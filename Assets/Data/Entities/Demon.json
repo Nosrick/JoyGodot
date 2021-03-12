@@ -1,0 +1,87 @@
+{
+  "Entities": [{
+      "CreatureType": "demon",
+      "Type": "demon",
+      "VisionType": "nocturnal vision",
+      "Statistics": [
+        {
+          "Name": "strength",
+          "Value": 6
+        },
+        {
+          "Name": "agility",
+          "Value": 4
+        },
+        {
+          "Name": "endurance",
+          "Value": 6
+        },
+        {
+          "Name": "intellect",
+          "Value": 4
+        },
+        {
+          "Name": "cunning",
+          "Value": 4
+        },
+        {
+          "Name": "focus",
+          "Value": 4
+        },
+        {
+          "Name": "personality",
+          "Value": 5
+        },
+        {
+          "Name": "suavity",
+          "Value": 5
+        },
+        {
+          "Name": "wit",
+          "Value": 4
+        }
+      ],
+      "Tags": [
+        "Living",
+        "Sentient",
+        "Animated",
+        "Nocturnal"
+      ],
+      "Needs": [
+        "hunger",
+        "thirst",
+        "sex",
+        "friendship",
+        "family",
+        "health",
+        "property",
+        "respect",
+        "sleep",
+        "confidence",
+        "morality",
+        "purpose"
+      ],
+      "Slots": [
+        "Head",
+        "Neck",
+        "Shoulders",
+        "Torso",
+        "Waist",
+        "Legs",
+        "Feet",
+        "Hand",
+        "Hand",
+        "Hand",
+        "Hand",
+        "Ring",
+        "Ring",
+        "Ring",
+        "Ring",
+        "Ranged",
+        "Ammo",
+        "Job Pin",
+        "Throw"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+<Project Sdk="Godot.NET.Sdk/3.2.3">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CodingSeb.ExpressionEvaluator" Version="1.4.24" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Data\Conversation\BaseTopics.json" />
+    <Content Include="Assets\Data\Conversation\Farewells.json" />
+    <Content Include="Assets\Data\Conversation\Greetings.json" />
+    <Content Include="Assets\Data\Conversation\ListenerThanks.json" />
+    <Content Include="Assets\Data\Conversation\Thanks.json" />
+    <Content Include="Assets\Data\Cultures\demon-culture.json" />
+    <Content Include="Assets\Data\Cultures\human-culture.json" />
+    <Content Include="Assets\Data\Cultures\naga-culture.json" />
+    <Content Include="Assets\Data\Cultures\slime-culture.json" />
+    <Content Include="Assets\Data\DamageTypes.xml" />
+    <Content Include="Assets\Data\Entities\Demon.json" />
+    <Content Include="Assets\Data\Entities\Humans.json" />
+    <Content Include="Assets\Data\Entities\TestMonsters.json" />
+    <Content Include="Assets\Data\EntityDerivedValues.json" />
+    <Content Include="Assets\Data\Genders\DefaultGenders.json" />
+    <Content Include="Assets\Data\ItemDerivedValues.json" />
+    <Content Include="Assets\Data\Items\Armour\Hand\ShieldItems.json" />
+    <Content Include="Assets\Data\Items\Armour\Torso\TorsoItems.json" />
+    <Content Include="Assets\Data\Items\Containers.json" />
+    <Content Include="Assets\Data\Items\Currency.json" />
+    <Content Include="Assets\Data\Items\Drinks\Drinks.json" />
+    <Content Include="Assets\Data\Items\Food\Food.json" />
+    <Content Include="Assets\Data\Items\Lights.json" />
+    <Content Include="Assets\Data\Items\Potions\Potions.json" />
+    <Content Include="Assets\Data\Items\Potions\Potions.xml" />
+    <Content Include="Assets\Data\Items\Weapons\Bows.json" />
+    <Content Include="Assets\Data\Items\Weapons\Daggers.json" />
+    <Content Include="Assets\Data\Items\Weapons\TwoHanded.json" />
+    <Content Include="Assets\Data\Jobs\Hedge Wizard.json" />
+    <Content Include="Assets\Data\Jobs\Thief.json" />
+    <Content Include="Assets\Data\Jobs\Warrior.json" />
+    <Content Include="Assets\Data\Materials\Bone.json" />
+    <Content Include="Assets\Data\Materials\Cloth.json" />
+    <Content Include="Assets\Data\Materials\Flesh.json" />
+    <Content Include="Assets\Data\Materials\Food.json" />
+    <Content Include="Assets\Data\Materials\Glass.json" />
+    <Content Include="Assets\Data\Materials\Leather.json" />
+    <Content Include="Assets\Data\Materials\Metals.json" />
+    <Content Include="Assets\Data\Materials\Woods.json" />
+    <Content Include="Assets\Data\Relationships\DefaultRelationships.json" />
+    <Content Include="Assets\Data\Romance\DefaultRomance.json" />
+    <Content Include="Assets\Data\Rumours\BaseRumours.json" />
+    <Content Include="Assets\Data\Settings\DyslexicMode.json" />
+    <Content Include="Assets\Data\Settings\GUIDefaults.json" />
+    <Content Include="Assets\Data\Sexes\DefaultSexes.json" />
+    <Content Include="Assets\Data\Sexualities\DefaultSexualities.json" />
+    <Content Include="Assets\Data\Skills\DefaultSkills.json" />
+    <Content Include="Assets\Data\Sprite Definitions\Entities\AbilityIcons.json" />
+    <Content Include="Assets\Data\Sprite Definitions\Entities\NeedsIcons.json" />
+    <Content Include="Assets\Data\Sprite Definitions\Entities\ParticleEffects.json" />
+    <Content Include="Assets\Data\Sprite Definitions\Environment\Obscure.json" />
+    <Content Include="Assets\Data\Sprite Definitions\GUI\AccentBackground.json" />
+    <Content Include="Assets\Data\Sprite Definitions\GUI\DefaultCursor.json" />
+    <Content Include="Assets\Data\Sprite Definitions\GUI\Quickbar.json" />
+    <Content Include="Assets\Data\Sprite Definitions\GUI\SlotSprite.json" />
+    <Content Include="Assets\Data\Sprite Definitions\GUI\WindowBackground.json" />
+    <Content Include="Assets\Data\Statistics\Statistics.json" />
+    <Content Include="Assets\Data\Vision Types\StandardVisionTypes.json" />
+    <Content Include="Assets\Data\World Spaces\Demon Offices.json" />
+    <Content Include="Assets\Data\World Spaces\Naga Pits.json" />
+    <Content Include="Assets\Data\World Spaces\Overworld.json" />
+    <Content Include="Assets\Data\World Spaces\Stairs.json" />
+    <Content Include="Assets\Scenes\LoadingScreen.tscn" />
+    <Content Include="Assets\Scenes\MainGame.tscn" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,58 @@
+﻿{
+  "Jobs": [
+    {
+      "Name": "Thief",
+      "Description": "The quintessential thief. Average in most respects, but excels at stealth, pickpocketing and lockpicking.",
+      "Statistics": [
+        {
+          "Name": "Agility",
+          "Discount": 2
+        }
+      ],
+      "Skills": [
+        {
+          "Name": "Light Blades",
+          "Discount": 1
+        },
+        {
+          "Name": "Evasion",
+          "Discount": 2
+        },
+        {
+          "Name": "Crossbows",
+          "Discount": 1
+        },
+        {
+          "Name": "Mercantile",
+          "Discount": 1
+        },
+        {
+          "Name": "Deception",
+          "Discount": 2
+        },
+        {
+          "Name": "Stealth",
+          "Discount": 2
+        },
+        {
+          "Name": "Lockpicking",
+          "Discount": 2
+        },
+        {
+          "Name": "Pickpocketing",
+          "Discount": 2
+        }
+      ],
+      "Colours": {
+        "Background": "#0341b5ff",
+        "Icon": "#99e7f4ff"
+      },
+      "Abilities": [
+        {
+          "Name": "distraction",
+          "Cost": 200
+        }
+      ]
+    }
+  ]
+}

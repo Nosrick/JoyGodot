@@ -1,0 +1,22 @@
+﻿{
+  "GUIData": [
+    {
+      "Name": "Font",
+      "Value": "OpenDyslexic3",
+      "MinFontSize": 8,
+      "MaxFontSize": 36
+    },
+    {
+      "Name": "AccentFont",
+      "Value": "OpenDyslexic3",
+      "MinFontSize": 8,
+      "MaxFontSize": 24
+    },
+    {
+      "Name": "TitleFont",
+      "Value": "OpenDyslexic3",
+      "MinFontSize": 14,
+      "MaxFontSize": 40
+    }
+  ]
+}

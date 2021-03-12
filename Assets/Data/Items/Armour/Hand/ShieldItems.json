@@ -1,0 +1,116 @@
+{
+  "Items": {
+    "Category": "Armour",
+    "IdentifiedItems": [
+      {
+        "Name": "Round Shield",
+        "Description": "A large, round shield. Good for stopping projectiles.",
+        "Value": 90,
+        "Materials": [
+          "steel",
+          "iron",
+          "bronze"
+        ],
+        "Size": 300,
+        "TileSet": "armour",
+        "SpawnWeight": 3,
+        "Slots": [
+          "hand"
+        ],
+        "Tags": [
+          "shield",
+          "one handed",
+          "armour",
+          "metal",
+          "physical",
+          "light armour"
+        ]
+      },
+      {
+        "Name": "Round Shield",
+        "Description": "A large, round shield. Good for stopping projectiles.",
+        "Value": 90,
+        "Materials": [
+          "leather"
+        ],
+        "Size": 300,
+        "TileSet": "armour",
+        "SpawnWeight": 4,
+        "Slots": [
+          "hand"
+        ],
+        "Tags": [
+          "shield",
+          "one handed",
+          "armour",
+          "leather",
+          "weapon",
+          "physical",
+          "light armour"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "armour",
+      "SpriteData": [
+        {
+          "Name": "round shield",
+          "Part": [
+            {
+              "Name": "round-shield-body",
+              "Frames": 1,
+              "Filename": "items/shields-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#a65805ff"
+              ]
+            },
+            {
+              "Name": "round-shield-detail",
+              "Frames": 1,
+              "Filename": "items/shields-detail",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#99e7f4ff"
+              ]
+            },
+            {
+              "Name": "round-shield-highlight",
+              "Frames": 1,
+              "Filename": "items/shields-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 3,
+              "Colour": [
+                "#e5fbf3ff"
+              ]
+            },
+            {
+              "Name": "round-shield-outline",
+              "Frames": 1,
+              "Filename": "items/shields-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 4,
+              "Colour": [
+                "#3c1701ff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

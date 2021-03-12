@@ -1,0 +1,156 @@
+{
+  "Items": {
+    "Category": "Containers",
+    "IdentifiedItems": [
+      {
+        "Name": "Leather Bag",
+        "Description": "A simple leather bag, used to store things.",
+        "Value": 5,
+        "Materials": [
+          "leather"
+        ],
+        "Size": 100,
+        "TileSet": "Containers",
+        "Tags": [
+          "container",
+          "leather"
+        ]
+      },
+      {
+        "Name": "Canvas Bag",
+        "Description": "A simple canvas bag, used to store things.",
+        "Value": 5,
+        "Materials": [
+          "canvas"
+        ],
+        "Size": 100,
+        "TileSet": "Containers",
+        "Tags": [
+          "container",
+          "cloth"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "Containers",
+      "SpriteData": [
+        {
+          "Name": "canvas bag",
+          "Part": [
+            {
+              "Name": "bag-tie",
+              "Frames": 1,
+              "Filename": "items/bags-tie",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#12c2f8ff",
+                "#ee113dff"
+              ],
+              "SortOrder": 4
+            },
+            {
+              "Name": "bag-outline",
+              "Frames": 1,
+              "Filename": "items/bags-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#ba5017ff"
+              ],
+              "SortOrder": 3
+            },
+            {
+              "Name": "bag-highlight",
+              "Frames": 1,
+              "Filename": "items/bags-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#f2f2f2ff"
+              ],
+              "SortOrder": 2
+            },
+            {
+              "Name": "bag-body",
+              "Frames": 1,
+              "Filename": "items/bags-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#fecc81ff"
+              ],
+              "SortOrder": 1
+            }
+          ]
+        },
+        {
+          "Name": "leather bag",
+          "Part": [
+            {
+              "Name": "bag-tie",
+              "Frames": 1,
+              "Filename": "items/bags-tie",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#12c2f8ff",
+                "#ee113dff"
+              ],
+              "SortOrder": 4
+            },
+            {
+              "Name": "bag-outline",
+              "Frames": 1,
+              "Filename": "items/bags-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#4d0a00ff"
+              ],
+              "SortOrder": 3
+            },
+            {
+              "Name": "bag-highlight",
+              "Frames": 1,
+              "Filename": "items/bags-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#ea7d10ff"
+              ],
+              "SortOrder": 2
+            },
+            {
+              "Name": "bag-body",
+              "Frames": 1,
+              "Filename": "items/bags-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#a65805ff"
+              ],
+              "SortOrder": 1
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

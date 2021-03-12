@@ -1,0 +1,141 @@
+{
+  "Entities": [
+      {
+        "CreatureType": "Naga",
+        "Type": "Naga",
+        "VisionType": "nocturnal vision",
+        "Statistics": [
+          {
+            "Name": "strength",
+            "Value": 4
+          },
+          {
+            "Name": "agility",
+            "Value": 5
+          },
+          {
+            "Name": "endurance",
+            "Value": 4
+          },
+          {
+            "Name": "intellect",
+            "Value": 5
+          },
+          {
+            "Name": "cunning",
+            "Value": 5
+          },
+          {
+            "Name": "focus",
+            "Value": 4
+          },
+          {
+            "Name": "personality",
+            "Value": 4
+          },
+          {
+            "Name": "suavity",
+            "Value": 4
+          },
+          {
+            "Name": "wit",
+            "Value": 4
+          }
+        ],
+        "Tags": [
+          "Living",
+          "Sentient",
+          "Animated",
+          "Nocturnal"
+        ],
+        "Needs": [
+          "hunger",
+          "thirst",
+          "sex",
+          "friendship",
+          "family",
+          "health",
+          "property",
+          "respect",
+          "sleep",
+          "confidence",
+          "morality",
+          "purpose"
+        ],
+        "Slots": [
+          "Head",
+          "Neck",
+          "Shoulders",
+          "Torso",
+          "Waist",
+          "Tail",
+          "Hand",
+          "Hand",
+          "Ring",
+          "Ring",
+          "Ranged",
+          "Ammo",
+          "Job Pin",
+          "Throw"
+        ]
+      },
+      {
+        "CreatureType": "Slime",
+        "Type": "Slime",
+        "VisionType": "nocturnal vision",
+        "TileSet": "slime",
+        "Statistics": [
+          {
+            "Name": "strength",
+            "Value": 4
+          },
+          {
+            "Name": "agility",
+            "Value": 2
+          },
+          {
+            "Name": "endurance",
+            "Value": 6
+          },
+          {
+            "Name": "intellect",
+            "Value": 1
+          },
+          {
+            "Name": "cunning",
+            "Value": 2
+          },
+          {
+            "Name": "focus",
+            "Value": 2
+          },
+          {
+            "Name": "personality",
+            "Value": 1
+          },
+          {
+            "Name": "suavity",
+            "Value": 1
+          },
+          {
+            "Name": "wit",
+            "Value": 1
+          }
+        ],
+        "Tags": [
+          "Living",
+          "Animated",
+          "Nocturnal"
+        ],
+        "Needs": [
+          "hunger",
+          "thirst",
+          "sex",
+          "friendship",
+          "health",
+          "sleep"
+        ],
+        "Slots": ["Torso"]
+      }
+    ]
+  }

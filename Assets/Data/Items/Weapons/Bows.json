@@ -1,0 +1,89 @@
+﻿{
+  "Items": {
+    "ActionWord": "shoots",
+    "IdentifiedItems": [
+      {
+        "Name": "Shortbow",
+        "Description": "A small bow used for swift, short-range attacks",
+        "Value": 15,
+        "Effects": [
+          "strictrangedweapon"
+        ],
+        "Skills": [
+          "bows"
+        ],
+        "SpawnWeight": 7,
+        "Materials": [
+          "Maple"
+        ],
+        "Size": 300,
+        "Range": 4,
+        "Slots": [
+          "Hand",
+          "Hand"
+        ],
+        "Tags": [
+          "weapon",
+          "bows",
+          "physical",
+          "ranged",
+          "agility"
+        ],
+        "TileSet": "Weapons"
+      }
+    ],
+    "UnidentifiedItems": [
+      {
+        "Name": "Shortbow",
+        "Description": "A small bow used for swift, short-range attacks",
+        "IdentifiedName": "Shortbow"
+      }
+    ],
+    "TileSet": {
+      "Name": "Weapons",
+      "SpriteData": [
+        {
+          "Name": "shortbow",
+          "Part": [
+            {
+              "Name": "shortbow-body",
+              "Filename": "items/bows-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#980b1cff"
+              ]
+            },
+            {
+              "Name": "shortbow-string",
+              "Filename": "items/bows-strings",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#f2f2f2ff"
+              ]
+            },
+            {
+              "Name": "shortbow-highlight",
+              "Filename": "items/bows-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#ba5017ff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

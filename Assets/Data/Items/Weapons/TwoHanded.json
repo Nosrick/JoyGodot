@@ -1,0 +1,107 @@
+{
+  "Items": {
+    "ActionWord": "cuts",
+    "IdentifiedItems": [
+      {
+        "Name": "Greatsword",
+        "Description": "A long, bladed weapon capable of devastating strikes.",
+        "Value": 50,
+        "Skills": [
+          "heavy blades"
+        ],
+        "SpawnWeight": 10,
+        "Materials": [
+          "Iron",
+          "Steel",
+          "Bronze",
+          "Glass",
+          "Bone"
+        ],
+        "Size": 500,
+        "Slots": [
+          "Hand",
+          "Hand"
+        ],
+        "Tags": [
+          "weapon",
+          "two-handed",
+          "sword",
+          "physical",
+          "heavy blades",
+          "strength"
+        ],
+        "TileSet": "Weapons"
+      }
+    ],
+    "UnidentifiedItems": [
+      {
+        "Name": "Greatsword",
+        "Description": "A long, bladed weapon capable of devastating strikes.",
+        "IdentifiedName": "Greatsword"
+      }
+    ],
+    "TileSet": {
+      "Name": "Weapons",
+      "SpriteData": [
+        {
+          "Name": "greatsword",
+          "Part": [
+            {
+              "Name": "falchion-blade",
+              "Frames": 1,
+              "Filename": "items/greatsword-blades",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#ffffffff",
+                "#99e7f4ff"
+              ] 
+            },
+            {
+              "Name": "falchion-crossguard",
+              "Frames" : 1,
+              "Filename": "items/greatsword-crossguards",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#99e7f4ff",
+                "#424e66ff"
+              ]
+            },
+            {
+              "Name": "falchion-pommel",
+              "Frames" : 1,
+              "Filename": "items/greatsword-pommels",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#980b1cff",
+                "#a65805ff",
+                "#9d2c07ff"
+              ]
+            },
+            {
+              "Name": "falchion-outline",
+              "Frames" : 1,
+              "Filename": "items/greatsword-outlines",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#424e66ff",
+                "#020a55ff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

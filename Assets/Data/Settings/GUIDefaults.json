@@ -1,0 +1,22 @@
+﻿{
+  "GUIData": [
+    {
+      "Name": "Font",
+      "Value": "Silver",
+      "MinFontSize": 8,
+      "MaxFontSize": 60
+    },
+    {
+      "Name": "AccentFont",
+      "Value": "Silver",
+      "MinFontSize": 8,
+      "MaxFontSize": 60
+    },
+    {
+      "Name": "TitleFont",
+      "Value": "Silver",
+      "MinFontSize": 20,
+      "MaxFontSize": 100
+    }
+  ]
+}

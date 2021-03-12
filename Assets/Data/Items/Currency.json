@@ -1,0 +1,102 @@
+{
+  "Items": {
+    "IdentifiedItems": [
+      {
+        "Name": "Copper coin",
+        "Description": "A coin made from copper, from a local mint.",
+        "Value": 1,
+        "Materials": [
+          "Copper"
+        ],
+        "Size": 1,
+        "SpawnWeight": 50,
+        "Tags": [
+          "currency"
+        ],
+        "TileSet": "Currency"
+      },
+      {
+        "Name": "Silver coin",
+        "Description": "A coin made from shiny silver, from a local mint.",
+        "Value": 10,
+        "Materials": [
+          "Silver"
+        ],
+        "Size": 1,
+        "SpawnWeight": 30,
+        "Tags": [
+          "currency"
+        ],
+        "TileSet": "Currency"
+      },
+      {
+        "Name": "Gold coin",
+        "Description": "A valuable gold coin, from a local mint.",
+        "Value": 100,
+        "Materials": [
+          "Gold"
+        ],
+        "Size": 1,
+        "SpawnWeight": 5,
+        "Tags": [
+          "currency"
+        ],
+        "TileSet": "Currency"
+      }
+    ],
+    "TileSet": {
+      "Filename": "Money",
+      "Name": "Currency",
+      "SpriteData": [
+        {
+          "Name": "copper coin",
+          "Part": [
+            {
+              "Name": "copper coin",
+              "Filename": "items/Money32",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#ff851bff"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "silver coin",
+          "Part": [
+            {
+              "Name": "silver coin",
+              "Filename": "items/Money32",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#d9d9d9ff"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "gold coin",
+          "Part": [
+            {
+              "Name": "gold coin",
+              "Filename": "items/Money32",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#ffc80aff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "Items": {
+    "ActionWord": "stabs",
+    "IdentifiedItems": [
+      {
+        "Name": "Dagger",
+        "Description": "A short, bladed weapon that is easily concealed and good for stabbing.",
+        "Value": 15,
+        "Skills": [
+          "light blades"
+        ],
+        "SpawnWeight": 10,
+        "Materials": [
+          "Iron",
+          "Steel",
+          "Bronze",
+          "Glass",
+          "Bone"
+        ],
+        "Size": 60,
+        "Slots": [
+          "Hand"
+        ],
+        "Tags": [
+          "weapon",
+          "dagger",
+          "physical",
+          "one-handed",
+          "light blades",
+          "agility",
+          "strength"
+        ],
+        "TileSet": "Weapons"
+      }
+    ],
+    "UnidentifiedItems": [
+      {
+        "Name": "Dagger",
+        "Description": "A short, bladed weapon that is easily concealed and good for stabbing.",
+        "IdentifiedName": "Dagger"
+      }
+    ],
+    "TileSet": {
+      "Name": "Weapons",
+      "SpriteData": [
+        {
+          "Name": "dagger",
+          "Part": [
+            {
+              "Name": "dagger-blade",
+              "Frames": 1,
+              "Filename": "items/dagger-blades",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#ffffffff",
+                "#99e7f4ff"
+              ]
+            },
+            {
+              "Name": "dagger-crossguard",
+              "Frames" : 1,
+              "Filename": "items/dagger-crossguards",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#93a5beff",
+                "#424e66ff"
+              ]
+            },
+            {
+              "Name": "dagger-pommel",
+              "Frames" : 1,
+              "Filename": "items/dagger-pommels",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#980b1cff",
+                "#a65805ff",
+                "#9d2c07ff"
+              ]
+            },
+            {
+              "Name": "dagger-outline",
+              "Frames" : 1,
+              "Filename": "items/dagger-outlines",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#020a55ff",
+                "#424e66ff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

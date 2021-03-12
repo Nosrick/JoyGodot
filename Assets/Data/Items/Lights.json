@@ -1,0 +1,148 @@
+{
+  "Items": {
+    "IdentifiedItems": [
+      {
+        "Name": "Lantern",
+        "Description": "A metal cylinder with an opening in it to let light out from the fire within.",
+        "Value": 50,
+        "Materials": [
+          "Copper",
+          "Iron"
+        ],
+        "Size": 150,
+        "LightLevel": 24,
+        "SpawnWeight": 2,
+        "Tags": [
+          "light source"
+        ],
+        "TileSet": "Light Source"
+      },
+      {
+        "Name": "Torch",
+        "Description": "Basically a stick on fire.",
+        "Value": 5,
+        "Materials": [
+          "White Pine"
+        ],
+        "Size": 150,
+        "LightLevel": 16,
+        "SpawnWeight": 5,
+        "Tags": [
+          "light source"
+        ],
+        "TileSet": "Light Source"
+      }
+    ],
+    "TileSet": {
+      "Name": "Light Source",
+      "SpriteData": [
+        {
+          "Name": "lantern",
+          "Part": [
+            {
+              "Name": "lantern-outline",
+              "Frames": 1,
+              "Filename": "items/lights-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#3c1701ff"
+              ]
+            },
+            {
+              "Name": "lantern-body",
+              "Frames": 1,
+              "Filename": "items/lights-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#f8be49ff"
+              ]
+            },
+            {
+              "Name": "lantern-highlight",
+              "Frames": 1,
+              "Filename": "items/lights-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#e5fbf3ff"
+              ]
+            },
+            {
+              "Name": "lantern-flames",
+              "Frames": 1,
+              "Filename": "items/lights-flames",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#ffffffff"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "torch",
+          "Part": [
+            {
+              "Name": "torch-outline",
+              "Frames": 1,
+              "Filename": "items/lights-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#3c1701ff"
+              ]
+            },
+            {
+              "Name": "torch-body",
+              "Frames": 1,
+              "Filename": "items/lights-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#ba5017ff"
+              ]
+            },
+            {
+              "Name": "torch-highlight",
+              "Frames": 1,
+              "Filename": "items/lights-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#f08b32ff"
+              ]
+            },
+            {
+              "Name": "torch-flames",
+              "Frames": 1,
+              "Filename": "items/lights-flames",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#ffffffff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

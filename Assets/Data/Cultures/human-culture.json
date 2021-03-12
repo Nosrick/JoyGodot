@@ -1,0 +1,324 @@
+﻿{
+  "Cultures": [
+    {
+      "CultureName": "human kingdom",
+      "Inhabitants": [
+        "human"
+      ],
+      "Rulers": [
+        "king",
+        "queen"
+      ],
+      "Crimes": [
+        "theft",
+        "murder",
+        "trespass",
+        "rape"
+      ],
+      "Jobs": [
+        {
+          "Name": "warrior",
+          "Chance": 50
+        },
+        {
+          "Name": "thief",
+          "Chance": 20
+        },
+        {
+          "Name": "hedge wizard",
+          "Chance": 10
+        }
+      ],
+      "Sexualities": [
+        {
+          "Name": "heterosexual",
+          "Chance": 70
+        },
+        {
+          "Name": "pansexual",
+          "Chance": 10
+        },
+        {
+          "Name": "homosexual",
+          "Chance": 10
+        },
+        {
+          "Name": "asexual",
+          "Chance": 3
+        }
+      ],
+      "Genders": [
+        {
+          "Name": "male",
+          "Chance": 40
+        },
+        {
+          "Name": "female",
+          "Chance": 40
+        },
+        {
+          "Name": "neutral",
+          "Chance": 10
+        },
+        {
+          "Name": "agender",
+          "Chance": 5
+        }
+      ],
+      "NonConformingGenderChance": 10,
+      "Romances": [
+        {
+          "Name": "heteroromantic",
+          "Chance": 70
+        },
+        {
+          "Name": "homoromantic",
+          "Chance": 10
+        },
+        {
+          "Name": "panromantic",
+          "Chance": 10
+        },
+        {
+          "Name": "aromantic",
+          "Chance": 3
+        }
+      ],
+      "Sexes": [
+        {
+          "Name": "male",
+          "Chance": 50
+        },
+        {
+          "Name": "female",
+          "Chance": 50
+        }
+      ],
+      "Relationships": [
+        "monoamorous",
+        "polyamorous"
+      ],
+      "Names": [
+        {
+          "Name": "Alex",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "McHuman",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            1
+          ]
+        },
+        {
+          "Name": "the",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            1
+          ],
+          "Group": [
+            0,
+            1
+          ]
+        },
+        {
+          "Name": "Fantastic",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            2
+          ],
+          "Group": [
+            0
+          ]
+        },
+        {
+          "Name": "Despicable",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            2
+          ],
+          "Group": [
+            1
+          ]
+        }
+      ],
+      "Statistics": [],
+      "TileSet": {
+        "Name": "human kingdom",
+        "SpriteData": [
+          {
+            "Name": "human",
+            "State": "idle",
+            "Part": [
+              {
+                "Name": "body",
+                "Frames": 3,
+                "Filename": "cultures/human-body32",
+                "Data": ["default"],
+                "Position": 0,
+                "SortOrder": 0,
+                "Colour": [
+                  "#fca790ff",
+                  "#966c6cff"
+                ]
+              },
+              {
+                "Name": "eyes",
+                "Frames": 3,
+                "Filename": "cultures/human-eyes32",
+                "Data": ["default"],
+                "Position": 0,
+                "SortOrder": 1,
+                "Colour": [
+                  "#1ebc73ff",
+                  "#4d9be6ff",
+                  "#9e4539ff"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "UIColours": {
+        "CursorColours": [
+          {
+            "Name": "DefaultCursor",
+            "Colour": [
+              {
+                "Name": "CursorHighlight",
+                "Value": "#cd683dff"
+              },
+              {
+                "Name": "CursorBright",
+                "Value": "#9e4539ff"
+              },
+              {
+                "Name": "CursorMid",
+                "Value": "#9e4539ff"
+              },
+              {
+                "Name": "CursorDark",
+                "Value": "#7a3045ff"
+              },
+              {
+                "Name": "CursorOutline",
+                "Value": "#3e3546ff"
+              }
+            ]
+          }
+        ],
+        "BackgroundColours": [
+          {
+            "Name": "DefaultWindow",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#7a3045ff"
+              },
+              {
+                "Name": "border",
+                "Value": "#9e4539ff"
+              }
+            ]
+          },
+          {
+            "Name": "SlotBackground",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#9e4539ff"
+              },
+              {
+                "Name": "border",
+                "Value": "#7a3045ff"
+              }
+            ]
+          },
+          {
+            "Name": "AccentBackground",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#9e4539ff"
+            }]
+          },
+          {
+            "Name": "SecondaryAccent",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#7a3045ff"
+            }]
+          },
+          {
+            "Name": "IconBackground",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#7a3045ff"
+            }]
+          },
+          {
+            "Name": "CharacterSheetIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#9e4539ff"
+            }]
+          },
+          {
+            "Name": "InventoryIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#9e4539ff"
+            }]
+          },
+          {
+            "Name": "EquipmentIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#9e4539ff"
+            }]
+          },
+          {
+            "Name": "JobManagementIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#9e4539ff"
+            }]
+          },
+          {
+            "Name": "QuestJournalIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#9e4539ff"
+            }]
+          }
+        ],
+        "FontColours": [
+          {
+            "Name": "Font",
+            "Value": "#e3c896ff"
+          },
+          {
+            "Name": "AccentFont",
+            "Value": "#e3c896ff"
+          },
+          {
+            "Name": "TitleFont",
+            "Value": "#e3c896ff"
+          }
+        ]
+      }
+    }
+  ]
+}

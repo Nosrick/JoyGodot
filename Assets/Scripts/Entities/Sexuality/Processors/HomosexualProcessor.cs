@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using JoyLib.Code.Entities.Relationships;
+
+namespace JoyLib.Code.Entities.Sexuality
+{
+    public class HomosexualProcessor : ISexualityPreferenceProcessor
+    {
+        public string Name => "homosexual";
+        public bool WillMateWith(IEntity left, IEntity right, IEnumerable<IRelationship> relationships)
+        {
+            if (relationships.Any() == false)
+            {
+                return false;
+            }
+            int highestValue = relationships.Max(relationship => relationship.GetRelationshipValue(left.Guid, right.Guid));
+            if(highestValue < left.Sexuality.MatingThreshold
+               || left.Gender.Name.Equals(right.Gender.Name, StringComparison.OrdinalIgnoreCase) == false)
+            {
+                return false;
+            }
+            return left.Sentient == right.Sentient;
+        }
+
+        public bool Compatible(IEntity left, IEntity right)
+        {
+            return left.Sentient == right.Sentient
+                   && left.Gender.Name.Equals(right.Gender.Name, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+}

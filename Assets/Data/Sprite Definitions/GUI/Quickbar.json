@@ -1,0 +1,81 @@
+﻿{
+  "Objects": {
+    "TileSet": {
+      "Name": "QuickBar",
+      "SpriteData": [
+        {
+          "Name": "IconBackground",
+          "Part": [{
+            "Name": "background",
+            "Filename": "UI/icons/icon-background",
+            "Data": ["default"],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 1,
+            "FillType": "simple"
+          }]
+        },
+        {
+          "Name": "CharacterSheetIcon",
+          "Part": [{
+            "Name": "icon",
+            "Filename": "UI/icons/character-sheet-icon",
+            "Data": ["default"],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 2,
+            "FillType": "simple"
+          }]
+        },
+        {
+          "Name": "InventoryIcon",
+          "Part": [{
+            "Name": "icon",
+            "Filename": "UI/icons/backpack-icon",
+            "Data": ["default"],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 2,
+            "FillType": "simple"
+          }]
+        },
+        {
+          "Name": "EquipmentIcon",
+          "Part": [{
+            "Name": "icon",
+            "Filename": "UI/icons/equipment-icon",
+            "Data": ["default"],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 2,
+            "FillType": "simple"
+          }]
+        },
+        {
+          "Name": "JobManagementIcon",
+          "Part": [{
+            "Name": "icon",
+            "Filename": "UI/icons/job-management-icon",
+            "Data": ["default"],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 2,
+            "FillType": "simple"
+          }]
+        },
+        {
+          "Name": "QuestJournalIcon",
+          "Part": [{
+            "Name": "icon",
+            "Filename": "UI/icons/quest-journal-icon",
+            "Data": ["default"],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 2,
+            "FillType": "simple"
+          }]
+        }
+      ]
+    }
+  }
+}

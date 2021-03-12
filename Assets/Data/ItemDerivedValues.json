@@ -1,0 +1,8 @@
+﻿{
+  "DerivedValues": [
+    {
+      "Name": "durability",
+      "Formula": "(size * hardness) + bonus"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+﻿{
+  "WorldInfo": [{
+    "Name": "Demon Offices",
+    "Inhabitants": [
+      "Demon",
+      "Human"
+    ],
+    "Tags": ["Interior"],
+    "TileSet":
+    {
+      "Name": "Demon Offices",
+      "SpriteData": [
+        {
+          "Name": "SurroundFloor",
+          "Part": [
+            {
+              "Name": "SurroundFloor",
+              "Position": 4,
+              "Data": [
+                "Floor",
+                "Default"
+              ],
+              "Filename": "environments/overworld-grass",
+              "Frames": 1,
+              "Colour": ["#625565ff"]
+            }
+          ]
+        },
+        {
+          "Name": "SurroundWall",
+          "Part": [
+            {
+              "Name": "SurroundWall",
+              "Position": 19,
+              "Data": [
+                "Floor",
+                "Default"
+              ],
+              "Filename": "environments/naga-pits32",
+              "Frames": 1,
+              "Colour": ["#8fd3ffff"]
+            }
+          ]
+        }
+      ]
+    }
+  }]
+}

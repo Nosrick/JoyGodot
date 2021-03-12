@@ -1,0 +1,16 @@
+﻿{
+  "Materials": [
+    {
+      "Name": "Cloth",
+      "Hardness": 0.8,
+      "Bonus": 0,
+      "Weight": 2
+    },
+    {
+      "Name": "Canvas",
+      "Hardness": 1,
+      "Bonus": 0,
+      "Weight": 2
+    }
+  ]
+}

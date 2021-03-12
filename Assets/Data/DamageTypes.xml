@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DamageTypes>
+	<Type>Piercing</Type>
+	<Type>Bludgeoning</Type>
+	<Type>Slashing</Type>
+	<Type>Heat</Type>
+	<Type>Cold</Type>
+	<Type>Corrosive</Type>
+	<Type>Radiant</Type>
+	<Type>Necrotic</Type>
+	<Type>Shock</Type>
+	<Type>Sonic</Type>
+	<Type>Psychic</Type>
+	<Type>Magical</Type>
+	<Type>Chaos</Type>
+</DamageTypes>

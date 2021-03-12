@@ -1,0 +1,58 @@
+{
+  "Conversations": {
+    "Name": "BaseTopics",
+    "Lines": [
+      {
+        "Text": "Let's talk.",
+        "Processor": "ChatterProcessor",
+        "Next": ["ChatterTopic"],
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "Can you tell me anything about this place?",
+        "Processor": "LocalAreaInfoProcessor",
+        "Next": ["LocalAreaInfo"],
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "Do you have anything to trade?",
+        "Processor": "TradeProcessor",
+        "Next": ["TradeTopic"],
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "Is there anything I can do for you?",
+        "Processor": "TaskProcessor",
+        "Next": ["TaskTopic"],
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "Fancy a quicky?",
+        "Processor": "SexProposalProcessor",
+        "Next": ["SexProposal"],
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "Would you be my partner?",
+        "Processor": "RomanticProposalProcessor",
+        "Conditions": ["Relationship ! Romantic"],
+        "Next": ["RomanticProposal"],
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "Would you do me the honour of becoming my spouse?",
+        "Conditions": [
+          "Relationship = Romantic",
+          "Relationship ! Bonded"
+        ],
+        "Processor": "BondingProposalProcessor",
+        "Next": ["BondingProposal"],
+        "Speaker": "instigator"
+      },
+      {
+        "Link": "Farewells",
+        "Speaker": "instigator"
+      }
+    ]
+  }
+}

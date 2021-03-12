@@ -1,0 +1,28 @@
+{
+  "Conversations": {
+    "Name": "Thanks",
+    "Lines": [
+      {
+        "Text": "Thank you kindly.",
+        "Conditions": ["Relationship < 50"],
+        "Priority": 0,
+        "Next": ["BaseTopics"],
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "Thanks, friend.",
+        "Conditions": ["Relationship > 49"],
+        "Priority": 1,
+        "Next": ["BaseTopics"],
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "Thanks, love.",
+        "Conditions": ["Relationship = Romantic"],
+        "Priority": 2,
+        "Next": ["BaseTopics"],
+        "Speaker": "instigator"
+      }
+    ]
+  }
+}

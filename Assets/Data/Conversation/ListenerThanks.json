@@ -1,0 +1,35 @@
+{
+  "Conversations": {
+    "Name": "ListenerThanks",
+    "Lines": [
+      {
+        "Text": "Uh, thanks?",
+        "Conditions": ["Relationship < 0"],
+        "Priority": 1,
+        "Next": ["BaseTopics"],
+        "Speaker": "listener"
+      },
+      {
+        "Text": "Thank you kindly.",
+        "Conditions": ["Relationship < 50"],
+        "Priority": 0,
+        "Next": ["BaseTopics"],
+        "Speaker": "listener"
+      },
+      {
+        "Text": "Thanks, friend.",
+        "Conditions": ["Relationship > 49"],
+        "Priority": 2,
+        "Next": ["BaseTopics"],
+        "Speaker": "listener"
+      },
+      {
+        "Text": "Thanks, love.",
+        "Conditions": ["Relationship = Romantic"],
+        "Priority": 3,
+        "Next": ["BaseTopics"],
+        "Speaker": "listener"
+      }
+    ]
+  }
+}

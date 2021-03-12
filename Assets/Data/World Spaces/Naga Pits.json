@@ -1,0 +1,48 @@
+﻿{
+  "WorldInfo": [{
+      "Name": "Naga Pits",
+      "Inhabitants": [
+        "Naga",
+        "Slime"
+      ],
+      "Tags": ["Interior"],
+      "TileSet": 
+        {
+          "Name": "Naga Pits",
+          "SpriteData": [
+            {
+              "Name": "SurroundFloor",
+              "Part": [
+                {
+                  "Name": "SurroundFloor",
+                  "Position": 4,
+                  "Data": [
+                    "Floor",
+                    "Default"
+                  ],
+                  "Filename": "environments/naga-pits32",
+                  "Frames": 1,
+                  "Colour": ["#4d9be6ff"]
+                }
+              ]
+            },
+            {
+              "Name": "SurroundWall",
+              "Part": [
+                {
+                  "Name": "SurroundWall",
+                  "Position": 19,
+                  "Data": [
+                    "Floor",
+                    "Default"
+                  ],
+                  "Filename": "environments/naga-pits32",
+                  "Frames": 1,
+                  "Colour": ["#4d65b4ff"]
+                }
+              ]
+            }
+          ]
+        }
+    }]
+}

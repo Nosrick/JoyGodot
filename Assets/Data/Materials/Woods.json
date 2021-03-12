@@ -1,0 +1,16 @@
+﻿{
+  "Materials": [
+    {
+      "Name": "White Pine",
+      "Hardness": 0.4,
+      "Bonus": 0,
+      "Weight": 0.5
+    },
+    {
+      "Name": "Maple",
+      "Hardness": 0.6,
+      "Bonus": 1,
+      "Weight": 0.6
+    }
+  ]
+}

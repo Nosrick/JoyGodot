@@ -1,0 +1,42 @@
+﻿{
+  "Objects": {
+    "TileSet": {
+      "Name": "Abilities",
+      "SpriteData": [
+        {
+          "Name": "AbilityBackground",
+          "Part": [
+            {
+              "Name": "AbilityBackground",
+              "Frames": 1,
+              "Filename": "UI/background-tile",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 1
+            }
+          ]
+        },
+        {
+          "Name": "backdraft",
+          "Part": [
+            {
+              "Name": "icon",
+              "Frames": 1,
+              "Filename": "abilities/backdraft-icon",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#ff0000ff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

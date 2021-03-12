@@ -1,0 +1,40 @@
+﻿{
+  "Materials": [
+    {
+      "Name": "Iron",
+      "Hardness": 4.5,
+      "Bonus": 2,
+      "Weight": 7.874
+    },
+    {
+      "Name": "Steel",
+      "Hardness": 4.5,
+      "Bonus": 4,
+      "Weight": 7.8
+    },
+    {
+      "Name": "Bronze",
+      "Hardness": 3,
+      "Bonus": 2,
+      "Weight": 8.52
+    },
+    {
+      "Name": "Copper",
+      "Hardness": 3,
+      "Bonus": 1,
+      "Weight": 8.96
+    },
+    {
+      "Name": "Silver",
+      "Hardness": 2.5,
+      "Bonus": 0,
+      "Weight": 10.49
+    },
+    {
+      "Name": "Gold",
+      "Hardness": 2.5,
+      "Bonus": 0,
+      "Weight": 19.3
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+﻿{
+  "Sexualities": [
+    {
+      "Name": "Heterosexual",
+      "DecaysNeed": "true",
+      "MatingThreshold": "0",
+      "Processor": "Heterosexual",
+      "Tags": ["hetero"]
+    },
+    {
+      "Name": "Homosexual",
+      "DecaysNeed": "true",
+      "MatingThreshold": "0",
+      "Processor": "Homosexual",
+      "Tags": ["homo"]
+    },
+    {
+      "Name": "Asexual",
+      "DecaysNeed": "false",
+      "MatingThreshold": "0",
+      "Processor": "Asexual",
+      "Tags": ["ace"]
+    },
+    {
+      "Name": "Pansexual",
+      "DecaysNeed": "true",
+      "MatingThreshold": "0",
+      "Processor": "Pansexual",
+      "Tags": ["pan"]
+    }
+  ]
+}

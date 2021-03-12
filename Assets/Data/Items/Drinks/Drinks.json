@@ -1,0 +1,281 @@
+{
+  "Items": {
+    "IdentifiedItems": [
+      {
+        "Name": "Cider",
+        "Description": "Crisp, delicious cider. Made from the finest apples.",
+        "Value": 15,
+        "SpawnWeight": 10,
+        "Materials": [
+          "Glass"
+        ],
+        "Size": 50,
+        "Tags": [
+          "drink",
+          "alcohol"
+        ],
+        "TileSet": "Drinks"
+      },
+      {
+        "Name": "Water",
+        "Description": "Clear, cool water in a leather skin.",
+        "Value": 10,
+        "Effects": [
+          "GenericNonAlcoholicDrink"
+        ],
+        "SpawnWeight": 30,
+        "Materials": [
+          "Leather"
+        ],
+        "Size": 50,
+        "Tags": [
+          "drink"
+        ],
+        "TileSet": "Drinks"
+      },
+      {
+        "Name": "Wine",
+        "Description": "Red wine, made from grapes.",
+        "Value": 50,
+        "SpawnWeight": 10,
+        "Materials": [
+          "Glass"
+        ],
+        "Size": 100,
+        "Tags": [
+          "drink",
+          "alcohol"
+        ],
+        "TileSet": "Drinks"
+      }
+    ],
+    "TileSet": {
+      "Name": "Drinks",
+      "SpriteData": [
+        {
+          "Name": "cider",
+          "Part": [
+            {
+              "Name": "cider-body",
+              "Frames": 1,
+              "Filename": "items/drinks-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#f4d01aff"
+              ],
+              "SortOrder": 1
+            },
+            {
+              "Name": "cider-highlight",
+              "Frames": 1,
+              "Filename": "items/drinks-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#fecc81ff"
+              ],
+              "SortOrder": 2
+            },
+            {
+              "Name": "cider-top",
+              "Frames": 1,
+              "Filename": "items/drinks-tops",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#21b039ff"
+              ],
+              "SortOrder": 3
+            },
+            {
+              "Name": "cider-glass",
+              "Frames": 1,
+              "Filename": "items/drinks-glass",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#99e7f4ff"
+              ],
+              "SortOrder": 4
+            },
+            {
+              "Name": "cider-outline",
+              "Frames": 1,
+              "Filename": "items/drinks-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "Colour": [
+                "#020a55ff"
+              ],
+              "SortOrder": 5
+            }
+          ]
+        },
+        {
+          "Name": "water",
+          "Part": [
+            {
+              "Name": "water-body",
+              "Frames": 1,
+              "Filename": "items/drinks-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#a65805ff"
+              ],
+              "SortOrder": 1
+            },
+            {
+              "Name": "water-highlight",
+              "Frames": 1,
+              "Filename": "items/drinks-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#f4964eff"
+              ],
+              "SortOrder": 2
+            },
+            {
+              "Name": "water-top",
+              "Frames": 1,
+              "Filename": "items/drinks-tops",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#fecc81ff"
+              ],
+              "SortOrder": 3
+            },
+            {
+              "Name": "water-detail",
+              "Frames": 1,
+              "Filename": "items/drinks-detail",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#ee113dff"
+              ],
+              "SortOrder": 4
+            },
+            {
+              "Name": "water-outline",
+              "Frames": 1,
+              "Filename": "items/drinks-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 1,
+              "Colour": [
+                "#3c1701ff"
+              ],
+              "SortOrder": 5
+            }
+          ]
+        },
+        {
+          "Name": "wine",
+          "Part": [
+            {
+              "Name": "wine-body",
+              "Frames": 1,
+              "Filename": "items/drinks-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 2,
+              "Colour": [
+                "#830165ff"
+              ],
+              "SortOrder": 1
+            },
+            {
+              "Name": "wine-highlight",
+              "Frames": 1,
+              "Filename": "items/drinks-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 2,
+              "Colour": [
+                "#830165ff"
+              ],
+              "SortOrder": 2
+            },
+            {
+              "Name": "wine-top",
+              "Frames": 1,
+              "Filename": "items/drinks-tops",
+              "Data": [
+                "default"
+              ],
+              "Position": 2,
+              "Colour": [
+                "#fecc81ff"
+              ],
+              "SortOrder": 3
+            },
+            {
+              "Name": "wine-glass",
+              "Frames": 1,
+              "Filename": "items/drinks-glass",
+              "Data": [
+                "default"
+              ],
+              "Position": 2,
+              "Colour": [
+                "#082525ff"
+              ],
+              "SortOrder": 4
+            },
+            {
+              "Name": "wine-detail",
+              "Frames": 1,
+              "Filename": "items/drinks-detail",
+              "Data": [
+                "default"
+              ],
+              "Position": 2,
+              "Colour": [
+                "#fecc81ff"
+              ],
+              "SortOrder": 5
+            },
+            {
+              "Name": "wine-outline",
+              "Frames": 1,
+              "Filename": "items/drinks-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 2,
+              "Colour": [
+                "#107a68ff"
+              ],
+              "SortOrder": 6
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "Genders": [
+      {
+        "Name": "male",
+        "Possessive": "his",
+        "PersonalSubject": "he",
+        "PersonalObject": "him",
+        "Reflexive": "himself",
+        "PossessivePlural": "his",
+        "ReflexivePlural": "himself",
+        "IsOrAre": "is"
+      },
+      {
+        "Name": "female",
+        "Possessive": "her",
+        "PersonalSubject": "she",
+        "PersonalObject": "her",
+        "Reflexive": "herself",
+        "PossessivePlural": "hers",
+        "ReflexivePlural": "herself",
+        "IsOrAre": "is"
+      },
+      {
+        "Name": "agender",
+        "Possessive": "its",
+        "PersonalSubject": "it",
+        "PersonalObject": "it",
+        "Reflexive": "itself",
+        "PossessivePlural": "its",
+        "ReflexivePlural": "itself",
+        "IsOrAre": "is"
+      },
+      {
+        "Name": "neutral",
+        "Possessive": "their",
+        "PersonalSubject": "they",
+        "PersonalObject": "they",
+        "Reflexive": "themself",
+        "PossessivePlural": "theirs",
+        "ReflexivePlural": "themselves",
+        "IsOrAre": "are"
+      }
+    ]
+}

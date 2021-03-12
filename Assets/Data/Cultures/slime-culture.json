@@ -1,0 +1,280 @@
+﻿{
+  "Cultures": [
+    {
+      "CultureName": "slime conglomerate",
+      "Inhabitants": [
+        "slime"
+      ],
+      "Rulers": [
+        "great slime"
+      ],
+      "Crimes": [],
+      "TileSet": {
+        "Name": "slime conglomerate",
+        "SpriteData": [
+          {
+            "Name": "slime",
+            "State": "idle",
+            "Part": [
+              {
+                "Name": "body-light",
+                "Frames": 3,
+                "Filename": "cultures/slime-light-body",
+                "Data": ["default"],
+                "SortOrder": 0,
+                "Position": 0,
+                "Colour": [
+                  "#8fd3ffff",
+                  "#a884f3ff"
+                ]
+              },
+              {
+                "Name": "body-dark",
+                "Frames": 3,
+                "Filename": "cultures/slime-dark-body",
+                "Data": ["default"],
+                "SortOrder": 1,
+                "Position": 0,
+                "Colour": [
+                  "#905ea9ff",
+                  "#4d65b4ff"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "Sexualities": [
+        {
+          "Name": "pansexual",
+          "Chance": 95
+        },
+        {
+          "Name": "asexual",
+          "Chance": 5
+        }
+      ],
+      "Romances": [
+        {
+          "Name": "aromantic",
+          "Chance": 100
+        }
+      ],
+      "Sexes": [
+        {
+          "Name": "neutral",
+          "Chance": 100
+        }
+      ],
+      "Genders": [
+        {
+          "Name": "neutral",
+          "Chance": 100
+        }
+      ],
+      "NonConformingGenderChance": 0,
+      "Jobs": [
+        {
+          "Name": "warrior",
+          "Chance": 10
+        }
+      ],
+      "Relationships": [
+        "polyamorous"
+      ],
+      "Statistics": [],
+      "Names": [
+        {
+          "Name": "Glorp",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Blip",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Slorp",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Glurg",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "The",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            1
+          ]
+        },
+        {
+          "Name": "Von",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            1
+          ]
+        },
+        {
+          "Name": "Slimy",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            2
+          ]
+        }
+      ],
+      "UIColours": {
+        "CursorColours": [
+          {
+            "Name": "DefaultCursor",
+            "Colour": [
+              {
+                "Name": "CursorHighlight",
+                "Value": "#4d65b4ff"
+              },
+              {
+                "Name": "CursorBright",
+                "Value": "#4d65b4ff"
+              },
+              {
+                "Name": "CursorMid",
+                "Value": "#4d65b4ff"
+              },
+              {
+                "Name": "CursorDark",
+                "Value": "#4d65b4ff"
+              },
+              {
+                "Name": "CursorOutline",
+                "Value": "#8fd3ffff"
+              }
+            ]
+          }
+        ],
+        "BackgroundColours": [
+          {
+            "Name": "DefaultWindow",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#4d65b4ff"
+              },
+              {
+                "Name": "border",
+                "Value": "#8fd3ffff"
+              }
+            ]
+          },
+          {
+            "Name": "SlotBackground",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#8fd3ffff"
+              },
+              {
+                "Name": "border",
+                "Value": "#4d65b4ff"
+              }
+            ]
+          },
+          {
+            "Name": "AccentBackground",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#8fd3ffff"
+            }]
+          },
+          {
+            "Name": "SecondaryAccent",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#4d65b4ff"
+            }]
+          },
+          {
+            "Name": "IconBackground",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#4d65b4ff"
+            }]
+          },
+          {
+            "Name": "CharacterSheetIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#8fd3ffff"
+            }]
+          },
+          {
+            "Name": "InventoryIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#8fd3ffff"
+            }]
+          },
+          {
+            "Name": "EquipmentIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#8fd3ffff"
+            }]
+          },
+          {
+            "Name": "JobManagementIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#8fd3ffff"
+            }]
+          },
+          {
+            "Name": "QuestJournalIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#8fd3ffff"
+            }]
+          }
+        ],
+        "FontColours": [
+          {
+            "Name": "Font",
+            "Value": "#3e3546ff"
+          },
+          {
+            "Name": "AccentFont",
+            "Value": "#3e3546ff"
+          },
+          {
+            "Name": "TitleFont",
+            "Value": "#3e3546ff"
+          }
+        ]
+      }
+    }
+  ]
+}

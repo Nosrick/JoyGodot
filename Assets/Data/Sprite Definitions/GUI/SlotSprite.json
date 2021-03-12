@@ -1,0 +1,36 @@
+﻿{
+  "Objects": {
+    "TileSet": {
+      "Name": "SlotSprite",
+      "SpriteData": [
+        {
+          "Name": "SlotSprite",
+          "Part": [
+            {
+              "Name": "background",
+              "Filename": "UI/background-tile",
+              "Data": [
+                "default"
+              ],
+              "Frames": 1,
+              "Position": 0,
+              "SortOrder": 1,
+              "FillType": "sliced"
+            },
+            {
+              "Name": "border",
+              "Filename": "UI/background-border",
+              "Data": [
+                "default"
+              ],
+              "Frames": 1,
+              "Position": 0,
+              "SortOrder": 2,
+              "FillType": "tiled"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

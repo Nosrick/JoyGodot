@@ -1,0 +1,35 @@
+{
+  "Conversations": {
+    "Name": "Greeting",
+    "Lines": [
+      {
+        "Text": "What do you want?",
+        "Conditions": ["Relationship < 0"],
+        "Next": ["BaseTopics"],
+        "Priority": 3,
+        "Speaker": "listener"
+      },
+      {
+        "Text": "Good to see you.",
+        "Conditions": ["Relationship > 80"],
+        "Next": ["BaseTopics"],
+        "Priority": 2,
+        "Speaker": "listener"
+      },
+      {
+        "Text": "Hi there!",
+        "Conditions": ["Relationship > 49"],
+        "Next": ["BaseTopics"],
+        "Priority": 1,
+        "Speaker": "listener"
+      },
+      {
+        "Text": "Greetings, stranger.",
+        "Conditions": ["Relationship < 50"],
+        "Next": ["BaseTopics"],
+        "Priority": 0,
+        "Speaker": "listener"
+      }
+    ]
+  }
+}

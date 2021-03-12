@@ -1,0 +1,44 @@
+﻿{
+  "Romance": [
+    {
+      "Name": "aromantic",
+      "DecaysNeed": "false",
+      "RomanceThreshold": "0",
+      "BondingThreshold": "0",
+      "Processor": "aromantic",
+      "Tags": [
+        "aro"
+      ]
+    },
+    {
+      "Name": "panromantic",
+      "DecaysNeed": "true",
+      "RomanceThreshold": "0",
+      "BondingThreshold": "0",
+      "Processor": "panromantic",
+      "Tags": [
+        "pan"
+      ]
+    },
+    {
+      "Name": "heteroromantic",
+      "DecaysNeed": "true",
+      "RomanceThreshold": "0",
+      "BondingThreshold": "0",
+      "Processor": "heteroromantic",
+      "Tags": [
+        "hetero"
+      ]
+    },
+    {
+      "Name": "homoromantic",
+      "DecaysNeed": "true",
+      "RomanceThreshold": "0",
+      "BondingThreshold": "0",
+      "Processor": "homoromantic",
+      "Tags": [
+        "homo"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1288 @@
+﻿{
+  "Cultures": [
+    {
+      "CultureName": "naga imperium",
+      "Inhabitants": [
+        "naga"
+      ],
+      "Rulers": [
+        "king",
+        "queen"
+      ],
+      "Crimes": [
+        "theft",
+        "murder",
+        "trespass",
+        "rape"
+      ],
+      "Relationships": [
+        "monoamorous"
+      ],
+      "Statistics": [],
+      "TileSet": {
+        "Name": "naga imperium",
+        "SpriteData": [
+          {
+            "Name": "naga",
+            "State": "idle",
+            "Part": [
+              {
+                "Name": "body-light",
+                "Frames": 3,
+                "Filename": "cultures/naga-light-body",
+                "SortOrder": 0,
+                "Data": ["default"],
+                "Colour": ["#fb6b1dff"]
+              },
+              {
+                "Name": "body-dark",
+                "Frames": 3,
+                "Filename": "cultures/naga-dark-body",
+                "SortOrder": 1,
+                "Data": ["default"],
+                "Colour": ["#fb6b1dff"]
+              },
+              {
+                "Name": "eyes",
+                "Frames": 3,
+                "Filename": "cultures/naga-eyes",
+                "SortOrder": 2,
+                "Data": ["default"],
+                "Colour": ["#3e3546ff"]
+              },
+              {
+                "Name": "tongue",
+                "Frames": 3,
+                "Filename": "cultures/naga-tongue",
+                "SortOrder": 3,
+                "Data": ["default"],
+                "Colour": ["#c32454ff"]
+              }
+            ]
+          }
+        ]
+      },
+      "Jobs": [
+        {
+          "Name": "warrior",
+          "Chance": 50
+        },
+        {
+          "Name": "thief",
+          "Chance": 20
+        },
+        {
+          "Name": "hedge wizard",
+          "Chance": 20
+        }
+      ],
+      "Sexualities": [
+        {
+          "Name": "heterosexual",
+          "Chance": 70
+        },
+        {
+          "Name": "pansexual",
+          "Chance": 10
+        },
+        {
+          "Name": "homosexual",
+          "Chance": 10
+        },
+        {
+          "Name": "asexual",
+          "Chance": 3
+        }
+      ],
+      "Genders": [
+        {
+          "Name": "male",
+          "Chance": 40
+        },
+        {
+          "Name": "female",
+          "Chance": 40
+        },
+        {
+          "Name": "neutral",
+          "Chance": 10
+        },
+        {
+          "Name": "agender",
+          "Chance": 5
+        }
+      ],
+      "NonConformingGenderChance": 7,
+      "Romances": [
+        {
+          "Name": "heteroromantic",
+          "Chance": 70
+        },
+        {
+          "Name": "homoromantic",
+          "Chance": 10
+        },
+        {
+          "Name": "panromantic",
+          "Chance": 10
+        },
+        {
+          "Name": "aromantic",
+          "Chance": 3
+        }
+      ],
+      "Sexes": [
+        {
+          "Name": "male",
+          "Chance": 50
+        },
+        {
+          "Name": "female",
+          "Chance": 50
+        }
+      ],
+      "Names": [
+        {
+          "Name": "The",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            1
+          ],
+          "Group": [
+            0,
+            1
+          ]
+        },
+        {
+          "Name": "Fantastic",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            2
+          ],
+          "Group": [
+            0
+          ]
+        },
+        {
+          "Name": "Despicable",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            2
+          ],
+          "Group": [
+            1
+          ]
+        },
+        {
+          "Name": "of",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            1
+          ],
+          "Group": [
+            2
+          ]
+        },
+        {
+          "Name": "the Isles",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            2
+          ],
+          "Group": [
+            2
+          ]
+        },
+        {
+          "Name": "the Mountains",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            2
+          ],
+          "Group": [
+            2
+          ]
+        },
+        {
+          "Name": "the Moon",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            2
+          ],
+          "Group": [
+            2
+          ]
+        },
+        {
+          "Name": "Aditi",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Aditya",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Agni",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Ananta",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Anil",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Aniruddha",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Arjuna",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Aruna",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Arundhati",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Bala",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Baladeva",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Bharata",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Bhaskara",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Bhima",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Bhumi",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Brahma",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Brijesha",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Chandra",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Damayanti",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Damodara",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Devaraja",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Devi",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Dilipa",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Draupadi",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Durga",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Gauri",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Girisha",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Hari",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Indira",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Jaya",
+          "Gender": [
+            "male",
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Jayanta",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Jayanti",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Kali",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Kalyani",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Kama",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Kamala",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Kanti",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Kapila",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Karna",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Kumara",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Kumari",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Lakshmi",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Lalita",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Madhava",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Madhavi",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Mahesha",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Mani",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Manu",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Maya",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Mina",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Mitra",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Mohana",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Mohini",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Murali",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Nala",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Nanda",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Padma",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Padmavati",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Partha",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Parvati",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Pramoda",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Pritha",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Priya",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Radha",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Raghu",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Rajani",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Rama",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Rama",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Rati",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Ravi",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Reva",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Rukmini",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sachin",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sandhya",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sanjaya",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Saraswati",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sati",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Savitr",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Savitri",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Shailaja",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Shakti",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Shanta",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Shantanu",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Shri",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Shyama",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sita",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Skanda",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sumati",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sundara",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sunita",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Surya",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Sushila",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Tara",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Uma",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Usha",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Vasanta",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Vasu",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Vayu",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Vijaya",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Vikrama",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Yama",
+          "Gender": [
+            "male"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "Yami",
+          "Gender": [
+            "female"
+          ],
+          "Chain": [
+            0
+          ]
+        },
+        {
+          "Name": "McNaga",
+          "Gender": [
+            "all"
+          ],
+          "Chain": [
+            1
+          ]
+        }
+      ],
+      "UIColours": {
+        "CursorColours": [
+          {
+            "Name": "DefaultCursor",
+            "Colour": [
+              {
+                "Name": "CursorHighlight",
+                "Value": "#fbb954ff"
+              },
+              {
+                "Name": "CursorBright",
+                "Value": "#fb6b1dff"
+              },
+              {
+                "Name": "CursorMid",
+                "Value": "#fb6b1dff"
+              },
+              {
+                "Name": "CursorDark",
+                "Value": "#e83b3bff"
+              },
+              {
+                "Name": "CursorOutline",
+                "Value": "#c32454ff"
+              }
+            ]
+          }
+        ],
+        "BackgroundColours": [
+          {
+            "Name": "DefaultWindow",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#e83b3bff"
+              },
+              {
+                "Name": "border",
+                "Value": "#fb6b1dff"
+              }
+            ]
+          },
+          {
+            "Name": "SlotBackground",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#fb6b1dff"
+              },
+              {
+                "Name": "border",
+                "Value": "#e83b3bff"
+              }
+            ]
+          },
+          {
+            "Name": "AccentBackground",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#fb6b1dff"
+            }]
+          },
+          {
+            "Name": "SecondaryAccent",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#e83b3bff"
+            }]
+          },
+          {
+            "Name": "IconBackground",
+            "Colour": [{
+              "Name": "background",
+              "Value": "#fb6b1dff"
+            }]
+          },
+          {
+            "Name": "CharacterSheetIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#e83b3bff"
+            }]
+          },
+          {
+            "Name": "InventoryIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#e83b3bff"
+            }]
+          },
+          {
+            "Name": "EquipmentIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#e83b3bff"
+            }]
+          },
+          {
+            "Name": "JobManagementIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#e83b3bff"
+            }]
+          },
+          {
+            "Name": "QuestJournalIcon",
+            "Colour": [{
+              "Name": "icon",
+              "Value": "#e83b3bff"
+            }]
+          }
+        ],
+        "FontColours": [
+          {
+            "Name": "Font",
+            "Value": "#23234bff"
+          },
+          {
+            "Name": "AccentFont",
+            "Value": "#23234bff"
+          },
+          {
+            "Name": "TitleFont",
+            "Value": "#23234bff"
+          }
+        ]
+      }
+    }
+  ]
+}

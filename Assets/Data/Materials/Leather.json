@@ -1,0 +1,10 @@
+﻿{
+  "Materials": [
+    {
+      "Name": "Leather",
+      "Hardness": 1,
+      "Bonus": 1,
+      "Weight": 2
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+﻿{
+  "Jobs": [
+    {
+      "Name": "Warrior",
+      "Description": "The versatile warrior. Trained in all melee weapons and all armour types.",
+      "Statistics": [
+        {
+          "Name": "Strength",
+          "Discount": 2
+        },
+        {
+          "Name": "Endurance",
+          "Discount": 1
+        }
+      ],
+      "Skills": [
+        {
+          "Name": "Light Blades",
+          "Discount": 1
+        },
+        {
+          "Name": "Heavy Blades",
+          "Discount": 1
+        },
+        {
+          "Name": "Axes",
+          "Discount": 1
+        },
+        {
+          "Name": "Polearms",
+          "Discount": 1
+        },
+        {
+          "Name": "Blunt Weapons",
+          "Discount": 1
+        },
+        {
+          "Name": "Martial Arts",
+          "Discount": 1
+        }
+      ],
+      "Colours": {
+        "Background": "#980b1cff",
+        "Icon": "#ee113dff"
+      },
+      "Abilities": [
+        {
+          "Name": "Backdraft",
+          "Cost": 300
+        }
+      ]
+    }
+  ]
+}

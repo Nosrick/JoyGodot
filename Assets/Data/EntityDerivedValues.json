@@ -1,0 +1,32 @@
+﻿{
+  "DerivedValues": [
+    {
+      "Name": "hitpoints",
+      "Formula": "endurance * 3",
+      "BackgroundColour": "#f01f5aff",
+      "TextColour": "#0d000dff",
+      "OutlineColour": "#fffed9ff"
+    },
+    {
+      "Name": "concentration",
+      "Formula": "focus * 3",
+      "BackgroundColour": "#2e994aff",
+      "TextColour": "#0d000dff",
+      "OutlineColour": "#fffed9ff"
+    },
+    {
+      "Name": "composure",
+      "Formula": "wit * 3",
+      "BackgroundColour": "#386abaff",
+      "TextColour": "#0d000dff",
+      "OutlineColour": "#fffed9ff"
+    },
+    {
+      "Name": "mana",
+      "Formula": "endurance + focus + wit",
+      "BackgroundColour": "#30f5dfff",
+      "TextColour": "#0d000dff",
+      "OutlineColour": "#fffed9ff"
+    }
+  ]
+}

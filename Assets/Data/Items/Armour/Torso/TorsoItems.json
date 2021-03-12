@@ -1,0 +1,144 @@
+{
+  "Items": {
+    "Category": "Armour",
+    "IdentifiedItems": [
+      {
+        "Name": "Breastplate",
+        "Description": "A piece of torso armour.",
+        "Value": 150,
+        "Materials": [
+          "steel",
+          "iron",
+          "bronze"
+        ],
+        "Size": 300,
+        "TileSet": "armour",
+        "SpawnWeight": 2,
+        "Slots": [
+          "torso"
+        ],
+        "Tags": [
+          "armour",
+          "torso",
+          "metal",
+          "physical",
+          "heavy armour"
+        ]
+      },
+      {
+        "Name": "Leather Armour",
+        "Description": "A basic piece of leather torso armour.",
+        "Value": 90,
+        "Materials": [
+          "leather"
+        ],
+        "Size": 300,
+        "TileSet": "armour",
+        "SpawnWeight": 4,
+        "Slots": [
+          "torso"
+        ],
+        "Tags": [
+          "armour",
+          "torso",
+          "leather",
+          "physical",
+          "light armour"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "Armour",
+      "SpriteData": [
+        {
+          "Name": "breastplate",
+          "Part": [
+            {
+              "Name": "breastplate-body",
+              "Frames": 1,
+              "Filename": "items/armour-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#99e7f4ff"
+              ]
+            },
+            {
+              "Name": "breastplate-highlight",
+              "Frames": 1,
+              "Filename": "items/armour-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#e5fbf3ff"
+              ]
+            },
+            {
+              "Name": "breastplate-outline",
+              "Frames": 1,
+              "Filename": "items/armour-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 3,
+              "Colour": [
+                "#020a55ff"
+              ]
+            }
+          ]
+        },
+        {
+          "Name": "leather armour",
+          "Part": [
+            {
+              "Name": "leather-armour-body",
+              "Frames": 1,
+              "Filename": "items/armour-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#a65805ff"
+              ]
+            },
+            {
+              "Name": "leather-armour-highlight",
+              "Frames": 1,
+              "Filename": "items/armour-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#ea7d10ff"
+              ]
+            },
+            {
+              "Name": "leather-armour-outline",
+              "Frames": 1,
+              "Filename": "items/armour-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 3,
+              "Colour": [
+                "#3c1701ff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

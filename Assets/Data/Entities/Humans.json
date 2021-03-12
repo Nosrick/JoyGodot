@@ -1,0 +1,84 @@
+{
+  "Entities": [
+    {
+      "CreatureType": "human",
+      "Type": "humanoid",
+      "VisionType": "diurnal vision",
+      "Statistics": [
+        {
+          "Name": "strength",
+          "Value": 4
+        },
+        {
+          "Name": "agility",
+          "Value": 4
+        },
+        {
+          "Name": "endurance",
+          "Value": 5
+        },
+        {
+          "Name": "intellect",
+          "Value": 4
+        },
+        {
+          "Name": "cunning",
+          "Value": 4
+        },
+        {
+          "Name": "focus",
+          "Value": 4
+        },
+        {
+          "Name": "personality",
+          "Value": 4
+        },
+        {
+          "Name": "suavity",
+          "Value": 4
+        },
+        {
+          "Name": "wit",
+          "Value": 4
+        }
+      ],
+      "Tags": [
+        "Living",
+        "Sentient",
+        "Animated",
+        "Diurnal"
+      ],
+      "Needs": [
+        "hunger",
+        "thirst",
+        "sex",
+        "friendship",
+        "family",
+        "health",
+        "property",
+        "respect",
+        "sleep",
+        "confidence",
+        "morality",
+        "purpose"
+      ],
+      "Slots": [
+        "Head",
+        "Neck",
+        "Shoulders",
+        "Torso",
+        "Waist",
+        "Legs",
+        "Feet",
+        "Hand",
+        "Hand",
+        "Ring",
+        "Ring",
+        "Ranged",
+        "Ammo",
+        "Job Pin",
+        "Throw"
+      ]
+    }
+  ]
+}

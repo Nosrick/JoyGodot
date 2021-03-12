@@ -1,0 +1,25 @@
+{
+  "Conversations": {
+    "Name": "Farewells",
+    "Lines": [
+      {
+        "Text": "Goodbye.",
+        "Conditions": ["Relationship < 50"],
+        "Priority": 0,
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "See you later!",
+        "Conditions": ["Relationship > 49"],
+        "Priority": 1,
+        "Speaker": "instigator"
+      },
+      {
+        "Text": "I'll be back soon, darling.",
+        "Conditions": ["Relationship = Romantic"],
+        "Priority": 2,
+        "Speaker": "instigator"
+      }
+    ]
+  }
+}

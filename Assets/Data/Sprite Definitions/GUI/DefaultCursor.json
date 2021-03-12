@@ -1,0 +1,64 @@
+﻿{
+  "Objects": {
+    "TileSet": {
+      "Name": "Cursors",
+      "SpriteData": [
+        {
+          "Name": "DefaultCursor",
+          "Part": [
+            {
+              "Name": "CursorHighlight",
+              "Filename": "UI/DefaultCursor",
+              "Data": [
+                "default"
+              ],
+              "Frames": 1,
+              "Position": 0,
+              "SortOrder": 4
+            },
+            {
+              "Name": "CursorBright",
+              "Filename": "UI/DefaultCursor",
+              "Data": [
+                "default"
+              ],
+              "Frames": 1,
+              "Position": 1,
+              "SortOrder": 3
+            },
+            {
+              "Name": "CursorMid",
+              "Filename": "UI/DefaultCursor",
+              "Data": [
+                "default"
+              ],
+              "Frames": 1,
+              "Position": 2,
+              "SortOrder": 2
+            },
+            {
+              "Name": "CursorDark",
+              "Filename": "UI/DefaultCursor",
+              "Data": [
+                "default"
+              ],
+              "Frames": 1,
+              "Position": 3,
+              "SortOrder": 1
+            },
+            {
+              "Name": "CursorOutline",
+              "Filename": "UI/DefaultCursor",
+              "Data": [
+                "default"
+              ],
+              "Frames": 1,
+              "Position": 4,
+              "SortOrder": 0
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

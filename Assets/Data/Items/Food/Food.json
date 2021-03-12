@@ -1,0 +1,100 @@
+{
+  "Items": {
+    "Category": "Food",
+    "IdentifiedItems": [
+      {
+        "Name": "Apple",
+        "Description": "Said to keep the doctor away. Juicy and fresh!",
+        "Value": 5,
+        "Effects": [
+          "FoodItem"
+        ],
+        "SpawnWeight": 30,
+        "Materials": [
+          "Food"
+        ],
+        "Size": 36,
+        "Tags": [
+          "food",
+          "fruit"
+        ],
+        "TileSet": "Food"
+      }
+    ],
+    "TileSet": {
+      "Name": "Food",
+      "SpriteData": [
+        {
+          "Name": "apple",
+          "Part": [
+            {
+              "Name": "apple-body",
+              "Frames": 1,
+              "Filename": "items/food-body",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#ee113dff"
+              ]
+            },
+            {
+              "Name": "apple-detail1",
+              "Frames": 1,
+              "Filename": "items/food-detail1",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2,
+              "Colour": [
+                "#21b039ff"
+              ]
+            },
+            {
+              "Name": "apple-detail2",
+              "Frames": 1,
+              "Filename": "items/food-detail2",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 3,
+              "Colour": [
+                "#a65805ff"
+              ]
+            },
+            {
+              "Name": "apple-highlight",
+              "Frames": 1,
+              "Filename": "items/food-highlight",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 4,
+              "Colour": [
+                "#faa3abff"
+              ]
+            },
+            {
+              "Name": "apple-outline",
+              "Frames": 1,
+              "Filename": "items/food-outline",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 5,
+              "Colour": [
+                "#3f0409ff"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

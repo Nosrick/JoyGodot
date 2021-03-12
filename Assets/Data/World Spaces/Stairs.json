@@ -1,0 +1,37 @@
+﻿{
+  "WorldInfo": [
+    {
+      "Name": "stairs",
+      "Tags": [
+        "stairs"
+      ],
+      "TileSet": {
+        "Name": "Stairs",
+        "SpriteData": [
+          {
+            "Name": "Upstairs",
+            "Part": [
+              {
+                "Name": "Upstairs",
+                "Data": "default",
+                "Position": 0,
+                "Filename": "environments/stairs"
+              }
+            ]
+          },
+          {
+            "Name": "Downstairs",
+            "Part": [
+              {
+                "Name": "Downstairs",
+                "Data": "default",
+                "Position": 1,
+                "Filename": "environments/stairs"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

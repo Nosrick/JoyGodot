@@ -1,0 +1,32 @@
+﻿{
+  "WorldInfo": [{
+      "Name": "Plains",
+      "Tags": ["Exterior"],
+      "TileSet": {
+        "Name": "Overworld",
+        "SpriteData": [{
+          "Name": "SurroundFloor",
+          "Part": [
+            {
+              "Name": "dirt",
+              "Position": 4,
+              "Data": ["default"],
+              "Frames": 1,
+              "Filename": "environments/overworld-dirt",
+              "SortOrder": 0,
+              "Colour": ["#9e4539ff"]
+            },
+            {
+              "Name": "grass",
+              "Position": 4,
+              "Data": ["default"],
+              "Frames": 1,
+              "Filename": "environments/overworld-grass",
+              "SortOrder": 1,
+              "Colour": ["#1ebc73ff"]
+            }
+          ]
+        }]
+      }
+    }]
+}

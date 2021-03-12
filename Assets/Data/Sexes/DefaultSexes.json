@@ -1,0 +1,42 @@
+﻿{
+  "Sexes": [
+    {
+      "Name": "Female",
+      "CanBirth": "true",
+      "CanFertilise": "false",
+      "Processor": "female",
+      "Tags": [
+        "female"
+      ]
+    },
+    {
+      "Name": "Male",
+      "CanBirth": "false",
+      "CanFertilise": "true",
+      "Processor": "male",
+      "Tags": [
+        "male"
+      ]
+    },
+    {
+      "Name": "Intersex",
+      "CanBirth": "true",
+      "CanFertilise": "true",
+      "Processor": "intersexfunctional",
+      "Tags": [
+        "female",
+        "male",
+        "intersex"
+      ]
+    },
+    {
+      "Name": "Neutral",
+      "CanBirth": "true",
+      "CanFertilise": "true",
+      "Processor": "neutral",
+      "Tags": [
+        "neutral"
+      ]
+    }
+  ]
+}
