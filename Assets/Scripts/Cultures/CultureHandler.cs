@@ -17,7 +17,7 @@ namespace JoyLib.Code.Cultures
         protected System.Collections.Generic.Dictionary<string, ICulture> m_Cultures;
 
         public IEnumerable<ICulture> Values => this.m_Cultures.Values;
-        
+
         protected IObjectIconHandler IconHandler { get; set; }
 
         public CultureHandler(IObjectIconHandler objectIconHandler)
@@ -45,6 +45,7 @@ namespace JoyLib.Code.Cultures
             {
                 return false;
             }
+
             this.m_Cultures.Add(value.CultureName, value);
             return true;
         }
@@ -55,10 +56,10 @@ namespace JoyLib.Code.Cultures
             {
                 return false;
             }
+
             this.m_Cultures[key] = null;
             this.m_Cultures.Remove(key);
             return true;
-
         }
 
         public IEnumerable<ICulture> Load()
@@ -100,12 +101,14 @@ namespace JoyLib.Code.Cultures
                     GlobalConstants.ActionLog.Log("Trans Chance: " + nonconformingGenderChance);
 
                     float number = 0;
-                    ICollection<string> rulers = jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Rulers");
+                    ICollection<string> rulers =
+                        jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Rulers");
                     GlobalConstants.ActionLog.Log("Rulers");
                     GlobalConstants.ActionLog.Log(rulers);
 
                     Array entry = new Array();
-                    ICollection<string> crimes = jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Crimes");
+                    ICollection<string> crimes =
+                        jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Crimes");
                     GlobalConstants.ActionLog.Log("Crimes");
                     GlobalConstants.ActionLog.Log(crimes);
 
@@ -113,8 +116,8 @@ namespace JoyLib.Code.Cultures
                         jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Inhabitants");
                     GlobalConstants.ActionLog.Log("Inhabitants");
                     GlobalConstants.ActionLog.Log(inhabitants);
-                    
-                    ICollection<string> relationships = 
+
+                    ICollection<string> relationships =
                         jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Relationships");
                     GlobalConstants.ActionLog.Log("Relationships");
                     GlobalConstants.ActionLog.Log(relationships);
@@ -126,11 +129,14 @@ namespace JoyLib.Code.Cultures
                     {
                         string name = jsonValueExtractor.GetValueFromDictionary<string>(data, "Name");
 
-                        ICollection<int> chain = jsonValueExtractor.GetArrayValuesCollectionFromDictionary<int>(data, "Chain");
+                        ICollection<int> chain =
+                            jsonValueExtractor.GetArrayValuesCollectionFromDictionary<int>(data, "Chain");
 
-                        ICollection<int> groups = jsonValueExtractor.GetArrayValuesCollectionFromDictionary<int>(data, "Group");
+                        ICollection<int> groups =
+                            jsonValueExtractor.GetArrayValuesCollectionFromDictionary<int>(data, "Group");
 
-                        ICollection<string> genders = jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Gender");
+                        ICollection<string> genders =
+                            jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Gender");
 
                         nameDatas.Add(new NameData(
                             name,
@@ -138,7 +144,7 @@ namespace JoyLib.Code.Cultures
                             genders.ToArray(),
                             groups.ToArray()));
                     }
-                    
+
                     GlobalConstants.ActionLog.Log(nameData);
 
                     entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Sexualities");
@@ -208,8 +214,15 @@ namespace JoyLib.Code.Cultures
 
                     this.IconHandler.AddSpriteDataFromJson(culture);
 
+                    Dictionary uiColours = jsonValueExtractor.GetValueFromDictionary<Dictionary>(culture, "UIColours");
+
                     IDictionary<string, IDictionary<string, Color>> backgroundColours =
-                        this.ExtractColourData(culture, "BackgroundColours");
+                        this.ExtractColourData(
+                            uiColours,
+                            "BackgroundColours",
+                            jsonValueExtractor);
+
+                    GlobalConstants.ActionLog.Log(backgroundColours);
                 }
 
                 //string cultureName = 
@@ -423,38 +436,45 @@ namespace JoyLib.Code.Cultures
 
         protected IDictionary<string, IDictionary<string, Color>> ExtractColourData(
             Dictionary element,
-            string elementName)
+            string elementName,
+            JSONValueExtractor valueExtractor)
         {
             IDictionary<string, IDictionary<string, Color>> colours =
                 new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
 
             if (element.Contains(elementName))
             {
-                
-            }
-            /*
-            foreach(var colour in element)
-            {
-                string name = (string) colour["Name"];
-                foreach (var data in colour["Colour"])
+                ICollection<Dictionary> elementsData = valueExtractor.GetCollectionFromArray<Dictionary>(
+                    valueExtractor.GetValueFromDictionary<Array>(
+                        element,
+                        elementName));
+                foreach (Dictionary inner in elementsData)
                 {
-                    string partName = (string) data["Name"];
-                    Color c = new Color((string) data["Value"]);
+                    string partName = valueExtractor.GetValueFromDictionary<string>(inner, "Name");
+                    ICollection<Dictionary> innerDicts = valueExtractor.GetCollectionFromArray<Dictionary>(
+                        valueExtractor.GetValueFromDictionary<Array>(inner, "Colour"));
+                    foreach (Dictionary colourData in innerDicts)
+                    {
+                        string colourName = valueExtractor.GetValueFromDictionary<string>(colourData, "Name");
+                        Color colour = new Color(valueExtractor.GetValueFromDictionary<string>(colourData, "Value"));
 
-                    if (colours.ContainsKey(name))
-                    {
-                        colours[name].Add(partName, c);
-                    }
-                    else
-                    {
-                        colours.Add(name, new Dictionary<string, Color>
+                        if (colours.ContainsKey(partName))
                         {
-                            {partName, c}
-                        });
+                            colours[partName].Add(colourName, colour);
+                        }
+                        else
+                        {
+                            colours.Add(
+                                partName,
+                                new System.Collections.Generic.Dictionary<string, Color>
+                                {
+                                    {colourName, colour}
+                                });
+                        }
                     }
                 }
             }
-            */
+
             return colours;
         }
 

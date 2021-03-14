@@ -170,7 +170,7 @@
               {
                 "Name": "body-light",
                 "Frames": 3,
-                "Filename": "cultures/demon-body",
+                "Filename": "cultures/demon-body.png",
                 "SortOrder": 0,
                 "Data": ["default"],
                 "Colour": [
@@ -181,7 +181,7 @@
               {
                 "Name": "eyes",
                 "Frames": 3,
-                "Filename": "cultures/demon-eyes",
+                "Filename": "cultures/demon-eyes.png",
                 "SortOrder": 2,
                 "Data": ["default"],
                 "Colour": [
@@ -198,7 +198,7 @@
               {
                 "Name": "body",
                 "Frames": 3,
-                "Filename": "cultures/human-body32",
+                "Filename": "cultures/human-body32.png",
                 "Data": ["default"],
                 "Position": 0,
                 "SortOrder": 0,
@@ -210,7 +210,7 @@
               {
                 "Name": "eyes",
                 "Frames": 3,
-                "Filename": "cultures/human-eyes32",
+                "Filename": "cultures/human-eyes32.png",
                 "Data": ["default"],
                 "Position": 0,
                 "SortOrder": 1,
@@ -222,8 +222,8 @@
               {
                 "Name": "horns",
                 "Frames": 3,
-                "Filename": "cultures/human-horns32",
-                "Data": "default",
+                "Filename": "cultures/human-horns32.png",
+                "Data": ["default"],
                 "Position": 0,
                 "SortOrder": 2,
                 "Colour": [

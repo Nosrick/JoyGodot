@@ -189,7 +189,7 @@ namespace JoyLib.Code.Graphics
                         colours.Add(Colors.White);
                     }
 
-                    Texture sprite = GD.Load<Texture>("Sprites/" + fileName);
+                    Texture sprite = GD.Load<Texture>("Assets/Sprites/" + fileName);
 
                     SpritePart part = new SpritePart
                     {
