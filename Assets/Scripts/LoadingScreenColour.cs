@@ -10,9 +10,14 @@ using JoyLib.Code.Scripting;
 
 public class LoadingScreenColour : Node
 {
-    
     protected NinePatchRect Background { get; set; }
     protected NinePatchRect Border { get; set; }
+    
+    protected ICultureHandler CultureHandler { get; set; }
+    
+    protected IObjectIconHandler IconHandler { get; set; }
+    
+    protected RNG Roller { get; set; }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -22,12 +27,27 @@ public class LoadingScreenColour : Node
 
         GlobalConstants.ActionLog = new ActionLog();
 
-        this.Background.Modulate = new Color(1, 0, 0);
-        this.Border.Modulate = new Color(0, 1, 0);
+        this.Roller = new RNG();
 
-        IObjectIconHandler objectIconHandler = new ObjectIconHandler(new RNG());
+        this.IconHandler = new ObjectIconHandler(this.Roller);
 
-        ICultureHandler cultureHandler = new CultureHandler(objectIconHandler);
+        this.CultureHandler = new CultureHandler(this.IconHandler);
+
+        ICulture chosenCulture = this.Roller.SelectFromCollection(this.CultureHandler.Cultures);
+        
+        this.Background.Modulate = chosenCulture.BackgroundColours["DefaultWindow"]["background"];
+        this.Border.Modulate = chosenCulture.BackgroundColours["DefaultWindow"]["border"];
+    }
+    
+    public override void _Input(InputEvent inputEvent)
+    {
+        if (inputEvent.IsActionPressed("ui_accept"))
+        {
+            ICulture chosenCulture = this.Roller.SelectFromCollection(this.CultureHandler.Cultures);
+        
+            this.Background.Modulate = chosenCulture.BackgroundColours["DefaultWindow"]["background"];
+            this.Border.Modulate = chosenCulture.BackgroundColours["DefaultWindow"]["border"];
+        }
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

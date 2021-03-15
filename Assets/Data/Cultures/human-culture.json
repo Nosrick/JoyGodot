@@ -173,8 +173,8 @@
                 "Position": 0,
                 "SortOrder": 0,
                 "Colour": [
-                  "#fca790ff",
-                  "#966c6cff"
+                  "#fca790",
+                  "#966c6c"
                 ]
               },
               {
@@ -187,9 +187,9 @@
                 "Position": 0,
                 "SortOrder": 1,
                 "Colour": [
-                  "#1ebc73ff",
-                  "#4d9be6ff",
-                  "#9e4539ff"
+                  "#1ebc73",
+                  "#4d9be6",
+                  "#9e4539"
                 ]
               }
             ]
@@ -203,23 +203,23 @@
             "Colour": [
               {
                 "Name": "CursorHighlight",
-                "Value": "#cd683dff"
+                "Value": "#cd683d"
               },
               {
                 "Name": "CursorBright",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               },
               {
                 "Name": "CursorMid",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               },
               {
                 "Name": "CursorDark",
-                "Value": "#7a3045ff"
+                "Value": "#7a3045"
               },
               {
                 "Name": "CursorOutline",
-                "Value": "#3e3546ff"
+                "Value": "#3e3546"
               }
             ]
           }
@@ -230,11 +230,11 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#7a3045ff"
+                "Value": "#7a3045"
               },
               {
                 "Name": "border",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               }
             ]
           },
@@ -243,11 +243,11 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               },
               {
                 "Name": "border",
-                "Value": "#7a3045ff"
+                "Value": "#7a3045"
               }
             ]
           },
@@ -256,7 +256,7 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               }
             ]
           },
@@ -265,7 +265,7 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#7a3045ff"
+                "Value": "#7a3045"
               }
             ]
           },
@@ -274,7 +274,7 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#7a3045ff"
+                "Value": "#7a3045"
               }
             ]
           },
@@ -283,7 +283,7 @@
             "Colour": [
               {
                 "Name": "icon",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               }
             ]
           },
@@ -292,7 +292,7 @@
             "Colour": [
               {
                 "Name": "icon",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               }
             ]
           },
@@ -301,7 +301,7 @@
             "Colour": [
               {
                 "Name": "icon",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               }
             ]
           },
@@ -310,7 +310,7 @@
             "Colour": [
               {
                 "Name": "icon",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               }
             ]
           },
@@ -319,7 +319,7 @@
             "Colour": [
               {
                 "Name": "icon",
-                "Value": "#9e4539ff"
+                "Value": "#9e4539"
               }
             ]
           }
@@ -327,15 +327,15 @@
         "FontColours": [
           {
             "Name": "Font",
-            "Value": "#e3c896ff"
+            "Value": "#e3c896"
           },
           {
             "Name": "AccentFont",
-            "Value": "#e3c896ff"
+            "Value": "#e3c896"
           },
           {
             "Name": "TitleFont",
-            "Value": "#e3c896ff"
+            "Value": "#e3c896"
           }
         ]
       }

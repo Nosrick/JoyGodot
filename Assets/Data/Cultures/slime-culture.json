@@ -24,8 +24,8 @@
                 "SortOrder": 0,
                 "Position": 0,
                 "Colour": [
-                  "#8fd3ffff",
-                  "#a884f3ff"
+                  "#8fd3ff",
+                  "#a884f3"
                 ]
               },
               {
@@ -36,8 +36,8 @@
                 "SortOrder": 1,
                 "Position": 0,
                 "Colour": [
-                  "#905ea9ff",
-                  "#4d65b4ff"
+                  "#905ea9",
+                  "#4d65b4"
                 ]
               }
             ]
@@ -155,23 +155,23 @@
             "Colour": [
               {
                 "Name": "CursorHighlight",
-                "Value": "#4d65b4ff"
+                "Value": "#4d65b4"
               },
               {
                 "Name": "CursorBright",
-                "Value": "#4d65b4ff"
+                "Value": "#4d65b4"
               },
               {
                 "Name": "CursorMid",
-                "Value": "#4d65b4ff"
+                "Value": "#4d65b4"
               },
               {
                 "Name": "CursorDark",
-                "Value": "#4d65b4ff"
+                "Value": "#4d65b4"
               },
               {
                 "Name": "CursorOutline",
-                "Value": "#8fd3ffff"
+                "Value": "#8fd3ff"
               }
             ]
           }
@@ -182,11 +182,11 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#4d65b4ff"
+                "Value": "#4d65b4"
               },
               {
                 "Name": "border",
-                "Value": "#8fd3ffff"
+                "Value": "#8fd3ff"
               }
             ]
           },
@@ -195,11 +195,11 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#8fd3ffff"
+                "Value": "#8fd3ff"
               },
               {
                 "Name": "border",
-                "Value": "#4d65b4ff"
+                "Value": "#4d65b4"
               }
             ]
           },
@@ -207,71 +207,71 @@
             "Name": "AccentBackground",
             "Colour": [{
               "Name": "background",
-              "Value": "#8fd3ffff"
+              "Value": "#8fd3ff"
             }]
           },
           {
             "Name": "SecondaryAccent",
             "Colour": [{
               "Name": "background",
-              "Value": "#4d65b4ff"
+              "Value": "#4d65b4"
             }]
           },
           {
             "Name": "IconBackground",
             "Colour": [{
               "Name": "background",
-              "Value": "#4d65b4ff"
+              "Value": "#4d65b4"
             }]
           },
           {
             "Name": "CharacterSheetIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#8fd3ffff"
+              "Value": "#8fd3ff"
             }]
           },
           {
             "Name": "InventoryIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#8fd3ffff"
+              "Value": "#8fd3ff"
             }]
           },
           {
             "Name": "EquipmentIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#8fd3ffff"
+              "Value": "#8fd3ff"
             }]
           },
           {
             "Name": "JobManagementIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#8fd3ffff"
+              "Value": "#8fd3ff"
             }]
           },
           {
             "Name": "QuestJournalIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#8fd3ffff"
+              "Value": "#8fd3ff"
             }]
           }
         ],
         "FontColours": [
           {
             "Name": "Font",
-            "Value": "#3e3546ff"
+            "Value": "#3e3546"
           },
           {
             "Name": "AccentFont",
-            "Value": "#3e3546ff"
+            "Value": "#3e3546"
           },
           {
             "Name": "TitleFont",
-            "Value": "#3e3546ff"
+            "Value": "#3e3546"
           }
         ]
       }

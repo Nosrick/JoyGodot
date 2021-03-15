@@ -32,7 +32,7 @@
                 "Filename": "cultures/naga-light-body.png",
                 "SortOrder": 0,
                 "Data": ["default"],
-                "Colour": ["#fb6b1dff"]
+                "Colour": ["#fb6b1d"]
               },
               {
                 "Name": "body-dark",
@@ -40,7 +40,7 @@
                 "Filename": "cultures/naga-dark-body.png",
                 "SortOrder": 1,
                 "Data": ["default"],
-                "Colour": ["#fb6b1dff"]
+                "Colour": ["#fb6b1d"]
               },
               {
                 "Name": "eyes",
@@ -48,7 +48,7 @@
                 "Filename": "cultures/naga-eyes.png",
                 "SortOrder": 2,
                 "Data": ["default"],
-                "Colour": ["#3e3546ff"]
+                "Colour": ["#3e3546"]
               },
               {
                 "Name": "tongue",
@@ -56,7 +56,7 @@
                 "Filename": "cultures/naga-tongue.png",
                 "SortOrder": 3,
                 "Data": ["default"],
-                "Colour": ["#c32454ff"]
+                "Colour": ["#c32454"]
               }
             ]
           }
@@ -1163,23 +1163,23 @@
             "Colour": [
               {
                 "Name": "CursorHighlight",
-                "Value": "#fbb954ff"
+                "Value": "#fbb954"
               },
               {
                 "Name": "CursorBright",
-                "Value": "#fb6b1dff"
+                "Value": "#fb6b1d"
               },
               {
                 "Name": "CursorMid",
-                "Value": "#fb6b1dff"
+                "Value": "#fb6b1d"
               },
               {
                 "Name": "CursorDark",
-                "Value": "#e83b3bff"
+                "Value": "#e83b3b"
               },
               {
                 "Name": "CursorOutline",
-                "Value": "#c32454ff"
+                "Value": "#c32454"
               }
             ]
           }
@@ -1190,11 +1190,11 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#e83b3bff"
+                "Value": "#e83b3b"
               },
               {
                 "Name": "border",
-                "Value": "#fb6b1dff"
+                "Value": "#fb6b1d"
               }
             ]
           },
@@ -1203,11 +1203,11 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#fb6b1dff"
+                "Value": "#fb6b1d"
               },
               {
                 "Name": "border",
-                "Value": "#e83b3bff"
+                "Value": "#e83b3b"
               }
             ]
           },
@@ -1215,71 +1215,71 @@
             "Name": "AccentBackground",
             "Colour": [{
               "Name": "background",
-              "Value": "#fb6b1dff"
+              "Value": "#fb6b1d"
             }]
           },
           {
             "Name": "SecondaryAccent",
             "Colour": [{
               "Name": "background",
-              "Value": "#e83b3bff"
+              "Value": "#e83b3b"
             }]
           },
           {
             "Name": "IconBackground",
             "Colour": [{
               "Name": "background",
-              "Value": "#fb6b1dff"
+              "Value": "#fb6b1d"
             }]
           },
           {
             "Name": "CharacterSheetIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#e83b3bff"
+              "Value": "#e83b3b"
             }]
           },
           {
             "Name": "InventoryIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#e83b3bff"
+              "Value": "#e83b3b"
             }]
           },
           {
             "Name": "EquipmentIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#e83b3bff"
+              "Value": "#e83b3b"
             }]
           },
           {
             "Name": "JobManagementIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#e83b3bff"
+              "Value": "#e83b3b"
             }]
           },
           {
             "Name": "QuestJournalIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#e83b3bff"
+              "Value": "#e83b3b"
             }]
           }
         ],
         "FontColours": [
           {
             "Name": "Font",
-            "Value": "#23234bff"
+            "Value": "#23234b"
           },
           {
             "Name": "AccentFont",
-            "Value": "#23234bff"
+            "Value": "#23234b"
           },
           {
             "Name": "TitleFont",
-            "Value": "#23234bff"
+            "Value": "#23234b"
           }
         ]
       }

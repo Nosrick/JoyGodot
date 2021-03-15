@@ -174,8 +174,8 @@
                 "SortOrder": 0,
                 "Data": ["default"],
                 "Colour": [
-                  "#1ebc73ff",
-                  "#30e1b9ff"
+                  "#1ebc73",
+                  "#30e1b9"
                 ]
               },
               {
@@ -185,8 +185,8 @@
                 "SortOrder": 2,
                 "Data": ["default"],
                 "Colour": [
-                  "#c32454ff",
-                  "#e83b3bff"
+                  "#c32454",
+                  "#e83b3b"
                 ]
               }
             ]
@@ -203,8 +203,8 @@
                 "Position": 0,
                 "SortOrder": 0,
                 "Colour": [
-                  "#30e1b9ff",
-                  "#fbb954ff"
+                  "#30e1b9",
+                  "#fbb954"
                 ]
               },
               {
@@ -215,8 +215,8 @@
                 "Position": 0,
                 "SortOrder": 1,
                 "Colour": [
-                  "#fb6b1dff",
-                  "#c32454ff"
+                  "#fb6b1d",
+                  "#c32454"
                 ]
               },
               {
@@ -227,8 +227,8 @@
                 "Position": 0,
                 "SortOrder": 2,
                 "Colour": [
-                  "#625565ff",
-                  "#e3c896ff"
+                  "#625565",
+                  "#e3c896"
                 ]
               }
             ]
@@ -242,23 +242,23 @@
             "Colour": [
               {
                 "Name": "CursorHighlight",
-                "Value": "#91db69ff"
+                "Value": "#91db69"
               },
               {
                 "Name": "CursorBright",
-                "Value": "#1ebc73ff"
+                "Value": "#1ebc73"
               },
               {
                 "Name": "CursorMid",
-                "Value": "#1ebc73ff"
+                "Value": "#1ebc73"
               },
               {
                 "Name": "CursorDark",
-                "Value": "#0b8a8fff"
+                "Value": "#0b8a8f"
               },
               {
                 "Name": "CursorOutline",
-                "Value": "#c32454ff"
+                "Value": "#c32454"
               }
             ]
           }
@@ -269,11 +269,11 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#0b8a8fff"
+                "Value": "#0b8a8f"
               },
               {
                 "Name": "border",
-                "Value": "#1ebc73ff"
+                "Value": "#1ebc73"
               }
             ]
           },
@@ -282,11 +282,11 @@
             "Colour": [
               {
                 "Name": "background",
-                "Value": "#1ebc73ff"
+                "Value": "#1ebc73"
               },
               {
                 "Name": "border",
-                "Value": "#0b8a8fff"
+                "Value": "#0b8a8f"
               }
             ]
           },
@@ -295,71 +295,71 @@
             "Colour": 
             [{
               "Name": "background",
-              "Value": "#1ebc73ff"
+              "Value": "#1ebc73"
             }]
           },
           {
             "Name": "SecondaryAccent",
             "Colour": [{
               "Name": "background",
-              "Value": "#0b8a8fff"
+              "Value": "#0b8a8f"
             }]
           },
           {
             "Name": "CharacterSheetIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#1ebc73ff"
+              "Value": "#1ebc73"
             }]
           },
           {
             "Name": "InventoryIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#1ebc73ff"
+              "Value": "#1ebc73"
             }]
           },
           {
             "Name": "EquipmentIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#1ebc73ff"
+              "Value": "#1ebc73"
             }]
           },
           {
             "Name": "JobManagementIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#1ebc73ff"
+              "Value": "#1ebc73"
             }]
           },
           {
             "Name": "QuestJournalIcon",
             "Colour": [{
               "Name": "icon",
-              "Value": "#1ebc73ff"
+              "Value": "#1ebc73"
             }]
           },
           {
             "Name": "IconBackground",
             "Colour": [{
               "Name": "background",
-              "Value": "#0b8a8fff"
+              "Value": "#0b8a8f"
             }]
           }
         ],
         "FontColours": [
           {
             "Name": "Font",
-            "Value": "#23234bff"
+            "Value": "#23234b"
           },
           {
             "Name": "AccentFont",
-            "Value": "#23234bff"
+            "Value": "#23234b"
           },
           {
             "Name": "TitleFont",
-            "Value": "#23234bff"
+            "Value": "#23234b"
           }
         ]
       }

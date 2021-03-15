@@ -111,20 +111,6 @@ namespace JoyLib.Code.Graphics
         public bool AddSpriteData(string tileSet, SpriteData dataToAdd)
         {
             List<SpritePart> parts = new List<SpritePart>();
-            /*
-            foreach (SpritePart part in dataToAdd.m_Parts)
-            {
-                SpritePart copy = part;
-                copy.m_FrameSprites = GD.Load<Sprite>("Sprites/" + part.m_Filename)
-                    .Where(
-                        (sprite, i) =>
-                            i >= part.m_Position
-                            && i < part.m_Position +
-                            part.m_Frames)
-                    .ToList();
-                parts.Add(copy);
-            }
-            */
 
             dataToAdd.m_Parts = parts;
 
