@@ -110,10 +110,6 @@ namespace JoyLib.Code.Graphics
 
         public bool AddSpriteData(string tileSet, SpriteData dataToAdd)
         {
-            List<SpritePart> parts = new List<SpritePart>();
-
-            dataToAdd.m_Parts = parts;
-
             if (this.Icons.ContainsKey(tileSet))
             {
                 this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.m_Name, dataToAdd));
