@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Godot;
 using JoyLib.Code.Graphics;
-using TMPro;
-using UnityEngine;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -42,11 +41,13 @@ namespace JoyLib.Code.Unity.GUI
         bool IsActive(string name);
 
         bool AreAnyOpen(bool includeAlwaysOpen = false);
+        
+        IDictionary<string, Theme> Themes { get; }
 
         IDictionary<string, ISpriteState> UISprites { get; }
         IDictionary<string, ISpriteState> Cursors { get; }
 
-        IDictionary<string, TMP_FontAsset> FontsInUse { get; }
+        IDictionary<string, DynamicFont> FontsInUse { get; }
         
         IDictionary<string, IDictionary<string, Color>> CursorColours { get; }
         

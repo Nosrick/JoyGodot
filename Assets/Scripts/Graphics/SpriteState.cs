@@ -55,34 +55,10 @@ namespace JoyLib.Code.Graphics
                 this.RandomiseColours();
             }
         }
-        public IList<Tuple<Color, Texture>> GetSpriteForFrame(int frame)
+        public SpritePart GetPart(string name)
         {
-            int maxFrames = this.SpriteData.m_Parts.Max(part => part.m_Frames);
-            if (maxFrames == 0)
-            {
-                throw new InvalidOperationException("The sprite data for " + this.Name + " is empty!");
-            }
-            
-            if (frame < maxFrames)
-            {
-                List<Tuple<Color, Texture>> data = new List<Tuple<Color, Texture>>();
-                foreach (SpritePart part in this.SpriteData.m_Parts)
-                {
-                    Color colour = part.SelectedColour;
-                    Texture sprite = part.m_FrameSprite;
-                    data.Add(new Tuple<Color, Texture>(colour, sprite));
-                }
-
-                return data;
-                /*
-                return this.SpriteData.m_Parts.Select(part =>
-                    new Tuple<Color, Sprite>(
-                        part.m_PossibleColours[part.m_SelectedColour],
-                        part.m_FrameSprites[frame])).ToList();
-                        */
-            }
-
-            return this.GetSpriteForFrame(0);
+            return this.m_SpriteData.m_Parts.FirstOrDefault(part =>
+                part.m_Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public void OverrideColours(IDictionary<string, Color> colours)

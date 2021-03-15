@@ -1,83 +1,52 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Godot;
 using JoyLib.Code.Graphics;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    [RequireComponent(typeof(CanvasGroup))]
-    [RequireComponent(typeof(GUIData))]
-    public class Cursor : MonoBehaviour
+    public class Cursor : GUIData
     {
-        [SerializeField] protected ManagedUISprite m_PartPrefab;
+        protected ManagedSprite m_PartPrefab;
         
-        protected ManagedUISprite CursorObject { get; set; }
-        protected CanvasGroup CanvasGroup { get; set; }
-        protected RectTransform MyRect { get; set; }
+        protected ManagedSprite CursorObject { get; set; }
 
         protected bool Initialised { get; set; }
-        protected ManagedUISprite DragObject { get; set; }
-        
-        protected Canvas Canvas { get; set; }
-        protected Camera MainCamera { get; set; }
+        protected ManagedSprite DragObject { get; set; }
 
         public void Awake()
         {
-            this.CanvasGroup = this.GetComponent<CanvasGroup>();
-            this.MyRect = this.GetComponent<RectTransform>();
-            this.Canvas = this.GetComponent<Canvas>();
-            this.MainCamera = Camera.main;
-
-            this.Canvas.sortingLayerName = "GUI";
-
             if (this.DragObject is null)
             {
-                this.DragObject = Instantiate(this.m_PartPrefab, this.transform);
+                this.DragObject = new ManagedSprite();
                 this.DragObject.Awake();
-                this.DragObject.gameObject.SetActive(false);
-                RectTransform dragRect = this.DragObject.GetComponent<RectTransform>();
-                dragRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, this.MyRect.rect.width * 2);
-                dragRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, this.MyRect.rect.height * 2);
+                this.DragObject.Visible = false;
             }
-            
-            UnityEngine.Cursor.visible = false;
 
             if (this.CursorObject is null)
             {
-                this.CursorObject = Instantiate(this.m_PartPrefab, this.transform);
+                this.CursorObject = (ManagedSprite) this.m_PartPrefab.Duplicate();
                 this.CursorObject.Awake();
             }
 
             this.Initialised = true;
         }
 
-        public void Update()
+        public override void _Input(InputEvent @event)
         {
-            if (!this.enabled)
+            if (!this.Visible)
             {
                 return;
             }
 
-            Rect rect = this.MyRect.rect;
-            // this.transform.position = Mouse.current.position.ReadValue() + new Vector2(rect.width / 4, -(rect.height / 4));
-            
-            Vector3 mousePosition = Mouse.current.position.ReadValue();
-            
-            switch (this.Canvas.renderMode)
+            if (!(@event is InputEventMouse mouseEvent))
             {
-                case RenderMode.ScreenSpaceOverlay:
-                    break;
-                
-                case RenderMode.ScreenSpaceCamera:
-                    mousePosition = this.MainCamera.ScreenToWorldPoint(mousePosition);
-                    break;
-                
-                case RenderMode.WorldSpace:
-                    mousePosition = this.MainCamera.ScreenToWorldPoint(mousePosition);
-                    break;
+                return;
             }
-            
-            this.transform.position = new Vector3(mousePosition.x, mousePosition.y, this.transform.position.z);
+
+            Vector2 mousePosition = mouseEvent.Position;
+
+            this.RectPosition = new Vector2(mousePosition.x, mousePosition.y);
         }
 
         public void SetCursorSize(int width, int height)
@@ -86,14 +55,9 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.Awake();
             }
-            this.MyRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
-            this.MyRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
-            RectTransform cursorRect = this.CursorObject.GetComponent<RectTransform>();
-            cursorRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
-            cursorRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
-            RectTransform dragRect = this.DragObject.GetComponent<RectTransform>();
-            dragRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width * 2);
-            dragRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height * 2);
+
+            this.RectSize = new Vector2(width, height);
+            //this.DragObject.Scale = new Vector2()
         }
 
         public void SetCursorSprites(ISpriteState state)
@@ -102,9 +66,10 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.Awake();
             }
-            this.CursorObject.gameObject.SetActive(true);
+
+            this.CursorObject.Visible = true;
             this.CursorObject.Clear();
-            this.CursorObject.AddSpriteState(state, true);
+            this.CursorObject.AddSpriteState(state);
         }
 
         public void SetCursorColours(IDictionary<string, Color> colours)
@@ -139,13 +104,13 @@ namespace JoyLib.Code.Unity.GUI
                 this.Awake();
             }
             this.DragObject.Clear();
-            this.DragObject.gameObject.SetActive(false);
+            this.DragObject.Visible = false;
             if (replacement is null)
             {
                 return;
             }
-            this.DragObject.gameObject.SetActive(true);
-            this.DragObject.AddSpriteState(replacement, true);
+            this.DragObject.Visible = true;
+            this.DragObject.AddSpriteState(replacement);
         }
 
         public void Reset()

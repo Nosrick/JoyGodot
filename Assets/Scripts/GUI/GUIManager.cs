@@ -2,19 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Castle.Core.Internal;
-using Code.Unity.GUI.Managed_Assets;
-using JoyLib.Code.Events;
+using Godot;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Settings;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using TMPro;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using SpriteState = JoyLib.Code.Graphics.SpriteState;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -22,15 +14,17 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected HashSet<GUIData> GUIs { get; set; }
         protected HashSet<GUIData> ActiveGUIs { get; set; }
-
-        protected Canvas MainUI { get; set; }
+        
+        protected Node RootUI { get; set; }
+        
+        public IDictionary<string, Theme> Themes { get; protected set; }
 
         public IDictionary<string, ISpriteState> UISprites { get; protected set; }
         public IDictionary<string, ISpriteState> Cursors { get; protected set; }
 
-        protected IDictionary<string, TMP_FontAsset> LoadedFonts { get; set; }
+        protected IDictionary<string, DynamicFont> LoadedFonts { get; set; }
 
-        public IDictionary<string, TMP_FontAsset> FontsInUse =>
+        public IDictionary<string, DynamicFont> FontsInUse =>
             this.DyslexicMode ? this.DyslexicModeFonts : this.LoadedFonts;
 
         public IDictionary<string, Tuple<float, float>> FontSizesInUse =>
@@ -42,12 +36,13 @@ namespace JoyLib.Code.Unity.GUI
         public IDictionary<string, IDictionary<string, Color>> UISpriteColours { get; protected set; }
 
         protected bool DyslexicMode { get; set; }
-        protected IDictionary<string, TMP_FontAsset> DyslexicModeFonts { get; set; }
+        protected IDictionary<string, DynamicFont> DyslexicModeFonts { get; set; }
 
         public IDictionary<string, Color> FontColours { get; protected set; }
 
-        public GUIManager()
+        public GUIManager(Node rootUi)
         {
+            this.RootUI = rootUi;
             this.Initialise();
         }
 
@@ -55,7 +50,7 @@ namespace JoyLib.Code.Unity.GUI
         
         public GUIData Get(string name)
         {
-            return this.GUIs.FirstOrDefault(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.GUIs.FirstOrDefault(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public IEnumerable<GUIData> Load()
@@ -67,31 +62,33 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.GUIs is null)
             {
-                this.MainUI = GameObject.Find("MainUI").GetComponent<Canvas>();
+                this.Themes = new Dictionary<string, Theme>();
+                
                 this.GUIs = new HashSet<GUIData>();
                 this.ActiveGUIs = new HashSet<GUIData>();
 
                 this.UISprites = new Dictionary<string, ISpriteState>();
-
+                
+                /*
                 this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
                     .Select(data => new SpriteState(data.m_Name, data))
                     .Cast<ISpriteState>()
                     .ToDictionary(state => state.Name, state => state);
-
+*/
                 this.CursorColours = new Dictionary<string, IDictionary<string, Color>>();
                 this.UISpriteColours = new Dictionary<string, IDictionary<string, Color>>();
-                this.LoadedFonts = new Dictionary<string, TMP_FontAsset>
+                this.LoadedFonts = new Dictionary<string, DynamicFont>
                 {
-                    {"default", Resources.Load<TMP_FontAsset>("Fonts/OpenDyslexic3")}
+                    {"default", GD.Load<DynamicFont>("Fonts/OpenDyslexic3")}
                 };
 
-                this.DyslexicModeFonts = new Dictionary<string, TMP_FontAsset>
+                this.DyslexicModeFonts = new Dictionary<string, DynamicFont>
                 {
                     {"default", this.LoadedFonts["default"]}
                 };
                 this.FontColours = new Dictionary<string, Color>
                 {
-                    {"default", Color.black}
+                    {"default", Colors.Black}
                 };
                 this.StandardFontSizes = new Dictionary<string, Tuple<float, float>>
                 {
@@ -104,11 +101,14 @@ namespace JoyLib.Code.Unity.GUI
                 this.LoadDefaults();
                 this.LoadDefinitions();
 
+                /*
                 GlobalConstants.GameManager.SettingsManager.OnSettingChange -= this.SettingChanged;
                 GlobalConstants.GameManager.SettingsManager.OnSettingChange += this.SettingChanged;
+                */
             }
         }
 
+        /*
         protected void SettingChanged(SettingChangedEventArgs args)
         {
             if (args.Setting is DyslexicModeSetting dyslexicModeSetting)
@@ -118,6 +118,7 @@ namespace JoyLib.Code.Unity.GUI
                 LayoutRebuilder.MarkLayoutForRebuild(this.MainUI.GetComponent<RectTransform>());
             }
         }
+        */
 
         protected void LoadDefaults()
         {
@@ -132,7 +133,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             else
             {
-                GlobalConstants.ActionLog.AddText("COULD NOT FIND GUI DEFAULTS.", LogLevel.Error);
+                GlobalConstants.ActionLog.Log("COULD NOT FIND GUI DEFAULTS.", LogLevel.Error);
             }
 
             file = Directory.GetCurrentDirectory() + GlobalConstants.SETTINGS_FOLDER + "/DyslexicMode.json";
@@ -145,15 +146,18 @@ namespace JoyLib.Code.Unity.GUI
                     this.DyslexicModeFonts);
             }
 
+            /*
             this.DyslexicMode = (bool) GlobalConstants.GameManager.SettingsManager
                 .GetSetting(SettingNames.DYSLEXIC_MODE).objectValue;
+                */
         }
 
         protected void LoadFontSettings(
             string file, 
             IDictionary<string, Tuple<float, float>> sizes, 
-            IDictionary<string, TMP_FontAsset> fonts)
+            IDictionary<string, DynamicFont> fonts)
         {
+            /*
             using (StreamReader reader = new StreamReader(file))
             {
                 using (JsonTextReader jsonReader = new JsonTextReader(reader))
@@ -193,17 +197,22 @@ namespace JoyLib.Code.Unity.GUI
                     }
                 }
             }
+            */
         }
 
         protected void LoadDefinitions()
         {
-            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER +
-                                                "Sprite Definitions/GUI/",
+            string[] files = Directory.GetFiles(
+                Directory.GetCurrentDirectory() +
+                GlobalConstants.ASSETS_FOLDER + 
+                GlobalConstants.DATA_FOLDER +
+                "Sprite Definitions/GUI/",
                 "*.json",
                 SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
+                /*
                 using (StreamReader reader = new StreamReader(file))
                 {
                     using (JsonTextReader jsonReader = new JsonTextReader(reader))
@@ -237,6 +246,7 @@ namespace JoyLib.Code.Unity.GUI
                         }
                     }
                 }
+                */
             }
         }
 
@@ -265,11 +275,12 @@ namespace JoyLib.Code.Unity.GUI
 
         public void FindGUIs()
         {
-            Canvas mainUI = null;
-            SceneManager.GetActiveScene().GetRootGameObjects().First(o => o.TryGetComponent(out mainUI));
-            this.MainUI = mainUI;
-
-            GUIData[] guiData = this.MainUI.GetComponentsInChildren<GUIData>(true);
+            Godot.Collections.Array guiData = this.RootUI.GetChildren();
+            foreach (var child in guiData)
+            {
+                
+            }
+            /*
             foreach (GUIData data in guiData)
             {
                 this.Add(data);
@@ -283,6 +294,7 @@ namespace JoyLib.Code.Unity.GUI
 
             cursor.SetCursorSprites(this.Cursors["DefaultCursor"]);
             cursor.SetCursorColours(this.CursorColours["DefaultCursor"]);
+            */
         }
 
         public bool Add(GUIData gui)

@@ -54,7 +54,13 @@ namespace JoyLib.Code.Graphics
                         m_Frames = 1,
                         m_Name = "DEFAULT",
                         m_Position = 0,
-                        m_FrameSprite = defaultSprite,
+                        m_FrameSprite = new SpriteFrames
+                        {
+                            Frames = new Array
+                            {
+                                defaultSprite
+                            }
+                        },
                         m_PossibleColours = new List<Color> {Colors.White}
                     }
                 }
@@ -179,17 +185,34 @@ namespace JoyLib.Code.Graphics
                         colours.Add(Colors.White);
                     }
 
-                    Texture sprite = GD.Load<Texture>(
+                    Texture texture = GD.Load<Texture>(
                         GlobalConstants.GODOT_ASSETS_FOLDER + 
                         GlobalConstants.SPRITES_FOLDER + 
                         fileName);
 
+                    Image image = texture.GetData();
+                    int frameWidth = texture.GetWidth() / partFrames;
+                    List<Texture> frames = new List<Texture>();
+                    for (int i = 0; i < texture.GetWidth(); i += frameWidth)
+                    {
+                        ImageTexture imageTexture = new ImageTexture();
+                        imageTexture.CreateFromImage(image.GetRect(new Rect2(new Vector2(i, 0), new Vector2(frameWidth, frameWidth))));
+                        frames.Add(imageTexture);
+                    }
+                    
+                    SpriteFrames spriteFrames = new SpriteFrames();
+                    spriteFrames.AddAnimation("idle");
+                    for (int i = 0; i < frames.Count; i++)
+                    {
+                        spriteFrames.AddFrame(name, frames[i], i);
+                    }
+                    
                     SpritePart part = new SpritePart
                     {
                         m_Data = data.ToArray(),
                         m_Filename = fileName,
                         m_Frames = partFrames,
-                        m_FrameSprite = sprite,
+                        m_FrameSprite = spriteFrames,
                         m_Name = partName,
                         m_Position = position,
                         m_PossibleColours = colours.ToList(),
@@ -222,22 +245,6 @@ namespace JoyLib.Code.Graphics
         public SpriteData ReturnDefaultIcon()
         {
             return this.Icons["DEFAULT"].First().Item2;
-        }
-
-        public SpriteData GetFrame(string tileSet, string tileName, string state = "DEFAULT", int frame = 0)
-        {
-            SpriteData[] frames = this.GetSprites(tileSet, tileName, state).ToArray();
-            return frames.Length >= frame ? frames[frame] : this.ReturnDefaultIcon();
-        }
-
-        public List<Texture> GetRawFrames(string tileSet, string tileName, string partName, string state = "DEFAULT")
-        {
-            List<Texture> sprites = this.GetSprites(tileSet, tileName, state).SelectMany(data => data.m_Parts)
-                .Where(part => part.m_Name.Equals(partName, StringComparison.OrdinalIgnoreCase))
-                .Select(part => part.m_FrameSprite)
-                .ToList();
-
-            return sprites;
         }
 
         public IEnumerable<SpriteData> GetSprites(string tileSet, string tileName, string state = "DEFAULT")
@@ -296,7 +303,7 @@ namespace JoyLib.Code.Graphics
         public string m_Name;
         public int m_Frames;
         public string[] m_Data;
-        [NonSerialized] public Texture m_FrameSprite;
+        public SpriteFrames m_FrameSprite;
         public string m_Filename;
         public int m_Position;
         public List<Color> m_PossibleColours;

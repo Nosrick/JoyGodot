@@ -1,30 +1,28 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
+using Godot;
+using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Unity.GUI.Managed_Assets;
-using UnityEngine;
+using Thread = System.Threading.Thread;
+using Timer = Godot.Timer;
 
 namespace JoyLib.Code.Unity
 {
-    [RequireComponent(typeof(RectTransform))]
-    public class ManagedSprite : 
-        ManagedElement, 
+    public class ManagedSprite :
+        AnimatedSprite,
+        IManagedElement, 
         IAnimated
     {
-        [SerializeField] protected GameObject m_Prefab;
+        protected Node2D m_Prefab;
+        
+        public string ElementName { get; protected set; }
+        public bool Initialised { get; protected set; }
 
         protected string SortingLayer { get; set; }
-        
-        protected RectTransform MyRect { get; set; }
-        
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
         protected bool ForwardAnimation { get; set; }
-
-        protected const string _TINT_COLOUR = "_TintColour";
 
         public ISpriteState CurrentSpriteState
         {
@@ -85,7 +83,7 @@ namespace JoyLib.Code.Unity
 
         protected IDictionary<string, ISpriteState> m_States;
         
-        protected List<SpriteRenderer> SpriteParts { get; set; }
+        protected List<Node2D> Parts { get; set; }
 
         protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
 
@@ -101,9 +99,8 @@ namespace JoyLib.Code.Unity
                 return;
             }
             
-            this.SpriteParts = new List<SpriteRenderer>();
+            this.Parts = new List<Node2D>();
             this.m_States = new Dictionary<string, ISpriteState>();
-            this.MyRect = this.GetComponent<RectTransform>();
 
             this.Initialised = true;
         }
@@ -117,17 +114,6 @@ namespace JoyLib.Code.Unity
             if (changeToNew)
             {
                 this.ChangeState(state);
-            }
-        }
-
-        public virtual void SetSpriteLayer(string layerName)
-        {
-            this.Initialise();
-
-            this.SortingLayer = layerName;
-            foreach (SpriteRenderer spriteRenderer in this.SpriteParts)
-            {
-                spriteRenderer.sortingLayerName = layerName;
             }
         }
 
@@ -175,13 +161,13 @@ namespace JoyLib.Code.Unity
             this.Initialise();
 
             this.m_States = new Dictionary<string, ISpriteState>();
-            foreach (SpriteRenderer part in this.SpriteParts)
+            foreach (AnimatedSprite part in this.Parts)
             {
-                part.gameObject.SetActive(false);
+                part.Visible = false;
             }
         }
 
-        public virtual void FixedUpdate()
+        public override void _Process(float delta)
         {
             if (this.CurrentSpriteState is null)
             {
@@ -193,7 +179,7 @@ namespace JoyLib.Code.Unity
                 return;
             }
             
-            this.TimeSinceLastChange += Time.unscaledDeltaTime;
+            this.TimeSinceLastChange += delta;
             if (!(this.TimeSinceLastChange >= TIME_BETWEEN_FRAMES))
             {
                 return;
@@ -266,23 +252,17 @@ namespace JoyLib.Code.Unity
             {
                 state.OverrideColours(colours);
             }
-
-            if (this.isActiveAndEnabled == false)
-            {
-                return;
-            }
             
             if (crossFade)
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    if (colours.TryGetValue(this.SpriteParts[i].name, out Color colour))
+                    if (colours.TryGetValue(this.Parts[i].Name, out Color colour))
                     {
-                        this.StartCoroutine(
-                            this.ColourLerp(
-                                this.SpriteParts[i].gameObject, 
-                                colour, 
-                                duration));
+                        this.ColourLerp(
+                            this.Parts[i], 
+                            colour, 
+                            duration);
                     }
                 }
             }
@@ -290,7 +270,7 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.SpriteParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
                 }
             }
             this.IsDirty = true;
@@ -309,14 +289,14 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.StartCoroutine(this.ColourLerp(this.SpriteParts[i].gameObject, colour, duration));
+                    this.ColourLerp(this.Parts[i], colour, duration);
                 }
             }
             else
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.SpriteParts[i].color = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
                 }
             }
             
@@ -327,43 +307,65 @@ namespace JoyLib.Code.Unity
         {
             this.Initialise();
 
-            foreach (SpriteRenderer spritePart in this.SpriteParts)
+            foreach (Node2D part in this.Parts)
             {
-                spritePart.gameObject.SetActive(false);
+                part.Visible = false;
             }
-            if (this.SpriteParts.Count < this.CurrentSpriteState.SpriteData.m_Parts.Count)
+            if (this.Parts.Count < this.CurrentSpriteState.SpriteData.m_Parts.Count)
             {
-                for (int i = this.SpriteParts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.SpriteParts.Add(GameObject.Instantiate(this.m_Prefab, this.transform).GetComponent<SpriteRenderer>());
+                    this.Parts.Add((Node2D) this.m_Prefab.Duplicate());
                 }
             }
 
-            var data = this.CurrentSpriteState.GetSpriteForFrame(this.FrameIndex);
-            for (int i = 0; i < data.Count; i++)
+            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
             {
-                SpriteRenderer spriteRenderer = this.SpriteParts[i];
-                if (this.SortingLayer.IsNullOrEmpty() == false)
-                {
-                    spriteRenderer.sortingLayerName = this.SortingLayer;
-                }
-                spriteRenderer.name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
-                spriteRenderer.gameObject.SetActive(true);
-                spriteRenderer.sprite = data[i].Item2;
-                spriteRenderer.sortingOrder = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
-                spriteRenderer.sortingLayerName = this.SortingLayer;
-                spriteRenderer.drawMode = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SpriteDrawMode;
-                Material material = spriteRenderer.material;
-                material.SetColor(_TINT_COLOUR, data[i].Item1);
+                AnimatedSprite animatedSprite = (AnimatedSprite) this.Parts[i];
+                animatedSprite.Name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
+                animatedSprite.Visible = true;
+                animatedSprite.Frames = this.CurrentSpriteState.SpriteData.m_Parts[i].m_FrameSprite;
             }
         }
 
-        protected virtual IEnumerator ColourLerp(GameObject gameObject,
+        protected virtual void ColourLerp(
+            Node2D sprite,
             Color newColour,
-            float duration,
-            params bool[] args)
+            float duration)
         {
-            yield return null;
+            Thread lerpThread = new Thread(this.ColourLerpForThread);
+            lerpThread.Start(new ThreadLerpParams
+            {
+                m_Duration = duration,
+                m_NewColour = newColour,
+                m_Sprite = sprite
+            });
+        }
+
+        protected void ColourLerpForThread(object param)
+        {
+            if (param is ThreadLerpParams lerpParams)
+            {
+                Timer timer = new Timer
+                {
+                    OneShot = true
+                };
+                timer.Start(lerpParams.m_Duration);
+                float lerp = 0f;
+                while (lerp < 1f)
+                {
+                    lerpParams.m_Sprite.SelfModulate.LinearInterpolate(lerpParams.m_NewColour, lerp);
+                    lerp = timer.WaitTime / lerpParams.m_Duration;
+                }
+                timer.Stop();
+            }
+        }
+
+        public struct ThreadLerpParams
+        {
+            public Node2D m_Sprite;
+            public Color m_NewColour;
+            public float m_Duration;
         }
     }
 }

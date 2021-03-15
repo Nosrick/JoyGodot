@@ -1,50 +1,20 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Unity.GUI;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using Godot;
+using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyLib.Code;
 
 namespace Code.Unity.GUI.Managed_Assets
 {
     public class ManagedButton : 
-        ManagedBackground,
-        IMoveHandler,
-        IPointerDownHandler, 
-        IPointerUpHandler,
-        IPointerEnterHandler, 
-        IPointerExitHandler,
-        ISelectHandler, 
-        IDeselectHandler, 
-        IPointerClickHandler, 
-        ISubmitHandler
+        Button,
+        IManagedElement
     {
-        [SerializeField] protected ColorBlock m_ColourBlock = new ColorBlock
-        {
-            colorMultiplier = 1f,
-            disabledColor = new Color(0.2f, 0.2f, 0.2f, 0.5f),
-            fadeDuration = 0.1f,
-            highlightedColor = new Color(0.8f, 0.8f, 0.8f, 1.0f),
-            normalColor = Color.white,
-            pressedColor = Color.gray,
-            selectedColor = new Color(0.8f, 0.8f, 0.8f, 1f)
-        };
+        public string ElementName { get; protected set; }
+        public bool Initialised { get; protected set; }
 
-        [SerializeField]
-        protected AnimationTriggers m_AnimationTriggers = new AnimationTriggers();
-
-        [SerializeField]
-        protected Selectable.Transition m_Transition = Selectable.Transition.ColorTint;
-        
-        [SerializeField]
         protected bool m_Interactable = true;
 
-        [SerializeField] protected bool m_Toggleable = false;
-
-        [SerializeField]
-        protected Button.ButtonClickedEvent m_OnClick = new Button.ButtonClickedEvent();
+        protected bool m_Toggleable = false;
 
         protected SelectionState CurrentSelectionState
         {
@@ -81,69 +51,18 @@ namespace Code.Unity.GUI.Managed_Assets
         
         protected bool m_GroupsAllowInteraction = true;
 
-        protected readonly List<CanvasGroup> m_CanvasGroupCache = new List<CanvasGroup>();
-
-        protected void OnEnable()
-        {
-            if (this.CurrentSpriteState is null == false)
-            {
-                this.DoStateTransition(this.CurrentSelectionState, false);
-            }
-        }
-
-        protected void OnTransformParentChanged()
-        {
-            // If our parenting changes figure out if we are under a new CanvasGroup.
-            this.OnCanvasGroupChanged();
-        }
-        
-        protected void OnCanvasGroupChanged()
-        {
-            // Figure out if parent groups allow interaction
-            // If no interaction is alowed... then we need
-            // to not do that :)
-            var groupAllowInteraction = true;
-            Transform t = transform;
-            while (t != null)
-            {
-                t.GetComponents(this.m_CanvasGroupCache);
-                bool shouldBreak = false;
-                for (var i = 0; i < this.m_CanvasGroupCache.Count; i++)
-                {
-                    // if the parent group does not allow interaction
-                    // we need to break
-                    if (!this.m_CanvasGroupCache[i].interactable)
-                    {
-                        groupAllowInteraction = false;
-                        shouldBreak = true;
-                    }
-                    // if this is a 'fresh' group, then break
-                    // as we should not consider parents
-                    if (this.m_CanvasGroupCache[i].ignoreParentGroups)
-                    {
-                        shouldBreak = true;
-                    }
-                }
-                if (shouldBreak)
-                    break;
-
-                t = t.parent;
-            }
-
-            this.m_GroupsAllowInteraction = groupAllowInteraction;
-        }
-
         protected void DoStateTransition(SelectionState state, bool crossFade)
         {
-            if (!this.gameObject.activeInHierarchy)
+            if (!this.Visible)
             {
                 return;
             }
 
             Color tintColor;
-            Sprite transitionSprite;
+            Texture transitionSprite;
             string triggerName;
 
+            /*
             switch (state)
             {
                 case SelectionState.Normal:
@@ -190,25 +109,12 @@ namespace Code.Unity.GUI.Managed_Assets
                     this.TriggerAnimation(triggerName);
                     break;
             }
-        }
-
-        public void AddListener(UnityAction action)
-        {
-            this.m_OnClick.AddListener(action);
-        }
-
-        public void RemoveListener(UnityAction action)
-        {
-            this.m_OnClick.RemoveListener(action);
-        }
-
-        public void RemoveAllListeners()
-        {
-            this.m_OnClick.RemoveAllListeners();
+            */
         }
 
         protected virtual void DoSpriteSwap(Sprite sprite)
         {
+            /*
             if (sprite is null)
             {
                 return;
@@ -239,22 +145,7 @@ namespace Code.Unity.GUI.Managed_Assets
                             }
                         }
                     }));
-        }
-        
-        protected virtual void TriggerAnimation(string triggername)
-        {
-#if PACKAGE_ANIMATION
-            if (transition != Transition.Animation || animator == null || !animator.isActiveAndEnabled || !animator.hasBoundPlayables || string.IsNullOrEmpty(triggername))
-                return;
-
-            animator.ResetTrigger(m_AnimationTriggers.normalTrigger);
-            animator.ResetTrigger(m_AnimationTriggers.highlightedTrigger);
-            animator.ResetTrigger(m_AnimationTriggers.pressedTrigger);
-            animator.ResetTrigger(m_AnimationTriggers.selectedTrigger);
-            animator.ResetTrigger(m_AnimationTriggers.disabledTrigger);
-
-            animator.SetTrigger(triggername);
-#endif
+                    */
         }
         
         public virtual bool IsInteractable()
@@ -264,7 +155,7 @@ namespace Code.Unity.GUI.Managed_Assets
         
         protected virtual void EvaluateAndTransitionToSelectionState()
         {
-            if (!this.enabled || !this.IsInteractable())
+            if (!this.Visible || !this.IsInteractable())
             {
                 return;
             }
@@ -272,10 +163,7 @@ namespace Code.Unity.GUI.Managed_Assets
             this.DoStateTransition(this.CurrentSelectionState, true);
         }
 
-        public virtual void OnMove(AxisEventData eventData)
-        {
-        }
-
+        /*
         public virtual void OnPointerDown(PointerEventData eventData)
         {
             if (eventData.button != PointerEventData.InputButton.Left)
@@ -358,20 +246,20 @@ namespace Code.Unity.GUI.Managed_Assets
             this.DoStateTransition(SelectionState.Pressed, true);
             this.StartCoroutine(this.OnFinishSubmit());
         }
+        */
         
         protected virtual void Press()
         {
-            if (!this.enabled || !this.IsInteractable())
+            if (!this.Visible || !this.IsInteractable())
             {
                 return;
             }
 
-            UISystemProfilerApi.AddMarker("Button.onClick", this);
-            this.m_OnClick.Invoke();
+            GlobalConstants.ActionLog.Log("Pressed " + this.Name);
         }
         
         protected virtual IEnumerator OnFinishSubmit()
-        {
+        {/*
             var fadeTime = this.m_ColourBlock.fadeDuration;
             var elapsedTime = 0f;
 
@@ -380,7 +268,9 @@ namespace Code.Unity.GUI.Managed_Assets
                 elapsedTime += Time.unscaledDeltaTime;
                 yield return null;
             }
+            */
 
+            yield return null;
             this.DoStateTransition(this.CurrentSelectionState, true);
         }
     }

@@ -8,7 +8,7 @@ namespace JoyLib.Code.Graphics
     {
         string Name { get; }
 
-        IList<Tuple<Color, Texture>> GetSpriteForFrame(int frame);
+        SpritePart GetPart(string name);
         
         SpriteData SpriteData { get; }
 

@@ -1,54 +1,50 @@
-﻿using JoyLib.Code.Events;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using Godot;
+using Godot.Collections;
+using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    [DisallowMultipleComponent]
-    [RequireComponent(typeof(Canvas))]
-    public class GUIData : MonoBehaviour, IPointerDownHandler
+    public class GUIData : Control
     {
         protected IGUIManager m_GUIManager;
-        
-        public Canvas MyCanvas { get; protected set; }
-        
+
         public int DefaultSortingOrder { get; protected set; }
 
         public IGUIManager GUIManager
         {
-            get => this.m_GUIManager ?? (this.m_GUIManager = GlobalConstants.GameManager.GUIManager);
+            get => this.m_GUIManager; /*?? (this.m_GUIManager = GlobalConstants.GameManager.GUIManager)*/
             set
             {
                 this.m_GUIManager = value;
-                foreach (GUIData data in this.GetComponentsInChildren<GUIData>())
+                Array children = this.GetChildren();
+                foreach (var child in children)
                 {
-                    data.m_GUIManager = value;
+                    if (child is GUIData data)
+                    {
+                        data.GUIManager = value;
+                    }
                 }
             }
         }
 
-        public virtual void Awake()
+        public override void _Input(InputEvent @event)
         {
-            this.MyCanvas = this.GetComponent<Canvas>();
-            this.DefaultSortingOrder = this.MyCanvas.sortingOrder;
-
-            this.MyCanvas.sortingLayerName = "GUI";
-        }
-
-        public virtual void OnPointerDown(PointerEventData eventData)
-        {
-            this.GUIManager.BringToFront(this.name);
-        }
-
-        public virtual void Show()
-        {
-            this.gameObject.SetActive(true);
-            GUIData[] children = this.gameObject.GetComponentsInChildren<GUIData>(true);
-            foreach (GUIData child in children)
+            base._Input(@event);
+            if (@event.IsAction("ui_confirm"))
             {
-                if (child.Equals(this) == false)
+                this.GUIManager.BringToFront(this.Name);
+            }
+        }
+
+        public virtual void Display()
+        {
+            this.Visible = true;
+            Array children = this.GetChildren();
+            foreach (var child in children)
+            {
+                if (child is GUIData data)
                 {
-                    child.Show();
+                    data.Show();
                 }
             }
 
@@ -62,13 +58,13 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
             
-            this.gameObject.SetActive(false);
-            GUIData[] children = this.gameObject.GetComponentsInChildren<GUIData>(true);
-            foreach (GUIData child in children)
+            this.Visible = false;
+            Array children = this.GetChildren();
+            foreach (var child in children)
             {
-                if (child.Equals(this) == false)
+                if (child is GUIData data)
                 {
-                    child.Close();
+                    data.Close();
                 }
             }
 
@@ -77,7 +73,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void ButtonClose()
         {
-            this.GUIManager.CloseGUI(this.name);
+            this.GUIManager.CloseGUI(this.Name);
         }
 
         public bool m_RemovesControl;
