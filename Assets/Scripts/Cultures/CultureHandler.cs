@@ -94,33 +94,23 @@ namespace JoyLib.Code.Cultures
                 foreach (Dictionary culture in cultureArray)
                 {
                     string cultureName = jsonValueExtractor.GetValueFromDictionary<string>(culture, "CultureName");
-                    GlobalConstants.ActionLog.Log("Name: " + cultureName);
 
                     int nonconformingGenderChance =
                         jsonValueExtractor.GetValueFromDictionary<int>(culture, "NonConformingGenderChance");
-                    GlobalConstants.ActionLog.Log("Trans Chance: " + nonconformingGenderChance);
 
                     float number = 0;
                     ICollection<string> rulers =
                         jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Rulers");
-                    GlobalConstants.ActionLog.Log("Rulers");
-                    GlobalConstants.ActionLog.Log(rulers);
 
                     Array entry = new Array();
                     ICollection<string> crimes =
                         jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Crimes");
-                    GlobalConstants.ActionLog.Log("Crimes");
-                    GlobalConstants.ActionLog.Log(crimes);
 
                     ICollection<string> inhabitants =
                         jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Inhabitants");
-                    GlobalConstants.ActionLog.Log("Inhabitants");
-                    GlobalConstants.ActionLog.Log(inhabitants);
 
                     ICollection<string> relationships =
                         jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Relationships");
-                    GlobalConstants.ActionLog.Log("Relationships");
-                    GlobalConstants.ActionLog.Log(relationships);
 
                     List<NameData> nameDatas = new List<NameData>();
                     entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Names");
@@ -144,8 +134,6 @@ namespace JoyLib.Code.Cultures
                             genders.ToArray(),
                             groups.ToArray()));
                     }
-
-                    GlobalConstants.ActionLog.Log(nameData);
 
                     entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Sexualities");
                     ICollection<Dictionary> inner = jsonValueExtractor.GetCollectionFromArray<Dictionary>(entry);
@@ -214,6 +202,12 @@ namespace JoyLib.Code.Cultures
 
                     this.IconHandler.AddSpriteDataFromJson(culture);
 
+                    string tileSetName = jsonValueExtractor.GetValueFromDictionary<string>(
+                        jsonValueExtractor.GetValueFromDictionary<Dictionary>(
+                            culture, 
+                            "TileSet"),
+                        "Name");
+
                     Dictionary uiColours = jsonValueExtractor.GetValueFromDictionary<Dictionary>(culture, "UIColours");
 
                     IDictionary<string, IDictionary<string, Color>> backgroundColours =
@@ -222,214 +216,39 @@ namespace JoyLib.Code.Cultures
                             "BackgroundColours",
                             jsonValueExtractor);
 
-                    GlobalConstants.ActionLog.Log(backgroundColours);
-                }
+                    IDictionary<string, IDictionary<string, Color>> cursorColours =
+                        this.ExtractColourData(
+                            uiColours,
+                            "CursorColours",
+                            jsonValueExtractor);
 
-                //string cultureName = 
-            }
-            /*
-                using (StreamReader reader = new StreamReader(file))
-                {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                    {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken["Cultures"])
-                            {
-                                string cultureName = (string) child["CultureName"];
-                                int nonConformingGenderChance = (int) child["NonConformingGenderChance"];
-                                IEnumerable<string> rulers = child["Rulers"].Select(token => (string) token);
-                                IEnumerable<string> crimes = child["Crimes"].Select(token => (string) token);
-                                IEnumerable<string> inhabitants =
-                                    child["Inhabitants"].Select(token => (string) token);
-                                IEnumerable<string> relationships =
-                                    child["Relationships"].Select(token => (string) token);
-
-                                JToken dataArray = child["Names"];
-                                List<NameData> nameData = new List<NameData>();
-                                foreach (var data in dataArray)
-                                {
-                                    string name = (string) data["Name"];
-                                    int[] chain = data["Chain"]?.Select(token => (int) token).ToArray();
-                                    if (chain.IsNullOrEmpty())
-                                    {
-                                        chain = new[] {0};
-                                    }
-
-                                    string[] genderNames = data["Gender"]?.Select(token => (string) token).ToArray();
-                                    if (genderNames.IsNullOrEmpty())
-                                    {
-                                        genderNames = new[] {"all"};
-                                    }
-
-                                    int[] groups = data["Group"]?.Select(token => (int) token).ToArray();
-                                    if (groups.IsNullOrEmpty())
-                                    {
-                                        groups = new int[0];
-                                    }
-                                    nameData.Add(new NameData(
-                                        name,
-                                        chain,
-                                        genderNames,
-                                        groups));
-                                }
-
-                                dataArray = child["Sexualities"];
-                                IDictionary<string, int> sexualities = dataArray.Select(token =>
-                                        new KeyValuePair<string, int>(
-                                            (string) token["Name"],
-                                            (int) token["Chance"]))
-                                    .ToDictionary(x => x.Key, x => x.Value);
-
-                                dataArray = child["Romances"];
-                                IDictionary<string, int> romances = dataArray.Select(token =>
-                                        new KeyValuePair<string, int>(
-                                            (string) token["Name"],
-                                            (int) token["Chance"]))
-                                    .ToDictionary(x => x.Key, x => x.Value);
-
-                                dataArray = child["Genders"];
-                                IDictionary<string, int> genders = dataArray.Select(token =>
-                                        new KeyValuePair<string, int>(
-                                            (string) token["Name"],
-                                            (int) token["Chance"]))
-                                    .ToDictionary(x => x.Key, x => x.Value);
-
-                                dataArray = child["Sexes"];
-                                IDictionary<string, int> sexes = dataArray.Select(token =>
-                                        new KeyValuePair<string, int>(
-                                            (string) token["Name"],
-                                            (int) token["Chance"]))
-                                    .ToDictionary(x => x.Key, x => x.Value);
-
-                                dataArray = child["Statistics"];
-                                IDictionary<string, Tuple<int, int>> statistics = dataArray.Select(token =>
-                                        new KeyValuePair<string, Tuple<int, int>>(
-                                            (string) token["Name"],
-                                            new Tuple<int, int>(
-                                                (int) token["Chance"],
-                                                (int) token["Magnitude"])))
-                                    .ToDictionary(x => x.Key, x => x.Value);
-
-                                dataArray = child["Jobs"];
-                                IDictionary<string, int> jobPrevalence = dataArray.Select(token =>
-                                        new KeyValuePair<string, int>(
-                                            (string) token["Name"],
-                                            (int) token["Chance"]))
-                                    .ToDictionary(x => x.Key, x => x.Value);
-
-                                dataArray = child["TileSet"];
-                                string tileSetName = (string) dataArray["Name"];
-
-                                objectIcons.AddSpriteDataFromJson(tileSetName, dataArray["SpriteData"]);
-
-                                dataArray = child["UIColours"];
-
-                                IDictionary<string, IDictionary<string, Color>> cursorColours =
-                                    new Dictionary<string, IDictionary<string, Color>>();
-                                try
-                                {
-                                    cursorColours = this.ExtractColourData(dataArray, "CursorColours");
-                                }
-                                catch (Exception e)
-                                {
-                                    GlobalConstants.ActionLog.AddText(
-                                        "Could not find cursor colours in file " + file,
-                                        LogLevel.Error);
-                                    GlobalConstants.ActionLog.StackTrace(e);
-                                    cursorColours.Add(
-                                        "DefaultCursor",
-                                        new Dictionary<string, Color>
-                                        {
-                                            {"default", Color.magenta}
-                                        });
-                                }
-
-                                IDictionary<string, IDictionary<string, Color>> backgroundColours =
-                                    new Dictionary<string, IDictionary<string, Color>>();
-                                try
-                                {
-                                    backgroundColours = this.ExtractColourData(dataArray, "BackgroundColours");
-                                }
-                                catch (Exception e)
-                                {
-                                    GlobalConstants.ActionLog.AddText(
-                                        "Could not find background colours in file " + file,
-                                        LogLevel.Warning);
-                                    GlobalConstants.ActionLog.StackTrace(e);
-                                    backgroundColours.Add(
-                                        "DefaultWindow",
-                                        new Dictionary<string, Color>
-                                        {
-                                            {"default", Color.magenta}
-                                        });
-                                }
-
-                                IDictionary<string, Color> mainFontColours = new Dictionary<string, Color>();
-                                try
-                                {
-                                    var fontColours = dataArray["FontColours"];
-                                    foreach (var colour in fontColours)
-                                    {
-                                        mainFontColours.Add(
-                                            (string) colour["Name"],
-                                            GraphicsHelper.ParseHTMLString((string) colour["Value"]));
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    GlobalConstants.ActionLog.AddText(
-                                        "Could not find main font colour in file " + file,
-                                        LogLevel.Warning);
-                                    GlobalConstants.ActionLog.StackTrace(e);
-                                    mainFontColours.Add(
-                                        "Font",
-                                        Color.black);
-                                }
-
-                                cultures.Add(
-                                    new CultureType(
-                                        cultureName,
-                                        tileSetName,
-                                        rulers,
-                                        crimes,
-                                        nameData,
-                                        jobPrevalence,
-                                        inhabitants,
-                                        sexualities,
-                                        sexes,
-                                        statistics,
-                                        relationships,
-                                        romances,
-                                        genders,
-                                        nonConformingGenderChance,
-                                        backgroundColours,
-                                        cursorColours,
-                                        mainFontColours));
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Could not load cultures from file: " + file,
-                                LogLevel.Error);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                        finally
-                        {
-                            jsonReader.Close();
-                            reader.Close();
-                        }
-                    }
+                    IDictionary<string, Color> fontColours =
+                        this.ExtractFontData(
+                            uiColours,
+                            "FontColours",
+                            jsonValueExtractor);
+                    
+                    cultures.Add(
+                        new CultureType(
+                            cultureName,
+                            tileSetName,
+                            rulers,
+                            crimes,
+                            nameDatas,
+                            jobs,
+                            inhabitants,
+                            sexualities,
+                            sexes,
+                            statistics,
+                            relationships,
+                            romances,
+                            genderChances,
+                            nonconformingGenderChance,
+                            backgroundColours,
+                            cursorColours,
+                            fontColours));
                 }
             }
-            */
 
             return cultures;
         }
@@ -472,6 +291,32 @@ namespace JoyLib.Code.Cultures
                                 });
                         }
                     }
+                }
+            }
+
+            return colours;
+        }
+
+        protected IDictionary<string, Color> ExtractFontData(
+            Dictionary element,
+            string elementName,
+            JSONValueExtractor valueExtractor)
+        {
+            IDictionary<string, Color> colours = new System.Collections.Generic.Dictionary<string, Color>();
+
+            if (element.Contains(elementName))
+            {
+                ICollection<Dictionary> elementsData = valueExtractor.GetCollectionFromArray<Dictionary>(
+                    valueExtractor.GetValueFromDictionary<Array>(
+                        element,
+                        elementName));
+
+                foreach (Dictionary inner in elementsData)
+                {
+                    string partName = valueExtractor.GetValueFromDictionary<string>(inner, "Name");
+                    Color colour = new Color(valueExtractor.GetValueFromDictionary<string>(inner, "Value"));
+
+                    colours.Add(partName, colour);
                 }
             }
 
