@@ -64,7 +64,10 @@ namespace JoyLib.Code.Cultures
 
         public IEnumerable<ICulture> Load()
         {
-            string folderPath = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Cultures";
+            string folderPath = Directory.GetCurrentDirectory() + 
+                                GlobalConstants.ASSETS_FOLDER + 
+                                GlobalConstants.DATA_FOLDER + 
+                                "Cultures";
             string[] files = Directory.GetFiles(folderPath, "*.json");
 
             JSONValueExtractor jsonValueExtractor = new JSONValueExtractor();

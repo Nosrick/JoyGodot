@@ -5,9 +5,12 @@ namespace JoyLib.Code
 {
     public static class GlobalConstants
     {
-        public static readonly string DATA_FOLDER = OS.IsDebugBuild() ? "/Assets/Data/" : "/Data/";
-        public static readonly string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
-        public static readonly string SETTINGS_FOLDER = DATA_FOLDER + "Settings/";
+        public const string GODOT_ASSETS_FOLDER = "res://Assets/";
+        public const string ASSETS_FOLDER = "/Assets/";
+        public const string SPRITES_FOLDER = "Sprites/";
+        public const string DATA_FOLDER = "Data/";
+        public const string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
+        public const string SETTINGS_FOLDER = DATA_FOLDER + "Settings/";
 
         public static readonly bool IS_EDITOR = Engine.EditorHint;
         

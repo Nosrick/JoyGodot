@@ -19,7 +19,7 @@
               {
                 "Name": "body-light",
                 "Frames": 3,
-                "Filename": "cultures/slime-light-body",
+                "Filename": "cultures/slime-light-body.png",
                 "Data": ["default"],
                 "SortOrder": 0,
                 "Position": 0,
@@ -31,7 +31,7 @@
               {
                 "Name": "body-dark",
                 "Frames": 3,
-                "Filename": "cultures/slime-dark-body",
+                "Filename": "cultures/slime-dark-body.png",
                 "Data": ["default"],
                 "SortOrder": 1,
                 "Position": 0,

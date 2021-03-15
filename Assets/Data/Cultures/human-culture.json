@@ -166,8 +166,10 @@
               {
                 "Name": "body",
                 "Frames": 3,
-                "Filename": "cultures/human-body32",
-                "Data": ["default"],
+                "Filename": "cultures/human-body32.png",
+                "Data": [
+                  "default"
+                ],
                 "Position": 0,
                 "SortOrder": 0,
                 "Colour": [
@@ -178,8 +180,10 @@
               {
                 "Name": "eyes",
                 "Frames": 3,
-                "Filename": "cultures/human-eyes32",
-                "Data": ["default"],
+                "Filename": "cultures/human-eyes32.png",
+                "Data": [
+                  "default"
+                ],
                 "Position": 0,
                 "SortOrder": 1,
                 "Colour": [
@@ -249,59 +253,75 @@
           },
           {
             "Name": "AccentBackground",
-            "Colour": [{
-              "Name": "background",
-              "Value": "#9e4539ff"
-            }]
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#9e4539ff"
+              }
+            ]
           },
           {
             "Name": "SecondaryAccent",
-            "Colour": [{
-              "Name": "background",
-              "Value": "#7a3045ff"
-            }]
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#7a3045ff"
+              }
+            ]
           },
           {
             "Name": "IconBackground",
-            "Colour": [{
-              "Name": "background",
-              "Value": "#7a3045ff"
-            }]
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#7a3045ff"
+              }
+            ]
           },
           {
             "Name": "CharacterSheetIcon",
-            "Colour": [{
-              "Name": "icon",
-              "Value": "#9e4539ff"
-            }]
+            "Colour": [
+              {
+                "Name": "icon",
+                "Value": "#9e4539ff"
+              }
+            ]
           },
           {
             "Name": "InventoryIcon",
-            "Colour": [{
-              "Name": "icon",
-              "Value": "#9e4539ff"
-            }]
+            "Colour": [
+              {
+                "Name": "icon",
+                "Value": "#9e4539ff"
+              }
+            ]
           },
           {
             "Name": "EquipmentIcon",
-            "Colour": [{
-              "Name": "icon",
-              "Value": "#9e4539ff"
-            }]
+            "Colour": [
+              {
+                "Name": "icon",
+                "Value": "#9e4539ff"
+              }
+            ]
           },
           {
             "Name": "JobManagementIcon",
-            "Colour": [{
-              "Name": "icon",
-              "Value": "#9e4539ff"
-            }]
+            "Colour": [
+              {
+                "Name": "icon",
+                "Value": "#9e4539ff"
+              }
+            ]
           },
           {
             "Name": "QuestJournalIcon",
-            "Colour": [{
-              "Name": "icon",
-              "Value": "#9e4539ff"
-            }]
+            "Colour": [
+              {
+                "Name": "icon",
+                "Value": "#9e4539ff"
+              }
+            ]
           }
         ],
         "FontColours": [

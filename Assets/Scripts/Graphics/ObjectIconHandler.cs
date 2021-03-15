@@ -34,7 +34,10 @@ namespace JoyLib.Code.Graphics
 
             this.Icons = new System.Collections.Generic.Dictionary<string, List<Tuple<string, SpriteData>>>();
 
-            Texture defaultSprite = GD.Load<Texture>("Sprites/default");
+            Texture defaultSprite = GD.Load<Texture>(
+                GlobalConstants.GODOT_ASSETS_FOLDER + 
+                GlobalConstants.SPRITES_FOLDER + 
+                "default.png");
             //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
             SpriteData iconData = new SpriteData
             {
@@ -45,7 +48,9 @@ namespace JoyLib.Code.Graphics
                     new SpritePart
                     {
                         m_Data = new[] {"DEFAULT"},
-                        m_Filename = "Sprites/default",
+                        m_Filename = GlobalConstants.GODOT_ASSETS_FOLDER + 
+                                     GlobalConstants.SPRITES_FOLDER + 
+                                     "default.png",
                         m_Frames = 1,
                         m_Name = "DEFAULT",
                         m_Position = 0,
@@ -62,7 +67,10 @@ namespace JoyLib.Code.Graphics
 
             string[] files =
                 Directory.GetFiles(
-                    Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Sprite Definitions", "*.json",
+                    Directory.GetCurrentDirectory() + 
+                    GlobalConstants.ASSETS_FOLDER + 
+                    GlobalConstants.DATA_FOLDER + 
+                    "/Sprite Definitions", "*.json",
                     SearchOption.AllDirectories);
 
             foreach (string file in files)
@@ -189,7 +197,10 @@ namespace JoyLib.Code.Graphics
                         colours.Add(Colors.White);
                     }
 
-                    Texture sprite = GD.Load<Texture>("Assets/Sprites/" + fileName);
+                    Texture sprite = GD.Load<Texture>(
+                        GlobalConstants.GODOT_ASSETS_FOLDER + 
+                        GlobalConstants.SPRITES_FOLDER + 
+                        fileName);
 
                     SpritePart part = new SpritePart
                     {

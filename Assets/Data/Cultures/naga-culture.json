@@ -29,7 +29,7 @@
               {
                 "Name": "body-light",
                 "Frames": 3,
-                "Filename": "cultures/naga-light-body",
+                "Filename": "cultures/naga-light-body.png",
                 "SortOrder": 0,
                 "Data": ["default"],
                 "Colour": ["#fb6b1dff"]
@@ -37,7 +37,7 @@
               {
                 "Name": "body-dark",
                 "Frames": 3,
-                "Filename": "cultures/naga-dark-body",
+                "Filename": "cultures/naga-dark-body.png",
                 "SortOrder": 1,
                 "Data": ["default"],
                 "Colour": ["#fb6b1dff"]
@@ -45,7 +45,7 @@
               {
                 "Name": "eyes",
                 "Frames": 3,
-                "Filename": "cultures/naga-eyes",
+                "Filename": "cultures/naga-eyes.png",
                 "SortOrder": 2,
                 "Data": ["default"],
                 "Colour": ["#3e3546ff"]
@@ -53,7 +53,7 @@
               {
                 "Name": "tongue",
                 "Frames": 3,
-                "Filename": "cultures/naga-tongue",
+                "Filename": "cultures/naga-tongue.png",
                 "SortOrder": 3,
                 "Data": ["default"],
                 "Colour": ["#c32454ff"]
