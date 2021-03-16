@@ -74,7 +74,6 @@ namespace JoyLib.Code.Entities
         void Deserialise(
             IEnumerable<ICulture> cultures);
         
-        void Tick();
         //void AddQuest(IQuest quest);
         IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args);
         void AddIdentifiedItem(string nameRef);
