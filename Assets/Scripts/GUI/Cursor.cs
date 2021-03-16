@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using JoyLib.Code.Graphics;
 
@@ -7,12 +6,13 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class Cursor : GUIData
     {
+        [Export]
         protected ManagedSprite m_PartPrefab;
         
         protected ManagedSprite CursorObject { get; set; }
 
         protected bool Initialised { get; set; }
-        protected ManagedSprite DragObject { get; set; }
+        public ManagedSprite DragObject { get; set; }
 
         public void Awake()
         {
@@ -46,7 +46,7 @@ namespace JoyLib.Code.Unity.GUI
 
             Vector2 mousePosition = mouseEvent.Position;
 
-            this.RectPosition = new Vector2(mousePosition.x, mousePosition.y);
+            this.Position = new Vector2(mousePosition.x, mousePosition.y);
         }
 
         public void SetCursorSize(int width, int height)
@@ -56,7 +56,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Awake();
             }
 
-            this.RectSize = new Vector2(width, height);
+            //this. = new Vector2(width, height);
             //this.DragObject.Scale = new Vector2()
         }
 

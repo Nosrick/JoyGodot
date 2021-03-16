@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/Scripts/GUI/Inventory System/JoyItemSlot.cs" type="Script" id=1]
+[ext_resource path="res://Assets/Sprites/draw.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Fonts/Silver.tres" type="DynamicFont" id=3]
+
+[node name="Item Slot" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -790.0
+margin_bottom = -416.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cooldown Overlay" type="TextureProgress" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+value = 33.0
+texture_progress = ExtResource( 2 )
+fill_mode = 5
+tint_progress = Color( 0, 0, 0, 0.231373 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stack" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.353561
+margin_top = 44.818
+margin_right = -5.0
+margin_bottom = -0.181984
+custom_fonts/font = ExtResource( 3 )
+text = "1"
+align = 2
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="mouse_entered" from="." to="." method="OnPointerEnter"]
+[connection signal="mouse_exited" from="." to="." method="OnPointerExit"]

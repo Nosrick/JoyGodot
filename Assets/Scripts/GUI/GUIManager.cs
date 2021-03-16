@@ -5,6 +5,7 @@ using System.Linq;
 using Godot;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
@@ -275,26 +276,14 @@ namespace JoyLib.Code.Unity.GUI
 
         public void FindGUIs()
         {
-            Godot.Collections.Array guiData = this.RootUI.GetChildren();
+            Array guiData = this.RootUI.GetChildren();
             foreach (var child in guiData)
             {
-                
+                if (child is GUIData data)
+                {
+                    this.Add(data);
+                }
             }
-            /*
-            foreach (GUIData data in guiData)
-            {
-                this.Add(data);
-            }
-
-            Cursor cursor = this.GUIs.First(data => data.name.Equals(GUINames.CURSOR)).GetComponent<Cursor>();
-            if (cursor is null)
-            {
-                return;
-            }
-
-            cursor.SetCursorSprites(this.Cursors["DefaultCursor"]);
-            cursor.SetCursorColours(this.CursorColours["DefaultCursor"]);
-            */
         }
 
         public bool Add(GUIData gui)
@@ -305,7 +294,6 @@ namespace JoyLib.Code.Unity.GUI
                 return false;
             }
 
-            gui.Awake();
             gui.GUIManager = this;
             gui.Close();
 
@@ -317,7 +305,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool Destroy(string key)
         {
-            GUIData gui = this.GUIs.FirstOrDefault(data => data.name.Equals(key, StringComparison.OrdinalIgnoreCase));
+            GUIData gui = this.GUIs.FirstOrDefault(data => data.Name.Equals(key, StringComparison.OrdinalIgnoreCase));
             return !(gui is null) && this.GUIs.Remove(gui);
         }
 
@@ -328,8 +316,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.SetupManagedComponents(gui, crossFade, duration);
             }
 
-            Cursor cursor = null;
-            this.GUIs.FirstOrDefault(data => data.TryGetComponent(out cursor));
+            Cursor cursor = (Cursor) this.GUIs.FirstOrDefault(data => data is Cursor);
             if (cursor is null == false)
             {
                 cursor.SetCursorSprites(this.Cursors["DefaultCursor"]);
@@ -339,98 +326,44 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetupManagedComponents(GUIData gui, bool crossFade = false, float duration = 0.1f)
         {
-            ManagedBackground[] backgrounds = gui.GetComponentsInChildren<ManagedBackground>(true);
-            foreach (ManagedBackground background in backgrounds)
+            Array managedComponents = gui.GetChildren();
+            foreach (var component in managedComponents)
             {
-                if (this.UISprites.TryGetValue(background.ElementName, out ISpriteState state))
+                if (component is ManagedFonts fonts)
                 {
-                    background.SetBackground(state);
+                    if (this.Themes.TryGetValue(fonts.ElementName, out Theme value))
+                    {
+                        fonts.SetTheme(value);
+                    }
+                    else
+                    {
+                        GlobalConstants.ActionLog.Log("Could not find font theme " + fonts.ElementName, LogLevel.Warning);
+                    }
                 }
-                else
+                else if (component is ManagedSprite managedSprite)
                 {
-                    GlobalConstants.ActionLog.AddText(
-                        "Could not find background " + background.ElementName + " on element " +
-                        background.name, LogLevel.Warning);
-                }
-
-                if (this.UISpriteColours.TryGetValue(background.ElementName, out IDictionary<string, Color> colours))
-                {
-                    background.SetColours(colours, crossFade, duration);
-                }
-                else
-                {
-                    GlobalConstants.ActionLog.AddText("Could not find background colours " + background.ElementName +
-                                                      " on element " +
-                                                      background.name, LogLevel.Warning);
-                }
-            }
-
-            ManagedFonts[] fonts = gui.GetComponentsInChildren<ManagedFonts>(true);
-            foreach (ManagedFonts font in fonts)
-            {
-                if (this.FontsInUse.TryGetValue(font.ElementName, out TMP_FontAsset fontToUse))
-                {
-                    font.SetFonts(fontToUse);
-                }
-                else
-                {
-                    GlobalConstants.ActionLog.AddText("Could not find font " + font.ElementName + " on element " +
-                                                      font.name, LogLevel.Warning);
-                }
-
-                (float minFontSize, float maxFontSize) = this.FontSizesInUse[font.ElementName];
-                font.SetMinMaxFontSizes(minFontSize, maxFontSize);
-
-                if (this.FontColours.TryGetValue(font.ElementName, out Color colour))
-                {
-                    font.SetFontColour(colour);
-                }
-                else
-                {
-                    GlobalConstants.ActionLog.AddText("Could not find font colour " + font.ElementName +
-                                                      " on element " + font.name,
-                        LogLevel.Warning);
-                }
-            }
-
-            ManagedIcon[] icons = gui.GetComponentsInChildren<ManagedIcon>(true);
-            foreach (ManagedIcon icon in icons)
-            {
-                if (this.UISprites.TryGetValue(icon.ElementName, out ISpriteState state))
-                {
-                    icon.Clear();
-                    icon.AddSpriteState(state);
-                }
-                else
-                {
-                    GlobalConstants.ActionLog.AddText(
-                        "Could not find background " + icon.ElementName + " on element " +
-                        icon.name, LogLevel.Warning);
-                }
-
-                if (this.UISpriteColours.TryGetValue(icon.ElementName, out IDictionary<string, Color> colours))
-                {
-                    icon.OverrideAllColours(colours, crossFade, duration);
-                }
-                else
-                {
-                    GlobalConstants.ActionLog.AddText("Could not find background colours " + icon.ElementName +
-                                                      " on element " +
-                                                      icon.name, LogLevel.Warning);
+                    if (this.Themes.TryGetValue(managedSprite.ElementName, out Theme value))
+                    {
+                        managedSprite.SetTheme(value);
+                    }
+                    else
+                    {
+                        GlobalConstants.ActionLog.Log("Could not find font theme " + managedSprite.ElementName, LogLevel.Warning);
+                    }
                 }
             }
         }
 
         public void ToggleGUI(string name)
         {
-            if (this.ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (this.ActiveGUIs.Any(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 GUIData[] toToggle = this.ActiveGUIs
-                    .Where(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    .Where(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     .ToArray();
                 foreach (GUIData data in toToggle)
                 {
-                    this.CloseGUI(data.name);
+                    this.CloseGUI(data.Name);
                 }
             }
             else
@@ -441,26 +374,26 @@ namespace JoyLib.Code.Unity.GUI
 
         public GUIData OpenGUI(string name, bool bringToFront = false)
         {
-            if (this.ActiveGUIs.Any(widget => widget.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (this.ActiveGUIs.Any(widget => widget.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                GUIData openGUI = this.ActiveGUIs.First(ui => ui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                GUIData openGUI = this.ActiveGUIs.First(ui => ui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 if (bringToFront)
                 {
-                    this.BringToFront(openGUI.name);
+                    this.BringToFront(openGUI.Name);
                 }
 
                 return openGUI;
             }
 
             GUIData toOpen = this.GUIs.First(gui =>
-                gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (toOpen.m_ClosesOthers)
             {
                 List<GUIData> activeCopy = new List<GUIData>(this.ActiveGUIs);
                 foreach (GUIData widget in activeCopy)
                 {
-                    this.CloseGUI(widget.name);
+                    this.CloseGUI(widget.Name);
                 }
             }
 
@@ -468,23 +401,9 @@ namespace JoyLib.Code.Unity.GUI
 
             this.ActiveGUIs.Add(toOpen);
 
-            if (toOpen.TryGetComponent(out ManagedBackground background))
-            {
-                if (background.HasBackground == false)
-                {
-                    background.SetBackground(this.UISprites[background.ElementName]);
-                }
-
-                if (GlobalConstants.GameManager.Player is null == false
-                    && background.HasColours == false)
-                {
-                    background.SetColours(this.UISpriteColours[background.ElementName]);
-                }
-            }
-
             if (bringToFront)
             {
-                this.BringToFront(toOpen.name);
+                this.BringToFront(toOpen.Name);
             }
 
             return toOpen;
@@ -492,13 +411,13 @@ namespace JoyLib.Code.Unity.GUI
 
         public void CloseGUI(string activeName)
         {
-            if (this.ActiveGUIs.Any(data => data.name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
+            if (this.ActiveGUIs.Any(data => data.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
             {
                 return;
             }
 
             GUIData toClose = this.ActiveGUIs
-                .First(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
+                .First(gui => gui.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
 
             if (toClose.m_AlwaysOpen)
             {
@@ -511,12 +430,12 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool RemoveActiveGUI(string name)
         {
-            if (this.ActiveGUIs.Any(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase)) == false)
+            if (this.ActiveGUIs.Any(data => data.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) == false)
             {
                 return false;
             }
 
-            GUIData toClose = this.ActiveGUIs.First(data => data.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            GUIData toClose = this.ActiveGUIs.First(data => data.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (toClose.m_AlwaysOpen)
             {
@@ -529,12 +448,12 @@ namespace JoyLib.Code.Unity.GUI
 
         public void BringToFront(string name)
         {
-            if (!this.ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            if (!this.ActiveGUIs.Any(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
                 return;
             }
 
-            GUIData toFront = this.ActiveGUIs.First(g => g.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            GUIData toFront = this.ActiveGUIs.First(g => g.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             foreach (GUIData gui in this.ActiveGUIs)
             {
                 if (toFront.Equals(gui) || gui.m_AlwaysOnTop)
@@ -542,7 +461,7 @@ namespace JoyLib.Code.Unity.GUI
                     continue;
                 }
 
-                gui.MyCanvas.sortingOrder = gui.DefaultSortingOrder;
+                gui.ZIndex = gui.DefaultSortingOrder;
             }
 
             GUIData[] found = this.ActiveGUIs
@@ -550,14 +469,14 @@ namespace JoyLib.Code.Unity.GUI
                 .ToArray();
             if (found.Any())
             {
-                toFront.MyCanvas.sortingOrder = found.Max(data => data.DefaultSortingOrder) + 1;
+                toFront.ZIndex = found.Max(data => data.DefaultSortingOrder) + 1;
             }
         }
 
         public void CloseAllOtherGUIs(string activeName = "")
         {
             GUIData[] toClose = this.ActiveGUIs
-                .Where(gui => gui.name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false
+                .Where(gui => gui.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false
                               && gui.m_AlwaysOpen == false)
                 .ToArray();
 
@@ -589,7 +508,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool IsActive(string name)
         {
-            return this.ActiveGUIs.Any(gui => gui.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return this.ActiveGUIs.Any(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AreAnyOpen(bool includeAlwaysOpen = false)

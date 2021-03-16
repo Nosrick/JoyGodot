@@ -2,39 +2,39 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using Godot;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Events;
 using JoyLib.Code.Unity.GUI;
-using UnityEngine;
-using UnityEngine.UI;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Unity
 {
-    public class ItemContainer : MonoBehaviour
+    public class ItemContainer : GUIData
     {
-        [SerializeField] protected string m_UseAction;
-        [SerializeField] protected LayoutGroup m_SlotParent;
-        [SerializeField] protected JoyItemSlot m_SlotPrefab;
+        [Export] protected string m_UseAction;
+        [Export] protected BoxContainer m_SlotParent;
+        [Export] protected JoyItemSlot m_SlotPrefab;
 
-        [SerializeField] protected bool m_CanDrag = false;
+        [Export] protected bool m_CanDrag = false;
         public bool CanDrag => this.m_CanDrag;
 
-        [SerializeField] protected bool m_CanDropItems = false;
+        [Export] protected bool m_CanDropItems = false;
         public bool CanDropItems => this.m_CanDropItems;
 
-        [SerializeField] protected bool m_CanUseItems = false;
+        [Export] protected bool m_CanUseItems = false;
         public bool CanUseItems => this.m_CanUseItems;
 
-        [SerializeField] protected bool m_UseContextMenu = false;
+        [Export] protected bool m_UseContextMenu = false;
         public bool UseContextMenu => this.m_UseContextMenu;
 
-        [SerializeField] protected bool m_ShowTooltips = false;
+        [Export] protected bool m_ShowTooltips = false;
         public bool ShowTooltips => this.m_ShowTooltips;
 
-        [SerializeField] protected bool m_MoveUsedItem = false;
+        [Export] protected bool m_MoveUsedItem = false;
 
-        [SerializeField] protected List<MoveContainerPriority> m_ContainerNames;
-        protected List<string> MoveToContainers { get; set; }
+        [Export] protected List<MoveContainerPriority> m_ContainerNames;
+        protected List<ItemContainer> MoveToContainers { get; set; }
         public bool MoveUsedItem => this.m_MoveUsedItem;
 
         protected List<JoyItemSlot> Slots { get; set; }
@@ -87,27 +87,38 @@ namespace JoyLib.Code.Unity
 
         public virtual void OnEnable()
         {
+            /*
             if (GlobalConstants.GameManager is null)
             {
                 return;
             }
 
             this.GUIManager = GlobalConstants.GameManager.GUIManager;
+            */
             if (this.Slots is null)
             {
-                this.Slots = this.GetComponentsInChildren<JoyItemSlot>().ToList();
+                this.Slots = new List<JoyItemSlot>();
+                Array children = this.GetChildren();
+                foreach (var child in children)
+                {
+                    if (child is JoyItemSlot slot)
+                    {
+                        this.Slots.Add(slot);
+                    }
+                }
             }
 
-            this.MoveToContainers = new List<string>();
+            this.MoveToContainers = new List<ItemContainer>();
             if (this.m_ContainerNames is null)
             {
                 this.m_ContainerNames = new List<MoveContainerPriority>();
             }
             else
             {
+                Node root = this.GetTree().Root.FindNode("MainUI");
                 foreach (MoveContainerPriority priority in this.m_ContainerNames)
                 {
-                    this.MoveToContainers.Add(priority.m_ContainerName);
+                    this.MoveToContainers.Add((ItemContainer) root.FindNode(priority.m_ContainerName));
                 }
             }
 
@@ -129,8 +140,7 @@ namespace JoyLib.Code.Unity
                 {
                     for (int i = this.Slots.Count; i < container.Contents.Count(); i++)
                     {
-                        this.Slots.Add(Instantiate(this.m_SlotPrefab, this.m_SlotParent.transform, false)
-                            .GetComponent<JoyItemSlot>());
+                        this.Slots.Add((JoyItemSlot) this.m_SlotPrefab.Duplicate());
                     }
                 }
 
@@ -140,7 +150,7 @@ namespace JoyLib.Code.Unity
                     this.StackOrAdd(item);
                 }
 
-                foreach (JoyItemSlot slot in this.Slots.Where(slot => slot.enabled))
+                foreach (JoyItemSlot slot in this.Slots.Where(slot => slot.Visible))
                 {
                     slot.Repaint();
                 }
@@ -178,18 +188,17 @@ namespace JoyLib.Code.Unity
                 return false;
             }
             
-            string target = this.MoveToContainers.FirstOrDefault(container => sorted.Any(sort =>
-                sort.m_ContainerName.Equals(container, StringComparison.OrdinalIgnoreCase)
-                && (sort.m_RequiresVisibility && GameObject.Find(container) is null == false)
-                || sort.m_RequiresVisibility == false));
+            ItemContainer target = this.MoveToContainers.FirstOrDefault(container => sorted.Any(sort =>
+                sort.m_ContainerName.Equals(container.Name, StringComparison.OrdinalIgnoreCase)
+                && ((sort.m_RequiresVisibility && container.Visible)
+                || sort.m_RequiresVisibility == false)));
                 
             if (target is null || item is null)
             {
                 return false;
             }
 
-            ItemContainer targetContainer = GameObject.Find(target).GetComponent<ItemContainer>();
-            return !(targetContainer is null) && this.StackOrSwap(targetContainer, item);
+            return this.StackOrSwap(target, item);
         }
 
         public virtual List<JoyItemSlot> GetRequiredSlots(IItemInstance item, bool takeFilledSlots = false)
@@ -249,10 +258,14 @@ namespace JoyLib.Code.Unity
         {
             if (pool)
             {
-                if (this.Slots.Any(itemSlot => itemSlot.isActiveAndEnabled == false))
+                if (this.Slots.Any(itemSlot => itemSlot.Visible == false))
                 {
-                    JoyItemSlot poolSlot = this.Slots.First(itemSlot => itemSlot.isActiveAndEnabled == false);
-                    poolSlot.gameObject.SetActive(true);
+                    JoyItemSlot poolSlot = this.Slots.FirstOrDefault(itemSlot => itemSlot.Visible == false);
+                    if (poolSlot is null)
+                    {
+                        poolSlot = slot;
+                    }
+                    poolSlot.Visible = true;
                     poolSlot.Item = slot.Item;
                     return true;
                 }
@@ -261,8 +274,8 @@ namespace JoyLib.Code.Unity
             }
             else
             {
+                this.m_SlotParent.AddChild(slot);
                 this.Slots.Add(slot);
-                slot.transform.parent = this.m_SlotParent.transform;
                 return true;
             }
         }
@@ -274,13 +287,13 @@ namespace JoyLib.Code.Unity
                 if (pool)
                 {
                     JoyItemSlot foundSlot = this.Slots.First(itemSlot => itemSlot == slot);
-                    foundSlot.gameObject.SetActive(false);
+                    foundSlot.Visible = false;
                     return true;
                 }
                 else
                 {
                     this.Slots.Remove(slot);
-                    DestroyImmediate(slot);
+                    slot.QueueFree();
                     return true;
                 }
             }
@@ -292,11 +305,11 @@ namespace JoyLib.Code.Unity
         {
             if (pool)
             {
-                this.Slots.ForEach(slot => slot.gameObject.SetActive(false));
+                this.Slots.ForEach(slot => slot.Visible = false);
                 return true;
             }
 
-            this.Slots.ForEach(slot => Destroy(slot));
+            this.Slots.ForEach(slot => slot.QueueFree());
             return true;
         }
 

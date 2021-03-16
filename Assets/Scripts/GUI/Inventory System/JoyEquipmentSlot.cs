@@ -1,12 +1,11 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using Godot;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public class JoyEquipmentSlot : JoyItemSlot
     {
-        [SerializeField] protected TextMeshProUGUI m_SlotName;
+        [Export] protected Label m_SlotName;
 
-        public TextMeshProUGUI SlotName => this.m_SlotName;
+        public Label SlotName => this.m_SlotName;
     }
 }

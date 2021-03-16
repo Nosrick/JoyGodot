@@ -1,81 +1,103 @@
 ﻿{
-  "Objects": {
-    "TileSet": {
-      "Name": "QuickBar",
-      "SpriteData": [
-        {
-          "Name": "IconBackground",
-          "Part": [{
+  "TileSet": {
+    "Name": "QuickBar",
+    "SpriteData": [
+      {
+        "Name": "IconBackground",
+        "Part": [
+          {
             "Name": "background",
-            "Filename": "UI/icons/icon-background",
-            "Data": ["default"],
+            "Filename": "UI/icons/icon-background.png",
+            "Data": [
+              "default"
+            ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
             "FillType": "simple"
-          }]
-        },
-        {
-          "Name": "CharacterSheetIcon",
-          "Part": [{
+          }
+        ]
+      },
+      {
+        "Name": "CharacterSheetIcon",
+        "Part": [
+          {
             "Name": "icon",
-            "Filename": "UI/icons/character-sheet-icon",
-            "Data": ["default"],
+            "Filename": "UI/icons/character-sheet-icon.png",
+            "Data": [
+              "default"
+            ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 2,
             "FillType": "simple"
-          }]
-        },
-        {
-          "Name": "InventoryIcon",
-          "Part": [{
+          }
+        ]
+      },
+      {
+        "Name": "InventoryIcon",
+        "Part": [
+          {
             "Name": "icon",
-            "Filename": "UI/icons/backpack-icon",
-            "Data": ["default"],
+            "Filename": "UI/icons/backpack-icon.png",
+            "Data": [
+              "default"
+            ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 2,
             "FillType": "simple"
-          }]
-        },
-        {
-          "Name": "EquipmentIcon",
-          "Part": [{
+          }
+        ]
+      },
+      {
+        "Name": "EquipmentIcon",
+        "Part": [
+          {
             "Name": "icon",
-            "Filename": "UI/icons/equipment-icon",
-            "Data": ["default"],
+            "Filename": "UI/icons/equipment-icon.png",
+            "Data": [
+              "default"
+            ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 2,
             "FillType": "simple"
-          }]
-        },
-        {
-          "Name": "JobManagementIcon",
-          "Part": [{
+          }
+        ]
+      },
+      {
+        "Name": "JobManagementIcon",
+        "Part": [
+          {
             "Name": "icon",
-            "Filename": "UI/icons/job-management-icon",
-            "Data": ["default"],
+            "Filename": "UI/icons/job-management-icon.png",
+            "Data": [
+              "default"
+            ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 2,
             "FillType": "simple"
-          }]
-        },
-        {
-          "Name": "QuestJournalIcon",
-          "Part": [{
+          }
+        ]
+      },
+      {
+        "Name": "QuestJournalIcon",
+        "Part": [
+          {
             "Name": "icon",
-            "Filename": "UI/icons/quest-journal-icon",
-            "Data": ["default"],
+            "Filename": "UI/icons/quest-journal-icon.png",
+            "Data": [
+              "default"
+            ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 2,
             "FillType": "simple"
-          }]
-        }
-      ]
-    }
+          }
+        ]
+      }
+    ]
   }
 }

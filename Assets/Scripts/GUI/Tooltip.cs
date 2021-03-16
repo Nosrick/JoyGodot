@@ -2,61 +2,53 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using Godot;
+using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Graphics;
-using TMPro;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    [RequireComponent(typeof(GUIData))]
-    public class Tooltip : MonoBehaviour
+    public class Tooltip : GUIData
     {
-        [SerializeField] protected TextMeshProUGUI m_Title;
-        [SerializeField] protected TextMeshProUGUI m_Text;
-        [SerializeField] protected RectTransform m_IconSlot;
-        [SerializeField] protected ManagedUISprite m_Icon;
-        [SerializeField] protected GameObject m_Background;
-        [SerializeField] protected StringPairContainer m_ItemPrefab;
-        [SerializeField] protected LayoutGroup m_ParentLayout;
-        [SerializeField] protected Vector2 m_PositionOffset;
-
-        protected Canvas Canvas { get; set; }
-        protected Camera MainCamera { get; set; }
-        protected RectTransform RectTransform { get; set; }
-        
+        [Export] protected Label m_Title;
+        [Export] protected Label m_Text;
+        [Export] protected Node2D m_IconSlot;
+        [Export] protected ManagedUIElement m_Icon;
+        [Export] protected Node2D m_Background;
+        [Export] protected StringPairContainer m_ItemPrefab;
+        [Export] protected BoxContainer m_ParentLayout;
+        [Export] protected Vector2 m_PositionOffset;
         protected List<StringPairContainer> ItemCache { get; set; }
-        
-        protected Rect CursorRect { get; set; }
 
         public void Awake()
         {
-            if (this.Canvas is null)
+            if (this.ItemCache.IsNullOrEmpty() == false)
+            {
+                foreach (var item in this.ItemCache)
+                {
+                    item.Visible = false;
+                }
+            }
+            else
             {
                 this.ItemCache = new List<StringPairContainer>();
-                this.Canvas = this.GetComponentInParent<Canvas>();
-                this.Canvas.sortingLayerName = "GUI";
-                this.RectTransform = this.GetComponent<RectTransform>();
-                this.m_Icon.Awake();
-                this.MainCamera = Camera.main;
             }
         }
 
-        public void Update()
+        public override void _Input(InputEvent @event)
         {
-            this.CursorRect = GlobalConstants.GameManager.GUIManager
-                .Get(GUINames.CURSOR)
-                .GetComponent<RectTransform>()
-                .rect;
-            this.UpdatePosition();
+            if (@event is InputEventMouseMotion motion)
+            {
+                this.UpdatePosition(motion);
+            }
         }
 
-        protected void UpdatePosition()
+        protected void UpdatePosition(InputEventMouseMotion motion)
         {
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Vector2 mousePosition = motion.Position;
 
-            Vector2 offset = Vector2.zero;
+            Vector2 offset = Vector2.Zero;
+            /*
             if (mousePosition.x < Screen.width - this.RectTransform.sizeDelta.x)
             {
                 offset.x += this.CursorRect.width / 2;
@@ -89,9 +81,10 @@ namespace JoyLib.Code.Unity.GUI
                     mousePosition = this.MainCamera.ScreenToWorldPoint(mousePosition + offset);
                     break;
             }
+            */
 
             //this.transform.position = this.Canvas.transform.TransformPoint(mousePosition + offset);
-            this.transform.position = mousePosition;
+            this.Position = mousePosition;
         }
 
         public virtual void Show(
@@ -103,25 +96,25 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (!string.IsNullOrEmpty(title))
             {
-                this.m_Title.gameObject.SetActive(true);
-                this.m_Title.text = title;
+                this.m_Title.Visible = true;
+                this.m_Title.Text = title;
             }
             else
             {
-                this.m_Title.gameObject.SetActive(false);
+                this.m_Title.Visible = false;
             }
 
-            this.m_Text.text = content;
-            this.m_Text.gameObject.SetActive(!content.IsNullOrEmpty());
+            this.m_Text.Text = content;
+            this.m_Text.Visible = !content.IsNullOrEmpty();
 
             if (sprite is null == false)
             {
-                this.m_IconSlot.gameObject.SetActive(true);
+                this.m_IconSlot.Visible = true;
                 this.SetIcon(sprite);
             }
             else
             {
-                this.m_IconSlot.gameObject.SetActive(false);
+                this.m_IconSlot.Visible = false;
             }
 
             if (data.IsNullOrEmpty() == false)
@@ -131,32 +124,32 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     for (int i = this.ItemCache.Count; i < dataArray.Length; i++)
                     {
-                        this.ItemCache.Add(Instantiate(this.m_ItemPrefab, this.m_ParentLayout.transform, false));
+                        this.ItemCache.Add((StringPairContainer) this.m_ItemPrefab.Duplicate());
                     }
                 }
                 else if (this.ItemCache.Count > dataArray.Length)
                 {
-                    for (int i = dataArray.Count(); i < this.ItemCache.Count; i++)
+                    for (int i = dataArray.Length; i < this.ItemCache.Count; i++)
                     {
-                        this.ItemCache[i].gameObject.SetActive(false);
+                        this.ItemCache[i].Visible = false;
                     }
                 }
                     
                 for (int i = 0; i < dataArray.Length; i++)
                 {
                     this.ItemCache[i].Target = dataArray[i];
-                    this.ItemCache[i].gameObject.SetActive(true);
+                    this.ItemCache[i].Visible = true;
                 }
             }
             else
             {
                 foreach(var item in this.ItemCache)
                 {
-                    item.gameObject.SetActive(false);
+                    item.Visible = false;
                 }
             }
            
-            this.m_Background.SetActive(showBackground);
+            this.m_Background.Visible = showBackground;
 
             /*
             float height = this.ItemCache.Count(container => container.gameObject.activeSelf) * 0.055f;
@@ -165,8 +158,6 @@ namespace JoyLib.Code.Unity.GUI
             this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
             this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
             */
-            
-            LayoutRebuilder.ForceRebuildLayoutImmediate(this.RectTransform);
         }
 
         protected void SetIcon(ISpriteState state)

@@ -1,70 +1,25 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=1]
-[ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Scripts/LoadingScreenColour.cs" type="Script" id=3]
-[ext_resource path="res://Assets/Sprites/cultures/demon-body.png" type="Texture" id=4]
-
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 128, 0, 128, 128 )
-
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 4 )
-region = Rect2( 256, 0, 128, 128 )
-
-[sub_resource type="SpriteFrames" id=4]
-animations = [ {
-"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ) ],
-"loop": true,
-"name": "idle",
-"speed": 5.0
-} ]
+[ext_resource path="res://Assets/Scenes/Parts/JoyObject.tscn" type="PackedScene" id=4]
 
 [node name="Controller" type="Node"]
 script = ExtResource( 3 )
 
-[node name="Background" type="NinePatchRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = 6.10352e-05
-margin_bottom = 3.05176e-05
-texture = ExtResource( 1 )
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-axis_stretch_horizontal = 1
-axis_stretch_vertical = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="MainUI" type="Node2D" parent="."]
 
-[node name="Border" type="NinePatchRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = 6.10352e-05
-margin_bottom = 3.05176e-05
-texture = ExtResource( 2 )
-draw_center = false
-patch_margin_left = 9
-patch_margin_top = 9
-patch_margin_right = 9
-patch_margin_bottom = 9
-axis_stretch_horizontal = 1
-axis_stretch_vertical = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Background" parent="MainUI" instance=ExtResource( 1 )]
+margin_right = 854.0
+margin_bottom = 480.0
+grow_horizontal = 2
+grow_vertical = 2
+ElementName = "DefaultWindow"
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 444, 257 )
-frames = SubResource( 4 )
-animation = "idle"
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="JoyObject" parent="Sprites" instance=ExtResource( 4 )]
+
+[editable path="MainUI/Background"]
+
+[editable path="Sprites/JoyObject"]

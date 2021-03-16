@@ -9,6 +9,7 @@ using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
+using File = Godot.File;
 
 namespace JoyLib.Code.Graphics
 {
@@ -21,8 +22,8 @@ namespace JoyLib.Code.Graphics
         public ObjectIconHandler(RNG roller)
         {
             this.Roller = roller;
-            this.Load();
             this.ValueExtractor = new JSONValueExtractor();
+            this.Load();
         }
 
         protected bool Load()
@@ -41,18 +42,18 @@ namespace JoyLib.Code.Graphics
             //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
             SpriteData iconData = new SpriteData
             {
-                m_Name = "DEFAULT",
-                m_State = "DEFAULT",
+                m_Name = "default",
+                m_State = "default",
                 m_Parts = new List<SpritePart>
                 {
                     new SpritePart
                     {
-                        m_Data = new[] {"DEFAULT"},
+                        m_Data = new[] {"default"},
                         m_Filename = GlobalConstants.GODOT_ASSETS_FOLDER + 
                                      GlobalConstants.SPRITES_FOLDER + 
                                      "default.png",
                         m_Frames = 1,
-                        m_Name = "DEFAULT",
+                        m_Name = "default",
                         m_Position = 0,
                         m_FrameSprite = new SpriteFrames
                         {
@@ -66,7 +67,7 @@ namespace JoyLib.Code.Graphics
                 }
             };
 
-            this.Icons.Add("DEFAULT", new List<Tuple<string, SpriteData>>
+            this.Icons.Add("default", new List<Tuple<string, SpriteData>>
             {
                 new Tuple<string, SpriteData>(iconData.m_Name, iconData)
             });
@@ -81,34 +82,9 @@ namespace JoyLib.Code.Graphics
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
-                {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                    {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
+                Dictionary result = (Dictionary) JSON.Parse(System.IO.File.ReadAllText(file)).Result;
 
-                            if (jToken["Objects"].IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            JToken tileSet = jToken["Objects"]["TileSet"];
-
-                            string name = (string) tileSet["Name"];
-
-                            this.AddSpriteDataFromJson(name, tileSet["SpriteData"]);
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Cannot load sprite definitions from " + file);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                    }
-                }
-                */
+                this.AddSpriteDataFromJson(result);
             }
 
             return true;
@@ -173,8 +149,12 @@ namespace JoyLib.Code.Graphics
                     Array partColourArray =
                         this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Colour");
                     ICollection<Color> colours = new List<Color>();
-                    ICollection<string> colourCodes =
-                        this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
+                    ICollection<string> colourCodes = partColourArray.IsNullOrEmpty() 
+                        ? new List<string>
+                        {
+                            "#ffffffff"
+                        }
+                        : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
                     foreach (string code in colourCodes)
                     {
                         colours.Add(new Color(code));
@@ -201,7 +181,7 @@ namespace JoyLib.Code.Graphics
                     }
                     
                     SpriteFrames spriteFrames = new SpriteFrames();
-                    spriteFrames.AddAnimation("idle");
+                    spriteFrames.AddAnimation(state);
                     for (int i = 0; i < frames.Count; i++)
                     {
                         spriteFrames.AddFrame(name, frames[i], i);
@@ -238,7 +218,7 @@ namespace JoyLib.Code.Graphics
 
         public IEnumerable<SpriteData> ReturnDefaultData()
         {
-            return this.Icons["DEFAULT"]
+            return this.Icons["default"]
                 .Select(tuple => tuple.Item2.Copy());
         }
 

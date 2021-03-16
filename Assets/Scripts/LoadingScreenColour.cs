@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Linq;
+using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Needs;
@@ -10,8 +12,7 @@ using JoyLib.Code.Scripting;
 
 public class LoadingScreenColour : Node
 {
-    protected NinePatchRect Background { get; set; }
-    protected NinePatchRect Border { get; set; }
+    protected ManagedUIElement Background { get; set; }
     
     protected ICultureHandler CultureHandler { get; set; }
     
@@ -22,8 +23,7 @@ public class LoadingScreenColour : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        this.Background = this.GetNodeOrNull<NinePatchRect>("Background");
-        this.Border = this.GetNodeOrNull<NinePatchRect>("Border");
+        this.Background = (ManagedUIElement) this.FindNode("Background");
 
         GlobalConstants.ActionLog = new ActionLog();
 
@@ -34,9 +34,11 @@ public class LoadingScreenColour : Node
         this.CultureHandler = new CultureHandler(this.IconHandler);
 
         ICulture chosenCulture = this.Roller.SelectFromCollection(this.CultureHandler.Cultures);
-        
-        this.Background.Modulate = chosenCulture.BackgroundColours["DefaultWindow"]["background"];
-        this.Border.Modulate = chosenCulture.BackgroundColours["DefaultWindow"]["border"];
+
+        this.Background.AddSpriteState(new SpriteState(
+            "Background",
+            this.IconHandler.GetSprites("Windows", this.Background.ElementName).First()));
+        this.Background.OverrideAllColours(chosenCulture.BackgroundColours[this.Background.ElementName]);
     }
     
     public override void _Input(InputEvent inputEvent)
@@ -45,8 +47,7 @@ public class LoadingScreenColour : Node
         {
             ICulture chosenCulture = this.Roller.SelectFromCollection(this.CultureHandler.Cultures);
         
-            this.Background.Modulate = chosenCulture.BackgroundColours["DefaultWindow"]["background"];
-            this.Border.Modulate = chosenCulture.BackgroundColours["DefaultWindow"]["border"];
+            this.Background.OverrideAllColours(chosenCulture.BackgroundColours[this.Background.ElementName]);
         }
     }
 

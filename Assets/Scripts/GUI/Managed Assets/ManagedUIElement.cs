@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyLib.Code;
 using JoyLib.Code.Graphics;
 using Thread = System.Threading.Thread;
-using Timer = Godot.Timer;
-using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Unity
+namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {
-    public class ManagedSprite :
-        AnimatedSprite,
-        IManagedElement
+    public class ManagedUIElement : Control, IManagedElement
     {
         [Export] public string ElementName { get; protected set; }
         public bool Initialised { get; protected set; }
@@ -43,6 +39,7 @@ namespace JoyLib.Code.Unity
         protected bool IsDirty { get; set; }
         
         protected ISpriteState CachedState { get; set; } 
+        
         public int FrameIndex { get; protected set; }
 
         public string ChosenSprite
@@ -71,16 +68,17 @@ namespace JoyLib.Code.Unity
         
         protected string LastState { get; set; }
         protected string LastSprite { get; set; }
+        
         public float TimeSinceLastChange { get; protected set; }
         
         public IEnumerable<ISpriteState> States => this.m_States.Values;
 
         protected IDictionary<string, ISpriteState> m_States;
         
-        protected List<Node2D> Parts { get; set; }
+        protected List<NinePatchRect> Parts { get; set; }
 
         protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
-
+        
         public virtual void Awake()
         {
             this.Initialise();
@@ -93,12 +91,12 @@ namespace JoyLib.Code.Unity
                 return;
             }
             
-            this.Parts = new List<Node2D>();
-            this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
+            this.Parts = new List<NinePatchRect>();
+            this.m_States = new Dictionary<string, ISpriteState>();
 
             this.Initialised = true;
         }
-
+        
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
             this.Initialise();
@@ -125,7 +123,7 @@ namespace JoyLib.Code.Unity
                     Texture icon = theme.GetIcon(part.m_Name, "SpritePart");
                     if (icon is null == false)
                     {
-                        part.m_FrameSprite.Frames = new Array
+                        part.m_FrameSprite.Frames = new Godot.Collections.Array
                         {
                             icon
                         };
@@ -140,7 +138,7 @@ namespace JoyLib.Code.Unity
                 }
             }
         }
-
+        
         public virtual ISpriteState GetState(string name)
         {
             return this.m_States.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
@@ -180,7 +178,7 @@ namespace JoyLib.Code.Unity
             this.Initialise();
 
             this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
-            foreach (AnimatedSprite part in this.Parts)
+            foreach (Control part in this.Parts)
             {
                 part.Visible = false;
             }
@@ -326,7 +324,7 @@ namespace JoyLib.Code.Unity
         {
             this.Initialise();
 
-            foreach (Node2D part in this.Parts)
+            foreach (NinePatchRect part in this.Parts)
             {
                 part.Visible = false;
             }
@@ -334,29 +332,43 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    AnimatedSprite newSprite = new AnimatedSprite
+                    NinePatchRect patchRect = new NinePatchRect
                     {
-                        Centered = true
+                        Visible = false,
+                        AxisStretchVertical = NinePatchRect.AxisStretchMode.Stretch,
+                        AxisStretchHorizontal = NinePatchRect.AxisStretchMode.Stretch,
+                        AnchorBottom = 1,
+                        AnchorTop = 0,
+                        AnchorLeft = 0,
+                        AnchorRight = 1,
+                        MarginBottom = 0,
+                        MarginLeft = 0,
+                        MarginRight = 0,
+                        MarginTop = 0
                     };
-                    this.Parts.Add(newSprite);
+                    this.Parts.Add(patchRect);
+                    this.AddChild(patchRect);
                 }
             }
 
             for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
             {
-                AnimatedSprite animatedSprite = (AnimatedSprite) this.Parts[i];
-                animatedSprite.Name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
-                animatedSprite.Visible = true;
-                animatedSprite.Frames = this.CurrentSpriteState.SpriteData.m_Parts[i].m_FrameSprite;
+                NinePatchRect patchRect = this.Parts[i];
+                patchRect.Name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
+                patchRect.Visible = true;
+                patchRect.Texture = this.CurrentSpriteState.SpriteData.m_Parts[i].m_FrameSprite
+                    .GetFrame(patchRect.Name, 0);
             }
+            
+            GlobalConstants.ActionLog.Log(this.GetChildren());
         }
 
         protected virtual void ColourLerp(
-            Node2D sprite,
+            NinePatchRect sprite,
             Color newColour,
             float duration)
         {
-            Thread lerpThread = new Thread(this.ColourLerpForThread);
+            System.Threading.Thread lerpThread = new Thread(this.ColourLerpForThread);
             lerpThread.Start(new ThreadLerpParams
             {
                 m_Duration = duration,
@@ -386,7 +398,7 @@ namespace JoyLib.Code.Unity
 
         public struct ThreadLerpParams
         {
-            public Node2D m_Sprite;
+            public NinePatchRect m_Sprite;
             public Color m_NewColour;
             public float m_Duration;
         }

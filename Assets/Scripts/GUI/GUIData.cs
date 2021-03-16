@@ -4,7 +4,7 @@ using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUIData : Control
+    public class GUIData : Node2D
     {
         protected IGUIManager m_GUIManager;
 

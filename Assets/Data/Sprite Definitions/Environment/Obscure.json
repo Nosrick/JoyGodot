@@ -1,23 +1,21 @@
 ﻿{
-  "Objects": {
-    "TileSet": {
-      "Name": "obscure",
-      "SpriteData": [
-        {
-          "Name": "obscure",
-          "Part": [
-            {
-              "Name": "obscure",
-              "Frames": 1,
-              "Filename": "Obscure",
-              "Data": [
-                "default"
-              ],
-              "Position": 0
-            }
-          ]
-        }
-      ]
-    }
+  "TileSet": {
+    "Name": "obscure",
+    "SpriteData": [
+      {
+        "Name": "obscure",
+        "Part": [
+          {
+            "Name": "obscure",
+            "Frames": 1,
+            "Filename": "Obscure.png",
+            "Data": [
+              "default"
+            ],
+            "Position": 0
+          }
+        ]
+      }
+    ]
   }
 }

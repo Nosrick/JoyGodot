@@ -1,56 +1,66 @@
 ﻿{
-  "Objects": {
-    "TileSet": {
-      "Name": "Windows",
-      "SpriteData": [
-        {
-          "Name": "AccentBackground",
-          "Part": [{
+  "TileSet": {
+    "Name": "Windows",
+    "SpriteData": [
+      {
+        "Name": "AccentBackground",
+        "Part": [
+          {
             "Name": "background",
-            "Filename": "UI/background-tile",
-            "Data": ["default"],
+            "Filename": "UI/background-tile.png",
+            "Data": [
+              "default"
+            ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
             "FillType": "sliced"
-          }]
-        },
-        {
-          "Name": "SecondaryAccent",
-          "Part": [{
+          }
+        ]
+      },
+      {
+        "Name": "SecondaryAccent",
+        "Part": [
+          {
             "Name": "background",
-            "Filename": "UI/background-tile",
-            "Data": ["default"],
+            "Filename": "UI/background-tile.png",
+            "Data": [
+              "default"
+            ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
             "FillType": "sliced"
-          }]
-        },
-        {
-          "Name": "SlotBackground",
-          "Part": [
-            {
-              "Name": "background",
-              "Filename": "UI/background-tile",
-              "Data": ["default"],
-              "Frames": 1,
-              "Position": 0,
-              "SortOrder": 1,
-              "FillType": "sliced"
-            },
-            {
-              "Name": "border",
-              "Filename": "UI/background-border",
-              "Data": ["default"],
-              "Frames": 1,
-              "Position": 0,
-              "SortOrder": 2,
-              "FillType": "tiled"
-            }
-          ]
-        }
-      ]
-    }
+          }
+        ]
+      },
+      {
+        "Name": "SlotBackground",
+        "Part": [
+          {
+            "Name": "background",
+            "Filename": "UI/background-tile.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 1,
+            "FillType": "sliced"
+          },
+          {
+            "Name": "border",
+            "Filename": "UI/background-border.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 2,
+            "FillType": "tiled"
+          }
+        ]
+      }
+    ]
   }
 }

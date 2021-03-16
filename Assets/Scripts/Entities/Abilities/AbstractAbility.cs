@@ -392,6 +392,6 @@ namespace JoyLib.Code.Entities.Abilities
         public int Range { get; protected set; }
 
         public SpriteData SpriteData { get; protected set; }
-        public Texture UsingIcon { get; protected set; }
+        public SpriteFrames UsingIcon { get; protected set; }
     }
 }

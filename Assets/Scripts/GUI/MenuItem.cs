@@ -1,14 +1,13 @@
 ﻿using Code.Unity.GUI.Managed_Assets;
-using TMPro;
-using UnityEngine;
+using Godot;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public class MenuItem : ManagedButton
     {
-        [SerializeField] protected TextMeshProUGUI m_Text;
+        [Export] protected Label m_Text;
 
-        public TextMeshProUGUI Text
+        public Label Text
         {
             get => this.m_Text;
             protected set => this.m_Text = value;
