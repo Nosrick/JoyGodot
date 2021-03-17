@@ -187,7 +187,7 @@ namespace JoyLib.Code.Graphics
                         {
                             ImageTexture imageTexture = new ImageTexture();
                             imageTexture.CreateFromImage(image.GetRect(new Rect2(new Vector2(i, 0),
-                                new Vector2(frameWidth, frameWidth))), 11);
+                                new Vector2(frameWidth, frameWidth))), 2);
                             frames.Add(imageTexture);
                         }
 

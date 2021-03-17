@@ -22,6 +22,7 @@ grow_vertical = 2
 ElementName = "DefaultWindow"
 
 [node name="editor background" type="NinePatchRect" parent="MainUI/Background"]
+visible = false
 modulate = Color( 0.909804, 0.909804, 0.909804, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -37,6 +38,7 @@ __meta__ = {
 }
 
 [node name="editor border" type="NinePatchRect" parent="MainUI/Background"]
+visible = false
 modulate = Color( 1, 0.483333, 0, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0

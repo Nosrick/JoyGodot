@@ -368,19 +368,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 patchRect.AxisStretchVertical = part.m_StretchMode;
                 patchRect.SizeFlagsHorizontal = 3;
                 patchRect.SizeFlagsVertical = 3;
-
-                patchRect.MarginBottom = -20;
-                patchRect.MarginLeft = 20;
-                patchRect.MarginTop = 20;
-                patchRect.MarginRight = -20;
-                
-                GlobalConstants.ActionLog.Log(patchRect.Name);
-                GlobalConstants.ActionLog.Log(patchRect.AxisStretchHorizontal);
-                GlobalConstants.ActionLog.Log(patchRect.PatchMarginBottom);
-                GlobalConstants.ActionLog.Log(patchRect.SizeFlagsHorizontal);
             }
-            
-            //GlobalConstants.ActionLog.Log(this.GetChildren());
         }
 
         protected virtual void ColourLerp(
