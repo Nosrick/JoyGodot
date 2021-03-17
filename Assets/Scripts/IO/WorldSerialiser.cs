@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using Godot;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
@@ -10,18 +10,16 @@ using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Managers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.World;
-using Sirenix.OdinSerializer;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.IO
 {
     public class WorldSerialiser
     {
         protected IObjectIconHandler ObjectIcons { get; set; }
-
-        protected const DataFormat DEFAULT_DATA_FORMAT = DataFormat.Binary;
 
         public WorldSerialiser(IObjectIconHandler objectIcons)
         {
@@ -40,13 +38,13 @@ namespace JoyLib.Code.IO
             }
             catch (Exception e)
             {
-                GlobalConstants.ActionLog.AddText("Cannot open save directory.", LogLevel.Error);
+                GlobalConstants.ActionLog.Log("Cannot open save directory.", LogLevel.Error);
                 GlobalConstants.ActionLog.StackTrace(e);
             }
             try
             {
-                byte[] array = SerializationUtility.SerializeValue(world, DEFAULT_DATA_FORMAT);
-                File.WriteAllBytes(directory + "/world.dat", array);
+                string json = JSON.Print(world, "\t");
+                File.WriteAllText(directory + "/world.dat", json);
                 /*
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
                 JsonSerializer serializer = JsonSerializer.CreateDefault();
@@ -54,98 +52,75 @@ namespace JoyLib.Code.IO
                 writer.Close();
                 */
 
-                array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.QuestTracker.AllQuests,
-                    DEFAULT_DATA_FORMAT);
-                File.WriteAllBytes(directory + "/quests.dat", array);
+                json = JSON.Print(GlobalConstants.GameManager.QuestTracker.AllQuests, "\t");
+                File.WriteAllText(directory + "/quests.dat", json);
 
-                array = SerializationUtility.SerializeValue(GlobalConstants.GameManager.ItemHandler.QuestRewards,
-                    DEFAULT_DATA_FORMAT);
-                File.WriteAllBytes(directory + "/rewards.dat", array);
+                json = JSON.Print(GlobalConstants.GameManager.ItemHandler.QuestRewards, "\t");
+                File.WriteAllText(directory + "/rewards.dat", json);
 
-                array = SerializationUtility.SerializeValue(
-                    GlobalConstants.GameManager.RelationshipHandler.Values,
-                    DEFAULT_DATA_FORMAT);
-                File.WriteAllBytes(directory + "/relationships.dat", array);
+                json = JSON.Print(GlobalConstants.GameManager.RelationshipHandler.Values, "\t");
+                File.WriteAllText(directory + "/relationships.dat", json);
 
-                array = SerializationUtility.SerializeValue(
-                    GlobalConstants.GameManager.ItemHandler.Values,
-                    DEFAULT_DATA_FORMAT);
-                File.WriteAllBytes(directory + "/items.dat", array);
+                json = JSON.Print(GlobalConstants.GameManager.ItemHandler.Values, "\t");
+                File.WriteAllText(directory + "/items.dat", json);
 
-                array = SerializationUtility.SerializeValue(
-                    GlobalConstants.GameManager.EntityHandler.Values,
-                    DEFAULT_DATA_FORMAT);
-                File.WriteAllBytes(directory + "/entities.dat", array);
+                json = JSON.Print(GlobalConstants.GameManager.EntityHandler.Values, "\t");
+                File.WriteAllText(directory + "/entities.dat", json);
 
-                array = SerializationUtility.SerializeValue(
-                    GlobalConstants.GameManager.GUIDManager,
-                    DEFAULT_DATA_FORMAT);
-                File.WriteAllBytes(directory + "/guids.dat", array);
-                
-                File.WriteAllText(directory + "/data_format.dat", DEFAULT_DATA_FORMAT.ToString());
+                json = JSON.Print(GlobalConstants.GameManager.GUIDManager, "\t");
+                File.WriteAllText(directory + "/guids.dat", json);
             }
             catch(Exception e)
             {
-                GlobalConstants.ActionLog.AddText("Cannot serialise and/or write world to file.", LogLevel.Error);
+                GlobalConstants.ActionLog.Log("Cannot serialise and/or write world to file.", LogLevel.Error);
                 GlobalConstants.ActionLog.StackTrace(e);
             }
         }
 
         public IWorldInstance Deserialise(string worldName)
         {
-            /*
-            StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "/save/" + worldName + "/sav.dat");
-            JsonSerializer serializer = JsonSerializer.CreateDefault();
-            IWorldInstance world = serializer.Deserialize<IWorldInstance>(new JsonTextReader(reader));
-            reader.Close();
-            */
-            
-
             string directory = Directory.GetCurrentDirectory() + "/save/" + worldName;
 
-            if (!Enum.TryParse(File.ReadAllText(directory + "/data_format.dat"), out DataFormat dataFormat))
-            {
-                dataFormat = DEFAULT_DATA_FORMAT;
-            }
-            
-            byte[] array = File.ReadAllBytes(directory + "/world.dat");
-            IWorldInstance world = SerializationUtility.DeserializeValue<IWorldInstance>(array, dataFormat);
+            string json = File.ReadAllText(directory + "/world.dat");
+            /*
+            IWorldInstance world = JSON.Parse<IWorldInstance>(json);
             world.Initialise();
 
-            array = File.ReadAllBytes(directory + "/items.dat");
+            json = File.ReadAllText(directory + "/items.dat");
             IEnumerable<IItemInstance> items =
-                SerializationUtility.DeserializeValue<IEnumerable<IItemInstance>>(array, dataFormat);
+                JSON.Parse<IEnumerable<IItemInstance>>(json);
             this.Items(items, world);
 
-            array = File.ReadAllBytes(directory + "/entities.dat");
+            json = File.ReadAllText(directory + "/entities.dat");
             IEnumerable<IEntity> entities =
-                SerializationUtility.DeserializeValue<IEnumerable<IEntity>>(array, dataFormat);
+                JSON.Parse<IEnumerable<IEntity>>(json);
             this.Entities(entities, world);
 
-            array = File.ReadAllBytes(directory + "/relationships.dat");
+            json = File.ReadAllText(directory + "/relationships.dat");
             IEnumerable<IRelationship> relationships =
-                SerializationUtility.DeserializeValue<IEnumerable<IRelationship>>(array, dataFormat);
+                JSON.Parse<IEnumerable<IRelationship>>(json);
             this.Relationships(relationships);
 
-            array = File.ReadAllBytes(directory + "/quests.dat");
-            IEnumerable<IQuest> quests = SerializationUtility.DeserializeValue<IEnumerable<IQuest>>(array, dataFormat);
+            json = File.ReadAllText(directory + "/quests.dat");
+            IEnumerable<IQuest> quests = JSON.Parse<IEnumerable<IQuest>>(json);
             this.Quests(quests);
 
-            array = File.ReadAllBytes(directory + "/rewards.dat");
+            json = File.ReadAllText(directory + "/rewards.dat");
             NonUniqueDictionary<Guid, Guid> rewards =
-                SerializationUtility.DeserializeValue<NonUniqueDictionary<Guid, Guid>>(array, dataFormat);
+                JSON.Parse<NonUniqueDictionary<Guid, Guid>>(json);
             this.QuestRewards(rewards);
 
-            array = File.ReadAllBytes(directory + "/guids.dat");
+            json = File.ReadAllText(directory + "/guids.dat");
             GUIDManager guidManager =
-                SerializationUtility.DeserializeValue<GUIDManager>(array, dataFormat);
+                JSON.Parse<GUIDManager>(json);
 
             GlobalConstants.GameManager.GUIDManager.Deserialise(guidManager.RecycleList);
-            
             this.LinkWorlds(world);
             this.AssignIcons(world);
             
             return world;
+            */
+            return null;
         }
 
         private void LinkWorlds(IWorldInstance parent)
@@ -179,7 +154,7 @@ namespace JoyLib.Code.IO
         {
             foreach (SpritePart part in state.SpriteData.m_Parts)
             {
-                part.m_FrameSprites = this.ObjectIcons.GetRawFrames(tileSet, state.Name, part.m_Name, state.SpriteData.m_State);
+                //part.m_FrameSprite = this.ObjectIcons.(tileSet, state.Name, part.m_Name, state.SpriteData.m_State);
             }
         }
 
@@ -261,11 +236,13 @@ namespace JoyLib.Code.IO
 
                 foreach (INeed need in entity.Needs.Values)
                 {
+                    /*
                     need.FulfillingSprite = new SpriteState(
                         need.Name, 
                         GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
                             "needs", 
                             need.Name));
+                            */
                 }
 
                 worlds.First(world => world.EntityGUIDs.Contains(entity.Guid))?.AddEntity(entity);

@@ -14,12 +14,15 @@ namespace JoyLib.Code.Entities.Jobs
         
         protected RNG Roller { get; set; }
         
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+        
         protected IAbilityHandler AbilityHandler { get; set; }
 
         public JobHandler(
             IAbilityHandler abilityHandler,
             RNG roller)
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.AbilityHandler = abilityHandler;
             this.Roller = roller;
             this.m_Jobs = this.Load().ToList();

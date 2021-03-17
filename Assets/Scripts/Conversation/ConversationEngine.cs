@@ -2,18 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 using Castle.Core.Internal;
-using JoyLib.Code;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.Unity.GUI;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UnityEngine;
+using Directory = System.IO.Directory;
 
 namespace JoyLib.Code.Conversation
 {
@@ -21,8 +14,6 @@ namespace JoyLib.Code.Conversation
     {
         protected List<ITopic> m_Topics;
         protected List<ITopic> m_CurrentTopics;
-
-        protected GameObject m_Window;
 
         protected ITopic LastSaid
         {
@@ -82,6 +73,7 @@ namespace JoyLib.Code.Conversation
 
             foreach (string file in files)
             {
+                /*
                 using (StreamReader reader = new StreamReader(file))
                 {
                     using (JsonTextReader jsonReader = new JsonTextReader(reader))
@@ -188,6 +180,7 @@ namespace JoyLib.Code.Conversation
                         }
                     }
                 }
+                    */
             }
 
             topics = this.PerformLinks(topics);

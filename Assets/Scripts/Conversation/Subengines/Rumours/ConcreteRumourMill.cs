@@ -3,16 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using Castle.Core.Internal;
-using JoyLib.Code.Conversation.Conversations.Rumours;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace JoyLib.Code.Conversation.Conversations
 {
@@ -21,6 +15,8 @@ namespace JoyLib.Code.Conversation.Conversations
         public List<IRumour> Rumours { get; protected set; }
 
         public List<IRumour> RumourTypes { get; protected set; }
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public RNG Roller { get; protected set; }
 
@@ -50,6 +46,7 @@ namespace JoyLib.Code.Conversation.Conversations
 
             foreach (string file in files)
             {
+                /*
                 using (StreamReader reader = new StreamReader(file))
                 {
                     using (JsonTextReader jsonReader = new JsonTextReader(reader))
@@ -143,6 +140,7 @@ namespace JoyLib.Code.Conversation.Conversations
                         }
                     }
                 }
+                */
             }
 
             return rumours;

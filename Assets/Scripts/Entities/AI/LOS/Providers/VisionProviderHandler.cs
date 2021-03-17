@@ -12,11 +12,14 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
     public class VisionProviderHandler : IVisionProviderHandler
     {
         protected Dictionary<string, IVision> VisionTypes { get; set; }
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public IEnumerable<IVision> Values => this.VisionTypes.Values;
 
         public VisionProviderHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.VisionTypes = this.Load().ToDictionary(vision => vision.Name, vision => vision);
         }
 

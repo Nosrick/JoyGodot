@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using JoyLib.Code.Entities.Romance.Processors;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Romance
@@ -11,12 +12,15 @@ namespace JoyLib.Code.Entities.Romance
     {
         protected IDictionary<string, IRomance> RomanceTypes { get; set; }
         
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+        
         protected IDictionary<string, IRomanceProcessor> Processors { get; set; }
         
         public IEnumerable<IRomance> Values => this.RomanceTypes.Values.ToArray();
 
         public EntityRomanceHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.RomanceTypes = this.Load().ToDictionary(romance => romance.Name, romance => romance);
         }
 

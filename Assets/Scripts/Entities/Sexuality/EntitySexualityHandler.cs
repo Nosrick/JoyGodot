@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Sexuality
@@ -10,12 +11,15 @@ namespace JoyLib.Code.Entities.Sexuality
     {
         public IEnumerable<ISexuality> Values => this.Sexualities.Values;
         
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+        
         protected IDictionary<string, ISexuality> Sexualities { get; set; }
         
         protected IDictionary<string, ISexualityPreferenceProcessor> PreferenceProcessors { get; set; }
 
         public EntitySexualityHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Sexualities = this.Load().ToDictionary(sexuality => sexuality.Name, sexuality => sexuality);
         }
 

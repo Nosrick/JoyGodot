@@ -22,7 +22,9 @@ namespace JoyLib.Code.Entities.Statistics
         protected IDictionary<string, Color> DerivedValueOutlineColours { get; set; }
 
         public IEnumerable<IDerivedValue> Values => this.DerivedValues.Values;
-        
+
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+
         protected IEntityStatisticHandler StatisticHandler { get; set; }
         protected IEntitySkillHandler SkillHandler { get; set; }
 
@@ -33,6 +35,7 @@ namespace JoyLib.Code.Entities.Statistics
             IEntityStatisticHandler statisticHandler,
             IEntitySkillHandler skillHandler)
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.StatisticHandler = statisticHandler;
             this.SkillHandler = skillHandler;
 

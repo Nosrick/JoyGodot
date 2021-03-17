@@ -14,10 +14,13 @@ namespace JoyLib.Code.Entities.Relationships
         protected IDictionary<string, IRelationship> m_RelationshipTypes;
         protected NonUniqueDictionary<long, IRelationship> m_Relationships;
 
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+        
         public IEnumerable<IRelationship> Values => this.m_Relationships.Values;
 
         public EntityRelationshipHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.m_Relationships = new NonUniqueDictionary<long, IRelationship>();
             this.m_RelationshipTypes =
                 this.Load().ToDictionary(relationship => relationship.Name, relationship => relationship);

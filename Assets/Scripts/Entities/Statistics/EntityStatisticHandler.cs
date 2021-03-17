@@ -12,11 +12,14 @@ namespace JoyLib.Code.Entities.Statistics
 
         public IEnumerable<IEntityStatistic> Values => this.Statistics.Values;
         
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+        
         protected IDictionary<string, IEntityStatistic> Statistics { get; set; }
         protected IDictionary<string, IEntityStatistic> DefaultStatistics { get; set; }
 
         public EntityStatisticHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Statistics = this.Load().ToDictionary(statistic => statistic.Name, stat => stat);
         }
 

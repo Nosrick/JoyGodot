@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Abilities
@@ -9,11 +10,14 @@ namespace JoyLib.Code.Entities.Abilities
     public class AbilityHandler : IAbilityHandler
     {
         protected List<IAbility> Abilities { get; set; }
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public IEnumerable<IAbility> Values => this.Abilities;
 
         public AbilityHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Abilities = this.Load().ToList();
         }
 

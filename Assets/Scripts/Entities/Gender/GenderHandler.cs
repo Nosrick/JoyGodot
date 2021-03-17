@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Entities.Gender
 {
     public class GenderHandler : IGenderHandler
     {
         protected HashSet<IGender> Genders { get; set; }
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public IEnumerable<IGender> Values => this.Genders;
 
         public GenderHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Initialise();
         }
 

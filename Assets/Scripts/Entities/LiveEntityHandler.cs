@@ -11,6 +11,7 @@ namespace JoyLib.Code.Entities
         protected IEntity m_Player;
 
         public IEnumerable<IEntity> Values => this.m_Entities.Values.ToList();
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public LiveEntityHandler()
         {

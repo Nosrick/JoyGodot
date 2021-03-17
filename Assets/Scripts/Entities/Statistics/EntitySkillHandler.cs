@@ -13,11 +13,14 @@ namespace JoyLib.Code.Entities
 
         public IEnumerable<IEntitySkill> Values => this.Skills.Values;
         
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+        
         protected IDictionary<string, IEntitySkill> Skills { get; set; }
         protected IDictionary<string, IEntitySkill> DefaultSkills { get; set; }
         
         public EntitySkillHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Skills = this.Load().ToDictionary(skill => skill.Name, skill => skill);
         }
 

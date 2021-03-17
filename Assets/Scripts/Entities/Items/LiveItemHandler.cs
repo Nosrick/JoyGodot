@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Collections;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World;
 
@@ -11,10 +12,13 @@ namespace JoyLib.Code.Entities.Items
     {
         protected Dictionary<Guid, IItemInstance> LiveItems { get; set; }
         
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+        
         protected RNG Roller { get; set; }
 
         public LiveItemHandler(RNG roller = null)
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Roller = roller ?? new RNG();
             this.Load();
         }

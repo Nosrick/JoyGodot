@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Entities.Needs
 {
     public class NeedHandler : INeedHandler
     {
         protected Dictionary<string, INeed> m_NeedsMasters;
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public NeedHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.m_NeedsMasters = this.Load().ToDictionary(need => need.Name, need => need);
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using JoyLib.Code.Entities.Sexes.Processors;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Sexes
@@ -10,6 +11,8 @@ namespace JoyLib.Code.Entities.Sexes
     public class EntityBioSexHandler : IEntityBioSexHandler
     {
         public IEnumerable<IBioSex> Values => this.Sexes.Values;
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         protected IDictionary<string, IBioSexProcessor> Processors { get; set; }
         
@@ -17,6 +20,7 @@ namespace JoyLib.Code.Entities.Sexes
 
         public EntityBioSexHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Sexes = this.Load().ToDictionary(sex => sex.Name, sex => sex);
         }
 

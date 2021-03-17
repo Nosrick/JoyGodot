@@ -21,6 +21,8 @@ namespace JoyLib.Code.Entities.Items
         protected IAbilityHandler AbilityHandler { get; set; }
 
         public IEnumerable<BaseItemType> Values => this.m_ItemDatabase;
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public IDictionary<string, int> ItemWeights
         {
@@ -56,6 +58,7 @@ namespace JoyLib.Code.Entities.Items
             IAbilityHandler abilityHandler,
             IRollable roller = null)
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.ObjectIcons = objectIconHandler;
             this.MaterialHandler = materialHandler;
             this.AbilityHandler = abilityHandler;

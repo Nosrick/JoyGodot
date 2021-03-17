@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Entities.Items
 {
     public class MaterialHandler : IMaterialHandler
     {
         protected Dictionary<string, IItemMaterial> m_Materials;
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public IEnumerable<IItemMaterial> Values => this.m_Materials.Values;
 
         public MaterialHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Initialise();
         }
 

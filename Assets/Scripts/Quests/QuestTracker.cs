@@ -60,13 +60,13 @@ namespace JoyLib.Code.Quests
                 this.EntityQuests.Add(GUID, new List<IQuest> {quest});
             }
 
-            GlobalConstants.ActionLog.AddText("Quest added to player: " + quest.ID);
-            GlobalConstants.ActionLog.AddText(quest.ToString());
+            GlobalConstants.ActionLog.Log("Quest added to player: " + quest.ID);
+            GlobalConstants.ActionLog.Log(quest);
         }
 
         public void CompleteQuest(IEntity questor, IQuest quest)
         {
-            GlobalConstants.ActionLog.AddText(questor + " completed " + quest.ID);
+            GlobalConstants.ActionLog.Log(questor + " completed " + quest.ID);
             quest.CompleteQuest(questor);
             this.EntityQuests[questor.Guid].Remove(quest);
             GlobalConstants.GameManager.ItemHandler.CleanUpRewards();

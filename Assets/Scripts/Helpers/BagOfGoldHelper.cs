@@ -5,7 +5,6 @@ namespace JoyLib.Code.Helpers
 {
     public class BagOfGoldHelper
     {
-        /*
         private static IItemFactory ItemFactory { get; set; }
         
         private static ILiveItemHandler ItemHandler { get; set; }
@@ -61,6 +60,5 @@ namespace JoyLib.Code.Helpers
 
             return bag;
         }
-        */
     }
 }

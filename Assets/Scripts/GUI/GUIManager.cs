@@ -41,14 +41,17 @@ namespace JoyLib.Code.Unity.GUI
 
         public IDictionary<string, Color> FontColours { get; protected set; }
 
+        public IEnumerable<GUIData> Values => this.GUIs;
+        
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+
         public GUIManager(Node rootUi)
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.RootUI = rootUi;
             this.Initialise();
         }
 
-        public IEnumerable<GUIData> Values => this.GUIs;
-        
         public GUIData Get(string name)
         {
             return this.GUIs.FirstOrDefault(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
