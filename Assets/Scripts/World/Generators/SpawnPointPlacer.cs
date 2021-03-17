@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Rollers;
 
 namespace JoyLib.Code.World.Generators
 {
     public class SpawnPointPlacer
     {
-        /*
         protected RNG Roller { get; set; }
 
         public SpawnPointPlacer(RNG roller)
@@ -168,6 +168,5 @@ namespace JoyLib.Code.World.Generators
             }
             return false;
         }
-        */
     }
 }

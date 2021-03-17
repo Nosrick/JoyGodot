@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JoyLib.Code.World;
 using Tanis.Collections;
 
 namespace JoyLib.Code.Entities.AI
 {
-    /*
     public class Pathfinder
     {
         public Queue<Vector2Int> FindPath(Vector2Int from, Vector2Int to, IWorldInstance worldRef)
@@ -542,5 +542,4 @@ namespace JoyLib.Code.Entities.AI
 
         #endregion
     }
-    */
 }

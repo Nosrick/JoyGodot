@@ -3,52 +3,52 @@ using Godot;
 
 namespace Code.Collections
 {
-    public class GameObjectPool
+    public class GameObjectPool<T> where T : Node2D
     {
         /// <summary>
         /// The active GameObjects
         /// </summary>
-        protected List<Node2D> Objects { get; set; }
+        protected List<T> Objects { get; set; }
         
         /// <summary>
         /// The GameObjects which have been 'retired'
         /// </summary>
-        protected List<Node2D> InactiveObjects { get; set; }
+        protected List<T> InactiveObjects { get; set; }
         
         /// <summary>
         /// The prefab we use to instantiate
         /// </summary>
-        protected PackedScene Prefab { get; set; }
+        protected T Prefab { get; set; }
         
         /// <summary>
         /// This is the GameObject that new instances will be parented to
         /// </summary>
         protected Node2D Parent { get; set; }
 
-        public GameObjectPool(PackedScene prefab, Node2D parent)
+        public GameObjectPool(T prefab, Node2D parent)
         {
-            this.Objects = new List<Node2D>();
-            this.InactiveObjects = new List<Node2D>();
+            this.Objects = new List<T>();
+            this.InactiveObjects = new List<T>();
             this.Prefab = prefab;
             this.Parent = parent;
         }
 
-        public Node2D Get()
+        public T Get()
         {
             if (this.InactiveObjects.Count > 0)
             {
-                Node2D returnObject = this.InactiveObjects[0];
+                T returnObject = this.InactiveObjects[0];
                 this.InactiveObjects.RemoveAt(0);
                 this.Objects.Add(returnObject);
                 return returnObject;
             }
 
-            Node2D newObject = (Node2D) this.Prefab.Instance();
+            T newObject = (T) this.Prefab.Duplicate();
             this.Objects.Add(newObject);
             return newObject;
         }
 
-        public bool Retire(Node2D gameObject)
+        public bool Retire(T gameObject)
         {
             bool result = this.Objects.Remove(gameObject);
             if (result)
@@ -62,7 +62,7 @@ namespace Code.Collections
 
         public void RetireAll()
         {
-            foreach (Node2D gameObject in this.Objects)
+            foreach (T gameObject in this.Objects)
             {
                 gameObject.Visible = false;
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -58,7 +59,8 @@ namespace JoyLib.Code
         protected List<ISpriteState> m_States;
 
         public List<IJoyAction> CachedActions { get; protected set; }
-        
+        public Node2D MyNode { get; protected set; }
+
         public IRollable Roller { get; protected set; }
 
         public virtual IEnumerable<Tuple<string, string>> Tooltip

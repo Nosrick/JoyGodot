@@ -1,5 +1,5 @@
+using Godot;
 using JoyLib.Code.States;
-using UnityEngine.InputSystem;
 
 namespace Joy.Code.Managers
 {
@@ -11,8 +11,6 @@ namespace Joy.Code.Managers
 
         public StateManager()
         {
-            InputSystem.onActionChange -= this.OnMove;
-            InputSystem.onActionChange += this.OnMove;
         }
 
         public void ChangeState(IGameState newState)
@@ -54,13 +52,13 @@ namespace Joy.Code.Managers
             }
         }
 
-        public void OnMove(object data, InputActionChange change)
+        public void Process(InputEvent @event)
         {
             if (this.Active == false)
             {
                 return;
             }
-            this.m_ActiveState?.HandleInput(data, change);
+            this.m_ActiveState?.HandleInput(@event);
         }
 
         public void NextState()

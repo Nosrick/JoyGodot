@@ -5,19 +5,15 @@ using JoyLib.Code.Unity.GUI;
 
 namespace JoyLib.Code.Godot
 {
-    public class JoyObjectNode : Node2D
+    public class JoyObjectNode : ManagedSprite
     {
         protected IJoyObject JoyObject { get; set; }
 
         protected GUIManager GuiManager { get; set; }
-        
-        public ManagedSprite Icon { get; protected set; }
 
         public JoyObjectNode()
         {
-            this.Icon = new ManagedSprite();
-            this.AddChild(this.Icon);
-            this.Icon.Awake();
+            this.Awake();
         }
 
         public JoyObjectNode(IJoyObject joyObject)
@@ -30,8 +26,8 @@ namespace JoyLib.Code.Godot
         public void AttachJoyObject(IJoyObject joyObject)
         {
             this.JoyObject = joyObject;
-            this.Icon.Clear();
-            this.Icon.AddSpriteState(this.JoyObject.States[0]);
+            this.Clear();
+            this.AddSpriteState(this.JoyObject.States[0]);
         }
 
         public void OnPointerEnter()

@@ -2,19 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using Code.States;
+using Godot;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Events;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace JoyLib.Code.States
 {
@@ -30,8 +27,6 @@ namespace JoyLib.Code.States
 
         protected const int TICK_TIMER = 50;
         protected double m_TickTimer;
-
-        protected GameObject m_FogOfWarHolder;
 
         protected readonly WorldSerialiser m_WorldSerialiser;
 
@@ -51,8 +46,7 @@ namespace JoyLib.Code.States
             this.m_ActiveWorld = activeWorldRef;
             this.m_Overworld = overworldRef;
 
-            this.m_Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-            this.m_FogOfWarHolder = GameObject.Find("WorldFog");
+            this.m_Camera = (Camera) GlobalConstants.GameManager.MyNode.FindNode("Main Camera");
 
             this.GameManager = GlobalConstants.GameManager;
             this.PhysicsManager = this.GameManager.PhysicsManager;
@@ -61,17 +55,11 @@ namespace JoyLib.Code.States
             this.GUIManager = this.GameManager.GUIManager;
 
             this.TickTimer = this.TickEvent();
-            this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StartCoroutine(this.TickTimer);
 
             GlobalConstants.GameManager.Player.AliveChange -= this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.AliveChange += this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.ConsciousnessChange -= this.OnPlayerConsciousChange;
             GlobalConstants.GameManager.Player.ConsciousnessChange += this.OnPlayerConsciousChange;
-
-            if (Camera.main is null == false)
-            {
-                Camera.main.backgroundColor = GlobalConstants.GameManager.Player.VisionProvider.DarkColour;
-            }
 
             this.Tick();
         }
@@ -86,15 +74,17 @@ namespace JoyLib.Code.States
             this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
             this.GUIManager.OpenGUI(GUINames.ACTION_LOG);
 
-            this.GUIManager.Get(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
+            //this.GUIManager.Get(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
             //GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
+            /*
             EquipmentHandler equipmentHandler =
                 this.GUIManager.Get(GUINames.EQUIPMENT).GetComponentInChildren<EquipmentHandler>();
             equipmentHandler.SetPlayer(this.m_ActiveWorld.Player);
 
             var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();
             entryBanner.Activate(this.m_ActiveWorld.Name);
+            */
         }
 
         public override void Start()
@@ -125,8 +115,8 @@ namespace JoyLib.Code.States
                 this.AutoTurn = true;
             }
             
-            this.m_Camera.transform.position = new Vector3(player.WorldPosition.x, player.WorldPosition.y,
-                this.m_Camera.transform.position.z);
+            this.m_Camera.Translation = new Vector3(player.WorldPosition.x, player.WorldPosition.y,
+                this.m_Camera.Translation.z);
         }
 
         protected void SetEntityWorld(IWorldInstance world)
@@ -165,8 +155,10 @@ namespace JoyLib.Code.States
             player.Move(spawnPoint);
             player.Tick();
 
+            /*
             var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();
             entryBanner.Activate(this.m_ActiveWorld.Name);
+            */
 
             this.Tick();
         }
@@ -175,7 +167,6 @@ namespace JoyLib.Code.States
         {
             while (true)
             {
-                yield return new WaitForSeconds(0.2f);
                 if (this.AutoTurn)
                 {
                     this.Tick();
@@ -189,7 +180,6 @@ namespace JoyLib.Code.States
             {
                 this.AutoTurn = false;
                 this.GameManager.SetNextState(new GameOverState(this.m_Overworld));
-                SceneManager.LoadScene("GameOver");
             }
         }
 
@@ -198,7 +188,7 @@ namespace JoyLib.Code.States
             this.AutoTurn = !args.Value;
         }
 
-        public override void HandleInput(object data, InputActionChange change)
+        public override void HandleInput(InputEvent @event)
         {
             bool hasMoved = false;
             IEntity player = this.m_ActiveWorld.Player;
@@ -217,17 +207,12 @@ namespace JoyLib.Code.States
             }
             */
 
-            if (change != InputActionChange.ActionPerformed)
+            if (!(@event is InputEventAction action))
             {
                 return;
             }
 
-            if (!(data is InputAction inputAction))
-            {
-                return;
-            }
-
-            if (inputAction.name.Equals("auto turn", StringComparison.OrdinalIgnoreCase))
+            if (action.Action.Equals("auto turn", StringComparison.OrdinalIgnoreCase))
             {
                 this.AutoTurn = !this.AutoTurn;
                 this.ManualAutoTurn = this.AutoTurn;
@@ -240,7 +225,7 @@ namespace JoyLib.Code.States
 
             Vector2Int newPlayerPoint = this.m_ActiveWorld.Player.WorldPosition;
 
-            if (inputAction.name.Equals("close all windows", StringComparison.OrdinalIgnoreCase))
+            if (action.Action.Equals("close all windows", StringComparison.OrdinalIgnoreCase))
             {
                 if (this.GUIManager.AreAnyOpen() == false)
                 {
@@ -252,7 +237,7 @@ namespace JoyLib.Code.States
                 }
             }
 
-            if (inputAction.name.Equals("toggle inventory", StringComparison.OrdinalIgnoreCase))
+            if (action.Action.Equals("toggle inventory", StringComparison.OrdinalIgnoreCase))
             {
                 this.GUIManager.ToggleGUI(GUINames.INVENTORY);
                 if (this.GUIManager.IsActive(GUINames.INVENTORY) == false)
@@ -260,19 +245,19 @@ namespace JoyLib.Code.States
                     this.GUIManager.CloseGUI(GUINames.INVENTORY_CONTAINER);
                 }
             }
-            else if (inputAction.name.Equals("toggle equipment", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("toggle equipment", StringComparison.OrdinalIgnoreCase))
             {
                 this.GUIManager.ToggleGUI(GUINames.EQUIPMENT);
             }
-            else if (inputAction.name.Equals("toggle journal", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("toggle journal", StringComparison.OrdinalIgnoreCase))
             {
                 this.GUIManager.ToggleGUI(GUINames.QUEST_JOURNAL);
             }
-            else if (inputAction.name.Equals("toggle job management", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("toggle job management", StringComparison.OrdinalIgnoreCase))
             {
                 this.GUIManager.ToggleGUI(GUINames.JOB_MANAGEMENT);
             }
-            else if (inputAction.name.Equals("toggle character sheet", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("toggle character sheet", StringComparison.OrdinalIgnoreCase))
             {
                 this.GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
             }
@@ -288,7 +273,7 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            if (inputAction.name.Equals("interact", StringComparison.OrdinalIgnoreCase))
+            if (action.Action.Equals("interact", StringComparison.OrdinalIgnoreCase))
             {
                 //Going up a level
                 if (this.m_ActiveWorld.Parent != null && player.WorldPosition == this.m_ActiveWorld.SpawnPoint &&
@@ -307,57 +292,57 @@ namespace JoyLib.Code.States
                 }
             }
 
-            if (inputAction.name.Equals("skip turn", StringComparison.OrdinalIgnoreCase))
+            if (action.Action.Equals("skip turn", StringComparison.OrdinalIgnoreCase))
             {
                 this.Tick();
             }
             //North
-            else if (inputAction.name.Equals("N", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("N", StringComparison.OrdinalIgnoreCase))
             {
                 newPlayerPoint.y += 1;
                 hasMoved = true;
             }
             //North east
-            else if (inputAction.name.Equals("NE", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("NE", StringComparison.OrdinalIgnoreCase))
             {
                 newPlayerPoint.x += 1;
                 newPlayerPoint.y += 1;
                 hasMoved = true;
             }
             //East
-            else if (inputAction.name.Equals("E", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("E", StringComparison.OrdinalIgnoreCase))
             {
                 newPlayerPoint.x += 1;
                 hasMoved = true;
             }
             //South east
-            else if (inputAction.name.Equals("SE", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("SE", StringComparison.OrdinalIgnoreCase))
             {
                 newPlayerPoint.x += 1;
                 newPlayerPoint.y -= 1;
                 hasMoved = true;
             }
             //South
-            else if (inputAction.name.Equals("S", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("S", StringComparison.OrdinalIgnoreCase))
             {
                 newPlayerPoint.y -= 1;
                 hasMoved = true;
             }
             //South west
-            else if (inputAction.name.Equals("SW", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("SW", StringComparison.OrdinalIgnoreCase))
             {
                 newPlayerPoint.x -= 1;
                 newPlayerPoint.y -= 1;
                 hasMoved = true;
             }
             //West
-            else if (inputAction.name.Equals("W", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("W", StringComparison.OrdinalIgnoreCase))
             {
                 newPlayerPoint.x -= 1;
                 hasMoved = true;
             }
             //North west
-            else if (inputAction.name.Equals("NW", StringComparison.OrdinalIgnoreCase))
+            else if (action.Action.Equals("NW", StringComparison.OrdinalIgnoreCase))
             {
                 newPlayerPoint.x -= 1;
                 newPlayerPoint.y += 1;
@@ -501,7 +486,7 @@ namespace JoyLib.Code.States
 
         public override GameState GetNextState()
         {
-            this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StopCoroutine(this.TickTimer);
+            //this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StopCoroutine(this.TickTimer);
             return new WorldDestructionState(this.m_Overworld, this.m_ActiveWorld);
         }
 

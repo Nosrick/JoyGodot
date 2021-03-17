@@ -3,6 +3,7 @@ using System.Linq;
 using Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Godot;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
@@ -23,7 +24,7 @@ namespace JoyLib.Code.Entities.Items
         
         protected GUIDManager GuidManager { get; set; }
 
-        protected GameObjectPool ItemPool { get; set; }
+        protected GameObjectPool<JoyObjectNode> ItemPool { get; set; }
 
         protected RNG Roller { get; set; }
 
@@ -33,7 +34,7 @@ namespace JoyLib.Code.Entities.Items
             ILiveItemHandler itemHandler,
             IObjectIconHandler objectIconHandler,
             IDerivedValueHandler derivedValueHandler,
-            GameObjectPool itemPool,
+            GameObjectPool<JoyObjectNode> itemPool,
             RNG roller = null)
         {
             this.GuidManager = guidManager;

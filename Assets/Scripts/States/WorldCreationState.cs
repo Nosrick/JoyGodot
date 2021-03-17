@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Godot;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Godot;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using JoyLib.Code.World.Generators;
 using JoyLib.Code.World.Generators.Interiors;
 using JoyLib.Code.World.Generators.Overworld;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -126,7 +126,7 @@ namespace JoyLib.Code.States
 
             foreach (IItemInstance item in this.m_Player.Contents)
             {
-                GlobalConstants.GameManager.ItemPool.Retire(item.MonoBehaviourHandler.gameObject);
+                GlobalConstants.GameManager.ItemPool.Retire((JoyObjectNode) item.MyNode);
             }
 
             this.m_World.Tick();
@@ -150,7 +150,7 @@ namespace JoyLib.Code.States
         {
         }
 
-        public override void HandleInput(object data, InputActionChange action)
+        public override void HandleInput(InputEvent @event)
         {
         }
 

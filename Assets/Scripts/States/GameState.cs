@@ -1,5 +1,5 @@
+using Godot;
 using JoyLib.Code.Unity.GUI;
-using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -29,7 +29,7 @@ namespace JoyLib.Code.States
         //ALWAYS call base.Update() from derived classes
         public abstract void Update();
 
-        public abstract void HandleInput(object data, InputActionChange action);
+        public abstract void HandleInput(InputEvent @event);
 
         public abstract GameState GetNextState();
 

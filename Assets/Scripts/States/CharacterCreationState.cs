@@ -1,11 +1,11 @@
-﻿using JoyLib.Code.Unity.GUI;
-using UnityEngine.InputSystem;
+﻿using Godot;
+using JoyLib.Code.Unity.GUI;
 
 namespace JoyLib.Code.States
 {
     public class CharacterCreationState : GameState
     {
-        protected CharacterCreationScreen CharacterCreationScreen { get; set; }
+        //protected CharacterCreationScreen CharacterCreationScreen { get; set; }
 
         public CharacterCreationState()
         {
@@ -27,14 +27,16 @@ namespace JoyLib.Code.States
         {
             base.SetUpUi();
 
+            /*
             this.CharacterCreationScreen = this.GUIManager
                 .Get(GUINames.CHARACTER_CREATION_PART_1)
                 .GetComponent<CharacterCreationScreen>();
             this.CharacterCreationScreen.Initialise();
+            */
             this.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1, true);
         }
 
-        public override void HandleInput(object data, InputActionChange action)
+        public override void HandleInput(InputEvent @event)
         {
         }
 

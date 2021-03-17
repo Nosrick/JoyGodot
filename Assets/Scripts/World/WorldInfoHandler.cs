@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.World
 {
@@ -18,10 +19,12 @@ namespace JoyLib.Code.World
         protected IDictionary<string, WorldInfo> WorldInfoDict { get; set; }
 
         public IEnumerable<WorldInfo> Values => this.WorldInfoDict.Values;
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public WorldInfoHandler(IObjectIconHandler objectIconHandler)
         {
             this.ObjectIcons = objectIconHandler;
+            this.ValueExtractor = new JSONValueExtractor();
 
             this.WorldInfoDict = this.Load().ToDictionary(info => info.name, info => info);
         }

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
+using Godot;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.IO;
 using JoyLib.Code.World;
-using UnityEngine.InputSystem;
 
 namespace JoyLib.Code.States
 {
@@ -47,7 +47,7 @@ namespace JoyLib.Code.States
         {
         }
 
-        public override void HandleInput(object data, InputActionChange action)
+        public override void HandleInput(InputEvent @event)
         {
         }
 

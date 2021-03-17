@@ -17,6 +17,7 @@ using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Godot;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Managers;
@@ -24,6 +25,7 @@ using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.States;
+using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 
@@ -81,11 +83,11 @@ namespace JoyLib.Code
         Node MyNode { get; }
         
         IEntity Player { get; }
-        GameObjectPool FloorPool { get; }
-        GameObjectPool WallPool { get; }
-        GameObjectPool EntityPool { get; }
-        GameObjectPool ItemPool { get; }
-        GameObjectPool FogPool { get; }
+        GameObjectPool<ManagedSprite> FloorPool { get; }
+        GameObjectPool<JoyObjectNode> WallPool { get; }
+        GameObjectPool<JoyObjectNode> EntityPool { get; }
+        GameObjectPool<JoyObjectNode> ItemPool { get; }
+        GameObjectPool<Sprite> FogPool { get; }
         void SetNextState(IGameState nextState = null);
 
         void Reset();

@@ -1,7 +1,7 @@
-﻿using JoyLib.Code;
+﻿using Godot;
+using JoyLib.Code;
 using JoyLib.Code.States;
 using JoyLib.Code.World;
-using UnityEngine.InputSystem;
 
 namespace Code.States
 {
@@ -38,7 +38,7 @@ namespace Code.States
         {
         }
 
-        public override void HandleInput(object data, InputActionChange action)
+        public override void HandleInput(InputEvent @event)
         {
         }
 

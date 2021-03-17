@@ -1,5 +1,5 @@
-﻿using JoyLib.Code.Unity.GUI;
-using UnityEngine.InputSystem;
+﻿using Godot;
+using JoyLib.Code.Unity.GUI;
 
 namespace JoyLib.Code.States
 {
@@ -12,7 +12,7 @@ namespace JoyLib.Code.States
         void Start();
         void Stop();
         void Update();
-        void HandleInput(object data, InputActionChange change);
+        void HandleInput(InputEvent @event);
         GameState GetNextState();
     }
 }
