@@ -14,7 +14,13 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "sliced"
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
           }
         ]
       },
@@ -30,7 +36,13 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "sliced"
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
           }
         ]
       },
@@ -46,7 +58,13 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "sliced"
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
           },
           {
             "Name": "border",
@@ -57,7 +75,13 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 2,
-            "FillType": "tiled"
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
           }
         ]
       }

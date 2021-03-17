@@ -36,8 +36,8 @@ namespace JoyLib.Code.Graphics
             this.Icons = new System.Collections.Generic.Dictionary<string, List<Tuple<string, SpriteData>>>();
 
             Texture defaultSprite = GD.Load<Texture>(
-                GlobalConstants.GODOT_ASSETS_FOLDER + 
-                GlobalConstants.SPRITES_FOLDER + 
+                GlobalConstants.GODOT_ASSETS_FOLDER +
+                GlobalConstants.SPRITES_FOLDER +
                 "default.png");
             //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
             SpriteData iconData = new SpriteData
@@ -49,8 +49,8 @@ namespace JoyLib.Code.Graphics
                     new SpritePart
                     {
                         m_Data = new[] {"default"},
-                        m_Filename = GlobalConstants.GODOT_ASSETS_FOLDER + 
-                                     GlobalConstants.SPRITES_FOLDER + 
+                        m_Filename = GlobalConstants.GODOT_ASSETS_FOLDER +
+                                     GlobalConstants.SPRITES_FOLDER +
                                      "default.png",
                         m_Frames = 1,
                         m_Name = "default",
@@ -74,9 +74,9 @@ namespace JoyLib.Code.Graphics
 
             string[] files =
                 Directory.GetFiles(
-                    Directory.GetCurrentDirectory() + 
-                    GlobalConstants.ASSETS_FOLDER + 
-                    GlobalConstants.DATA_FOLDER + 
+                    Directory.GetCurrentDirectory() +
+                    GlobalConstants.ASSETS_FOLDER +
+                    GlobalConstants.DATA_FOLDER +
                     "/Sprite Definitions", "*.json",
                     SearchOption.AllDirectories);
 
@@ -130,88 +130,111 @@ namespace JoyLib.Code.Graphics
                 this.ValueExtractor.GetCollectionFromArray<Dictionary>(tileSetArray);
             foreach (Dictionary dict in tileSetDicts)
             {
-                List<SpritePart> parts = new List<SpritePart>();
-                
-                string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
-                string state = this.ValueExtractor.GetValueFromDictionary<string>(dict, "State");
-                Array partsArray = this.ValueExtractor.GetValueFromDictionary<Array>(dict, "Part");
-                ICollection<Dictionary> partDicts =
-                    this.ValueExtractor.GetCollectionFromArray<Dictionary>(partsArray);
-                foreach (Dictionary innerDict in partDicts)
+                try
                 {
-                    string partName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Name");
-                    int partFrames = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Frames");
-                    string fileName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Filename");
-                    int sortOrder = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "SortOrder");
-                    int position = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Position");
-                    Array partDataArray = this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Data");
-                    ICollection<string> data = this.ValueExtractor.GetCollectionFromArray<string>(partDataArray);
-                    Array partColourArray =
-                        this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Colour");
-                    ICollection<Color> colours = new List<Color>();
-                    ICollection<string> colourCodes = partColourArray.IsNullOrEmpty() 
-                        ? new List<string>
+                    List<SpritePart> parts = new List<SpritePart>();
+
+                    string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                    string state = this.ValueExtractor.GetValueFromDictionary<string>(dict, "State") ?? "default";
+                    Array partsArray = this.ValueExtractor.GetValueFromDictionary<Array>(dict, "Part");
+                    ICollection<Dictionary> partDicts =
+                        this.ValueExtractor.GetCollectionFromArray<Dictionary>(partsArray);
+                    foreach (Dictionary innerDict in partDicts)
+                    {
+                        string partName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Name");
+                        int partFrames = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Frames");
+                        string fileName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Filename");
+                        int sortOrder = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "SortOrder");
+                        int position = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Position");
+                        NinePatchRect.AxisStretchMode stretchMode =
+                            GraphicsHelper.ParseStretchMode(
+                                this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "FillType"));
+                        bool drawCentre = !innerDict.Contains("DrawCentre") 
+                                          || this.ValueExtractor.GetValueFromDictionary<bool>(innerDict, "DrawCentre");
+                        Array marginArray = this.ValueExtractor.GetValueFromDictionary<Array>(
+                            innerDict,
+                            "PatchMargins");
+                        ICollection<int> patchMargins = marginArray.IsNullOrEmpty()
+                            ? new[] {0, 0, 0, 0}
+                            : this.ValueExtractor.GetCollectionFromArray<int>(marginArray);
+
+                        Array partDataArray = this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Data") ??
+                                              new Array();
+                        ICollection<string> data = this.ValueExtractor.GetCollectionFromArray<string>(partDataArray);
+                        Array partColourArray =
+                            this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Colour");
+                        ICollection<Color> colours = new List<Color>();
+                        ICollection<string> colourCodes = partColourArray.IsNullOrEmpty()
+                            ? new List<string>
+                            {
+                                "#ffffff"
+                            }
+                            : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
+                        foreach (string code in colourCodes)
                         {
-                            "#ffffffff"
+                            colours.Add(new Color(code));
                         }
-                        : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
-                    foreach (string code in colourCodes)
-                    {
-                        colours.Add(new Color(code));
+
+                        Texture texture = GD.Load<Texture>(
+                            GlobalConstants.GODOT_ASSETS_FOLDER +
+                            GlobalConstants.SPRITES_FOLDER +
+                            fileName);
+
+                        Image image = texture.GetData();
+                        int frameWidth = texture.GetWidth() / partFrames;
+                        List<Texture> frames = new List<Texture>();
+                        for (int i = 0; i < texture.GetWidth(); i += frameWidth)
+                        {
+                            ImageTexture imageTexture = new ImageTexture();
+                            imageTexture.CreateFromImage(image.GetRect(new Rect2(new Vector2(i, 0),
+                                new Vector2(frameWidth, frameWidth))), 11);
+                            frames.Add(imageTexture);
+                        }
+
+                        SpriteFrames spriteFrames = new SpriteFrames();
+                        if (spriteFrames.GetAnimationNames().Contains(state) == false)
+                        {
+                            spriteFrames.AddAnimation(state);
+                        }
+
+                        for (int i = 0; i < frames.Count; i++)
+                        {
+                            spriteFrames.AddFrame(state, frames[i], i);
+                        }
+
+                        SpritePart part = new SpritePart
+                        {
+                            m_Data = data.ToArray(),
+                            m_Filename = fileName,
+                            m_Frames = partFrames,
+                            m_FrameSprite = spriteFrames,
+                            m_Name = partName,
+                            m_Position = position,
+                            m_PossibleColours = colours.ToList(),
+                            m_SortingOrder = sortOrder,
+                            m_PatchMargins = patchMargins.ToArray(),
+                            m_DrawCentre = drawCentre,
+                            m_StretchMode = stretchMode
+                        };
+
+                        parts.Add(part);
                     }
 
-                    if (colours.IsNullOrEmpty())
-                    {
-                        colours.Add(Colors.White);
-                    }
-
-                    Texture texture = GD.Load<Texture>(
-                        GlobalConstants.GODOT_ASSETS_FOLDER + 
-                        GlobalConstants.SPRITES_FOLDER + 
-                        fileName);
-
-                    Image image = texture.GetData();
-                    int frameWidth = texture.GetWidth() / partFrames;
-                    List<Texture> frames = new List<Texture>();
-                    for (int i = 0; i < texture.GetWidth(); i += frameWidth)
-                    {
-                        ImageTexture imageTexture = new ImageTexture();
-                        imageTexture.CreateFromImage(image.GetRect(new Rect2(new Vector2(i, 0), new Vector2(frameWidth, frameWidth))));
-                        frames.Add(imageTexture);
-                    }
-                    
-                    SpriteFrames spriteFrames = new SpriteFrames();
-                    spriteFrames.AddAnimation(state);
-                    for (int i = 0; i < frames.Count; i++)
-                    {
-                        spriteFrames.AddFrame(name, frames[i], i);
-                    }
-                    
-                    SpritePart part = new SpritePart
-                    {
-                        m_Data = data.ToArray(),
-                        m_Filename = fileName,
-                        m_Frames = partFrames,
-                        m_FrameSprite = spriteFrames,
-                        m_Name = partName,
-                        m_Position = position,
-                        m_PossibleColours = colours.ToList(),
-                        m_SortingOrder = sortOrder
-                    };
-
-                    parts.Add(part);
+                    spriteData.Add(
+                        new SpriteData
+                        {
+                            m_Name = name,
+                            m_Parts = parts,
+                            m_State = state
+                        });
                 }
-                
-                spriteData.Add(
-                    new SpriteData
-                    {
-                        m_Name = name,
-                        m_Parts = parts,
-                        m_State = state
-                    });
+                catch (Exception e)
+                {
+                    GlobalConstants.ActionLog.Log("Could not load sprite data from JSON. Offending JSON to follow.");
+                    GlobalConstants.ActionLog.Log(dict);
+                    GlobalConstants.ActionLog.StackTrace(e);
+                }
             }
-
-            GlobalConstants.ActionLog.Log(tileSetDict);
 
             return this.AddSpriteDataRange(tileSetName, spriteData);
         }
@@ -287,8 +310,11 @@ namespace JoyLib.Code.Graphics
         public string m_Filename;
         public int m_Position;
         public List<Color> m_PossibleColours;
+        public int[] m_PatchMargins;
         public int m_SelectedColour;
         public int m_SortingOrder;
+        public bool m_DrawCentre;
+        public NinePatchRect.AxisStretchMode m_StretchMode;
 
         public Color SelectedColour => this.m_PossibleColours[this.m_SelectedColour];
 

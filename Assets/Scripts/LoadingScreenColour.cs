@@ -1,18 +1,18 @@
-using Godot;
-using System;
 using System.Linq;
+using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code;
 using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities.Needs;
+using JoyLib.Code.Godot;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
 
 public class LoadingScreenColour : Node
 {
     protected ManagedUIElement Background { get; set; }
+    
+    protected JoyObjectNode Node { get; set; }
     
     protected ICultureHandler CultureHandler { get; set; }
     
@@ -24,6 +24,7 @@ public class LoadingScreenColour : Node
     public override void _Ready()
     {
         this.Background = (ManagedUIElement) this.FindNode("Background");
+        this.Node = (JoyObjectNode) this.FindNode("JoyObject");
 
         GlobalConstants.ActionLog = new ActionLog();
 

@@ -353,14 +353,34 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
             {
+                var part = this.CurrentSpriteState.SpriteData.m_Parts[i];
                 NinePatchRect patchRect = this.Parts[i];
-                patchRect.Name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
+                patchRect.Name = part.m_Name;
                 patchRect.Visible = true;
-                patchRect.Texture = this.CurrentSpriteState.SpriteData.m_Parts[i].m_FrameSprite
-                    .GetFrame(patchRect.Name, 0);
+                patchRect.Texture = part.m_FrameSprite.GetFrame(this.CurrentSpriteState.SpriteData.m_State, 0);
+                this.MoveChild(patchRect, part.m_SortingOrder);
+                patchRect.PatchMarginLeft = part.m_PatchMargins[0];
+                patchRect.PatchMarginTop = part.m_PatchMargins[1];
+                patchRect.PatchMarginRight = part.m_PatchMargins[2];
+                patchRect.PatchMarginBottom = part.m_PatchMargins[3];
+                patchRect.DrawCenter = part.m_DrawCentre;
+                patchRect.AxisStretchHorizontal = part.m_StretchMode;
+                patchRect.AxisStretchVertical = part.m_StretchMode;
+                patchRect.SizeFlagsHorizontal = 3;
+                patchRect.SizeFlagsVertical = 3;
+
+                patchRect.MarginBottom = -20;
+                patchRect.MarginLeft = 20;
+                patchRect.MarginTop = 20;
+                patchRect.MarginRight = -20;
+                
+                GlobalConstants.ActionLog.Log(patchRect.Name);
+                GlobalConstants.ActionLog.Log(patchRect.AxisStretchHorizontal);
+                GlobalConstants.ActionLog.Log(patchRect.PatchMarginBottom);
+                GlobalConstants.ActionLog.Log(patchRect.SizeFlagsHorizontal);
             }
             
-            GlobalConstants.ActionLog.Log(this.GetChildren());
+            //GlobalConstants.ActionLog.Log(this.GetChildren());
         }
 
         protected virtual void ColourLerp(

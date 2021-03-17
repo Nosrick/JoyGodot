@@ -348,6 +348,7 @@ namespace JoyLib.Code.Unity
                 animatedSprite.Name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
                 animatedSprite.Visible = true;
                 animatedSprite.Frames = this.CurrentSpriteState.SpriteData.m_Parts[i].m_FrameSprite;
+                animatedSprite.ZIndex = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
             }
         }
 

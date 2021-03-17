@@ -1,13 +1,18 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=2]
 [ext_resource path="res://Assets/Scripts/LoadingScreenColour.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Scenes/Parts/JoyObject.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=5]
 
 [node name="Controller" type="Node"]
 script = ExtResource( 3 )
 
 [node name="MainUI" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="MainUI"]
+anchor_mode = 0
 
 [node name="Background" parent="MainUI" instance=ExtResource( 1 )]
 margin_right = 854.0
@@ -16,9 +21,44 @@ grow_horizontal = 2
 grow_vertical = 2
 ElementName = "DefaultWindow"
 
+[node name="editor background" type="NinePatchRect" parent="MainUI/Background"]
+modulate = Color( 0.909804, 0.909804, 0.909804, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -0.416077
+margin_bottom = 0.0399475
+texture = ExtResource( 5 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="editor border" type="NinePatchRect" parent="MainUI/Background"]
+modulate = Color( 1, 0.483333, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -0.960022
+texture = ExtResource( 2 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
 [node name="Sprites" type="Node2D" parent="."]
 
 [node name="JoyObject" parent="Sprites" instance=ExtResource( 4 )]
+
+[node name="CollisionShape2D" parent="Sprites/JoyObject/KinematicBody2D" index="0"]
+position = Vector2( 427, 232 )
 
 [editable path="MainUI/Background"]
 

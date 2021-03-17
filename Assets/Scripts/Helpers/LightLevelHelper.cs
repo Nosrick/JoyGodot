@@ -14,7 +14,7 @@ namespace JoyLib.Code.Helpers
         public static Color GetColour(int light, IVision vision)
         {
             float lerp = Normalise(light);
-            Color displayColour = GraphicsHelper.LerpColour(vision.DarkColour, vision.LightColour, lerp);
+            Color displayColour = vision.DarkColour.LinearInterpolate(vision.LightColour, lerp);
             if(light > vision.MaximumLightLevel)
             {
                 displayColour.a = 1f;

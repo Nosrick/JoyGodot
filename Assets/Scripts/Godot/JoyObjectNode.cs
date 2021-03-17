@@ -11,11 +11,12 @@ namespace JoyLib.Code.Godot
 
         protected GUIManager GuiManager { get; set; }
         
-        protected ManagedSprite Icon { get; set; }
+        public ManagedSprite Icon { get; protected set; }
 
         public JoyObjectNode()
         {
             this.Icon = new ManagedSprite();
+            this.AddChild(this.Icon);
             this.Icon.Awake();
         }
 

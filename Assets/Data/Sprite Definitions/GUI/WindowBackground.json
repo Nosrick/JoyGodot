@@ -5,17 +5,7 @@
       {
         "Name": "DefaultWindow",
         "Part": [
-          {
-            "Name": "background",
-            "Filename": "UI/background-tile.png",
-            "Data": [
-              "default"
-            ],
-            "Frames": 1,
-            "Position": 0,
-            "SortOrder": 1,
-            "FillType": "sliced"
-          },
+          
           {
             "Name": "border",
             "Filename": "UI/background-border.png",
@@ -25,7 +15,14 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 2,
-            "FillType": "tiled"
+            "FillType": "tile-fit",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ],
+            "DrawCentre": true
           }
         ]
       }
