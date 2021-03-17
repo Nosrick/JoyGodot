@@ -27,7 +27,7 @@ namespace JoyLib.Code
 
         public static readonly Vector2Int NO_TARGET = new Vector2Int(-1, -1);
 
-        //public static IGameManager GameManager { get; set; }
+        public static IGameManager GameManager { get; set; }
 
         public static ActionLog ActionLog { get; set; }
     }

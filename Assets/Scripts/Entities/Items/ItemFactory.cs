@@ -4,15 +4,15 @@ using Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Managers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Entities.Items
 {
-    /*
     public class ItemFactory : IItemFactory
     {
-        //protected IGameManager GameManager { get; set; }
+        protected IGameManager GameManager { get; set; }
 
         protected IItemDatabase ItemDatabase { get; set; }
         protected ILiveItemHandler ItemHandler { get; set; }
@@ -21,7 +21,7 @@ namespace JoyLib.Code.Entities.Items
 
         protected IDerivedValueHandler DerivedValueHandler { get; set; }
         
-        //protected GUIDManager GuidManager { get; set; }
+        protected GUIDManager GuidManager { get; set; }
 
         protected GameObjectPool ItemPool { get; set; }
 
@@ -176,5 +176,4 @@ namespace JoyLib.Code.Entities.Items
             return itemInstance;
         }
     }
-    */
 }

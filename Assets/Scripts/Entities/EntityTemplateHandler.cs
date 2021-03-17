@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.LOS.Providers;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Helpers;
+using Array = Godot.Collections.Array;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities
 {
@@ -14,6 +20,8 @@ namespace JoyLib.Code.Entities
         protected IEntitySkillHandler SkillHandler { get; set; }
         protected IVisionProviderHandler VisionProviderHandler { get; set; }
         protected IAbilityHandler AbilityHandler { get; set; }
+
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public IEnumerable<IEntityTemplate> Values
         {
@@ -33,6 +41,7 @@ namespace JoyLib.Code.Entities
             IVisionProviderHandler visionProviderHandler,
             IAbilityHandler abilityHandler)
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.AbilityHandler = abilityHandler;
             this.VisionProviderHandler = visionProviderHandler;
             this.SkillHandler = skillHandler;
@@ -51,91 +60,111 @@ namespace JoyLib.Code.Entities
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                    GlobalConstants.ActionLog.Log("Could not load entity templates from " + file, LogLevel.Warning);
+                    GlobalConstants.ActionLog.Log(result.ErrorString, LogLevel.Warning);
+                    GlobalConstants.ActionLog.Log("On line: " + result.ErrorLine, LogLevel.Warning);
+                    continue;
+                }
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Could not parse JSON to Dictionary from " + file, LogLevel.Warning);
+                    continue;
+                }
+
+                Array templateArray = this.ValueExtractor.GetValueFromDictionary<Array>(dictionary, "Entities");
+
+                foreach (Dictionary templateDict in templateArray)
+                {
+                    string creatureType =
+                        this.ValueExtractor.GetValueFromDictionary<string>(templateDict, "CreatureType");
+                    string type = this.ValueExtractor.GetValueFromDictionary<string>(templateDict, "Type");
+                    string visionType = this.ValueExtractor.GetValueFromDictionary<string>(templateDict, "VisionType") ?? "diurnal vision";
+                    IVision vision = this.VisionProviderHandler.Get(visionType);
+
+                    IDictionary<string, IEntityStatistic> statistics =
+                        new System.Collections.Generic.Dictionary<string, IEntityStatistic>();
+                    ICollection<Dictionary> statisticsCollection =
+                        this.ValueExtractor.GetCollectionFromArray<Dictionary>(
+                            this.ValueExtractor.GetValueFromDictionary<Array>(templateDict, "Statistics"));
+                    foreach (Dictionary innerDict in statisticsCollection)
                     {
-                        try
+                        string statName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Name");
+                        int statValue = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Value");
+                        int threshold = innerDict.Contains("Threshold") 
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Threshold")
+                        : GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
+                        statistics.Add(
+                            statName,
+                            new EntityStatistic(
+                                statName,
+                                statValue,
+                                threshold));
+                    }
+
+                    IDictionary<string, IEntitySkill> skills =
+                        new System.Collections.Generic.Dictionary<string, IEntitySkill>();
+                    if (templateDict.Contains("Skills"))
+                    {
+                        ICollection<Dictionary> skillCollection =
+                            this.ValueExtractor.GetCollectionFromArray<Dictionary>(
+                                this.ValueExtractor.GetValueFromDictionary<Array>(templateDict, "Skills"));
+                        foreach (Dictionary innerDict in skillCollection)
                         {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken["Entities"])
-                            {
-                                string creatureType = (string) child["CreatureType"];
-                                string type = (string) child["Type"];
-                                string visionType = (string) child["VisionType"];
-                                IVision vision = this.VisionProviderHandler.Get(visionType);
-                                int size = (int) (child["Size"] ?? 0);
-
-                                IDictionary<string, IEntityStatistic> statistics = child["Statistics"] is null
-                                    ? new Dictionary<string, IEntityStatistic>()
-                                    : child["Statistics"].Select(
-                                            token => new EntityStatistic(
-                                                (string) token["Name"],
-                                                (int) token["Value"],
-                                                (int) ((token["Threshold"]) ??
-                                                       GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)))
-                                        .ToDictionary(statistic => statistic.Name, statistic => (IEntityStatistic) statistic);
-
-                                IDictionary<string, IEntitySkill> skills = child["Skills"] is null
-                                    ? new Dictionary<string, IEntitySkill>()
-                                    : child["Skills"].Select(
-                                            token => new EntitySkill(
-                                                (string) token["Name"],
-                                                (int) (token["Value"] ?? 0),
-                                                (int) (token["Threshold"] ?? GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)))
-                                        .ToDictionary(skill => skill.Name, skill => (IEntitySkill) skill);
-
-                                IEnumerable<string> tags = child["Tags"] is null
-                                    ? new List<string>()
-                                    : child["Tags"].Select(token => (string) token);
-
-                                IEnumerable<string> slots = child["Slots"] is null
-                                    ? new List<string>()
-                                    : child["Slots"].Select(token => (string) token);
-
-                                IEnumerable<string> needs = child["Needs"] is null
-                                    ? new List<string>()
-                                    : child["Needs"].Select(token => (string) token);
-
-                                IEnumerable<IAbility> abilities = child["Abilities"] is null
-                                    ? new List<IAbility>()
-                                    : child["Abilities"].Select(token =>
-                                        this.AbilityHandler.Get((string) token));
-                                
-                                entities.Add(
-                                    new EntityTemplate(
-                                        statistics,
-                                        skills,
-                                        needs.ToArray(),
-                                        abilities.ToArray(),
-                                        slots.ToArray(),
-                                        size,
-                                        vision,
-                                        creatureType,
-                                        type,
-                                        tags.ToArray()));
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Failed to load entities in " + file);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                        finally
-                        {
-                            jsonReader.Close();
-                            reader.Close();
+                            string skillName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Name");
+                            int skillValue = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Value");
+                            int threshold = innerDict.Contains("Threshold")
+                                ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Threshold")
+                                : GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
+                            skills.Add(
+                                skillName,
+                                new EntitySkill(
+                                    skillName,
+                                    skillValue,
+                                    threshold));
                         }
                     }
+
+                    ICollection<string> tags = this.ValueExtractor.GetCollectionFromArray<string>(
+                        this.ValueExtractor.GetValueFromDictionary<Array>(templateDict, "Tags"));
+                    
+                    ICollection<string> slots = this.ValueExtractor.GetCollectionFromArray<string>(
+                        this.ValueExtractor.GetValueFromDictionary<Array>(templateDict, "Slots"));
+                    
+                    ICollection<string> needs = this.ValueExtractor.GetCollectionFromArray<string>(
+                        this.ValueExtractor.GetValueFromDictionary<Array>(templateDict, "Needs"));
+
+                    ICollection<IAbility> abilities = new List<IAbility>();
+                    if (templateDict.Contains("Abilities"))
+                    {
+                        ICollection<string> abilityNames = this.ValueExtractor.GetCollectionFromArray<string>(
+                            this.ValueExtractor.GetValueFromDictionary<Array>(templateDict, "Abilities"));
+
+                        foreach (string name in abilityNames)
+                        {
+                            abilities.Add(this.AbilityHandler.Get(name));
+                        }
+                    }
+
+                    int size = this.ValueExtractor.GetValueFromDictionary<int>(templateDict, "Size");
+                    
+                    entities.Add(
+                        new EntityTemplate(
+                            statistics,
+                            skills,
+                            needs.ToArray(),
+                            abilities.ToArray(),
+                            slots.ToArray(),
+                            size,
+                            vision,
+                            creatureType,
+                            type,
+                            tags.ToArray()));
                 }
-                */
             }
 
             return entities;

@@ -1,0 +1,27 @@
+{
+    "name": "PlayModeTests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "JoyUnity",
+        "LeanGUI",
+        "DevionGames.InventorySystem",
+        "DevionGames.Utilities",
+        "DevionGames.UIWidgets"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Moq.dll",
+        "Castle.Core.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

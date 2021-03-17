@@ -18,11 +18,14 @@ namespace JoyLib.Code.Cultures
 
         public IEnumerable<ICulture> Values => this.m_Cultures.Values;
 
+        public JSONValueExtractor ValueExtractor { get; protected set; }
+
         protected IObjectIconHandler IconHandler { get; set; }
 
         public CultureHandler(IObjectIconHandler objectIconHandler)
         {
             this.IconHandler = objectIconHandler;
+            this.ValueExtractor = new JSONValueExtractor();
             this.Initialise();
         }
 
@@ -70,8 +73,6 @@ namespace JoyLib.Code.Cultures
                                 "Cultures";
             string[] files = Directory.GetFiles(folderPath, "*.json");
 
-            JSONValueExtractor jsonValueExtractor = new JSONValueExtractor();
-
             //IObjectIconHandler objectIcons = GlobalConstants.GameManager.ObjectIconHandler;
 
             List<ICulture> cultures = new List<ICulture>();
@@ -83,6 +84,8 @@ namespace JoyLib.Code.Cultures
                 if (result.Error != Error.Ok)
                 {
                     GlobalConstants.ActionLog.Log("Could not parse JSON in " + file, LogLevel.Warning);
+                    GlobalConstants.ActionLog.Log(result.ErrorString, LogLevel.Warning);
+                    GlobalConstants.ActionLog.Log("On line: " + result.ErrorLine, LogLevel.Warning);
                     continue;
                 }
 
@@ -92,44 +95,44 @@ namespace JoyLib.Code.Cultures
                     continue;
                 }
 
-                Array cultureArray = (Array) cultureDict["Cultures"];
+                Array cultureArray = this.ValueExtractor.GetValueFromDictionary<Array>(cultureDict, "Cultures");
 
                 foreach (Dictionary culture in cultureArray)
                 {
-                    string cultureName = jsonValueExtractor.GetValueFromDictionary<string>(culture, "CultureName");
+                    string cultureName = this.ValueExtractor.GetValueFromDictionary<string>(culture, "CultureName");
 
                     int nonconformingGenderChance =
-                        jsonValueExtractor.GetValueFromDictionary<int>(culture, "NonConformingGenderChance");
+                        this.ValueExtractor.GetValueFromDictionary<int>(culture, "NonConformingGenderChance");
 
                     float number = 0;
                     ICollection<string> rulers =
-                        jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Rulers");
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Rulers");
 
                     Array entry = new Array();
                     ICollection<string> crimes =
-                        jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Crimes");
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Crimes");
 
                     ICollection<string> inhabitants =
-                        jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Inhabitants");
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Inhabitants");
 
                     ICollection<string> relationships =
-                        jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Relationships");
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Relationships");
 
                     List<NameData> nameDatas = new List<NameData>();
-                    entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Names");
-                    ICollection<Dictionary> nameData = jsonValueExtractor.GetCollectionFromArray<Dictionary>(entry);
+                    entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Names");
+                    ICollection<Dictionary> nameData = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry);
                     foreach (var data in nameData)
                     {
-                        string name = jsonValueExtractor.GetValueFromDictionary<string>(data, "Name");
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(data, "Name");
 
                         ICollection<int> chain =
-                            jsonValueExtractor.GetArrayValuesCollectionFromDictionary<int>(data, "Chain");
+                            this.ValueExtractor.GetArrayValuesCollectionFromDictionary<int>(data, "Chain");
 
                         ICollection<int> groups =
-                            jsonValueExtractor.GetArrayValuesCollectionFromDictionary<int>(data, "Group");
+                            this.ValueExtractor.GetArrayValuesCollectionFromDictionary<int>(data, "Group");
 
                         ICollection<string> genders =
-                            jsonValueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Gender");
+                            this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Gender");
 
                         nameDatas.Add(new NameData(
                             name,
@@ -138,65 +141,65 @@ namespace JoyLib.Code.Cultures
                             groups.ToArray()));
                     }
 
-                    entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Sexualities");
-                    ICollection<Dictionary> inner = jsonValueExtractor.GetCollectionFromArray<Dictionary>(entry);
+                    entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Sexualities");
+                    ICollection<Dictionary> inner = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry);
                     IDictionary<string, int> sexualities = new System.Collections.Generic.Dictionary<string, int>();
                     foreach (Dictionary dict in inner)
                     {
-                        string name = jsonValueExtractor.GetValueFromDictionary<string>(dict, "Name");
-                        int weight = jsonValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                        int weight = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
                         sexualities.Add(name, weight);
                     }
 
-                    entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Sexes");
-                    inner = jsonValueExtractor.GetCollectionFromArray<Dictionary>(entry);
+                    entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Sexes");
+                    inner = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry);
                     IDictionary<string, int> sexes = new System.Collections.Generic.Dictionary<string, int>();
                     foreach (Dictionary dict in inner)
                     {
-                        string name = jsonValueExtractor.GetValueFromDictionary<string>(dict, "Name");
-                        int weight = jsonValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                        int weight = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
                         sexes.Add(name, weight);
                     }
 
-                    entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Romances");
-                    inner = jsonValueExtractor.GetCollectionFromArray<Dictionary>(entry);
+                    entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Romances");
+                    inner = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry);
                     IDictionary<string, int> romances = new System.Collections.Generic.Dictionary<string, int>();
                     foreach (Dictionary dict in inner)
                     {
-                        string name = jsonValueExtractor.GetValueFromDictionary<string>(dict, "Name");
-                        int weight = jsonValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                        int weight = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
                         romances.Add(name, weight);
                     }
 
-                    entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Genders");
-                    inner = jsonValueExtractor.GetCollectionFromArray<Dictionary>(entry);
+                    entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Genders");
+                    inner = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry);
                     IDictionary<string, int> genderChances = new System.Collections.Generic.Dictionary<string, int>();
                     foreach (Dictionary dict in inner)
                     {
-                        string name = jsonValueExtractor.GetValueFromDictionary<string>(dict, "Name");
-                        int weight = jsonValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                        int weight = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
                         genderChances.Add(name, weight);
                     }
 
-                    entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Jobs");
-                    inner = jsonValueExtractor.GetCollectionFromArray<Dictionary>(entry);
+                    entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Jobs");
+                    inner = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry);
                     IDictionary<string, int> jobs = new System.Collections.Generic.Dictionary<string, int>();
                     foreach (Dictionary dict in inner)
                     {
-                        string name = jsonValueExtractor.GetValueFromDictionary<string>(dict, "Name");
-                        int weight = jsonValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                        int weight = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
                         jobs.Add(name, weight);
                     }
 
-                    entry = jsonValueExtractor.GetValueFromDictionary<Array>(culture, "Statistics");
-                    inner = jsonValueExtractor.GetCollectionFromArray<Dictionary>(entry);
+                    entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Statistics");
+                    inner = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry);
                     IDictionary<string, Tuple<int, int>> statistics =
                         new System.Collections.Generic.Dictionary<string, Tuple<int, int>>();
                     foreach (Dictionary dict in inner)
                     {
-                        string name = jsonValueExtractor.GetValueFromDictionary<string>(dict, "Name");
-                        int weight = jsonValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
-                        int magnitude = jsonValueExtractor.GetValueFromDictionary<int>(dict, "Magnitude");
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                        int weight = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Chance");
+                        int magnitude = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Magnitude");
                         statistics.Add(
                             name,
                             new Tuple<int, int>(
@@ -205,31 +208,28 @@ namespace JoyLib.Code.Cultures
 
                     this.IconHandler.AddSpriteDataFromJson(culture);
 
-                    string tileSetName = jsonValueExtractor.GetValueFromDictionary<string>(
-                        jsonValueExtractor.GetValueFromDictionary<Dictionary>(
+                    string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(
+                        this.ValueExtractor.GetValueFromDictionary<Dictionary>(
                             culture, 
                             "TileSet"),
                         "Name");
 
-                    Dictionary uiColours = jsonValueExtractor.GetValueFromDictionary<Dictionary>(culture, "UIColours");
+                    Dictionary uiColours = this.ValueExtractor.GetValueFromDictionary<Dictionary>(culture, "UIColours");
 
                     IDictionary<string, IDictionary<string, Color>> backgroundColours =
                         this.ExtractColourData(
                             uiColours,
-                            "BackgroundColours",
-                            jsonValueExtractor);
+                            "BackgroundColours");
 
                     IDictionary<string, IDictionary<string, Color>> cursorColours =
                         this.ExtractColourData(
                             uiColours,
-                            "CursorColours",
-                            jsonValueExtractor);
+                            "CursorColours");
 
                     IDictionary<string, Color> fontColours =
                         this.ExtractFontData(
                             uiColours,
-                            "FontColours",
-                            jsonValueExtractor);
+                            "FontColours");
                     
                     cultures.Add(
                         new CultureType(
@@ -258,27 +258,26 @@ namespace JoyLib.Code.Cultures
 
         protected IDictionary<string, IDictionary<string, Color>> ExtractColourData(
             Dictionary element,
-            string elementName,
-            JSONValueExtractor valueExtractor)
+            string elementName)
         {
             IDictionary<string, IDictionary<string, Color>> colours =
                 new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
 
             if (element.Contains(elementName))
             {
-                ICollection<Dictionary> elementsData = valueExtractor.GetCollectionFromArray<Dictionary>(
-                    valueExtractor.GetValueFromDictionary<Array>(
+                ICollection<Dictionary> elementsData = this.ValueExtractor.GetCollectionFromArray<Dictionary>(
+                    this.ValueExtractor.GetValueFromDictionary<Array>(
                         element,
                         elementName));
                 foreach (Dictionary inner in elementsData)
                 {
-                    string partName = valueExtractor.GetValueFromDictionary<string>(inner, "Name");
-                    ICollection<Dictionary> innerDicts = valueExtractor.GetCollectionFromArray<Dictionary>(
-                        valueExtractor.GetValueFromDictionary<Array>(inner, "Colour"));
+                    string partName = this.ValueExtractor.GetValueFromDictionary<string>(inner, "Name");
+                    ICollection<Dictionary> innerDicts = this.ValueExtractor.GetCollectionFromArray<Dictionary>(
+                        this.ValueExtractor.GetValueFromDictionary<Array>(inner, "Colour"));
                     foreach (Dictionary colourData in innerDicts)
                     {
-                        string colourName = valueExtractor.GetValueFromDictionary<string>(colourData, "Name");
-                        Color colour = new Color(valueExtractor.GetValueFromDictionary<string>(colourData, "Value"));
+                        string colourName = this.ValueExtractor.GetValueFromDictionary<string>(colourData, "Name");
+                        Color colour = new Color(this.ValueExtractor.GetValueFromDictionary<string>(colourData, "Value"));
 
                         if (colours.ContainsKey(partName))
                         {
@@ -302,22 +301,21 @@ namespace JoyLib.Code.Cultures
 
         protected IDictionary<string, Color> ExtractFontData(
             Dictionary element,
-            string elementName,
-            JSONValueExtractor valueExtractor)
+            string elementName)
         {
             IDictionary<string, Color> colours = new System.Collections.Generic.Dictionary<string, Color>();
 
             if (element.Contains(elementName))
             {
-                ICollection<Dictionary> elementsData = valueExtractor.GetCollectionFromArray<Dictionary>(
-                    valueExtractor.GetValueFromDictionary<Array>(
+                ICollection<Dictionary> elementsData = this.ValueExtractor.GetCollectionFromArray<Dictionary>(
+                    this.ValueExtractor.GetValueFromDictionary<Array>(
                         element,
                         elementName));
 
                 foreach (Dictionary inner in elementsData)
                 {
-                    string partName = valueExtractor.GetValueFromDictionary<string>(inner, "Name");
-                    Color colour = new Color(valueExtractor.GetValueFromDictionary<string>(inner, "Value"));
+                    string partName = this.ValueExtractor.GetValueFromDictionary<string>(inner, "Name");
+                    Color colour = new Color(this.ValueExtractor.GetValueFromDictionary<string>(inner, "Value"));
 
                     colours.Add(partName, colour);
                 }
