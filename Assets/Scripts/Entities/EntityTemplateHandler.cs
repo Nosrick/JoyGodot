@@ -182,12 +182,16 @@ namespace JoyLib.Code.Entities
 
         public bool Add(IEntityTemplate value)
         {
-            throw new NotImplementedException();
+            this.m_Templates.Add(value);
+            return true;
         }
 
         public bool Destroy(string key)
         {
-            throw new NotImplementedException();
+            IEntityTemplate found = this.m_Templates.FirstOrDefault(template =>
+                template.CreatureType.Equals(key, StringComparison.OrdinalIgnoreCase));
+            
+            return !(found is null) && this.m_Templates.Remove(found);
         }
 
         public IEntityTemplate GetRandom()

@@ -72,15 +72,12 @@ namespace JoyLib.Code.Entities.Needs
             this.Roller = roller is null ? new RNG() : roller;
             this.m_CachedActions = new Dictionary<string, IJoyAction>();
 
-            //TODO: Get the action system back in
-            /*
             IJoyAction[] standardActions = this.FetchStandardActions();
 
             foreach (IJoyAction action in standardActions)
             {
                 this.m_CachedActions.Add(action.Name, action);
             }
-            */
 
             this.m_Decay = decayRef;
             this.m_DecayCounter = decayCounterRef;
@@ -111,12 +108,10 @@ namespace JoyLib.Code.Entities.Needs
                 }
             }
 
-            /*
             foreach (string action in actions)
             {
                 this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
             }
-            */
         }
 
         public abstract bool FindFulfilmentObject(IEntity actor);

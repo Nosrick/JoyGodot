@@ -83,15 +83,16 @@ namespace JoyLib.Code.Entities.Items
             {
                 IItemInstance item = this.LiveItems[key];
                 
-                /*
                 //Erase any targets that match this item
                 //This is a really quick hack to fix a persistent problem
                 //TODO: Find a better way to reference AI targets
                 IEnumerable<IEntity> targeting =
                     GlobalConstants.GameManager.Player.MyWorld.Entities.Where(entity =>
                         entity.CurrentTarget.target == item);
-                targeting.ForEach(entity => entity.CurrentTarget.target = null);
-                */
+                foreach (IEntity entity in targeting)
+                {
+                    entity.CurrentTarget.target = null;
+                }
                 
                 this.LiveItems[key].Dispose();
                 this.LiveItems[key] = null;
