@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Helpers;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.Gender
 {
@@ -32,59 +36,54 @@ namespace JoyLib.Code.Entities.Gender
         {
             HashSet<IGender> genders = new HashSet<IGender>();
                 string[] files =
-                    Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Genders",
-                        "*.json", SearchOption.AllDirectories);
+                    Directory.GetFiles(
+                        Directory.GetCurrentDirectory() +
+                        GlobalConstants.ASSETS_FOLDER + 
+                        GlobalConstants.DATA_FOLDER + 
+                        "/Genders",
+                        "*.json",
+                        SearchOption.AllDirectories);
 
                 foreach (string file in files)
                 {
-/*
-                    using (StreamReader reader = new StreamReader(file))
+                    JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                    if (result.Error != Error.Ok)
                     {
-                        using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                        {
-                            try
-                            {
-                                JObject jToken = JObject.Load(jsonReader);
+                        this.ValueExtractor.PrintFileParsingError(result, file);
+                        continue;
+                    }
 
-                                if (jToken.IsNullOrEmpty())
-                                {
-                                    continue;
-                                }
+                    if (!(result.Result is Dictionary dictionary))
+                    {
+                        GlobalConstants.ActionLog.Log("Could not parse JSON in " + file + " into a Dictionary.", LogLevel.Warning);
+                        continue;
+                    }
 
-                                foreach (JToken child in jToken["Genders"])
-                                {
-                                    string name = (string) child["Name"];
-                                    string possessive = (string) child["Possessive"];
-                                    string personalSubject = (string) child["PersonalSubject"];
-                                    string personalObject = (string) child["PersonalObject"];
-                                    string reflexive = (string) child["Reflexive"];
-                                    string possessivePlural = (string) child["PossessivePlural"];
-                                    string reflexivePlural = (string) child["ReflexivePlural"];
-                                    string isOrAre = (string) child["IsOrAre"];
+                    ICollection<Dictionary> gendersCollection =
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Genders");
 
-                                    genders.Add(new BaseGender(
-                                        name,
-                                        possessive,
-                                        personalSubject,
-                                        personalObject,
-                                        reflexive,
-                                        possessivePlural,
-                                        reflexivePlural,
-                                        isOrAre));
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                GlobalConstants.ActionLog.AddText("Error loading genders from " + file);
-                                GlobalConstants.ActionLog.StackTrace(e);
-                            }
-                            finally
-                            {
-                                jsonReader.Close();
-                                reader.Close();
-                            }
-                        }
-                    }*/
+                    foreach (Dictionary gender in gendersCollection)
+                    {
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(gender, "Name");
+                        string possessive = this.ValueExtractor.GetValueFromDictionary<string>(gender, "Possessive");
+                        string personalSubject = this.ValueExtractor.GetValueFromDictionary<string>(gender, "PersonalSubject");
+                        string personalObject = this.ValueExtractor.GetValueFromDictionary<string>(gender, "PersonalObject");
+                        string reflexive = this.ValueExtractor.GetValueFromDictionary<string>(gender, "Reflexive");
+                        string possessivePlural = this.ValueExtractor.GetValueFromDictionary<string>(gender, "PossessivePlural");
+                        string reflexivePlural = this.ValueExtractor.GetValueFromDictionary<string>(gender, "ReflexivePlural");
+                        string isOrAre = this.ValueExtractor.GetValueFromDictionary<string>(gender, "IsOrAre");
+
+                        genders.Add(new BaseGender(
+                            name,
+                            possessive,
+                            personalSubject,
+                            personalObject,
+                            reflexive,
+                            possessivePlural,
+                            reflexivePlural,
+                            isOrAre));
+                    }
                 }
 
                 return genders;
