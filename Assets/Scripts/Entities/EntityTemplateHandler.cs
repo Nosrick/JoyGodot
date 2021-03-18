@@ -54,7 +54,10 @@ namespace JoyLib.Code.Entities
 
             string[] files =
                 Directory.GetFiles(
-                    Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Entities", 
+                    Directory.GetCurrentDirectory() +
+                    GlobalConstants.ASSETS_FOLDER + 
+                    GlobalConstants.DATA_FOLDER + 
+                    "Entities", 
                     "*.json",
                     SearchOption.AllDirectories);
 
