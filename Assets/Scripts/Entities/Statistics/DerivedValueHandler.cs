@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
+using Godot.Collections;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.Statistics
 {
@@ -39,16 +41,21 @@ namespace JoyLib.Code.Entities.Statistics
             this.StatisticHandler = statisticHandler;
             this.SkillHandler = skillHandler;
 
-            this.ENTITY_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER +
+            this.ENTITY_FILE = Directory.GetCurrentDirectory() +
+                               GlobalConstants.ASSETS_FOLDER + 
+                               GlobalConstants.DATA_FOLDER +
                                "EntityDerivedValues.json";
 
-            this.ITEM_FILE = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "ItemDerivedValues.json";
+            this.ITEM_FILE = Directory.GetCurrentDirectory() + 
+                             GlobalConstants.ASSETS_FOLDER + 
+                             GlobalConstants.DATA_FOLDER + 
+                             "ItemDerivedValues.json";
 
-            this.DerivedValueOutlineColours = new Dictionary<string, Color>();
-            this.DerivedValueBackgroundColours = new Dictionary<string, Color>();
-            this.DerivedValueTextColours = new Dictionary<string, Color>();
+            this.DerivedValueOutlineColours = new System.Collections.Generic.Dictionary<string, Color>();
+            this.DerivedValueBackgroundColours = new System.Collections.Generic.Dictionary<string, Color>();
+            this.DerivedValueTextColours = new System.Collections.Generic.Dictionary<string, Color>();
             this.Load();
-            this.Formulas = new Dictionary<string, string>(this.EntityStandardFormulas);
+            this.Formulas = new System.Collections.Generic.Dictionary<string, string>(this.EntityStandardFormulas);
             foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
             {
                 this.Formulas.Add(pair.Key, pair.Value);
@@ -88,7 +95,7 @@ namespace JoyLib.Code.Entities.Statistics
             this.EntityStandardFormulas = this.LoadFormulasFromFile(this.ENTITY_FILE);
             this.ItemStandardFormulas = this.LoadFormulasFromFile(this.ITEM_FILE);
 
-            this.DerivedValues = new Dictionary<string, IDerivedValue>();
+            this.DerivedValues = new System.Collections.Generic.Dictionary<string, IDerivedValue>();
             foreach (var pair in this.EntityStandardFormulas)
             {
                 this.DerivedValues.Add(
@@ -106,58 +113,55 @@ namespace JoyLib.Code.Entities.Statistics
             return this.DerivedValues.Values;
         }
 
-        public Dictionary<string, string> LoadFormulasFromFile(string file)
+        public System.Collections.Generic.Dictionary<string, string> LoadFormulasFromFile(string file)
         {
-            Dictionary<string, string> formulas = new Dictionary<string, string>();
+            System.Collections.Generic.Dictionary<string, string> formulas = new System.Collections.Generic.Dictionary<string, string>();
+
+            JSONParseResult result = JSON.Parse(File.ReadAllText(file));
             
-            /*
-            using (StreamReader reader = new StreamReader(file))
+            if (result.Error != Error.Ok)
             {
-                using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                {
-                    try
-                    {
-                        JObject jToken = JObject.Load(jsonReader);
-
-                        if (jToken["DerivedValues"].IsNullOrEmpty() == false)
-                        {
-                            foreach (JToken value in jToken["DerivedValues"])
-                            {
-                                string name = (string) value["Name"];
-
-                                if (name.IsNullOrEmpty())
-                                {
-                                    continue;
-                                }
-                                
-                                formulas.Add(
-                                    name,
-                                    (string) value["Formula"]);
-
-                                string colourCode = (string) (value["BackgroundColour"] ?? "#888888ff");
-                                this.DerivedValueBackgroundColours.Add(name, GraphicsHelper.ParseHTMLString(colourCode));
-
-                                colourCode = (string) value["TextColour"] ?? "#ffffffff";
-                                this.DerivedValueTextColours.Add(name, GraphicsHelper.ParseHTMLString(colourCode));
-
-                                colourCode = (string) value["OutlineColour"] ?? "#000000FF";
-                                this.DerivedValueOutlineColours.Add(name, GraphicsHelper.ParseHTMLString(colourCode));
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText("Could not load derived values from " + file);
-                        GlobalConstants.ActionLog.StackTrace(e);
-                    }
-                    finally
-                    {
-                        jsonReader.Close();
-                        reader.Close();
-                    }
-                }
+                this.ValueExtractor.PrintFileParsingError(result, file);
+                return formulas;
             }
-            */
+
+            if (!(result.Result is Dictionary dictionary))
+            {
+                GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.", LogLevel.Warning);
+                return formulas;
+            }
+
+            ICollection<Dictionary> dvCollection =
+                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "DerivedValues");
+
+            foreach (Dictionary dv in dvCollection)
+            {
+                string name = this.ValueExtractor.GetValueFromDictionary<string>(dv, "Name");
+
+                if (name.IsNullOrEmpty())
+                {
+                    continue;
+                }
+                                
+                formulas.Add(
+                    name,
+                    this.ValueExtractor.GetValueFromDictionary<string>(dv, "Formula"));
+
+                string colourCode = dv.Contains("BackgroundColour")
+                    ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "BackgroundColour")
+                    : "#888888";
+                this.DerivedValueBackgroundColours.Add(name, new Color(colourCode));
+
+                colourCode = dv.Contains("TextColour")
+                    ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "BackgroundColour")
+                    : "#ffffff";
+                this.DerivedValueTextColours.Add(name, new Color(colourCode));
+
+                colourCode = dv.Contains("OutlineColour")
+                    ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "BackgroundColour")
+                    : "#000000";
+                this.DerivedValueOutlineColours.Add(name, new Color(colourCode));
+            }
 
             return formulas;
         }
@@ -177,9 +181,9 @@ namespace JoyLib.Code.Entities.Statistics
             throw new InvalidOperationException("Could not find formula for name of value " + name);
         }
 
-        public Dictionary<string, IDerivedValue> GetEntityStandardBlock(IEnumerable<IBasicValue<int>> components)
+        public System.Collections.Generic.Dictionary<string, IDerivedValue> GetEntityStandardBlock(IEnumerable<IBasicValue<int>> components)
         {
-            Dictionary<string, IDerivedValue> values = new Dictionary<string, IDerivedValue>();
+            System.Collections.Generic.Dictionary<string, IDerivedValue> values = new System.Collections.Generic.Dictionary<string, IDerivedValue>();
             foreach (KeyValuePair<string, string> pair in this.EntityStandardFormulas)
             {
                 int result = Math.Max(1, this.Calculate<int>(components, pair.Value)); 
@@ -194,9 +198,9 @@ namespace JoyLib.Code.Entities.Statistics
             return values;
         }
 
-        public Dictionary<string, IDerivedValue> GetItemStandardBlock(IEnumerable<IBasicValue<float>> components)
+        public System.Collections.Generic.Dictionary<string, IDerivedValue> GetItemStandardBlock(IEnumerable<IBasicValue<float>> components)
         {
-            Dictionary<string, IDerivedValue> values = new Dictionary<string, IDerivedValue>();
+            System.Collections.Generic.Dictionary<string, IDerivedValue> values = new System.Collections.Generic.Dictionary<string, IDerivedValue>();
             foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
             {
                 int result = Math.Max(1, this.Calculate(components, pair.Value)); 

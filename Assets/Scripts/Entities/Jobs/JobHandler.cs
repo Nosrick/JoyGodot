@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.Jobs
 {
@@ -69,98 +73,96 @@ namespace JoyLib.Code.Entities.Jobs
             List<IJob> jobTypes = new List<IJob>();
 
             string[] files = Directory.GetFiles(
-                Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Jobs", 
+                Directory.GetCurrentDirectory() +
+                GlobalConstants.ASSETS_FOLDER + 
+                GlobalConstants.DATA_FOLDER + 
+                "Jobs", 
                 "*.json", 
                 SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                    continue;
+                }
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.", LogLevel.Warning);
+                    continue;
+                }
+
+                ICollection<Dictionary> jobCollection =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Jobs");
+
+                foreach (Dictionary job in jobCollection)
+                {
+                    string name = this.ValueExtractor.GetValueFromDictionary<string>(job, "Name");
+                    string description = this.ValueExtractor.GetValueFromDictionary<string>(job, "Description") ?? "NO DESCRIPTION PROVIDED.";
+                    IDictionary<string, int> statisticDiscounts = new System.Collections.Generic.Dictionary<string, int>();
+                    if (job.Contains("Statistics"))
                     {
-                        try
+                        ICollection<Dictionary> statistics =
+                            this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(job, "Statistics");
+                        foreach (Dictionary statistic in statistics)
                         {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken["Jobs"])
-                            {
-                                string name = (string) child["Name"];
-                                string description = (string) child["Description"] ?? "NO DESCRIPTION PROVIDED.";
-
-                                IDictionary<string, int> statisticDiscounts = new Dictionary<string, int>();
-                                if (child["Statistics"].IsNullOrEmpty() == false)
-                                {
-                                    foreach (JToken statistic in child["Statistics"])
-                                    {
-                                        statisticDiscounts.Add(
-                                            (string) statistic["Name"],
-                                            (int) statistic["Discount"]);
-                                    }
-                                }
-
-                                IDictionary<string, int> skillDiscounts = new Dictionary<string, int>();
-                                if (child["Skills"].IsNullOrEmpty() == false)
-                                {
-                                    foreach (JToken skill in child["Skills"])
-                                    {
-                                        skillDiscounts.Add(
-                                            (string) skill["Name"],
-                                            (int) skill["Discount"]);
-                                    }
-                                }
-
-                                IDictionary<IAbility, int> abilityCosts = new Dictionary<IAbility, int>();
-                                if (child["Abilities"].IsNullOrEmpty() == false)
-                                {
-                                    foreach (JToken ability in child["Abilities"])
-                                    {
-                                        abilityCosts.Add(
-                                            this.AbilityHandler.Get((string) ability["Name"]),
-                                            (int) ability["Cost"]);
-                                    }
-                                }
-
-                                Color abilityIconColour = Color.white;
-                                Color abilityBackgroundColour = Color.black;
-                                if (child["Colours"].IsNullOrEmpty() == false)
-                                {
-                                    abilityIconColour =
-                                        GraphicsHelper.ParseHTMLString((string) child["Colours"].SelectToken("Icon"));
-                                    abilityBackgroundColour =
-                                        GraphicsHelper.ParseHTMLString((string) child["Colours"].SelectToken("Background"));
-                                }
-                                
-                                jobTypes.Add(
-                                    new JobType(
-                                        name,
-                                        description,
-                                        statisticDiscounts,
-                                        skillDiscounts,
-                                        abilityCosts, 
-                                        abilityIconColour,
-                                        abilityBackgroundColour));
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("ERROR LOADING JOB, FILE " + file, LogLevel.Error);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                        finally
-                        {
-                            jsonReader.Close();
-                            reader.Close();
+                            statisticDiscounts.Add(
+                                this.ValueExtractor.GetValueFromDictionary<string>(statistic, "Name"),
+                                this.ValueExtractor.GetValueFromDictionary<int>(statistic, "Discount"));
                         }
                     }
+
+                    IDictionary<string, int> skillDiscounts = new System.Collections.Generic.Dictionary<string, int>();
+                    if (job.Contains("Skills"))
+                    {
+                        ICollection<Dictionary> skills =
+                            this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(job, "Skills");
+                        foreach (Dictionary skill in skills)
+                        {
+                            skillDiscounts.Add(
+                                this.ValueExtractor.GetValueFromDictionary<string>(skill, "Name"),
+                                this.ValueExtractor.GetValueFromDictionary<int>(skill, "Discount"));
+                        }
+                    }
+
+                    IDictionary<IAbility, int> abilityCosts = new System.Collections.Generic.Dictionary<IAbility, int>();
+                    if (job.Contains("Abilities"))
+                    {
+                        ICollection<Dictionary> abilities =
+                            this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(job, "Abilities");
+                        foreach (Dictionary ability in abilities)
+                        {
+                            abilityCosts.Add(
+                                this.AbilityHandler.Get(
+                                    this.ValueExtractor.GetValueFromDictionary<string>(ability, "Name")),
+                                this.ValueExtractor.GetValueFromDictionary<int>(ability, "Cost"));
+                        }
+                    }
+
+                    Color abilityIconColour = Colors.White;
+                    Color abilityBackgroundColour = Colors.Black;
+                    if (job.Contains("Colours"))
+                    {
+                        Dictionary colours = this.ValueExtractor.GetValueFromDictionary<Dictionary>(job, "Colours");
+                        abilityIconColour = new Color(this.ValueExtractor.GetValueFromDictionary<string>(colours, "Icon"));
+                        abilityBackgroundColour =
+                            new Color(this.ValueExtractor.GetValueFromDictionary<string>(colours, "Background"));
+                    }
+                                
+                    jobTypes.Add(
+                        new JobType(
+                            name,
+                            description,
+                            statisticDiscounts,
+                            skillDiscounts,
+                            abilityCosts, 
+                            abilityIconColour,
+                            abilityBackgroundColour));
                 }
-                */
             }
             
             return jobTypes;
