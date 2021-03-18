@@ -104,8 +104,13 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = this.m_Types.First(t => t.Name.Equals(type, StringComparison.OrdinalIgnoreCase));
+                Type directType = this.m_Types.FirstOrDefault(t => t.Name.Equals(type, StringComparison.OrdinalIgnoreCase));
 
+                if (directType is null)
+                {
+                    throw new Exception();
+                }
+                
                 return Activator.CreateInstance(directType);
             }
             catch (Exception ex)
@@ -155,10 +160,10 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = this.m_Types.First(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
+                Type directType = this.m_Types.FirstOrDefault(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
 
                 List<Type> children = new List<Type>();
-                if (directType != null)
+                if (directType is null == false)
                 {
                     children = this.m_Types.Where(type => directType.IsAssignableFrom(type)).ToList();
                 }

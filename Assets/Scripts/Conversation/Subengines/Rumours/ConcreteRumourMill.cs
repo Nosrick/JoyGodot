@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
 using JoyLib.Code.Conversation.Conversations.Rumours;
@@ -79,7 +80,7 @@ namespace JoyLib.Code.Conversation.Conversations
                     string text = this.ValueExtractor.GetValueFromDictionary<string>(rumour, "Text");
                     string processor = rumour.Contains("Processor")
                         ? this.ValueExtractor.GetValueFromDictionary<string>(rumour, "Processor")
-                        : "NONE";
+                        : "";
 
                     float viralPotential = rumour.Contains("ViralPotential")
                         ? this.ValueExtractor.GetValueFromDictionary<float>(rumour, "ViralPotential")
@@ -109,7 +110,7 @@ namespace JoyLib.Code.Conversation.Conversations
                     List<ITopicCondition> conditions =
                         conditionStrings.Select(this.ParseCondition).ToList();
 
-                    var processorBase = ScriptingEngine.Instance.FetchAndInitialise(processor);
+                    var processorBase = processor.IsNullOrEmpty() ? null : ScriptingEngine.Instance.FetchAndInitialise(processor);
                     if (processorBase is null == false)
                     {
                         IRumour processorObject = (IRumour) processorBase;

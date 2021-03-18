@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Castle.Core.Internal;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Helpers;
+using JoyLib.Code.Scripting;
 using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Conversation
 {
@@ -15,44 +20,31 @@ namespace JoyLib.Code.Conversation
         protected List<ITopic> m_Topics;
         protected List<ITopic> m_CurrentTopics;
 
-        protected ITopic LastSaid
-        {
-            get;
-            set;
-        }
+        protected JSONValueExtractor ValueExtractor { get; set; }
+
+        protected ITopic LastSaid { get; set; }
 
         public string LastSaidWords { get; protected set; }
 
-        public IEntity Instigator
-        {
-            get;
-            protected set;
-        }
+        public IEntity Instigator { get; protected set; }
 
-        public IEntity Listener
-        {
-            get;
-            protected set;
-        }
+        public IEntity Listener { get; protected set; }
 
-        public Guid Guid
-        {
-            get;
-            protected set;
-        }
-        
+        public Guid Guid { get; protected set; }
+
         public string ListenerInfo { get; protected set; }
 
         public event EventHandler OnConverse;
         public event EventHandler OnOpen;
         public event EventHandler OnClose;
-        
+
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         public ConversationEngine(
             IEntityRelationshipHandler relationshipHandler,
             Guid guid)
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.RelationshipHandler = relationshipHandler;
 
             this.m_Topics = this.LoadTopics();
@@ -67,120 +59,107 @@ namespace JoyLib.Code.Conversation
             List<ITopic> topics = new List<ITopic>();
 
             string[] files = Directory.GetFiles(
-                Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Conversation",
+                Directory.GetCurrentDirectory() +
+                GlobalConstants.ASSETS_FOLDER +
+                GlobalConstants.DATA_FOLDER +
+                "Conversation",
                 "*.json",
                 SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                    continue;
+                }
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.",
+                        LogLevel.Warning);
+                    continue;
+                }
+
+                Dictionary conversations =
+                    this.ValueExtractor.GetValueFromDictionary<Dictionary>(dictionary, "Conversations");
+
+                string name = this.ValueExtractor.GetValueFromDictionary<string>(conversations, "Name");
+
+                ICollection<Dictionary> lines =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(conversations, "Lines");
+
+                foreach (Dictionary line in lines)
+                {
+                    string text = this.ValueExtractor.GetValueFromDictionary<string>(line, "Text");
+                    string processorName = line.Contains("Processor")
+                        ? this.ValueExtractor.GetValueFromDictionary<string>(line, "Processor")
+                        : "";
+
+                    ICollection<string> conditionStrings = line.Contains("Conditions")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(line, "Conditions")
+                        : new string[0];
+
+                    ICollection<string> next = line.Contains("Next")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(line, "Next")
+                        : new string[0];
+
+                    int priority = line.Contains("Priority")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(line, "Priority")
+                        : 0;
+
+                    string speaker = line.Contains("Speaker")
+                        ? this.ValueExtractor.GetValueFromDictionary<string>(line, "Speaker")
+                        : "instigator";
+                    string link = line.Contains("Link")
+                        ? this.ValueExtractor.GetValueFromDictionary<string>(line, "Link")
+                        : "";
+
+                    Speaker speakerEnum = (Speaker) Enum.Parse(typeof(Speaker), speaker, true);
+
+                    IEnumerable<ITopicCondition> conditions =
+                        conditionStrings.Select(this.ParseCondition);
+
+                    string[] actionStrings = line.Contains("Actions")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(line, "Actions").ToArray()
+                        : new string[0];
+
+                    IEnumerable<IJoyAction> actions = ScriptingEngine.Instance.FetchActions(actionStrings);
+
+                    var processorBase = processorName.IsNullOrEmpty() ? null : ScriptingEngine.Instance.FetchAndInitialise(processorName);
+                    if (processorBase is ITopic topicProcessor)
                     {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken.Values())
-                            {
-                                string topicName = (string) child["Name"];
-                                foreach (JToken line in child["Lines"])
-                                {
-                                    string text = (string) line["Text"];
-                                    string processor = ((string) line["Processor"]) ?? "NONE";
-
-                                    string[] conditionStrings = line["Conditions"] is null 
-                                        ? new string[0]
-                                        : line["Conditions"].Select(token => (string) token).ToArray();
-
-                                    string[] nextTopics = line["Next"] is null
-                                        ? new string[0]
-                                        : line["Next"].Select(token => (string) token).ToArray();
-
-                                    int priority = (int) (line["Priority"] ?? 0);
-
-                                    string speaker = (string) line["Speaker"] ?? "instigator";
-
-                                    string link = (string) line["Link"] ?? "";
-
-                                    Speaker speakerEnum = (Speaker) Enum.Parse(typeof(Speaker), speaker, true);
-
-                                    List<ITopicCondition> conditions = new List<ITopicCondition>();
-                                    foreach (string condition in conditionStrings)
-                                    {
-                                        conditions.Add(this.ParseCondition(condition));
-                                    }
-
-                                    string[] actionStrings = line["Actions"] is null
-                                        ? new string[0]
-                                        : line["Actions"].Select(token => (string) token).ToArray();
-
-                                    IEnumerable<IJoyAction> actions = ScriptingEngine.Instance.FetchActions(actionStrings);
-
-                                    if (processor.Equals("NONE", StringComparison.OrdinalIgnoreCase) == false)
-                                    {
-                                        try
-                                        {
-                                            ITopic processorObject = (ITopic)ScriptingEngine.Instance.FetchAndInitialise(processor);
-                                            processorObject.Initialise(
-                                                conditions.ToArray(),
-                                                topicName,
-                                                nextTopics.ToArray(),
-                                                text,
-                                                priority,
-                                                actions,
-                                                speakerEnum,
-                                                link);
-                                            
-                                            topics.Add(processorObject);
-                                        }
-                                        catch
-                                        {
-                                            GlobalConstants.ActionLog.AddText("Could not find topic processor " + processor);
-                                            topics.Add(new TopicData(
-                                                conditions.ToArray(),
-                                                topicName,
-                                                nextTopics.ToArray(),
-                                                text,
-                                                priority,
-                                                actions,
-                                                speakerEnum,
-                                                null,
-                                                link));
-                                        }
-                                    }
-                                    else
-                                    {
-                                        topics.Add(new TopicData(
-                                                conditions.ToArray(),
-                                                topicName,
-                                                nextTopics.ToArray(),
-                                                text,
-                                                priority,
-                                                actions,
-                                                speakerEnum,
-                                                null,
-                                                link,
-                                                this,
-                                                this.RelationshipHandler));
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Could not load conversations for " + file);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
+                        topicProcessor.Initialise(
+                            conditions.ToArray(),
+                            name,
+                            next.ToArray(),
+                            text,
+                            priority,
+                            actions,
+                            speakerEnum,
+                            link,
+                            this,
+                            this.RelationshipHandler);
+                        topics.Add(topicProcessor);
+                    }
+                    else
+                    {
+                        topics.Add(new TopicData(
+                            conditions.ToArray(),
+                            name,
+                            next.ToArray(),
+                            text,
+                            priority,
+                            actions,
+                            speakerEnum,
+                            null,
+                            link,
+                            this,
+                            this.RelationshipHandler));
                     }
                 }
-                    */
             }
 
             topics = this.PerformLinks(topics);
@@ -214,10 +193,11 @@ namespace JoyLib.Code.Conversation
                             this,
                             this.RelationshipHandler);
                     }
+
                     linked.Remove(topic);
                 }
             }
-            
+
             return linked;
         }
 
@@ -228,7 +208,8 @@ namespace JoyLib.Code.Conversation
 
             try
             {
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(new IJoyObject[] {this.Instigator, this.Listener});
+                IEnumerable<IRelationship> relationships =
+                    this.RelationshipHandler.Get(new IJoyObject[] {this.Instigator, this.Listener});
 
                 IRelationship chosenRelationship = null;
                 int best = Int32.MinValue;
@@ -239,7 +220,7 @@ namespace JoyLib.Code.Conversation
                         chosenRelationship = relationship;
                         break;
                     }
-                    
+
                     int value = relationship.GetRelationshipValue(this.Instigator.Guid, this.Listener.Guid);
                     if (value > best)
                     {
@@ -267,7 +248,7 @@ namespace JoyLib.Code.Conversation
 
                 this.CurrentTopics = this.SanitiseTopics(this.CurrentTopics);
             }
-            
+
             ITopic currentTopic = this.CurrentTopics[index];
 
             this.DoInteractions(currentTopic);
@@ -277,6 +258,7 @@ namespace JoyLib.Code.Conversation
                 this.SetActors(this.Instigator, this.Listener);
                 this.OnConverse?.Invoke(this, EventArgs.Empty);
             }
+
             return this.CurrentTopics;
         }
 
@@ -299,14 +281,14 @@ namespace JoyLib.Code.Conversation
                 this.Instigator = null;
                 return;
             }
-            
+
             switch (currentTopic.Speaker)
             {
                 case Speaker.LISTENER:
                     this.LastSaid = currentTopic;
                     this.LastSaidWords = this.LastSaid.Words;
                     break;
-                
+
                 case Speaker.INSTIGATOR:
                     currentTopic = next[0];
                     if (currentTopic.Speaker == Speaker.LISTENER)
@@ -316,8 +298,9 @@ namespace JoyLib.Code.Conversation
                         this.LastSaid = currentTopic;
                         this.LastSaidWords = this.LastSaid.Words;
                     }
+
                     break;
-                
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -354,11 +337,11 @@ namespace JoyLib.Code.Conversation
                 foreach (ITopicCondition condition in conditions)
                 {
                     tuples.AddRange(this.Listener.GetData(
-                        new [] {condition.Criteria}, 
+                        new[] {condition.Criteria},
                         this.Listener));
                 }
 
-                if(topic.FulfilsConditions(tuples.ToArray()))
+                if (topic.FulfilsConditions(tuples.ToArray()))
                 {
                     validTopics.Add(topic);
                 }
@@ -374,15 +357,14 @@ namespace JoyLib.Code.Conversation
             return sorting.OrderByDescending(t => t.Priority).ToArray();
         }
 
-        
 
         protected ITopic[] TrimEmpty(ITopic[] topics)
         {
             List<ITopic> newTopics = new List<ITopic>(topics.Length);
 
-            for(int i = 0; i < topics.Length; i++)
+            for (int i = 0; i < topics.Length; i++)
             {
-                if(string.IsNullOrWhiteSpace(topics[i].Words) == false)
+                if (string.IsNullOrWhiteSpace(topics[i].Words) == false)
                 {
                     newTopics.Add(topics[i]);
                 }
@@ -395,7 +377,8 @@ namespace JoyLib.Code.Conversation
         {
             try
             {
-                string[] split = conditionString.Split(new char[] {'<', '>', '=', '!'}, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = conditionString.Split(new char[] {'<', '>', '=', '!'},
+                    StringSplitOptions.RemoveEmptyEntries);
 
                 string criteria = split[0].Trim();
                 string operand = conditionString.First(c => c.Equals('!')
@@ -403,7 +386,7 @@ namespace JoyLib.Code.Conversation
                                                             || c.Equals('<')
                                                             || c.Equals('>')).ToString();
                 string stringValue = split[1].Trim();
-            
+
                 TopicConditionFactory factory = new TopicConditionFactory();
 
                 int value = int.MinValue;
@@ -428,14 +411,8 @@ namespace JoyLib.Code.Conversation
 
         public ITopic[] CurrentTopics
         {
-            get
-            {
-                return this.m_CurrentTopics.ToArray();
-            }
-            set
-            {
-                this.m_CurrentTopics = value.ToList();
-            }
+            get { return this.m_CurrentTopics.ToArray(); }
+            set { this.m_CurrentTopics = value.ToList(); }
         }
 
         public ITopic[] AllTopics => this.m_Topics.ToArray();
