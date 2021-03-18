@@ -42,7 +42,7 @@ namespace JoyLib.Code
         protected IGameState NextState { get; set; }
 
         // Use this for initialization
-        protected void Awake()
+        public GameManager()
         {
             if (GlobalConstants.GameManager is null)
             {
@@ -50,9 +50,10 @@ namespace JoyLib.Code
             }
 
             this.LoadingMessage = "Just waking up";
+            this.Initialise();
         }
 
-        public IEnumerator Initialise()
+        public void Initialise()
         {
             this.BegunInitialisation = true;
 
@@ -63,9 +64,9 @@ namespace JoyLib.Code
             Node2D wallHolder = (Node2D) this.FindNode("WorldWalls");
             Node2D floorHolder = (Node2D) this.FindNode("WorldFloors");
 
-            JoyObjectNode prefab = GD.Load<JoyObjectNode>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/JoyObject");
-            ManagedSprite positionableSprite = GD.Load<ManagedSprite>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/ManagedSprite");
-            Sprite fog = GD.Load<Sprite>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Fog of War");
+            JoyObjectNode prefab = (JoyObjectNode) GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn").Instance();
+            ManagedSprite positionableSprite = (ManagedSprite) GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn").Instance();
+            Sprite fog = new Sprite();
             this.FloorPool = new GameObjectPool<ManagedSprite>(positionableSprite, floorHolder);
             this.WallPool = new GameObjectPool<JoyObjectNode>(prefab, wallHolder);
             this.EntityPool = new GameObjectPool<JoyObjectNode>(prefab, entityHolder);
@@ -75,8 +76,6 @@ namespace JoyLib.Code
             this.MyNode = this;
 
             this.Load();
-
-            yield return null;
         }
 
         // Update is called once per frame

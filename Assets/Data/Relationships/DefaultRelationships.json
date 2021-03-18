@@ -3,7 +3,6 @@
     {
       "Name": "friendship",
       "DisplayName": "friend",
-      "Unique": "false",
       "MaxParticipants" : "-1",
       "Tags": [
         "friendship"
@@ -11,7 +10,7 @@
     },{
       "Name": "monoamorous",
       "DisplayName": "lover",
-      "Unique": "true",
+      "UniqueTags": ["romantic"],
       "MaxParticipants" : "2",
       "Tags": [
         "romantic",
@@ -20,7 +19,6 @@
     },{
       "Name": "polyamorous",
       "DisplayName": "lover",
-      "Unique": "false",
       "MaxParticipants" : "-1",
       "Tags": [
         "romantic",
@@ -29,7 +27,6 @@
     },{
       "Name": "sexual",
       "DisplayName": "sexual partner",
-      "Unique": "false",
       "MaxParticipants" : "-1",
       "Tags": [
         "sexual"
