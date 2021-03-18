@@ -49,7 +49,7 @@
             {
               "Name": "dagger-blade",
               "Frames": 1,
-              "Filename": "items/dagger-blades",
+              "Filename": "items/dagger-blades.png",
               "Data": [
                 "default"
               ],
@@ -62,7 +62,7 @@
             {
               "Name": "dagger-crossguard",
               "Frames" : 1,
-              "Filename": "items/dagger-crossguards",
+              "Filename": "items/dagger-crossguards.png",
               "Data": [
                 "default"
               ],
@@ -75,7 +75,7 @@
             {
               "Name": "dagger-pommel",
               "Frames" : 1,
-              "Filename": "items/dagger-pommels",
+              "Filename": "items/dagger-pommels.png",
               "Data": [
                 "default"
               ],
@@ -89,7 +89,7 @@
             {
               "Name": "dagger-outline",
               "Frames" : 1,
-              "Filename": "items/dagger-outlines",
+              "Filename": "items/dagger-outlines.png",
               "Data": [
                 "default"
               ],

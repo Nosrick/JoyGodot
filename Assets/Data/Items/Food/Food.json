@@ -30,7 +30,7 @@
             {
               "Name": "apple-body",
               "Frames": 1,
-              "Filename": "items/food-body",
+              "Filename": "items/food-body.png",
               "Data": [
                 "default"
               ],
@@ -43,7 +43,7 @@
             {
               "Name": "apple-detail1",
               "Frames": 1,
-              "Filename": "items/food-detail1",
+              "Filename": "items/food-detail1.png",
               "Data": [
                 "default"
               ],
@@ -56,7 +56,7 @@
             {
               "Name": "apple-detail2",
               "Frames": 1,
-              "Filename": "items/food-detail2",
+              "Filename": "items/food-detail2.png",
               "Data": [
                 "default"
               ],
@@ -69,7 +69,7 @@
             {
               "Name": "apple-highlight",
               "Frames": 1,
-              "Filename": "items/food-highlight",
+              "Filename": "items/food-highlight.png",
               "Data": [
                 "default"
               ],
@@ -82,7 +82,7 @@
             {
               "Name": "apple-outline",
               "Frames": 1,
-              "Filename": "items/food-outline",
+              "Filename": "items/food-outline.png",
               "Data": [
                 "default"
               ],

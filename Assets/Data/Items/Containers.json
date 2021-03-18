@@ -40,7 +40,7 @@
             {
               "Name": "bag-tie",
               "Frames": 1,
-              "Filename": "items/bags-tie",
+              "Filename": "items/bags-tie.png",
               "Data": [
                 "default"
               ],
@@ -54,7 +54,7 @@
             {
               "Name": "bag-outline",
               "Frames": 1,
-              "Filename": "items/bags-outline",
+              "Filename": "items/bags-outline.png",
               "Data": [
                 "default"
               ],
@@ -67,7 +67,7 @@
             {
               "Name": "bag-highlight",
               "Frames": 1,
-              "Filename": "items/bags-highlight",
+              "Filename": "items/bags-highlight.png",
               "Data": [
                 "default"
               ],
@@ -80,7 +80,7 @@
             {
               "Name": "bag-body",
               "Frames": 1,
-              "Filename": "items/bags-body",
+              "Filename": "items/bags-body.png",
               "Data": [
                 "default"
               ],
@@ -98,7 +98,7 @@
             {
               "Name": "bag-tie",
               "Frames": 1,
-              "Filename": "items/bags-tie",
+              "Filename": "items/bags-tie.png",
               "Data": [
                 "default"
               ],
@@ -112,7 +112,7 @@
             {
               "Name": "bag-outline",
               "Frames": 1,
-              "Filename": "items/bags-outline",
+              "Filename": "items/bags-outline.png",
               "Data": [
                 "default"
               ],
@@ -125,7 +125,7 @@
             {
               "Name": "bag-highlight",
               "Frames": 1,
-              "Filename": "items/bags-highlight",
+              "Filename": "items/bags-highlight.png",
               "Data": [
                 "default"
               ],
@@ -138,7 +138,7 @@
             {
               "Name": "bag-body",
               "Frames": 1,
-              "Filename": "items/bags-body",
+              "Filename": "items/bags-body.png",
               "Data": [
                 "default"
               ],

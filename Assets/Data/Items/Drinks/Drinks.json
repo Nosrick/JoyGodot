@@ -58,7 +58,7 @@
             {
               "Name": "cider-body",
               "Frames": 1,
-              "Filename": "items/drinks-body",
+              "Filename": "items/drinks-body.png",
               "Data": [
                 "default"
               ],
@@ -71,7 +71,7 @@
             {
               "Name": "cider-highlight",
               "Frames": 1,
-              "Filename": "items/drinks-highlight",
+              "Filename": "items/drinks-highlight.png",
               "Data": [
                 "default"
               ],
@@ -84,7 +84,7 @@
             {
               "Name": "cider-top",
               "Frames": 1,
-              "Filename": "items/drinks-tops",
+              "Filename": "items/drinks-tops.png",
               "Data": [
                 "default"
               ],
@@ -97,7 +97,7 @@
             {
               "Name": "cider-glass",
               "Frames": 1,
-              "Filename": "items/drinks-glass",
+              "Filename": "items/drinks-glass.png",
               "Data": [
                 "default"
               ],
@@ -110,7 +110,7 @@
             {
               "Name": "cider-outline",
               "Frames": 1,
-              "Filename": "items/drinks-outline",
+              "Filename": "items/drinks-outline.png",
               "Data": [
                 "default"
               ],
@@ -128,7 +128,7 @@
             {
               "Name": "water-body",
               "Frames": 1,
-              "Filename": "items/drinks-body",
+              "Filename": "items/drinks-body.png",
               "Data": [
                 "default"
               ],
@@ -141,7 +141,7 @@
             {
               "Name": "water-highlight",
               "Frames": 1,
-              "Filename": "items/drinks-highlight",
+              "Filename": "items/drinks-highlight.png",
               "Data": [
                 "default"
               ],
@@ -154,7 +154,7 @@
             {
               "Name": "water-top",
               "Frames": 1,
-              "Filename": "items/drinks-tops",
+              "Filename": "items/drinks-tops.png",
               "Data": [
                 "default"
               ],
@@ -167,7 +167,7 @@
             {
               "Name": "water-detail",
               "Frames": 1,
-              "Filename": "items/drinks-detail",
+              "Filename": "items/drinks-detail.png",
               "Data": [
                 "default"
               ],
@@ -180,7 +180,7 @@
             {
               "Name": "water-outline",
               "Frames": 1,
-              "Filename": "items/drinks-outline",
+              "Filename": "items/drinks-outline.png",
               "Data": [
                 "default"
               ],
@@ -198,7 +198,7 @@
             {
               "Name": "wine-body",
               "Frames": 1,
-              "Filename": "items/drinks-body",
+              "Filename": "items/drinks-body.png",
               "Data": [
                 "default"
               ],
@@ -211,7 +211,7 @@
             {
               "Name": "wine-highlight",
               "Frames": 1,
-              "Filename": "items/drinks-highlight",
+              "Filename": "items/drinks-highlight.png",
               "Data": [
                 "default"
               ],
@@ -224,7 +224,7 @@
             {
               "Name": "wine-top",
               "Frames": 1,
-              "Filename": "items/drinks-tops",
+              "Filename": "items/drinks-tops.png",
               "Data": [
                 "default"
               ],
@@ -237,7 +237,7 @@
             {
               "Name": "wine-glass",
               "Frames": 1,
-              "Filename": "items/drinks-glass",
+              "Filename": "items/drinks-glass.png",
               "Data": [
                 "default"
               ],
@@ -250,7 +250,7 @@
             {
               "Name": "wine-detail",
               "Frames": 1,
-              "Filename": "items/drinks-detail",
+              "Filename": "items/drinks-detail.png",
               "Data": [
                 "default"
               ],
@@ -263,7 +263,7 @@
             {
               "Name": "wine-outline",
               "Frames": 1,
-              "Filename": "items/drinks-outline",
+              "Filename": "items/drinks-outline.png",
               "Data": [
                 "default"
               ],

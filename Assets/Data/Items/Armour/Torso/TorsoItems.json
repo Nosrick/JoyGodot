@@ -56,7 +56,7 @@
             {
               "Name": "breastplate-body",
               "Frames": 1,
-              "Filename": "items/armour-body",
+              "Filename": "items/armour-body.png",
               "Data": [
                 "default"
               ],
@@ -69,7 +69,7 @@
             {
               "Name": "breastplate-highlight",
               "Frames": 1,
-              "Filename": "items/armour-highlight",
+              "Filename": "items/armour-highlight.png",
               "Data": [
                 "default"
               ],
@@ -82,7 +82,7 @@
             {
               "Name": "breastplate-outline",
               "Frames": 1,
-              "Filename": "items/armour-outline",
+              "Filename": "items/armour-outline.png",
               "Data": [
                 "default"
               ],
@@ -100,7 +100,7 @@
             {
               "Name": "leather-armour-body",
               "Frames": 1,
-              "Filename": "items/armour-body",
+              "Filename": "items/armour-body.png",
               "Data": [
                 "default"
               ],
@@ -113,7 +113,7 @@
             {
               "Name": "leather-armour-highlight",
               "Frames": 1,
-              "Filename": "items/armour-highlight",
+              "Filename": "items/armour-highlight.png",
               "Data": [
                 "default"
               ],
@@ -126,7 +126,7 @@
             {
               "Name": "leather-armour-outline",
               "Frames": 1,
-              "Filename": "items/armour-outline",
+              "Filename": "items/armour-outline.png",
               "Data": [
                 "default"
               ],

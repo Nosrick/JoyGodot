@@ -49,7 +49,7 @@
             {
               "Name": "falchion-blade",
               "Frames": 1,
-              "Filename": "items/greatsword-blades",
+              "Filename": "items/greatsword-blades.png",
               "Data": [
                 "default"
               ],
@@ -62,7 +62,7 @@
             {
               "Name": "falchion-crossguard",
               "Frames" : 1,
-              "Filename": "items/greatsword-crossguards",
+              "Filename": "items/greatsword-crossguards.png",
               "Data": [
                 "default"
               ],
@@ -75,7 +75,7 @@
             {
               "Name": "falchion-pommel",
               "Frames" : 1,
-              "Filename": "items/greatsword-pommels",
+              "Filename": "items/greatsword-pommels.png",
               "Data": [
                 "default"
               ],
@@ -89,7 +89,7 @@
             {
               "Name": "falchion-outline",
               "Frames" : 1,
-              "Filename": "items/greatsword-outlines",
+              "Filename": "items/greatsword-outlines.png",
               "Data": [
                 "default"
               ],

@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Castle.Core.Internal;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -21,7 +25,7 @@ namespace JoyLib.Code.Entities.Items
         protected IAbilityHandler AbilityHandler { get; set; }
 
         public IEnumerable<BaseItemType> Values => this.m_ItemDatabase;
-        
+
         public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public IDictionary<string, int> ItemWeights
@@ -30,7 +34,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 if (this.m_ItemWeights.IsNullOrEmpty())
                 {
-                    this.m_ItemWeights = new Dictionary<string, int>();
+                    this.m_ItemWeights = new System.Collections.Generic.Dictionary<string, int>();
                     foreach (BaseItemType type in this.m_ItemDatabase)
                     {
                         if (this.m_ItemWeights.ContainsKey(type.IdentifiedName))
@@ -49,7 +53,7 @@ namespace JoyLib.Code.Entities.Items
         }
 
         protected IDictionary<string, int> m_ItemWeights;
-        
+
         protected IRollable Roller { get; set; }
 
         public ItemDatabase(
@@ -63,7 +67,7 @@ namespace JoyLib.Code.Entities.Items
             this.MaterialHandler = materialHandler;
             this.AbilityHandler = abilityHandler;
             this.Roller = roller ?? new RNG();
-            
+
             this.m_ItemDatabase = this.Load().ToList();
         }
 
@@ -71,154 +75,169 @@ namespace JoyLib.Code.Entities.Items
         {
             List<BaseItemType> items = new List<BaseItemType>();
 
-            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Items", "*.json", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(
+                Directory.GetCurrentDirectory() +
+                GlobalConstants.ASSETS_FOLDER +
+                GlobalConstants.DATA_FOLDER +
+                "Items",
+                "*.json",
+                SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                    continue;
+                }
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.",
+                        LogLevel.Warning);
+                    continue;
+                }
+
+                Dictionary itemData =
+                    this.ValueExtractor.GetValueFromDictionary<Dictionary>(dictionary, "Items");
+
+                List<IdentifiedItem> identifiedItems = new List<IdentifiedItem>();
+                ICollection<Dictionary> identifiedItemsDicts =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(itemData, "IdentifiedItems");
+
+                foreach (Dictionary identifiedToken in identifiedItemsDicts)
+                {
+                    string name = this.ValueExtractor.GetValueFromDictionary<string>(identifiedToken, "Name");
+                    string description = identifiedToken.Contains("Description")
+                        ? this.ValueExtractor.GetValueFromDictionary<string>(identifiedToken, "Description")
+                        : "";
+                    int value = this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Value");
+                    IEnumerable<string> materials =
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken,
+                            "Materials");
+
+                    int size = this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Size");
+                    int lightLevel = identifiedToken.Contains("LightLevel")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "LightLevel")
+                        : 0;
+                    int spawnWeight = identifiedToken.Contains("SpawnWeight")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "SpawnWeight")
+                        : 1;
+                    int range = identifiedToken.Contains("Range")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Range")
+                        : 1;
+                    IEnumerable<string> tags =
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken, "Tags");
+                    string tileSet = this.ValueExtractor.GetValueFromDictionary<string>(identifiedToken, "TileSet");
+                    IEnumerable<string> abilityNames = identifiedToken.Contains("Effects")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken, "Effects")
+                        : new List<string>();
+                    IEnumerable<IAbility> abilities =
+                        abilityNames.Select(abilityName => this.AbilityHandler.Get(abilityName));
+                    IEnumerable<string> slots = identifiedToken.Contains("Slots")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken, "Slots")
+                        : new List<string>();
+                    IEnumerable<string> skills = identifiedToken.Contains("Skill")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken,
+                            "Skill")
+                        : new[] {"none"};
+
+                    identifiedItems.Add(new IdentifiedItem(
+                        name,
+                        tags.ToArray(),
+                        description,
+                        value,
+                        abilities.ToArray(),
+                        spawnWeight,
+                        skills,
+                        materials.ToArray(),
+                        size,
+                        slots.ToArray(),
+                        tileSet,
+                        range,
+                        lightLevel));
+                }
+
+                List<UnidentifiedItem> unidentifiedItems = new List<UnidentifiedItem>();
+
+                if (itemData.Contains("UnidentifiedItems"))
+                {
+                    ICollection<Dictionary> unidentifiedItemDicts =
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
+                            itemData,
+                            "UnidentifiedItems");
+                    foreach (Dictionary unidentifiedToken in unidentifiedItemDicts)
                     {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(unidentifiedToken, "Name");
+                        string description = unidentifiedToken.Contains("Description")
+                            ? this.ValueExtractor.GetValueFromDictionary<string>(unidentifiedToken, "Description")
+                            : "";
+                        string identifiedName =
+                            this.ValueExtractor.GetValueFromDictionary<string>(unidentifiedToken, "IdentifiedName");
 
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken.Values())
-                            {
-                                List<IdentifiedItem> identifiedItems = new List<IdentifiedItem>();
-
-                                foreach (JToken identifiedToken in child["IdentifiedItems"])
-                                {
-                                    string name = (string) identifiedToken["Name"];
-                                    string description = ((string) identifiedToken["Description"]) ?? "";
-                                    int value = (int) identifiedToken["Value"];
-                                    IEnumerable<string> materials =
-                                        identifiedToken["Materials"].Select(token => (string) token);
-
-                                    int size = (int) identifiedToken["Size"];
-                                    int lightLevel = (int) (identifiedToken["LightLevel"] ?? 0);
-                                    int spawnWeight = (int) (identifiedToken["SpawnWeight"] ?? 1);
-                                    int range = (int) (identifiedToken["Range"] ?? 1);
-                                    IEnumerable<string> tags =
-                                        identifiedToken["Tags"].Select(token => (string) token);
-                                    string tileSet = (string) identifiedToken["TileSet"];
-                                    IEnumerable<string> abilityNames = identifiedToken["Effects"].IsNullOrEmpty() 
-                                                                        ? new List<string>() 
-                                                                        : identifiedToken["Effects"].Select(token => (string) token);
-                                    IEnumerable<IAbility> abilities = abilityNames.Select(abilityName => this.AbilityHandler.Get(abilityName));
-                                    IEnumerable<string> slots = identifiedToken["Slots"].IsNullOrEmpty()
-                                        ? new List<string>() 
-                                        : identifiedToken["Slots"].Select(token => (string) token);
-                                    IEnumerable<string> skills = identifiedToken["Skill"].IsNullOrEmpty()
-                                        ? new[] { "none" }
-                                        : identifiedToken["Skill"].Select(token => (string) token);
-
-                                    identifiedItems.Add(new IdentifiedItem(
-                                        name,
-                                        tags.ToArray(),
-                                        description,
-                                        value,
-                                        abilities.ToArray(),
-                                        spawnWeight,
-                                        skills,
-                                        materials.ToArray(),
-                                        size,
-                                        slots.ToArray(),
-                                        tileSet,
-                                        range,
-                                        lightLevel));
-                                }
-
-                                List<UnidentifiedItem> unidentifiedItems = new List<UnidentifiedItem>();
-
-                                if (child["UnidentifiedItems"].IsNullOrEmpty() == false)
-                                {
-                                    foreach (JToken unidentifiedToken in child["UnidentifiedItems"])
-                                    {
-                                        string name = (string) unidentifiedToken["Name"];
-                                        string description = ((string) unidentifiedToken["Description"]) ?? "";
-                                        string identifiedName = (string) unidentifiedToken["IdentifiedName"];
-
-                                        unidentifiedItems.Add(new UnidentifiedItem(name, description, identifiedName));
-                                    }
-                                }
-
-                                JToken tileSetToken = child["TileSet"];
-                                string tileSetName = (string) tileSetToken["Name"];
-
-                                string actionWord = ((string) child["ActionWord"]) ?? "strikes";
-
-                                this.ObjectIcons.AddSpriteDataFromJson(tileSetName, tileSetToken["SpriteData"]);
-
-                                foreach (IdentifiedItem identifiedItem in identifiedItems)
-                                {
-                                    string[] materials = identifiedItem.materials.ToArray();
-                                    for (int i = 0; i < materials.Length; i++)
-                                    {
-                                        UnidentifiedItem[] possibilities = unidentifiedItems.Where(item =>
-                                                item.identifiedName.Equals(identifiedItem.name,
-                                                    StringComparison.OrdinalIgnoreCase))
-                                            .ToArray();
-                                        string materialName = materials[i];
-                                        UnidentifiedItem selectedItem;
-                                        if (possibilities.IsNullOrEmpty())
-                                        {
-                                            selectedItem = new UnidentifiedItem(
-                                                identifiedItem.name,
-                                                identifiedItem.description,
-                                                identifiedItem.name);
-                                        }
-                                        else
-                                        {
-                                            selectedItem = this.Roller.SelectFromCollection(possibilities);
-                                        }
-
-                                        items.Add(new BaseItemType(
-                                            identifiedItem.tags,
-                                            identifiedItem.description,
-                                            selectedItem.description,
-                                            selectedItem.name,
-                                            identifiedItem.name,
-                                            identifiedItem.slots,
-                                            identifiedItem.size,
-                                            this.MaterialHandler.Get(materialName),
-                                            identifiedItem.skills,
-                                            actionWord,
-                                            identifiedItem.value,
-                                            identifiedItem.weighting,
-                                            identifiedItem.spriteSheet,
-                                            identifiedItem.range,
-                                            identifiedItem.lightLevel,
-                                            identifiedItem.abilities));
-                                    }
-
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Error when loading items from " + file, LogLevel.Warning);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                        finally
-                        {
-                            jsonReader.Close();
-                            reader.Close();
-                        }
+                        unidentifiedItems.Add(new UnidentifiedItem(name, description, identifiedName));
                     }
                 }
-                */
+
+                string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(
+                    this.ValueExtractor.GetValueFromDictionary<Dictionary>(itemData, "TileSet"),
+                    "Name");
+
+                string actionWord = itemData.Contains("ActionWord")
+                    ? this.ValueExtractor.GetValueFromDictionary<string>(itemData, "ActionWord")
+                    : "strikes";
+
+                this.ObjectIcons.AddSpriteDataFromJson(itemData);
+
+                foreach (IdentifiedItem identifiedItem in identifiedItems)
+                {
+                    string[] materials = identifiedItem.materials.ToArray();
+                    for (int i = 0; i < materials.Length; i++)
+                    {
+                        UnidentifiedItem[] possibilities = unidentifiedItems.Where(unidentifiedItem =>
+                                unidentifiedItem.identifiedName.Equals(identifiedItem.name,
+                                    StringComparison.OrdinalIgnoreCase))
+                            .ToArray();
+                        string materialName = materials[i];
+                        UnidentifiedItem selectedItem;
+                        if (possibilities.IsNullOrEmpty())
+                        {
+                            selectedItem = new UnidentifiedItem(
+                                identifiedItem.name,
+                                identifiedItem.description,
+                                identifiedItem.name);
+                        }
+                        else
+                        {
+                            selectedItem = this.Roller.SelectFromCollection(possibilities);
+                        }
+
+                        items.Add(new BaseItemType(
+                            identifiedItem.tags,
+                            identifiedItem.description,
+                            selectedItem.description,
+                            selectedItem.name,
+                            identifiedItem.name,
+                            identifiedItem.slots,
+                            identifiedItem.size,
+                            this.MaterialHandler.Get(materialName),
+                            identifiedItem.skills,
+                            actionWord,
+                            identifiedItem.value,
+                            identifiedItem.weighting,
+                            identifiedItem.spriteSheet,
+                            identifiedItem.range,
+                            identifiedItem.lightLevel,
+                            identifiedItem.abilities));
+                    }
+                }
             }
 
             return items;
         }
-        
+
         public BaseItemType Get(string name)
         {
             return this.m_ItemDatabase.FirstOrDefault(type =>
@@ -256,16 +275,17 @@ namespace JoyLib.Code.Entities.Items
                     matchingTypes.Add(itemType);
                 }
             }
+
             return matchingTypes.ToArray();
         }
-        
+
         public void Dispose()
         {
             for (int i = 0; i < this.m_ItemDatabase.Count; i++)
             {
                 this.m_ItemDatabase[i] = null;
             }
-            
+
             this.m_ItemDatabase = null;
         }
     }

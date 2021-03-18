@@ -34,7 +34,6 @@
     <Content Include="Assets\Data\Items\Food\Food.json" />
     <Content Include="Assets\Data\Items\Lights.json" />
     <Content Include="Assets\Data\Items\Potions\Potions.json" />
-    <Content Include="Assets\Data\Items\Potions\Potions.xml" />
     <Content Include="Assets\Data\Items\Weapons\Bows.json" />
     <Content Include="Assets\Data\Items\Weapons\Daggers.json" />
     <Content Include="Assets\Data\Items\Weapons\TwoHanded.json" />

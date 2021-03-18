@@ -59,7 +59,7 @@
             {
               "Name": "round-shield-body",
               "Frames": 1,
-              "Filename": "items/shields-body",
+              "Filename": "items/shields-body.png",
               "Data": [
                 "default"
               ],
@@ -72,7 +72,7 @@
             {
               "Name": "round-shield-detail",
               "Frames": 1,
-              "Filename": "items/shields-detail",
+              "Filename": "items/shields-detail.png",
               "Data": [
                 "default"
               ],
@@ -85,7 +85,7 @@
             {
               "Name": "round-shield-highlight",
               "Frames": 1,
-              "Filename": "items/shields-highlight",
+              "Filename": "items/shields-highlight.png",
               "Data": [
                 "default"
               ],
@@ -98,7 +98,7 @@
             {
               "Name": "round-shield-outline",
               "Frames": 1,
-              "Filename": "items/shields-outline",
+              "Filename": "items/shields-outline.png",
               "Data": [
                 "default"
               ],

@@ -47,7 +47,7 @@
           "Part": [
             {
               "Name": "shortbow-body",
-              "Filename": "items/bows-body",
+              "Filename": "items/bows-body.png",
               "Data": [
                 "default"
               ],
@@ -59,7 +59,7 @@
             },
             {
               "Name": "shortbow-string",
-              "Filename": "items/bows-strings",
+              "Filename": "items/bows-strings.png",
               "Data": [
                 "default"
               ],
@@ -71,7 +71,7 @@
             },
             {
               "Name": "shortbow-highlight",
-              "Filename": "items/bows-highlight",
+              "Filename": "items/bows-highlight.png",
               "Data": [
                 "default"
               ],
