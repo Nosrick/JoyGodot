@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Entities.Romance.Processors;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.Romance
 {
@@ -32,64 +36,66 @@ namespace JoyLib.Code.Entities.Romance
                 .ToDictionary(processor => processor.Name, processor => processor);
             
             string[] files =
-                Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Romance",
-                    "*.json", SearchOption.AllDirectories);
+                Directory.GetFiles(
+                    Directory.GetCurrentDirectory() + 
+                    GlobalConstants.ASSETS_FOLDER +
+                    GlobalConstants.DATA_FOLDER + 
+                    "/Romance",
+                    "*.json", 
+                    SearchOption.AllDirectories);
             
             foreach(string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                    {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken["Romance"])
-                            {
-                                string name = (string) child["Name"];
-                                bool decaysNeed = (bool) (child["DecaysNeed"] ?? false);
-                                int romanceThreshold = (int) (child["RomanceThreshold"] ?? 0);
-                                int bondingThreshold = (int) (child["BondingThreshold"] ?? 0);
-                                string processorString = (string) (child["Processor"] ?? "aromantic");
-                                IEnumerable<string> tags = child["Tags"] is null
-                                    ? new string[0]
-                                    : child["Tags"].Select(token => (string) token);
-
-                                IRomanceProcessor processor =
-                                    this.Processors.Values.FirstOrDefault(preferenceProcessor => 
-                                        preferenceProcessor.Name.Equals(processorString, StringComparison.OrdinalIgnoreCase)) ??
-                                    new AromanticProcessor();
-                                
-                                romances.Add(
-                                    new BaseRomance(
-                                        name,
-                                        decaysNeed,
-                                        romanceThreshold,
-                                        bondingThreshold,
-                                        processor,
-                                        tags));
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Could not load sexes in " + file);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                        finally
-                        {
-                            jsonReader.Close();
-                            reader.Close();
-                        }
-                    }
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                    continue;
                 }
-                */
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Failed to parse JSON in " + file + " into a Dictionary.", LogLevel.Warning);
+                    continue;
+                }
+
+                ICollection<Dictionary> romanceCollection =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Romance");
+
+                foreach (Dictionary romance in romanceCollection)
+                {
+                    string name = this.ValueExtractor.GetValueFromDictionary<string>(romance, "Name");
+                    bool decaysNeed = romance.Contains("DecaysNeed") 
+                                      && this.ValueExtractor.GetValueFromDictionary<bool>(romance, "DecaysNeed");
+                    
+                    int romanceThreshold = romance.Contains("RomanceThreshold")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(romance, "RomanceThreshold")
+                        : 0;
+
+                    int bondingThreshold = romance.Contains("BondingThreshold")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(romance, "BondingThreshold")
+                        : 0;
+                    string processorString = romance.Contains("Processor")
+                        ? this.ValueExtractor.GetValueFromDictionary<string>(romance, "Processor")
+                        : "aromantic";
+                    ICollection<string> tags =
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(romance, "Tags");
+
+                    IRomanceProcessor processor =
+                        this.Processors.Values.FirstOrDefault(preferenceProcessor => 
+                            preferenceProcessor.Name.Equals(processorString, StringComparison.OrdinalIgnoreCase)) ??
+                        new AromanticProcessor();
+                                
+                    romances.Add(
+                        new BaseRomance(
+                            name,
+                            decaysNeed,
+                            romanceThreshold,
+                            bondingThreshold,
+                            processor,
+                            tags));
+                }
             }
 
             romances.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IRomance>());

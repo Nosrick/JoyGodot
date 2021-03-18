@@ -57,7 +57,7 @@ namespace JoyLib.Code.Entities.Romance
             this.BondingThreshold = bondingThreshold;
             this.Processor = processor;
             this.Tags = tags;
-            this.m_Tags.Add("romance");
+            this.m_Tags.Add("romantic");
         }
         
         public bool HasTag(string tag)
