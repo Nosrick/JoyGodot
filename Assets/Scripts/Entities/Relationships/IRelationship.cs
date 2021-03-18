@@ -35,7 +35,7 @@ namespace JoyLib.Code.Entities.Relationships
 
         string DisplayName { get; }
         
-        bool Unique { get; }
+        HashSet<string> UniqueTags { get; }
         
         int MaxParticipants { get; }
     }

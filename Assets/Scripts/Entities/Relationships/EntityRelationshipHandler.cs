@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Castle.Core.Internal;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.Relationships
 {
@@ -36,59 +40,57 @@ namespace JoyLib.Code.Entities.Relationships
             List<IRelationship> relationships = new List<IRelationship>();
             
             string[] files =
-                Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Relationships",
-                    "*.json", SearchOption.AllDirectories);
+                Directory.GetFiles(
+                    Directory.GetCurrentDirectory() + 
+                    GlobalConstants.ASSETS_FOLDER + 
+                    GlobalConstants.DATA_FOLDER + 
+                    "/Relationships",
+                    "*.json", 
+                    SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+                
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                    {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken["Relationships"])
-                            {
-                                string name = (string) child["Name"];
-                                string displayName = (string) child["DisplayName"];
-                                bool unique = (bool) (child["Unique"] ?? false);
-                                int maxParticipants = (int) (child["MaxParticipants"] ?? -1);
-                                IEnumerable<string> tags = child["Tags"] is null
-                                    ? new string[0]
-                                    : child["Tags"].Select(token => (string) token);
-                                
-                                relationships.Add(
-                                    new BaseRelationship(
-                                        name,
-                                        displayName,
-                                        unique,
-                                        maxParticipants,
-                                        null,
-                                        null,
-                                        tags));
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Error loading relationships from " + file);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                        finally
-                        {
-                            jsonReader.Close();
-                            reader.Close();
-                        }
-                    }
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                    continue;
                 }
-                */
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.", LogLevel.Warning);
+                    continue;
+                }
+
+                ICollection<Dictionary> relationshipCollection =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Relationships");
+
+                foreach (Dictionary relationship in relationshipCollection)
+                {
+                    string name = this.ValueExtractor.GetValueFromDictionary<string>(relationship, "Name");
+                    string displayName = this.ValueExtractor.GetValueFromDictionary<string>(relationship, "DisplayName");
+                    IEnumerable<string> uniqueTags = relationship.Contains("UniqueTags")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(relationship, "UniqueTags")
+                        : new string[0];
+                    int maxParticipants = relationship.Contains("MaxParticipants")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(relationship, "MaxParticipants")
+                        : -1;
+                    IEnumerable<string> tags = relationship.Contains("Tags")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(relationship, "Tags")
+                        : new string[0];
+                                
+                    relationships.Add(
+                        new BaseRelationship(
+                            name,
+                            displayName,
+                            maxParticipants,
+                            uniqueTags,
+                            null,
+                            null,
+                            tags));
+                }
             }
 
             relationships.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IRelationship>());

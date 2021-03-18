@@ -18,7 +18,7 @@ namespace JoyLib.Code.Entities.Relationships
         public string DisplayName { get; protected set; }
 
          
-        public bool Unique { get; protected set; }
+        public HashSet<string> UniqueTags { get; protected set; }
 
          
         public int MaxParticipants { get; protected set; }
@@ -41,7 +41,7 @@ namespace JoyLib.Code.Entities.Relationships
         {
             this.Name = "DEFAULT";
             this.DisplayName = "DEFAULT";
-            this.Unique = false;
+            this.UniqueTags = new HashSet<string>();
             this.MaxParticipants = 1;
             this.m_Participants = new List<Guid>();
             this.m_Values = new Dictionary<Guid, IDictionary<Guid, int>>();
@@ -51,15 +51,15 @@ namespace JoyLib.Code.Entities.Relationships
         public BaseRelationship(
             string name,
             string displayName,
-            bool unique,
             int maxParticipants,
+            IEnumerable<string> uniqueTags = null,
             IEnumerable<Guid> participants = null,
             IDictionary<Guid, IDictionary<Guid, int>> values = null,
             IEnumerable<string> tags = null)
         {
             this.Name = name;
             this.DisplayName = displayName;
-            this.Unique = unique;
+            this.UniqueTags = uniqueTags.IsNullOrEmpty() ? new HashSet<string>() : new HashSet<string>(uniqueTags);
             this.MaxParticipants = maxParticipants;
             this.m_Participants = new List<Guid>();
             this.m_Values = values ?? new SortedDictionary<Guid, IDictionary<Guid, int>>();
@@ -281,8 +281,8 @@ namespace JoyLib.Code.Entities.Relationships
             return new BaseRelationship(
                 this.Name,
                 this.DisplayName,
-                this.Unique,
                 this.MaxParticipants,
+                this.UniqueTags,
                 participants.Select(o => o.Guid),
                 null,
                 this.Tags);

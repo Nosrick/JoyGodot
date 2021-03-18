@@ -44,13 +44,13 @@ namespace JoyLib.Code.Entities.Conversation.Processors
 
                 bool unique = relationships.Any(relationship =>
                     relationship.Name.Equals(selectedRelationship.Name)
-                    && (relationship.Unique || selectedRelationship.Unique));
+                    && relationship.UniqueTags.Intersect(selectedRelationship.UniqueTags).Any());
 
                 relationships = this.RelationshipHandler.GetAllForObject(listener).ToList();
                 
                 unique |= relationships.Any(relationship =>
                     relationship.Name.Equals(selectedRelationship.Name)
-                    && (relationship.Unique || selectedRelationship.Unique));
+                    && relationship.UniqueTags.Intersect(selectedRelationship.UniqueTags).Any());
 
                 if (unique == false)
                 {
