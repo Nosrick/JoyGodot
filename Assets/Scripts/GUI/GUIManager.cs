@@ -73,17 +73,15 @@ namespace JoyLib.Code.Unity.GUI
 
                 this.UISprites = new Dictionary<string, ISpriteState>();
                 
-                /*
                 this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
                     .Select(data => new SpriteState(data.m_Name, data))
                     .Cast<ISpriteState>()
                     .ToDictionary(state => state.Name, state => state);
-*/
                 this.CursorColours = new Dictionary<string, IDictionary<string, Color>>();
                 this.UISpriteColours = new Dictionary<string, IDictionary<string, Color>>();
                 this.LoadedFonts = new Dictionary<string, DynamicFont>
                 {
-                    {"default", GD.Load<DynamicFont>("Fonts/OpenDyslexic3")}
+                    {"default", GD.Load<DynamicFont>(GlobalConstants.GODOT_ASSETS_FOLDER + "Fonts/OpenDyslexic3.tres")}
                 };
 
                 this.DyslexicModeFonts = new Dictionary<string, DynamicFont>
@@ -126,7 +124,10 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void LoadDefaults()
         {
-            string file = Directory.GetCurrentDirectory() + GlobalConstants.SETTINGS_FOLDER + "/GUIDefaults.json";
+            string file = Directory.GetCurrentDirectory() + 
+                          GlobalConstants.ASSETS_FOLDER +
+                          GlobalConstants.SETTINGS_FOLDER + 
+                          "/GUIDefaults.json";
 
             if (File.Exists(file))
             {
