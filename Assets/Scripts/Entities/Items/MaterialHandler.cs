@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Helpers;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.Items
 {
     public class MaterialHandler : IMaterialHandler
     {
-        protected Dictionary<string, IItemMaterial> m_Materials;
-        
+        protected System.Collections.Generic.Dictionary<string, IItemMaterial> m_Materials;
+
         public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public IEnumerable<IItemMaterial> Values => this.m_Materials.Values;
@@ -26,17 +30,18 @@ namespace JoyLib.Code.Entities.Items
 
             this.m_Materials.Add("DEFAULT MATERIAL", new ItemMaterial("DEFAULT MATERIAL", 0.1f, 0, 1.0f, 0.0f));
         }
-        
+
         public IItemMaterial Get(string name)
         {
-            if(this.m_Materials is null)
+            if (this.m_Materials is null)
             {
                 this.Initialise();
             }
 
             if (this.m_Materials.Any(pair => pair.Value.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return this.m_Materials.First(pair => pair.Value.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
+                return this.m_Materials.First(pair => pair.Value.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    .Value;
             }
 
             return this.m_Materials["DEFAULT MATERIAL"];
@@ -59,6 +64,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 return false;
             }
+
             this.m_Materials[key] = null;
             this.m_Materials.Remove(key);
             return true;
@@ -67,55 +73,59 @@ namespace JoyLib.Code.Entities.Items
         public IEnumerable<IItemMaterial> Load()
         {
             List<IItemMaterial> materials = new List<IItemMaterial>();
-            
-            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Materials", "*.json", SearchOption.AllDirectories);
+
+            string[] files = Directory.GetFiles(
+                Directory.GetCurrentDirectory() +
+                GlobalConstants.ASSETS_FOLDER +
+                GlobalConstants.DATA_FOLDER +
+                "Materials",
+                "*.json",
+                SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                    {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken["Materials"])
-                            {
-                                string name = (string) child["Name"];
-                                float hardness = (float) (child["Hardness"] ?? 1.0f);
-                                int bonus = (int) (child["Bonus"] ?? 1);
-                                float weight = (float) (child["Weight"] ?? 1.0f);
-                                float value = (float) (child["Value"] ?? 1.0f);
-
-                                materials.Add(
-                                    new ItemMaterial(
-                                        name,
-                                        hardness,
-                                        bonus,
-                                        weight,
-                                        value));
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Error loading materials from " + file);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                        finally
-                        {
-                            jsonReader.Close();
-                            reader.Close();
-                        }
-                    }
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                    continue;
                 }
-                */
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.",
+                        LogLevel.Warning);
+                    continue;
+                }
+
+                ICollection<Dictionary> materialCollection =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Materials");
+
+                foreach (Dictionary material in materialCollection)
+                {
+                    string name = this.ValueExtractor.GetValueFromDictionary<string>(material, "Name");
+                    float hardness = material.Contains("Hardness")
+                        ? this.ValueExtractor.GetValueFromDictionary<float>(material, "Hardness")
+                        : 1f;
+                    int bonus = material.Contains("Bonus")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(material, "Bonus")
+                        : 1;
+                    float weight = material.Contains("Weight")
+                        ? this.ValueExtractor.GetValueFromDictionary<float>(material, "Weight")
+                        : 1f;
+                    float value = material.Contains("Value")
+                        ? this.ValueExtractor.GetValueFromDictionary<float>(material, "Value")
+                        : 1f;
+
+                    materials.Add(
+                        new ItemMaterial(
+                            name,
+                            hardness,
+                            bonus,
+                            weight,
+                            value));
+                }
             }
 
             return materials;
