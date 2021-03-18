@@ -12,7 +12,7 @@
               "Position": 4,
               "Data": ["default"],
               "Frames": 1,
-              "Filename": "environments/overworld-dirt",
+              "Filename": "environments/overworld-dirt.png",
               "SortOrder": 0,
               "Colour": ["#9e4539ff"]
             },
@@ -21,7 +21,7 @@
               "Position": 4,
               "Data": ["default"],
               "Frames": 1,
-              "Filename": "environments/overworld-grass",
+              "Filename": "environments/overworld-grass.png",
               "SortOrder": 1,
               "Colour": ["#1ebc73ff"]
             }

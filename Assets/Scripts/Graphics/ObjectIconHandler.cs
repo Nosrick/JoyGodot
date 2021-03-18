@@ -142,14 +142,16 @@ namespace JoyLib.Code.Graphics
                     foreach (Dictionary innerDict in partDicts)
                     {
                         string partName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Name");
-                        int partFrames = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Frames");
+                        int partFrames = innerDict.Contains("Frames")
+                            ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Frames")
+                            : 1;
                         string fileName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Filename");
                         int sortOrder = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "SortOrder");
                         int position = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Position");
                         NinePatchRect.AxisStretchMode stretchMode =
                             GraphicsHelper.ParseStretchMode(
                                 this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "FillType"));
-                        bool drawCentre = !innerDict.Contains("DrawCentre") 
+                        bool drawCentre = !innerDict.Contains("DrawCentre")
                                           || this.ValueExtractor.GetValueFromDictionary<bool>(innerDict, "DrawCentre");
                         Array marginArray = this.ValueExtractor.GetValueFromDictionary<Array>(
                             innerDict,
@@ -158,8 +160,9 @@ namespace JoyLib.Code.Graphics
                             ? new[] {0, 0, 0, 0}
                             : this.ValueExtractor.GetCollectionFromArray<int>(marginArray);
 
-                        Array partDataArray = this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Data") ??
-                                              new Array();
+                        Array partDataArray = innerDict.Contains("Data")
+                            ? this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Data")
+                            : new Array();
                         ICollection<string> data = this.ValueExtractor.GetCollectionFromArray<string>(partDataArray);
                         Array partColourArray =
                             this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Colour");

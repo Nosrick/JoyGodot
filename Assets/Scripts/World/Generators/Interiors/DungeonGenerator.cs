@@ -18,6 +18,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 gameManager.GUIDManager,
                 gameManager.ObjectIconHandler,
                 gameManager.DerivedValueHandler,
+                gameManager.WorldInfoHandler,
                 roller);
             SpawnPointPlacer spawnPointPlacer = new SpawnPointPlacer(roller);
             DungeonItemPlacer itemPlacer = new DungeonItemPlacer(

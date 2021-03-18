@@ -46,7 +46,7 @@ namespace JoyLib.Code.States
         private void CreateWorld()
         {
             //Make a new overworld generator
-            OverworldGenerator overworldGen = new OverworldGenerator();
+            OverworldGenerator overworldGen = new OverworldGenerator(this.m_WorldInfoHandler);
 
             //Generate the basic overworld
             this.m_World = new WorldInstance(

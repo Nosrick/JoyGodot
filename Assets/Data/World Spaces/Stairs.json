@@ -13,9 +13,9 @@
             "Part": [
               {
                 "Name": "Upstairs",
-                "Data": "default",
+                "Data": ["default"],
                 "Position": 0,
-                "Filename": "environments/stairs"
+                "Filename": "environments/stairs.png"
               }
             ]
           },
@@ -24,9 +24,9 @@
             "Part": [
               {
                 "Name": "Downstairs",
-                "Data": "default",
+                "Data": ["default"],
                 "Position": 1,
-                "Filename": "environments/stairs"
+                "Filename": "environments/stairs.png"
               }
             ]
           }

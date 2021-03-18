@@ -5,11 +5,18 @@ namespace JoyLib.Code.World.Generators.Overworld
 {
     public class OverworldGenerator : IWorldSpaceGenerator
     {
+        protected IWorldInfoHandler WorldInfoHandler { get; set; }
+        
+        public OverworldGenerator(IWorldInfoHandler worldInfoHandler)
+        {
+            this.WorldInfoHandler = worldInfoHandler;
+        }
+        
         public WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet)
         {
             WorldTile[,] tiles = new WorldTile[sizeRef, sizeRef];
 
-            WorldTile template = StandardWorldTiles.instance.GetByTileSet(tileSet).ToArray()[0];
+            WorldTile template = this.WorldInfoHandler.GetByTileSet(tileSet).ToArray()[0];
 
             for (int i = 0; i < tiles.GetLength(0); i++)
             {

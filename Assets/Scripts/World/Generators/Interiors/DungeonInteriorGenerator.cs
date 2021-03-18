@@ -14,17 +14,21 @@ namespace JoyLib.Code.World.Generators.Interiors
         protected GUIDManager GuidManager { get; set; }
         protected IObjectIconHandler ObjectIcons { get; set; }
         protected IDerivedValueHandler DerivedValueHandler { get; set; }
+        
+        protected IWorldInfoHandler WorldInfoHandler { get; set; }
         protected RNG Roller { get; set; }
 
         public DungeonInteriorGenerator(
             GUIDManager guidManager,
             IObjectIconHandler objectIconHandler,
             IDerivedValueHandler derivedValueHandler,
+            IWorldInfoHandler worldInfoHandler,
             RNG roller)
         {
             this.GuidManager = guidManager;
             this.DerivedValueHandler = derivedValueHandler;
             this.Roller = roller;
+            this.WorldInfoHandler = worldInfoHandler;
             this.ObjectIcons = objectIconHandler;
         }
 
@@ -49,7 +53,7 @@ namespace JoyLib.Code.World.Generators.Interiors
         {
             WorldTile[,] tiles = new WorldTile[this.m_UntreatedTiles.GetLength(0), this.m_UntreatedTiles.GetLength(1)];
 
-            WorldTile[] templates = StandardWorldTiles.instance.GetByTileSet(this.TileSet).ToArray();
+            WorldTile[] templates = this.WorldInfoHandler.GetByTileSet(this.TileSet).ToArray();
 
             for (int i = 0; i < tiles.GetLength(0); i++)
             {
@@ -94,7 +98,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                                 spriteList,
                                 this.TileSet,
                                 null,
-                                new string[] { "wall", "interior" }));
+                                "wall", "interior"));
                     }
                 }
             }

@@ -20,7 +20,7 @@
                 "Floor",
                 "Default"
               ],
-              "Filename": "environments/overworld-grass",
+              "Filename": "environments/overworld-grass.png",
               "Frames": 1,
               "Colour": ["#625565ff"]
             }
@@ -36,7 +36,7 @@
                 "Floor",
                 "Default"
               ],
-              "Filename": "environments/naga-pits32",
+              "Filename": "environments/naga-pits32.png",
               "Frames": 1,
               "Colour": ["#8fd3ffff"]
             }
