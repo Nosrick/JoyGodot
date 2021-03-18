@@ -1,8 +1,11 @@
-﻿namespace JoyLib.Code.Helpers
+﻿using System.Linq;
+using Castle.Core.Internal;
+using JoyLib.Code.World;
+
+namespace JoyLib.Code.Helpers
 {
     public static class WorldConversationDataHelper
     {
-        /*
         public static int GetNumberOfFloors(int floorsSoFar, IWorldInstance worldToCheck)
         {
             if (worldToCheck.Areas.Count > 0)
@@ -22,6 +25,5 @@
                 worldToCheck.Entities.Count 
                 : worldToCheck.Entities.Count(x => x.CreatureType.Equals(entityType));
         }
-        */
     }
 }

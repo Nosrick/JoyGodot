@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using JoyLib.Code.Godot;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -30,7 +31,7 @@ namespace JoyLib.Code
         
         List<IJoyAction> CachedActions { get; }
         
-        Node2D MyNode { get; }
+        JoyObjectNode MyNode { get; }
         
         IEnumerable<Tuple<string, string>> Tooltip { get; }
         

@@ -7,7 +7,7 @@ namespace JoyLib.Code.Entities.AI
     {
         void FindPathStop();
 
-        Queue<Vector2Int> FindPath(Vector2Int fromPoint, Vector2Int toPoint, byte[,] grid, Rect2 sizes);
+        Queue<Vector2Int> FindPath(Vector2Int fromPoint, Vector2Int toPoint, byte[,] grid, Rect2Int sizes);
 
         string DetermineSector(Vector2Int fromPoint, Vector2Int toPoint);
 

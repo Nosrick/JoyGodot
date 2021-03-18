@@ -21,6 +21,7 @@ using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
@@ -30,8 +31,6 @@ namespace JoyLib.Code.Entities
     [Serializable]
     public class Entity : JoyObject, IEntity
     {
-        //public event ValueChangedEventHandler OnDerivedValueChange;
-        //public event ValueChangedEventHandler OnMaximumChange;
         public event ValueChangedEventHandler<int> StatisticChange;
         public event ValueChangedEventHandler<int> SkillChange;
         public event ValueChangedEventHandler<int> ExperienceChange;
@@ -125,11 +124,11 @@ namespace JoyLib.Code.Entities
 
                 if (value.targetType == typeof(IEntity).Name)
                 {
-                    //this.m_CurrentTarget.target = GlobalConstants.GameManager.EntityHandler.Get(value.targetGuid);
+                    this.m_CurrentTarget.target = GlobalConstants.GameManager.EntityHandler.Get(value.targetGuid);
                 }
                 else if (value.targetType == typeof(IItemInstance).Name)
                 {
-                    //this.m_CurrentTarget.target = GlobalConstants.GameManager.ItemHandler.Get(value.targetGuid);
+                    this.m_CurrentTarget.target = GlobalConstants.GameManager.ItemHandler.Get(value.targetGuid);
                 }
             }
         }
@@ -146,13 +145,13 @@ namespace JoyLib.Code.Entities
 
         [NonSerialized] protected const int ATTACK_THRESHOLD = -50;
 
-        public IEnumerable<IItemInstance> Contents => null; //GlobalConstants.GameManager.ItemHandler.GetItems(this.m_Backpack);
+        public IEnumerable<IItemInstance> Contents => GlobalConstants.GameManager.ItemHandler.GetItems(this.m_Backpack);
 
         public IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         public IEntitySkillHandler SkillHandler { get; set; }
 
-        //public IQuestTracker QuestTracker { get; set; }
+        public IQuestTracker QuestTracker { get; set; }
 
         public NaturalWeaponHelper NaturalWeaponHelper { get; set; }
 
@@ -347,13 +346,11 @@ namespace JoyLib.Code.Entities
 
         protected void Initialise()
         {
-            /*
             this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
             this.QuestTracker = GlobalConstants.GameManager.QuestTracker;
             this.SkillHandler = GlobalConstants.GameManager.SkillHandler;
             this.DerivedValueHandler = GlobalConstants.GameManager.DerivedValueHandler;
             this.NaturalWeaponHelper = GlobalConstants.GameManager.NaturalWeaponHelper;
-            */
         }
 
         public void Deserialise(
@@ -381,13 +378,11 @@ namespace JoyLib.Code.Entities
                 string relationshipName = "Stranger";
                 try
                 {
-                    /*
                     relationshipName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
                         this.RelationshipHandler.GetBestRelationship(
                                 this,
                                 GlobalConstants.GameManager.Player)
                             .DisplayName);
-                            */
                 }
                 catch (Exception e)
                 { }
@@ -515,13 +510,11 @@ namespace JoyLib.Code.Entities
             this.UpdateMe();
         }
 
-        /*
         public void AddQuest(IQuest quest)
         {
             quest.StartQuest(this);
             QuestTracker?.AddQuest(this.Guid, quest);
         }
-        */
 
         public bool AddJob(IJob job)
         {
@@ -1167,20 +1160,18 @@ namespace JoyLib.Code.Entities
             {
                 this.m_FulfillmentData = value;
 
-                /*
                 if (value is null)
                 {
-                    this.MonoBehaviourHandler.SetSpeechBubble(false);
+                    this.MyNode.SetSpeechBubble(false);
                     return;
                 }
 
                 if (this.m_FulfillmentData.Name.IsNullOrEmpty() == false
                     && this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
                 {
-                    this.MonoBehaviourHandler.SetSpeechBubble(this.m_FulfillmentData.Counter > 0,
+                    this.MyNode.SetSpeechBubble(this.m_FulfillmentData.Counter > 0,
                         this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
                 }
-                */
             }
         }
 

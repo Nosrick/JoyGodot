@@ -14,6 +14,7 @@ using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
+using JoyLib.Code.Quests;
 
 namespace JoyLib.Code.Entities
 {
@@ -74,7 +75,7 @@ namespace JoyLib.Code.Entities
         void Deserialise(
             IEnumerable<ICulture> cultures);
         
-        //void AddQuest(IQuest quest);
+        void AddQuest(IQuest quest);
         IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args);
         void AddIdentifiedItem(string nameRef);
         bool RemoveItemFromPerson(IItemInstance item);

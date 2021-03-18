@@ -5,6 +5,7 @@ using Godot;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
+using JoyLib.Code.Godot;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -59,7 +60,7 @@ namespace JoyLib.Code
         protected List<ISpriteState> m_States;
 
         public List<IJoyAction> CachedActions { get; protected set; }
-        public Node2D MyNode { get; protected set; }
+        public JoyObjectNode MyNode { get; protected set; }
 
         public IRollable Roller { get; protected set; }
 
@@ -179,7 +180,7 @@ namespace JoyLib.Code
 
             this.CachedActions = new List<IJoyAction>(actions);
 
-            //this.Tooltip = new List<Tuple<string, string>>();
+            this.Tooltip = new List<Tuple<string, string>>();
         }
 
         public IJoyAction FetchAction(string name)
@@ -395,7 +396,7 @@ namespace JoyLib.Code
 
         public virtual void Dispose()
         {
-            //GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.Guid);
+            GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.Guid);
             GC.SuppressFinalize(this);
         }
 
