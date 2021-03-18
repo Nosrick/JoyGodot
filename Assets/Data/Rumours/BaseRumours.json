@@ -1,41 +1,45 @@
 ﻿{
   "Rumours": [
-      {
-        "Text": "Have you heard about <1> and <2>? They make such a cute couple.",
-        "Parameters": [
-          "participant",
-          "participant"
-        ],
-        "Conditions": ["relationship = romantic"],
-        "Tags": [
-          "relationship",
-          "positive"
-        ]
-      },
-      {
-        "Text": "I hear <1> is really good at <2>! I wish I was as good as <3>.",
-        "Parameters": [
-          "participant",
-          "skills",
-          "gender/personalobject"
-        ],
-        "Conditions": ["skills > 5"],
-        "Tags": [
-          "skill",
-          "positive"
-        ]
-      },
-      {
-        "Text": "I heard that <1> doesn't much like <2>.",
-        "Parameters": [
-          "participant",
-          "participant"
-        ],
-        "Conditions": "relationship < 0",
-        "Tags": [
-          "relationship",
-          "negative"
-        ]
-      }
-    ]
+    {
+      "Text": "Have you heard about <1> and <2>? They make such a cute couple.",
+      "Parameters": [
+        "participant",
+        "participant"
+      ],
+      "Conditions": [
+        "relationship = romantic"
+      ],
+      "Tags": [
+        "relationship",
+        "positive"
+      ]
+    },
+    {
+      "Text": "I hear <1> is really good at <2>! I wish I was as good as <3>.",
+      "Parameters": [
+        "participant",
+        "skills",
+        "gender/personalobject"
+      ],
+      "Conditions": [
+        "skills > 5"
+      ],
+      "Tags": [
+        "skill",
+        "positive"
+      ]
+    },
+    {
+      "Text": "I heard that <1> doesn't much like <2>.",
+      "Parameters": [
+        "participant",
+        "participant"
+      ],
+      "Conditions": "relationship < 0",
+      "Tags": [
+        "relationship",
+        "negative"
+      ]
+    }
+  ]
 }

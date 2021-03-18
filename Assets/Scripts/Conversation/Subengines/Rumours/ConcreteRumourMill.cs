@@ -3,10 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Godot;
+using Godot.Collections;
+using JoyLib.Code.Conversation.Conversations.Rumours;
 using JoyLib.Code.Conversation.Subengines.Rumours;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Conversation.Conversations
 {
@@ -15,13 +21,14 @@ namespace JoyLib.Code.Conversation.Conversations
         public List<IRumour> Rumours { get; protected set; }
 
         public List<IRumour> RumourTypes { get; protected set; }
-        
+
         public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public RNG Roller { get; protected set; }
 
         public ConcreteRumourMill(RNG roller = null)
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.Roller = roller is null ? new RNG() : roller;
             this.Initialise();
         }
@@ -40,107 +47,99 @@ namespace JoyLib.Code.Conversation.Conversations
             List<IRumour> rumours = new List<IRumour>();
 
             string[] files = Directory.GetFiles(
-                Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Rumours",
+                Directory.GetCurrentDirectory() +
+                GlobalConstants.ASSETS_FOLDER +
+                GlobalConstants.DATA_FOLDER +
+                "Rumours",
                 "*.json",
                 SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                    continue;
+                }
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.",
+                        LogLevel.Warning);
+                    continue;
+                }
+
+                ICollection<Dictionary> rumourCollection =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Rumours");
+
+                foreach (Dictionary rumour in rumourCollection)
+                {
+                    string text = this.ValueExtractor.GetValueFromDictionary<string>(rumour, "Text");
+                    string processor = rumour.Contains("Processor")
+                        ? this.ValueExtractor.GetValueFromDictionary<string>(rumour, "Processor")
+                        : "NONE";
+
+                    float viralPotential = rumour.Contains("ViralPotential")
+                        ? this.ValueExtractor.GetValueFromDictionary<float>(rumour, "ViralPotential")
+                        : 1f;
+
+                    IEnumerable<string> tags = rumour.Contains("Tags")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(rumour, "Tags")
+                        : new string[0];
+
+                    IEnumerable<string> conditionStrings = rumour.Contains("Conditions")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(rumour, "Conditions")
+                        : new string[0];
+
+                    IEnumerable<string> parameters = rumour.Contains("Parameters")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(rumour, "Parameters")
+                        : new string[0];
+
+                    bool baseless = !rumour.Contains("Baseless")
+                                    || this.ValueExtractor.GetValueFromDictionary<bool>(rumour, "Baseless");
+                    float lifetimeMultiplier = rumour.Contains("LifetimeMultiplier")
+                        ? this.ValueExtractor.GetValueFromDictionary<float>(rumour, "LifetimeMultiplier")
+                        : 1f;
+                    int lifetime = rumour.Contains("Lifetime")
+                        ? this.ValueExtractor.GetValueFromDictionary<int>(rumour, "Lifetime")
+                        : BaseRumour.DEFAULT_LIFETIME;
+
+                    List<ITopicCondition> conditions =
+                        conditionStrings.Select(this.ParseCondition).ToList();
+
+                    var processorBase = ScriptingEngine.Instance.FetchAndInitialise(processor);
+                    if (processorBase is null == false)
                     {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            foreach (JToken child in jToken["Rumours"])
-                            {
-                                string text = (string) child["Text"];
-                                string processor = (string) child["Processor"] ?? "NONE";
-                                float viralPotential = (float) (child["ViralPotential"] ?? 1.0f);
-                                IEnumerable<string> tags = child["Tags"] is null
-                                    ? new string[0]
-                                    : child["Tags"].Select(token => (string) token);
-
-                                IEnumerable<string> conditionStrings = child["Conditions"] is null
-                                    ? new string[0]
-                                    : child["Conditions"].Select(token => (string) token);
-
-                                IEnumerable<string> parameters = child["Parameters"] is null
-                                    ? new string[0]
-                                    : child["Parameters"].Select(token => (string) token);
-
-                                bool baseless = (bool) (child["Baseless"] ?? true);
-                                float lifetimeMultiplier = (float) (child["LifetimeMultiplier"] ?? 1.0f);
-                                int lifetime = (int) (child["Lifetime"] ?? BaseRumour.DEFAULT_LIFETIME);
-
-                                List<ITopicCondition> conditions =
-                                    conditionStrings.Select(this.ParseCondition).ToList();
-
-                                if (processor.Equals("NONE", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    rumours.Add(
-                                        new BaseRumour(
-                                            null,
-                                            tags,
-                                            viralPotential,
-                                            conditions.ToArray(),
-                                            parameters,
-                                            text,
-                                            lifetimeMultiplier,
-                                            lifetime,
-                                            baseless));
-                                }
-                                else
-                                {
-                                    IRumour processorObject = (IRumour) ScriptingEngine.Instance.FetchAndInitialise(processor);
-                                    if (processorObject is null)
-                                    {
-                                        rumours.Add(
-                                            new BaseRumour(
-                                                null,
-                                                tags,
-                                                viralPotential,
-                                                conditions.ToArray(),
-                                                parameters,
-                                                text,
-                                                lifetimeMultiplier,
-                                                lifetime,
-                                                baseless));
-                                    }
-                                    else
-                                    {
-                                        rumours.Add(
-                                            processorObject.Create(
-                                                null,
-                                                tags,
-                                                viralPotential,
-                                                conditions.ToArray(),
-                                                parameters,
-                                                text,
-                                                lifetimeMultiplier,
-                                                lifetime,
-                                                baseless));
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Could not load rumours from file " + file,
-                                LogLevel.Error);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
+                        IRumour processorObject = (IRumour) processorBase;
+                        rumours.Add(
+                            processorObject.Create(
+                                null,
+                                tags,
+                                viralPotential,
+                                conditions.ToArray(),
+                                parameters,
+                                text,
+                                lifetimeMultiplier,
+                                lifetime,
+                                baseless));
+                    }
+                    else
+                    {
+                        rumours.Add(
+                            new BaseRumour(
+                                null,
+                                tags,
+                                viralPotential,
+                                conditions.ToArray(),
+                                parameters,
+                                text,
+                                lifetimeMultiplier,
+                                lifetime,
+                                baseless));
                     }
                 }
-                */
             }
 
             return rumours;
@@ -152,7 +151,7 @@ namespace JoyLib.Code.Conversation.Conversations
             {
                 IJoyObject left = overworldRef.GetRandomSentientWorldWide();
                 IJoyObject right = left.MyWorld.GetRandomSentient();
-                this.Rumours.Add(this.GenerateRandomRumour(new []{left, right}));
+                this.Rumours.Add(this.GenerateRandomRumour(new[] {left, right}));
             }
 
             return this.Rumours[this.Roller.Roll(0, this.Rumours.Count)];
@@ -164,7 +163,7 @@ namespace JoyLib.Code.Conversation.Conversations
             {
                 this.Initialise();
             }
-            
+
             IRumour rumour = null;
             IRumour[] possibilities = this.RumourTypes.Where(r => r.FulfilsConditions(participants)).ToArray();
 
@@ -205,13 +204,13 @@ namespace JoyLib.Code.Conversation.Conversations
             {
                 this.Initialise();
             }
-            
+
             IRumour rumour = null;
 
             IRumour[] possibilities = this.RumourTypes.Where(r =>
-                r.Tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Any() && r.FulfilsConditions(participants))
+                    r.Tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Any() && r.FulfilsConditions(participants))
                 .ToArray();
-            
+
             if (possibilities.Length > 0)
             {
                 IRumour resultingRumour = possibilities[this.Roller.Roll(0, possibilities.Length)];
@@ -268,7 +267,8 @@ namespace JoyLib.Code.Conversation.Conversations
         {
             try
             {
-                string[] split = conditionString.Split(new char[] {'<', '>', '=', '!'}, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = conditionString.Split(new char[] {'<', '>', '=', '!'},
+                    StringSplitOptions.RemoveEmptyEntries);
 
                 string criteria = split[0].Trim();
                 string operand = conditionString.First(c => c.Equals('!')
@@ -276,14 +276,16 @@ namespace JoyLib.Code.Conversation.Conversations
                                                             || c.Equals('<')
                                                             || c.Equals('>')).ToString();
                 string stringValue = split[1].Trim();
-            
+
                 TopicConditionFactory factory = new TopicConditionFactory();
 
                 int value = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=")
                     ? 1
                     : int.Parse(stringValue);
 
-                criteria = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=") ? stringValue : criteria;
+                criteria = criteria.Equals("relationship", StringComparison.OrdinalIgnoreCase) && operand.Equals("=")
+                    ? stringValue
+                    : criteria;
 
                 return factory.Create(criteria, operand, value);
             }

@@ -111,7 +111,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception ex)
             {
                 GlobalConstants.ActionLog.StackTrace(ex);
-                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, type name " + type);
+                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + type, LogLevel.Error);
+                return default;
             }
         }
 
@@ -124,7 +125,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.StackTrace(e);
-                throw new InvalidOperationException("Error when searching for Type " + typeof(T).Name);
+                GlobalConstants.ActionLog.Log("Error when activating type " + nameof(T), LogLevel.Error);
+                return default;
             }
         }
 
@@ -144,8 +146,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.StackTrace(e);
-                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " +
-                                                    typeof(T).Name);
+                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + nameof(T), LogLevel.Error);
+                return default;
             }
         }
 
@@ -172,7 +174,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception ex)
             {
                 GlobalConstants.ActionLog.StackTrace(ex);
-                throw new InvalidOperationException("Error when searching for Type in ScriptingEngine, " + typeName);
+                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + typeName, LogLevel.Error);
+                return default;
             }
         }
 
@@ -187,8 +190,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.StackTrace(e);
-                throw new InvalidOperationException(
-                    "Error when searching for Type in ScriptingEngine, " + type.FullName);
+                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + nameof(type), LogLevel.Error);
+                return default;
             }
         }
 
@@ -204,7 +207,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.StackTrace(e);
-                throw new InvalidOperationException("Error when finding action, no such action " + actionName);
+                GlobalConstants.ActionLog.Log("Error when finding action, no such action " + actionName, LogLevel.Error);
+                return default;
             }
         }
 
