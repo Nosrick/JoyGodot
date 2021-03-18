@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Castle.Core.Internal;
+using Godot;
 using Godot.Collections;
 using Array = Godot.Collections.Array;
 
@@ -64,6 +65,13 @@ namespace JoyLib.Code.Helpers
             }
             
             return dict;
+        }
+
+        public void PrintFileParsingError(JSONParseResult result, string file)
+        {
+            GlobalConstants.ActionLog.Log("Could not parse JSON in " + file, LogLevel.Warning);
+            GlobalConstants.ActionLog.Log(result.ErrorString, LogLevel.Warning);
+            GlobalConstants.ActionLog.Log("On line: " + result.ErrorLine, LogLevel.Warning);
         }
     }
 }

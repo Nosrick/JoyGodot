@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
+using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
     public class VisionProviderHandler : IVisionProviderHandler
     {
-        protected Dictionary<string, IVision> VisionTypes { get; set; }
+        protected System.Collections.Generic.Dictionary<string, IVision> VisionTypes { get; set; }
         
         public JSONValueExtractor ValueExtractor { get; protected set; }
 
@@ -28,68 +31,72 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
             List<IVision> visionTypes = new List<IVision>();
 
             string[] files = Directory.GetFiles(
-                Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Vision Types",
+                Directory.GetCurrentDirectory() +
+                GlobalConstants.ASSETS_FOLDER + 
+                GlobalConstants.DATA_FOLDER + 
+                "Vision Types",
                 "*.json",
                 SearchOption.AllDirectories);
 
-            /*
             foreach (string file in files)
             {
-                using (StreamReader reader = new StreamReader(file))
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+                
+                if (result.Error != Error.Ok)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                    {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                    continue;
+                }
 
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
+                if (!(result.Result is Dictionary visionDict))
+                {
+                    GlobalConstants.ActionLog.Log("Could not parse JSON to Dictionary from " + file, LogLevel.Warning);
+                    continue;
+                }
 
-                            foreach (JToken child in jToken["VisionTypes"])
-                            {
-                                string name = (string) child["Name"];
-                                Color lightColour = child["LightColour"] is null
-                                    ? Color.white
-                                    : GraphicsHelper.ParseHTMLString((string) child["LightColour"]);
+                ICollection<Dictionary> visions = this.ValueExtractor.GetCollectionFromArray<Dictionary>(
+                    this.ValueExtractor.GetValueFromDictionary<Array>(
+                        visionDict, 
+                        "VisionTypes"));
 
-                                Color darkColour = child["DarkColour"] is null
-                                    ? Color.black
-                                    : GraphicsHelper.ParseHTMLString((string) child["DarkColour"]);
+                foreach (Dictionary innerDict in visions)
+                {
+                    string name = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Name");
+                    Color lightColour =
+                        new Color(this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "LightColour"));
+                    Color darkColour =
+                        new Color(this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "DarkColour"));
+                    int minimumLight = innerDict.Contains("MinimumLight")
+                    ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MinimumLight")
+                    : 0;
+                    int minimumComfort = innerDict.Contains("MinimumComfort") 
+                    ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MinimumLight")
+                    : minimumLight;
+                    int maximumLight = innerDict.Contains("MaximumLight") 
+                    ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MaximumLight")
+                    : GlobalConstants.MAX_LIGHT;
+                    int maximumComfort = innerDict.Contains("MaximumComfort")
+                    ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MaximumComfort")
+                    : maximumLight;
 
-                                string fovHandler = (string) child["Handler"] ?? "FOVShadowCasting";
-                                IFOVHandler handler =
-                                    (IFOVHandler) ScriptingEngine.Instance.FetchAndInitialise(fovHandler);
+                    string visionProvider = innerDict.Contains("Algorithm")
+                        ? this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Algorithm")
+                        : nameof(FOVShadowCasting);
 
-                                int minimumLight = (int) (child["MinimumLight"] ?? 0);
-                                int maximumLight = (int) (child["MaximumLight"] ?? GlobalConstants.MAX_LIGHT);
-
-                                int minimumComfort = (int) (child["MinimumComfort"] ?? minimumLight);
-                                int maximumComfort = (int) (child["MaximumComfort"] ?? maximumLight);
-
-                                visionTypes.Add(
-                                    new BaseVisionProvider(
-                                        darkColour,
-                                        lightColour,
-                                        handler,
-                                        minimumLight,
-                                        minimumComfort,
-                                        maximumLight,
-                                        maximumComfort,
-                                        name));
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Could not parse vision type in file ", LogLevel.Error);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                    }
+                    IFOVHandler handler = (IFOVHandler) ScriptingEngine.Instance.FetchAndInitialise(visionProvider);
+                    
+                    visionTypes.Add(
+                        new BaseVisionProvider(
+                            darkColour,
+                            lightColour,
+                            handler,
+                            minimumLight,
+                            minimumComfort,
+                            maximumLight,
+                            maximumComfort,
+                            name));
                 }
             }
-*/
 
             return visionTypes;
         }

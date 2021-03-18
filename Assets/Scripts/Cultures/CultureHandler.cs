@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -71,9 +72,7 @@ namespace JoyLib.Code.Cultures
                                 GlobalConstants.ASSETS_FOLDER + 
                                 GlobalConstants.DATA_FOLDER + 
                                 "Cultures";
-            string[] files = Directory.GetFiles(folderPath, "*.json");
-
-            //IObjectIconHandler objectIcons = GlobalConstants.GameManager.ObjectIconHandler;
+            string[] files = Directory.GetFiles(folderPath, "*.json", SearchOption.AllDirectories);
 
             List<ICulture> cultures = new List<ICulture>();
 
@@ -83,9 +82,7 @@ namespace JoyLib.Code.Cultures
 
                 if (result.Error != Error.Ok)
                 {
-                    GlobalConstants.ActionLog.Log("Could not parse JSON in " + file, LogLevel.Warning);
-                    GlobalConstants.ActionLog.Log(result.ErrorString, LogLevel.Warning);
-                    GlobalConstants.ActionLog.Log("On line: " + result.ErrorLine, LogLevel.Warning);
+                    this.ValueExtractor.PrintFileParsingError(result, file);
                     continue;
                 }
 
@@ -104,11 +101,9 @@ namespace JoyLib.Code.Cultures
                     int nonconformingGenderChance =
                         this.ValueExtractor.GetValueFromDictionary<int>(culture, "NonConformingGenderChance");
 
-                    float number = 0;
                     ICollection<string> rulers =
                         this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Rulers");
 
-                    Array entry = new Array();
                     ICollection<string> crimes =
                         this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Crimes");
 
@@ -119,7 +114,7 @@ namespace JoyLib.Code.Cultures
                         this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(culture, "Relationships");
 
                     List<NameData> nameDatas = new List<NameData>();
-                    entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Names");
+                    Array entry = this.ValueExtractor.GetValueFromDictionary<Array>(culture, "Names");
                     ICollection<Dictionary> nameData = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry);
                     foreach (var data in nameData)
                     {

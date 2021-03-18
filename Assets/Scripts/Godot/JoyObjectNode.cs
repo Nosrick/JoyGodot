@@ -1,5 +1,4 @@
 ﻿using Castle.Core.Internal;
-using Godot;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 
@@ -9,7 +8,7 @@ namespace JoyLib.Code.Godot
     {
         protected IJoyObject JoyObject { get; set; }
 
-        protected GUIManager GuiManager { get; set; }
+        protected IGUIManager GuiManager { get; set; }
 
         public JoyObjectNode()
         {
@@ -20,7 +19,7 @@ namespace JoyLib.Code.Godot
             : this()
         {
             this.AttachJoyObject(joyObject);
-            //this.GuiManager = GlobalConstants
+            this.GuiManager = GlobalConstants.GameManager.GUIManager;
         }
 
         public void AttachJoyObject(IJoyObject joyObject)

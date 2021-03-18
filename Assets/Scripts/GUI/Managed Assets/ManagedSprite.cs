@@ -11,7 +11,7 @@ using Array = Godot.Collections.Array;
 namespace JoyLib.Code.Unity
 {
     public class ManagedSprite :
-        AnimatedSprite,
+        Node2D,
         IManagedElement
     {
         [Export] public string ElementName { get; protected set; }
