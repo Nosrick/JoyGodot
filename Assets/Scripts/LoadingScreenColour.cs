@@ -3,21 +3,8 @@ using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code;
 using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Godot;
 using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Managers;
-using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 
 public class LoadingScreenColour : Node
@@ -31,21 +18,34 @@ public class LoadingScreenColour : Node
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        this.CallDeferred("DeferredReady");
+    }
+
+    protected void DeferredReady()
+    {
         this.Roller = new RNG();
         this.Background = (ManagedUIElement) this.FindNode("Background");
         this.Node = (JoyObjectNode) this.FindNode("JoyObject");
 
         ICulture chosenCulture = this.Roller.SelectFromCollection(GlobalConstants.GameManager.CultureHandler.Cultures);
 
+        /*
         this.Background.AddSpriteState(new SpriteState(
             "Background",
             GlobalConstants.GameManager.ObjectIconHandler.GetSprites("Windows", this.Background.ElementName).First()));
         this.Background.OverrideAllColours(chosenCulture.BackgroundColours[this.Background.ElementName]);
+        */
         
         this.Node.AttachJoyObject(
             GlobalConstants.GameManager.EntityFactory.CreateFromTemplate(
                 GlobalConstants.GameManager.EntityTemplateHandler.GetRandom(), 
                 Vector2Int.Zero));
+        
+        GlobalConstants.ActionLog.Log("JoyObject children:");
+        GlobalConstants.ActionLog.Log(this.Node.GetChildren());
+        
+        GlobalConstants.ActionLog.Log("Background children:");
+        GlobalConstants.ActionLog.Log(this.Background.GetChildren());
     }
     
     public override void _Input(InputEvent inputEvent)

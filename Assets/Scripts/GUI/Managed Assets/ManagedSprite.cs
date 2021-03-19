@@ -18,7 +18,6 @@ namespace JoyLib.Code.Unity
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
-        protected bool ForwardAnimation { get; set; }
 
         public ISpriteState CurrentSpriteState
         {
@@ -71,15 +70,12 @@ namespace JoyLib.Code.Unity
         
         protected string LastState { get; set; }
         protected string LastSprite { get; set; }
-        public float TimeSinceLastChange { get; protected set; }
         
         public IEnumerable<ISpriteState> States => this.m_States.Values;
 
         protected IDictionary<string, ISpriteState> m_States;
         
         protected List<Node2D> Parts { get; set; }
-
-        protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
 
         public virtual void Awake()
         {
@@ -186,79 +182,6 @@ namespace JoyLib.Code.Unity
             }
         }
 
-        public override void _Process(float delta)
-        {
-            if (this.CurrentSpriteState is null)
-            {
-                return;
-            }
-            
-            if (!this.CurrentSpriteState.IsAnimated || this.Finished)
-            {
-                return;
-            }
-            
-            this.TimeSinceLastChange += delta;
-            if (!(this.TimeSinceLastChange >= TIME_BETWEEN_FRAMES))
-            {
-                return;
-            }
-
-            int lastIndex = this.FrameIndex;
-            this.TimeSinceLastChange = 0f;
-            
-            switch (this.CurrentSpriteState.AnimationType)
-            {
-                case AnimationType.Forward:
-                    this.FrameIndex += 1;
-                    if (this.FrameIndex == this.FramesInCurrentState)
-                    {
-                        this.FrameIndex = 0;
-                        if (this.CurrentSpriteState.Looping == false)
-                        {
-                            this.Finished = true;
-                        }
-                    }
-                    break;
-                
-                case AnimationType.Reverse:
-                    this.FrameIndex -= 1;
-                    if (this.FrameIndex < 0)
-                    {
-                        this.FrameIndex = this.FramesInCurrentState - 1;
-                        if (this.CurrentSpriteState.Looping == false)
-                        {
-                            this.Finished = true;
-                        }
-                    }
-                    break;
-                
-                case AnimationType.PingPong:
-                    if (this.FrameIndex == 0)
-                    {
-                        this.ForwardAnimation = true;
-                    }
-                    else if (this.FrameIndex == this.FramesInCurrentState - 1)
-                    {
-                        this.ForwardAnimation = false;
-                    }
-
-                    if (this.ForwardAnimation)
-                    {
-                        this.FrameIndex += 1;
-                    }
-                    else
-                    {
-                        this.FrameIndex -= 1;
-                    }
-                    break;
-            }
-            if (lastIndex != this.FrameIndex)
-            {
-                this.UpdateSprites();
-            }
-        }
-
         public virtual void OverrideAllColours(
             IDictionary<string, 
                 Color> colours, 
@@ -339,16 +262,19 @@ namespace JoyLib.Code.Unity
                         Centered = true
                     };
                     this.Parts.Add(newSprite);
+                    this.AddChild(newSprite);
                 }
             }
 
             for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
             {
                 AnimatedSprite animatedSprite = (AnimatedSprite) this.Parts[i];
-                animatedSprite.Name = this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name;
+                SpritePart spriteDataPart = this.CurrentSpriteState.SpriteData.m_Parts[i];
+                animatedSprite.Name = spriteDataPart.m_Name;
                 animatedSprite.Visible = true;
-                animatedSprite.Frames = this.CurrentSpriteState.SpriteData.m_Parts[i].m_FrameSprite;
-                animatedSprite.ZIndex = this.CurrentSpriteState.SpriteData.m_Parts[i].m_SortingOrder;
+                animatedSprite.Frames = spriteDataPart.m_FrameSprite;
+                animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
+                animatedSprite.Play(this.CurrentSpriteState.SpriteData.m_State);
             }
         }
 

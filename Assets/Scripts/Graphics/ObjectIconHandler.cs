@@ -194,10 +194,18 @@ namespace JoyLib.Code.Graphics
                             frames.Add(imageTexture);
                         }
 
+                        int halfway = frames.Count / 2;
+                        for (int i = halfway; i >= halfway; i--)
+                        {
+                            frames.Add(frames[i]);
+                        }
+
                         SpriteFrames spriteFrames = new SpriteFrames();
                         if (spriteFrames.GetAnimationNames().Contains(state) == false)
                         {
                             spriteFrames.AddAnimation(state);
+                            spriteFrames.SetAnimationLoop(state, true);
+                            spriteFrames.SetAnimationSpeed(state, GlobalConstants.FRAMES_PER_SECOND);
                         }
 
                         for (int i = 0; i < frames.Count; i++)

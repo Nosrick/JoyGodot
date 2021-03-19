@@ -26,3 +26,16 @@ ElementName = "DefaultWindow"
 [node name="Sprites" type="Node2D" parent="Loading Screen"]
 
 [node name="JoyObject" parent="Loading Screen/Sprites" instance=ExtResource( 4 )]
+position = Vector2( 400, 200 )
+
+[node name="WorldHolder" type="Node2D" parent="."]
+
+[node name="WorldFloors" type="Node2D" parent="WorldHolder"]
+
+[node name="WorldWalls" type="Node2D" parent="WorldHolder"]
+
+[node name="WorldObjects" type="Node2D" parent="WorldHolder"]
+
+[node name="WorldEntities" type="Node2D" parent="WorldHolder"]
+
+[node name="WorldFog" type="Node2D" parent="WorldHolder"]

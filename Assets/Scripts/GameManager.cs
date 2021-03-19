@@ -50,19 +50,20 @@ namespace JoyLib.Code
             }
 
             this.LoadingMessage = "Just waking up";
-            this.Initialise();
         }
 
-        public void Initialise()
+        public override void _Ready()
         {
+            base._Ready();
             this.BegunInitialisation = true;
 
             this.LoadingMessage = "Initialising object pools";
-            Node2D objectHolder = (Node2D) this.FindNode("WorldObjects");
-            Node2D entityHolder = (Node2D) this.FindNode("WorldEntities");
-            Node2D fogHolder = (Node2D) this.FindNode("WorldFog");
-            Node2D wallHolder = (Node2D) this.FindNode("WorldWalls");
-            Node2D floorHolder = (Node2D) this.FindNode("WorldFloors");
+            Node2D worldHolder = this.GetNode<Node2D>("WorldHolder");
+            Node2D floorHolder = (Node2D) worldHolder.FindNode("WorldFloors");
+            Node2D wallHolder = (Node2D) worldHolder.FindNode("WorldWalls");
+            Node2D objectHolder = (Node2D) worldHolder.FindNode("WorldObjects");
+            Node2D entityHolder = (Node2D) worldHolder.FindNode("WorldEntities");
+            Node2D fogHolder = (Node2D) worldHolder.FindNode("WorldFog");
 
             JoyObjectNode prefab = (JoyObjectNode) GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn").Instance();
             ManagedSprite positionableSprite = (ManagedSprite) GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn").Instance();
