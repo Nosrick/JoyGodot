@@ -49,7 +49,7 @@ namespace JoyLib.Code.Entities
             {
                 return false;
             }
-            this.m_Entities[key].Dispose();
+            //this.m_Entities[key].Dispose();
             this.m_Entities[key] = null;
             this.m_Entities.Remove(key);
             return true;

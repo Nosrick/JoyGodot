@@ -394,20 +394,9 @@ namespace JoyLib.Code
                 .ToArray();
         }
 
-        public virtual void Dispose()
-        {
-            GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.Guid);
-            GC.SuppressFinalize(this);
-        }
-
         public void SetStates(IEnumerable<ISpriteState> states)
         {
             this.m_States = states.ToList();
-        }
-
-        ~JoyObject()
-        {
-            this.Dispose();
         }
     }    
 }

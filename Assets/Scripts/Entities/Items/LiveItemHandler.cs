@@ -94,7 +94,7 @@ namespace JoyLib.Code.Entities.Items
                     entity.CurrentTarget.target = null;
                 }
                 
-                this.LiveItems[key].Dispose();
+                //this.LiveItems[key].Dispose();
                 this.LiveItems[key] = null;
                 this.LiveItems.Remove(key);
                 item = null;
@@ -206,7 +206,7 @@ namespace JoyLib.Code.Entities.Items
             Guid[] keys = this.LiveItems.Keys.ToArray();
             foreach (Guid key in keys)
             {
-                this.LiveItems[key].Dispose();
+                //this.LiveItems[key].Dispose();
                 this.LiveItems[key] = null;
             }
 

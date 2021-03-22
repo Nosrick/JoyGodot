@@ -176,7 +176,7 @@ namespace JoyLib.Code.Unity
             this.Initialise();
 
             this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
-            foreach (AnimatedSprite part in this.Parts)
+            foreach (Node2D part in this.Parts)
             {
                 part.Visible = false;
             }

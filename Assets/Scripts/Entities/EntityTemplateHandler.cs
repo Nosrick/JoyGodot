@@ -199,8 +199,7 @@ namespace JoyLib.Code.Entities
 
         public IEntityTemplate GetRandom()
         {
-            //int result = GlobalConstants.GameManager.Roller.Roll(0, this.m_Templates.Count);
-            return this.m_Templates[0];
+            return GlobalConstants.GameManager.Roller.SelectFromCollection(this.m_Templates);
         }
 
         public void Dispose()

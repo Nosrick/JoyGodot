@@ -462,32 +462,6 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public override void Dispose()
-        {
-            /*
-            if (this.MonoBehaviourHandler)
-            {
-                GlobalConstants.GameManager.ItemPool.Retire(this.MonoBehaviourHandler.gameObject);
-                this.MonoBehaviourHandler.Dispose();
-            }
-            
-            base.Dispose();
-            if (this.Contents is null)
-            {
-                return;
-            }
-            foreach (IItemInstance content in this.Contents)
-            {
-                content.Dispose();
-            }
-            */
-        }
-
-        ~ItemInstance()
-        {
-            this.Dispose();
-        }
-
         public bool Identified
         {
             get => this.m_Identified;

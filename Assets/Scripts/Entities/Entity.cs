@@ -1336,37 +1336,5 @@ namespace JoyLib.Code.Entities
         }
 
         protected List<string> m_CultureNames;
-
-        public override void Dispose()
-        {
-            foreach (IItemInstance item in this.Contents)
-            {
-                item.Dispose();
-            }
-
-            foreach (IItemInstance equipment in this.Equipment.Contents)
-            {
-                equipment.Dispose();
-            }
-
-            this.m_NaturalWeapons.Dispose();
-            /*
-            if (this.MonoBehaviourHandler)
-            {
-                GlobalConstants.GameManager.EntityPool.Retire(this.MonoBehaviourHandler.gameObject);
-                this.MonoBehaviourHandler.Dispose();
-            }
-            */
-
-            for (int i = 0; i < this.States.Count; i++)
-            {
-                this.States[i].Dispose();
-                this.States[i] = null;
-            }
-
-            this.States = null;
-
-            base.Dispose();
-        }
     }
 }

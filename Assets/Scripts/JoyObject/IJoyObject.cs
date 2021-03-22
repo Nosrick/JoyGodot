@@ -14,7 +14,6 @@ namespace JoyLib.Code
         IPosition, 
         IDerivedValueContainer, 
         IDataContainer, 
-        IDisposable, 
         IGuidHolder,
         ITickable
     {

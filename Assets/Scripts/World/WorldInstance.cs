@@ -751,13 +751,13 @@ namespace JoyLib.Code.World
         {
             foreach (IEntity entity in this.m_Entities)
             {
-                entity.Dispose();
+                //entity.Dispose();
             }
             this.m_Entities = null;
 
             foreach (IJoyObject joyObject in this.m_Objects)
             {
-                joyObject.Dispose();
+                //joyObject.Dispose();
             }
             this.m_Objects = null;
 
