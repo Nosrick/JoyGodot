@@ -1,7 +1,9 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code;
+using JoyLib.Code.Graphics;
 
 namespace Code.Unity.GUI.Managed_Assets
 {
@@ -9,33 +11,33 @@ namespace Code.Unity.GUI.Managed_Assets
         Button,
         IManagedElement
     {
-        public string ElementName { get; protected set; }
+        [Export] public string ElementName { get; protected set; }
         public bool Initialised { get; protected set; }
-
-        protected bool m_Interactable = true;
-
-        protected bool m_Toggleable = false;
+        
+        protected ManagedUIElement Element { get; set; }
+        
+        protected bool HasFocus { get; set; }
 
         protected SelectionState CurrentSelectionState
         {
             get
             {
-                if (!this.IsInteractable())
+                if (this.Disabled)
                 {
                     return SelectionState.Disabled;
                 }
 
-                if (this.IsPointerDown || this.Toggled)
+                if (this.Pressed || (this.ToggleMode && this.Pressed))
                 {
                     return SelectionState.Pressed;
                 }
 
-                if (this.HasSelection)
+                if (this.HasFocus)
                 {
                     return SelectionState.Selected;
                 }
 
-                if (this.IsPointerInside)
+                if (this.HasFocus)
                 {
                     return SelectionState.Highlighted;
                 }
@@ -43,13 +45,15 @@ namespace Code.Unity.GUI.Managed_Assets
             }
         }
 
-        protected bool IsPointerInside { get; set; }
-        protected bool IsPointerDown { get; set; }
-        protected bool HasSelection { get; set; }
-        
-        public bool Toggled { get; set; }
-        
-        protected bool m_GroupsAllowInteraction = true;
+        public void AddSpriteState(ISpriteState state)
+        {
+            this.Element.AddSpriteState(state);
+        }
+
+        public void OverwriteColours(IDictionary<string, Color> colours)
+        {
+            this.Element.OverrideAllColours(colours);
+        }
 
         protected void DoStateTransition(SelectionState state, bool crossFade)
         {
@@ -148,14 +152,9 @@ namespace Code.Unity.GUI.Managed_Assets
                     */
         }
         
-        public virtual bool IsInteractable()
-        {
-            return m_GroupsAllowInteraction && m_Interactable;
-        }
-        
         protected virtual void EvaluateAndTransitionToSelectionState()
         {
-            if (!this.Visible || !this.IsInteractable())
+            if (!this.Visible || this.Disabled)
             {
                 return;
             }
@@ -163,94 +162,73 @@ namespace Code.Unity.GUI.Managed_Assets
             this.DoStateTransition(this.CurrentSelectionState, true);
         }
 
-        /*
-        public virtual void OnPointerDown(PointerEventData eventData)
+        public virtual void OnPointerDown()
         {
-            if (eventData.button != PointerEventData.InputButton.Left)
-            {
-                return;
-            }
-
             // Selection tracking
-            if (this.IsInteractable() && EventSystem.current != null)
+            if (this.Disabled == false)
             {
-                EventSystem.current.SetSelectedGameObject(this.gameObject, eventData);
             }
 
-            if (this.m_Toggleable)
-            {
-                this.Toggled = !this.Toggled;
-            }
-
-            this.IsPointerDown = true;
-            this.EvaluateAndTransitionToSelectionState();
-        }
-
-        public virtual void OnPointerUp(PointerEventData eventData)
-        {
-            if (eventData.button != PointerEventData.InputButton.Left)
-            {
-                return;
-            }
+            GD.Print("PRESS");
             
-            this.IsPointerDown = false;
-            this.EvaluateAndTransitionToSelectionState();
-        }
-
-        public virtual void OnPointerEnter(PointerEventData eventData)
-        {
-            this.IsPointerInside = true;
-            this.EvaluateAndTransitionToSelectionState();
-        }
-
-        public virtual void OnPointerExit(PointerEventData eventData)
-        {
-            this.IsPointerInside = false;
-            this.HasSelection = false;
-            this.EvaluateAndTransitionToSelectionState();
-        }
-
-        public virtual void OnSelect(BaseEventData eventData)
-        {
-            this.HasSelection = true;
-            this.EvaluateAndTransitionToSelectionState();
-        }
-
-        public virtual void OnDeselect(BaseEventData eventData)
-        {
-            this.HasSelection = false;
-            this.EvaluateAndTransitionToSelectionState();
-        }
-
-        public virtual void OnPointerClick(PointerEventData eventData)
-        {
-            if (eventData.button != PointerEventData.InputButton.Left)
+            if (this.ToggleMode)
             {
-                return;
+                this.Pressed = !this.Pressed;
             }
 
+            this.EvaluateAndTransitionToSelectionState();
+        }
+
+        public virtual void OnPointerUp()
+        {
+            this.EvaluateAndTransitionToSelectionState();
+        }
+
+        public virtual void OnPointerEnter()
+        {
+            GD.Print("ENTER");
+            this.EvaluateAndTransitionToSelectionState();
+        }
+
+        public virtual void OnPointerExit()
+        {
+            GD.Print("EXIT");
+            this.EvaluateAndTransitionToSelectionState();
+        }
+
+        public virtual void OnSelect()
+        {
+            this.EvaluateAndTransitionToSelectionState();
+        }
+
+        public virtual void OnDeselect()
+        {
+            this.EvaluateAndTransitionToSelectionState();
+        }
+
+        public virtual void OnPointerClick()
+        {
             this.Press();
         }
 
-        public virtual void OnSubmit(BaseEventData eventData)
+        public virtual void OnSubmit()
         {
             this.Press();
 
             // if we get set disabled during the press
             // don't run the coroutine.
-            if (!this.enabled || !this.IsInteractable())
+            if (!this.Visible || this.Disabled)
             {
                 return;
             }
 
             this.DoStateTransition(SelectionState.Pressed, true);
-            this.StartCoroutine(this.OnFinishSubmit());
+            //this.StartCoroutine(this.OnFinishSubmit());
         }
-        */
         
         protected virtual void Press()
         {
-            if (!this.Visible || !this.IsInteractable())
+            if (!this.Visible || this.Disabled)
             {
                 return;
             }

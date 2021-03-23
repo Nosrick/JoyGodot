@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using Code.Collections;
 using Godot;
 using Joy.Code.Managers;
@@ -32,6 +31,7 @@ using JoyLib.Code.States;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
+using Thread = System.Threading.Thread;
 
 namespace JoyLib.Code
 {
@@ -40,6 +40,8 @@ namespace JoyLib.Code
         protected StateManager m_StateManager;
 
         protected IGameState NextState { get; set; }
+        
+        protected Thread LoadingThread { get; set; }
 
         // Use this for initialization
         public GameManager()
@@ -76,7 +78,8 @@ namespace JoyLib.Code
 
             this.MyNode = this;
 
-            this.Load();
+            this.LoadingThread = new Thread(this.Load);
+            this.LoadingThread.Start();
         }
 
         // Update is called once per frame
@@ -181,6 +184,8 @@ namespace JoyLib.Code
 
             this.Initialised = true;
             this.LoadingMessage = "Done!";
+            
+            this.LoadingThread.Abort();
         }
 
         public void SetNextState(IGameState nextState = null)
