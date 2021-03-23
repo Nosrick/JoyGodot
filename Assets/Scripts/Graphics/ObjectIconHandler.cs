@@ -266,7 +266,7 @@ namespace JoyLib.Code.Graphics
             List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
                 .SelectMany(x => x.Value.Where(pair => pair.Item1.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
                 .Where(pair => pair.Item2.m_State.Equals(state, StringComparison.OrdinalIgnoreCase))
-                .Select(x => x.Item2.Copy())
+                .Select(x => x.Item2)
                 .ToList();
 
             return data.Any() == false ? this.ReturnDefaultData() : data;
@@ -283,12 +283,13 @@ namespace JoyLib.Code.Graphics
     }
 
     [Serializable]
-    public class SpriteData : IDisposable
+    public class SpriteData
     {
         public string m_Name;
         public string m_State;
         public List<SpritePart> m_Parts;
 
+        /*
         public void Dispose()
         {
             if (this.m_Parts is null == false)
@@ -309,10 +310,11 @@ namespace JoyLib.Code.Graphics
         {
             this.Dispose();
         }
+        */
     }
 
     [Serializable]
-    public class SpritePart : IDisposable
+    public class SpritePart
     {
         public string m_Name;
         public int m_Frames;
@@ -329,6 +331,7 @@ namespace JoyLib.Code.Graphics
 
         public Color SelectedColour => this.m_PossibleColours[this.m_SelectedColour];
 
+        /*
         public void Dispose()
         {
             this.m_FrameSprite = null;
@@ -338,5 +341,6 @@ namespace JoyLib.Code.Graphics
         {
             this.Dispose();
         }
+        */
     }
 }

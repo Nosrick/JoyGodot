@@ -121,6 +121,7 @@ namespace JoyLib.Code.Graphics
             }
         }
 
+        /*
         public void Dispose()
         {
             this.m_SpriteData?.Dispose();
@@ -131,5 +132,6 @@ namespace JoyLib.Code.Graphics
         {
             this.Dispose();
         }
+        */
     }
 }

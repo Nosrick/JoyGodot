@@ -4,7 +4,7 @@ using Godot;
 
 namespace JoyLib.Code.Graphics
 {
-    public interface ISpriteState : IDisposable
+    public interface ISpriteState
     {
         string Name { get; }
 
