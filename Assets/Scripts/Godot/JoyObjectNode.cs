@@ -33,7 +33,13 @@ namespace JoyLib.Code.Godot
             this.JoyObject = joyObject;
             this.SpeechBubble = this.GetNodeOrNull<ManagedSprite>("Speech Bubble");
             this.Clear();
-            this.AddSpriteState(this.JoyObject.States.FirstOrDefault());
+            ISpriteState state = this.JoyObject.States.FirstOrDefault();
+            if (state is null)
+            {
+                return;
+            }
+            this.AddSpriteState(state);
+            this.OverrideAllColours(state.SpriteData.GetRandomPartColours());
         }
 
         public void SetSpeechBubble(bool on, ISpriteState need = null)

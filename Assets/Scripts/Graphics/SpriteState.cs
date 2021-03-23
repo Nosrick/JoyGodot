@@ -100,12 +100,7 @@ namespace JoyLib.Code.Graphics
         
         public void RandomiseColours()
         {
-            for(int i = 0; i < this.SpriteData.m_Parts.Count; i++)
-            {
-                SpritePart part = this.SpriteData.m_Parts[i];
-                //part.m_SelectedColour = GlobalConstants.GameManager.Roller.Roll(0, part.m_PossibleColours.Count);
-                this.SpriteData.m_Parts[i] = part;
-            }
+            this.OverrideColours(this.SpriteData.GetRandomPartColours());
         }
 
         public void SetColourIndices(List<int> indices)

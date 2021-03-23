@@ -275,6 +275,7 @@ namespace JoyLib.Code.Unity
                 animatedSprite.Frames = spriteDataPart.m_FrameSprite;
                 animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
                 animatedSprite.Play(this.CurrentSpriteState.SpriteData.m_State);
+                animatedSprite.Frame = 0;
             }
         }
 

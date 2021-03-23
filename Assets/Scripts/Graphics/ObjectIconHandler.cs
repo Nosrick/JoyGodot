@@ -289,6 +289,20 @@ namespace JoyLib.Code.Graphics
         public string m_State;
         public List<SpritePart> m_Parts;
 
+        public IDictionary<string, Color> GetRandomPartColours()
+        {
+            IDictionary<string, Color> colours = new System.Collections.Generic.Dictionary<string, Color>();
+
+            foreach (SpritePart part in this.m_Parts)
+            {
+                colours.Add(
+                    part.m_Name,
+                    GlobalConstants.GameManager.Roller.SelectFromCollection(part.m_PossibleColours));
+            }
+
+            return colours;
+        }
+
         /*
         public void Dispose()
         {
