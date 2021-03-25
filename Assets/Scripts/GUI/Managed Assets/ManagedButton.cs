@@ -53,6 +53,8 @@ namespace Code.Unity.GUI.Managed_Assets
                 AnchorRight = 1,
                 Name = "Background"
             };
+
+            this.Element.MouseFilter = MouseFilterEnum.Ignore;
             this.AddChild(this.Element);
             this.MoveChild(this.Element, 0);
         }

@@ -40,7 +40,7 @@ __meta__ = {
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 341.0
-margin_bottom = 87.0
+margin_bottom = 112.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 ElementName = "SlotSprite"
@@ -52,9 +52,9 @@ text = "New Game"
 [node name="Load Game Button" parent="Button Container" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 91.0
+margin_top = 116.0
 margin_right = 341.0
-margin_bottom = 178.0
+margin_bottom = 229.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 ElementName = "SlotSprite"
@@ -66,9 +66,9 @@ text = "Load Game"
 [node name="Settings" parent="Button Container" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 182.0
+margin_top = 233.0
 margin_right = 341.0
-margin_bottom = 269.0
+margin_bottom = 346.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 ElementName = "SlotSprite"
@@ -80,9 +80,9 @@ text = "Settings"
 [node name="Quit to Desktop" parent="Button Container" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 273.0
+margin_top = 350.0
 margin_right = 341.0
-margin_bottom = 360.0
+margin_bottom = 463.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 ElementName = "SlotSprite"
@@ -91,6 +91,9 @@ ElementName = "SlotSprite"
 custom_fonts/font = SubResource( 1 )
 text = "Quit to Desktop"
 [connection signal="pressed" from="Button Container/New Game Button" to="Button Container/New Game Button" method="OnPointerDown"]
+[connection signal="pressed" from="Button Container/Load Game Button" to="Button Container/Load Game Button" method="OnPointerDown"]
+[connection signal="pressed" from="Button Container/Settings" to="Button Container/Settings" method="OnPointerDown"]
+[connection signal="pressed" from="Button Container/Quit to Desktop" to="Button Container/Quit to Desktop" method="OnPointerDown"]
 
 [editable path="Button Container/New Game Button"]
 
