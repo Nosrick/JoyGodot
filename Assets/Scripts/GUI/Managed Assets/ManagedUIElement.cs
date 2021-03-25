@@ -115,7 +115,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             return this.m_States.Remove(name);
         }
         
-        public void SetTheme(Theme theme)
+        public new void SetTheme(Theme theme)
         {
             foreach (ISpriteState state in this.States)
             {

@@ -2,12 +2,20 @@
 Border
 Message
 
-[Information]: [Information] LoadingScreen
+[Information]: [Information] Loading Screen
 
 [Information]: [Information] Background
 Button Container
 
-[Information]: [Information] MainMenu
+[Information]: [Information] Main Menu
 
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
 [Information]: [Information] background
 [Information]: [Information] border

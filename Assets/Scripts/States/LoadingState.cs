@@ -1,6 +1,7 @@
 ﻿using Godot;
 using JoyLib.Code;
 using JoyLib.Code.States;
+using JoyLib.Code.Unity.GUI;
 
 namespace JoyGodot.Assets.Scripts.States
 {
@@ -26,6 +27,8 @@ namespace JoyGodot.Assets.Scripts.States
                     GlobalConstants.GODOT_ASSETS_FOLDER +
                     "Scenes/UI/LoadingScreen.tscn"));
             base.SetUpUi();
+
+            GlobalConstants.GameManager.GUIManager.OpenGUI(GUINames.LOADING_SCREEN);
         }
 
         public override void Update()

@@ -2,6 +2,7 @@
 using Godot;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.IO;
+using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
 
 namespace JoyLib.Code.States
@@ -33,10 +34,9 @@ namespace JoyLib.Code.States
             this.GUIManager.SetUIColours(
                 randomCulture.BackgroundColours,
                 randomCulture.CursorColours,
-                randomCulture.FontColours,
-                false);
+                randomCulture.FontColours);
             base.SetUpUi();
-            //this.GUIManager.RecolourGUIs();
+            this.GUIManager.OpenGUI(GUINames.MAIN_MENU);
         }
 
         public override void Start()

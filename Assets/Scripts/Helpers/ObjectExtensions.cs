@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using Godot;
+using Object = System.Object;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Helpers
 {
@@ -39,6 +43,30 @@ namespace JoyLib.Code.Helpers
                 new Dictionary<Object, Object>(new ReferenceEqualityComparer()));
         }
 
+        public static Array GetAllChildren(this Node node)
+        {
+            Array array = node.GetChildren();
+            if (array.Count <= 0)
+            {
+                return array;
+            }
+            foreach (var obj in array)
+            {
+                if (!(obj is Node innerNode))
+                {
+                    continue;
+                }
+                Array inner = innerNode.GetAllChildren();
+
+                foreach (var innerObj in inner)
+                {
+                    array.Add(innerObj);
+                }
+            }
+
+            return array;
+        }
+
         private static Object InternalCopy(Object originalObject, IDictionary<Object, Object> visited)
         {
             if (originalObject == null)
@@ -68,7 +96,7 @@ namespace JoyLib.Code.Helpers
                 var arrayType = typeToReflect.GetElementType();
                 if (IsPrimitive(arrayType) == false)
                 {
-                    Array clonedArray = (Array) cloneObject;
+                    System.Array clonedArray = (System.Array) cloneObject;
                     clonedArray.ForEach((array, indices) =>
                         array.SetValue(InternalCopy(clonedArray.GetValue(indices), visited), indices));
                 }
@@ -138,11 +166,11 @@ namespace JoyLib.Code.Helpers
         }
     }
 
-    public static class ArrayExtensions
+    public static class IEnumerableExtensions
     {
-        public static void ForEach(this Array array, Action<Array, int[]> action)
+        public static void ForEach(this System.Array array, Action<System.Array, int[]> action)
         {
-            if (array.LongLength == 0)
+            if (array.LongLength > 0)
             {
                 return;
             }
@@ -160,7 +188,7 @@ namespace JoyLib.Code.Helpers
         public int[] Position;
         private int[] maxLengths;
 
-        public ArrayTraverse(Array array)
+        public ArrayTraverse(System.Array array)
         {
             this.maxLengths = new int[array.Rank];
             for (int i = 0; i < array.Rank; ++i)

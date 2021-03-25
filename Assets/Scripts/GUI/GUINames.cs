@@ -21,5 +21,7 @@
         public const string SETTINGS = "Settings Screen";
         public const string PAUSE = "Pause Screen";
         public const string ENTRY_BANNER = "Entry Banner";
+        public const string LOADING_SCREEN = "Loading Screen";
+        public const string MAIN_MENU = "Main Menu";
     }
 }

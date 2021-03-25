@@ -45,6 +45,23 @@ namespace Code.Unity.GUI.Managed_Assets
             }
         }
 
+        public override void _Ready()
+        {
+            this.Element = new ManagedUIElement
+            {
+                AnchorBottom = 1,
+                AnchorRight = 1,
+                Name = "Background"
+            };
+            this.AddChild(this.Element);
+            this.MoveChild(this.Element, 0);
+        }
+
+        public void Clear()
+        {
+            this.Element.Clear();
+        }
+
         public void AddSpriteState(ISpriteState state)
         {
             this.Element.AddSpriteState(state);
@@ -186,13 +203,11 @@ namespace Code.Unity.GUI.Managed_Assets
 
         public virtual void OnPointerEnter()
         {
-            GD.Print("ENTER");
             this.EvaluateAndTransitionToSelectionState();
         }
 
         public virtual void OnPointerExit()
         {
-            GD.Print("EXIT");
             this.EvaluateAndTransitionToSelectionState();
         }
 

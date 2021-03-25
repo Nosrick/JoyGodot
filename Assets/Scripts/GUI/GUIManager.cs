@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Castle.Core.Internal;
+using Code.Unity.GUI.Managed_Assets;
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
@@ -353,9 +354,19 @@ namespace JoyLib.Code.Unity.GUI
 
         public void SetupManagedComponents(GUIData gui, bool crossFade = false, float duration = 0.1f)
         {
-            Array managedComponents = gui.GetChildren();
+            Array managedComponents = gui.GetAllChildren();
             foreach (var component in managedComponents)
             {
+                if (!(component is IManagedElement managedElement))
+                {
+                    continue;
+                }
+
+                if (managedElement.ElementName.IsNullOrEmpty())
+                {
+                    continue;
+                }
+                
                 if (component is ManagedFonts fonts)
                 {
                     if (this.Themes.TryGetValue(fonts.ElementName, out Theme value))
@@ -382,18 +393,75 @@ namespace JoyLib.Code.Unity.GUI
                 }
                 else if (component is ManagedUIElement managedUiElement)
                 {
-                    if (this.UISprites.TryGetValue(managedUiElement.ElementName, out ISpriteState state))
+                    bool result = this.UISprites.TryGetValue(managedUiElement.ElementName, out ISpriteState state);
+                    if (result)
                     {
                         managedUiElement.Clear();
                         managedUiElement.AddSpriteState(state);
                     }
-                    if (this.Themes.TryGetValue(managedUiElement.ElementName, out Theme value))
+                    else
+                    {
+                        GlobalConstants.ActionLog.Log("Could not find UI sprite for element " + managedUiElement.ElementName,
+                            LogLevel.Warning);
+                    }
+
+                    result = this.Themes.TryGetValue(managedUiElement.ElementName, out Theme value);
+                    if (result)
                     {
                         managedUiElement.SetTheme(value);
                     }
                     else
                     {
-                        GlobalConstants.ActionLog.Log("Could not find UI element " + managedUiElement.ElementName,
+                        GlobalConstants.ActionLog.Log("Could not find UI theme for element " + managedUiElement.ElementName,
+                            LogLevel.Warning);
+                    }
+                    
+                    result = this.UISpriteColours.TryGetValue(managedUiElement.ElementName,
+                        out IDictionary<string, Color> colours);
+                    if(result)
+                    {
+                        managedUiElement.OverrideAllColours(colours);
+                    }
+                    else
+                    {
+                        GlobalConstants.ActionLog.Log("Could not find colours for element " + managedUiElement.ElementName,
+                            LogLevel.Warning);
+                    }
+                }
+                else if (component is ManagedButton managedButton)
+                {
+                    bool result = this.UISprites.TryGetValue(managedButton.ElementName, out ISpriteState state);
+                    if (result)
+                    {
+                        managedButton.Clear();
+                        managedButton.AddSpriteState(state);
+                    }
+                    else
+                    {
+                        GlobalConstants.ActionLog.Log("Could not find UI sprite for element " + managedButton.ElementName,
+                            LogLevel.Warning);
+                    }
+
+                    result = this.Themes.TryGetValue(managedButton.ElementName, out Theme value);
+                    if (result)
+                    {
+                        managedButton.Theme = value;
+                    }
+                    else
+                    {
+                        GlobalConstants.ActionLog.Log("Could not find UI theme for element " + managedButton.ElementName,
+                            LogLevel.Warning);
+                    }
+
+                    result = this.UISpriteColours.TryGetValue(managedButton.ElementName,
+                        out IDictionary<string, Color> colours);
+                    if(result)
+                    {
+                        managedButton.OverwriteColours(colours);
+                    }
+                    else
+                    {
+                        GlobalConstants.ActionLog.Log("Could not find colours for element " + managedButton.ElementName,
                             LogLevel.Warning);
                     }
                 }
@@ -431,8 +499,13 @@ namespace JoyLib.Code.Unity.GUI
                 return openGUI;
             }
 
-            GUIData toOpen = this.GUIs.First(gui =>
+            GUIData toOpen = this.GUIs.FirstOrDefault(gui =>
                 gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            if (toOpen is null)
+            {
+                return null;
+            }
 
             if (toOpen.m_ClosesOthers)
             {

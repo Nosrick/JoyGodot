@@ -13,7 +13,7 @@ outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
 font_data = ExtResource( 4 )
 
-[node name="MainMenu" type="Control"]
+[node name="Main Menu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
@@ -29,6 +29,8 @@ anchor_left = 0.3
 anchor_top = 0.15
 anchor_right = 0.7
 anchor_bottom = 0.9
+size_flags_horizontal = 3
+size_flags_vertical = 3
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -39,6 +41,8 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 341.0
 margin_bottom = 87.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 ElementName = "SlotSprite"
 
 [node name="Text" parent="Button Container/New Game Button" index="0"]
@@ -51,6 +55,8 @@ anchor_bottom = 0.0
 margin_top = 91.0
 margin_right = 341.0
 margin_bottom = 178.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 ElementName = "SlotSprite"
 
 [node name="Text" parent="Button Container/Load Game Button" index="0"]
@@ -63,6 +69,8 @@ anchor_bottom = 0.0
 margin_top = 182.0
 margin_right = 341.0
 margin_bottom = 269.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 ElementName = "SlotSprite"
 
 [node name="Text" parent="Button Container/Settings" index="0"]
@@ -75,11 +83,14 @@ anchor_bottom = 0.0
 margin_top = 273.0
 margin_right = 341.0
 margin_bottom = 360.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 ElementName = "SlotSprite"
 
 [node name="Text" parent="Button Container/Quit to Desktop" index="0"]
 custom_fonts/font = SubResource( 1 )
 text = "Quit to Desktop"
+[connection signal="pressed" from="Button Container/New Game Button" to="Button Container/New Game Button" method="OnPointerDown"]
 
 [editable path="Button Container/New Game Button"]
 

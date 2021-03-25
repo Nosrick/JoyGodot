@@ -85,7 +85,7 @@ namespace JoyLib.Code.Helpers
         public void Log(object objectToPrint, LogLevel logLevel = LogLevel.Information)
         {
             string toPrint = "[" + logLevel + "] ";
-            if (objectToPrint is IEnumerable collection)
+            if (objectToPrint is ICollection collection)
             {
                 toPrint += this.CollectionWalk(collection);
             }
@@ -134,12 +134,12 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public void PrintCollection(IEnumerable collection)
+        public void PrintCollection(ICollection collection)
         {
             this.Log(this.CollectionWalk(collection));
         }
 
-        public string CollectionWalk(IEnumerable collection)
+        public string CollectionWalk(ICollection collection)
         {
             StringBuilder builder = new StringBuilder();
             foreach (object o in collection)
@@ -149,7 +149,7 @@ namespace JoyLib.Code.Helpers
                     case DictionaryEntry entry:
                         builder.AppendLine("[" + entry.Key + ": " + entry.Value + "]");
                         break;
-                    case IEnumerable child:
+                    case ICollection child:
                         builder.AppendLine("Contents:");
                         builder.AppendLine(this.CollectionWalk(child));
                         break;

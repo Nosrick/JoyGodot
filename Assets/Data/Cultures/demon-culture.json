@@ -278,7 +278,7 @@
             ]
           },
           {
-            "Name": "SlotBackground",
+            "Name": "SlotSprite",
             "Colour": [
               {
                 "Name": "background",
