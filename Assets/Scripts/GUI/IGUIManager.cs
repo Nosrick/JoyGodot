@@ -41,10 +41,10 @@ namespace JoyLib.Code.Unity.GUI
         bool IsActive(string name);
 
         bool AreAnyOpen(bool includeAlwaysOpen = false);
+
+        void InstantiateUIScene(PackedScene ui);
         
         IDictionary<string, Theme> Themes { get; }
-
-        IDictionary<string, ISpriteState> UISprites { get; }
         IDictionary<string, ISpriteState> Cursors { get; }
 
         IDictionary<string, DynamicFont> FontsInUse { get; }

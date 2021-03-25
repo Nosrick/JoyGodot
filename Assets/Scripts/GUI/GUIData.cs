@@ -4,7 +4,7 @@ using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class GUIData : Node2D
+    public class GUIData : Control
     {
         protected IGUIManager m_GUIManager;
 
@@ -30,7 +30,7 @@ namespace JoyLib.Code.Unity.GUI
         public override void _Input(InputEvent @event)
         {
             base._Input(@event);
-            if (@event.IsAction("ui_confirm"))
+            if (@event.IsAction("ui_accept"))
             {
                 this.GUIManager.BringToFront(this.Name);
             }

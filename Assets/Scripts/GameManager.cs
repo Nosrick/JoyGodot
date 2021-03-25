@@ -2,6 +2,7 @@
 using Code.Collections;
 using Godot;
 using Joy.Code.Managers;
+using JoyGodot.Assets.Scripts.States;
 using JoyLib.Code.Combat;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
@@ -83,7 +84,7 @@ namespace JoyLib.Code
         }
 
         // Update is called once per frame
-        protected void Update()
+        public override void _Process(float delta)
         {
             this.m_StateManager?.Update();
             this.ActionLog.Update();
@@ -103,6 +104,11 @@ namespace JoyLib.Code
             this.Roller = new RNG();
 
             this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
+
+            this.GUIManager = new GUIManager(this.FindNode("MainUI"));
+
+            this.m_StateManager = new StateManager();
+            this.m_StateManager.ChangeState(new LoadingState());
             this.CombatEngine = new CombatEngine();
 
             this.PhysicsManager = new PhysicsManager();
@@ -112,8 +118,6 @@ namespace JoyLib.Code
             this.AbilityHandler = new AbilityHandler();
 
             this.MaterialHandler = new MaterialHandler();
-
-            this.GUIManager = new GUIManager(this.FindNode("MainUI"));
 
             this.VisionProviderHandler = new VisionProviderHandler();
 
@@ -180,11 +184,9 @@ namespace JoyLib.Code
 
             this.NaturalWeaponHelper = new NaturalWeaponHelper(this.MaterialHandler, this.ItemFactory);
 
-            this.m_StateManager = new StateManager();
-
-            this.Initialised = true;
             this.LoadingMessage = "Done!";
             
+            this.Initialised = true;
             this.LoadingThread.Abort();
         }
 

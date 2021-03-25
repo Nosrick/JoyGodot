@@ -84,7 +84,7 @@ namespace JoyLib.Code.Unity.GUI
             */
 
             //this.transform.position = this.Canvas.transform.TransformPoint(mousePosition + offset);
-            this.Position = mousePosition;
+            this.RectPosition = mousePosition;
         }
 
         public virtual void Show(

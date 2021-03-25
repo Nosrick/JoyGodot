@@ -78,9 +78,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected List<NinePatchRect> Parts { get; set; }
 
         protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
-        
-        public virtual void Awake()
+
+        public override void _Ready()
         {
+            base._Ready();
             this.Initialise();
         }
 
@@ -120,7 +121,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 foreach (SpritePart part in state.SpriteData.m_Parts)
                 {
-                    Texture icon = theme.GetIcon(part.m_Name, "SpritePart");
+                    Texture icon = theme.GetIcon(part.m_Name, nameof(this.GetType));
                     if (icon is null == false)
                     {
                         part.m_FrameSprite.Frames = new Godot.Collections.Array
@@ -129,7 +130,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                         };
                     }
                     
-                    Color colour = theme.GetColor(part.m_Name, "SpritePart");
+                    Color colour = theme.GetColor(part.m_Name, nameof(this.GetType));
                     part.m_PossibleColours = new List<Color>
                     {
                         colour
@@ -368,6 +369,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 patchRect.AxisStretchVertical = part.m_StretchMode;
                 patchRect.SizeFlagsHorizontal = 3;
                 patchRect.SizeFlagsVertical = 3;
+                GlobalConstants.ActionLog.Log(patchRect);
             }
         }
 

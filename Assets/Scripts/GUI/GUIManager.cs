@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Castle.Core.Internal;
 using Godot;
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using Array = Godot.Collections.Array;
@@ -15,9 +18,9 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected HashSet<GUIData> GUIs { get; set; }
         protected HashSet<GUIData> ActiveGUIs { get; set; }
-        
+
         protected Node RootUI { get; set; }
-        
+
         public IDictionary<string, Theme> Themes { get; protected set; }
 
         public IDictionary<string, ISpriteState> UISprites { get; protected set; }
@@ -42,7 +45,7 @@ namespace JoyLib.Code.Unity.GUI
         public IDictionary<string, Color> FontColours { get; protected set; }
 
         public IEnumerable<GUIData> Values => this.GUIs;
-        
+
         public JSONValueExtractor ValueExtractor { get; protected set; }
 
         public GUIManager(Node rootUi)
@@ -66,37 +69,37 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.GUIs is null)
             {
-                this.Themes = new Dictionary<string, Theme>();
-                
+                this.Themes = new System.Collections.Generic.Dictionary<string, Theme>();
+
                 this.GUIs = new HashSet<GUIData>();
                 this.ActiveGUIs = new HashSet<GUIData>();
 
-                this.UISprites = new Dictionary<string, ISpriteState>();
-                
+                this.UISprites = new System.Collections.Generic.Dictionary<string, ISpriteState>();
+
                 this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
                     .Select(data => new SpriteState(data.m_Name, data))
                     .Cast<ISpriteState>()
                     .ToDictionary(state => state.Name, state => state);
-                this.CursorColours = new Dictionary<string, IDictionary<string, Color>>();
-                this.UISpriteColours = new Dictionary<string, IDictionary<string, Color>>();
-                this.LoadedFonts = new Dictionary<string, DynamicFont>
+                this.CursorColours = new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
+                this.UISpriteColours = new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
+                this.LoadedFonts = new System.Collections.Generic.Dictionary<string, DynamicFont>
                 {
                     {"default", GD.Load<DynamicFont>(GlobalConstants.GODOT_ASSETS_FOLDER + "Fonts/OpenDyslexic3.tres")}
                 };
 
-                this.DyslexicModeFonts = new Dictionary<string, DynamicFont>
+                this.DyslexicModeFonts = new System.Collections.Generic.Dictionary<string, DynamicFont>
                 {
                     {"default", this.LoadedFonts["default"]}
                 };
-                this.FontColours = new Dictionary<string, Color>
+                this.FontColours = new System.Collections.Generic.Dictionary<string, Color>
                 {
                     {"default", Colors.Black}
                 };
-                this.StandardFontSizes = new Dictionary<string, Tuple<float, float>>
+                this.StandardFontSizes = new System.Collections.Generic.Dictionary<string, Tuple<float, float>>
                 {
                     {"default", new Tuple<float, float>(8f, 36f)}
                 };
-                this.DyslexicModeFontSizes = new Dictionary<string, Tuple<float, float>>
+                this.DyslexicModeFontSizes = new System.Collections.Generic.Dictionary<string, Tuple<float, float>>
                 {
                     {"default", new Tuple<float, float>(8f, 36f)}
                 };
@@ -124,9 +127,9 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void LoadDefaults()
         {
-            string file = Directory.GetCurrentDirectory() + 
+            string file = Directory.GetCurrentDirectory() +
                           GlobalConstants.ASSETS_FOLDER +
-                          GlobalConstants.SETTINGS_FOLDER + 
+                          GlobalConstants.SETTINGS_FOLDER +
                           "/GUIDefaults.json";
 
             if (File.Exists(file))
@@ -158,58 +161,54 @@ namespace JoyLib.Code.Unity.GUI
         }
 
         protected void LoadFontSettings(
-            string file, 
-            IDictionary<string, Tuple<float, float>> sizes, 
+            string file,
+            IDictionary<string, Tuple<float, float>> sizes,
             IDictionary<string, DynamicFont> fonts)
         {
-            /*
-            using (StreamReader reader = new StreamReader(file))
+            if (File.Exists(file) == false)
             {
-                using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                {
-                    try
-                    {
-                        JObject jToken = JObject.Load(jsonReader);
-
-                        if (jToken.IsNullOrEmpty())
-                        {
-                            return;
-                        }
-
-                        foreach (JToken child in jToken["GUIData"])
-                        {
-                            string name = (string) child["Name"] ?? "default";
-                            TMP_FontAsset font = child["Value"] is null
-                                ? this.LoadedFonts["default"]
-                                : Resources.Load<TMP_FontAsset>("Fonts/" + child["Value"]);
-
-                            float minSize = (float) (child["MinFontSize"] ?? 8);
-                            float maxSize = (float) (child["MaxFontSize"] ?? 24);
-
-                            sizes.Add(
-                                name,
-                                new Tuple<float, float>(
-                                    minSize,
-                                    maxSize));
-
-                            fonts.Add(name, font);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText("Failed loading default GUI settings in " + file);
-                        GlobalConstants.ActionLog.StackTrace(e);
-                    }
-                }
+                GlobalConstants.ActionLog.Log("Could not find font settings file " + file, LogLevel.Warning);
+                return;
             }
-            */
+
+            JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+            if (result.Error != Error.Ok)
+            {
+                this.ValueExtractor.PrintFileParsingError(result, file);
+            }
+
+            if (!(result.Result is Dictionary dictionary))
+            {
+                GlobalConstants.ActionLog.Log("Could not parse JSON to Dictionary from " + file, LogLevel.Warning);
+                return;
+            }
+
+            ICollection<Dictionary> fontSettings =
+                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "GUIData");
+
+            foreach (Dictionary fontDict in fontSettings)
+            {
+                string name = this.ValueExtractor.GetValueFromDictionary<string>(fontDict, "Name");
+                string value = this.ValueExtractor.GetValueFromDictionary<string>(fontDict, "Value");
+                float minFontSize = this.ValueExtractor.GetValueFromDictionary<float>(fontDict, "MinFontSize");
+                float maxFontSize = this.ValueExtractor.GetValueFromDictionary<float>(fontDict, "MaxFontSize");
+
+                DynamicFont font = GD.Load<DynamicFont>(
+                    GlobalConstants.GODOT_ASSETS_FOLDER +
+                    "Fonts/" +
+                    value) ?? this.LoadedFonts["default"];
+
+                sizes.Add(name, new Tuple<float, float>(minFontSize, maxFontSize));
+                fonts.Add(name, font);
+            }
         }
 
         protected void LoadDefinitions()
         {
             string[] files = Directory.GetFiles(
                 Directory.GetCurrentDirectory() +
-                GlobalConstants.ASSETS_FOLDER + 
+                GlobalConstants.ASSETS_FOLDER +
                 GlobalConstants.DATA_FOLDER +
                 "Sprite Definitions/GUI/",
                 "*.json",
@@ -217,41 +216,46 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (string file in files)
             {
-                /*
-                using (StreamReader reader = new StreamReader(file))
+                if (File.Exists(file) == false)
                 {
-                    using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                    {
-                        try
-                        {
-                            JObject jToken = JObject.Load(jsonReader);
-
-                            if (jToken.IsNullOrEmpty())
-                            {
-                                continue;
-                            }
-
-                            JToken child = jToken["Objects"]["TileSet"];
-
-                            string tileSetName = (string) child["Name"];
-                            var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet(tileSetName);
-                            foreach (SpriteData data in spriteData)
-                            {
-                                if (this.UISprites.ContainsKey(data.m_Name))
-                                {
-                                    continue;
-                                }
-                                this.UISprites.Add(data.m_Name, new SpriteState(data.m_Name, data));
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            GlobalConstants.ActionLog.AddText("Could not load GUI definitions from " + file);
-                            GlobalConstants.ActionLog.StackTrace(e);
-                        }
-                    }
+                    GlobalConstants.ActionLog.Log("Could not find GUI definitions file " + file, LogLevel.Warning);
+                    return;
                 }
-                */
+
+                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+
+                if (result.Error != Error.Ok)
+                {
+                    this.ValueExtractor.PrintFileParsingError(result, file);
+                }
+
+                if (!(result.Result is Dictionary dictionary))
+                {
+                    GlobalConstants.ActionLog.Log("Could not parse JSON to Dictionary from " + file, LogLevel.Warning);
+                    return;
+                }
+
+                string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(
+                    this.ValueExtractor.GetValueFromDictionary<Dictionary>(dictionary, "TileSet"),
+                    "Name");
+
+                var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet(tileSetName);
+                foreach (SpriteData data in spriteData)
+                {
+                    if (this.Themes.ContainsKey(data.m_Name) == false)
+                    {
+                        Theme theme = new Theme();
+                        theme.SetIcon(data.m_Name, "ManagedUIElement", data.m_Parts.First().m_FrameSprite.GetFrame("default", 0));
+                        this.Themes.Add(data.m_Name, theme);
+                    }
+                    
+                    if (this.UISprites.ContainsKey(data.m_Name))
+                    {
+                        continue;
+                    }
+
+                    this.UISprites.Add(data.m_Name, new SpriteState(data.m_Name, data));
+                }
             }
         }
 
@@ -281,6 +285,7 @@ namespace JoyLib.Code.Unity.GUI
         public void FindGUIs()
         {
             Array guiData = this.RootUI.GetChildren();
+            GlobalConstants.ActionLog.Log(guiData);
             foreach (var child in guiData)
             {
                 if (child is GUIData data)
@@ -288,6 +293,24 @@ namespace JoyLib.Code.Unity.GUI
                     this.Add(data);
                 }
             }
+        }
+
+        public void InstantiateUIScene(PackedScene ui)
+        {
+            Array children = this.RootUI.GetChildren();
+            if (children.IsNullOrEmpty() == false)
+            {
+                for(int i = 0; i < children.Count; i++)
+                {
+                    this.RootUI.RemoveChild(this.RootUI.GetChild(0));
+                }
+            }
+            Control newUI = (Control) ui.Instance();
+            newUI.AnchorBottom = 1;
+            newUI.AnchorRight = 1;
+            this.RootUI.AddChild(newUI);
+            children = newUI.GetChildren();
+            GlobalConstants.ActionLog.Log(children);
         }
 
         public bool Add(GUIData gui)
@@ -341,7 +364,8 @@ namespace JoyLib.Code.Unity.GUI
                     }
                     else
                     {
-                        GlobalConstants.ActionLog.Log("Could not find font theme " + fonts.ElementName, LogLevel.Warning);
+                        GlobalConstants.ActionLog.Log("Could not find font theme " + fonts.ElementName,
+                            LogLevel.Warning);
                     }
                 }
                 else if (component is ManagedSprite managedSprite)
@@ -352,7 +376,25 @@ namespace JoyLib.Code.Unity.GUI
                     }
                     else
                     {
-                        GlobalConstants.ActionLog.Log("Could not find font theme " + managedSprite.ElementName, LogLevel.Warning);
+                        GlobalConstants.ActionLog.Log("Could not find sprite " + managedSprite.ElementName,
+                            LogLevel.Warning);
+                    }
+                }
+                else if (component is ManagedUIElement managedUiElement)
+                {
+                    if (this.UISprites.TryGetValue(managedUiElement.ElementName, out ISpriteState state))
+                    {
+                        managedUiElement.Clear();
+                        managedUiElement.AddSpriteState(state);
+                    }
+                    if (this.Themes.TryGetValue(managedUiElement.ElementName, out Theme value))
+                    {
+                        managedUiElement.SetTheme(value);
+                    }
+                    else
+                    {
+                        GlobalConstants.ActionLog.Log("Could not find UI element " + managedUiElement.ElementName,
+                            LogLevel.Warning);
                     }
                 }
             }
@@ -465,7 +507,7 @@ namespace JoyLib.Code.Unity.GUI
                     continue;
                 }
 
-                gui.ZIndex = gui.DefaultSortingOrder;
+                //gui.ZIndex = gui.DefaultSortingOrder;
             }
 
             GUIData[] found = this.ActiveGUIs
@@ -473,7 +515,7 @@ namespace JoyLib.Code.Unity.GUI
                 .ToArray();
             if (found.Any())
             {
-                toFront.ZIndex = found.Max(data => data.DefaultSortingOrder) + 1;
+                //toFront.ZIndex = found.Max(data => data.DefaultSortingOrder) + 1;
             }
         }
 
@@ -546,10 +588,10 @@ namespace JoyLib.Code.Unity.GUI
 
             GarbageMan.Dispose(this.StandardFontSizes);
             this.StandardFontSizes = null;
-            
+
             GarbageMan.Dispose(this.UISprites);
             this.UISprites = null;
-            
+
             GarbageMan.Dispose(this.UISpriteColours);
             this.UISpriteColours = null;
         }

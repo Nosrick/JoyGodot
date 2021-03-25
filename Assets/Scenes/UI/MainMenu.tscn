@@ -1,0 +1,90 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Scripts/GUI/GUIData.cs" type="Script" id=2]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedButton.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+resource_local_to_scene = true
+size = 40
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 4 )
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" parent="." instance=ExtResource( 1 )]
+ElementName = "DefaultWindow"
+
+[node name="Button Container" type="VBoxContainer" parent="."]
+anchor_left = 0.3
+anchor_top = 0.15
+anchor_right = 0.7
+anchor_bottom = 0.9
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="New Game Button" parent="Button Container" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 341.0
+margin_bottom = 87.0
+ElementName = "SlotSprite"
+
+[node name="Text" parent="Button Container/New Game Button" index="0"]
+custom_fonts/font = SubResource( 1 )
+text = "New Game"
+
+[node name="Load Game Button" parent="Button Container" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 91.0
+margin_right = 341.0
+margin_bottom = 178.0
+ElementName = "SlotSprite"
+
+[node name="Text" parent="Button Container/Load Game Button" index="0"]
+custom_fonts/font = SubResource( 1 )
+text = "Load Game"
+
+[node name="Settings" parent="Button Container" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 182.0
+margin_right = 341.0
+margin_bottom = 269.0
+ElementName = "SlotSprite"
+
+[node name="Text" parent="Button Container/Settings" index="0"]
+custom_fonts/font = SubResource( 1 )
+text = "Settings"
+
+[node name="Quit to Desktop" parent="Button Container" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 273.0
+margin_right = 341.0
+margin_bottom = 360.0
+ElementName = "SlotSprite"
+
+[node name="Text" parent="Button Container/Quit to Desktop" index="0"]
+custom_fonts/font = SubResource( 1 )
+text = "Quit to Desktop"
+
+[editable path="Button Container/New Game Button"]
+
+[editable path="Button Container/Load Game Button"]
+
+[editable path="Button Container/Settings"]
+
+[editable path="Button Container/Quit to Desktop"]

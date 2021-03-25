@@ -2,19 +2,19 @@
   "GUIData": [
     {
       "Name": "Font",
-      "Value": "Silver",
+      "Value": "Silver.tres",
       "MinFontSize": 8,
       "MaxFontSize": 60
     },
     {
       "Name": "AccentFont",
-      "Value": "Silver",
+      "Value": "Silver.tres",
       "MinFontSize": 8,
       "MaxFontSize": 60
     },
     {
       "Name": "TitleFont",
-      "Value": "Silver",
+      "Value": "Silver.tres",
       "MinFontSize": 20,
       "MaxFontSize": 100
     }

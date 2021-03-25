@@ -31,6 +31,10 @@ namespace JoyLib.Code.Helpers
 
         public void Update()
         {
+            if (this.Writer is null)
+            {
+                return;
+            }
             this.ServiceQueue();
         }
 
@@ -81,9 +85,13 @@ namespace JoyLib.Code.Helpers
         public void Log(object objectToPrint, LogLevel logLevel = LogLevel.Information)
         {
             string toPrint = "[" + logLevel + "] ";
-            if (objectToPrint is ICollection collection)
+            if (objectToPrint is IEnumerable collection)
             {
                 toPrint += this.CollectionWalk(collection);
+            }
+            else if (objectToPrint is Node node)
+            {
+                toPrint += node.Name;
             }
             else
             {
@@ -126,12 +134,12 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public void PrintCollection(ICollection collection)
+        public void PrintCollection(IEnumerable collection)
         {
             this.Log(this.CollectionWalk(collection));
         }
 
-        public string CollectionWalk(ICollection collection)
+        public string CollectionWalk(IEnumerable collection)
         {
             StringBuilder builder = new StringBuilder();
             foreach (object o in collection)
@@ -141,9 +149,12 @@ namespace JoyLib.Code.Helpers
                     case DictionaryEntry entry:
                         builder.AppendLine("[" + entry.Key + ": " + entry.Value + "]");
                         break;
-                    case ICollection child:
+                    case IEnumerable child:
                         builder.AppendLine("Contents:");
                         builder.AppendLine(this.CollectionWalk(child));
+                        break;
+                    case Node node:
+                        builder.AppendLine(node.Name);
                         break;
                     
                     default:

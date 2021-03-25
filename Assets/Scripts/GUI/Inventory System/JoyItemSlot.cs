@@ -62,7 +62,7 @@ namespace JoyLib.Code.Unity.GUI
             this.GetBits();
             this.m_CooldownOverlay.Visible = false;
 
-            this.m_Icon.Awake();
+            this.m_Icon._Ready();
         }
 
         protected void GetBits()
@@ -90,7 +90,7 @@ namespace JoyLib.Code.Unity.GUI
                 MarginLeft = 0,
                 MarginRight = 0
             };
-            this.m_Icon.Awake();
+            this.m_Icon._Ready();
             this.Initialised = true;
             /*this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
             this.GUIManager = GlobalConstants.GameManager.GUIManager;

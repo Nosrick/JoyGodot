@@ -195,9 +195,12 @@ namespace JoyLib.Code.Graphics
                         }
 
                         int halfway = frames.Count / 2;
-                        for (int i = halfway; i >= halfway; i--)
+                        if (frames.Count > 1)
                         {
-                            frames.Add(frames[i]);
+                            for (int i = halfway; i >= halfway; i--)
+                            {
+                                frames.Add(frames[i]);
+                            }
                         }
 
                         SpriteFrames spriteFrames = new SpriteFrames();

@@ -46,7 +46,7 @@ namespace JoyLib.Code.Unity.GUI
 
             Vector2 mousePosition = mouseEvent.Position;
 
-            this.Position = new Vector2(mousePosition.x, mousePosition.y);
+            this.RectPosition = new Vector2(mousePosition.x, mousePosition.y);
         }
 
         public void SetCursorSize(int width, int height)

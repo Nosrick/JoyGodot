@@ -23,16 +23,20 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
+            GlobalConstants.GameManager.GUIManager.InstantiateUIScene(
+                GD.Load<PackedScene>(
+                    GlobalConstants.GODOT_ASSETS_FOLDER +
+                    "Scenes/UI/MainMenu.tscn"));
+            
             ICulture[] cultures = GlobalConstants.GameManager.CultureHandler.Cultures.ToArray();
-            int result = GlobalConstants.GameManager.Roller.Roll(0, cultures.Length);
-            ICulture randomCulture = cultures[result];
+            ICulture randomCulture = GlobalConstants.GameManager.Roller.SelectFromCollection(cultures);
             this.GUIManager.SetUIColours(
                 randomCulture.BackgroundColours,
                 randomCulture.CursorColours,
                 randomCulture.FontColours,
                 false);
             base.SetUpUi();
-            this.GUIManager.RecolourGUIs();
+            //this.GUIManager.RecolourGUIs();
         }
 
         public override void Start()
@@ -51,13 +55,13 @@ namespace JoyLib.Code.States
         {
         }
 
-        private void NewGame()
+        public void NewGame()
         {
             this.Done = true;
             this.m_NextState = new CharacterCreationState();
         }
 
-        private void ContinueGame()
+        public void ContinueGame()
         {
             IWorldInstance overworld = this.m_WorldSerialiser.Deserialise("Everse");
             this.Done = true;
