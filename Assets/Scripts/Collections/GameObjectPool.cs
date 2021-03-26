@@ -40,6 +40,7 @@ namespace Code.Collections
                 T returnObject = this.InactiveObjects[0];
                 this.InactiveObjects.RemoveAt(0);
                 this.Objects.Add(returnObject);
+                returnObject.SetProcess(true);
                 return returnObject;
             }
 
@@ -53,6 +54,7 @@ namespace Code.Collections
             bool result = this.Objects.Remove(gameObject);
             if (result)
             {
+                gameObject.SetProcess(false);
                 this.InactiveObjects.Add(gameObject);
                 gameObject.Visible = false;
             }
