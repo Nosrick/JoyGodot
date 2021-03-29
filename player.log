@@ -3,11 +3,63 @@ Border
 Message
 
 [Information]: [Information] Loading Screen
+Background
+Border
+Message
 
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element DefaultWindow
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element SlotSprite
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element SlotSprite
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element SlotSprite
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element SlotSprite
 [Information]: [Information] Background
 Button Container
 
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
 [Information]: [Information] Main Menu
+Background
+Button Container
+background
+border
+New Game Button
+Load Game Button
+Settings
+Quit to Desktop
+Background
+Text
+background
+border
+Background
+Text
+background
+border
+Background
+Text
+background
+border
+Background
+Text
+background
+border
 
 [Information]: [Information] background
 [Information]: [Information] border

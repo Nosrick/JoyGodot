@@ -193,16 +193,6 @@ namespace JoyLib.Code
         public void SetNextState(IGameState nextState = null)
         {
             this.NextState = nextState;
-        }
-
-        protected void OnSceneLoad()
-        {
-            if (this.NextState is null)
-            {
-                return;
-            }
-
-            //GlobalConstants.ActionLog.Log(SceneManager.GetActiveScene().name);
             this.m_StateManager.ChangeState(this.NextState);
         }
 

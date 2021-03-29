@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/GUIData.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedButton.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Assets/Scripts/GUI/MainMenuState/MainMenuHandler.cs" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
@@ -29,9 +30,12 @@ anchor_left = 0.3
 anchor_top = 0.15
 anchor_right = 0.7
 anchor_bottom = 0.9
+margin_left = -0.200012
+margin_right = 0.200012
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -39,8 +43,8 @@ __meta__ = {
 [node name="New Game Button" parent="Button Container" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 341.0
-margin_bottom = 112.0
+margin_right = 342.0
+margin_bottom = 87.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 ElementName = "SlotSprite"
@@ -52,9 +56,9 @@ text = "New Game"
 [node name="Load Game Button" parent="Button Container" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 116.0
-margin_right = 341.0
-margin_bottom = 229.0
+margin_top = 91.0
+margin_right = 342.0
+margin_bottom = 178.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 ElementName = "SlotSprite"
@@ -66,9 +70,9 @@ text = "Load Game"
 [node name="Settings" parent="Button Container" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 233.0
-margin_right = 341.0
-margin_bottom = 346.0
+margin_top = 182.0
+margin_right = 342.0
+margin_bottom = 269.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 ElementName = "SlotSprite"
@@ -80,9 +84,9 @@ text = "Settings"
 [node name="Quit to Desktop" parent="Button Container" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 350.0
-margin_right = 341.0
-margin_bottom = 463.0
+margin_top = 273.0
+margin_right = 342.0
+margin_bottom = 360.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 ElementName = "SlotSprite"
@@ -91,6 +95,7 @@ ElementName = "SlotSprite"
 custom_fonts/font = SubResource( 1 )
 text = "Quit to Desktop"
 [connection signal="pressed" from="Button Container/New Game Button" to="Button Container/New Game Button" method="OnPointerDown"]
+[connection signal="pressed" from="Button Container/New Game Button" to="Button Container" method="NewGame"]
 [connection signal="pressed" from="Button Container/Load Game Button" to="Button Container/Load Game Button" method="OnPointerDown"]
 [connection signal="pressed" from="Button Container/Settings" to="Button Container/Settings" method="OnPointerDown"]
 [connection signal="pressed" from="Button Container/Quit to Desktop" to="Button Container/Quit to Desktop" method="OnPointerDown"]

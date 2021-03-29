@@ -39,6 +39,9 @@ namespace JoyLib.Code.Graphics
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 GlobalConstants.SPRITES_FOLDER +
                 "default.png");
+
+            ImageTexture defaultImageTexture = new ImageTexture();
+            defaultImageTexture.CreateFromImage(defaultSprite.GetData(), 2);
             //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
             SpriteData iconData = new SpriteData
             {
@@ -59,7 +62,7 @@ namespace JoyLib.Code.Graphics
                         {
                             Frames = new Array
                             {
-                                defaultSprite
+                                defaultImageTexture
                             }
                         },
                         m_PossibleColours = new List<Color> {Colors.White}
@@ -191,6 +194,7 @@ namespace JoyLib.Code.Graphics
                             ImageTexture imageTexture = new ImageTexture();
                             imageTexture.CreateFromImage(image.GetRect(new Rect2(new Vector2(i, 0),
                                 new Vector2(frameWidth, frameWidth))), 2);
+                            imageTexture.ResourceLocalToScene = true;
                             frames.Add(imageTexture);
                         }
 

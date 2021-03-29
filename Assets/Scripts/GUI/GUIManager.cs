@@ -285,7 +285,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void FindGUIs()
         {
-            Array guiData = this.RootUI.GetChildren();
+            Array guiData = this.RootUI.GetAllChildren();
             GlobalConstants.ActionLog.Log(guiData);
             foreach (var child in guiData)
             {
@@ -323,7 +323,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             gui.GUIManager = this;
-            gui.Close();
+            //gui.Close();
 
             this.SetupManagedComponents(gui);
 

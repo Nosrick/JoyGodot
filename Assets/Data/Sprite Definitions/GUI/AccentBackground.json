@@ -45,45 +45,6 @@
             ]
           }
         ]
-      },
-      {
-        "Name": "SlotBackground",
-        "Part": [
-          {
-            "Name": "background",
-            "Filename": "UI/background-tile.png",
-            "Data": [
-              "default"
-            ],
-            "Frames": 1,
-            "Position": 0,
-            "SortOrder": 1,
-            "FillType": "tile",
-            "PatchMargins": [
-              9,
-              9,
-              9,
-              9
-            ]
-          },
-          {
-            "Name": "border",
-            "Filename": "UI/background-border.png",
-            "Data": [
-              "default"
-            ],
-            "Frames": 1,
-            "Position": 0,
-            "SortOrder": 2,
-            "FillType": "tile",
-            "PatchMargins": [
-              9,
-              9,
-              9,
-              9
-            ]
-          }
-        ]
       }
     ]
   }

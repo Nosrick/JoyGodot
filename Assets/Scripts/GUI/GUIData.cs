@@ -71,6 +71,12 @@ namespace JoyLib.Code.Unity.GUI
             this.OnGUIClose?.Invoke(this);
         }
 
+        public override void _Ready()
+        {
+            this.GUIManager = GlobalConstants.GameManager.GUIManager;
+            this.GUIManager.Add(this);
+        }
+
         public virtual void ButtonClose()
         {
             this.GUIManager.CloseGUI(this.Name);

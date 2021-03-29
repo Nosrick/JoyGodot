@@ -179,7 +179,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             this.Initialise();
 
             this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
-            foreach (Control part in this.Parts)
+            foreach (NinePatchRect part in this.Parts)
             {
                 part.Visible = false;
             }

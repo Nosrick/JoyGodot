@@ -49,12 +49,12 @@ namespace Code.Unity.GUI.Managed_Assets
         {
             this.Element = new ManagedUIElement
             {
-                AnchorBottom = 1,
-                AnchorRight = 1,
-                Name = "Background"
+                AnchorBottom = 1, 
+                AnchorRight = 1, 
+                Name = "Background", 
+                MouseFilter = MouseFilterEnum.Ignore
             };
 
-            this.Element.MouseFilter = MouseFilterEnum.Ignore;
             this.AddChild(this.Element);
             this.MoveChild(this.Element, 0);
         }
