@@ -9,33 +9,12 @@ Message
 
 [Information]: [Information] background
 [Information]: [Information] border
-[Warning]: [Warning] Could not find colours for element DefaultWindow
-[Information]: [Information] background
-[Information]: [Information] border
-[Warning]: [Warning] Could not find colours for element SlotSprite
-[Information]: [Information] background
-[Information]: [Information] border
-[Warning]: [Warning] Could not find colours for element SlotSprite
-[Information]: [Information] background
-[Information]: [Information] border
-[Warning]: [Warning] Could not find colours for element SlotSprite
-[Information]: [Information] background
-[Information]: [Information] border
-[Warning]: [Warning] Could not find colours for element SlotSprite
-[Information]: [Information] Background
+[Information]: [Information] @@4
+Background
 Button Container
 
-[Information]: [Information] background
-[Information]: [Information] border
-[Information]: [Information] background
-[Information]: [Information] border
-[Information]: [Information] background
-[Information]: [Information] border
-[Information]: [Information] background
-[Information]: [Information] border
-[Information]: [Information] background
-[Information]: [Information] border
 [Information]: [Information] Main Menu
+@@4
 Background
 Button Container
 background
@@ -46,21 +25,19 @@ Settings
 Quit to Desktop
 Background
 Text
-background
-border
 Background
 Text
-background
-border
 Background
 Text
-background
-border
 Background
 Text
-background
-border
 
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
 [Information]: [Information] background
 [Information]: [Information] border
 [Information]: [Information] background

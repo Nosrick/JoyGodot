@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Assets/Scripts/GUI/GUIData.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedButton.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/Scripts/GUI/MainMenuState/MainMenuHandler.cs" type="Script" id=5]
@@ -17,12 +16,13 @@ font_data = ExtResource( 4 )
 [node name="Main Menu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 2 )
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Background" parent="." instance=ExtResource( 1 )]
+visible = false
 ElementName = "DefaultWindow"
 
 [node name="Button Container" type="VBoxContainer" parent="."]
@@ -35,7 +35,6 @@ margin_right = 0.200012
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
-script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -94,8 +93,8 @@ ElementName = "SlotSprite"
 [node name="Text" parent="Button Container/Quit to Desktop" index="0"]
 custom_fonts/font = SubResource( 1 )
 text = "Quit to Desktop"
+[connection signal="pressed" from="Button Container/New Game Button" to="." method="NewGame"]
 [connection signal="pressed" from="Button Container/New Game Button" to="Button Container/New Game Button" method="OnPointerDown"]
-[connection signal="pressed" from="Button Container/New Game Button" to="Button Container" method="NewGame"]
 [connection signal="pressed" from="Button Container/Load Game Button" to="Button Container/Load Game Button" method="OnPointerDown"]
 [connection signal="pressed" from="Button Container/Settings" to="Button Container/Settings" method="OnPointerDown"]
 [connection signal="pressed" from="Button Container/Quit to Desktop" to="Button Container/Quit to Desktop" method="OnPointerDown"]
