@@ -1,6 +1,4 @@
-﻿using JoyLib.Code.States;
-
-namespace JoyLib.Code.Unity.GUI.MainMenuState
+﻿namespace JoyLib.Code.Unity.GUI.MainMenuState
 {
     public class MainMenuHandler : GUIData
     {
@@ -22,13 +20,13 @@ namespace JoyLib.Code.Unity.GUI.MainMenuState
             this.MoveChild(background, 0);
             */
             
-            GlobalConstants.GameManager.GUIManager.SetupManagedComponents(this);
+            //GlobalConstants.GameManager.GUIManager.SetupManagedComponents(this);
         }
 
         public void NewGame()
         {
             GlobalConstants.GameManager.GUIManager.CloseAllGUIs();
-            GlobalConstants.GameManager.SetNextState(new CharacterCreationState());
+            GlobalConstants.GameManager.SetNextState(new States.CharacterCreationState());
         }
     }
 }
