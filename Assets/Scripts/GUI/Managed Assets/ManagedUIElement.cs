@@ -4,13 +4,14 @@ using System.Linq;
 using Godot;
 using JoyLib.Code;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using Thread = System.Threading.Thread;
 
 namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {
     public class ManagedUIElement : Control, IManagedElement
     {
-        [Export] public string ElementName { get; protected set; }
+        [Export] public string ElementName { get; set; }
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
@@ -93,6 +94,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
             
             this.Parts = new List<NinePatchRect>();
+            var children = this.GetAllChildren();
+            foreach (var child in children)
+            {
+                if (child is NinePatchRect patchRect)
+                {
+                    this.Parts.Add(patchRect);
+                }
+            }
             this.m_States = new Dictionary<string, ISpriteState>();
 
             this.Initialised = true;
@@ -358,8 +367,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 NinePatchRect patchRect = this.Parts[i];
                 patchRect.Name = part.m_Name;
                 patchRect.Visible = true;
-                patchRect.Texture = part.m_FrameSprite.GetFrame(this.CurrentSpriteState.SpriteData.m_State, 0);
-                this.MoveChild(patchRect, part.m_SortingOrder);
+                //patchRect.Texture = part.m_FrameSprite.GetFrame(this.CurrentSpriteState.SpriteData.m_State, 0);
+                //this.MoveChild(patchRect, part.m_SortingOrder);
                 patchRect.PatchMarginLeft = part.m_PatchMargins[0];
                 patchRect.PatchMarginTop = part.m_PatchMargins[1];
                 patchRect.PatchMarginRight = part.m_PatchMargins[2];

@@ -35,16 +35,15 @@ namespace JoyLib.Code.States
             this.Node = scene.Instance();
             GlobalConstants.GameManager.MyNode.GetTree().Root.AddChild(this.Node);
             
-            //GlobalConstants.GameManager.GUIManager.InstantiateUIScene(scene);
+            GlobalConstants.GameManager.GUIManager.InstantiateUIScene(scene);
             ICulture culture = GlobalConstants.GameManager.Roller.SelectFromCollection(GlobalConstants.GameManager.CultureHandler.Values);
-            /*this.GUIManager.SetUIColours(
+            this.GUIManager.SetUIColours(
                 culture.BackgroundColours,
                 culture.CursorColours,
                 culture.FontColours);
-            */
 
 
-            //base.SetUpUi();
+            base.SetUpUi();
 
             /*
             this.CharacterCreationScreen = this.GUIManager

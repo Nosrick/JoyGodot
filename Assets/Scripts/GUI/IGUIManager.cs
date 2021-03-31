@@ -53,6 +53,8 @@ namespace JoyLib.Code.Unity.GUI
         
         IDictionary<string, IDictionary<string, Color>> UISpriteColours { get; }
         
+        IDictionary<string, ISpriteState> UISprites { get; }
+
         IDictionary<string, Tuple<float, float>> FontSizesInUse { get; }
     }
 }

@@ -9,12 +9,23 @@ Message
 
 [Information]: [Information] background
 [Information]: [Information] border
-[Information]: [Information] @@4
-Background
+[Warning]: [Warning] Could not find colours for element DefaultWindow
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element SlotSprite
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element SlotSprite
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element SlotSprite
+[Information]: [Information] background
+[Information]: [Information] border
+[Warning]: [Warning] Could not find colours for element SlotSprite
+[Information]: [Information] Background
 Button Container
 
 [Information]: [Information] Main Menu
-@@4
 Background
 Button Container
 background
@@ -23,14 +34,22 @@ New Game Button
 Load Game Button
 Settings
 Quit to Desktop
-Background
+Element
 Text
-Background
+background
+border
+Element
 Text
-Background
+background
+border
+Element
 Text
-Background
+background
+border
+Element
 Text
+background
+border
 
 [Information]: [Information] background
 [Information]: [Information] border
@@ -42,6 +61,61 @@ Text
 [Information]: [Information] border
 [Information]: [Information] background
 [Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] CC1 Background
+Player Name Container
+
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] background
+[Information]: [Information] border
+[Information]: [Information] Character Creation Part 1
+CC1 Background
+Player Name Container
+background
+border
+Player Background
+Player Icon
+Input Background
+Random Name Button
+background
+border
+background
+border
+Player Name Input
+@@5
+@@7
+@@6
+
 [Information]: [Information] background
 [Information]: [Information] border
 [Information]: [Information] background

@@ -1,15 +1,17 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Assets/Sprites/default.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/GUIData.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Scripts/GUI/Managed Assets/ManagedUIElement.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=1]
 
 [sub_resource type="StyleBoxEmpty" id=2]
 
-[sub_resource type="StyleBoxEmpty" id=3]
-
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
 size = 40
 outline_size = 1
@@ -34,6 +36,32 @@ __meta__ = {
 }
 ElementName = "DefaultWindow"
 
+[node name="background" type="NinePatchRect" parent="CC1 Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 6 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="border" type="NinePatchRect" parent="CC1 Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Player Name Container" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -55,6 +83,35 @@ __meta__ = {
 }
 ElementName = "SlotSprite"
 
+[node name="background" type="NinePatchRect" parent="Player Name Container/Player Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 6 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="border" type="NinePatchRect" parent="Player Name Container/Player Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Player Icon" type="Control" parent="Player Name Container"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -75,16 +132,45 @@ __meta__ = {
 }
 ElementName = "SlotSprite"
 
-[node name="Player Name Input" type="LineEdit" parent="Player Name Container"]
+[node name="background" type="NinePatchRect" parent="Player Name Container/Input Background"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 69.0
-margin_top = 5.0
-margin_right = -69.0
-margin_bottom = -5.0
-custom_styles/focus = SubResource( 2 )
-custom_styles/normal = SubResource( 3 )
-custom_fonts/font = SubResource( 1 )
+texture = ExtResource( 6 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="border" type="NinePatchRect" parent="Player Name Container/Input Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player Name Input" type="LineEdit" parent="Player Name Container/Input Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -9.0
+custom_styles/focus = SubResource( 1 )
+custom_styles/normal = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 context_menu_enabled = false
 placeholder_text = "Arseface"
 __meta__ = {
