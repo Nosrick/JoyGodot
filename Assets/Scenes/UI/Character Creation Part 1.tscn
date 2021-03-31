@@ -1,11 +1,12 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://Assets/Sprites/default.png" type="Texture" id=1]
-[ext_resource path="res://Assets/Scripts/GUI/GUIData.cs" type="Script" id=2]
+[ext_resource path="res://Assets/Sprites/UI/icons/character-sheet-icon.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/CharacterCreationHandler.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Scripts/GUI/Managed Assets/ManagedUIElement.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=5]
 [ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Fonts/Kenney Pixel.ttf" type="DynamicFontData" id=7]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -18,6 +19,10 @@ outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
 font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 1
+font_data = ExtResource( 7 )
 
 [node name="Character Creation Part 1" type="Control"]
 anchor_right = 1.0
@@ -37,6 +42,7 @@ __meta__ = {
 ElementName = "DefaultWindow"
 
 [node name="background" type="NinePatchRect" parent="CC1 Background"]
+self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 6 )
@@ -46,8 +52,12 @@ patch_margin_right = 9
 patch_margin_bottom = 9
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="border" type="NinePatchRect" parent="CC1 Background"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 5 )
@@ -84,6 +94,7 @@ __meta__ = {
 ElementName = "SlotSprite"
 
 [node name="background" type="NinePatchRect" parent="Player Name Container/Player Background"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 6 )
@@ -98,6 +109,7 @@ __meta__ = {
 }
 
 [node name="border" type="NinePatchRect" parent="Player Name Container/Player Background"]
+self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 5 )
@@ -133,6 +145,7 @@ __meta__ = {
 ElementName = "SlotSprite"
 
 [node name="background" type="NinePatchRect" parent="Player Name Container/Input Background"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 6 )
@@ -147,6 +160,7 @@ __meta__ = {
 }
 
 [node name="border" type="NinePatchRect" parent="Player Name Container/Input Background"]
+self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 5 )
@@ -177,9 +191,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Random Name Button" type="TextureButton" parent="Player Name Container"]
+[node name="Random Name Button" type="ToolButton" parent="Player Name Container"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 356.0
-texture_normal = ExtResource( 1 )
-expand = true
+custom_fonts/font = SubResource( 4 )
+icon = ExtResource( 1 )
+expand_icon = true

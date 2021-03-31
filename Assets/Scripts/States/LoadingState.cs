@@ -1,5 +1,6 @@
 ﻿using Godot;
 using JoyLib.Code;
+using JoyLib.Code.Cultures;
 using JoyLib.Code.States;
 using JoyLib.Code.Unity.GUI;
 
@@ -36,6 +37,13 @@ namespace JoyGodot.Assets.Scripts.States
             if (GlobalConstants.GameManager?.Initialised == true)
             {
                 this.Done = true;
+                
+                ICulture randomCulture = GlobalConstants.GameManager.Roller.SelectFromCollection(
+                    GlobalConstants.GameManager.CultureHandler.Values);
+                this.GUIManager.SetUIColours(
+                    randomCulture.BackgroundColours,
+                    randomCulture.CursorColours,
+                    randomCulture.FontColours);
             }
         }
 
