@@ -284,6 +284,10 @@
               {
                 "Name": "icon",
                 "Value": "#9e4539"
+              },
+              {
+                "Name": "background",
+                "Value": "#7a3045"
               }
             ]
           },
@@ -293,6 +297,10 @@
               {
                 "Name": "icon",
                 "Value": "#9e4539"
+              },
+              {
+                "Name": "background",
+                "Value": "#7a3045"
               }
             ]
           },
@@ -302,6 +310,10 @@
               {
                 "Name": "icon",
                 "Value": "#9e4539"
+              },
+              {
+                "Name": "background",
+                "Value": "#7a3045"
               }
             ]
           },
@@ -311,6 +323,10 @@
               {
                 "Name": "icon",
                 "Value": "#9e4539"
+              },
+              {
+                "Name": "background",
+                "Value": "#7a3045"
               }
             ]
           },
@@ -320,6 +336,10 @@
               {
                 "Name": "icon",
                 "Value": "#9e4539"
+              },
+              {
+                "Name": "background",
+                "Value": "#7a3045"
               }
             ]
           }

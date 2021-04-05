@@ -7,15 +7,16 @@ using JoyLib.Code.Graphics;
 
 namespace Code.Unity.GUI.Managed_Assets
 {
-    public class ManagedButton : 
+    public class ManagedButton :
         Button,
-        IManagedElement
+        IColourableElement,
+        ISpriteStateElement
     {
         [Export] public string ElementName { get; protected set; }
         public bool Initialised { get; protected set; }
-        
+
         protected ManagedUIElement Element { get; set; }
-        
+
         protected bool HasFocus { get; set; }
 
         protected SelectionState CurrentSelectionState
@@ -41,20 +42,47 @@ namespace Code.Unity.GUI.Managed_Assets
                 {
                     return SelectionState.Highlighted;
                 }
+
                 return SelectionState.Normal;
             }
         }
 
         public override void _Ready()
         {
-            this.Element = new ManagedUIElement
+            this.Element = this.GetNode<ManagedUIElement>("Element");
+            if (this.Element is null)
             {
-                AnchorBottom = 1,
-                AnchorRight = 1,
-                Name = "Background"
-            };
-            this.AddChild(this.Element);
-            this.MoveChild(this.Element, 0);
+                this.Element = new ManagedUIElement
+                {
+                    AnchorBottom = 1,
+                    AnchorRight = 1,
+                    Name = "Background",
+                    MouseFilter = MouseFilterEnum.Ignore
+                };
+
+                this.AddChild(this.Element);
+                this.MoveChild(this.Element, 0);
+            }
+        }
+
+        public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
+        {
+            this.Element.AddSpriteState(state, changeToNew);
+        }
+
+        public bool RemoveStatesByName(string name)
+        {
+            return this.Element.RemoveStatesByName(name);
+        }
+
+        public ISpriteState GetState(string name)
+        {
+            return this.Element.GetState(name);
+        }
+
+        public bool ChangeState(string name)
+        {
+            return this.Element.ChangeState(name);
         }
 
         public void Clear()
@@ -62,14 +90,14 @@ namespace Code.Unity.GUI.Managed_Assets
             this.Element.Clear();
         }
 
-        public void AddSpriteState(ISpriteState state)
+        public void OverrideAllColours(IDictionary<string, Color> colours, bool crossFade = false, float duration = 0.1f)
         {
-            this.Element.AddSpriteState(state);
+            this.Element.OverrideAllColours(colours, crossFade, duration);
         }
 
-        public void OverwriteColours(IDictionary<string, Color> colours)
+        public void TintWithSingleColour(Color colour, bool crossFade = false, float duration = 0.1f)
         {
-            this.Element.OverrideAllColours(colours);
+            this.Element.TintWithSingleColour(colour, crossFade, duration);
         }
 
         protected void DoStateTransition(SelectionState state, bool crossFade)
@@ -168,7 +196,7 @@ namespace Code.Unity.GUI.Managed_Assets
                     }));
                     */
         }
-        
+
         protected virtual void EvaluateAndTransitionToSelectionState()
         {
             if (!this.Visible || this.Disabled)
@@ -183,11 +211,10 @@ namespace Code.Unity.GUI.Managed_Assets
         {
             // Selection tracking
             if (this.Disabled == false)
-            {
-            }
+            { }
 
             GD.Print("PRESS");
-            
+
             if (this.ToggleMode)
             {
                 this.Pressed = !this.Pressed;
@@ -240,7 +267,7 @@ namespace Code.Unity.GUI.Managed_Assets
             this.DoStateTransition(SelectionState.Pressed, true);
             //this.StartCoroutine(this.OnFinishSubmit());
         }
-        
+
         protected virtual void Press()
         {
             if (!this.Visible || this.Disabled)
@@ -250,24 +277,25 @@ namespace Code.Unity.GUI.Managed_Assets
 
             GlobalConstants.ActionLog.Log("Pressed " + this.Name);
         }
-        
-        protected virtual IEnumerator OnFinishSubmit()
-        {/*
-            var fadeTime = this.m_ColourBlock.fadeDuration;
-            var elapsedTime = 0f;
 
-            while (elapsedTime < fadeTime)
-            {
-                elapsedTime += Time.unscaledDeltaTime;
-                yield return null;
-            }
-            */
+        protected virtual IEnumerator OnFinishSubmit()
+        {
+            /*
+                        var fadeTime = this.m_ColourBlock.fadeDuration;
+                        var elapsedTime = 0f;
+            
+                        while (elapsedTime < fadeTime)
+                        {
+                            elapsedTime += Time.unscaledDeltaTime;
+                            yield return null;
+                        }
+                        */
 
             yield return null;
             this.DoStateTransition(this.CurrentSelectionState, true);
         }
     }
-    
+
     public enum SelectionState
     {
         /// <summary>

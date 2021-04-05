@@ -246,7 +246,7 @@ namespace JoyLib.Code.Unity.GUI
                     if (this.Themes.ContainsKey(data.m_Name) == false)
                     {
                         Theme theme = new Theme();
-                        theme.SetIcon(data.m_Name, "ManagedUIElement", data.m_Parts.First().m_FrameSprite.GetFrame("default", 0));
+                        theme.SetIcon(data.m_Name, "ManagedUIElement", data.m_Parts.First().m_FrameSprite.FirstOrDefault());
                         this.Themes.Add(data.m_Name, theme);
                     }
                     
@@ -285,7 +285,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void FindGUIs()
         {
-            Array guiData = this.RootUI.GetChildren();
+            Array guiData = this.RootUI.GetAllChildren();
             GlobalConstants.ActionLog.Log(guiData);
             foreach (var child in guiData)
             {
@@ -323,7 +323,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             gui.GUIManager = this;
-            gui.Close();
+            //gui.Close();
 
             this.SetupManagedComponents(gui);
 
@@ -367,101 +367,28 @@ namespace JoyLib.Code.Unity.GUI
                     continue;
                 }
                 
-                if (component is ManagedFonts fonts)
+                if (component is ISpriteStateElement spriteStateElement)
                 {
-                    if (this.Themes.TryGetValue(fonts.ElementName, out Theme value))
+                    if (this.UISprites.TryGetValue(spriteStateElement.ElementName, out ISpriteState value))
                     {
-                        fonts.SetTheme(value);
+                        spriteStateElement.Clear();
+                        spriteStateElement.AddSpriteState(value);
                     }
                     else
                     {
-                        GlobalConstants.ActionLog.Log("Could not find font theme " + fonts.ElementName,
+                        GlobalConstants.ActionLog.Log("Could not find sprite " + spriteStateElement.ElementName,
                             LogLevel.Warning);
                     }
                 }
-                else if (component is ManagedSprite managedSprite)
+                if (component is IColourableElement colourfulElement)
                 {
-                    if (this.Themes.TryGetValue(managedSprite.ElementName, out Theme value))
+                    if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName, out IDictionary<string, Color> value))
                     {
-                        managedSprite.SetTheme(value);
+                        colourfulElement.OverrideAllColours(value);
                     }
                     else
                     {
-                        GlobalConstants.ActionLog.Log("Could not find sprite " + managedSprite.ElementName,
-                            LogLevel.Warning);
-                    }
-                }
-                else if (component is ManagedUIElement managedUiElement)
-                {
-                    bool result = this.UISprites.TryGetValue(managedUiElement.ElementName, out ISpriteState state);
-                    if (result)
-                    {
-                        managedUiElement.Clear();
-                        managedUiElement.AddSpriteState(state);
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.Log("Could not find UI sprite for element " + managedUiElement.ElementName,
-                            LogLevel.Warning);
-                    }
-
-                    result = this.Themes.TryGetValue(managedUiElement.ElementName, out Theme value);
-                    if (result)
-                    {
-                        managedUiElement.SetTheme(value);
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.Log("Could not find UI theme for element " + managedUiElement.ElementName,
-                            LogLevel.Warning);
-                    }
-                    
-                    result = this.UISpriteColours.TryGetValue(managedUiElement.ElementName,
-                        out IDictionary<string, Color> colours);
-                    if(result)
-                    {
-                        managedUiElement.OverrideAllColours(colours);
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.Log("Could not find colours for element " + managedUiElement.ElementName,
-                            LogLevel.Warning);
-                    }
-                }
-                else if (component is ManagedButton managedButton)
-                {
-                    bool result = this.UISprites.TryGetValue(managedButton.ElementName, out ISpriteState state);
-                    if (result)
-                    {
-                        managedButton.Clear();
-                        managedButton.AddSpriteState(state);
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.Log("Could not find UI sprite for element " + managedButton.ElementName,
-                            LogLevel.Warning);
-                    }
-
-                    result = this.Themes.TryGetValue(managedButton.ElementName, out Theme value);
-                    if (result)
-                    {
-                        managedButton.Theme = value;
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.Log("Could not find UI theme for element " + managedButton.ElementName,
-                            LogLevel.Warning);
-                    }
-
-                    result = this.UISpriteColours.TryGetValue(managedButton.ElementName,
-                        out IDictionary<string, Color> colours);
-                    if(result)
-                    {
-                        managedButton.OverwriteColours(colours);
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.Log("Could not find colours for element " + managedButton.ElementName,
+                        GlobalConstants.ActionLog.Log("Could not find colours for " + colourfulElement.ElementName,
                             LogLevel.Warning);
                     }
                 }

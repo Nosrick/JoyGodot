@@ -39,6 +39,9 @@ namespace JoyLib.Code.Graphics
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 GlobalConstants.SPRITES_FOLDER +
                 "default.png");
+
+            ImageTexture defaultImageTexture = new ImageTexture();
+            defaultImageTexture.CreateFromImage(defaultSprite.GetData(), 2);
             //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
             SpriteData iconData = new SpriteData
             {
@@ -55,14 +58,14 @@ namespace JoyLib.Code.Graphics
                         m_Frames = 1,
                         m_Name = "default",
                         m_Position = 0,
-                        m_FrameSprite = new SpriteFrames
+                        m_FrameSprite = new List<Texture>()
                         {
-                            Frames = new Array
-                            {
-                                defaultSprite
-                            }
+                            defaultImageTexture
                         },
-                        m_PossibleColours = new List<Color> {Colors.White}
+                        m_PossibleColours = new List<Color> {Colors.White},
+                        m_DrawCentre = true,
+                        m_PatchMargins = new int[4],
+                        m_StretchMode = NinePatchRect.AxisStretchMode.Stretch
                     }
                 }
             };
@@ -191,6 +194,7 @@ namespace JoyLib.Code.Graphics
                             ImageTexture imageTexture = new ImageTexture();
                             imageTexture.CreateFromImage(image.GetRect(new Rect2(new Vector2(i, 0),
                                 new Vector2(frameWidth, frameWidth))), 2);
+                            imageTexture.ResourceLocalToScene = true;
                             frames.Add(imageTexture);
                         }
 
@@ -203,6 +207,7 @@ namespace JoyLib.Code.Graphics
                             }
                         }
 
+                        /*
                         SpriteFrames spriteFrames = new SpriteFrames();
                         if (spriteFrames.GetAnimationNames().Contains(state) == false)
                         {
@@ -215,13 +220,14 @@ namespace JoyLib.Code.Graphics
                         {
                             spriteFrames.AddFrame(state, frames[i], i);
                         }
+                        */
 
                         SpritePart part = new SpritePart
                         {
                             m_Data = data.ToArray(),
                             m_Filename = fileName,
                             m_Frames = partFrames,
-                            m_FrameSprite = spriteFrames,
+                            m_FrameSprite = frames,
                             m_Name = partName,
                             m_Position = position,
                             m_PossibleColours = colours.ToList(),
@@ -336,7 +342,8 @@ namespace JoyLib.Code.Graphics
         public string m_Name;
         public int m_Frames;
         public string[] m_Data;
-        public SpriteFrames m_FrameSprite;
+        //public SpriteFrames m_FrameSprite;
+        public List<Texture> m_FrameSprite;
         public string m_Filename;
         public int m_Position;
         public List<Color> m_PossibleColours;

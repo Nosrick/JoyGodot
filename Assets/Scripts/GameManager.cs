@@ -106,10 +106,9 @@ namespace JoyLib.Code
             this.ObjectIconHandler = new ObjectIconHandler(this.Roller);
 
             this.GUIManager = new GUIManager(this.FindNode("MainUI"));
-
-            this.m_StateManager = new StateManager();
-            this.m_StateManager.ChangeState(new LoadingState());
             this.CombatEngine = new CombatEngine();
+            
+            this.m_StateManager = new StateManager();
 
             this.PhysicsManager = new PhysicsManager();
 
@@ -135,6 +134,8 @@ namespace JoyLib.Code
                 this.SkillHandler,
                 this.VisionProviderHandler,
                 this.AbilityHandler);
+            
+            this.m_StateManager.ChangeState(new LoadingState());
 
             this.DerivedValueHandler = new DerivedValueHandler(this.StatisticHandler, this.SkillHandler);
 
@@ -193,16 +194,6 @@ namespace JoyLib.Code
         public void SetNextState(IGameState nextState = null)
         {
             this.NextState = nextState;
-        }
-
-        protected void OnSceneLoad()
-        {
-            if (this.NextState is null)
-            {
-                return;
-            }
-
-            //GlobalConstants.ActionLog.Log(SceneManager.GetActiveScene().name);
             this.m_StateManager.ChangeState(this.NextState);
         }
 

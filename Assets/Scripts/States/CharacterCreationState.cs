@@ -1,4 +1,5 @@
 ﻿using Godot;
+using JoyLib.Code.Cultures;
 using JoyLib.Code.Unity.GUI;
 
 namespace JoyLib.Code.States
@@ -6,6 +7,8 @@ namespace JoyLib.Code.States
     public class CharacterCreationState : GameState
     {
         //protected CharacterCreationScreen CharacterCreationScreen { get; set; }
+        
+        protected Node Node { get; set; }
 
         public CharacterCreationState()
         {
@@ -25,6 +28,20 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
+            PackedScene scene = GD.Load<PackedScene>(
+                GlobalConstants.GODOT_ASSETS_FOLDER +
+                "Scenes/UI/Character Creation Part 1.tscn");
+
+            this.Node = scene.Instance();
+            //GlobalConstants.GameManager.MyNode.GetTree().Root.AddChild(this.Node);
+            
+            GlobalConstants.GameManager.GUIManager.InstantiateUIScene(scene);
+            ICulture culture = GlobalConstants.GameManager.Roller.SelectFromCollection(GlobalConstants.GameManager.CultureHandler.Values);
+            this.GUIManager.SetUIColours(
+                culture.BackgroundColours,
+                culture.CursorColours,
+                culture.FontColours);
+            
             base.SetUpUi();
 
             /*
@@ -33,7 +50,6 @@ namespace JoyLib.Code.States
                 .GetComponent<CharacterCreationScreen>();
             this.CharacterCreationScreen.Initialise();
             */
-            this.GUIManager.OpenGUI(GUINames.CHARACTER_CREATION_PART_1, true);
         }
 
         public override void HandleInput(InputEvent @event)

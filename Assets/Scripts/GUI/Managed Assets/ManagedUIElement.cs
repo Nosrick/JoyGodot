@@ -4,13 +4,17 @@ using System.Linq;
 using Godot;
 using JoyLib.Code;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using Thread = System.Threading.Thread;
 
 namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {
-    public class ManagedUIElement : Control, IManagedElement
+    public class ManagedUIElement : 
+        Control, 
+        IColourableElement, 
+        ISpriteStateElement
     {
-        [Export] public string ElementName { get; protected set; }
+        [Export] public string ElementName { get; set; }
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
@@ -93,6 +97,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
             
             this.Parts = new List<NinePatchRect>();
+            var children = this.GetAllChildren();
+            foreach (var child in children)
+            {
+                if (child is NinePatchRect patchRect)
+                {
+                    this.Parts.Add(patchRect);
+                }
+            }
             this.m_States = new Dictionary<string, ISpriteState>();
 
             this.Initialised = true;
@@ -106,7 +118,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (changeToNew)
             {
-                this.ChangeState(state);
+                this.ChangeState(state.Name);
             }
         }
 
@@ -124,7 +136,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     Texture icon = theme.GetIcon(part.m_Name, nameof(this.GetType));
                     if (icon is null == false)
                     {
-                        part.m_FrameSprite.Frames = new Godot.Collections.Array
+                        part.m_FrameSprite = new List<Texture>
                         {
                             icon
                         };
@@ -151,27 +163,26 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 .Select(pair => pair.Value);
         }
 
-        public virtual void ChangeState(string name)
+        public virtual bool ChangeState(string name)
         {
             this.Initialise();
 
-            if (this.m_States.ContainsKey(name))
+            if (!this.m_States.ContainsKey(name))
             {
-                this.ChosenSprite = name;
-                this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
-
-                this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
-
-                this.FrameIndex = 0;
-                this.Finished = false;
-                
-                this.UpdateSprites();
+                return false;
             }
-        }
+            
+            this.ChosenSprite = name;
+            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
 
-        public virtual void ChangeState(ISpriteState state)
-        {
-            this.ChangeState(state.Name);
+            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+
+            this.FrameIndex = 0;
+            this.Finished = false;
+                
+            this.UpdateSprites();
+
+            return true;
         }
 
         public virtual void Clear()
@@ -179,7 +190,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             this.Initialise();
 
             this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
-            foreach (Control part in this.Parts)
+            foreach (NinePatchRect part in this.Parts)
             {
                 part.Visible = false;
             }
@@ -358,8 +369,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 NinePatchRect patchRect = this.Parts[i];
                 patchRect.Name = part.m_Name;
                 patchRect.Visible = true;
-                patchRect.Texture = part.m_FrameSprite.GetFrame(this.CurrentSpriteState.SpriteData.m_State, 0);
-                this.MoveChild(patchRect, part.m_SortingOrder);
+                patchRect.Texture = part.m_FrameSprite.FirstOrDefault();
+                //this.MoveChild(patchRect, part.m_SortingOrder);
                 patchRect.PatchMarginLeft = part.m_PatchMargins[0];
                 patchRect.PatchMarginTop = part.m_PatchMargins[1];
                 patchRect.PatchMarginRight = part.m_PatchMargins[2];

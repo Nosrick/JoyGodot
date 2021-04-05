@@ -168,17 +168,17 @@ namespace JoyLib.Code.Cultures
             if (group == NO_GROUP)
             {
                 names = this.m_NameData.Where(x => x.chain.Contains(chain)
-                                                   && (x.genders.Contains(gender, StringComparer.OrdinalIgnoreCase))
+                                                   && (x.genders.Contains(gender, StringComparer.OrdinalIgnoreCase)
                                                        || x.genders.Any(s =>
-                                                           s.Equals("all", StringComparison.OrdinalIgnoreCase))
+                                                           s.Equals("all", StringComparison.OrdinalIgnoreCase)))
                                                    && x.groups.IsNullOrEmpty()).ToArray();
             }
             else
             {
                 names = this.m_NameData.Where(x => x.chain.Contains(chain)
-                                                   && (x.genders.Contains(gender, StringComparer.OrdinalIgnoreCase))
+                                                   && (x.genders.Contains(gender, StringComparer.OrdinalIgnoreCase)
                                                    || x.genders.Any(s =>
-                                                       s.Equals("all", StringComparison.OrdinalIgnoreCase))
+                                                       s.Equals("all", StringComparison.OrdinalIgnoreCase)))
                                                    && x.groups.Contains(group)).ToArray();
             }
 

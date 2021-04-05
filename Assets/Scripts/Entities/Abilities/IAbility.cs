@@ -162,6 +162,6 @@ namespace JoyLib.Code.Entities.Abilities
         
         SpriteData SpriteData { get; }
         
-        SpriteFrames UsingIcon { get; }
+        Texture UsingIcon { get; }
     }
 }

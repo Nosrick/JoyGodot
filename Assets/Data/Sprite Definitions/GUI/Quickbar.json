@@ -28,6 +28,23 @@
         "Name": "CharacterSheetIcon",
         "Part": [
           {
+            "Name": "background",
+            "Filename": "UI/icons/icon-background.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 1,
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
+          },
+          {
             "Name": "icon",
             "Filename": "UI/icons/character-sheet-icon.png",
             "Data": [
@@ -43,6 +60,23 @@
       {
         "Name": "InventoryIcon",
         "Part": [
+          {
+            "Name": "background",
+            "Filename": "UI/icons/icon-background.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 1,
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
+          },
           {
             "Name": "icon",
             "Filename": "UI/icons/backpack-icon.png",
@@ -60,6 +94,23 @@
         "Name": "EquipmentIcon",
         "Part": [
           {
+            "Name": "background",
+            "Filename": "UI/icons/icon-background.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 1,
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
+          },
+          {
             "Name": "icon",
             "Filename": "UI/icons/equipment-icon.png",
             "Data": [
@@ -76,6 +127,23 @@
         "Name": "JobManagementIcon",
         "Part": [
           {
+            "Name": "background",
+            "Filename": "UI/icons/icon-background.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 1,
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
+          },
+          {
             "Name": "icon",
             "Filename": "UI/icons/job-management-icon.png",
             "Data": [
@@ -91,6 +159,23 @@
       {
         "Name": "QuestJournalIcon",
         "Part": [
+          {
+            "Name": "background",
+            "Filename": "UI/icons/icon-background.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 1,
+            "FillType": "tile",
+            "PatchMargins": [
+              9,
+              9,
+              9,
+              9
+            ]
+          },
           {
             "Name": "icon",
             "Filename": "UI/icons/quest-journal-icon.png",
