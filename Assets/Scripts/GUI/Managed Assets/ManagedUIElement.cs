@@ -299,7 +299,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                    colours.TryGetValue(this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name, out Color colour);
+                    this.Parts[i].SelfModulate = colour; 
                 }
             }
             this.IsDirty = true;
@@ -369,7 +370,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 NinePatchRect patchRect = this.Parts[i];
                 patchRect.Name = part.m_Name;
                 patchRect.Visible = true;
-                patchRect.Texture = part.m_FrameSprite.FirstOrDefault();
+                patchRect.Texture = part.m_FrameSprite[this.FrameIndex];
                 //this.MoveChild(patchRect, part.m_SortingOrder);
                 patchRect.PatchMarginLeft = part.m_PatchMargins[0];
                 patchRect.PatchMarginTop = part.m_PatchMargins[1];
@@ -380,7 +381,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 patchRect.AxisStretchVertical = part.m_StretchMode;
                 patchRect.SizeFlagsHorizontal = 3;
                 patchRect.SizeFlagsVertical = 3;
-                GlobalConstants.ActionLog.Log(patchRect);
             }
         }
 

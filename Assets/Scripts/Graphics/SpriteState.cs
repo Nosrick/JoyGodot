@@ -33,7 +33,7 @@ namespace JoyLib.Code.Graphics
             bool randomiseColours = false)
         {
             this.SpriteData = spriteData;
-            
+
             this.Name = name;
 
             this.AnimationType = animationType;
@@ -55,26 +55,45 @@ namespace JoyLib.Code.Graphics
                 this.RandomiseColours();
             }
         }
+
         public SpritePart GetPart(string name)
         {
             return this.m_SpriteData.m_Parts.FirstOrDefault(part =>
                 part.m_Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public void OverrideColours(IDictionary<string, Color> colours)
+        public void OverrideColours(IDictionary<string, Color> colours, bool overwrite = false)
         {
-            for(int i = 0; i < this.SpriteData.m_Parts.Count; i++)
+            for (int i = 0; i < this.SpriteData.m_Parts.Count; i++)
             {
                 SpritePart part = this.SpriteData.m_Parts[i];
                 if (!colours.ContainsKey(part.m_Name))
                 {
                     continue;
                 }
-                part.m_PossibleColours = new List<Color>
+
+                if (overwrite)
                 {
-                    colours[part.m_Name]
-                };
-                part.m_SelectedColour = 0;
+                    part.m_PossibleColours = new List<Color>
+                    {
+                        colours[part.m_Name]
+                    };
+                    part.m_SelectedColour = 0;
+                }
+                else
+                {
+                    if (part.m_PossibleColours.Contains(colours[part.m_Name]))
+                    {
+                        part.m_SelectedColour =
+                            part.m_PossibleColours.FindIndex(color => color.Equals(colours[part.m_Name]));
+                    }
+                    else
+                    {
+                        part.m_PossibleColours.Add(colours[part.m_Name]);
+                        part.m_SelectedColour = part.m_PossibleColours.Count;
+                    }
+                }
+                
                 this.SpriteData.m_Parts[i] = part;
             }
         }
@@ -97,7 +116,7 @@ namespace JoyLib.Code.Graphics
         {
             return this.SpriteData.m_Parts.Select(part => part.m_SelectedColour).ToList();
         }
-        
+
         public void RandomiseColours()
         {
             this.OverrideColours(this.SpriteData.GetRandomPartColours());

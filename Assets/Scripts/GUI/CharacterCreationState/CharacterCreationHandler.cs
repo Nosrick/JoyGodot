@@ -30,10 +30,18 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.IconHandler = GlobalConstants.GameManager.ObjectIconHandler;
         }
 
+        public override void _Input(InputEvent @event)
+        {
+            if (@event.IsActionPressed("ui_accept"))
+            {
+                GlobalConstants.GameManager.GUIManager.CloseAllGUIs();
+                GlobalConstants.GameManager.SetNextState(new States.MainMenuState());
+            }
+        }
+
         public void RandomiseName()
         {
-            var culture = this.Roller.SelectFromCollection(
-                    this.CultureHandler.Values);
+            var culture = this.Roller.SelectFromCollection(this.CultureHandler.Values);
 
             string name = culture.GetRandomName("male");
             
@@ -51,6 +59,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             
             this.PlayerSprite.Clear();
             this.PlayerSprite.AddSpriteState(state);
+            this.PlayerSprite.OverrideAllColours(state.SpriteData.GetRandomPartColours());
             this.PlayerName.Text = name;
         }
     }

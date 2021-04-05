@@ -14,7 +14,7 @@ namespace JoyLib.Code.Graphics
 
         void RandomiseColours();
         void SetColourIndices(List<int> indices);
-        void OverrideColours(IDictionary<string, Color> colours);
+        void OverrideColours(IDictionary<string, Color> colours, bool overwrite = false);
         void OverrideWithSingleColour(Color colour);
 
         List<int> GetIndices();
