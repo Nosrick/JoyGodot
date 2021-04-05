@@ -6,6 +6,7 @@ using Castle.Core.Internal;
 using Code.Unity.GUI.Managed_Assets;
 using Godot;
 using Godot.Collections;
+using JoyGodot.addons.Managed_Assets;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;

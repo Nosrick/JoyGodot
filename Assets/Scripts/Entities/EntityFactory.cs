@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.Drivers;

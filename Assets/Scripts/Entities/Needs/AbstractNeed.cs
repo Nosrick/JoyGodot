@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;

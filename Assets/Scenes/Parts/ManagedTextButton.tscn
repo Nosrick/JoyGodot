@@ -1,24 +1,23 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Assets/Scripts/GUI/Managed Assets/ManagedButton.cs" type="Script" id=1]
+[ext_resource path="res://addons/Managed Assets/ManagedButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Themes/DefaultTheme.tres" type="Theme" id=2]
 [ext_resource path="res://Assets/Fonts/Silver.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=5]
 [ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=6]
 
-[node name="Button" type="Button"]
+[node name="Button" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 2 )
-shortcut_in_tooltip = false
-flat = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Element" parent="." instance=ExtResource( 4 )]
+visible = false
 
 [node name="background" type="NinePatchRect" parent="Element"]
 anchor_right = 1.0
@@ -49,8 +48,3 @@ custom_fonts/font = ExtResource( 3 )
 text = "My Text"
 align = 1
 valign = 1
-[connection signal="focus_entered" from="." to="." method="OnPointerEnter"]
-[connection signal="focus_exited" from="." to="." method="OnPointerExit"]
-[connection signal="mouse_entered" from="." to="." method="OnPointerEnter"]
-[connection signal="mouse_exited" from="." to="." method="OnPointerExit"]
-[connection signal="toggled" from="." to="." method="OnPointerDown"]

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;

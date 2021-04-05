@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
+using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
