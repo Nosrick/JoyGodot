@@ -54,7 +54,7 @@ namespace JoyLib.Code.Entities.Abilities
             this.SpriteData = usingSprite;
             this.UsingIcon = this.SpriteData?.m_Parts
                 .FirstOrDefault(part => part.m_Name.Equals("icon", StringComparison.OrdinalIgnoreCase))?
-                .m_FrameSprite;
+                .m_FrameSprite.FirstOrDefault();
 
             this.m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
 
@@ -392,6 +392,6 @@ namespace JoyLib.Code.Entities.Abilities
         public int Range { get; protected set; }
 
         public SpriteData SpriteData { get; protected set; }
-        public SpriteFrames UsingIcon { get; protected set; }
+        public Texture UsingIcon { get; protected set; }
     }
 }

@@ -9,7 +9,8 @@ namespace Code.Unity.GUI.Managed_Assets
 {
     public class ManagedButton :
         Button,
-        IManagedElement
+        IColourableElement,
+        ISpriteStateElement
     {
         [Export] public string ElementName { get; protected set; }
         public bool Initialised { get; protected set; }
@@ -64,19 +65,39 @@ namespace Code.Unity.GUI.Managed_Assets
             }
         }
 
+        public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
+        {
+            this.Element.AddSpriteState(state, changeToNew);
+        }
+
+        public bool RemoveStatesByName(string name)
+        {
+            return this.Element.RemoveStatesByName(name);
+        }
+
+        public ISpriteState GetState(string name)
+        {
+            return this.Element.GetState(name);
+        }
+
+        public bool ChangeState(string name)
+        {
+            return this.Element.ChangeState(name);
+        }
+
         public void Clear()
         {
             this.Element.Clear();
         }
 
-        public void AddSpriteState(ISpriteState state)
+        public void OverrideAllColours(IDictionary<string, Color> colours, bool crossFade = false, float duration = 0.1f)
         {
-            this.Element.AddSpriteState(state);
+            this.Element.OverrideAllColours(colours, crossFade, duration);
         }
 
-        public void OverwriteColours(IDictionary<string, Color> colours)
+        public void TintWithSingleColour(Color colour, bool crossFade = false, float duration = 0.1f)
         {
-            this.Element.OverrideAllColours(colours);
+            this.Element.TintWithSingleColour(colour, crossFade, duration);
         }
 
         protected void DoStateTransition(SelectionState state, bool crossFade)

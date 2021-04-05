@@ -57,7 +57,7 @@ namespace JoyLib.Code.Godot
                 Texture needSprite = need.SpriteData.m_Parts.First(
                         part =>
                             part.m_Data.Any(data => data.Equals("need", StringComparison.OrdinalIgnoreCase)))
-                                .m_FrameSprite.GetFrame("default", 0);
+                                .m_FrameSprite.FirstOrDefault();
                 //this.SetParticleSystem(needSprite, Color.white);
 
                 //this.ParticleSystem.Play();

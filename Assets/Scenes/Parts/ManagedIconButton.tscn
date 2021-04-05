@@ -1,15 +1,21 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Scripts/GUI/Managed Assets/ManagedButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Themes/DefaultTheme.tres" type="Theme" id=2]
 [ext_resource path="res://Assets/Sprites/UI/icons/character-sheet-icon.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Assets/Sprites/UI/icons/icon-background.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Fonts/Kenney Pixel.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 1
+font_data = ExtResource( 6 )
 
 [node name="Button" type="Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 2 )
+custom_fonts/font = SubResource( 1 )
 shortcut_in_tooltip = false
 flat = true
 script = ExtResource( 1 )
@@ -18,6 +24,7 @@ __meta__ = {
 }
 
 [node name="Element" parent="." instance=ExtResource( 4 )]
+mouse_filter = 2
 
 [node name="background" type="NinePatchRect" parent="Element"]
 self_modulate = Color( 0, 0, 0, 1 )

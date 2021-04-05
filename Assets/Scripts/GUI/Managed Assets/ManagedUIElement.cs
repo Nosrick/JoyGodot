@@ -9,7 +9,10 @@ using Thread = System.Threading.Thread;
 
 namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {
-    public class ManagedUIElement : Control, IManagedElement
+    public class ManagedUIElement : 
+        Control, 
+        IColourableElement, 
+        ISpriteStateElement
     {
         [Export] public string ElementName { get; set; }
         public bool Initialised { get; protected set; }
@@ -115,7 +118,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (changeToNew)
             {
-                this.ChangeState(state);
+                this.ChangeState(state.Name);
             }
         }
 
@@ -133,7 +136,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     Texture icon = theme.GetIcon(part.m_Name, nameof(this.GetType));
                     if (icon is null == false)
                     {
-                        part.m_FrameSprite.Frames = new Godot.Collections.Array
+                        part.m_FrameSprite = new List<Texture>
                         {
                             icon
                         };
@@ -160,27 +163,26 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 .Select(pair => pair.Value);
         }
 
-        public virtual void ChangeState(string name)
+        public virtual bool ChangeState(string name)
         {
             this.Initialise();
 
-            if (this.m_States.ContainsKey(name))
+            if (!this.m_States.ContainsKey(name))
             {
-                this.ChosenSprite = name;
-                this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
-
-                this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
-
-                this.FrameIndex = 0;
-                this.Finished = false;
-                
-                this.UpdateSprites();
+                return false;
             }
-        }
+            
+            this.ChosenSprite = name;
+            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
 
-        public virtual void ChangeState(ISpriteState state)
-        {
-            this.ChangeState(state.Name);
+            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+
+            this.FrameIndex = 0;
+            this.Finished = false;
+                
+            this.UpdateSprites();
+
+            return true;
         }
 
         public virtual void Clear()
@@ -367,7 +369,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 NinePatchRect patchRect = this.Parts[i];
                 patchRect.Name = part.m_Name;
                 patchRect.Visible = true;
-                //patchRect.Texture = part.m_FrameSprite.GetFrame(this.CurrentSpriteState.SpriteData.m_State, 0);
+                patchRect.Texture = part.m_FrameSprite.FirstOrDefault();
                 //this.MoveChild(patchRect, part.m_SortingOrder);
                 patchRect.PatchMarginLeft = part.m_PatchMargins[0];
                 patchRect.PatchMarginTop = part.m_PatchMargins[1];

@@ -12,7 +12,8 @@ namespace JoyLib.Code.Unity
 {
     public class ManagedSprite :
         Node2D,
-        IManagedElement
+        IColourableElement,
+        ISpriteStateElement
     {
         [Export] public string ElementName { get; protected set; }
         public bool Initialised { get; protected set; }
@@ -26,7 +27,8 @@ namespace JoyLib.Code.Unity
                 if (this.IsDirty)
                 {
                     if (this.m_States.ContainsKey(this.ChosenSprite)
-                        && this.m_States[this.ChosenSprite].SpriteData.m_State.Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
+                        && this.m_States[this.ChosenSprite].SpriteData.m_State
+                            .Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
                     {
                         this.CachedState = this.m_States[this.ChosenSprite];
                         this.LastSprite = this.ChosenSprite;
@@ -38,10 +40,10 @@ namespace JoyLib.Code.Unity
                 return this.CachedState;
             }
         }
-        
+
         protected bool IsDirty { get; set; }
-        
-        protected ISpriteState CachedState { get; set; } 
+
+        protected ISpriteState CachedState { get; set; }
         public int FrameIndex { get; protected set; }
 
         public string ChosenSprite
@@ -53,6 +55,7 @@ namespace JoyLib.Code.Unity
                 this.IsDirty = true;
             }
         }
+
         protected string m_ChosenSprite;
 
         public string ChosenState
@@ -64,17 +67,18 @@ namespace JoyLib.Code.Unity
                 this.IsDirty = true;
             }
         }
+
         protected string m_ChosenState;
-        
+
         protected int FramesInCurrentState { get; set; }
-        
+
         protected string LastState { get; set; }
         protected string LastSprite { get; set; }
-        
+
         public IEnumerable<ISpriteState> States => this.m_States.Values;
 
         protected IDictionary<string, ISpriteState> m_States;
-        
+
         protected List<Node2D> Parts { get; set; }
 
         public virtual void Awake()
@@ -88,7 +92,7 @@ namespace JoyLib.Code.Unity
             {
                 return;
             }
-            
+
             this.Parts = new List<Node2D>();
             this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
 
@@ -111,7 +115,7 @@ namespace JoyLib.Code.Unity
         {
             return this.m_States.Remove(name);
         }
-        
+
         public void SetTheme(Theme theme)
         {
             foreach (ISpriteState state in this.States)
@@ -121,12 +125,12 @@ namespace JoyLib.Code.Unity
                     Texture icon = theme.GetIcon(part.m_Name, "SpritePart");
                     if (icon is null == false)
                     {
-                        part.m_FrameSprite.Frames = new Array
+                        part.m_FrameSprite = new List<Texture>
                         {
                             icon
                         };
                     }
-                    
+
                     Color colour = theme.GetColor(part.m_Name, "SpritePart");
                     part.m_PossibleColours = new List<Color>
                     {
@@ -148,22 +152,26 @@ namespace JoyLib.Code.Unity
                 .Select(pair => pair.Value);
         }
 
-        public virtual void ChangeState(string name)
+        public virtual bool ChangeState(string name)
         {
             this.Initialise();
 
-            if (this.m_States.ContainsKey(name))
+            if (this.m_States.ContainsKey(name) == false)
             {
-                this.ChosenSprite = name;
-                this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
-
-                this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
-
-                this.FrameIndex = 0;
-                this.Finished = false;
-                
-                this.UpdateSprites();
+                return false;
             }
+
+            this.ChosenSprite = name;
+            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
+
+            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+
+            this.FrameIndex = 0;
+            this.Finished = false;
+
+            this.UpdateSprites();
+
+            return true;
         }
 
         public virtual void ChangeState(ISpriteState state)
@@ -183,8 +191,8 @@ namespace JoyLib.Code.Unity
         }
 
         public virtual void OverrideAllColours(
-            IDictionary<string, 
-                Color> colours, 
+            IDictionary<string,
+                Color> colours,
             bool crossFade = false,
             float duration = 0.1f)
         {
@@ -194,7 +202,7 @@ namespace JoyLib.Code.Unity
             {
                 state.OverrideColours(colours);
             }
-            
+
             if (crossFade)
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
@@ -202,8 +210,8 @@ namespace JoyLib.Code.Unity
                     if (colours.TryGetValue(this.Parts[i].Name, out Color colour))
                     {
                         this.ColourLerp(
-                            this.Parts[i], 
-                            colour, 
+                            this.Parts[i],
+                            colour,
                             duration);
                     }
                 }
@@ -212,21 +220,22 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour;
                 }
             }
+
             this.IsDirty = true;
         }
 
         public virtual void TintWithSingleColour(
-            Color colour, 
-            bool crossFade = false, 
+            Color colour,
+            bool crossFade = false,
             float duration = 0.1f)
         {
             this.Initialise();
 
             this.Tint = colour;
-            
+
             if (crossFade)
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
@@ -238,10 +247,10 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour;
                 }
             }
-            
+
             this.IsDirty = true;
         }
 
@@ -253,6 +262,7 @@ namespace JoyLib.Code.Unity
             {
                 part.Visible = false;
             }
+
             if (this.Parts.Count < this.CurrentSpriteState.SpriteData.m_Parts.Count)
             {
                 for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
@@ -272,7 +282,10 @@ namespace JoyLib.Code.Unity
                 SpritePart spriteDataPart = this.CurrentSpriteState.SpriteData.m_Parts[i];
                 animatedSprite.Name = spriteDataPart.m_Name;
                 animatedSprite.Visible = true;
-                animatedSprite.Frames = spriteDataPart.m_FrameSprite;
+                animatedSprite.Frames = new SpriteFrames
+                {
+                    Frames = new Array(spriteDataPart.m_FrameSprite)
+                };
                 animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
                 animatedSprite.Play(this.CurrentSpriteState.SpriteData.m_State);
                 animatedSprite.Frame = 0;
@@ -308,6 +321,7 @@ namespace JoyLib.Code.Unity
                     lerpParams.m_Sprite.SelfModulate.LinearInterpolate(lerpParams.m_NewColour, lerp);
                     lerp = timer.WaitTime / lerpParams.m_Duration;
                 }
+
                 timer.Stop();
             }
         }

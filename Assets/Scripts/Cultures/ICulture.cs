@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Godot;
 using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Jobs;
@@ -14,7 +15,7 @@ namespace JoyLib.Code.Cultures
     {
         string GetRandomName(string genderRef);
 
-        string GetNameForChain(int chain, string gender, int group);
+        string GetNameForChain(int chain, string gender, int group = Int32.MinValue);
 
         IBioSex ChooseSex(IEnumerable<IBioSex> sexes);
 
