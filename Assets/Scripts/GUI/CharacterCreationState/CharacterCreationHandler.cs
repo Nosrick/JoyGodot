@@ -46,7 +46,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 "player",
                 this.IconHandler.GetSprites(
                     culture.Tileset,
-                    this.Roller.SelectFromCollection(culture.Inhabitants)).First());
+                    this.Roller.SelectFromCollection(culture.Inhabitants),
+                    "idle").First());
             
             this.PlayerSprite.Clear();
             this.PlayerSprite.AddSpriteState(state);
