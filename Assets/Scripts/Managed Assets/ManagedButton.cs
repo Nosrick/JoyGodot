@@ -107,7 +107,22 @@ namespace Code.Unity.GUI.Managed_Assets
         public const int PRESSED = 3;
         public const int DISABLED = -1;
 
-        [Export] protected IDictionary<int, Color> StateColours { get; set; }
+        [Export]
+        protected IDictionary<int, Color> StateColours
+        {
+            get
+            {
+                if (this.m_StateColours is null)
+                {
+                    this.DefaultStateColours();
+                }
+
+                return this.m_StateColours;
+            }
+            set => this.m_StateColours = value;
+        }
+
+        protected IDictionary<int, Color> m_StateColours;
 
         [Export] public float ColourMultiplier { get; set; }
 
@@ -117,8 +132,10 @@ namespace Code.Unity.GUI.Managed_Assets
         public Color PressedColour => this.StateColours[PRESSED];
         public Color DisabledColour => this.StateColours[DISABLED];
 
+        [Signal]
         public delegate void _Press();
 
+        [Signal]
         public delegate void _Toggle();
 
         protected SelectionState CurrentSelectionState
@@ -155,7 +172,15 @@ namespace Code.Unity.GUI.Managed_Assets
         public override void _EnterTree()
         {
             this.ColourMultiplier = 1f;
-            this.StateColours = new Dictionary<int, Color>
+            this.DefaultStateColours();
+            
+            base._EnterTree();
+            this.Initialise();
+        }
+
+        protected void DefaultStateColours()
+        {
+            this.m_StateColours = new Dictionary<int, Color>
             {
                 {NORMAL, Colors.White},
                 {HIGHLIGHTED, Colors.LightGray},
@@ -163,9 +188,6 @@ namespace Code.Unity.GUI.Managed_Assets
                 {PRESSED, Colors.DarkGray},
                 {DISABLED, Colors.DarkSlateGray}
             };
-            
-            base._EnterTree();
-            this.Initialise();
         }
 
         public override void _Draw()

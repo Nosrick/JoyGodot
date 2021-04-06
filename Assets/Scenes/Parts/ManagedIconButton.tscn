@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Scripts/Managed Assets/ManagedButton.cs" type="Script" id=1]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=2]
+
+[node name="Managed Icon Button" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+ElementName = "SlotSprite"
+StateColours = {
+-1: Color( 0.2, 0.2, 0.2, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.8, 0.8, 0.8, 1 ),
+2: Color( 0.8, 0.8, 0.8, 1 ),
+3: Color( 0.6, 0.6, 0.6, 1 )
+}
+
+[node name="ManagedUIElement" parent="." instance=ExtResource( 2 )]
+
+[editable path="ManagedUIElement"]

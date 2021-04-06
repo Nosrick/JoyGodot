@@ -15,8 +15,8 @@ namespace JoyGodot.addons.Managed_Assets
 			set
 			{
 				this.m_HAlign = value;
-				this.EmitSignal("_AlignChanged");
 				this.MyLabel.Align = this.HAlign;
+				this.EmitSignal("_AlignChanged");
 			}
 		}
 
@@ -29,8 +29,8 @@ namespace JoyGodot.addons.Managed_Assets
 			set
 			{
 				this.m_VAlign = value;
-				this.EmitSignal("_AlignChanged");
 				this.MyLabel.Valign = this.m_VAlign;
+				this.EmitSignal("_AlignChanged");
 			}
 		}
 
@@ -39,34 +39,39 @@ namespace JoyGodot.addons.Managed_Assets
 		
 		protected Label MyLabel { get; set; }
 
+		[Signal]
 		public delegate void _AlignChanged();
 
-		[Export]
 		public string Text
 		{
-			get => this.MyLabel.Text;
-			set => this.MyLabel.Text = value;
+			get
+			{
+				if (this.MyLabel is null)
+				{
+					this.Initialise();
+				}
+				return this.MyLabel?.Text;
+			}
+			set
+			{
+				if (this.MyLabel is null)
+				{
+					this.Initialise();
+				}
+				this.MyLabel.Text = value;
+			}
 		}
 
 		public override void _EnterTree()
 		{
 			base._EnterTree();
 			this.Initialise();
-			this.Connect("_AlignChanged", this, "Repaint");
-		}
-
-		protected void Repaint()
-		{
-			if (this.MyLabel is null == false)
-			{
-				this.MyLabel.Align = this.HAlign;
-				this.MyLabel.Valign = this.VAlign;
-			}
 		}
 
 		protected override void Initialise()
 		{
-			base.Initialise();
+			//base.Initialise();
+			GD.Print(nameof(this.Initialise));
 			this.MyLabel = this.FindNode("Text") as Label;
 			if (this.MyLabel is null)
 			{
