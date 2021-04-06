@@ -15,6 +15,13 @@ namespace JoyLib.Code.Helpers
         private static readonly MethodInfo CloneMethod =
             typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
 
+        private static readonly Random ROLLER = new Random();
+
+        public static T GetRandom<T>(this ICollection<T> collection)
+        {
+            return collection.ElementAt(ROLLER.Next(collection.Count));
+        }
+
         public static string Print(this IEnumerable collection)
         {
             StringBuilder builder = new StringBuilder();

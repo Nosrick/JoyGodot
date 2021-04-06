@@ -82,7 +82,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         
         protected List<NinePatchRect> Parts { get; set; }
 
-        protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
+        protected const float TIME_BETWEEN_FRAMES = 1f;
 
         public override void _Ready()
         {

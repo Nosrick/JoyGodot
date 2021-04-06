@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
-using JoyLib.Code;
+using JoyLib.Code.Helpers;
 
 namespace JoyGodot.addons.Managed_Assets
 {
-    
-
     [Serializable]
     public class SpriteData
     {
@@ -22,7 +20,7 @@ namespace JoyGodot.addons.Managed_Assets
             {
                 colours.Add(
                     part.m_Name,
-                    GlobalConstants.GameManager.Roller.SelectFromCollection(part.m_PossibleColours));
+                    part.m_PossibleColours.GetRandom());
             }
 
             return colours;

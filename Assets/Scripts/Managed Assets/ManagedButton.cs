@@ -7,7 +7,6 @@ using JoyLib.Code.Graphics;
 
 namespace Code.Unity.GUI.Managed_Assets
 {
-    [Tool]
     public class ManagedButton :
         Control,
         IColourableElement,
@@ -17,8 +16,7 @@ namespace Code.Unity.GUI.Managed_Assets
         public bool Initialised { get; protected set; }
 
         protected ManagedUIElement Element { get; set; }
-
-
+        
         public bool MouseInside { get; protected set; }
 
         /// <summary>
@@ -102,8 +100,22 @@ namespace Code.Unity.GUI.Managed_Assets
         /// </summary>
         [Export]
         public ButtonGroup Group { get; set; }
+        
+        public const int NORMAL = 0;
+        public const int HIGHLIGHTED = 1;
+        public const int SELECTED = 2;
+        public const int PRESSED = 3;
+        public const int DISABLED = -1;
 
-        [Export] public ColourBlock StateColours { get; set; }
+        [Export] protected IDictionary<int, Color> StateColours { get; set; }
+
+        [Export] public float ColourMultiplier { get; set; }
+
+        public Color NormalColour => this.StateColours[NORMAL];
+        public Color HighlightedColour => this.StateColours[HIGHLIGHTED];
+        public Color SelectedColour => this.StateColours[SELECTED];
+        public Color PressedColour => this.StateColours[PRESSED];
+        public Color DisabledColour => this.StateColours[DISABLED];
 
         public delegate void _Press();
 
@@ -142,8 +154,34 @@ namespace Code.Unity.GUI.Managed_Assets
 
         public override void _EnterTree()
         {
+            this.ColourMultiplier = 1f;
+            this.StateColours = new Dictionary<int, Color>
+            {
+                {NORMAL, Colors.White},
+                {HIGHLIGHTED, Colors.LightGray},
+                {SELECTED, Colors.LightGray},
+                {PRESSED, Colors.DarkGray},
+                {DISABLED, Colors.DarkSlateGray}
+            };
+            
             base._EnterTree();
-            this.Element = this.GetNode<ManagedUIElement>("Element");
+            this.Initialise();
+        }
+
+        public override void _Draw()
+        {
+            this.Initialise();
+            base._Draw();
+        }
+
+        protected virtual void Initialise()
+        {
+            if (this.Initialised)
+            {
+                return;
+            }
+            
+            this.Element = this.FindNode("Element") as ManagedUIElement;
             if (this.Element is null)
             {
                 GD.Print("Creating managed UI element");
@@ -158,6 +196,8 @@ namespace Code.Unity.GUI.Managed_Assets
                 this.AddChild(this.Element);
                 this.MoveChild(this.Element, 0);
             }
+
+            this.Initialised = true;
         }
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
@@ -208,27 +248,27 @@ namespace Code.Unity.GUI.Managed_Assets
             switch (state)
             {
                 case SelectionState.Normal:
-                    tintColor = this.StateColours.Normal;
+                    tintColor = this.NormalColour;
                     //transitionSprite = null;
                     //triggerName = this.m_AnimationTriggers.normalTrigger;
                     break;
                 case SelectionState.Highlighted:
-                    tintColor = this.StateColours.Highlighted;
+                    tintColor = this.HighlightedColour;
                     //transitionSprite = this.m_SpriteState.highlightedSprite;
                     //triggerName = this.m_AnimationTriggers.highlightedTrigger;
                     break;
                 case SelectionState.Pressed:
-                    tintColor = this.StateColours.Pressed;
+                    tintColor = this.PressedColour;
                     //transitionSprite = this.m_SpriteState.pressedSprite;
                     //triggerName = this.m_AnimationTriggers.pressedTrigger;
                     break;
                 case SelectionState.Selected:
-                    tintColor = this.StateColours.Selected;
+                    tintColor = this.SelectedColour;
                     //transitionSprite = this.m_SpriteState.selectedSprite;
                     //triggerName = this.m_AnimationTriggers.selectedTrigger;
                     break;
                 case SelectionState.Disabled:
-                    tintColor = this.StateColours.Disabled;
+                    tintColor = this.DisabledColour;
                     //transitionSprite = this.m_SpriteState.disabledSprite;
                     //triggerName = this.m_AnimationTriggers.disabledTrigger;
                     break;
@@ -239,43 +279,7 @@ namespace Code.Unity.GUI.Managed_Assets
                     break;
             }
 
-            this.TintWithSingleColour(tintColor * this.StateColours.ColourMultiplier, crossFade);
-        }
-
-        protected virtual void DoSpriteSwap(Sprite sprite)
-        {
-            /*
-            if (sprite is null)
-            {
-                return;
-            }
-            
-            this.Clear();
-            this.AddSpriteState(
-                new JoyLib.Code.Graphics.SpriteState(
-                    "Button",
-                    new SpriteData
-                    {
-                        m_Name = "Button",
-                        m_Parts = new List<SpritePart>
-                        {
-                            new SpritePart
-                            {
-                                m_Frames = 1,
-                                m_FrameSprites = new List<Sprite>
-                                {
-                                    sprite
-                                },
-                                m_ImageFillType = Image.Type.Tiled,
-                                m_Name = "Button",
-                                m_PossibleColours = new List<Color>
-                                {
-                                    Color.white
-                                }
-                            }
-                        }
-                    }));
-                    */
+            this.TintWithSingleColour(tintColor * this.ColourMultiplier, crossFade);
         }
 
         protected virtual void EvaluateAndTransitionToSelectionState()
@@ -310,7 +314,7 @@ namespace Code.Unity.GUI.Managed_Assets
 
             this.EvaluateAndTransitionToSelectionState();
 
-            GlobalConstants.ActionLog.Log("Pressed " + this.Name);
+            GD.Print("Pressed " + this.Name);
         }
 
         public override void _GuiInput(InputEvent @event)
@@ -387,86 +391,6 @@ namespace Code.Unity.GUI.Managed_Assets
         /// <summary>
         /// The UI object cannot be selected.
         /// </summary>
-        Disabled,
-    }
-
-    public class ColourBlock
-    {
-        public const int NORMAL = 0;
-        public const int HIGHLIGHTED = 1;
-        public const int SELECTED = 2;
-        public const int PRESSED = 3;
-        public const int DISABLED = int.MaxValue;
-
-        [Export] protected IDictionary<int, Color> StateColours { get; set; }
-
-        [Export] public float ColourMultiplier { get; set; }
-
-        public Color Normal => this.StateColours[NORMAL];
-        public Color Highlighted => this.StateColours[HIGHLIGHTED];
-        public Color Selected => this.StateColours[SELECTED];
-        public Color Pressed => this.StateColours[PRESSED];
-        public Color Disabled => this.StateColours[DISABLED];
-
-        public ColourBlock()
-            : this(
-                1f,
-                new Dictionary<int, Color>
-                {
-                    {NORMAL, Colors.White},
-                    {HIGHLIGHTED, Colors.LightGray},
-                    {SELECTED, Colors.LightGray},
-                    {PRESSED, Colors.DarkGray},
-                    {DISABLED, Colors.DarkSlateGray}
-                })
-        { }
-
-        public ColourBlock(float colourMultiplier)
-            : this(
-                colourMultiplier,
-                new Dictionary<int, Color>
-                {
-                    {NORMAL, Colors.White},
-                    {HIGHLIGHTED, Colors.LightGray},
-                    {SELECTED, Colors.LightGray},
-                    {PRESSED, Colors.DarkGray},
-                    {DISABLED, Colors.DarkSlateGray}
-                })
-        { }
-
-        public ColourBlock(
-            float colourMultiplier,
-            IDictionary<int, Color> stateColours)
-        {
-            this.ColourMultiplier = colourMultiplier;
-            this.StateColours = stateColours;
-        }
-
-        public bool Add(int code, Color colour)
-        {
-            if (this.StateColours.ContainsKey(code))
-            {
-                return false;
-            }
-
-            this.StateColours.Add(code, colour);
-            return true;
-        }
-
-        public bool Remove(int code)
-        {
-            return this.StateColours.Remove(code);
-        }
-
-        public Color Get(int code)
-        {
-            if (!this.StateColours.TryGetValue(code, out Color colour))
-            {
-                GD.PushWarning("No colour found for code: " + code);
-                return Colors.Magenta;
-            }
-
-            return colour;
-        }
+        Disabled
     }
 }
