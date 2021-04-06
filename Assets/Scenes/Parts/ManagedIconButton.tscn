@@ -20,3 +20,4 @@ StateColours = {
 }
 
 [node name="Element" parent="." instance=ExtResource( 2 )]
+mouse_filter = 2

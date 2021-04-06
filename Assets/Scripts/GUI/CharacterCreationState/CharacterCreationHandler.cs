@@ -32,7 +32,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         public override void _Input(InputEvent @event)
         {
-            if (@event.IsActionPressed("ui_accept"))
+            if (@event.IsActionPressed("ui_cancel"))
             {
                 GlobalConstants.GameManager.GUIManager.CloseAllGUIs();
                 GlobalConstants.GameManager.SetNextState(new States.MainMenuState());

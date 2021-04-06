@@ -86,9 +86,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         protected const float TIME_BETWEEN_FRAMES = 1f;
 
-        public override void _Ready()
+        public override void _EnterTree()
         {
-            base._Ready();
+            base._EnterTree();
             this.Initialise();
         }
 
@@ -116,7 +116,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (this.TweenNode is null)
             {
-                this.TweenNode = new Tween();
+                this.TweenNode = new Tween()
+                {
+                    Name = "Colour Lerper"
+                };
                 this.AddChild(this.TweenNode);
             }
             
@@ -404,6 +407,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             Color newColour,
             float duration)
         {
+            if (this.GetTree() is null)
+            {
+                return;
+            }
+            
             this.TweenNode.InterpolateProperty(
                 this, 
                 "modulate", 
@@ -411,13 +419,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 newColour,
                 duration);
             this.TweenNode.Start();
-        }
-
-        public struct ThreadLerpParams
-        {
-            public NinePatchRect m_Sprite;
-            public Color m_NewColour;
-            public float m_Duration;
         }
     }
 }

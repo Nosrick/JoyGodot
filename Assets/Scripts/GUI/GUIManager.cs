@@ -304,7 +304,9 @@ namespace JoyLib.Code.Unity.GUI
             {
                 for(int i = 0; i < children.Count; i++)
                 {
-                    this.RootUI.RemoveChild(this.RootUI.GetChild(0));
+                    Node child = this.RootUI.GetChild(0);
+                    this.RootUI.RemoveChild(child);
+                    child.QueueFree();
                 }
             }
             Control newUI = (Control) ui.Instance();

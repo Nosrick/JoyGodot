@@ -191,16 +191,15 @@ __meta__ = {
 
 [node name="Random Name Button" parent="Player Name Container" instance=ExtResource( 1 )]
 margin_left = 356.0
-margin_right = 3.05176e-05
 ElementName = "CharacterSheetIcon"
-ColourMultiplier = 1.0
 StateColours = {
--1: Color( 0.18, 0.31, 0.31, 1 ),
+-1: Color( 0.2, 0.2, 0.2, 1 ),
 0: Color( 1, 1, 1, 1 ),
-1: Color( 0.83, 0.83, 0.83, 1 ),
-2: Color( 0.83, 0.83, 0.83, 1 ),
-3: Color( 0.66, 0.66, 0.66, 1 )
+1: Color( 0.8, 0.8, 0.8, 1 ),
+2: Color( 0.8, 0.8, 0.8, 1 ),
+3: Color( 0.6, 0.6, 0.6, 1 )
 }
+[connection signal="_Press" from="Player Name Container/Random Name Button" to="." method="RandomiseName"]
 
 [editable path="Player Name Container/Random Name Button"]
 
