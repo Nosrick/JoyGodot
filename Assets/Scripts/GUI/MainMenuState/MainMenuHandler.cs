@@ -1,4 +1,6 @@
-﻿namespace JoyLib.Code.Unity.GUI.MainMenuState
+﻿using Godot;
+
+namespace JoyLib.Code.Unity.GUI.MainMenuState
 {
     public class MainMenuHandler : GUIData
     {
@@ -27,6 +29,11 @@
         {
             GlobalConstants.GameManager.GUIManager.CloseAllGUIs();
             GlobalConstants.GameManager.SetNextState(new States.CharacterCreationState());
+        }
+
+        public void QuitGame()
+        {
+            this.GetTree().Quit(0);
         }
     }
 }

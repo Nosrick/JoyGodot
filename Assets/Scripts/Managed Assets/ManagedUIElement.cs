@@ -81,6 +81,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected IDictionary<string, ISpriteState> m_States;
         
         protected List<NinePatchRect> Parts { get; set; }
+        
+        protected Tween TweenNode { get; set; }
 
         protected const float TIME_BETWEEN_FRAMES = 1f;
 
@@ -105,7 +107,19 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 {
                     this.Parts.Add(patchRect);
                 }
+
+                if (child is Tween tween)
+                {
+                    this.TweenNode = tween;
+                }
             }
+
+            if (this.TweenNode is null)
+            {
+                this.TweenNode = new Tween();
+                this.AddChild(this.TweenNode);
+            }
+            
             this.m_States = new Dictionary<string, ISpriteState>();
 
             this.Initialised = true;
@@ -390,32 +404,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             Color newColour,
             float duration)
         {
-            System.Threading.Thread lerpThread = new Thread(this.ColourLerpForThread);
-            lerpThread.Start(new ThreadLerpParams
-            {
-                m_Duration = duration,
-                m_NewColour = newColour,
-                m_Sprite = sprite
-            });
-        }
-
-        protected void ColourLerpForThread(object param)
-        {
-            if (param is ThreadLerpParams lerpParams)
-            {
-                Timer timer = new Timer
-                {
-                    OneShot = true
-                };
-                timer.Start(lerpParams.m_Duration);
-                float lerp = 0f;
-                while (lerp < 1f)
-                {
-                    lerpParams.m_Sprite.SelfModulate.LinearInterpolate(lerpParams.m_NewColour, lerp);
-                    lerp = timer.WaitTime / lerpParams.m_Duration;
-                }
-                timer.Stop();
-            }
+            this.TweenNode.InterpolateProperty(
+                this, 
+                "modulate", 
+                this.Modulate, 
+                newColour,
+                duration);
+            this.TweenNode.Start();
         }
 
         public struct ThreadLerpParams

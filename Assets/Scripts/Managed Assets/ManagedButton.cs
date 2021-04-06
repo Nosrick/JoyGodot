@@ -4,6 +4,7 @@ using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 
 namespace Code.Unity.GUI.Managed_Assets
 {
@@ -15,7 +16,21 @@ namespace Code.Unity.GUI.Managed_Assets
         [Export] public string ElementName { get; protected set; }
         public bool Initialised { get; protected set; }
 
-        protected ManagedUIElement Element { get; set; }
+        protected ManagedUIElement Element
+        {
+            get
+            {
+                if (this.m_Element is null)
+                {
+                    this.Initialise();
+                }
+
+                return this.m_Element;
+            }
+            set => this.m_Element = value;
+        }
+
+        protected ManagedUIElement m_Element;
         
         public bool MouseInside { get; protected set; }
 
@@ -171,11 +186,22 @@ namespace Code.Unity.GUI.Managed_Assets
 
         public override void _EnterTree()
         {
+            base._EnterTree();
+            
+            this.Connect("mouse_entered", this, "OnPointerEnter");
+            this.Connect("mouse_exited", this, "OnPointerExit");
+            
             this.ColourMultiplier = 1f;
             this.DefaultStateColours();
-            
-            base._EnterTree();
             this.Initialise();
+        }
+
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+            
+            this.Disconnect("mouse_entered", this, "OnPointerEnter");
+            this.Disconnect("mouse_exited", this, "OnPointerExit");
         }
 
         protected void DefaultStateColours()
@@ -203,11 +229,13 @@ namespace Code.Unity.GUI.Managed_Assets
                 return;
             }
             
-            this.Element = this.FindNode("Element") as ManagedUIElement;
-            if (this.Element is null)
+            GlobalConstants.ActionLog.Log(this.GetAllChildren());
+            
+            this.m_Element = this.GetNodeOrNull<ManagedUIElement>("Element");
+            if (this.m_Element is null)
             {
                 GD.Print("Creating managed UI element");
-                this.Element = new ManagedUIElement
+                this.m_Element = new ManagedUIElement
                 {
                     AnchorBottom = 1,
                     AnchorRight = 1,
@@ -215,8 +243,8 @@ namespace Code.Unity.GUI.Managed_Assets
                     MouseFilter = MouseFilterEnum.Ignore
                 };
 
-                this.AddChild(this.Element);
-                this.MoveChild(this.Element, 0);
+                this.AddChild(this.m_Element);
+                this.MoveChild(this.m_Element, 0);
             }
 
             this.Initialised = true;
@@ -266,6 +294,8 @@ namespace Code.Unity.GUI.Managed_Assets
             }
 
             Color tintColor;
+            
+            GD.Print(this.Name + " transitioning to " + state);
 
             switch (state)
             {
@@ -275,7 +305,7 @@ namespace Code.Unity.GUI.Managed_Assets
                     //triggerName = this.m_AnimationTriggers.normalTrigger;
                     break;
                 case SelectionState.Highlighted:
-                    tintColor = this.HighlightedColour;
+                    tintColor = this.HighlightedColour;                    
                     //transitionSprite = this.m_SpriteState.highlightedSprite;
                     //triggerName = this.m_AnimationTriggers.highlightedTrigger;
                     break;
@@ -301,7 +331,7 @@ namespace Code.Unity.GUI.Managed_Assets
                     break;
             }
 
-            this.TintWithSingleColour(tintColor * this.ColourMultiplier, crossFade);
+            this.TintWithSingleColour(tintColor * this.ColourMultiplier, crossFade, 0.2f);
         }
 
         protected virtual void EvaluateAndTransitionToSelectionState()
@@ -321,17 +351,12 @@ namespace Code.Unity.GUI.Managed_Assets
                 return;
             }
 
-            GD.Print("PRESS");
             this.EmitSignal("_Press");
 
             if (this.ToggleMode)
             {
                 this.Pressed = !this.Pressed;
                 this.EmitSignal("_Toggle");
-            }
-            else
-            {
-                this.Pressed = false;
             }
 
             this.EvaluateAndTransitionToSelectionState();
@@ -342,19 +367,8 @@ namespace Code.Unity.GUI.Managed_Assets
         public override void _GuiInput(InputEvent @event)
         {
             base._GuiInput(@event);
-            if (@event is InputEventMouseMotion motion)
-            {
-                if (this.GetRect().HasPoint(motion.Position) && this.MouseInside == false)
-                {
-                    this.MouseInside = true;
-                }
-                else if (this.MouseInside)
-                {
-                    this.MouseInside = false;
-                }
-            }
 
-            if (@event is InputEventAction action)
+            if (@event is InputEventMouseButton action)
             {
                 if (this.MouseInside
                     && (action.IsActionPressed("ui_select")
@@ -370,21 +384,25 @@ namespace Code.Unity.GUI.Managed_Assets
             }
         }
 
-        protected virtual IEnumerator OnFinishSubmit()
+        public virtual void OnPointerEnter()
         {
-            /*
-                        var fadeTime = this.m_ColourBlock.fadeDuration;
-                        var elapsedTime = 0f;
-            
-                        while (elapsedTime < fadeTime)
-                        {
-                            elapsedTime += Time.unscaledDeltaTime;
-                            yield return null;
-                        }
-                        */
+            this.MouseInside = true;
+            this.EvaluateAndTransitionToSelectionState();
+        }
 
-            yield return null;
-            this.DoStateTransition(this.CurrentSelectionState, true);
+        public virtual void OnPointerExit()
+        {
+            this.MouseInside = false;
+            this.EvaluateAndTransitionToSelectionState();
+        }
+
+        public override void _Process(float delta)
+        {
+            base._Process(delta);
+            if (this.Pressed && this.ToggleMode == false)
+            {
+                this.Pressed = false;
+            }
         }
     }
 

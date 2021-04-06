@@ -19,6 +19,4 @@ StateColours = {
 3: Color( 0.6, 0.6, 0.6, 1 )
 }
 
-[node name="ManagedUIElement" parent="." instance=ExtResource( 2 )]
-
-[editable path="ManagedUIElement"]
+[node name="Element" parent="." instance=ExtResource( 2 )]

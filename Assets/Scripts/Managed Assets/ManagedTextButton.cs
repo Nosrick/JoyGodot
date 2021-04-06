@@ -15,7 +15,10 @@ namespace JoyGodot.addons.Managed_Assets
 			set
 			{
 				this.m_HAlign = value;
-				this.MyLabel.Align = this.HAlign;
+				if (this.MyLabel is null == false)
+				{
+					this.MyLabel.Align = this.m_HAlign;
+				}
 				this.EmitSignal("_AlignChanged");
 			}
 		}
@@ -29,7 +32,10 @@ namespace JoyGodot.addons.Managed_Assets
 			set
 			{
 				this.m_VAlign = value;
-				this.MyLabel.Valign = this.m_VAlign;
+				if (this.MyLabel is null == false)
+				{
+					this.MyLabel.Valign = this.m_VAlign;
+				}
 				this.EmitSignal("_AlignChanged");
 			}
 		}
@@ -70,7 +76,7 @@ namespace JoyGodot.addons.Managed_Assets
 
 		protected override void Initialise()
 		{
-			//base.Initialise();
+			base.Initialise();
 			GD.Print(nameof(this.Initialise));
 			this.MyLabel = this.FindNode("Text") as Label;
 			if (this.MyLabel is null)

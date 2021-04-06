@@ -7,9 +7,6 @@
 [ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=5]
 [ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=6]
 
-
-
-
 [sub_resource type="StyleBoxEmpty" id=1]
 
 [sub_resource type="StyleBoxEmpty" id=2]
@@ -196,12 +193,15 @@ __meta__ = {
 margin_left = 356.0
 margin_right = 3.05176e-05
 ElementName = "CharacterSheetIcon"
-
-[node name="background" parent="Player Name Container/Random Name Button/Element" index="0"]
-self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
-
-[node name="icon" parent="Player Name Container/Random Name Button/Element" index="1"]
-self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
-[connection signal="pressed" from="Player Name Container/Random Name Button" to="." method="RandomiseName"]
+ColourMultiplier = 1.0
+StateColours = {
+-1: Color( 0.18, 0.31, 0.31, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
+}
 
 [editable path="Player Name Container/Random Name Button"]
+
+[editable path="Player Name Container/Random Name Button/Element"]
