@@ -28,7 +28,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "Managed Assets" )
+enabled=PoolStringArray(  )
 
 [layer_names]
 
