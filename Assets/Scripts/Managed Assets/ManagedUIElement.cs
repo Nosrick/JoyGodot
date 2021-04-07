@@ -84,7 +84,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         
         protected Tween TweenNode { get; set; }
 
-        protected const float TIME_BETWEEN_FRAMES = 1f;
+        protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
 
         public override void _EnterTree()
         {
@@ -291,7 +291,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             IDictionary<string, 
                 Color> colours, 
             bool crossFade = false,
-            float duration = 0.1f)
+            float duration = 0.1f,
+            bool modulateChildren = false)
         {
             this.Initialise();
 
@@ -309,7 +310,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                         this.ColourLerp(
                             this.Parts[i], 
                             colour, 
-                            duration);
+                            duration,
+                            modulateChildren);
                     }
                 }
             }
@@ -327,7 +329,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         public virtual void TintWithSingleColour(
             Color colour, 
             bool crossFade = false, 
-            float duration = 0.1f)
+            float duration = 0.1f,
+            bool modulateChildren = false)
         {
             this.Initialise();
 
@@ -337,7 +340,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.ColourLerp(this.Parts[i], colour, duration);
+                    this.ColourLerp(this.Parts[i], colour, duration, modulateChildren);
                 }
             }
             else
@@ -405,19 +408,40 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected virtual void ColourLerp(
             NinePatchRect sprite,
             Color newColour,
-            float duration)
+            float duration,
+            bool modulateChildren = false)
         {
-            if (this.GetTree() is null)
+            if (this.IsInsideTree() == false)
             {
                 return;
             }
+
+            if (modulateChildren)
+            {
+                var children = this.GetAllChildren();
+                foreach (var child in children)
+                {
+                    if (child is Control control)
+                    {
+                        this.TweenNode.InterpolateProperty(
+                            control,
+                            "self_modulate",
+                            control.SelfModulate,
+                            newColour,
+                            duration);
+                    }
+                }
+            }
+            else
+            {
+                this.TweenNode.InterpolateProperty(
+                    this, 
+                    "modulate", 
+                    this.Modulate, 
+                    newColour,
+                    duration);
+            }
             
-            this.TweenNode.InterpolateProperty(
-                this, 
-                "modulate", 
-                this.Modulate, 
-                newColour,
-                duration);
             this.TweenNode.Start();
         }
     }

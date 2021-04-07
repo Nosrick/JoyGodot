@@ -261,7 +261,8 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void SetUIColours(IDictionary<string, IDictionary<string, Color>> background,
+        public void SetUIColours(
+            IDictionary<string, IDictionary<string, Color>> background,
             IDictionary<string, IDictionary<string, Color>> cursor,
             IDictionary<string, Color> mainFontColours,
             bool recolour = true,
@@ -387,7 +388,7 @@ namespace JoyLib.Code.Unity.GUI
                 {
                     if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName, out IDictionary<string, Color> value))
                     {
-                        colourfulElement.OverrideAllColours(value);
+                        colourfulElement.OverrideAllColours(value, crossFade, duration);
                     }
                     else
                     {

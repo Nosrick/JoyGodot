@@ -194,8 +194,9 @@ namespace JoyLib.Code.Unity
         public virtual void OverrideAllColours(
             IDictionary<string,
                 Color> colours,
-            bool crossFade = false,
-            float duration = 0.1f)
+            bool crossFade = false, 
+            float duration = 0.1f, 
+            bool modulateChildren = false)
         {
             this.Initialise();
 
@@ -230,8 +231,9 @@ namespace JoyLib.Code.Unity
 
         public virtual void TintWithSingleColour(
             Color colour,
-            bool crossFade = false,
-            float duration = 0.1f)
+            bool crossFade = false, 
+            float duration = 0.1f, 
+            bool modulateChildren = false)
         {
             this.Initialise();
 

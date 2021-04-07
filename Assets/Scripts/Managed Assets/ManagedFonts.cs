@@ -59,7 +59,11 @@ namespace JoyLib.Code.Unity.GUI
             this.HasFont = true;
         }
 
-        public void OverrideAllColours(IDictionary<string, Color> colours, bool crossFade = false, float duration = 0.1f)
+        public void OverrideAllColours(
+            IDictionary<string, Color> colours, 
+            bool crossFade = false, 
+            float duration = 0.1f, 
+            bool modulateChildren = false)
         {
             if (this.Initialised == false)
             {
@@ -101,7 +105,11 @@ namespace JoyLib.Code.Unity.GUI
             this.HasFontColours = true;
         }
 
-        public void TintWithSingleColour(Color colour, bool crossFade = false, float duration = 0.1f)
+        public void TintWithSingleColour(
+            Color colour, 
+            bool crossFade = false, 
+            float duration = 0.1f, 
+            bool modulateChildren = false)
         {
             if (this.Initialised == false)
             {

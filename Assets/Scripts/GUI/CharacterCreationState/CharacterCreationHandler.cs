@@ -48,9 +48,10 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.GUIManager.SetUIColours(
                 culture.BackgroundColours,
                 culture.CursorColours,
-                culture.FontColours);
-            Button button = new Button();
-
+                culture.FontColours,
+                true,
+                true,
+                1f);
             ISpriteState state = new SpriteState(
                 "player",
                 this.IconHandler.GetSprites(

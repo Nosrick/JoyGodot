@@ -1,8 +1,10 @@
+#if TOOLS
 using Code.Unity.GUI.Managed_Assets;
 using Godot;
 
 namespace JoyGodot.addons.Managed_Assets
 {
+	[Tool]
 	public class ManagedTextButton : ManagedButton
 	{
 		/// <summary>
@@ -48,6 +50,7 @@ namespace JoyGodot.addons.Managed_Assets
 		[Signal]
 		public delegate void _AlignChanged();
 
+		[Export]
 		public string Text
 		{
 			get
@@ -76,7 +79,11 @@ namespace JoyGodot.addons.Managed_Assets
 
 		protected override void Initialise()
 		{
-			base.Initialise();
+			if (this.Initialised)
+			{
+				return;
+			}
+			
 			GD.Print(nameof(this.Initialise));
 			this.MyLabel = this.FindNode("Text") as Label;
 			if (this.MyLabel is null)
@@ -90,6 +97,8 @@ namespace JoyGodot.addons.Managed_Assets
 				};
 				this.AddChild(this.MyLabel);
 			}
+			base.Initialise();
 		}
 	}
 }
+#endif

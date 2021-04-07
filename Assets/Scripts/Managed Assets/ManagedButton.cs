@@ -1,13 +1,13 @@
-﻿using System.Collections;
+﻿#if TOOLS
 using System.Collections.Generic;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 
 namespace Code.Unity.GUI.Managed_Assets
 {
+    [Tool]
     public class ManagedButton :
         Control,
         IColourableElement,
@@ -229,8 +229,6 @@ namespace Code.Unity.GUI.Managed_Assets
                 return;
             }
             
-            GlobalConstants.ActionLog.Log(this.GetAllChildren());
-            
             this.m_Element = this.GetNodeOrNull<ManagedUIElement>("Element");
             if (this.m_Element is null)
             {
@@ -246,6 +244,8 @@ namespace Code.Unity.GUI.Managed_Assets
                 this.AddChild(this.m_Element);
                 this.MoveChild(this.m_Element, 0);
             }
+            
+            GD.Print(this.GetAllChildren());
 
             this.Initialised = true;
         }
@@ -275,15 +275,22 @@ namespace Code.Unity.GUI.Managed_Assets
             this.Element.Clear();
         }
 
-        public void OverrideAllColours(IDictionary<string, Color> colours, bool crossFade = false,
-            float duration = 0.1f)
+        public void OverrideAllColours(
+            IDictionary<string, Color> colours,
+            bool crossFade = false, 
+            float duration = 0.1f, 
+            bool modulateChildren = false)
         {
-            this.Element.OverrideAllColours(colours, crossFade, duration);
+            this.Element.OverrideAllColours(colours, crossFade, duration, modulateChildren);
         }
 
-        public void TintWithSingleColour(Color colour, bool crossFade = false, float duration = 0.1f)
+        public void TintWithSingleColour(
+            Color colour, 
+            bool crossFade = false, 
+            float duration = 0.1f, 
+            bool modulateChildren = false)
         {
-            this.Element.TintWithSingleColour(colour, crossFade, duration);
+            this.Element.TintWithSingleColour(colour, crossFade, duration, modulateChildren);
         }
 
         protected void DoStateTransition(SelectionState state, bool crossFade)
@@ -434,3 +441,4 @@ namespace Code.Unity.GUI.Managed_Assets
         Disabled
     }
 }
+#endif

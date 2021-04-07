@@ -9,11 +9,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             IDictionary<string,
                 Color> colours,
             bool crossFade = false,
-            float duration = 0.1f);
+            float duration = 0.1f,
+            bool modulateChildren = false);
 
         void TintWithSingleColour(
             Color colour,
             bool crossFade = false,
-            float duration = 0.1f);
+            float duration = 0.1f,
+            bool modulateChildren = false);
     }
 }
