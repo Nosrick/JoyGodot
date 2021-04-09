@@ -6,10 +6,12 @@ using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
-using Thread = System.Threading.Thread;
 
 namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {
+#if TOOLS
+    [Tool]
+#endif
     public class ManagedUIElement : 
         Control, 
         IColourableElement, 
@@ -86,9 +88,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
 
-        public override void _EnterTree()
+        public override void _Ready()
         {
-            base._EnterTree();
             this.Initialise();
         }
 
@@ -125,6 +126,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             
             this.m_States = new Dictionary<string, ISpriteState>();
 
+            GD.Print(this.Name + " initialised!");
             this.Initialised = true;
         }
         
