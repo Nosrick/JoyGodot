@@ -193,14 +193,12 @@ __meta__ = {
 margin_left = 356.0
 ElementName = "CharacterSheetIcon"
 StateColours = {
--1: Color( 0.2, 0.2, 0.2, 1 ),
+-1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
-1: Color( 0.8, 0.8, 0.8, 1 ),
-2: Color( 0.8, 0.8, 0.8, 1 ),
-3: Color( 0.6, 0.6, 0.6, 1 )
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
 }
 [connection signal="_Press" from="Player Name Container/Random Name Button" to="." method="RandomiseName"]
 
 [editable path="Player Name Container/Random Name Button"]
-
-[editable path="Player Name Container/Random Name Button/Element"]

@@ -276,7 +276,6 @@ namespace Code.Unity.GUI.Managed_Assets
 				GD.Print(child.GetType().Name);
 			}
 
-			//this.m_Element =  as ManagedUIElement;
 			if (this.GetChildren().IsNullOrEmpty())
 			{
 				GD.Print("No children!");
