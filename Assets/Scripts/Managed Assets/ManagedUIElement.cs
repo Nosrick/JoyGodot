@@ -95,7 +95,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         protected virtual void Initialise()
         {
-            if (this.Initialised)
+            if (this.Initialised || this.IsInsideTree() == false)
             {
                 return;
             }
@@ -117,16 +117,19 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (this.TweenNode is null)
             {
+                GD.Print("Tween needs to be created");
                 this.TweenNode = new Tween()
                 {
                     Name = "Colour Lerper"
                 };
                 this.AddChild(this.TweenNode);
+                this.TweenNode.Owner = this.GetTree().EditedSceneRoot;
             }
             
             this.m_States = new Dictionary<string, ISpriteState>();
 
             GD.Print(this.Name + " initialised!");
+            GD.Print(this.GetPath());
             this.Initialised = true;
         }
         
@@ -384,6 +387,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);
+                    patchRect.Owner = this.GetTree().EditedSceneRoot;
                 }
             }
 
