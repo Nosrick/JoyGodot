@@ -1,15 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedLabel.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Assets/Scripts/GUI/Tools/StringValueItem.cs" type="Script" id=5]
 
 [node name="List Item" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -214.0
 margin_bottom = -416.0
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -23,7 +25,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-ElementName = "SecondaryAccent"
 Text = "Name"
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
@@ -39,14 +40,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Increase Value" type="Control" parent="."]
+[node name="Decrease Value" type="Control" parent="."]
 anchor_left = 0.5
 anchor_right = 0.6
 anchor_bottom = 1.0
 script = ExtResource( 2 )
 HAlign = 1
 VAlign = 1
-ElementName = "AccentBackground"
 Text = "<"
 ColourMultiplier = 1.0
 StateColours = {
@@ -57,15 +57,15 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 
-[node name="Element" type="Control" parent="Increase Value"]
+[node name="Element" type="Control" parent="Decrease Value"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 1 )
 
-[node name="Colour Lerper" type="Tween" parent="Increase Value/Element"]
+[node name="Colour Lerper" type="Tween" parent="Decrease Value/Element"]
 
-[node name="Text" type="Label" parent="Increase Value"]
+[node name="Text" type="Label" parent="Decrease Value"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -0.749161
@@ -88,7 +88,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-ElementName = "SecondaryAccent"
 Text = "Value"
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
@@ -104,7 +103,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Decrease Value" type="Control" parent="."]
+[node name="Increase Value" type="Control" parent="."]
 anchor_left = 0.9
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -114,7 +113,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-ElementName = "AccentBackground"
 Text = ">"
 ColourMultiplier = 1.0
 StateColours = {
@@ -125,7 +123,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 
-[node name="Element" type="Control" parent="Decrease Value"]
+[node name="Element" type="Control" parent="Increase Value"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -134,12 +132,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Colour Lerper" type="Tween" parent="Decrease Value/Element"]
+[node name="Colour Lerper" type="Tween" parent="Increase Value/Element"]
 
-[node name="Text" type="Label" parent="Decrease Value"]
+[node name="Text" type="Label" parent="Increase Value"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = ExtResource( 4 )
 text = ">"
 align = 1
 valign = 1
+[connection signal="_Press" from="Decrease Value" to="." method="DecreaseValue"]
+[connection signal="_Press" from="Increase Value" to="." method="IncreaseValue"]
