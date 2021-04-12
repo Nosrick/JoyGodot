@@ -20,14 +20,12 @@ namespace JoyLib.Code.Unity.GUI
             if (this.DragObject is null)
             {
                 this.DragObject = new ManagedSprite();
-                this.DragObject.Awake();
                 this.DragObject.Visible = false;
             }
 
             if (this.CursorObject is null)
             {
                 this.CursorObject = (ManagedSprite) this.m_PartPrefab.Duplicate();
-                this.CursorObject.Awake();
             }
 
             this.Initialised = true;

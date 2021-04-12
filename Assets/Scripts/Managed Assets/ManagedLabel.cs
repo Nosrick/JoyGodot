@@ -133,7 +133,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     Valign = this.VAlign
                 };
                 this.AddChild(this.MyLabel);
-                this.MyLabel.Owner = this.GetTree().EditedSceneRoot;
+#if TOOLS
+                this.MyLabel.Owner = this.GetTree()?.EditedSceneRoot;
+#endif
                 this.MyLabel.AddFontOverride("font", this.m_FontOverride);
                 this.m_TextToSet = null;
                 this.m_FontOverride = null;

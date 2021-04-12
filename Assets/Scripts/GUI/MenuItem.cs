@@ -1,16 +1,12 @@
-﻿using Code.Unity.GUI.Managed_Assets;
-using Godot;
+﻿using Godot;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class MenuItem : ManagedButton
+    #if TOOLS
+    [Tool]
+    #endif
+    public class MenuItem : Control
     {
-        [Export] protected Label m_Text;
-
-        public Label Text
-        {
-            get => this.m_Text;
-            protected set => this.m_Text = value;
-        }
+        
     }
 }

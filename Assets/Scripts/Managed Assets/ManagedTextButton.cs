@@ -56,41 +56,42 @@ namespace JoyGodot.addons.Managed_Assets
         [Export]
         public string Text
         {
-            get
-            {
-                if (this.MyLabel is null)
-                {
-                    this.Initialise();
-                }
-
-                return this.MyLabel?.Text;
-            }
+            get =>this.MyLabel?.Text;
             set
             {
                 if (this.MyLabel is null)
                 {
-                    this.Initialise();
+                    this.m_TextToSet = value;
+                    return;
                 }
 
                 this.MyLabel.Text = value;
             }
         }
 
+        protected string m_TextToSet;
+
         [Export]
         public override Font CustomFont
         {
-            get => this.HasFontOverride("default") ? this.GetFont("default") : null;
+            get => this.HasFontOverride("font") ? this.GetFont("font") : null;
             set
             {
                 this.AddFontOverride("default", value);
                 if (this.MyLabel is null)
                 {
-                    this.Initialise();
+                    GD.Print("Label is null in " + this.GetType().Name);
+                    this.m_FontOverride = value;
+                    return;
                 }
 
-                this.MyLabel?.AddFontOverride("default", value);
+                GD.Print("Setting font override");
+                GD.Print(this.GetChildren());
+                this.MyLabel.AddFontOverride("font", value);
             }
         }
+
+        protected Font m_FontOverride;
 
         protected override void Initialise()
         {
@@ -102,15 +103,23 @@ namespace JoyGodot.addons.Managed_Assets
             this.MyLabel = this.GetNodeOrNull("Text") as Label;
             if (this.MyLabel is null)
             {
-                GD.Print("Creating label");
+                GD.Print("Creating label in " + this.GetType().Name);
                 this.MyLabel = new Label
                 {
                     Name = "Text",
                     AnchorBottom = 1,
-                    AnchorRight = 1
+                    AnchorRight = 1,
+                    Align = this.m_HAlign,
+                    Valign = this.m_VAlign,
+                    Text = this.m_TextToSet
                 };
                 this.AddChild(this.MyLabel);
-                this.MyLabel.Owner = this;
+#if TOOLS
+                this.MyLabel.Owner = this.GetTree()?.EditedSceneRoot;
+#endif
+                this.MyLabel.AddFontOverride("font", this.m_FontOverride);
+                this.m_TextToSet = null;
+                this.m_FontOverride = null;
             }
 
             base.Initialise();

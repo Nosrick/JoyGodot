@@ -82,7 +82,7 @@ namespace JoyLib.Code.Unity
 
         protected List<Node2D> Parts { get; set; }
 
-        public virtual void Awake()
+        public override void _Ready()
         {
             this.Initialise();
         }
@@ -194,8 +194,8 @@ namespace JoyLib.Code.Unity
         public virtual void OverrideAllColours(
             IDictionary<string,
                 Color> colours,
-            bool crossFade = false, 
-            float duration = 0.1f, 
+            bool crossFade = false,
+            float duration = 0.1f,
             bool modulateChildren = false)
         {
             this.Initialise();
@@ -231,8 +231,8 @@ namespace JoyLib.Code.Unity
 
         public virtual void TintWithSingleColour(
             Color colour,
-            bool crossFade = false, 
-            float duration = 0.1f, 
+            bool crossFade = false,
+            float duration = 0.1f,
             bool modulateChildren = false)
         {
             this.Initialise();
@@ -276,6 +276,9 @@ namespace JoyLib.Code.Unity
                     };
                     this.Parts.Add(newSprite);
                     this.AddChild(newSprite);
+#if TOOLS
+                    newSprite.Owner = this.GetTree()?.EditedSceneRoot;
+#endif
                 }
             }
 
