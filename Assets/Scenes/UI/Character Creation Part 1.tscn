@@ -67,21 +67,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Colour Lerper" type="Tween" parent="CC1 Background"]
+
 [node name="Player Name Container" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -424.0
-margin_bottom = -406.0
+anchor_left = 0.012
+anchor_top = 0.012
+anchor_right = 0.505
+anchor_bottom = 0.146
+margin_top = 4.76837e-07
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Player Background" type="Control" parent="Player Name Container"]
-anchor_right = 1.0
+anchor_right = 0.15
 anchor_bottom = 1.0
-margin_right = -356.0
+margin_right = 0.999996
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -119,23 +120,26 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Colour Lerper" type="Tween" parent="Player Name Container/Player Background"]
+
 [node name="Player Icon" type="Control" parent="Player Name Container"]
-anchor_right = 1.0
+anchor_right = 0.15
 anchor_bottom = 1.0
 margin_left = 6.0
 margin_top = 6.0
-margin_right = -362.0
+margin_right = -5.0
 margin_bottom = -6.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Colour Lerper" type="Tween" parent="Player Name Container/Player Icon"]
+
 [node name="Input Background" type="Control" parent="Player Name Container"]
-anchor_right = 1.0
+anchor_left = 0.15
+anchor_right = 0.85
 anchor_bottom = 1.0
-margin_left = 64.0
-margin_right = -64.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -189,9 +193,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Colour Lerper" type="Tween" parent="Player Name Container/Input Background"]
+
 [node name="Random Name Button" parent="Player Name Container" instance=ExtResource( 1 )]
-margin_left = 356.0
-ElementName = "CharacterSheetIcon"
+anchor_left = 0.847
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -199,6 +204,33 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ElementName = "CharacterSheetIcon"
+
+[node name="Colour Lerper" type="Tween" parent="Player Name Container/Random Name Button/Element" index="0"]
+
+[node name="List Container" type="HBoxContainer" parent="."]
+anchor_left = 0.012
+anchor_top = 0.15
+anchor_right = 0.988
+anchor_bottom = 0.97
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Basic Player Info" type="VBoxContainer" parent="List Container"]
+margin_right = 275.0
+margin_bottom = 393.0
+
+[node name="Statistics List" type="VBoxContainer" parent="List Container"]
+margin_left = 280.0
+margin_right = 555.0
+margin_bottom = 393.0
+
+[node name="Derived Values List" type="VBoxContainer" parent="List Container"]
+margin_left = 560.0
+margin_right = 835.0
+margin_bottom = 393.0
 [connection signal="_Press" from="Player Name Container/Random Name Button" to="." method="RandomiseName"]
 
 [editable path="Player Name Container/Random Name Button"]

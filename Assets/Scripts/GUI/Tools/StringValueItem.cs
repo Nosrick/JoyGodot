@@ -94,7 +94,7 @@ namespace JoyLib.Code.Unity.GUI
 
             if (this.Index < this.Values.Count)
             {
-                this.ValueLabel.Text = this.Values.ElementAt(this.Index).ToString();
+                this.ValueLabel.Text = this.Values.ElementAt(this.Index);
             }
         }
 
@@ -107,7 +107,7 @@ namespace JoyLib.Code.Unity.GUI
             
             if (this.Index < this.Values.Count)
             {
-                this.ValueLabel.Text = this.Values.ElementAt(this.Index).ToString();
+                this.ValueLabel.Text = this.Values.ElementAt(this.Index);
             }
         }
     }
