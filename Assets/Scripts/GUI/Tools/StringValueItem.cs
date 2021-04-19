@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyLib.Code.Unity.GUI
 {
     #if TOOLS
     [Tool]
     #endif
-    public class StringValueItem : Control, IValueItem<string>
+    public class StringValueItem : 
+        Control, 
+        IValueItem<string>,
+        ILabelElement
     {
         protected ManagedLabel NameLabel { get; set; }
         protected ManagedLabel ValueLabel { get; set; }
@@ -32,6 +37,31 @@ namespace JoyLib.Code.Unity.GUI
 
         protected int Index { get; set; }
 
+        [Export]
+        public bool TitleCase
+        {
+            get => this.m_TitleCase;
+            set
+            {
+                if (value)
+                {
+                    if (this.ValueName is null == false)
+                    {
+                        this.ValueName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.ValueName);
+                    }
+
+                    if (this.Value is null == false)
+                    {
+                        this.Value = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Value);
+                    }
+                }
+
+                this.m_TitleCase = value;
+            }
+        }
+
+        protected bool m_TitleCase;
+
         [Signal]
         public delegate void ValueChanged(int delta, int newValue);
 
@@ -40,6 +70,7 @@ namespace JoyLib.Code.Unity.GUI
             get => this.NameLabel?.Text;
             set
             {
+                this.Name = value;
                 if (this.NameLabel is null)
                 {
                     GD.Print(this.GetType().Name + " NameLabel is null!");
@@ -51,8 +82,9 @@ namespace JoyLib.Code.Unity.GUI
                     return;
                 }
                 
-                this.NameLabel.Text = value;
-                this.Name = value;
+                this.NameLabel.Text = this.TitleCase 
+                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                    : value;
             }
         }
 
@@ -72,7 +104,9 @@ namespace JoyLib.Code.Unity.GUI
                     return;
                 }
                 
-                this.ValueLabel.Text = value;
+                this.ValueLabel.Text = this.TitleCase 
+                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                    : value;
             }
         }
 

@@ -1,11 +1,15 @@
-﻿using Godot;
+﻿using System.Globalization;
+using Godot;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {
 #if TOOLS
     [Tool]
 #endif
-    public class ManagedLabel : ManagedUIElement
+    public class ManagedLabel : 
+        ManagedUIElement,
+        ILabelElement
     {
         /// <summary>
         /// <para>Text alignment policy for the button's text, use one of the <see cref="T:Godot.Button.TextAlign" /> constants.</para>
@@ -46,7 +50,23 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         protected Label.VAlign m_VAlign;
 
+        [Export]
+        public bool TitleCase
+        {
+            get => this.m_TitleCase;
+            set
+            {
+                if (value)
+                {
+                    this.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Text);
+                }
+                
+                this.m_TitleCase = value;
+            }
+        }
 
+        protected bool m_TitleCase;
+        
         protected Label MyLabel { get; set; }
 
         [Signal]
@@ -55,28 +75,18 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         [Export]
         public string Text
         {
-            get
-            {
-                /*
-                if (this.MyLabel is null)
-                {
-                    GD.Print("Calling Initialise() from Text property");
-                    //GD.Print(this.GetPath());
-                    this.Initialise();
-                }
-                */
-
-                return this.MyLabel?.Text ?? this.m_TextToSet;
-            }
+            get =>  this.MyLabel?.Text ?? this.m_TextToSet;
             set
             {
+                this.m_TextToSet = this.TitleCase 
+                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                    : value;
                 if (this.MyLabel is null)
                 {
-                    this.m_TextToSet = value;
                     return;
                 }
 
-                this.MyLabel.Text = value;
+                this.MyLabel.Text = this.m_TextToSet;
             }
         }
 

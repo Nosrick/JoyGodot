@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyLib.Code.Unity.GUI
 {
     #if TOOLS
     [Tool]
     #endif
-    public class IntValueItem : Control, IValueItem<int>
+    public class IntValueItem : 
+        Control, 
+        IValueItem<int>,
+        ILabelElement
     {
         protected ManagedLabel NameLabel { get; set; }
         protected ManagedLabel ValueLabel { get; set; }
@@ -19,6 +24,23 @@ namespace JoyLib.Code.Unity.GUI
         public int Maximum { get; set; }
         public int Minimum { get; set; }
 
+        [Export]
+        public bool TitleCase
+        {
+            get => this.m_TitleCase;
+            set
+            {
+                if (value && this.ValueName is null == false)
+                {
+                    this.ValueName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.ValueName);
+                }
+
+                this.m_TitleCase = value;
+            }
+        }
+
+        protected bool m_TitleCase;
+
         [Signal]
         public delegate void ValueChanged(int delta, int newValue);
 
@@ -27,6 +49,7 @@ namespace JoyLib.Code.Unity.GUI
             get => this.NameLabel?.Text;
             set
             {
+                this.Name = value;
                 if (this.NameLabel is null)
                 {
                     GD.Print(this.GetType().Name + " NameLabel is null!");
@@ -38,8 +61,9 @@ namespace JoyLib.Code.Unity.GUI
                     return;
                 }
                 
-                this.NameLabel.Text = value;
-                this.Name = value;
+                this.NameLabel.Text = this.TitleCase 
+                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                    : value;
             }
         }
 

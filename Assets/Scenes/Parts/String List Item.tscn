@@ -6,7 +6,7 @@
 [ext_resource path="res://Assets/Scripts/GUI/Tools/StringValueItem.cs" type="Script" id=4]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=5]
 
-[node name="List Item" type="Control"]
+[node name="Name" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -214.0
@@ -17,6 +17,7 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+TitleCase = true
 
 [node name="Item Name" type="Control" parent="."]
 anchor_right = 0.4
@@ -49,6 +50,8 @@ anchor_bottom = 1.0
 script = ExtResource( 5 )
 HAlign = 1
 VAlign = 1
+Text = "<"
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -56,7 +59,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "<"
 
 [node name="Element" type="Control" parent="Decrease Value"]
 anchor_right = 1.0
@@ -117,6 +119,8 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+Text = ">"
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -124,7 +128,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = ">"
 
 [node name="Element" type="Control" parent="Increase Value"]
 anchor_right = 1.0
