@@ -267,28 +267,18 @@ namespace Code.Unity.GUI.Managed_Assets
 
             if (child is null)
             {
-                GD.Print("No element!");
+                //GD.Print("No element!");
             }
             else if (child is ManagedUIElement element)
             {
-                GD.Print("Element found!");
-                GD.Print(element.GetType().Name);
+                //GD.Print("Element found!");
+                //GD.Print(element.GetType().Name);
                 this.Element = element;
             }
             else
             {
-                GD.Print("Element found, but not correct type!");
-                GD.Print(child.GetType().Name);
-            }
-
-            if (this.GetChildren().IsNullOrEmpty())
-            {
-                GD.Print("No children!");
-            }
-            else
-            {
-                GD.Print("Found children!");
-                GD.Print(this.GetChildren());
+                //GD.Print("Element found, but not correct type!");
+                //GD.Print(child.GetType().Name);
             }
 
             if (this.m_Element is null)
@@ -296,8 +286,8 @@ namespace Code.Unity.GUI.Managed_Assets
                 GD.Print("Creating managed UI element");
                 if (ElementPrefab is null)
                 {
-                    GD.Print("ManagedUIElement prefab is null, creating from code node!");
-                    GD.Print("Prepare for trouble!");
+                    //GD.Print("ManagedUIElement prefab is null, creating from code node!");
+                    //GD.Print("Prepare for trouble!");
                     this.m_Element = new ManagedUIElement();
                 }
                 else
@@ -306,7 +296,7 @@ namespace Code.Unity.GUI.Managed_Assets
 
                     if (this.m_Element is null)
                     {
-                        GD.Print("Failed to instantiate ManagedUIElement from Prefab!");
+                        //GD.Print("Failed to instantiate ManagedUIElement from Prefab!");
                         return;
                     }
                 }
@@ -322,8 +312,8 @@ namespace Code.Unity.GUI.Managed_Assets
                 this.MoveChild(this.m_Element, 0);
             }
 
-            GD.Print("Finished initialising " + this.Name);
-            GD.Print(this.GetChildren());
+            //GD.Print("Finished initialising " + this.Name);
+            //GD.Print(this.GetChildren());
             this.Initialised = true;
         }
 

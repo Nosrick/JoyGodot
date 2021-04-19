@@ -397,7 +397,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName, out IDictionary<string, Color> value))
                 {
-                    colourfulElement.OverrideAllColours(value, crossFade, duration);
+                    colourfulElement.OverrideAllColours(value, crossFade, duration, true);
                 }
                 else
                 {

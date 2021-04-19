@@ -48,6 +48,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         public void RandomiseName()
         {
+            GD.Print(nameof(this.RandomiseName));
             var culture = this.Roller.SelectFromCollection(this.CultureHandler.Values);
             var inhabitant = this.Roller.SelectFromCollection(culture.Inhabitants);
             var template = this.EntityTemplateHandler.Get(inhabitant);
@@ -70,7 +71,11 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             
             this.PlayerSprite.Clear();
             this.PlayerSprite.AddSpriteState(state);
-            this.PlayerSprite.OverrideAllColours(state.SpriteData.GetRandomPartColours());
+            this.PlayerSprite.OverrideAllColours(
+                state.SpriteData.GetRandomPartColours(),
+                false,
+                0f,
+                true);
             this.PlayerName.Text = name;
             this.SetUpStatistics(template);
         }
