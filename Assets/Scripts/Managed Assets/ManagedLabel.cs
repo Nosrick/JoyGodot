@@ -7,7 +7,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 #if TOOLS
     [Tool]
 #endif
-    public class ManagedLabel : 
+    public class ManagedLabel :
         ManagedUIElement,
         ILabelElement
     {
@@ -60,13 +60,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 {
                     this.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Text);
                 }
-                
+
                 this.m_TitleCase = value;
             }
         }
 
         protected bool m_TitleCase;
-        
+
         protected Label MyLabel { get; set; }
 
         [Signal]
@@ -75,12 +75,20 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         [Export]
         public string Text
         {
-            get =>  this.MyLabel?.Text ?? this.m_TextToSet;
+            get => this.MyLabel?.Text ?? this.m_TextToSet;
             set
             {
-                this.m_TextToSet = this.TitleCase 
-                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
-                    : value;
+                if (value is null)
+                {
+                    this.m_TextToSet = null;
+                }
+                else
+                {
+                    this.m_TextToSet = this.TitleCase
+                        ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                        : value;
+                }
+
                 if (this.MyLabel is null)
                 {
                     return;

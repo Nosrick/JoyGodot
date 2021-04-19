@@ -70,6 +70,12 @@ namespace JoyLib.Code.Unity.GUI
             get => this.NameLabel?.Text;
             set
             {
+                if (value is null)
+                {
+                    this.NameLabel.Text = null;
+                    return;
+                }
+                
                 this.Name = value;
                 if (this.NameLabel is null)
                 {
@@ -103,10 +109,17 @@ namespace JoyLib.Code.Unity.GUI
 
                     return;
                 }
-                
-                this.ValueLabel.Text = this.TitleCase 
-                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
-                    : value;
+
+                if (value is null)
+                {
+                    this.ValueLabel.Text = null;
+                }
+                else
+                {
+                    this.ValueLabel.Text = this.TitleCase 
+                        ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                        : value;
+                }
             }
         }
 

@@ -49,6 +49,12 @@ namespace JoyLib.Code.Unity.GUI
             get => this.NameLabel?.Text;
             set
             {
+                if (value is null)
+                {
+                    this.NameLabel.Text = null;
+                    return;
+                }
+                
                 this.Name = value;
                 if (this.NameLabel is null)
                 {
