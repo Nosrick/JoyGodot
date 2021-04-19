@@ -42,7 +42,7 @@ namespace JoyLib.Code.Unity.GUI
         protected bool m_TitleCase;
 
         [Signal]
-        public delegate void ValueChanged(int delta, int newValue);
+        public delegate void ValueChanged(string name, int delta, int newValue);
 
         public string ValueName
         {
@@ -120,7 +120,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
             this.Value = Mathf.Clamp(this.Value + delta, this.Minimum, this.Maximum);
-            this.EmitSignal("ValueChanged", delta, this.Value);
+            this.EmitSignal("ValueChanged", this.ValueName, delta, this.Value);
         }
     }
 }

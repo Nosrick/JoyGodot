@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Unity.GUI.CharacterCreationState
@@ -22,6 +23,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         protected List<IntValueItem> Parts { get; set; }
         
         protected PackedScene PartPrefab { get; set; }
+
+        [Signal]
+        public delegate void StatisticBlockSet();
+
+        [Signal]
+        public delegate void StatisticChanged(string name, int delta, int newValue);
 
         public override void _EnterTree()
         {
@@ -59,7 +66,23 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 part.Maximum = 10;
                 part.Value = stat.Value;
                 part.Visible = true;
+                if (part.IsConnected(
+                    "ValueChanged",
+                    this,
+                    nameof(this.ChangeValue)))
+                {
+                    part.Disconnect(
+                        "ValueChanged",
+                        this,
+                        nameof(this.ChangeValue));
+                }
+                part.Connect(
+                    "ValueChanged",
+                    this,
+                    nameof(this.ChangeValue));
             }
+            
+            this.EmitSignal("StatisticBlockSet");
             
             this.CallDeferred("DeferredSetUp");
         }
@@ -67,6 +90,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         protected void DeferredSetUp()
         {
             GlobalConstants.GameManager.GUIManager.SetupManagedComponents(this);
+        }
+
+        public void ChangeValue(string name, int delta, int newValue)
+        {
+            GD.Print(name + " : " + delta + " : " + newValue);
+            this.EmitSignal("StatisticChanged", name, delta, newValue);
         }
     }
 }
