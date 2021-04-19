@@ -27,6 +27,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.m_Values = value;
                 this.Minimum = 0;
                 this.Maximum = this.m_Values.Count;
+                this.Value = this.m_Values.FirstOrDefault();
             }
         }
 
@@ -63,7 +64,7 @@ namespace JoyLib.Code.Unity.GUI
         protected bool m_TitleCase;
 
         [Signal]
-        public delegate void ValueChanged(int delta, int newValue);
+        public delegate void ValueChanged(string name, int delta, int newValue);
 
         public string ValueName
         {
@@ -162,7 +163,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.ValueLabel.Text = this.Values.ElementAt(this.Index);
             }
             
-            this.EmitSignal("ValueChanged", delta, this.Value);
+            this.EmitSignal("ValueChanged", this.ValueName, delta, this.Value);
         }
     }
 }
