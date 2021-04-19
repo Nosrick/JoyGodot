@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Castle.Core.Internal;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyLib.Code;
 using JoyLib.Code.Graphics;
 
 namespace Code.Unity.GUI.Managed_Assets
@@ -32,6 +33,8 @@ namespace Code.Unity.GUI.Managed_Assets
         }
 
         protected ManagedUIElement m_Element;
+        
+        protected static PackedScene ElementPrefab { get; set; }
 
         public bool MouseInside { get; protected set; }
 
@@ -198,6 +201,18 @@ namespace Code.Unity.GUI.Managed_Assets
         {
             base._EnterTree();
 
+            if (ElementPrefab is null)
+            {
+                GD.Print("Attempting to load ElementPrefab.");
+                ElementPrefab = GD.Load<PackedScene>(
+                    GlobalConstants.GODOT_ASSETS_FOLDER +
+                    "Scenes/Parts/ManagedUIElement.tscn");
+
+                GD.Print(ElementPrefab is null
+                    ? "Could not load ElementPrefab!"
+                    : "Got ElementPrefab.");
+            }
+
             this.Connect("mouse_entered", this, "OnPointerEnter");
             this.Connect("mouse_exited", this, "OnPointerExit");
 
@@ -279,14 +294,27 @@ namespace Code.Unity.GUI.Managed_Assets
             if (this.m_Element is null)
             {
                 GD.Print("Creating managed UI element");
-                this.m_Element = new ManagedUIElement
+                if (ElementPrefab is null)
                 {
-                    AnchorBottom = 1,
-                    AnchorRight = 1,
-                    Name = "Element",
-                    MouseFilter = MouseFilterEnum.Ignore
-                };
+                    GD.Print("ManagedUIElement prefab is null, creating from code node!");
+                    GD.Print("Prepare for trouble!");
+                    this.m_Element = new ManagedUIElement();
+                }
+                else
+                {
+                    this.m_Element = ElementPrefab.Instance() as ManagedUIElement;
 
+                    if (this.m_Element is null)
+                    {
+                        GD.Print("Failed to instantiate ManagedUIElement from Prefab!");
+                        return;
+                    }
+                }
+
+                this.m_Element.Name = "Element";
+                this.m_Element.AnchorBottom = 1;
+                this.m_Element.AnchorRight = 1;
+                this.m_Element.MouseFilter = MouseFilterEnum.Ignore;
                 this.AddChild(this.m_Element);
 #if TOOLS
                 this.m_Element.Owner = this.GetTree()?.EditedSceneRoot;

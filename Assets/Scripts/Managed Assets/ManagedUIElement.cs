@@ -140,6 +140,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
+            GD.Print(nameof(this.AddSpriteState));
+            GD.Print(this.GetPath());
             this.Initialise();
             this.m_States.Add(state.Name, state);
             this.IsDirty = true;

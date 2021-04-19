@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using JoyLib.Code;
 using JoyLib.Code.Entities.Statistics;
@@ -42,8 +41,7 @@ public class BasicPlayerInfo : Control
         {
             for (int i = this.Parts.Count; i < this.Statistics.Count; i++)
             {
-                var instance = this.ListItemPrefab.Instance() as StringValueItem;
-                if (instance is null)
+                if (!(this.ListItemPrefab.Instance() is StringValueItem instance))
                 {
                     GlobalConstants.ActionLog.Log("List item prefab is incorrect!", LogLevel.Error);
                     return;
@@ -56,7 +54,8 @@ public class BasicPlayerInfo : Control
         
         for(int i = 0; i < this.Statistics.Count; i++)
         {
-            
+            var part = this.Parts[i];
+            part.Visible = true;
         }
         
         this.EmitSignal("StatisticBlockSet");

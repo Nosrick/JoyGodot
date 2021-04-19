@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=2]
@@ -6,14 +6,6 @@
 [ext_resource path="res://Assets/Fonts/Silver.tres" type="DynamicFont" id=4]
 [ext_resource path="res://Assets/Scripts/GUI/MainMenuState/MainMenuHandler.cs" type="Script" id=5]
 [ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=6]
-
-[sub_resource type="CSharpScript" id=1]
-
-[sub_resource type="CSharpScript" id=2]
-
-[sub_resource type="CSharpScript" id=3]
-
-[sub_resource type="CSharpScript" id=4]
 
 [node name="Main Menu" type="Control"]
 anchor_right = 1.0
@@ -78,7 +70,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 HAlign = 1
 VAlign = 1
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -88,13 +79,10 @@ StateColours = {
 }
 Text = "New Game"
 
-[node name="Element2" type="Control" parent="Button Container/New Game Button" index="0"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Element" parent="Button Container/New Game Button" index="0"]
 mouse_filter = 2
-script = SubResource( 1 )
 
-[node name="Text" parent="Button Container/New Game Button" index="2"]
+[node name="Text" parent="Button Container/New Game Button" index="1"]
 custom_fonts/font = ExtResource( 4 )
 text = "New Game"
 align = 1
@@ -110,7 +98,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 HAlign = 1
 VAlign = 1
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -120,13 +107,10 @@ StateColours = {
 }
 Text = "Load Game"
 
-[node name="Element2" type="Control" parent="Button Container/Load Game Button" index="0"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Element" parent="Button Container/Load Game Button" index="0"]
 mouse_filter = 2
-script = SubResource( 2 )
 
-[node name="Text" parent="Button Container/Load Game Button" index="2"]
+[node name="Text" parent="Button Container/Load Game Button" index="1"]
 custom_fonts/font = ExtResource( 4 )
 text = "Load Game"
 align = 1
@@ -142,7 +126,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 HAlign = 1
 VAlign = 1
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -152,13 +135,10 @@ StateColours = {
 }
 Text = "Settings"
 
-[node name="Element2" type="Control" parent="Button Container/Settings" index="0"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Element" parent="Button Container/Settings" index="0"]
 mouse_filter = 2
-script = SubResource( 3 )
 
-[node name="Text" parent="Button Container/Settings" index="2"]
+[node name="Text" parent="Button Container/Settings" index="1"]
 custom_fonts/font = ExtResource( 4 )
 text = "Settings"
 align = 1
@@ -174,7 +154,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 HAlign = 1
 VAlign = 1
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -184,13 +163,10 @@ StateColours = {
 }
 Text = "Quit To Desktop"
 
-[node name="Element2" type="Control" parent="Button Container/Quit to Desktop" index="0"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Element" parent="Button Container/Quit to Desktop" index="0"]
 mouse_filter = 2
-script = SubResource( 4 )
 
-[node name="Text" parent="Button Container/Quit to Desktop" index="2"]
+[node name="Text" parent="Button Container/Quit to Desktop" index="1"]
 custom_fonts/font = ExtResource( 4 )
 text = "Quit To Desktop"
 align = 1

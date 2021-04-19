@@ -23,8 +23,8 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 Text = "Name"
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
@@ -45,9 +45,8 @@ anchor_left = 0.4
 anchor_right = 0.5
 anchor_bottom = 1.0
 script = ExtResource( 5 )
-HAlign = 1
 VAlign = 1
-Text = "<"
+HAlign = 1
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -56,12 +55,16 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
+Text = "<"
 
 [node name="Element" type="Control" parent="Decrease Value"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Colour Lerper" type="Tween" parent="Decrease Value/Element"]
 
@@ -86,8 +89,8 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 Text = "Value"
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
@@ -111,9 +114,8 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-Text = ">"
+HAlign = 1
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -122,6 +124,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
+Text = ">"
 
 [node name="Element" type="Control" parent="Increase Value"]
 anchor_right = 1.0
@@ -141,5 +144,5 @@ custom_fonts/font = ExtResource( 2 )
 text = ">"
 align = 1
 valign = 1
-[connection signal="_Press" from="Decrease Value" to="." method="DecreaseValue"]
-[connection signal="_Press" from="Increase Value" to="." method="IncreaseValue"]
+[connection signal="_Press" from="Decrease Value" to="." method="ChangeValue" binds= [ -1 ]]
+[connection signal="_Press" from="Increase Value" to="." method="ChangeValue" binds= [ 1 ]]

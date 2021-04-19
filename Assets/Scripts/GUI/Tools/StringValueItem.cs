@@ -9,18 +9,35 @@ namespace JoyLib.Code.Unity.GUI
     #if TOOLS
     [Tool]
     #endif
-    public class StringValueItem : Control
+    public class StringValueItem : Control, IValueItem<string>
     {
         protected ManagedLabel NameLabel { get; set; }
         protected ManagedLabel ValueLabel { get; set; }
+
+        public ICollection<string> Values
+        {
+            get => this.m_Values;
+            set
+            {
+                this.m_Values = value;
+                this.Minimum = 0;
+                this.Maximum = this.m_Values.Count;
+            }
+        }
+
+        protected ICollection<string> m_Values;
         
-        public ICollection<string> Values { get; set; }
-        
+        public int Minimum { get; set; }
+        public int Maximum { get; set; }
+
         protected int Index { get; set; }
+
+        [Signal]
+        public delegate void ValueChanged(int delta, int newValue);
 
         public string ValueName
         {
-            get =>this.NameLabel?.Text;
+            get => this.NameLabel?.Text;
             set
             {
                 if (this.NameLabel is null)
@@ -85,23 +102,10 @@ namespace JoyLib.Code.Unity.GUI
             GD.Print(this.GetType().Name + " finished initialising");
         }
 
-        public void IncreaseValue(int delta = 1)
+        public void ChangeValue(int delta = 1)
         {
-            GD.Print("Calling " + nameof(this.IncreaseValue));
+            GD.Print("Calling " + nameof(this.ChangeValue));
             this.Index += delta;
-            this.Index %= this.Values.Count > 0 ? this.Values.Count : 1;
-            this.Index = Math.Abs(this.Index);
-
-            if (this.Index < this.Values.Count)
-            {
-                this.ValueLabel.Text = this.Values.ElementAt(this.Index);
-            }
-        }
-
-        public void DecreaseValue(int delta = 1)
-        {
-            GD.Print("Calling " + nameof(this.DecreaseValue));
-            this.Index -= delta;
             this.Index %= this.Values.Count > 0 ? this.Values.Count : 1;
             this.Index = Math.Abs(this.Index);
             
@@ -109,6 +113,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.ValueLabel.Text = this.Values.ElementAt(this.Index);
             }
+            
+            this.EmitSignal("ValueChanged", delta, this.Value);
         }
     }
 }

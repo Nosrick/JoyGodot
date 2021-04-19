@@ -23,8 +23,8 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 Text = "Name"
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
@@ -45,9 +45,8 @@ anchor_left = 0.5
 anchor_right = 0.6
 anchor_bottom = 1.0
 script = ExtResource( 5 )
-HAlign = 1
 VAlign = 1
-Text = "<"
+HAlign = 1
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -56,6 +55,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
+Text = "<"
 
 [node name="Element" type="Control" parent="Decrease Value"]
 anchor_right = 1.0
@@ -86,9 +86,9 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-Text = "Value"
+HAlign = 1
+Text = "0"
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
 
@@ -96,7 +96,7 @@ Text = "Value"
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = ExtResource( 2 )
-text = "Value"
+text = "0"
 align = 1
 valign = 1
 __meta__ = {
@@ -111,9 +111,8 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-Text = ">"
+HAlign = 1
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -122,6 +121,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
+Text = ">"
 
 [node name="Element" type="Control" parent="Increase Value"]
 anchor_right = 1.0
