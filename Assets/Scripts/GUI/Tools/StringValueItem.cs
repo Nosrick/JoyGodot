@@ -52,6 +52,7 @@ namespace JoyLib.Code.Unity.GUI
                 }
                 
                 this.NameLabel.Text = value;
+                this.Name = value;
             }
         }
 

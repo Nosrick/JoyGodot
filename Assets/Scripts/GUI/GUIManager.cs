@@ -356,45 +356,53 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void SetupManagedComponents(GUIData gui, bool crossFade = false, float duration = 0.1f)
+        public void SetupManagedComponents(Control gui, bool crossFade = false, float duration = 0.1f)
         {
+            if (gui is IManagedElement guiElement)
+            {
+                this.SetUpManagedComponent(guiElement);
+            }
+            
             Array managedComponents = gui.GetAllChildren();
             foreach (var component in managedComponents)
             {
-                if (!(component is IManagedElement managedElement))
+                if (component is IManagedElement element)
                 {
-                    continue;
+                    this.SetUpManagedComponent(element, crossFade, duration);
                 }
+            }
+        }
 
-                if (managedElement.ElementName.IsNullOrEmpty())
-                {
-                    continue;
-                }
+        public void SetUpManagedComponent(IManagedElement element, bool crossFade = false, float duration = 0.1f)
+        {
+            if (element.ElementName.IsNullOrEmpty())
+            {
+                return;
+            }
                 
-                if (component is ISpriteStateElement spriteStateElement)
+            if (element is ISpriteStateElement spriteStateElement)
+            {
+                if (this.UISprites.TryGetValue(spriteStateElement.ElementName, out ISpriteState value))
                 {
-                    if (this.UISprites.TryGetValue(spriteStateElement.ElementName, out ISpriteState value))
-                    {
-                        spriteStateElement.Clear();
-                        spriteStateElement.AddSpriteState(value);
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.Log("Could not find sprite " + spriteStateElement.ElementName,
-                            LogLevel.Warning);
-                    }
+                    spriteStateElement.Clear();
+                    spriteStateElement.AddSpriteState(value);
                 }
-                if (component is IColourableElement colourfulElement)
+                else
                 {
-                    if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName, out IDictionary<string, Color> value))
-                    {
-                        colourfulElement.OverrideAllColours(value, crossFade, duration);
-                    }
-                    else
-                    {
-                        GlobalConstants.ActionLog.Log("Could not find colours for " + colourfulElement.ElementName,
-                            LogLevel.Warning);
-                    }
+                    GlobalConstants.ActionLog.Log("Could not find sprite " + spriteStateElement.ElementName,
+                        LogLevel.Warning);
+                }
+            }
+            if (element is IColourableElement colourfulElement)
+            {
+                if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName, out IDictionary<string, Color> value))
+                {
+                    colourfulElement.OverrideAllColours(value, crossFade, duration);
+                }
+                else
+                {
+                    GlobalConstants.ActionLog.Log("Could not find colours for " + colourfulElement.ElementName,
+                        LogLevel.Warning);
                 }
             }
         }

@@ -390,9 +390,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 part.Visible = false;
             }
 
-            if (this.Parts.Count < this.CurrentSpriteState.SpriteData.m_Parts.Count)
+            int partsCount = this.CurrentSpriteState.SpriteData.m_Parts.Count;
+            if (this.Parts.Count < partsCount)
             {
-                for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = this.Parts.Count; i < partsCount; i++)
                 {
                     NinePatchRect patchRect = new NinePatchRect
                     {
@@ -415,15 +416,18 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 #endif
                 }
             }
-
-            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+            
+            int maxSortingOrder = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_SortingOrder);
+            int minSortingOrder = this.CurrentSpriteState.SpriteData.m_Parts.Min(part => part.m_SortingOrder);
+            for (int i = 0; i < partsCount; i++)
             {
                 var part = this.CurrentSpriteState.SpriteData.m_Parts[i];
                 NinePatchRect patchRect = this.Parts[i];
                 patchRect.Name = part.m_Name;
                 patchRect.Visible = true;
                 patchRect.Texture = part.m_FrameSprite[this.FrameIndex];
-                //this.MoveChild(patchRect, part.m_SortingOrder);
+                int normaliseSortOrder = part.m_SortingOrder - minSortingOrder; 
+                this.MoveChild(patchRect, normaliseSortOrder);
                 patchRect.PatchMarginLeft = part.m_PatchMargins[0];
                 patchRect.PatchMarginTop = part.m_PatchMargins[1];
                 patchRect.PatchMarginRight = part.m_PatchMargins[2];
@@ -433,6 +437,19 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 patchRect.AxisStretchVertical = part.m_StretchMode;
                 patchRect.SizeFlagsHorizontal = 3;
                 patchRect.SizeFlagsVertical = 3;
+            }
+            
+            var array = this.GetChildren();
+            int index = 1;
+            foreach (object obj in array)
+            {
+                if (obj is NinePatchRect || !(obj is Node node))
+                {
+                    continue;
+                }
+                int sortOrder = this.Parts.Count + index;
+                this.MoveChild(node, sortOrder);
+                index += 1;
             }
         }
 

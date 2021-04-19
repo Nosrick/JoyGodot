@@ -49,11 +49,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                     this.Parts.Add(instance);
                 }
             }
-            this.DeferredSetUp(this.m_Statistics);
-        }
-
-        protected void DeferredSetUp(List<IEntityStatistic> statistics)
-        {
+            
             for (int i = 0; i < statistics.Count; i++)
             {
                 var stat = statistics[i];
@@ -64,6 +60,13 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 part.Value = stat.Value;
                 part.Visible = true;
             }
+            
+            this.CallDeferred("DeferredSetUp");
+        }
+
+        protected void DeferredSetUp()
+        {
+            GlobalConstants.GameManager.GUIManager.SetupManagedComponents(this);
         }
     }
 }
