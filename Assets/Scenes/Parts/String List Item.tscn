@@ -11,8 +11,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -214.0
 margin_bottom = -416.0
-size_flags_horizontal = 15
-size_flags_vertical = 15
+rect_min_size = Vector2( 320, 32 )
+size_flags_horizontal = 13
+size_flags_vertical = 13
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -51,8 +52,6 @@ anchor_bottom = 1.0
 script = ExtResource( 5 )
 HAlign = 1
 VAlign = 1
-ElementName = "AccentBackground"
-Text = "<"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -61,6 +60,8 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
+ElementName = "AccentBackground"
+Text = "<"
 
 [node name="Element" type="Control" parent="Decrease Value"]
 anchor_right = 1.0
@@ -122,8 +123,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-ElementName = "AccentBackground"
-Text = ">"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -132,6 +131,8 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
+ElementName = "AccentBackground"
+Text = ">"
 
 [node name="Element" type="Control" parent="Increase Value"]
 anchor_right = 1.0
