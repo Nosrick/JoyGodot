@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Godot;
+using JoyGodot.Assets.Scripts.GUI.CharacterCreationState;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
@@ -23,6 +24,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         
         protected IRollable Roller { get; set; }
         
+        protected BasicPlayerInfo BasicPlayerInfo { get; set; }
         protected StatisticsList StatisticsList { get; set; }
 
         public override void _Ready()
@@ -30,6 +32,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.PlayerName = this.FindNode("Player Name Input") as LineEdit;
             this.PlayerSprite = this.FindNode("Player Icon") as ManagedUIElement;
             this.StatisticsList = this.FindNode("Statistics List") as StatisticsList;
+            this.BasicPlayerInfo = this.FindNode("Basic Player Info") as BasicPlayerInfo;
+
+            this.BasicPlayerInfo?.Connect(
+                "ValueChanged",
+                this,
+                "ValueChanged");
 
             this.EntityTemplateHandler = GlobalConstants.GameManager.EntityTemplateHandler;
             this.CultureHandler = GlobalConstants.GameManager.CultureHandler;
@@ -78,6 +86,11 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 true);
             this.PlayerName.Text = name;
             this.SetUpStatistics(template);
+        }
+
+        public void ValueChanged(string name, int oldIndex, int newIndex)
+        {
+            GD.Print(name + " : " + oldIndex + " : " + newIndex);
         }
 
         protected void SetUpStatistics(IEntityTemplate template)

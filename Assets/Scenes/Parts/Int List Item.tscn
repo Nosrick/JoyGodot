@@ -97,6 +97,7 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+CustomFont = ExtResource( 2 )
 ElementName = "AccentBackground"
 Text = "0"
 
