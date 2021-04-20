@@ -120,7 +120,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (this.TweenNode is null)
             {
-                GD.Print("Tween needs to be created");
+                //GD.Print("Tween needs to be created");
                 this.TweenNode = new Tween
                 {
                     Name = "Colour Lerper"
@@ -133,7 +133,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             this.m_States = new Dictionary<string, ISpriteState>();
 
-            GD.Print(this.Name + " initialised!");
+            //GD.Print(this.Name + " initialised!");
             this.Initialised = true;
         }
 
