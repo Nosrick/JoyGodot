@@ -155,12 +155,18 @@ namespace JoyLib.Code.Unity.GUI
         {
             GD.Print("Calling " + nameof(this.ChangeValue));
             this.Index += delta;
-            this.Index %= this.Values.Count > 0 ? this.Values.Count : 1;
-            this.Index = Math.Abs(this.Index);
+            if (this.Index < 0)
+            {
+                this.Index = this.Values.Count - 1;
+            }
+            else
+            {
+                this.Index %= this.Values.Count > 0 ? this.Values.Count : 1;
+            }
             
             if (this.Index < this.Values.Count)
             {
-                this.ValueLabel.Text = this.Values.ElementAt(this.Index);
+                this.Value = this.Values.ElementAt(this.Index);
             }
             
             this.EmitSignal("ValueChanged", this.ValueName, delta, this.Value);
