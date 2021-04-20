@@ -38,6 +38,25 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 "Scenes/Parts/Int List Item.tscn");
         }
 
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+            
+            foreach (var part in this.Parts)
+            {
+                if (part.IsConnected(
+                    "ValueChanged",
+                    this,
+                    nameof(this.ChangeValue)))
+                {
+                    part.Disconnect(
+                        "ValueChanged",
+                        this,
+                        nameof(this.ChangeValue));
+                }
+            }
+        }
+
         public void SetUpStatistics(List<IEntityStatistic> statistics)
         {
             if (statistics.Count > this.Parts.Count 
@@ -66,20 +85,16 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 part.Maximum = 10;
                 part.Value = stat.Value;
                 part.Visible = true;
-                if (part.IsConnected(
+                if (!part.IsConnected(
                     "ValueChanged",
                     this,
                     nameof(this.ChangeValue)))
                 {
-                    part.Disconnect(
+                    part.Connect(
                         "ValueChanged",
                         this,
                         nameof(this.ChangeValue));
                 }
-                part.Connect(
-                    "ValueChanged",
-                    this,
-                    nameof(this.ChangeValue));
             }
             
             this.EmitSignal("StatisticBlockSet");
