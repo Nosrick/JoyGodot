@@ -31,8 +31,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         {
             this.PlayerName = this.FindNode("Player Name Input") as LineEdit;
             this.PlayerSprite = this.FindNode("Player Icon") as ManagedUIElement;
-            this.StatisticsList = this.FindNode("Statistics List") as StatisticsList;
             this.BasicPlayerInfo = this.FindNode("Basic Player Info") as BasicPlayerInfo;
+            this.StatisticsList = this.FindNode("Statistics List") as StatisticsList;
 
             this.BasicPlayerInfo?.Connect(
                 "ValueChanged",
@@ -43,6 +43,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.CultureHandler = GlobalConstants.GameManager.CultureHandler;
             this.Roller = GlobalConstants.GameManager.Roller;
             this.IconHandler = GlobalConstants.GameManager.ObjectIconHandler;
+            
+            this.CallDeferred("RandomiseName");
         }
 
         public override void _Input(InputEvent @event)
@@ -57,11 +59,10 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         public void RandomiseName()
         {
             GD.Print(nameof(this.RandomiseName));
-            var culture = this.Roller.SelectFromCollection(this.CultureHandler.Values);
-            var inhabitant = this.Roller.SelectFromCollection(culture.Inhabitants);
-            var template = this.EntityTemplateHandler.Get(inhabitant);
+            var culture = this.BasicPlayerInfo.CurrentCulture;
+            var template = this.BasicPlayerInfo.CurrentTemplate;
 
-            string name = culture.GetRandomName("male");
+            string name = culture.GetRandomName(this.BasicPlayerInfo.CurrentGender);
             
             this.GUIManager.SetUIColours(
                 culture.BackgroundColours,
@@ -74,7 +75,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 "player",
                 this.IconHandler.GetSprites(
                     culture.Tileset,
-                    inhabitant,
+                    template.CreatureType,
                     "idle").First());
             
             this.PlayerSprite.Clear();
@@ -88,9 +89,10 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.SetUpStatistics(template);
         }
 
-        public void ValueChanged(string name, int oldIndex, int newIndex)
+        public void ValueChanged(string name, string newValue)
         {
-            GD.Print(name + " : " + oldIndex + " : " + newIndex);
+            GD.Print(name + " : " + newValue);
+            this.RandomiseName();
         }
 
         protected void SetUpStatistics(IEntityTemplate template)

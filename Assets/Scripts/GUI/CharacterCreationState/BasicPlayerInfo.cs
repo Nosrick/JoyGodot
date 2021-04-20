@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using JoyLib.Code.Entities.Gender;
 using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
 
 namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
@@ -16,9 +18,9 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
     public class BasicPlayerInfo : Control
     {
         protected PackedScene ListItemPrefab { get; set; }
-    
+
         protected List<StringValueItem> Parts { get; set; }
-    
+
         public IEntityTemplateHandler EntityTemplateHandler { get; set; }
         public ICultureHandler CultureHandler { get; set; }
         public IGenderHandler GenderHandler { get; set; }
@@ -26,14 +28,18 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         public IEntitySexualityHandler SexualityHandler { get; set; }
         public IEntityRomanceHandler RomanceHandler { get; set; }
 
+        public ICulture CurrentCulture { get; protected set; }
+        public IEntityTemplate CurrentTemplate { get; protected set; }
+        public string CurrentGender { get; protected set; }
+
         [Signal]
-        public delegate void ValueChanged(string name, int newIndex);
+        public delegate void ValueChanged(string name, string newValue);
 
         public override void _Ready()
         {
             this.Parts = new List<StringValueItem>();
             this.ListItemPrefab = GD.Load<PackedScene>(
-                GlobalConstants.GODOT_ASSETS_FOLDER + 
+                GlobalConstants.GODOT_ASSETS_FOLDER +
                 "Scenes/Parts/String List Item.tscn");
 
             IGameManager gameManager = GlobalConstants.GameManager;
@@ -43,7 +49,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             this.BioSexHandler = gameManager.BioSexHandler;
             this.SexualityHandler = gameManager.SexualityHandler;
             this.RomanceHandler = gameManager.RomanceHandler;
-            
+
             this.SetUp();
         }
 
@@ -72,44 +78,133 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             {
                 obj.Visible = false;
             }
-            
+
             var item = this.AddItem(
                 "Species",
                 this.EntityTemplateHandler.Values
                     .Select(template => template.CreatureType)
-                    .ToArray());
-            
+                    .ToArray(),
+                "OnTemplateChange");
+
+            this.CurrentTemplate = this.EntityTemplateHandler.Get(item.Value);
+
             item = this.AddItem(
                 "Culture",
                 this.CultureHandler.GetByCreatureType(item.Value)
                     .Select(c => c.CultureName)
-                    .ToArray());
+                    .ToArray(),
+                "OnCultureChange");
 
-            ICulture culture = this.CultureHandler.GetByCultureName(item.Value);
+            this.CurrentCulture = this.CultureHandler.GetByCultureName(item.Value);
 
-            if (culture is null)
+            if (this.CurrentCulture is null)
             {
                 return;
             }
 
             item = this.AddItem(
-                "Gender",
-                culture.Genders);
+                "Sex",
+                this.CurrentCulture.Sexes,
+                "OnValueChange");
 
             item = this.AddItem(
-                "Sex",
-                culture.Sexes);
+                "Gender",
+                this.CurrentCulture.Genders,
+                "OnValueChange");
+
+            this.CurrentGender = item.Value;
 
             item = this.AddItem(
                 "Romance",
-                culture.RomanceTypes);
+                this.CurrentCulture.RomanceTypes,
+                "OnValueChange");
 
             item = this.AddItem(
                 "Sexuality",
-                culture.Sexualities);
+                this.CurrentCulture.Sexualities,
+                "OnValueChange");
         }
 
-        protected StringValueItem AddItem(string name, ICollection<string> values)
+        protected void OnChange(bool randomCulture = false)
+        {
+            var tempPart = this.GetItem("species");
+
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Species selector!");
+                return;
+            }
+
+            this.CurrentTemplate = this.EntityTemplateHandler.Get(tempPart.Value);
+
+            tempPart = this.GetItem("culture");
+
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Culture selector!");
+                return;
+            }
+            
+            if (randomCulture)
+            {
+                tempPart.Values = this.CultureHandler.GetByCreatureType(this.CurrentTemplate.CreatureType)
+                    .Select(culture => culture.CultureName)
+                    .ToArray();
+                tempPart.Value = tempPart.Values.GetRandom();
+            }
+            this.CurrentCulture = this.CultureHandler.GetByCultureName(tempPart.Value);
+
+            var bioSexPart = this.GetItem("sex");
+
+            if (bioSexPart is null)
+            {
+                GD.PushError("Could not find Sex selector!");
+                return;
+            }
+
+            bioSexPart.Values = this.CurrentCulture.Sexes;
+            bioSexPart.Value = this.CurrentCulture.ChooseSex(this.BioSexHandler.Values).Name;
+
+            var genderPart = this.GetItem("gender");
+
+            if (genderPart is null)
+            {
+                GD.PushError("Could not find Gender selector!");
+                return;
+            }
+
+            genderPart.Values = this.CurrentCulture.Genders;
+            genderPart.Value =
+                this.CurrentCulture.ChooseGender(bioSexPart.Value, this.GenderHandler.Values).Name;
+            this.CurrentGender = genderPart.Value;
+
+            tempPart = this.GetItem("romance");
+
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Romance selector!");
+                return;
+            }
+
+            tempPart.Values = this.CurrentCulture.RomanceTypes;
+            tempPart.Value = this.CurrentCulture.ChooseRomance(this.RomanceHandler.Values).Name;
+
+            tempPart = this.GetItem("sexuality");
+
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Sexuality selector!");
+                return;
+            }
+
+            tempPart.Values = this.CurrentCulture.Sexualities;
+            tempPart.Value = this.CurrentCulture.ChooseSexuality(this.SexualityHandler.Values).Name;
+        }
+
+        protected StringValueItem AddItem(
+            string name,
+            ICollection<string> values,
+            string connection)
         {
             var inactive = this.Parts.FirstOrDefault(part => part.Visible == false);
             StringValueItem item;
@@ -132,24 +227,46 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             this.Parts.Add(item);
             item.ValueName = name;
             item.Values = values;
+            foreach (var obj in item.GetSignalConnectionList("ValueChanged"))
+            {
+                item.Disconnect("ValueChanged", this, obj.ToString());
+            }
+
             if (!item.IsConnected(
                 "ValueChanged",
                 this,
-                "OnValueChange"))
+                connection))
             {
                 item.Connect(
                     "ValueChanged",
                     this,
-                    "OnValueChange");
+                    connection);
             }
 
             return item;
+        }
+
+        protected StringValueItem GetItem(string name)
+        {
+            return this.Parts.FirstOrDefault(part => part.ValueName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public void OnValueChange(string name, int delta, int newIndex)
         {
             GD.Print(nameof(this.OnValueChange));
             GD.Print(name + " : " + delta + " : " + newIndex);
+        }
+
+        public void OnCultureChange(string name, int delta, int newIndex)
+        {
+            this.OnChange();
+            this.EmitSignal("ValueChanged", "Culture", this.CurrentCulture.CultureName);
+        }
+
+        public void OnTemplateChange(string name, int delta, int newIndex)
+        {
+            this.OnChange(true);
+            this.EmitSignal("ValueChanged", "Template", this.CurrentTemplate.CreatureType);
         }
     }
 }
