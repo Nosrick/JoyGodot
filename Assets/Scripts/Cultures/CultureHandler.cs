@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
 using JoyLib.Code.Graphics;
@@ -323,12 +324,15 @@ namespace JoyLib.Code.Cultures
         {
             this.Initialise();
 
-            if (this.m_Cultures.ContainsKey(name))
+            string key = this.m_Cultures.Keys.FirstOrDefault(s => s.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (key is null)
             {
-                return this.m_Cultures[name];
+                return null;
             }
+            
+            this.m_Cultures.TryGetValue(key, out ICulture culture);
 
-            return null;
+            return culture;
         }
 
         public List<ICulture> GetByCreatureType(string type)
