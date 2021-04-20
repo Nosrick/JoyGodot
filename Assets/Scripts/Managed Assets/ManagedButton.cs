@@ -420,7 +420,7 @@ namespace Code.Unity.GUI.Managed_Assets
 
         protected virtual void Press()
         {
-            if (!this.Visible || this.Disabled)
+            if (!this.Visible || this.Disabled || this.IsInsideTree() == false)
             {
                 return;
             }
