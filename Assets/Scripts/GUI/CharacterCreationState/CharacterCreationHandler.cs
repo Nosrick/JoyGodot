@@ -99,5 +99,10 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         {
             this.StatisticsList.Statistics = template.Statistics.Values;
         }
+
+        protected void NextScreen()
+        {
+            GD.Print("Moving to CC2.");
+        }
     }
 }
