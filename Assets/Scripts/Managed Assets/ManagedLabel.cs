@@ -106,22 +106,20 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             get => this.HasFontOverride("font") ? this.GetFont("font") : null;
             set
             {
+                this.m_FontOverride = value;
+                this.AddFontOverride("font", value);
                 if (this.IsInsideTree() == false)
                 {
                     GD.Print("Not inside tree when trying to set font!");
-                    this.m_FontOverride = value;
                     return;
                 }
 
                 GD.Print(value is null ? "Clearing font" : "Setting font");
 
-                this.AddFontOverride("font", value);
                 if (this.MyLabel is null && this.IsInsideTree())
                 {
                     GD.Print("Label needs to be created");
                 }
-
-                this.m_FontOverride = value;
                 this.MyLabel?.AddFontOverride("font", value);
             }
         }

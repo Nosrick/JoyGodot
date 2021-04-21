@@ -77,16 +77,15 @@ namespace JoyGodot.addons.Managed_Assets
             get => this.HasFontOverride("font") ? this.GetFont("font") : null;
             set
             {
-                this.AddFontOverride("default", value);
+                this.m_FontOverride = value;
+                this.AddFontOverride("font", value);
                 if (this.MyLabel is null)
                 {
                     GD.Print("Label is null in " + this.GetType().Name);
-                    this.m_FontOverride = value;
                     return;
                 }
 
                 GD.Print("Setting font override");
-                GD.Print(this.GetChildren());
                 this.MyLabel.AddFontOverride("font", value);
             }
         }

@@ -24,10 +24,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         protected IObjectIconHandler IconHandler { get; set; }
         
         protected IRollable Roller { get; set; }
+
+        protected const int STATISTIC_POINTS_MAX = 8;
+        protected const int DERIVED_VALUE_POINTS_MAX = 10;
         
         protected BasicPlayerInfo BasicPlayerInfo { get; set; }
         protected StatisticsList StatisticsList { get; set; }
-        
         protected DerivedValuesList DerivedValuesList { get; set; }
 
         public override void _Ready()
@@ -41,7 +43,17 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.BasicPlayerInfo?.Connect(
                 "ValueChanged",
                 this,
-                "ValueChanged");
+                nameof(this.BasicPlayerInfoChanged));
+
+            if (this.StatisticsList is null == false)
+            {
+                this.StatisticsList.Points = STATISTIC_POINTS_MAX;
+            }
+
+            if (this.DerivedValuesList is null == false)
+            {
+                this.DerivedValuesList.Points = DERIVED_VALUE_POINTS_MAX;
+            }
 
             this.EntityTemplateHandler = GlobalConstants.GameManager.EntityTemplateHandler;
             this.CultureHandler = GlobalConstants.GameManager.CultureHandler;
@@ -63,6 +75,9 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         public void RandomiseName()
         {
             GD.Print(nameof(this.RandomiseName));
+            this.StatisticsList.Points = STATISTIC_POINTS_MAX;
+            this.DerivedValuesList.Points = DERIVED_VALUE_POINTS_MAX;
+            
             var culture = this.BasicPlayerInfo.CurrentCulture;
             var template = this.BasicPlayerInfo.CurrentTemplate;
 
@@ -97,7 +112,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                     .Values;
         }
 
-        public void ValueChanged(string name, string newValue)
+        public void BasicPlayerInfoChanged(string name, string newValue)
         {
             GD.Print(name + " : " + newValue);
             this.RandomiseName();

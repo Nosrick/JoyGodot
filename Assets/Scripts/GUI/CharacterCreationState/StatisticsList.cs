@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using Godot.Collections;
+using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Entities.Statistics;
 
 namespace JoyLib.Code.Unity.GUI.CharacterCreationState
@@ -24,6 +24,24 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         protected List<IntValueItem> Parts { get; set; }
         
         protected PackedScene PartPrefab { get; set; }
+        
+        protected ManagedLabel PointsLabel { get; set; }
+
+        public int Points
+        {
+            get => this.m_Points;
+            set
+            {
+                this.m_Points = value;
+                if (this.PointsLabel is null == false)
+                {
+                    this.PointsLabel.Text = "Statistic Points Remaining: " + this.m_Points;
+                }
+                this.SetChildPoints();
+            }
+        }
+
+        protected int m_Points;
 
         [Signal]
         public delegate void StatisticBlockSet();
@@ -37,6 +55,13 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.PartPrefab = GD.Load<PackedScene>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 "Scenes/Parts/Int List Item.tscn");
+        }
+
+        public override void _Ready()
+        {
+            base._Ready();
+            
+            this.PointsLabel = this.GetNodeOrNull<ManagedLabel>("../Points Remaining");
         }
 
         public override void _ExitTree()
@@ -86,6 +111,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 part.Maximum = 10;
                 part.Value = stat.Value;
                 part.Visible = true;
+                part.UseRestriction = true;
                 if (!part.IsConnected(
                     "ValueChanged",
                     this,
@@ -98,6 +124,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 }
             }
             
+            this.SetChildPoints();
             this.CallDeferred("DeferredSetUp");
         }
 
@@ -109,7 +136,23 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         public void ChangeValue(string name, int delta, int newValue)
         {
             GD.Print(name + " : " + delta + " : " + newValue);
-            this.EmitSignal("StatisticChanged", name, delta, newValue);
+            if (this.Points - delta >= 0)
+            {
+                this.Points -= delta;
+                this.SetChildPoints();
+                this.EmitSignal("StatisticChanged", name, delta, newValue);
+            }
+        }
+
+        protected void SetChildPoints()
+        {
+            foreach (var part in this.Parts)
+            {
+                if (part.UseRestriction)
+                {
+                    part.PointRestriction = this.Points;
+                }
+            }
         }
     }
 }

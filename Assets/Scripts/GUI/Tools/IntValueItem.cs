@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyGodot.Assets.Scripts.Managed_Assets;
@@ -18,11 +16,15 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected ManagedLabel NameLabel { get; set; }
         protected ManagedLabel ValueLabel { get; set; }
-        
-        
+
         public ICollection<int> Values { get; set; }
         public int Maximum { get; set; }
         public int Minimum { get; set; }
+        
+        [Export]
+        public bool UseRestriction { get; set; }
+        
+        public int PointRestriction { get; set; }
 
         [Export]
         public bool TitleCase
@@ -115,12 +117,19 @@ namespace JoyLib.Code.Unity.GUI
 
         public void ChangeValue(int delta = 1)
         {
-            if (this.Value + delta > this.Maximum || this.Value + delta < this.Minimum)
+            if (this.UseRestriction && delta > this.PointRestriction)
             {
                 return;
             }
-            this.Value = Mathf.Clamp(this.Value + delta, this.Minimum, this.Maximum);
-            this.EmitSignal("ValueChanged", this.ValueName, delta, this.Value);
+            
+            int newValue = this.Value + delta;
+            if (newValue > this.Maximum || newValue < this.Minimum)
+            {
+                return;
+            }
+
+            this.Value = newValue;
+            this.EmitSignal("ValueChanged", this.ValueName, delta, newValue);
         }
     }
 }
