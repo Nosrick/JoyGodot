@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Assets/Scenes/Parts/ManagedIconButton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/CharacterCreationHandler.cs" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/BasicPlayerInfo.cs" type="Script" id=8]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=10]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/DerivedValuesList.cs" type="Script" id=11]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -245,6 +246,7 @@ margin_bottom = 360.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5
+script = ExtResource( 11 )
 
 [node name="Next Button" parent="." instance=ExtResource( 9 )]
 anchor_left = 0.84

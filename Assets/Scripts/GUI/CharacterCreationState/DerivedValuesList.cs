@@ -1,36 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using Godot.Collections;
+using JoyLib.Code;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Unity.GUI;
 
-namespace JoyLib.Code.Unity.GUI.CharacterCreationState
+namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {
-    public class StatisticsList : Control
+    public class DerivedValuesList : Control
     {
-        public ICollection<IEntityStatistic> Statistics
+        public ICollection<IDerivedValue> DerivedValues
         {
-            get => this.m_Statistics;
+            get => this.m_DerivedValues;
             set
             {
-                this.m_Statistics = value.ToList();
-                this.SetUpStatistics(this.m_Statistics);
-                this.EmitSignal("StatisticBlockSet");
+                this.m_DerivedValues = value.ToList();
+                this.SetUpDerivedValues(this.m_DerivedValues);
+                this.EmitSignal("DerivedValuesSet");
             }
         }
 
-        protected List<IEntityStatistic> m_Statistics;
+        protected List<IDerivedValue> m_DerivedValues;
         
         protected List<IntValueItem> Parts { get; set; }
         
         protected PackedScene PartPrefab { get; set; }
 
         [Signal]
-        public delegate void StatisticBlockSet();
+        public delegate void DerivedValuesSet();
 
         [Signal]
-        public delegate void StatisticChanged(string name, int delta, int newValue);
-
+        public delegate void DerivedValueChanged(string name, int delta, int newValue);
+        
         public override void _EnterTree()
         {
             this.Parts = new List<IntValueItem>();
@@ -38,7 +40,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 "Scenes/Parts/Int List Item.tscn");
         }
-
+        
         public override void _ExitTree()
         {
             base._ExitTree();
@@ -57,13 +59,13 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 }
             }
         }
-
-        public void SetUpStatistics(List<IEntityStatistic> statistics)
+    
+        protected void SetUpDerivedValues(List<IDerivedValue> derivedValues)
         {
-            if (statistics.Count > this.Parts.Count 
+            if (derivedValues.Count > this.Parts.Count 
                 && this.PartPrefab is null == false)
             {
-                for (int i = this.Parts.Count; i < statistics.Count; i++)
+                for (int i = this.Parts.Count; i < derivedValues.Count; i++)
                 {
                     if (!(this.PartPrefab.Instance() is IntValueItem instance))
                     {
@@ -77,14 +79,14 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 }
             }
             
-            for (int i = 0; i < statistics.Count; i++)
+            for (int i = 0; i < derivedValues.Count; i++)
             {
-                var stat = statistics[i];
+                var derivedValue = derivedValues[i];
                 var part = this.Parts[i];
-                part.ValueName = stat.Name;
-                part.Minimum = 1;
-                part.Maximum = 10;
-                part.Value = stat.Value;
+                part.ValueName = derivedValue.Name;
+                part.Minimum = derivedValue.Base;
+                part.Maximum = derivedValue.Base + 5;
+                part.Value = derivedValue.Value;
                 part.Visible = true;
                 if (!part.IsConnected(
                     "ValueChanged",
@@ -100,16 +102,16 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             
             this.CallDeferred("DeferredSetUp");
         }
-
+        
         protected void DeferredSetUp()
         {
             GlobalConstants.GameManager.GUIManager.SetupManagedComponents(this);
         }
-
+        
         public void ChangeValue(string name, int delta, int newValue)
         {
             GD.Print(name + " : " + delta + " : " + newValue);
-            this.EmitSignal("StatisticChanged", name, delta, newValue);
+            this.EmitSignal("DerivedValueChanged", name, delta, newValue);
         }
     }
 }

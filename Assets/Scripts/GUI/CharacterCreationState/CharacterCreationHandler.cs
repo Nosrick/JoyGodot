@@ -5,6 +5,7 @@ using JoyGodot.Assets.Scripts.GUI.CharacterCreationState;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 
@@ -26,6 +27,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         
         protected BasicPlayerInfo BasicPlayerInfo { get; set; }
         protected StatisticsList StatisticsList { get; set; }
+        
+        protected DerivedValuesList DerivedValuesList { get; set; }
 
         public override void _Ready()
         {
@@ -33,6 +36,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.PlayerSprite = this.FindNode("Player Icon") as ManagedUIElement;
             this.BasicPlayerInfo = this.FindNode("Basic Player Info") as BasicPlayerInfo;
             this.StatisticsList = this.FindNode("Statistics List") as StatisticsList;
+            this.DerivedValuesList = this.FindNode("Derived Values List") as DerivedValuesList;
 
             this.BasicPlayerInfo?.Connect(
                 "ValueChanged",
@@ -86,18 +90,17 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 0f,
                 true);
             this.PlayerName.Text = name;
-            this.SetUpStatistics(template);
+            this.StatisticsList.Statistics = template.Statistics.Values;
+            this.DerivedValuesList.DerivedValues =
+                GlobalConstants.GameManager.DerivedValueHandler
+                    .GetEntityStandardBlock(template.Statistics.Values)
+                    .Values;
         }
 
         public void ValueChanged(string name, string newValue)
         {
             GD.Print(name + " : " + newValue);
             this.RandomiseName();
-        }
-
-        protected void SetUpStatistics(IEntityTemplate template)
-        {
-            this.StatisticsList.Statistics = template.Statistics.Values;
         }
 
         protected void NextScreen()
