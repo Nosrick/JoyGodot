@@ -93,7 +93,7 @@ namespace JoyGodot.addons.Managed_Assets
 
         protected Font m_FontOverride;
 
-        protected override void Initialise()
+        public override void Initialise()
         {
             if (this.Initialised)
             {

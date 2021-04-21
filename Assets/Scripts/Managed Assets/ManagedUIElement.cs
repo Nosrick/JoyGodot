@@ -96,7 +96,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             this.Initialise();
         }
 
-        protected virtual void Initialise()
+        public virtual void Initialise()
         {
             if (this.Initialised || this.IsInsideTree() == false)
             {

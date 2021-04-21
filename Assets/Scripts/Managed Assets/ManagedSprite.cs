@@ -87,7 +87,7 @@ namespace JoyLib.Code.Unity
             this.Initialise();
         }
 
-        protected virtual void Initialise()
+        public virtual void Initialise()
         {
             if (this.Initialised)
             {

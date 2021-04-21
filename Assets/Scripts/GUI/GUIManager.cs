@@ -379,6 +379,11 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
+
+            if (element.Initialised == false)
+            {
+                element.Initialise();
+            }
                 
             if (element is ISpriteStateElement spriteStateElement)
             {

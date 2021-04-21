@@ -4,6 +4,7 @@ using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code;
 using JoyLib.Code.Graphics;
+using NUnit.Framework.Internal.Execution;
 
 namespace Code.Unity.GUI.Managed_Assets
 {
@@ -33,7 +34,7 @@ namespace Code.Unity.GUI.Managed_Assets
         }
 
         protected ManagedUIElement m_Element;
-        
+
         protected static PackedScene ElementPrefab { get; set; }
 
         public bool MouseInside { get; protected set; }
@@ -183,11 +184,6 @@ namespace Code.Unity.GUI.Managed_Assets
                     return SelectionState.Selected;
                 }
 
-                if (this.MouseInside)
-                {
-                    return SelectionState.Highlighted;
-                }
-
                 return SelectionState.Normal;
             }
         }
@@ -256,7 +252,7 @@ namespace Code.Unity.GUI.Managed_Assets
             base._Draw();
         }
 
-        protected virtual void Initialise()
+        public virtual void Initialise()
         {
             if (this.Initialised)
             {
@@ -378,11 +374,6 @@ namespace Code.Unity.GUI.Managed_Assets
                     //transitionSprite = null;
                     //triggerName = this.m_AnimationTriggers.normalTrigger;
                     break;
-                case SelectionState.Highlighted:
-                    tintColor = this.HighlightedColour;
-                    //transitionSprite = this.m_SpriteState.highlightedSprite;
-                    //triggerName = this.m_AnimationTriggers.highlightedTrigger;
-                    break;
                 case SelectionState.Pressed:
                     tintColor = this.PressedColour;
                     //transitionSprite = this.m_SpriteState.pressedSprite;
@@ -442,19 +433,57 @@ namespace Code.Unity.GUI.Managed_Assets
         {
             base._GuiInput(@event);
 
-            if (@event is InputEventMouseButton action)
+            if (@event is InputEventMouseMotion motion)
             {
-                if (this.MouseInside
-                    && (action.IsActionPressed("ui_select")
-                        || action.IsActionPressed("ui_accept")))
+                bool last = this.MouseInside;
+                this.MouseInside = this.GetGlobalRect().HasPoint(motion.GlobalPosition);
+                if (last != this.MouseInside)
                 {
-                    this.Pressed = !this.Pressed;
+                    this.EmitSignal(this.MouseInside ? "mouse_entered" : "mouse_exited");
+                }
+            }
 
-                    if (this.Pressed)
+            if (this.MouseInside)
+            {
+                if (this.ActionMode == BaseButton.ActionModeEnum.Press)
+                {
+                    if (Input.IsActionJustPressed("ui_select")
+                        || Input.IsActionJustPressed("ui_accept"))
                     {
+                        this.Pressed = true;
                         this.Press();
                     }
+                    else if (Input.IsActionJustReleased("ui_select")
+                        || Input.IsActionJustReleased("ui_accept"))
+                    {
+                        this.Pressed = false;
+                        this.EvaluateAndTransitionToSelectionState();
+                    }
                 }
+                else
+                {
+                    if (Input.IsActionJustReleased("ui_select")
+                        || Input.IsActionJustReleased("ui_accept"))
+                    {
+                        this.Pressed = true;
+                        this.Press();
+                    }
+                    else if (Input.IsActionJustPressed("ui_select")
+                             || Input.IsActionJustPressed("ui_accept"))
+                    {
+                        this.Pressed = false;
+                        this.EvaluateAndTransitionToSelectionState();
+                    }
+                }
+            }
+            else
+            {
+                if (this.KeepPressedOutside)
+                {
+                    return;
+                }
+                this.Pressed = false;
+                this.EvaluateAndTransitionToSelectionState();
             }
         }
 
@@ -473,7 +502,10 @@ namespace Code.Unity.GUI.Managed_Assets
         public override void _Process(float delta)
         {
             base._Process(delta);
-            if (this.Pressed && this.ToggleMode == false)
+            if (this.Pressed 
+                && this.ToggleMode == false
+                && (this.MouseInside == false
+                && this.KeepPressedOutside == false))
             {
                 this.Pressed = false;
             }
@@ -486,11 +518,6 @@ namespace Code.Unity.GUI.Managed_Assets
         /// The UI object can be selected.
         /// </summary>
         Normal,
-
-        /// <summary>
-        /// The UI object is highlighted.
-        /// </summary>
-        Highlighted,
 
         /// <summary>
         /// The UI object is pressed.

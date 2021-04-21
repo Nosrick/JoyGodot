@@ -21,7 +21,7 @@ namespace JoyLib.Code.Unity.GUI
         public bool HasFont { get; protected set; }
         public bool HasFontColours { get; protected set; }
 
-        public virtual void Awake()
+        public virtual void Initialise()
         {
             this.Texts = this.GetChildren();
             this.Initialised = true;
@@ -31,7 +31,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Initialised == false)
             {
-                this.Awake();
+                this.Initialise();
             }
 
             foreach (var text in this.Texts)
@@ -47,7 +47,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Initialised == false)
             {
-                this.Awake();
+                this.Initialise();
             }
             /*
             foreach (var text in this.Texts)
@@ -67,7 +67,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Initialised == false)
             {
-                this.Awake();
+                this.Initialise();
             }
 
             if (this.m_OverrideColour == false)
@@ -113,7 +113,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Initialised == false)
             {
-                this.Awake();
+                this.Initialise();
             }
 
             if (this.m_OverrideColour == false)
@@ -152,7 +152,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Initialised == false)
             {
-                this.Awake();
+                this.Initialise();
             }
 
             if (this.m_OverrideOutline == false)
@@ -206,7 +206,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             if (this.Initialised == false)
             {
-                this.Awake();
+                this.Initialise();
             }
             /*
             foreach (var text in this.Texts)
