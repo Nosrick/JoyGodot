@@ -1,0 +1,272 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=3]
+[ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedLabel.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=9]
+
+[sub_resource type="DynamicFont" id=62]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 4 )
+
+[sub_resource type="Theme" id=5]
+default_font = SubResource( 62 )
+
+[sub_resource type="DynamicFont" id=59]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=63]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 4 )
+
+[sub_resource type="Theme" id=6]
+default_font = SubResource( 63 )
+
+[sub_resource type="DynamicFont" id=60]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=64]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 4 )
+
+[sub_resource type="Theme" id=8]
+default_font = SubResource( 64 )
+
+[sub_resource type="DynamicFont" id=61]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 4 )
+
+[node name="Character Creation Part 2" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC2 Background" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+ElementName = "DefaultWindow"
+
+[node name="background" type="NinePatchRect" parent="CC2 Background"]
+self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 2 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="border" type="NinePatchRect" parent="CC2 Background"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="CC2 Background"]
+
+[node name="Main Container" type="VBoxContainer" parent="."]
+anchor_left = 0.012
+anchor_top = 0.012
+anchor_right = 0.98
+anchor_bottom = 0.9
+custom_constants/separation = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player Info Container" type="HBoxContainer" parent="Main Container"]
+margin_right = 826.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Skills Container" type="VBoxContainer" parent="Main Container/Player Info Container"]
+margin_right = 272.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Points Remaining" parent="Main Container/Player Info Container/Skills Container" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 272.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 5 )
+VAlign = 1
+HAlign = 1
+ElementName = "SlotSprite"
+TitleCase = true
+Text = "Skill Points Remaining"
+CustomFont = SubResource( 59 )
+CacheFont = true
+
+[node name="Skills List" type="VBoxContainer" parent="Main Container/Player Info Container/Skills Container"]
+margin_top = 46.0
+margin_right = 272.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+
+[node name="Abilities Container" type="VBoxContainer" parent="Main Container/Player Info Container"]
+margin_left = 276.0
+margin_right = 549.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Points Remaining" parent="Main Container/Player Info Container/Abilities Container" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 273.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 5 )
+VAlign = 1
+HAlign = 1
+ElementName = "SlotSprite"
+TitleCase = true
+Text = "Ability Picks Remaining"
+CustomFont = SubResource( 59 )
+CacheFont = true
+
+[node name="Abilities List" type="VBoxContainer" parent="Main Container/Player Info Container/Abilities Container"]
+margin_top = 46.0
+margin_right = 273.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+
+[node name="Derived Values Container" type="VBoxContainer" parent="Main Container/Player Info Container"]
+margin_left = 553.0
+margin_right = 826.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Points Remaining" parent="Main Container/Player Info Container/Derived Values Container" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 273.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 6 )
+VAlign = 1
+HAlign = 1
+ElementName = "SlotSprite"
+TitleCase = true
+CustomFont = SubResource( 60 )
+CacheFont = true
+
+[node name="Empty List" type="VBoxContainer" parent="Main Container/Player Info Container/Derived Values Container"]
+margin_top = 46.0
+margin_right = 273.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+
+[node name="Begin Button" parent="." instance=ExtResource( 9 )]
+anchor_left = 0.84
+anchor_top = 0.91
+anchor_right = 0.99
+anchor_bottom = 0.98
+theme = SubResource( 8 )
+Text = "Begin"
+CustomFont = SubResource( 61 )
+StateColours = {
+-1: Color( 0.18, 0.31, 0.31, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
+}
+
+[node name="Back Button" parent="." instance=ExtResource( 9 )]
+anchor_left = 0.012
+anchor_top = 0.91
+anchor_right = 0.162
+anchor_bottom = 0.98
+theme = SubResource( 8 )
+Text = "Back"
+CustomFont = SubResource( 61 )
+StateColours = {
+-1: Color( 0.18, 0.31, 0.31, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
+}
