@@ -1,13 +1,15 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=2]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/SkillsList.cs" type="Script" id=5]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/AbilityList.cs" type="Script" id=6]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedLabel.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=9]
 
-[sub_resource type="DynamicFont" id=62]
+[sub_resource type="DynamicFont" id=91]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -18,9 +20,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=5]
-default_font = SubResource( 62 )
+default_font = SubResource( 91 )
 
-[sub_resource type="DynamicFont" id=59]
+[sub_resource type="DynamicFont" id=88]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -30,7 +32,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=63]
+[sub_resource type="DynamicFont" id=92]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -41,9 +43,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=6]
-default_font = SubResource( 63 )
+default_font = SubResource( 92 )
 
-[sub_resource type="DynamicFont" id=60]
+[sub_resource type="DynamicFont" id=89]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -53,7 +55,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=64]
+[sub_resource type="DynamicFont" id=93]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -64,9 +66,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=8]
-default_font = SubResource( 64 )
+default_font = SubResource( 93 )
 
-[sub_resource type="DynamicFont" id=61]
+[sub_resource type="DynamicFont" id=90]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -150,6 +152,7 @@ margin_right = 272.0
 margin_bottom = 426.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 5 )
 
 [node name="Points Remaining" parent="Main Container/Player Info Container/Skills Container" instance=ExtResource( 8 )]
 anchor_right = 0.0
@@ -164,7 +167,7 @@ HAlign = 1
 ElementName = "SlotSprite"
 TitleCase = true
 Text = "Skill Points Remaining"
-CustomFont = SubResource( 59 )
+CustomFont = SubResource( 88 )
 CacheFont = true
 
 [node name="Skills List" type="VBoxContainer" parent="Main Container/Player Info Container/Skills Container"]
@@ -182,6 +185,7 @@ margin_right = 549.0
 margin_bottom = 426.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 6 )
 
 [node name="Points Remaining" parent="Main Container/Player Info Container/Abilities Container" instance=ExtResource( 8 )]
 anchor_right = 0.0
@@ -196,7 +200,7 @@ HAlign = 1
 ElementName = "SlotSprite"
 TitleCase = true
 Text = "Ability Picks Remaining"
-CustomFont = SubResource( 59 )
+CustomFont = SubResource( 88 )
 CacheFont = true
 
 [node name="Abilities List" type="VBoxContainer" parent="Main Container/Player Info Container/Abilities Container"]
@@ -208,14 +212,14 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5
 
-[node name="Derived Values Container" type="VBoxContainer" parent="Main Container/Player Info Container"]
+[node name="Misc Container" type="VBoxContainer" parent="Main Container/Player Info Container"]
 margin_left = 553.0
 margin_right = 826.0
 margin_bottom = 426.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Points Remaining" parent="Main Container/Player Info Container/Derived Values Container" instance=ExtResource( 8 )]
+[node name="Points Remaining" parent="Main Container/Player Info Container/Misc Container" instance=ExtResource( 8 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 273.0
@@ -227,10 +231,10 @@ VAlign = 1
 HAlign = 1
 ElementName = "SlotSprite"
 TitleCase = true
-CustomFont = SubResource( 60 )
+CustomFont = SubResource( 89 )
 CacheFont = true
 
-[node name="Empty List" type="VBoxContainer" parent="Main Container/Player Info Container/Derived Values Container"]
+[node name="Empty List" type="VBoxContainer" parent="Main Container/Player Info Container/Misc Container"]
 margin_top = 46.0
 margin_right = 273.0
 margin_bottom = 426.0
@@ -246,7 +250,7 @@ anchor_right = 0.99
 anchor_bottom = 0.98
 theme = SubResource( 8 )
 Text = "Begin"
-CustomFont = SubResource( 61 )
+CustomFont = SubResource( 90 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -262,7 +266,7 @@ anchor_right = 0.162
 anchor_bottom = 0.98
 theme = SubResource( 8 )
 Text = "Back"
-CustomFont = SubResource( 61 )
+CustomFont = SubResource( 90 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),

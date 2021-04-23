@@ -153,10 +153,10 @@ namespace Code.Unity.GUI.Managed_Assets
         public Color DisabledColour => this.StateColours[DISABLED];
 
         [Signal]
-        public delegate void _Press();
+        public delegate void _Press(string myName);
 
         [Signal]
-        public delegate void _Toggle();
+        public delegate void _Toggle(string myName, bool newValue);
 
         protected SelectionState CurrentSelectionState
         {
@@ -414,12 +414,12 @@ namespace Code.Unity.GUI.Managed_Assets
                 return;
             }
 
-            this.EmitSignal("_Press");
+            this.EmitSignal("_Press", this.Name);
 
             if (this.ToggleMode)
             {
                 this.Pressed = !this.Pressed;
-                this.EmitSignal("_Toggle");
+                this.EmitSignal("_Toggle", this.Name, this.Pressed);
             }
 
             this.EvaluateAndTransitionToSelectionState();
