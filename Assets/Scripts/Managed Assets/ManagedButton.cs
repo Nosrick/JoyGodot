@@ -146,13 +146,6 @@ namespace Code.Unity.GUI.Managed_Assets
 
         [Export] public float ColourMultiplier { get; set; }
 
-        [Export]
-        public virtual Font CustomFont
-        {
-            get => this.HasFontOverride("default") ? this.GetFont("default") : null;
-            set => this.AddFontOverride("default", value);
-        }
-
         public Color NormalColour => this.StateColours[NORMAL];
         public Color HighlightedColour => this.StateColours[HIGHLIGHTED];
         public Color SelectedColour => this.StateColours[SELECTED];
@@ -259,6 +252,11 @@ namespace Code.Unity.GUI.Managed_Assets
                 return;
             }
 
+            if (this.Theme is null)
+            {
+                this.Theme = new Theme();
+            }
+            
             var child = this.GetNodeOrNull("Element");
 
             if (child is null)
