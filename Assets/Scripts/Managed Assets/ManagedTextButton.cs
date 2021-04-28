@@ -9,7 +9,7 @@ namespace JoyGodot.addons.Managed_Assets
 #if TOOLS
     [Tool]
 #endif
-    public class ManagedTextButton : 
+    public class ManagedTextButton :
         ManagedButton,
         ILabelElement,
         IManagedFonts
@@ -62,7 +62,7 @@ namespace JoyGodot.addons.Managed_Assets
         [Export]
         public string Text
         {
-            get =>this.MyLabel?.Text;
+            get => this.MyLabel?.Text;
             set
             {
                 this.m_TextToSet = value;
@@ -76,21 +76,17 @@ namespace JoyGodot.addons.Managed_Assets
         }
 
         protected string m_TextToSet;
-        
-        [Export]
-        public bool AutoSize { get; set; }
-        [Export]
-        public bool OverrideSize { get; set; }
-        [Export]
-        public bool OverrideColour { get; set; }
-        [Export]
-        public bool OverrideOutline { get; set; }
+
+        [Export] public bool AutoSize { get; set; }
+        [Export] public bool OverrideSize { get; set; }
+        [Export] public bool OverrideColour { get; set; }
+        [Export] public bool OverrideOutline { get; set; }
 
         public bool HasFont => this.Theme.DefaultFont is null == false;
         public bool HasFontColours => this.m_HasFontColours;
 
         protected bool m_HasFontColours;
-        
+
         [Export]
         public Color FontColour
         {
@@ -102,6 +98,7 @@ namespace JoyGodot.addons.Managed_Assets
                 {
                     return;
                 }
+
                 this.MyLabel?.AddColorOverride("font_color", this.m_FontColour);
                 this.m_HasFontColours = true;
                 this.UpdateTheme();
@@ -121,6 +118,7 @@ namespace JoyGodot.addons.Managed_Assets
                 {
                     return;
                 }
+
                 if (this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.Size = this.m_FontSize;
@@ -142,6 +140,7 @@ namespace JoyGodot.addons.Managed_Assets
                 {
                     return;
                 }
+
                 if (this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.OutlineColor = value;
@@ -163,6 +162,7 @@ namespace JoyGodot.addons.Managed_Assets
                 {
                     return;
                 }
+
                 if (this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.OutlineSize = value;
@@ -172,12 +172,10 @@ namespace JoyGodot.addons.Managed_Assets
         }
 
         protected int m_OutlineThickness;
-        
-        [Export]
-        public int FontMinSize { get; set; }
 
-        [Export]
-        public int FontMaxSize { get; set; }
+        [Export] public int FontMinSize { get; set; }
+
+        [Export] public int FontMaxSize { get; set; }
 
         [Export] public bool CacheFont { get; set; }
 
@@ -204,7 +202,7 @@ namespace JoyGodot.addons.Managed_Assets
         }
 
         protected DynamicFont m_CustomFont;
-        
+
         [Export]
         public bool TitleCase
         {
@@ -213,8 +211,8 @@ namespace JoyGodot.addons.Managed_Assets
             {
                 if (value)
                 {
-                    this.Text = this.Text is null 
-                        ? this.Text 
+                    this.Text = this.Text is null
+                        ? this.Text
                         : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Text);
                 }
 
@@ -231,7 +229,7 @@ namespace JoyGodot.addons.Managed_Assets
                 GD.Print("Theme is null for " + this.GetPath());
                 return;
             }
-            
+
             this.Theme.DefaultFont = this.m_CustomFont;
             if (this.MyLabel is null == false)
             {
@@ -256,18 +254,23 @@ namespace JoyGodot.addons.Managed_Assets
                 {
                     Name = "Text",
                     AnchorBottom = 1,
-                    AnchorRight = 1,
-                    Align = this.m_HAlign,
-                    Valign = this.m_VAlign,
-                    Text = this.m_TextToSet
+                    AnchorRight = 1
                 };
                 this.AddChild(this.MyLabel);
 #if TOOLS
                 this.MyLabel.Owner = this.GetTree()?.EditedSceneRoot;
 #endif
-                this.MyLabel.AddFontOverride("font", this.m_CustomFont);
-                this.m_TextToSet = null;
             }
+            this.OutlineColour = this.OutlineColour;
+            this.OutlineThickness = this.OutlineThickness;
+            this.FontColour = this.FontColour;
+            this.FontSize = this.FontSize;
+            
+            this.MyLabel.Align = this.HAlign;
+            this.MyLabel.Valign = this.VAlign;
+
+            this.MyLabel.AddFontOverride("font", this.m_CustomFont);
+            this.MyLabel.Text = this.m_TextToSet;
         }
     }
 }

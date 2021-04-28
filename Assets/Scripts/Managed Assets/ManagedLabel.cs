@@ -60,8 +60,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 if (value)
                 {
-                    this.Text = this.Text is null 
-                        ? this.Text 
+                    this.Text = this.Text is null
+                        ? this.Text
                         : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Text);
                 }
 
@@ -104,14 +104,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         protected string m_TextToSet;
 
-        [Export]
-        public bool AutoSize { get; set; }
-        [Export]
-        public bool OverrideSize { get; set; }
-        [Export]
-        public bool OverrideColour { get; set; }
-        [Export]
-        public bool OverrideOutline { get; set; }
+        [Export] public bool AutoSize { get; set; }
+        [Export] public bool OverrideSize { get; set; }
+        [Export] public bool OverrideColour { get; set; }
+        [Export] public bool OverrideOutline { get; set; }
 
         public bool HasFont => this.Theme.DefaultFont is null == false;
         public bool HasFontColours => this.m_HasFontColours;
@@ -205,12 +201,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         }
 
         protected int m_OutlineThickness;
-        
-        [Export]
-        public int FontMinSize { get; set; }
 
-        [Export]
-        public int FontMaxSize { get; set; }
+        [Export] public int FontMinSize { get; set; }
+
+        [Export] public int FontMaxSize { get; set; }
 
         protected void UpdateTheme()
         {
@@ -243,23 +237,23 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 {
                     Name = "Text",
                     AnchorBottom = 1,
-                    AnchorRight = 1,
-                    Text = this.m_TextToSet,
-                    Align = this.HAlign,
-                    Valign = this.VAlign
+                    AnchorRight = 1
                 };
                 this.AddChild(this.MyLabel);
 #if TOOLS
                 this.MyLabel.Owner = this.GetTree()?.EditedSceneRoot;
 #endif
-                this.OutlineColour = this.OutlineColour;
-                this.OutlineThickness = this.OutlineThickness;
-                this.FontColour = this.FontColour;
-                this.FontSize = this.FontSize;
-                
-                this.MyLabel.AddFontOverride("font", this.m_CustomFont);
-                this.m_TextToSet = null;
             }
+
+            this.OutlineColour = this.OutlineColour;
+            this.OutlineThickness = this.OutlineThickness;
+            this.FontColour = this.FontColour;
+            this.FontSize = this.FontSize;
+            this.MyLabel.Align = this.HAlign;
+            this.MyLabel.Valign = this.VAlign;
+
+            this.MyLabel.AddFontOverride("font", this.m_CustomFont);
+            this.MyLabel.Text = this.m_TextToSet;
         }
     }
 }

@@ -139,6 +139,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
+            if (this.IsInsideTree() == false)
+            {
+                return;
+            }
+            
             this.Initialise();
             this.m_States.Add(state.Name, state);
             this.IsDirty = true;
@@ -214,6 +219,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         public virtual void Clear()
         {
+            if (this.IsInsideTree() == false)
+            {
+                return;
+            }
+
             this.Initialise();
 
             this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
@@ -326,7 +336,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     if (colours.TryGetValue(this.Parts[i].Name, out Color colour))
                     {
                         this.ColourLerp(
-                            this.Parts[i], 
+                            this.Parts[i],
                             this.Parts[i].SelfModulate,
                             colour,
                             duration);
@@ -341,6 +351,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     this.Parts[i].SelfModulate = colour;
                 }
             }
+
             this.IsDirty = true;
         }
 
@@ -366,17 +377,17 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                     {
                         this.ColourLerp(
-                            this.Parts[i], 
-                            this.Parts[i].SelfModulate, 
-                            colour, 
+                            this.Parts[i],
+                            this.Parts[i].SelfModulate,
+                            colour,
                             duration);
                     }
                 }
                 else
                 {
                     this.ColourLerp(
-                        this, 
-                        this.Modulate, 
+                        this,
+                        this.Modulate,
                         colour,
                         duration,
                         "modulate");
@@ -495,7 +506,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     newColour,
                     duration);
                 this.TweenNode.Start();
-                
+
                 var children = this.GetAllChildren();
                 foreach (var child in children)
                 {
