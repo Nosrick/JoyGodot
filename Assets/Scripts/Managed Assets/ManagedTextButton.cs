@@ -65,9 +65,9 @@ namespace JoyGodot.addons.Managed_Assets
             get =>this.MyLabel?.Text;
             set
             {
+                this.m_TextToSet = value;
                 if (this.MyLabel is null)
                 {
-                    this.m_TextToSet = value;
                     return;
                 }
 
@@ -98,6 +98,10 @@ namespace JoyGodot.addons.Managed_Assets
             set
             {
                 this.m_FontColour = value;
+                if (this.OverrideColour == false)
+                {
+                    return;
+                }
                 this.MyLabel?.AddColorOverride("font_color", this.m_FontColour);
                 this.m_HasFontColours = true;
                 this.UpdateTheme();
@@ -113,6 +117,10 @@ namespace JoyGodot.addons.Managed_Assets
             set
             {
                 this.m_FontSize = value;
+                if (this.OverrideSize == false)
+                {
+                    return;
+                }
                 if (this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.Size = this.m_FontSize;
@@ -130,6 +138,10 @@ namespace JoyGodot.addons.Managed_Assets
             set
             {
                 this.m_OutlineColour = value;
+                if (this.OverrideOutline == false)
+                {
+                    return;
+                }
                 if (this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.OutlineColor = value;
@@ -147,6 +159,10 @@ namespace JoyGodot.addons.Managed_Assets
             set
             {
                 this.m_OutlineThickness = value;
+                if (this.OverrideOutline == false)
+                {
+                    return;
+                }
                 if (this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.OutlineSize = value;
@@ -176,6 +192,10 @@ namespace JoyGodot.addons.Managed_Assets
                 if (this.MyLabel is null)
                 {
                     GD.Print("Label not found!");
+                    if (this.IsInsideTree())
+                    {
+                        GD.Print(this.GetPath());
+                    }
                 }
 
                 GD.Print(value is null ? "Clearing font" : "Setting font");

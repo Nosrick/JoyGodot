@@ -3,6 +3,9 @@ using JoyGodot.addons.Managed_Assets;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
+    #if TOOLS
+    [Tool]
+    #endif
     public class ConstrainedManagedTextButton : ManagedTextButton
     {
         public int PointRestriction { get; set; }

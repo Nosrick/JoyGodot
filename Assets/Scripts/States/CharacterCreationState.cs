@@ -28,7 +28,7 @@ namespace JoyLib.Code.States
         {
             PackedScene scene = GD.Load<PackedScene>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
-                "Scenes/UI/Character Creation Part 1.tscn");
+                "Scenes/UI/Character Creation.tscn");
             
             GlobalConstants.GameManager.GUIManager.InstantiateUIScene(scene);
             base.SetUpUi();

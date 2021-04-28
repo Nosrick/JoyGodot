@@ -5,6 +5,7 @@ using JoyGodot.Assets.Scripts.GUI.CharacterCreationState;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
@@ -23,22 +24,38 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         
         protected IObjectIconHandler IconHandler { get; set; }
         
+        protected IEntitySkillHandler SkillHandler { get; set; }
+        
+        protected IAbilityHandler AbilityHandler { get; set; }
+        
         protected IRollable Roller { get; set; }
 
         protected const int STATISTIC_POINTS_MAX = 8;
         protected const int DERIVED_VALUE_POINTS_MAX = 10;
+        protected const int SKILL_POINTS_MAX = 10;
+        protected const int ABILITY_PICKS_MAX = 2;
+        
+        protected Control Part1 { get; set; }
+        protected Control Part2 { get; set; }
         
         protected BasicPlayerInfo BasicPlayerInfo { get; set; }
         protected StatisticsList StatisticsList { get; set; }
         protected DerivedValuesList DerivedValuesList { get; set; }
+        protected SkillsList SkillsList { get; set; }
+        protected AbilityList AbilityList { get; set; }
 
         public override void _Ready()
         {
+            this.Part1 = this.GetNode<Control>("Character Creation Part 1");
+            this.Part2 = this.GetNode<Control>("Character Creation Part 2");
+            
             this.PlayerName = this.FindNode("Player Name Input") as LineEdit;
             this.PlayerSprite = this.FindNode("Player Icon") as ManagedUIElement;
             this.BasicPlayerInfo = this.FindNode("Basic Player Info") as BasicPlayerInfo;
             this.StatisticsList = this.FindNode("Statistics List") as StatisticsList;
             this.DerivedValuesList = this.FindNode("Derived Values List") as DerivedValuesList;
+            this.SkillsList = this.FindNode("Skills List") as SkillsList;
+            this.AbilityList = this.FindNode("Ability List") as AbilityList;
 
             this.BasicPlayerInfo?.Connect(
                 "ValueChanged",
@@ -57,6 +74,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
             this.EntityTemplateHandler = GlobalConstants.GameManager.EntityTemplateHandler;
             this.CultureHandler = GlobalConstants.GameManager.CultureHandler;
+            this.SkillHandler = GlobalConstants.GameManager.SkillHandler;
+            this.AbilityHandler = GlobalConstants.GameManager.AbilityHandler;
             this.Roller = GlobalConstants.GameManager.Roller;
             this.IconHandler = GlobalConstants.GameManager.ObjectIconHandler;
             
@@ -120,7 +139,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         protected void NextScreen()
         {
-            GD.Print("Moving to CC2.");
+            
         }
     }
 }

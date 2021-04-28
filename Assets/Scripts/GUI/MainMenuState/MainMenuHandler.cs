@@ -25,13 +25,13 @@ namespace JoyLib.Code.Unity.GUI.MainMenuState
             GlobalConstants.GameManager.GUIManager.SetupManagedComponents(this);
         }
 
-        public void NewGame()
+        public void NewGame(string name)
         {
             GlobalConstants.GameManager.GUIManager.CloseAllGUIs();
             GlobalConstants.GameManager.SetNextState(new States.CharacterCreationState());
         }
 
-        public void QuitGame()
+        public void QuitGame(string name)
         {
             this.GetTree().Quit(0);
         }
