@@ -151,7 +151,7 @@ namespace JoyLib.Code.Unity.GUI
             GD.Print(this.GetType().Name + " finished initialising");
         }
 
-        public void ChangeValue(int delta = 1)
+        public void ChangeValue(string name, int delta = 1)
         {
             GD.Print("Calling " + nameof(this.ChangeValue));
             this.Index += delta;

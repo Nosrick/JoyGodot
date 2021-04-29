@@ -280,7 +280,6 @@ __meta__ = {
 [node name="Random Name Button" parent="Main Container/Player Info Container/Basic Info Container/Player Name Container" instance=ExtResource( 1 )]
 anchor_left = 0.847
 theme = SubResource( 4 )
-ElementName = "CharacterSheetIcon"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -288,6 +287,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ElementName = "CharacterSheetIcon"
 
 [node name="Basic Player Info" type="VBoxContainer" parent="Main Container/Player Info Container/Basic Info Container"]
 margin_top = 46.0
@@ -317,13 +317,21 @@ theme = SubResource( 6 )
 HAlign = 1
 VAlign = 1
 ElementName = "SlotSprite"
-TitleCase = true
+OutlineThickness = 1
+CacheFont = true
 Text = "Statistics Points Remaining"
 CustomFont = SubResource( 7 )
-CacheFont = true
+TitleCase = true
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+OverrideSize = true
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" parent="Main Container/Player Info Container/Statistics Container/Points Remaining" index="1"]
 theme = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Statistics Points Remaining"
 align = 1
 valign = 1
@@ -356,13 +364,22 @@ theme = SubResource( 9 )
 HAlign = 1
 VAlign = 1
 ElementName = "SlotSprite"
-TitleCase = true
+OutlineThickness = 1
+CacheFont = true
 Text = "Derived Value Points Remaining"
 CustomFont = SubResource( 10 )
-CacheFont = true
+TitleCase = true
+OverrideColour = true
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+OverrideSize = true
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" parent="Main Container/Player Info Container/Derived Values Container/Points Remaining" index="1"]
 theme = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Derived Value Points Remaining"
 align = 1
 valign = 1
@@ -394,6 +411,7 @@ Text = "Next"
 CustomFont = SubResource( 11 )
 
 [node name="Text" parent="Next Button" index="1"]
+custom_fonts/font = SubResource( 11 )
 text = "Next"
 
 [connection signal="_Press" from="Main Container/Player Info Container/Basic Info Container/Player Name Container/Random Name Button" to="." method="RandomiseName"]

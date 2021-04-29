@@ -78,6 +78,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.AbilityHandler = GlobalConstants.GameManager.AbilityHandler;
             this.Roller = GlobalConstants.GameManager.Roller;
             this.IconHandler = GlobalConstants.GameManager.ObjectIconHandler;
+
+            this.Part2.Visible = false;
             
             this.CallDeferred("RandomiseName");
         }
@@ -137,9 +139,16 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.RandomiseName();
         }
 
-        protected void NextScreen()
+        public void NextScreen()
         {
-            
+            this.Part2.Visible = true;
+            this.Part1.Visible = false;
+        }
+
+        public void PreviousScreen()
+        {
+            this.Part1.Visible = true;
+            this.Part2.Visible = false;
         }
     }
 }

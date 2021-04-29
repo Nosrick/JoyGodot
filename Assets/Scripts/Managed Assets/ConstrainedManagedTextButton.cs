@@ -13,6 +13,9 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         public int Value { get; set; }
 
         [Signal]
+        public delegate void ValuePress(string myName, int delta, bool newValue);
+
+        [Signal]
         public delegate void ValueToggle(string myName, int delta, bool newValue);
 
         protected override void Press()
@@ -23,6 +26,11 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             }
             
             base.Press();
+            this.EmitSignal(
+                "ValuePress",
+                this.Name,
+                this.Pressed ? 1 : -1,
+                this.Pressed);
 
             if (this.ToggleMode)
             {

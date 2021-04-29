@@ -115,7 +115,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void ChangeValue(int delta = 1)
+        public void ChangeValue(string name, int delta = 1)
         {
             if (this.UseRestriction && delta > this.PointRestriction)
             {
