@@ -24,7 +24,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             set => this.m_ElementName = value;
         }
 
-        protected string m_ElementName;
+        protected string m_ElementName = "SlotSprite";
         
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }

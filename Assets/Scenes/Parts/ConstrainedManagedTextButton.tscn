@@ -5,7 +5,7 @@
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=4]
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -16,7 +16,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 3 )
+default_font = SubResource( 1 )
 
 [node name="Managed Text Button" type="Control"]
 anchor_right = 1.0
@@ -28,16 +28,24 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-ElementName = "SlotSprite"
-OverrideSize = true
 TitleCase = true
-Text = "Text"
 OverrideOutline = true
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
 FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+OverrideColour = true
+OutlineThickness = 1
+Text = "Text"
 CustomFont = ExtResource( 4 )
+FontSize = 24
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+StateColours = {
+-1: Color( 0.18, 0.31, 0.31, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
+}
+ColourMultiplier = 1.0
 
 [node name="Element" parent="." instance=ExtResource( 3 )]
 mouse_filter = 2
@@ -46,6 +54,7 @@ mouse_filter = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )
+custom_fonts/font = ExtResource( 4 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Text"
 align = 1
