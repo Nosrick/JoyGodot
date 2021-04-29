@@ -1,11 +1,21 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=32 format=2]
 
-[ext_resource path="res://Assets/Scenes/UI/Character Creation Part 1.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/DerivedValuesList.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/CharacterCreationHandler.cs" type="Script" id=2]
-[ext_resource path="res://Assets/Scenes/UI/Character Creation Part 2.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/Sprites/UI/background-tile.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Assets/Sprites/UI/background-border.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/SkillsList.cs" type="Script" id=6]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/AbilityList.cs" type="Script" id=7]
+[ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=8]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedLabel.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/StatisticsList.cs" type="Script" id=11]
+[ext_resource path="res://Assets/Scripts/GUI/CharacterCreationState/BasicPlayerInfo.cs" type="Script" id=12]
+[ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=13]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedIconButton.tscn" type="PackedScene" id=14]
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=96]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -15,7 +25,10 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="Theme" id=2]
+default_font = SubResource( 96 )
+
+[sub_resource type="DynamicFont" id=88]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -25,7 +38,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=97]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -35,7 +48,10 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="Theme" id=5]
+default_font = SubResource( 97 )
+
+[sub_resource type="DynamicFont" id=89]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -45,7 +61,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=95]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -55,7 +71,16 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="Theme" id=98]
+default_font = ExtResource( 13 )
+
+[sub_resource type="StyleBoxEmpty" id=99]
+
+[sub_resource type="StyleBoxEmpty" id=100]
+
+[sub_resource type="Theme" id=101]
+
+[sub_resource type="DynamicFont" id=102]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -65,7 +90,10 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="Theme" id=18]
+default_font = SubResource( 102 )
+
+[sub_resource type="DynamicFont" id=103]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -75,7 +103,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=104]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -85,7 +113,10 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="Theme" id=21]
+default_font = SubResource( 104 )
+
+[sub_resource type="DynamicFont" id=105]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -103,54 +134,180 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Character Creation Part 1" parent="." instance=ExtResource( 1 )]
-
-[node name="Random Name Button" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container" index="3"]
-StateColours = {
--1: Color( 0.18, 0.31, 0.31, 1 ),
-0: Color( 1, 1, 1, 1 ),
-1: Color( 0.83, 0.83, 0.83, 1 ),
-2: Color( 0.83, 0.83, 0.83, 1 ),
-3: Color( 0.66, 0.66, 0.66, 1 )
+[node name="Character Creation Part 2" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
 }
 
-[node name="Points Remaining" parent="Character Creation Part 1/Main Container/Player Info Container/Statistics Container" index="0"]
-CustomFont = SubResource( 6 )
-
-[node name="Text" parent="Character Creation Part 1/Main Container/Player Info Container/Statistics Container/Points Remaining" index="1"]
-custom_fonts/font = SubResource( 1 )
-
-[node name="Points Remaining" parent="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container" index="0"]
-CustomFont = SubResource( 7 )
-
-[node name="Text" parent="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container/Points Remaining" index="1"]
-custom_fonts/font = SubResource( 2 )
-
-[node name="Next Button" parent="Character Creation Part 1" index="2"]
-StateColours = {
--1: Color( 0.18, 0.31, 0.31, 1 ),
-0: Color( 1, 1, 1, 1 ),
-1: Color( 0.83, 0.83, 0.83, 1 ),
-2: Color( 0.83, 0.83, 0.83, 1 ),
-3: Color( 0.66, 0.66, 0.66, 1 )
+[node name="CC2 Background" type="Control" parent="Character Creation Part 2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
 }
-CustomFont = SubResource( 8 )
+ElementName = "DefaultWindow"
 
-[node name="Text" parent="Character Creation Part 1/Next Button" index="1"]
-custom_fonts/font = SubResource( 4 )
+[node name="background" type="NinePatchRect" parent="Character Creation Part 2/CC2 Background"]
+self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 3 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Character Creation Part 2" parent="." instance=ExtResource( 3 )]
+[node name="border" type="NinePatchRect" parent="Character Creation Part 2/CC2 Background"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Points Remaining" parent="Character Creation Part 2/Main Container/Player Info Container/Skills Container" index="0"]
-CustomFont = SubResource( 9 )
+[node name="Colour Lerper" type="Tween" parent="Character Creation Part 2/CC2 Background"]
+
+[node name="Main Container" type="VBoxContainer" parent="Character Creation Part 2"]
+anchor_left = 0.012
+anchor_top = 0.012
+anchor_right = 0.98
+anchor_bottom = 0.9
+custom_constants/separation = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player Info Container" type="HBoxContainer" parent="Character Creation Part 2/Main Container"]
+margin_right = 826.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Skills Container" type="VBoxContainer" parent="Character Creation Part 2/Main Container/Player Info Container"]
+margin_right = 272.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 6 )
+
+[node name="Points Remaining" parent="Character Creation Part 2/Main Container/Player Info Container/Skills Container" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 272.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 2 )
+HAlign = 1
+VAlign = 1
+FontSize = 24
+CustomFont = SubResource( 88 )
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+OverrideOutline = true
+OverrideColour = true
+Text = "Skill Points Remaining"
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+ElementName = "SlotSprite"
+TitleCase = true
 
 [node name="Text" parent="Character Creation Part 2/Main Container/Player Info Container/Skills Container/Points Remaining" index="1"]
-custom_fonts/font = SubResource( 5 )
+theme = SubResource( 2 )
+custom_fonts/font = SubResource( 88 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Skill Points Remaining"
+align = 1
+valign = 1
 
-[node name="Points Remaining" parent="Character Creation Part 2/Main Container/Player Info Container/Abilities Container" index="0"]
-CustomFont = SubResource( 10 )
+[node name="Skills List" type="VBoxContainer" parent="Character Creation Part 2/Main Container/Player Info Container/Skills Container"]
+margin_top = 46.0
+margin_right = 272.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
 
-[node name="Back Button" parent="Character Creation Part 2" index="2"]
+[node name="Abilities Container" type="VBoxContainer" parent="Character Creation Part 2/Main Container/Player Info Container"]
+margin_left = 276.0
+margin_right = 549.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 7 )
+
+[node name="Points Remaining" parent="Character Creation Part 2/Main Container/Player Info Container/Abilities Container" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 273.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 5 )
+HAlign = 1
+VAlign = 1
+FontSize = 24
+CustomFont = SubResource( 89 )
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+OverrideOutline = true
+OverrideColour = true
+Text = "Ability Points Remaining"
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+ElementName = "SlotSprite"
+TitleCase = true
+
+[node name="Abilities List" type="VBoxContainer" parent="Character Creation Part 2/Main Container/Player Info Container/Abilities Container"]
+margin_top = 46.0
+margin_right = 273.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+
+[node name="Misc Container" type="VBoxContainer" parent="Character Creation Part 2/Main Container/Player Info Container"]
+margin_left = 553.0
+margin_right = 826.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Empty List" type="VBoxContainer" parent="Character Creation Part 2/Main Container/Player Info Container/Misc Container"]
+margin_right = 273.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+
+[node name="Back Button" parent="Character Creation Part 2" instance=ExtResource( 10 )]
+anchor_left = 0.012
+anchor_top = 0.9
+anchor_right = 0.2
+anchor_bottom = 0.98
 ActionMode = 0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -159,19 +316,354 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-CustomFont = SubResource( 8 )
+CustomFont = SubResource( 95 )
+Text = "Back"
 
+[node name="Character Creation Part 1" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC1 Background" type="Control" parent="Character Creation Part 1"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+ElementName = "DefaultWindow"
+
+[node name="background" type="NinePatchRect" parent="Character Creation Part 1/CC1 Background"]
+self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 3 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="border" type="NinePatchRect" parent="Character Creation Part 1/CC1 Background"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="Character Creation Part 1/CC1 Background"]
+
+[node name="Main Container" type="VBoxContainer" parent="Character Creation Part 1"]
+anchor_left = 0.012
+anchor_top = 0.012
+anchor_right = 0.98
+anchor_bottom = 0.9
+custom_constants/separation = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player Info Container" type="HBoxContainer" parent="Character Creation Part 1/Main Container"]
+margin_right = 826.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Basic Info Container" type="VBoxContainer" parent="Character Creation Part 1/Main Container/Player Info Container"]
+margin_right = 272.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Player Name Container" type="Control" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container"]
+margin_right = 272.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player Background" type="Control" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container"]
+anchor_right = 0.15
+anchor_bottom = 1.0
+margin_right = 0.999996
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+ElementName = "AccentBackground"
+
+[node name="background" type="NinePatchRect" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Player Background"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 3 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="border" type="NinePatchRect" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Player Background"]
+self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Player Background"]
+
+[node name="Player Icon" type="Control" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container"]
+anchor_right = 0.15
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -5.0
+margin_bottom = -6.0
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Player Icon"]
+
+[node name="Input Background" type="Control" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container"]
+anchor_left = 0.15
+anchor_right = 0.85
+anchor_bottom = 1.0
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+ElementName = "AccentBackground"
+
+[node name="background" type="NinePatchRect" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Input Background"]
+self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 3 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="border" type="NinePatchRect" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Input Background"]
+self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 5 )
+draw_center = false
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player Name Input" type="LineEdit" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Input Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+theme = SubResource( 98 )
+custom_styles/focus = SubResource( 99 )
+custom_styles/normal = SubResource( 100 )
+context_menu_enabled = false
+placeholder_text = "Arseface"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Input Background"]
+
+[node name="Random Name Button" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container" instance=ExtResource( 14 )]
+anchor_left = 0.847
+theme = SubResource( 101 )
+StateColours = {
+-1: Color( 0.18, 0.31, 0.31, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
+}
+
+[node name="Basic Player Info" type="VBoxContainer" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container"]
+margin_top = 46.0
+margin_right = 272.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+script = ExtResource( 12 )
+
+[node name="Statistics Container" type="VBoxContainer" parent="Character Creation Part 1/Main Container/Player Info Container"]
+margin_left = 276.0
+margin_right = 549.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Points Remaining" parent="Character Creation Part 1/Main Container/Player Info Container/Statistics Container" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 273.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 18 )
+HAlign = 1
+VAlign = 1
+FontSize = 24
+CacheFont = true
+CustomFont = SubResource( 103 )
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+OverrideOutline = true
+Text = "Statistics Points Remaining"
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+ElementName = "SlotSprite"
+TitleCase = true
+
+[node name="Text" parent="Character Creation Part 1/Main Container/Player Info Container/Statistics Container/Points Remaining" index="1"]
+theme = SubResource( 18 )
+custom_fonts/font = SubResource( 103 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Statistics Points Remaining"
+align = 1
+valign = 1
+
+[node name="Statistics List" type="VBoxContainer" parent="Character Creation Part 1/Main Container/Player Info Container/Statistics Container"]
+margin_top = 46.0
+margin_right = 273.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+script = ExtResource( 11 )
+
+[node name="Derived Values Container" type="VBoxContainer" parent="Character Creation Part 1/Main Container/Player Info Container"]
+margin_left = 553.0
+margin_right = 826.0
+margin_bottom = 426.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Points Remaining" parent="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 273.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 21 )
+HAlign = 1
+VAlign = 1
+FontSize = 24
+CacheFont = true
+CustomFont = SubResource( 105 )
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+OverrideOutline = true
+OverrideColour = true
+Text = "Derived Value Points Remaining"
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+ElementName = "SlotSprite"
+TitleCase = true
+
+[node name="Text" parent="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container/Points Remaining" index="1"]
+theme = SubResource( 21 )
+custom_fonts/font = SubResource( 105 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Derived Value Points Remaining"
+align = 1
+valign = 1
+
+[node name="Derived Values List" type="VBoxContainer" parent="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container"]
+margin_top = 46.0
+margin_right = 273.0
+margin_bottom = 426.0
+rect_min_size = Vector2( 0, 380 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 5
+script = ExtResource( 1 )
+
+[node name="Next Button" parent="Character Creation Part 1" instance=ExtResource( 10 )]
+anchor_left = 0.84
+anchor_top = 0.91
+anchor_right = 0.99
+anchor_bottom = 0.98
+ActionMode = 0
+StateColours = {
+-1: Color( 0.18, 0.31, 0.31, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
+}
+CustomFont = SubResource( 95 )
+Text = "Next"
+
+[node name="Text" parent="Character Creation Part 1/Next Button" index="1"]
+custom_fonts/font = SubResource( 95 )
+text = "Next"
+
+[connection signal="_Press" from="Character Creation Part 2/Back Button" to="." method="PreviousScreen"]
 [connection signal="_Press" from="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Random Name Button" to="." method="RandomiseName"]
 [connection signal="_Press" from="Character Creation Part 1/Next Button" to="." method="NextScreen"]
-[connection signal="_Press" from="Character Creation Part 2/Back Button" to="." method="PreviousScreen"]
 
-[editable path="Character Creation Part 1"]
+[editable path="Character Creation Part 2/Main Container/Player Info Container/Skills Container/Points Remaining"]
+[editable path="Character Creation Part 2/Main Container/Player Info Container/Skills Container/Points Remaining/Element"]
 [editable path="Character Creation Part 1/Main Container/Player Info Container/Statistics Container/Points Remaining"]
 [editable path="Character Creation Part 1/Main Container/Player Info Container/Statistics Container/Points Remaining/Element"]
 [editable path="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container/Points Remaining"]
 [editable path="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container/Points Remaining/Element"]
 [editable path="Character Creation Part 1/Next Button"]
 [editable path="Character Creation Part 1/Next Button/Element"]
-[editable path="Character Creation Part 2"]
-[editable path="Character Creation Part 2/Main Container/Player Info Container/Skills Container/Points Remaining"]
-[editable path="Character Creation Part 2/Main Container/Player Info Container/Skills Container/Points Remaining/Element"]

@@ -58,22 +58,24 @@ namespace JoyLib.Code.Entities.Abilities
 
         public IEnumerable<IAbility> GetAvailableAbilities(IEntity actor)
         {
-            IEnumerable<string> prereqs = this.Abilities.SelectMany(ability => ability.Prerequisites.Select(pair => pair.Key)).Distinct();
-
-            IEnumerable<Tuple<string, int>> data = actor.GetData(prereqs);
+            List<IBasicValue<int>> data = new List<IBasicValue<int>>();
+            data.AddRange(actor.Statistics.Values);
+            data.AddRange(actor.Skills.Values);
+            data.AddRange(actor.DerivedValues.Values);
 
             return this.Abilities.Where(ability => ability.MeetsPrerequisites(data));
         }
 
-        public IEnumerable<IAbility> GetAvailableAbilities(IEntityTemplate template,
-            IDictionary<string, IEntityStatistic> stats,
-            IDictionary<string, IEntitySkill> skills)
+        public IEnumerable<IAbility> GetAvailableAbilities(
+            IEntityTemplate template,
+            ICollection<IEntityStatistic> stats,
+            ICollection<IEntitySkill> skills,
+            ICollection<IDerivedValue> derivedValues)
         {
-            List<Tuple<string, int>> data =
-                stats.Select(stat => new Tuple<string, int>(stat.Key, stat.Value.Value)).ToList();
-
-            data.AddRange(skills.Select(skill => new Tuple<string, int>(skill.Key, skill.Value.Value)));
-            data.Add(new Tuple<string, int>(template.CreatureType, 1));
+            List<IBasicValue<int>> data = new List<IBasicValue<int>>();
+            data.AddRange(stats);
+            data.AddRange(skills);
+            data.AddRange(derivedValues);
 
             return this.Abilities.Where(ability => ability.MeetsPrerequisites(data));
         }

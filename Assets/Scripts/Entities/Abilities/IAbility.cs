@@ -95,7 +95,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         bool MeetsPrerequisites(IEntity actor);
 
-        bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data);
+        bool MeetsPrerequisites(IEnumerable<IBasicValue<int>> data);
 
         bool IsInRange(IEntity left, IJoyObject right);
 

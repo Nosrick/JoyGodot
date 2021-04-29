@@ -14,7 +14,14 @@ namespace Code.Unity.GUI.Managed_Assets
         IColourableElement,
         ISpriteStateElement
     {
-        [Export] public string ElementName { get; protected set; }
+        [Export] 
+        public string ElementName
+        {
+            get => this.m_ElementName;
+            set => this.m_ElementName = value;
+        }
+
+        protected string m_ElementName;
         public bool Initialised { get; protected set; }
 
         protected ManagedUIElement Element

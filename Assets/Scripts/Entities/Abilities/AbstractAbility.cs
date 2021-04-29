@@ -268,12 +268,13 @@ namespace JoyLib.Code.Entities.Abilities
             return meetsPrereqs;
         }
 
-        public bool MeetsPrerequisites(IEnumerable<Tuple<string, int>> data)
+        public bool MeetsPrerequisites(IEnumerable<IBasicValue<int>> data)
         {
-            return this.Prerequisites.IsNullOrEmpty()
-                   || this.Prerequisites.All(prereq => data.Any(
-                       datum => datum.Item1.Equals(prereq.Key, StringComparison.OrdinalIgnoreCase)
-                                && datum.Item2 >= prereq.Value));
+            bool meetsValueRequirements = this.Prerequisites.IsNullOrEmpty()
+                                          || this.Prerequisites.All(prereq => data.Any(
+                                              d => d.Name.Equals(prereq.Key)
+                                                   && d.Value >= prereq.Value));
+            return meetsValueRequirements;
         }
 
         public bool IsInRange(IEntity left, IJoyObject right)

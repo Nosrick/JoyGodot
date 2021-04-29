@@ -9,7 +9,7 @@
 [ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedLabel.tscn" type="PackedScene" id=8]
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=79]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -20,9 +20,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 6 )
+default_font = SubResource( 79 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=77]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -32,7 +32,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=35]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -42,7 +42,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=80]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -53,9 +53,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=5]
-default_font = SubResource( 7 )
+default_font = SubResource( 80 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=78]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -65,7 +65,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=81]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -89,7 +89,6 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-ElementName = "DefaultWindow"
 
 [node name="background" type="NinePatchRect" parent="CC2 Background"]
 self_modulate = Color( 0.721569, 0.368627, 0.054902, 1 )
@@ -161,21 +160,20 @@ size_flags_vertical = 3
 theme = SubResource( 2 )
 HAlign = 1
 VAlign = 1
-ElementName = "SlotSprite"
-OutlineThickness = 1
-Text = "Skill Points Remaining"
-CustomFont = SubResource( 1 )
-TitleCase = true
-OverrideColour = true
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 FontSize = 24
-OverrideSize = true
+CustomFont = SubResource( 77 )
 OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+OverrideOutline = true
+OverrideColour = true
+Text = "Skill Points Remaining"
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+TitleCase = true
 
 [node name="Text" parent="Main Container/Player Info Container/Skills Container/Points Remaining" index="1"]
 theme = SubResource( 2 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 35 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Skill Points Remaining"
 align = 1
@@ -208,17 +206,16 @@ size_flags_vertical = 3
 theme = SubResource( 5 )
 HAlign = 1
 VAlign = 1
-ElementName = "SlotSprite"
-OutlineThickness = 1
-Text = "Ability Points Remaining"
-CustomFont = SubResource( 4 )
-TitleCase = true
-OverrideColour = true
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 FontSize = 24
-OverrideSize = true
+CustomFont = SubResource( 78 )
 OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+OverrideOutline = true
+OverrideColour = true
+Text = "Ability Points Remaining"
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+TitleCase = true
 
 [node name="Abilities List" type="VBoxContainer" parent="Main Container/Player Info Container/Abilities Container"]
 margin_top = 46.0
@@ -249,6 +246,7 @@ anchor_left = 0.012
 anchor_top = 0.9
 anchor_right = 0.2
 anchor_bottom = 0.98
+ActionMode = 0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -256,8 +254,10 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 0.0
+CustomFont = SubResource( 81 )
 Text = "Back"
-CustomFont = SubResource( 8 )
+ElementName = null
 
 [editable path="Main Container/Player Info Container/Skills Container/Points Remaining"]
 [editable path="Main Container/Player Info Container/Skills Container/Points Remaining/Element"]

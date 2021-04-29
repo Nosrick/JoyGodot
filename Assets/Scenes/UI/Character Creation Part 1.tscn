@@ -12,16 +12,16 @@
 [ext_resource path="res://Assets/Scenes/Parts/ManagedLabel.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=13]
 
-[sub_resource type="Theme" id=1]
+[sub_resource type="Theme" id=10]
 default_font = ExtResource( 13 )
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="StyleBoxEmpty" id=11]
 
-[sub_resource type="StyleBoxEmpty" id=3]
+[sub_resource type="StyleBoxEmpty" id=12]
 
-[sub_resource type="Theme" id=4]
+[sub_resource type="Theme" id=13]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=14]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -32,9 +32,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 10 )
 
 [sub_resource type="Theme" id=6]
-default_font = SubResource( 5 )
+default_font = SubResource( 14 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=15]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -44,7 +44,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 10 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=16]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -55,9 +55,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 10 )
 
 [sub_resource type="Theme" id=9]
-default_font = SubResource( 8 )
+default_font = SubResource( 16 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=17]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -67,7 +67,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 10 )
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=18]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -266,9 +266,9 @@ margin_left = 5.0
 margin_top = 5.0
 margin_right = -5.0
 margin_bottom = -5.0
-theme = SubResource( 1 )
-custom_styles/focus = SubResource( 2 )
-custom_styles/normal = SubResource( 3 )
+theme = SubResource( 10 )
+custom_styles/focus = SubResource( 11 )
+custom_styles/normal = SubResource( 12 )
 context_menu_enabled = false
 placeholder_text = "Arseface"
 __meta__ = {
@@ -279,7 +279,8 @@ __meta__ = {
 
 [node name="Random Name Button" parent="Main Container/Player Info Container/Basic Info Container/Player Name Container" instance=ExtResource( 1 )]
 anchor_left = 0.847
-theme = SubResource( 4 )
+theme = SubResource( 13 )
+ElementName = "CharacterSheetIcon"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -287,7 +288,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ElementName = "CharacterSheetIcon"
 
 [node name="Basic Player Info" type="VBoxContainer" parent="Main Container/Player Info Container/Basic Info Container"]
 margin_top = 46.0
@@ -317,20 +317,20 @@ theme = SubResource( 6 )
 HAlign = 1
 VAlign = 1
 ElementName = "SlotSprite"
-OutlineThickness = 1
-CacheFont = true
 Text = "Statistics Points Remaining"
-CustomFont = SubResource( 7 )
+CustomFont = SubResource( 15 )
+OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
+OverrideSize = true
+CacheFont = true
 TitleCase = true
 OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 FontSize = 24
-OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" parent="Main Container/Player Info Container/Statistics Container/Points Remaining" index="1"]
 theme = SubResource( 6 )
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 15 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Statistics Points Remaining"
 align = 1
@@ -364,21 +364,21 @@ theme = SubResource( 9 )
 HAlign = 1
 VAlign = 1
 ElementName = "SlotSprite"
-OutlineThickness = 1
-CacheFont = true
 Text = "Derived Value Points Remaining"
-CustomFont = SubResource( 10 )
-TitleCase = true
-OverrideColour = true
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
-OverrideSize = true
+CustomFont = SubResource( 17 )
 OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
+OverrideSize = true
+CacheFont = true
+TitleCase = true
+OverrideOutline = true
+OverrideColour = true
+OutlineThickness = 1
+FontSize = 24
 
 [node name="Text" parent="Main Container/Player Info Container/Derived Values Container/Points Remaining" index="1"]
 theme = SubResource( 9 )
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 17 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Derived Value Points Remaining"
 align = 1
@@ -408,14 +408,11 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 Text = "Next"
-CustomFont = SubResource( 11 )
+CustomFont = SubResource( 18 )
 
 [node name="Text" parent="Next Button" index="1"]
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 18 )
 text = "Next"
-
-[connection signal="_Press" from="Main Container/Player Info Container/Basic Info Container/Player Name Container/Random Name Button" to="." method="RandomiseName"]
-[connection signal="_Press" from="Next Button" to="." method="NextScreen"]
 
 [editable path="Main Container/Player Info Container/Statistics Container/Points Remaining"]
 [editable path="Main Container/Player Info Container/Statistics Container/Points Remaining/Element"]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.CharacterCreationState;
@@ -15,29 +16,29 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
     public class CharacterCreationHandler : GUIData
     {
         protected LineEdit PlayerName { get; set; }
-        
+
         protected ManagedUIElement PlayerSprite { get; set; }
-        
+
         protected ICultureHandler CultureHandler { get; set; }
-        
+
         protected IEntityTemplateHandler EntityTemplateHandler { get; set; }
-        
+
         protected IObjectIconHandler IconHandler { get; set; }
-        
+
         protected IEntitySkillHandler SkillHandler { get; set; }
-        
+
         protected IAbilityHandler AbilityHandler { get; set; }
-        
+
         protected IRollable Roller { get; set; }
 
         protected const int STATISTIC_POINTS_MAX = 8;
         protected const int DERIVED_VALUE_POINTS_MAX = 10;
         protected const int SKILL_POINTS_MAX = 10;
         protected const int ABILITY_PICKS_MAX = 2;
-        
+
         protected Control Part1 { get; set; }
         protected Control Part2 { get; set; }
-        
+
         protected BasicPlayerInfo BasicPlayerInfo { get; set; }
         protected StatisticsList StatisticsList { get; set; }
         protected DerivedValuesList DerivedValuesList { get; set; }
@@ -48,16 +49,16 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         {
             this.Part1 = this.GetNode<Control>("Character Creation Part 1");
             this.Part2 = this.GetNode<Control>("Character Creation Part 2");
-            
+
             this.PlayerName = this.FindNode("Player Name Input") as LineEdit;
             this.PlayerSprite = this.FindNode("Player Icon") as ManagedUIElement;
             this.BasicPlayerInfo = this.FindNode("Basic Player Info") as BasicPlayerInfo;
             this.StatisticsList = this.FindNode("Statistics List") as StatisticsList;
             this.DerivedValuesList = this.FindNode("Derived Values List") as DerivedValuesList;
-            this.SkillsList = this.FindNode("Skills List") as SkillsList;
-            this.AbilityList = this.FindNode("Ability List") as AbilityList;
+            this.SkillsList = this.FindNode("Skills Container") as SkillsList;
+            this.AbilityList = this.FindNode("Abilities Container") as AbilityList;
 
-            this.BasicPlayerInfo?.Connect(
+            this.BasicPlayerInfo.Connect(
                 "ValueChanged",
                 this,
                 nameof(this.BasicPlayerInfoChanged));
@@ -80,8 +81,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.IconHandler = GlobalConstants.GameManager.ObjectIconHandler;
 
             this.Part2.Visible = false;
-            
-            this.CallDeferred("RandomiseName");
+
+            this.CallDeferred("Initialise");
         }
 
         public override void _Input(InputEvent @event)
@@ -95,15 +96,22 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         public void RandomiseName()
         {
-            GD.Print(nameof(this.RandomiseName));
-            this.StatisticsList.Points = STATISTIC_POINTS_MAX;
-            this.DerivedValuesList.Points = DERIVED_VALUE_POINTS_MAX;
-            
             var culture = this.BasicPlayerInfo.CurrentCulture;
-            var template = this.BasicPlayerInfo.CurrentTemplate;
-
             string name = culture.GetRandomName(this.BasicPlayerInfo.CurrentGender);
-            
+
+            this.PlayerName.Text = name;
+        }
+
+        public void Initialise()
+        {
+            this.OnCultureChange(this.BasicPlayerInfo.CurrentTemplate);
+        }
+
+        protected void OnCultureChange(IEntityTemplate template)
+        {
+            this.RandomiseName();
+            var culture = this.BasicPlayerInfo.CurrentCulture;
+
             this.GUIManager.SetUIColours(
                 culture.BackgroundColours,
                 culture.CursorColours,
@@ -117,7 +125,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                     culture.Tileset,
                     template.CreatureType,
                     "idle").First());
-            
+
             this.PlayerSprite.Clear();
             this.PlayerSprite.AddSpriteState(state);
             this.PlayerSprite.OverrideAllColours(
@@ -125,18 +133,77 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 false,
                 0f,
                 true);
-            this.PlayerName.Text = name;
+
+            this.SetUpStatistics(template);
+            this.SetUpDerivedValues(template);
+            this.SetUpSkills(template);
+            this.SetUpAbilities(
+                template,
+                this.StatisticsList.Statistics,
+                this.SkillsList.Skills,
+                this.DerivedValuesList.DerivedValues);
+        }
+
+        protected void SetUpStatistics(IEntityTemplate template)
+        {
+            this.StatisticsList.Points = STATISTIC_POINTS_MAX;
             this.StatisticsList.Statistics = template.Statistics.Values;
+        }
+
+        protected void SetUpDerivedValues(IEntityTemplate template)
+        {
+            this.DerivedValuesList.Points = DERIVED_VALUE_POINTS_MAX;
             this.DerivedValuesList.DerivedValues =
                 GlobalConstants.GameManager.DerivedValueHandler
                     .GetEntityStandardBlock(template.Statistics.Values)
                     .Values;
         }
 
+        protected void SetUpSkills(IEntityTemplate template)
+        {
+            this.SkillsList.Points = SKILL_POINTS_MAX;
+            var skills = this.SkillHandler.GetDefaultSkillBlock().Values;
+            var templateSkills = template.Skills.Values;
+
+            foreach (IEntitySkill skill in skills)
+            {
+                var found = templateSkills.FirstOrDefault(entitySkill =>
+                    entitySkill.Name.Equals(skill.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (found is null)
+                {
+                    continue;
+                }
+
+                skill.ModifyValue(found.Value);
+            }
+            
+            this.SkillsList.Skills = this.SkillHandler.GetDefaultSkillBlock().Values;
+        }
+
+        protected void SetUpAbilities(
+            IEntityTemplate template,
+            ICollection<IEntityStatistic> stats,
+            ICollection<IEntitySkill> skills,
+            ICollection<IDerivedValue> derivedValues)
+        {
+            var abilities = this.AbilityHandler.GetAvailableAbilities(
+                template,
+                stats,
+                skills,
+                derivedValues);
+
+            this.AbilityList.Abilities = abilities.ToArray();
+        }
+
         public void BasicPlayerInfoChanged(string name, string newValue)
         {
             GD.Print(name + " : " + newValue);
-            this.RandomiseName();
+
+            if (name.Equals("Template") || name.Equals("Culture"))
+            {
+                this.OnCultureChange(this.BasicPlayerInfo.CurrentTemplate);
+            }
         }
 
         public void NextScreen()
