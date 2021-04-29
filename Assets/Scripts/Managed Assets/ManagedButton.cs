@@ -18,10 +18,10 @@ namespace Code.Unity.GUI.Managed_Assets
         public string ElementName
         {
             get => this.m_ElementName;
-            set => this.m_ElementName = value;
+            set => this.m_ElementName = value ?? "None";
         }
 
-        protected string m_ElementName = "SlotSprite";
+        protected string m_ElementName;
         public bool Initialised { get; protected set; }
 
         protected ManagedUIElement Element

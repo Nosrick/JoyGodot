@@ -193,6 +193,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 skills,
                 derivedValues);
 
+            this.AbilityList.Points = ABILITY_PICKS_MAX;
             this.AbilityList.Abilities = abilities.ToArray();
         }
 

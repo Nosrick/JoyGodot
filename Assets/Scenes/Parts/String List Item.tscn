@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -6,7 +6,7 @@
 [ext_resource path="res://Assets/Scripts/GUI/Tools/StringValueItem.cs" type="Script" id=4]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=5]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=9]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -17,9 +17,29 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 1 )
+default_font = SubResource( 9 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=7]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=8]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=10]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -30,13 +50,13 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=4]
-default_font = SubResource( 1 )
+default_font = SubResource( 10 )
 
 [sub_resource type="Theme" id=5]
-default_font = SubResource( 1 )
+default_font = SubResource( 9 )
 
 [sub_resource type="Theme" id=6]
-default_font = SubResource( 1 )
+default_font = SubResource( 10 )
 
 [node name="Name" type="Control"]
 anchor_right = 1.0
@@ -60,20 +80,19 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-OutlineColour = Color( 0, 0, 0, 1 )
+VAlign = 1
 FontColour = Color( 1, 1, 1, 1 )
-TitleCase = true
-OverrideColour = true
-FontSize = 24
+CustomFont = SubResource( 7 )
 OutlineThickness = 1
-CustomFont = SubResource( 3 )
+OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideColour = true
 Text = "Name"
-OverrideOutline = true
 CacheFont = true
 OverrideSize = true
-ElementName = "AccentBackground"
+OverrideOutline = true
+TitleCase = true
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
 
@@ -81,7 +100,7 @@ ElementName = "AccentBackground"
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Name"
 align = 1
@@ -96,9 +115,19 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 theme = SubResource( 4 )
 script = ExtResource( 5 )
-VAlign = 1
 HAlign = 1
-ColourMultiplier = 1.0
+VAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 8 )
+OutlineThickness = 1
+OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideColour = true
+Text = "<"
+CacheFont = true
+OverrideSize = true
+OverrideOutline = true
+TitleCase = true
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -106,18 +135,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-TitleCase = true
-OverrideColour = true
-FontSize = 24
-OutlineThickness = 1
-CustomFont = SubResource( 3 )
-Text = "<"
-OverrideOutline = true
-CacheFont = true
-OverrideSize = true
-ElementName = "AccentBackground"
 
 [node name="Element" type="Control" parent="Decrease Value"]
 anchor_right = 1.0
@@ -136,7 +153,8 @@ anchor_bottom = 1.0
 margin_top = -0.749161
 margin_bottom = -0.749161
 theme = SubResource( 4 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 8 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "<"
 align = 1
 valign = 1
@@ -153,20 +171,19 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-OutlineColour = Color( 0, 0, 0, 1 )
+VAlign = 1
 FontColour = Color( 1, 1, 1, 1 )
-TitleCase = true
-OverrideColour = true
-FontSize = 24
+CustomFont = SubResource( 7 )
 OutlineThickness = 1
-CustomFont = SubResource( 3 )
+OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideColour = true
 Text = "Value"
-OverrideOutline = true
 CacheFont = true
 OverrideSize = true
-ElementName = "AccentBackground"
+OverrideOutline = true
+TitleCase = true
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
 
@@ -174,11 +191,12 @@ ElementName = "AccentBackground"
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 5 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Value"
 align = 1
 valign = 1
+clip_text = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -192,9 +210,19 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-ColourMultiplier = 1.0
+VAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 8 )
+OutlineThickness = 1
+OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideColour = true
+Text = ">"
+CacheFont = true
+OverrideSize = true
+OverrideOutline = true
+TitleCase = true
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -202,18 +230,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-TitleCase = true
-OverrideColour = true
-FontSize = 24
-OutlineThickness = 1
-CustomFont = SubResource( 3 )
-Text = ">"
-OverrideOutline = true
-CacheFont = true
-OverrideSize = true
-ElementName = "AccentBackground"
 
 [node name="Element" type="Control" parent="Increase Value"]
 anchor_right = 1.0
@@ -230,7 +246,8 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 6 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 8 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = ">"
 align = 1
 valign = 1

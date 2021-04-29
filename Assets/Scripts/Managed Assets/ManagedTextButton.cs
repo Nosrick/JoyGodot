@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Xml.Schema;
 using Code.Unity.GUI.Managed_Assets;
 using Godot;
 using JoyGodot.Assets.Scripts.Managed_Assets;
@@ -62,7 +63,7 @@ namespace JoyGodot.addons.Managed_Assets
         [Export]
         public string Text
         {
-            get => this.MyLabel?.Text;
+            get => this.MyLabel?.Text ?? this.m_TextToSet;
             set
             {
                 this.m_TextToSet = value;
