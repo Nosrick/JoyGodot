@@ -7,6 +7,7 @@ using JoyLib.Code;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Gender;
+using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Entities.Romance;
 using JoyLib.Code.Entities.Sexes;
 using JoyLib.Code.Entities.Sexuality;
@@ -27,10 +28,20 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         public IEntityBioSexHandler BioSexHandler { get; set; }
         public IEntitySexualityHandler SexualityHandler { get; set; }
         public IEntityRomanceHandler RomanceHandler { get; set; }
+        
+        public IJobHandler JobHandler { get; set; }
 
         public ICulture CurrentCulture { get; protected set; }
         public IEntityTemplate CurrentTemplate { get; protected set; }
         public string CurrentGender { get; protected set; }
+        
+        public string CurrentSex { get; protected set; }
+        
+        public string CurrentRomance { get; protected set; }
+        
+        public string CurrentSexuality { get; protected set; }
+        
+        public string CurrentJob { get; protected set; }
 
         [Signal]
         public delegate void ValueChanged(string name, string newValue);
@@ -49,6 +60,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             this.BioSexHandler = gameManager.BioSexHandler;
             this.SexualityHandler = gameManager.SexualityHandler;
             this.RomanceHandler = gameManager.RomanceHandler;
+            this.JobHandler = gameManager.JobHandler;
 
             this.SetUp();
         }
@@ -103,9 +115,18 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             }
 
             item = this.AddItem(
+                "Job",
+                this.CurrentCulture.Jobs,
+                "OnValueChange");
+
+            this.CurrentJob = item.Value;
+
+            item = this.AddItem(
                 "Sex",
                 this.CurrentCulture.Sexes,
                 "OnValueChange");
+
+            this.CurrentSex = item.Value;
 
             item = this.AddItem(
                 "Gender",
@@ -119,10 +140,14 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 this.CurrentCulture.RomanceTypes,
                 "OnValueChange");
 
+            this.CurrentRomance = item.Value;
+
             item = this.AddItem(
                 "Sexuality",
                 this.CurrentCulture.Sexualities,
                 "OnValueChange");
+
+            this.CurrentSexuality = item.Value;
         }
 
         protected void OnChange(bool randomCulture = false)
@@ -153,6 +178,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 tempPart.Value = tempPart.Values.GetRandom();
             }
             this.CurrentCulture = this.CultureHandler.GetByCultureName(tempPart.Value);
+
+            tempPart = this.GetItem("job");
+
+            this.CurrentJob = tempPart.Value;
 
             var bioSexPart = this.GetItem("sex");
 

@@ -16,7 +16,7 @@
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedButton.cs" type="Script" id=14]
 [ext_resource path="res://Assets/Themes/DefaultTheme.tres" type="Theme" id=15]
 
-[sub_resource type="DynamicFont" id=138]
+[sub_resource type="DynamicFont" id=77]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -27,9 +27,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 138 )
+default_font = SubResource( 77 )
 
-[sub_resource type="DynamicFont" id=133]
+[sub_resource type="DynamicFont" id=72]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -49,7 +49,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=139]
+[sub_resource type="DynamicFont" id=78]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -60,9 +60,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=5]
-default_font = SubResource( 139 )
+default_font = SubResource( 78 )
 
-[sub_resource type="DynamicFont" id=134]
+[sub_resource type="DynamicFont" id=73]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -72,7 +72,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=140]
+[sub_resource type="DynamicFont" id=79]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -91,7 +91,7 @@ default_font = ExtResource( 13 )
 
 [sub_resource type="Theme" id=11]
 
-[sub_resource type="DynamicFont" id=141]
+[sub_resource type="DynamicFont" id=80]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -102,9 +102,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=13]
-default_font = SubResource( 141 )
+default_font = SubResource( 80 )
 
-[sub_resource type="DynamicFont" id=136]
+[sub_resource type="DynamicFont" id=75]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -124,7 +124,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=142]
+[sub_resource type="DynamicFont" id=81]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -135,9 +135,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=16]
-default_font = SubResource( 142 )
+default_font = SubResource( 81 )
 
-[sub_resource type="DynamicFont" id=137]
+[sub_resource type="DynamicFont" id=76]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -157,7 +157,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=18]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -260,18 +260,18 @@ rect_min_size = Vector2( 0, 42 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 2 )
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
-Text = "Skill Points Remaining"
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
+VAlign = 1
 TitleCase = true
-CustomFont = SubResource( 133 )
 OverrideSize = true
+Text = "Skill Points Remaining"
+FontColour = Color( 1, 1, 1, 1 )
 FontSize = 24
+OutlineThickness = 1
+OverrideColour = true
+OverrideOutline = true
+CustomFont = SubResource( 72 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Element" parent="Character Creation Part 2/Main Container/Player Info Container/Skills Container/Points Remaining" index="0"]
 ElementName = null
@@ -319,18 +319,18 @@ margin_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 5 )
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
-Text = "Ability Points Remaining"
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
+VAlign = 1
 TitleCase = true
-CustomFont = SubResource( 134 )
 OverrideSize = true
+Text = "Ability Points Remaining"
+FontColour = Color( 1, 1, 1, 1 )
 FontSize = 24
+OutlineThickness = 1
+OverrideColour = true
+OverrideOutline = true
+CustomFont = SubResource( 73 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Abilities Scroller" type="ScrollContainer" parent="Character Creation Part 2/Main Container/Player Info Container/Abilities Container"]
 margin_top = 46.0
@@ -370,8 +370,10 @@ anchor_top = 0.9
 anchor_right = 0.2
 anchor_bottom = 0.98
 ActionMode = 0
+ElementName = null
 Text = "Back"
-CustomFont = SubResource( 140 )
+CustomFont = SubResource( 79 )
+ColourMultiplier = 0.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -379,7 +381,24 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ElementName = "None"
+
+[node name="Begin Button" parent="Character Creation Part 2" instance=ExtResource( 10 )]
+anchor_left = 0.788
+anchor_top = 0.9
+anchor_right = 0.988
+anchor_bottom = 0.98
+ActionMode = 0
+ElementName = null
+Text = "Begin"
+CustomFont = SubResource( 79 )
+ColourMultiplier = 0.0
+StateColours = {
+-1: Color( 0.18, 0.31, 0.31, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
+}
 
 [node name="Character Creation Part 1" type="Control" parent="."]
 anchor_right = 1.0
@@ -592,6 +611,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 ActionMode = 1
+ElementName = "CharacterSheetIcon"
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -599,8 +620,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
-ElementName = "CharacterSheetIcon"
 
 [node name="Element" type="Control" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Random Name Button"]
 anchor_right = 1.0
@@ -639,18 +658,18 @@ margin_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 13 )
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-CacheFont = true
-OutlineThickness = 1
-Text = "Statistics Points Remaining"
-OutlineColour = Color( 0, 0, 0, 1 )
+VAlign = 1
 TitleCase = true
-CustomFont = SubResource( 136 )
 OverrideSize = true
+Text = "Statistics Points Remaining"
+CacheFont = true
+FontColour = Color( 1, 1, 1, 1 )
 FontSize = 24
+OutlineThickness = 1
+OverrideOutline = true
+CustomFont = SubResource( 75 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Element" parent="Character Creation Part 1/Main Container/Player Info Container/Statistics Container/Points Remaining" index="0"]
 ElementName = null
@@ -688,19 +707,19 @@ margin_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 16 )
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-CacheFont = true
-OutlineThickness = 1
-Text = "Derived Value Points Remaining"
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
+VAlign = 1
 TitleCase = true
-CustomFont = SubResource( 137 )
 OverrideSize = true
+Text = "Derived Value Points Remaining"
+CacheFont = true
+FontColour = Color( 1, 1, 1, 1 )
 FontSize = 24
+OutlineThickness = 1
+OverrideColour = true
+OverrideOutline = true
+CustomFont = SubResource( 76 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Element" parent="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container/Points Remaining" index="0"]
 ElementName = null
@@ -724,13 +743,14 @@ custom_constants/separation = 5
 script = ExtResource( 1 )
 
 [node name="Next Button" parent="Character Creation Part 1" instance=ExtResource( 10 )]
-anchor_left = 0.84
-anchor_top = 0.91
-anchor_right = 0.99
+anchor_left = 0.788
+anchor_top = 0.9
+anchor_right = 0.988
 anchor_bottom = 0.98
 ActionMode = 0
 Text = "Next"
-CustomFont = SubResource( 140 )
+CustomFont = SubResource( 79 )
+ColourMultiplier = 0.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -743,10 +763,11 @@ StateColours = {
 ElementName = null
 
 [node name="Text" parent="Character Creation Part 1/Next Button" index="1"]
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 18 )
 text = "Next"
 
 [connection signal="_Press" from="Character Creation Part 2/Back Button" to="." method="PreviousScreen"]
+[connection signal="_Press" from="Character Creation Part 2/Begin Button" to="." method="CreatePlayer"]
 [connection signal="_Press" from="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Random Name Button" to="." method="RandomiseName"]
 [connection signal="_Press" from="Character Creation Part 1/Next Button" to="." method="NextScreen"]
 

@@ -7,9 +7,11 @@ using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
+using Microsoft.Win32;
 
 namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 {
@@ -29,6 +31,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         protected IAbilityHandler AbilityHandler { get; set; }
 
+        protected IEntityFactory EntityFactory { get; set; }
+
         protected IRollable Roller { get; set; }
 
         protected const int STATISTIC_POINTS_MAX = 8;
@@ -44,6 +48,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         protected DerivedValuesList DerivedValuesList { get; set; }
         protected SkillsList SkillsList { get; set; }
         protected AbilityList AbilityList { get; set; }
+
+        protected IEntity Player { get; set; }
 
         public override void _Ready()
         {
@@ -79,6 +85,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.AbilityHandler = GlobalConstants.GameManager.AbilityHandler;
             this.Roller = GlobalConstants.GameManager.Roller;
             this.IconHandler = GlobalConstants.GameManager.ObjectIconHandler;
+            this.EntityFactory = GlobalConstants.GameManager.EntityFactory;
 
             this.Part2.Visible = false;
 
@@ -177,7 +184,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
                 skill.ModifyValue(found.Value);
             }
-            
+
             this.SkillsList.Skills = skills;
         }
 
@@ -217,6 +224,30 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         {
             this.Part1.Visible = true;
             this.Part2.Visible = false;
+        }
+
+        public void CreatePlayer()
+        {
+            this.Player = this.EntityFactory.CreateFromTemplate(
+                this.BasicPlayerInfo.CurrentTemplate,
+                Vector2Int.Zero,
+                this.PlayerName.Text,
+                this.StatisticsList.Statistics.ToDictionary(statistic => statistic.Name, statistic => statistic),
+                this.DerivedValuesList.DerivedValues.ToDictionary(value => value.Name, value => value),
+                this.SkillsList.Skills.ToDictionary(skill => skill.Name, skill => skill),
+                this.AbilityList.Abilities,
+                new[] {this.BasicPlayerInfo.CurrentCulture},
+                this.BasicPlayerInfo.GenderHandler.Get(this.BasicPlayerInfo.CurrentGender),
+                this.BasicPlayerInfo.BioSexHandler.Get(this.BasicPlayerInfo.CurrentSex),
+                this.BasicPlayerInfo.SexualityHandler.Get(this.BasicPlayerInfo.CurrentSexuality),
+                this.BasicPlayerInfo.RomanceHandler.Get(this.BasicPlayerInfo.CurrentRomance),
+                GlobalConstants.GameManager.JobHandler.Get(this.BasicPlayerInfo.CurrentJob),
+                null,
+                null,
+                new PlayerDriver());
+            
+            GD.Print("PLAYER CREATED");
+            GD.Print(this.Player);
         }
     }
 }
