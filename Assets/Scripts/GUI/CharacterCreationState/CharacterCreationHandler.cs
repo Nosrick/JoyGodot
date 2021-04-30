@@ -9,9 +9,9 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.AI.Drivers;
 using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
-using Microsoft.Win32;
 
 namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 {
@@ -50,6 +50,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         protected AbilityList AbilityList { get; set; }
 
         protected IEntity Player { get; set; }
+        public event PlayerCreatedHandler PlayerCreated;
 
         public override void _Ready()
         {
@@ -254,6 +255,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             
             GD.Print("PLAYER CREATED");
             GD.Print(this.Player);
+            this.PlayerCreated?.Invoke(this.Player);
         }
     }
 }

@@ -1,12 +1,18 @@
-﻿using Godot;
+﻿using System.Linq;
+using Godot;
 using JoyLib.Code.Cultures;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Jobs;
 using JoyLib.Code.Unity.GUI;
+using JoyLib.Code.Unity.GUI.CharacterCreationState;
 
 namespace JoyLib.Code.States
 {
     public class CharacterCreationState : GameState
     {
-        //protected CharacterCreationScreen CharacterCreationScreen { get; set; }
+        protected CharacterCreationHandler CharacterCreationHandler { get; set; }
+        
+        protected IEntity Player { get; set; }
 
         public CharacterCreationState()
         {
@@ -33,18 +39,15 @@ namespace JoyLib.Code.States
             GlobalConstants.GameManager.GUIManager.InstantiateUIScene(scene);
             base.SetUpUi();
             
-            ICulture culture = GlobalConstants.GameManager.Roller.SelectFromCollection(GlobalConstants.GameManager.CultureHandler.Values);
-            this.GUIManager.SetUIColours(
-                culture.BackgroundColours,
-                culture.CursorColours,
-                culture.FontColours);
+            this.CharacterCreationHandler = this.GUIManager.Get("Character Creation") as CharacterCreationHandler;
 
-            /*
-            this.CharacterCreationScreen = this.GUIManager
-                .Get(GUINames.CHARACTER_CREATION_PART_1)
-                .GetComponent<CharacterCreationScreen>();
-            this.CharacterCreationScreen.Initialise();
-            */
+            if (this.CharacterCreationHandler is null)
+            {
+                GD.Print("CHARACTER CREATION NOT FOUND");
+                return;
+            }
+            
+            this.CharacterCreationHandler.PlayerCreated += this.PlayerCreated;
         }
 
         public override void HandleInput(InputEvent @event)
@@ -55,11 +58,10 @@ namespace JoyLib.Code.States
         {
         }
 
-        public override GameState GetNextState()
+        protected void PlayerCreated(IEntity player)
         {
-            /*
-            IEntity player = this.CharacterCreationScreen.CreatePlayer();
-            GlobalConstants.GameManager.Player = player;
+            this.Player = player;
+            GlobalConstants.GameManager.EntityHandler.SetPlayer(player);
             player.AddExperience(500);
             foreach (string jobName in player.Cultures.SelectMany(culture => culture.Jobs))
             {
@@ -67,10 +69,13 @@ namespace JoyLib.Code.States
                 job.AddExperience(300);
                 player.AddJob(job);
             }
-            
-            return new WorldCreationState(player);
-            */
-            return null;
+
+            this.Done = true;
+        }
+
+        public override GameState GetNextState()
+        {
+            return new WorldCreationState(this.Player);
         }
     }
 }
