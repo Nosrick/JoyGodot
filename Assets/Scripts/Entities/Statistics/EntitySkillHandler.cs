@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Helpers;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities
 {
@@ -61,44 +63,32 @@ namespace JoyLib.Code.Entities
         {
             List<IEntitySkill> skills = new List<IEntitySkill>();
 
-            string file = (Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "Skills/" + "DefaultSkills.json");
-
-            /*
-            using (StreamReader reader = new StreamReader(file))
+            string file = (Directory.GetCurrentDirectory() + 
+                           GlobalConstants.ASSETS_FOLDER + 
+                           GlobalConstants.DATA_FOLDER + 
+                           "Skills/" + "DefaultSkills.json");
+            
+            JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+            
+            if (result.Error != Error.Ok)
             {
-                using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                {
-                    try
-                    {
-                        JObject jToken = JObject.Load(jsonReader);
-
-                        if (jToken["Skills"].IsNullOrEmpty() == false)
-                        {
-                            foreach (JToken child in jToken["Skills"])
-                            {
-                                skills.Add(new EntitySkill(
-                                    (string) child,
-                                    0,
-                                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD));
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText("Could not load skills from " + file);
-                        GlobalConstants.ActionLog.StackTrace(e);
-                    }
-                    finally
-                    {
-                        jsonReader.Close();
-                        reader.Close();
-                    }
-                }
+                this.ValueExtractor.PrintFileParsingError(result, file);
+                return skills;
             }
-            */
+
+            if (!(result.Result is Dictionary dictionary))
+            {
+                GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.", LogLevel.Warning);
+                return skills;
+            }
+
+            ICollection<string> skillNames =
+                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(dictionary, "Skills");
+
+            skills.AddRange(skillNames.Select(statName => new EntitySkill(statName, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)));
 
             this.DefaultSkills = skills.ToDictionary(skill => skill.Name, skill => skill);
-
+            
             return skills;
         }
 
