@@ -101,6 +101,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                     }
 
                     instance.Visible = false;
+                    instance.ToggleMode = true;
                     this.ChildContainer.AddChild(instance);
                     this.Parts.Add(instance);
                 }

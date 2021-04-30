@@ -178,7 +178,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 skill.ModifyValue(found.Value);
             }
             
-            this.SkillsList.Skills = this.SkillHandler.GetDefaultSkillBlock().Values;
+            this.SkillsList.Skills = skills;
         }
 
         protected void SetUpAbilities(

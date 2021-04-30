@@ -9,7 +9,7 @@
 [ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedLabel.tscn" type="PackedScene" id=8]
 
-[sub_resource type="DynamicFont" id=79]
+[sub_resource type="DynamicFont" id=12]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -20,9 +20,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 79 )
+default_font = SubResource( 12 )
 
-[sub_resource type="DynamicFont" id=77]
+[sub_resource type="DynamicFont" id=10]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -32,7 +32,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=35]
+[sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -42,7 +42,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=80]
+[sub_resource type="DynamicFont" id=13]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -53,9 +53,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=5]
-default_font = SubResource( 80 )
+default_font = SubResource( 13 )
 
-[sub_resource type="DynamicFont" id=78]
+[sub_resource type="DynamicFont" id=11]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -65,7 +65,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=81]
+[sub_resource type="DynamicFont" id=14]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -135,7 +135,7 @@ __meta__ = {
 
 [node name="Player Info Container" type="HBoxContainer" parent="Main Container"]
 margin_right = 826.0
-margin_bottom = 426.0
+margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
@@ -145,7 +145,7 @@ __meta__ = {
 
 [node name="Skills Container" type="VBoxContainer" parent="Main Container/Player Info Container"]
 margin_right = 272.0
-margin_bottom = 426.0
+margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 5 )
@@ -154,36 +154,42 @@ script = ExtResource( 5 )
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 272.0
-margin_bottom = 42.0
+margin_bottom = 30.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 2 )
-HAlign = 1
 VAlign = 1
-FontSize = 24
-CustomFont = SubResource( 77 )
-OutlineColour = Color( 0, 0, 0, 1 )
-OverrideSize = true
+HAlign = 1
 OverrideOutline = true
-OverrideColour = true
-Text = "Skill Points Remaining"
 FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
+Text = "Skill Points Remaining"
+OverrideColour = true
+OutlineColour = Color( 0, 0, 0, 1 )
 TitleCase = true
+CustomFont = SubResource( 10 )
+OverrideSize = true
+FontSize = 24
 
 [node name="Text" parent="Main Container/Player Info Container/Skills Container/Points Remaining" index="1"]
 theme = SubResource( 2 )
-custom_fonts/font = SubResource( 35 )
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Skill Points Remaining"
 align = 1
 valign = 1
 
-[node name="Skills List" type="VBoxContainer" parent="Main Container/Player Info Container/Skills Container"]
-margin_top = 46.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Main Container/Player Info Container/Skills Container"]
+margin_top = 388.0
 margin_right = 272.0
-margin_bottom = 426.0
+margin_bottom = 768.0
 rect_min_size = Vector2( 0, 380 )
+
+[node name="Skills List" type="VBoxContainer" parent="Main Container/Player Info Container/Skills Container/ScrollContainer"]
+margin_right = 272.0
+margin_bottom = 380.0
+rect_min_size = Vector2( 0, 380 )
+rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5
@@ -191,7 +197,7 @@ custom_constants/separation = 5
 [node name="Abilities Container" type="VBoxContainer" parent="Main Container/Player Info Container"]
 margin_left = 276.0
 margin_right = 549.0
-margin_bottom = 426.0
+margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 6 )
@@ -200,27 +206,27 @@ script = ExtResource( 6 )
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 273.0
-margin_bottom = 42.0
+margin_bottom = 382.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 5 )
-HAlign = 1
 VAlign = 1
-FontSize = 24
-CustomFont = SubResource( 78 )
-OutlineColour = Color( 0, 0, 0, 1 )
-OverrideSize = true
+HAlign = 1
 OverrideOutline = true
-OverrideColour = true
-Text = "Ability Points Remaining"
 FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
+Text = "Ability Points Remaining"
+OverrideColour = true
+OutlineColour = Color( 0, 0, 0, 1 )
 TitleCase = true
+CustomFont = SubResource( 11 )
+OverrideSize = true
+FontSize = 24
 
 [node name="Abilities List" type="VBoxContainer" parent="Main Container/Player Info Container/Abilities Container"]
-margin_top = 46.0
+margin_top = 386.0
 margin_right = 273.0
-margin_bottom = 426.0
+margin_bottom = 768.0
 rect_min_size = Vector2( 0, 380 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -229,13 +235,13 @@ custom_constants/separation = 5
 [node name="Misc Container" type="VBoxContainer" parent="Main Container/Player Info Container"]
 margin_left = 553.0
 margin_right = 826.0
-margin_bottom = 426.0
+margin_bottom = 768.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Empty List" type="VBoxContainer" parent="Main Container/Player Info Container/Misc Container"]
 margin_right = 273.0
-margin_bottom = 426.0
+margin_bottom = 768.0
 rect_min_size = Vector2( 0, 380 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -247,6 +253,8 @@ anchor_top = 0.9
 anchor_right = 0.2
 anchor_bottom = 0.98
 ActionMode = 0
+Text = "Back"
+CustomFont = SubResource( 14 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -254,10 +262,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 0.0
-CustomFont = SubResource( 81 )
-Text = "Back"
-ElementName = null
+ElementName = "None"
 
 [editable path="Main Container/Player Info Container/Skills Container/Points Remaining"]
 [editable path="Main Container/Player Info Container/Skills Container/Points Remaining/Element"]
