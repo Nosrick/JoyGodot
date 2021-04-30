@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
@@ -18,7 +19,11 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         
         public ICollection<IAbility> Abilities
         {
-            get => this.m_Abilities;
+            get => this.m_Abilities.Where(ability => 
+                this.Parts.Any(part => 
+                    part.Name.Equals(ability.Name, StringComparison.OrdinalIgnoreCase)
+                    && part.Pressed))
+                .ToList();
             set
             {
                 this.m_Abilities = value;

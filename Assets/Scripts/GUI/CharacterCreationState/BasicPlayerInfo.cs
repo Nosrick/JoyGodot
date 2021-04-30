@@ -117,7 +117,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             item = this.AddItem(
                 "Job",
                 this.CurrentCulture.Jobs,
-                "OnValueChange");
+                "OnJobChange");
 
             this.CurrentJob = item.Value;
 
@@ -296,6 +296,11 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         {
             this.OnChange(true);
             this.EmitSignal("ValueChanged", "Template", this.CurrentTemplate.CreatureType);
+        }
+
+        public void OnJobChange(string name, int delta, int newIndex)
+        {
+            this.CurrentJob = this.GetItem("job").Value;
         }
     }
 }

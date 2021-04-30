@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -139,9 +140,21 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         public void ChangeValue(string name, int delta, int newValue)
         {
             GD.Print(name + " : " + delta + " : " + newValue);
+
+            var derivedValue =
+                this.m_DerivedValues.FirstOrDefault(
+                    value => value.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            if (derivedValue is null)
+            {
+                GD.Print(name + " derived value not found!");
+                return;
+            }
+
             if (this.Points - delta >= 0)
             {
                 this.Points -= delta;
+                derivedValue.SetEnhancement(derivedValue.Enhancement + delta);
                 this.SetChildPoints();
                 this.EmitSignal("DerivedValueChanged", name, delta, newValue);
             }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
@@ -141,9 +142,20 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         public void ChangeValue(string name, int delta, int newValue)
         {
             GD.Print(name + " : " + delta + " : " + newValue);
+
+            var skill = this.m_Skills.FirstOrDefault(s =>
+                s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            if (skill is null)
+            {
+                GD.Print(name + " skill not found!");
+                return;
+            }
+            
             if (this.Points - delta >= 0)
             {
                 this.Points -= delta;
+                skill.ModifyValue(delta);
                 this.SetChildPoints();
                 this.EmitSignal("SkillValueChanged", name, delta, newValue);
             }

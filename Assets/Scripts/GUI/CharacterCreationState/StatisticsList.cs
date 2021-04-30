@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
@@ -136,9 +137,20 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         public void ChangeValue(string name, int delta, int newValue)
         {
             GD.Print(name + " : " + delta + " : " + newValue);
+
+            var stat = this.m_Statistics.FirstOrDefault(statistic =>
+                statistic.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            
+            if(stat is null)
+            {
+                GD.Print(name + " statistic not found!");
+                return;
+            }
+
             if (this.Points - delta >= 0)
             {
                 this.Points -= delta;
+                stat.ModifyValue(delta);
                 this.SetChildPoints();
                 this.EmitSignal("StatisticChanged", name, delta, newValue);
             }

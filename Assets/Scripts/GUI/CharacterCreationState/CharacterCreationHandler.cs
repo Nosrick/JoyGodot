@@ -216,6 +216,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         public void NextScreen()
         {
+            this.SetUpAbilities(
+                this.BasicPlayerInfo.CurrentTemplate,
+                this.StatisticsList.Statistics,
+                this.SkillsList.Skills,
+                this.DerivedValuesList.DerivedValues);
+            
             this.Part2.Visible = true;
             this.Part1.Visible = false;
         }
