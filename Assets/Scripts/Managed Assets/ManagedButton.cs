@@ -14,7 +14,7 @@ namespace Code.Unity.GUI.Managed_Assets
         IColourableElement,
         ISpriteStateElement
     {
-        [Export] 
+        [Export]
         public string ElementName
         {
             get => this.m_ElementName;
@@ -261,7 +261,7 @@ namespace Code.Unity.GUI.Managed_Assets
             {
                 this.Theme = new Theme();
             }
-            
+
             var child = this.GetNodeOrNull("Element");
 
             if (child is null)
@@ -423,7 +423,6 @@ namespace Code.Unity.GUI.Managed_Assets
 
             if (this.ToggleMode)
             {
-                this.Pressed = !this.Pressed;
                 this.EmitSignal("_Toggle", this.Pressed);
             }
 
@@ -453,11 +452,19 @@ namespace Code.Unity.GUI.Managed_Assets
                     if (Input.IsActionJustPressed("ui_select")
                         || Input.IsActionJustPressed("ui_accept"))
                     {
-                        this.Pressed = true;
+                        if (this.ToggleMode)
+                        {
+                            this.Pressed = !this.Pressed;
+                        }
+                        else
+                        {
+                            this.Pressed = true;
+                        }
                         this.Press();
                     }
-                    else if (Input.IsActionJustReleased("ui_select")
-                        || Input.IsActionJustReleased("ui_accept"))
+                    else if (this.ToggleMode == false
+                             && (Input.IsActionJustReleased("ui_select")
+                                 || Input.IsActionJustReleased("ui_accept")))
                     {
                         this.Pressed = false;
                         this.EvaluateAndTransitionToSelectionState();
@@ -468,11 +475,19 @@ namespace Code.Unity.GUI.Managed_Assets
                     if (Input.IsActionJustReleased("ui_select")
                         || Input.IsActionJustReleased("ui_accept"))
                     {
-                        this.Pressed = true;
+                        if (this.ToggleMode)
+                        {
+                            this.Pressed = !this.Pressed;
+                        }
+                        else
+                        {
+                            this.Pressed = true;
+                        }
                         this.Press();
                     }
-                    else if (Input.IsActionJustPressed("ui_select")
-                             || Input.IsActionJustPressed("ui_accept"))
+                    else if (this.ToggleMode == false
+                             && (Input.IsActionJustPressed("ui_select")
+                                 || Input.IsActionJustPressed("ui_accept")))
                     {
                         this.Pressed = false;
                         this.EvaluateAndTransitionToSelectionState();
@@ -481,10 +496,11 @@ namespace Code.Unity.GUI.Managed_Assets
             }
             else
             {
-                if (this.KeepPressedOutside)
+                if (this.KeepPressedOutside || this.ToggleMode)
                 {
                     return;
                 }
+
                 this.Pressed = false;
                 this.EvaluateAndTransitionToSelectionState();
             }
@@ -505,10 +521,10 @@ namespace Code.Unity.GUI.Managed_Assets
         public override void _Process(float delta)
         {
             base._Process(delta);
-            if (this.Pressed 
+            if (this.Pressed
                 && this.ToggleMode == false
-                && (this.MouseInside == false
-                && this.KeepPressedOutside == false))
+                && this.MouseInside == false
+                && this.KeepPressedOutside == false)
             {
                 this.Pressed = false;
             }
