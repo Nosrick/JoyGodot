@@ -4,15 +4,15 @@ using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code
 {
-    public interface IHandler<T, K> : IDisposable
+    public interface IHandler<TData, TKey> : IDisposable
     {
-        IEnumerable<T> Values { get; }
+        IEnumerable<TData> Values { get; }
         
         JSONValueExtractor ValueExtractor { get; }
 
-        T Get(K name);
-        bool Add(T value);
-        bool Destroy(K key);
-        IEnumerable<T> Load();
+        TData Get(TKey name);
+        bool Add(TData value);
+        bool Destroy(TKey key);
+        IEnumerable<TData> Load();
     }
 }
