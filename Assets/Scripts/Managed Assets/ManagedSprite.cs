@@ -16,7 +16,14 @@ namespace JoyLib.Code.Unity
         IColourableElement,
         ISpriteStateElement
     {
-        [Export] public string ElementName { get; protected set; }
+        [Export] 
+        public string ElementName
+        {
+            get => this.m_ElementName;
+            set => this.m_ElementName = value;
+        }
+
+        protected string m_ElementName;
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
@@ -82,12 +89,12 @@ namespace JoyLib.Code.Unity
 
         protected List<Node2D> Parts { get; set; }
 
-        public virtual void Awake()
+        public override void _Ready()
         {
             this.Initialise();
         }
 
-        protected virtual void Initialise()
+        public virtual void Initialise()
         {
             if (this.Initialised)
             {
@@ -194,8 +201,8 @@ namespace JoyLib.Code.Unity
         public virtual void OverrideAllColours(
             IDictionary<string,
                 Color> colours,
-            bool crossFade = false, 
-            float duration = 0.1f, 
+            bool crossFade = false,
+            float duration = 0.1f,
             bool modulateChildren = false)
         {
             this.Initialise();
@@ -231,8 +238,8 @@ namespace JoyLib.Code.Unity
 
         public virtual void TintWithSingleColour(
             Color colour,
-            bool crossFade = false, 
-            float duration = 0.1f, 
+            bool crossFade = false,
+            float duration = 0.1f,
             bool modulateChildren = false)
         {
             this.Initialise();
@@ -276,6 +283,9 @@ namespace JoyLib.Code.Unity
                     };
                     this.Parts.Add(newSprite);
                     this.AddChild(newSprite);
+#if TOOLS
+                    newSprite.Owner = this.GetTree()?.EditedSceneRoot;
+#endif
                 }
             }
 

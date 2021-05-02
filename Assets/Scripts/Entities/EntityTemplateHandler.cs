@@ -175,12 +175,14 @@ namespace JoyLib.Code.Entities
 
         public IEntityTemplate Get(string type)
         {
-            if(this.Values.Any(x => x.CreatureType == type))
+            var value = this.Values.FirstOrDefault(x => x.CreatureType.Equals(type, StringComparison.OrdinalIgnoreCase));
+
+            if (value is null)
             {
-                return this.Values.First(x => x.CreatureType == type);
+                throw new InvalidOperationException("Could not find entity template of type " + type);
             }
 
-            throw new InvalidOperationException("Could not find entity template of type " + type);
+            return value;
         }
 
         public bool Add(IEntityTemplate value)

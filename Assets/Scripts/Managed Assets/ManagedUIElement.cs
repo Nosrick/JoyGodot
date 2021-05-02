@@ -12,12 +12,20 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 #if TOOLS
     [Tool]
 #endif
-    public class ManagedUIElement : 
-        Control, 
-        IColourableElement, 
+    public class ManagedUIElement :
+        Control,
+        IColourableElement,
         ISpriteStateElement
     {
-        [Export] public string ElementName { get; set; }
+        [Export]
+        public string ElementName
+        {
+            get => this.m_ElementName;
+            set => this.m_ElementName = value;
+        }
+
+        protected string m_ElementName = "SlotSprite";
+        
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
@@ -30,7 +38,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 if (this.IsDirty)
                 {
                     if (this.m_States.ContainsKey(this.ChosenSprite)
-                        && this.m_States[this.ChosenSprite].SpriteData.m_State.Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
+                        && this.m_States[this.ChosenSprite].SpriteData.m_State
+                            .Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
                     {
                         this.CachedState = this.m_States[this.ChosenSprite];
                         this.LastSprite = this.ChosenSprite;
@@ -42,11 +51,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 return this.CachedState;
             }
         }
-        
+
         protected bool IsDirty { get; set; }
-        
-        protected ISpriteState CachedState { get; set; } 
-        
+
+        protected ISpriteState CachedState { get; set; }
+
         public int FrameIndex { get; protected set; }
 
         public string ChosenSprite
@@ -58,6 +67,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 this.IsDirty = true;
             }
         }
+
         protected string m_ChosenSprite;
 
         public string ChosenState
@@ -69,21 +79,22 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 this.IsDirty = true;
             }
         }
+
         protected string m_ChosenState;
-        
+
         protected int FramesInCurrentState { get; set; }
-        
+
         protected string LastState { get; set; }
         protected string LastSprite { get; set; }
-        
+
         public float TimeSinceLastChange { get; protected set; }
-        
+
         public IEnumerable<ISpriteState> States => this.m_States.Values;
 
         protected IDictionary<string, ISpriteState> m_States;
-        
+
         protected List<NinePatchRect> Parts { get; set; }
-        
+
         protected Tween TweenNode { get; set; }
 
         protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
@@ -93,13 +104,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             this.Initialise();
         }
 
-        protected virtual void Initialise()
+        public virtual void Initialise()
         {
-            if (this.Initialised)
+            if (this.Initialised || this.IsInsideTree() == false)
             {
                 return;
             }
-            
+
             this.Parts = new List<NinePatchRect>();
             var children = this.GetAllChildren();
             foreach (var child in children)
@@ -117,21 +128,30 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (this.TweenNode is null)
             {
-                this.TweenNode = new Tween()
+                //GD.Print("Tween needs to be created");
+                this.TweenNode = new Tween
                 {
                     Name = "Colour Lerper"
                 };
                 this.AddChild(this.TweenNode);
+#if TOOLS
+                this.TweenNode.Owner = this.GetTree()?.EditedSceneRoot;
+#endif
             }
-            
+
             this.m_States = new Dictionary<string, ISpriteState>();
 
-            GD.Print(this.Name + " initialised!");
+            //GD.Print(this.Name + " initialised!");
             this.Initialised = true;
         }
-        
+
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
+            if (this.IsInsideTree() == false)
+            {
+                return;
+            }
+            
             this.Initialise();
             this.m_States.Add(state.Name, state);
             this.IsDirty = true;
@@ -146,7 +166,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         {
             return this.m_States.Remove(name);
         }
-        
+
         public new void SetTheme(Theme theme)
         {
             foreach (ISpriteState state in this.States)
@@ -161,7 +181,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                             icon
                         };
                     }
-                    
+
                     Color colour = theme.GetColor(part.m_Name, nameof(this.GetType));
                     part.m_PossibleColours = new List<Color>
                     {
@@ -171,7 +191,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 }
             }
         }
-        
+
         public virtual ISpriteState GetState(string name)
         {
             return this.m_States.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
@@ -191,7 +211,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 return false;
             }
-            
+
             this.ChosenSprite = name;
             this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
 
@@ -199,7 +219,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             this.FrameIndex = 0;
             this.Finished = false;
-                
+
             this.UpdateSprites();
 
             return true;
@@ -207,6 +227,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         public virtual void Clear()
         {
+            if (this.IsInsideTree() == false)
+            {
+                return;
+            }
+
             this.Initialise();
 
             this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
@@ -222,12 +247,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 return;
             }
-            
+
             if (!this.CurrentSpriteState.IsAnimated || this.Finished)
             {
                 return;
             }
-            
+
             this.TimeSinceLastChange += delta;
             if (!(this.TimeSinceLastChange >= TIME_BETWEEN_FRAMES))
             {
@@ -236,7 +261,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             int lastIndex = this.FrameIndex;
             this.TimeSinceLastChange = 0f;
-            
+
             switch (this.CurrentSpriteState.AnimationType)
             {
                 case AnimationType.Forward:
@@ -249,8 +274,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                             this.Finished = true;
                         }
                     }
+
                     break;
-                
+
                 case AnimationType.Reverse:
                     this.FrameIndex -= 1;
                     if (this.FrameIndex < 0)
@@ -261,8 +287,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                             this.Finished = true;
                         }
                     }
+
                     break;
-                
+
                 case AnimationType.PingPong:
                     if (this.FrameIndex == 0)
                     {
@@ -281,8 +308,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     {
                         this.FrameIndex -= 1;
                     }
+
                     break;
             }
+
             if (lastIndex != this.FrameIndex)
             {
                 this.UpdateSprites();
@@ -290,19 +319,24 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         }
 
         public virtual void OverrideAllColours(
-            IDictionary<string, 
-                Color> colours, 
+            IDictionary<string,
+                Color> colours,
             bool crossFade = false,
             float duration = 0.1f,
             bool modulateChildren = false)
         {
             this.Initialise();
 
+            if (this.CurrentSpriteState is null)
+            {
+                return;
+            }
+
             foreach (ISpriteState state in this.m_States.Values)
             {
                 state.OverrideColours(colours);
             }
-            
+
             if (crossFade)
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
@@ -310,10 +344,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     if (colours.TryGetValue(this.Parts[i].Name, out Color colour))
                     {
                         this.ColourLerp(
-                            this.Parts[i], 
-                            colour, 
-                            duration,
-                            modulateChildren);
+                            this.Parts[i],
+                            this.Parts[i].SelfModulate,
+                            colour,
+                            duration);
                     }
                 }
             }
@@ -322,37 +356,66 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
                     colours.TryGetValue(this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name, out Color colour);
-                    this.Parts[i].SelfModulate = colour; 
+                    this.Parts[i].SelfModulate = colour;
                 }
             }
+
             this.IsDirty = true;
         }
 
         public virtual void TintWithSingleColour(
-            Color colour, 
-            bool crossFade = false, 
+            Color colour,
+            bool crossFade = false,
             float duration = 0.1f,
             bool modulateChildren = false)
         {
             this.Initialise();
 
             this.Tint = colour;
-            
+
+            if (this.CurrentSpriteState is null)
+            {
+                return;
+            }
+
             if (crossFade)
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                if (modulateChildren)
                 {
-                    this.ColourLerp(this.Parts[i], colour, duration, modulateChildren);
+                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                    {
+                        this.ColourLerp(
+                            this.Parts[i],
+                            this.Parts[i].SelfModulate,
+                            colour,
+                            duration);
+                    }
+                }
+                else
+                {
+                    this.ColourLerp(
+                        this,
+                        this.Modulate,
+                        colour,
+                        duration,
+                        "modulate");
                 }
             }
             else
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                if (modulateChildren)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour; 
+                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                    {
+                        this.Parts[i].SelfModulate = colour;
+                    }
+                }
+                else
+                {
+                    this.Modulate = colour;
                 }
             }
-            
+
             this.IsDirty = true;
         }
 
@@ -364,9 +427,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 part.Visible = false;
             }
-            if (this.Parts.Count < this.CurrentSpriteState.SpriteData.m_Parts.Count)
+
+            int partsCount = this.CurrentSpriteState.SpriteData.m_Parts.Count;
+            if (this.Parts.Count < partsCount)
             {
-                for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = this.Parts.Count; i < partsCount; i++)
                 {
                     NinePatchRect patchRect = new NinePatchRect
                     {
@@ -384,17 +449,23 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);
+#if TOOLS
+                    patchRect.Owner = this.GetTree()?.EditedSceneRoot;
+#endif
                 }
             }
 
-            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+            int maxSortingOrder = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_SortingOrder);
+            int minSortingOrder = this.CurrentSpriteState.SpriteData.m_Parts.Min(part => part.m_SortingOrder);
+            for (int i = 0; i < partsCount; i++)
             {
                 var part = this.CurrentSpriteState.SpriteData.m_Parts[i];
                 NinePatchRect patchRect = this.Parts[i];
                 patchRect.Name = part.m_Name;
                 patchRect.Visible = true;
                 patchRect.Texture = part.m_FrameSprite[this.FrameIndex];
-                //this.MoveChild(patchRect, part.m_SortingOrder);
+                int normaliseSortOrder = part.m_SortingOrder - minSortingOrder;
+                this.MoveChild(patchRect, normaliseSortOrder);
                 patchRect.PatchMarginLeft = part.m_PatchMargins[0];
                 patchRect.PatchMarginTop = part.m_PatchMargins[1];
                 patchRect.PatchMarginRight = part.m_PatchMargins[2];
@@ -405,12 +476,28 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 patchRect.SizeFlagsHorizontal = 3;
                 patchRect.SizeFlagsVertical = 3;
             }
+
+            var array = this.GetChildren();
+            int index = 1;
+            foreach (object obj in array)
+            {
+                if (obj is NinePatchRect || !(obj is Node node))
+                {
+                    continue;
+                }
+
+                int sortOrder = this.Parts.Count + index;
+                this.MoveChild(node, sortOrder);
+                index += 1;
+            }
         }
 
         protected virtual void ColourLerp(
-            NinePatchRect sprite,
+            Control sprite,
+            Color originalColour,
             Color newColour,
             float duration,
+            string property = "self_modulate",
             bool modulateChildren = false)
         {
             if (this.IsInsideTree() == false)
@@ -420,6 +507,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (modulateChildren)
             {
+                this.TweenNode.InterpolateProperty(
+                    sprite,
+                    property,
+                    originalColour,
+                    newColour,
+                    duration);
+                this.TweenNode.Start();
+
                 var children = this.GetAllChildren();
                 foreach (var child in children)
                 {
@@ -427,24 +522,26 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     {
                         this.TweenNode.InterpolateProperty(
                             control,
-                            "self_modulate",
-                            control.SelfModulate,
+                            property,
+                            originalColour,
                             newColour,
                             duration);
+
+                        this.TweenNode.Start();
                     }
                 }
             }
             else
             {
                 this.TweenNode.InterpolateProperty(
-                    this, 
-                    "modulate", 
-                    this.Modulate, 
+                    sprite,
+                    property,
+                    originalColour,
                     newColour,
                     duration);
+
+                this.TweenNode.Start();
             }
-            
-            this.TweenNode.Start();
         }
     }
 }

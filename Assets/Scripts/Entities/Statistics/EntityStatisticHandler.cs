@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Godot;
+using Godot.Collections;
 using JoyLib.Code.Helpers;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Entities.Statistics
 {
@@ -25,40 +27,33 @@ namespace JoyLib.Code.Entities.Statistics
 
         public IEnumerable<IEntityStatistic> Load()
         {
-            string file = Directory.GetCurrentDirectory() + GlobalConstants.DATA_FOLDER + "/Statistics/Statistics.json";
+            string file = Directory.GetCurrentDirectory() + 
+                          GlobalConstants.ASSETS_FOLDER + 
+                          GlobalConstants.DATA_FOLDER + 
+                          "/Statistics/Statistics.json";
 
             List<IEntityStatistic> statistics = new List<IEntityStatistic>();
-
-            /*
-            using (StreamReader reader = new StreamReader(file))
+            
+            JSONParseResult result = JSON.Parse(File.ReadAllText(file));
+            
+            if (result.Error != Error.Ok)
             {
-                using (JsonTextReader jsonReader = new JsonTextReader(reader))
-                {
-                    try
-                    {
-                        JObject jToken = JObject.Load(jsonReader);
-
-                        if (jToken["Statistics"].IsNullOrEmpty() == false)
-                        {
-                            statistics.AddRange(jToken["Statistics"].Select(child =>
-                                new EntityStatistic((string) child, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)));
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        GlobalConstants.ActionLog.AddText("Could not load skills from " + file);
-                        GlobalConstants.ActionLog.StackTrace(e);
-                    }
-                    finally
-                    {
-                        jsonReader.Close();
-                        reader.Close();
-                    }
-                }
+                this.ValueExtractor.PrintFileParsingError(result, file);
+                return statistics;
             }
-            */
 
-            this.DefaultStatistics = statistics.ToDictionary(stat => stat.Name, statistic => statistic);
+            if (!(result.Result is Dictionary dictionary))
+            {
+                GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.", LogLevel.Warning);
+                return statistics;
+            }
+
+            ICollection<string> statNames =
+                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(dictionary, "Statistics");
+
+            statistics.AddRange(statNames.Select(statName => new EntityStatistic(statName, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)));
+
+            this.DefaultStatistics = statistics.ToDictionary(statistic => statistic.Name, statistic => statistic);
             
             return statistics;
         }

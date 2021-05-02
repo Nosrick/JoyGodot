@@ -7,9 +7,8 @@ namespace JoyLib.Code.Entities.Abilities
     {
         IEnumerable<IAbility> GetAvailableAbilities(IEntity actor);
 
-        IEnumerable<IAbility> GetAvailableAbilities(
-            IEntityTemplate template, 
-            IDictionary<string, IEntityStatistic> stats, 
-            IDictionary<string, IEntitySkill> skills);
+        IEnumerable<IAbility> GetAvailableAbilities(IEntityTemplate template,
+            ICollection<IEntityStatistic> stats,
+            ICollection<IEntitySkill> skills, ICollection<IDerivedValue> derivedValues);
     }
 }

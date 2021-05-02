@@ -18,7 +18,6 @@ namespace JoyLib.Code.Godot
 
         public JoyObjectNode()
         {
-            this.Awake();
         }
 
         public JoyObjectNode(IJoyObject joyObject)

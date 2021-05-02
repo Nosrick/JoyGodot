@@ -32,7 +32,7 @@ namespace JoyLib.Code.Unity.GUI
             base._Input(@event);
             if (@event.IsAction("ui_accept"))
             {
-                this.GUIManager.BringToFront(this.Name);
+                this.GUIManager?.BringToFront(this.Name);
             }
         }
 

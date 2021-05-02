@@ -23,7 +23,7 @@ namespace JoyLib.Code.Cultures
 
         IRomance ChooseRomance(IEnumerable<IRomance> romances);
 
-        IGender ChooseGender(IBioSex sex, IEnumerable<IGender> genders);
+        IGender ChooseGender(string sex, IEnumerable<IGender> genders);
 
         IJob ChooseJob(IEnumerable<IJob> jobs);
 

@@ -15,7 +15,7 @@ namespace JoyLib.Code.Unity.GUI
         public string ElementName { get; protected set; }
         
         public bool Initialised { get; protected set; }
-        
+
         [Export]
         public string m_Slot;
 
@@ -63,6 +63,12 @@ namespace JoyLib.Code.Unity.GUI
             this.m_CooldownOverlay.Visible = false;
 
             this.m_Icon._Ready();
+        }
+        
+        public void Initialise()
+        {
+            GD.Print(this.GetType().Name + " initialised!");
+            this.Initialised = true;
         }
 
         protected void GetBits()

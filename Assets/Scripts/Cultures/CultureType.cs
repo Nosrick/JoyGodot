@@ -267,7 +267,7 @@ namespace JoyLib.Code.Cultures
             throw new InvalidOperationException("Could not assign romance from culture " + this.CultureName + ".");
         }
 
-        public IGender ChooseGender(IBioSex sex, IEnumerable<IGender> genders)
+        public IGender ChooseGender(string sex, IEnumerable<IGender> genders)
         {
             int nonConforming = this.Roller.Roll(0, 100);
             if (nonConforming < this.NonConformingGenderChance)
@@ -293,7 +293,7 @@ namespace JoyLib.Code.Cultures
             }
             else
             {
-                return genders.First(gender => gender.Name.Equals(sex.Name, StringComparison.OrdinalIgnoreCase));
+                return genders.First(gender => gender.Name.Equals(sex, StringComparison.OrdinalIgnoreCase));
             }
 
             throw new InvalidOperationException("Could not assign gender from culture " + this.CultureName + ".");
