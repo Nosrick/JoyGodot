@@ -29,6 +29,8 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         
         protected ManagedLabel PointsLabel { get; set; }
         
+        protected VBoxContainer ChildContainer { get; set; }
+        
         protected PackedScene PartPrefab { get; set; }
 
         public int Points
@@ -65,7 +67,8 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         {
             base._Ready();
 
-            this.PointsLabel = this.GetNodeOrNull<ManagedLabel>("../Points Remaining");
+            this.PointsLabel = this.FindNode("Points Remaining") as ManagedLabel;
+            this.ChildContainer = this.FindNode("Derived Values List") as VBoxContainer;
         }
 
         public override void _ExitTree()
@@ -101,7 +104,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                     }
 
                     instance.Visible = false;
-                    this.AddChild(instance);
+                    this.ChildContainer.AddChild(instance);
                     this.Parts.Add(instance);
                 }
             }

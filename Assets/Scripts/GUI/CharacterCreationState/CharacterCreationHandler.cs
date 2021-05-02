@@ -60,8 +60,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.PlayerName = this.FindNode("Player Name Input") as LineEdit;
             this.PlayerSprite = this.FindNode("Player Icon") as ManagedUIElement;
             this.BasicPlayerInfo = this.FindNode("Basic Player Info") as BasicPlayerInfo;
-            this.StatisticsList = this.FindNode("Statistics List") as StatisticsList;
-            this.DerivedValuesList = this.FindNode("Derived Values List") as DerivedValuesList;
+            this.StatisticsList = this.FindNode("Statistics Container") as StatisticsList;
+            this.DerivedValuesList = this.FindNode("Derived Values Container") as DerivedValuesList;
             this.SkillsList = this.FindNode("Skills Container") as SkillsList;
             this.AbilityList = this.FindNode("Abilities Container") as AbilityList;
 

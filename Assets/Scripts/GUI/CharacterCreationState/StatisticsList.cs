@@ -27,6 +27,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         protected PackedScene PartPrefab { get; set; }
         
         protected ManagedLabel PointsLabel { get; set; }
+        
+        protected VBoxContainer ChildContainer { get; set; }
 
         public int Points
         {
@@ -62,7 +64,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
         {
             base._Ready();
             
-            this.PointsLabel = this.GetNodeOrNull<ManagedLabel>("../Points Remaining");
+            this.PointsLabel = this.FindNode("Points Remaining") as ManagedLabel;
+            this.ChildContainer = this.FindNode("Statistics List") as VBoxContainer;
         }
 
         public override void _ExitTree()
@@ -98,7 +101,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                     }
 
                     instance.Visible = false;
-                    this.AddChild(instance);
+                    this.ChildContainer.AddChild(instance);
                     this.Parts.Add(instance);
                 }
             }
