@@ -66,13 +66,23 @@ namespace JoyGodot.addons.Managed_Assets
             get => this.MyLabel?.Text ?? this.m_TextToSet;
             set
             {
-                this.m_TextToSet = value;
+                if (value is null)
+                {
+                    this.m_TextToSet = null;
+                }
+                else
+                {
+                    this.m_TextToSet = this.TitleCase
+                        ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                        : value;
+                }
+
                 if (this.MyLabel is null)
                 {
                     return;
                 }
 
-                this.MyLabel.Text = value;
+                this.MyLabel.Text = this.m_TextToSet;
             }
         }
 
