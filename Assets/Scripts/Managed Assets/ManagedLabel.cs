@@ -72,6 +72,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected bool m_TitleCase;
 
         protected Label MyLabel { get; set; }
+        
+        protected ManagedUIElement Element { get; set; }
 
         [Signal]
         public delegate void _AlignChanged();

@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyLib.Code.Graphics;
 
 namespace JoyLib.Code.Unity.GUI
 {
     public interface IGUIManager : IHandler<GUIData, string>
     {
+        ManagedCursor Cursor { get;}
+        
+        Tooltip Tooltip { get; }
+        
         void Clear();
 
         void FindGUIs();

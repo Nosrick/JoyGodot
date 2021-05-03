@@ -10,18 +10,20 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class Tooltip : GUIData
     {
-        [Export] protected Label m_Title;
-        [Export] protected Label m_Text;
-        [Export] protected Node2D m_IconSlot;
-        [Export] protected ManagedUIElement m_Icon;
-        [Export] protected Node2D m_Background;
-        [Export] protected StringPairContainer m_ItemPrefab;
-        [Export] protected BoxContainer m_ParentLayout;
-        [Export] protected Vector2 m_PositionOffset;
-        protected List<StringPairContainer> ItemCache { get; set; }
+        [Export] protected Vector2 PositionOffset { get; set; }
+        protected ManagedLabel Title { get; set; }
+        protected Control IconSlot { get; set; }
+        protected ManagedUIElement Icon { get; set; }
+        protected Control Background { get; set; }
+        
+        protected Control MainContainer { get; set; }
+        protected BoxContainer ContentContainer { get; set; }
+        protected List<Label> ItemCache { get; set; }
 
-        public void Awake()
+        public override void _Ready()
         {
+            base._Ready();
+            
             if (this.ItemCache.IsNullOrEmpty() == false)
             {
                 foreach (var item in this.ItemCache)
@@ -31,8 +33,17 @@ namespace JoyLib.Code.Unity.GUI
             }
             else
             {
-                this.ItemCache = new List<StringPairContainer>();
+                this.ItemCache = new List<Label>();
             }
+
+            this.Title = this.FindNode("Title") as ManagedLabel;
+            this.IconSlot = this.FindNode("Icon Container") as Control;
+            this.Icon = this.IconSlot?.GetNode<ManagedUIElement>("Icon");
+            this.Background = this.GetNode<Control>("Background");
+            this.MainContainer = this.GetNode<Control>("Main Container");
+            this.ContentContainer = this.FindNode("Content Container") as BoxContainer;
+            
+            this.Hide();
         }
 
         public override void _Input(InputEvent @event)
@@ -84,60 +95,65 @@ namespace JoyLib.Code.Unity.GUI
             */
 
             //this.transform.position = this.Canvas.transform.TransformPoint(mousePosition + offset);
-            this.RectPosition = mousePosition;
+            this.RectPosition = mousePosition + this.PositionOffset;
         }
 
         public virtual void Show(
-            string title = null, 
-            string content = null, 
+            string title = null,  
             ISpriteState sprite = null, 
-            IEnumerable<Tuple<string, string>> data = null, 
+            ICollection<string> data = null, 
             bool showBackground = true)
         {
+            this.Display();
+            
             if (!string.IsNullOrEmpty(title))
             {
-                this.m_Title.Visible = true;
-                this.m_Title.Text = title;
+                this.Title.Visible = true;
+                this.Title.Text = title;
             }
             else
             {
-                this.m_Title.Visible = false;
+                this.Title.Visible = false;
             }
-
-            this.m_Text.Text = content;
-            this.m_Text.Visible = !content.IsNullOrEmpty();
 
             if (sprite is null == false)
             {
-                this.m_IconSlot.Visible = true;
+                this.IconSlot.Visible = true;
                 this.SetIcon(sprite);
             }
             else
             {
-                this.m_IconSlot.Visible = false;
+                this.IconSlot.Visible = false;
             }
 
             if (data.IsNullOrEmpty() == false)
             {
-                Tuple<string,string>[] dataArray = data.ToArray();
-                if (this.ItemCache.Count < dataArray.Length)
+                if (this.ItemCache.Count < data.Count)
                 {
-                    for (int i = this.ItemCache.Count; i < dataArray.Length; i++)
+                    for (int i = this.ItemCache.Count; i < data.Count; i++)
                     {
-                        this.ItemCache.Add((StringPairContainer) this.m_ItemPrefab.Duplicate());
+                        Label item = new Label
+                        {
+                            SizeFlagsHorizontal = 3,
+                            SizeFlagsVertical = 1,
+                            Align = Label.AlignEnum.Center,
+                            Valign = Label.VAlign.Center
+                        };
+                        this.ContentContainer.AddChild(item);
+                        this.ItemCache.Add(item);
                     }
                 }
-                else if (this.ItemCache.Count > dataArray.Length)
+                else if (this.ItemCache.Count > data.Count)
                 {
-                    for (int i = dataArray.Length; i < this.ItemCache.Count; i++)
+                    for (int i = data.Count; i < this.ItemCache.Count; i++)
                     {
                         this.ItemCache[i].Visible = false;
                     }
                 }
                     
-                for (int i = 0; i < dataArray.Length; i++)
+                for (int i = 0; i < data.Count; i++)
                 {
-                    this.ItemCache[i].Target = dataArray[i];
+                    this.ItemCache[i].Text = data.ElementAt(i);
                     this.ItemCache[i].Visible = true;
                 }
             }
@@ -149,7 +165,19 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
            
-            this.m_Background.Visible = showBackground;
+            this.Background.Visible = showBackground;
+
+            float size = 0;
+            foreach (var obj in this.MainContainer.GetChildren())
+            {
+                if (obj is Control control)
+                {
+                    size += control.GetRect().Size.y;
+                }
+            }
+
+            this.MainContainer.RectSize = new Vector2(this.MainContainer.RectSize.x, size);
+            this.RectSize = this.MainContainer.GetRect().Grow(this.MainContainer.MarginLeft).Size;
 
             /*
             float height = this.ItemCache.Count(container => container.gameObject.activeSelf) * 0.055f;
@@ -162,8 +190,8 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetIcon(ISpriteState state)
         {
-            this.m_Icon.Clear();
-            this.m_Icon.AddSpriteState(state, true);
+            this.Icon.Clear();
+            this.Icon.AddSpriteState(state, true);
         }
     }
 }

@@ -64,19 +64,13 @@ namespace JoyLib.Code
 
         public IRollable Roller { get; protected set; }
 
-        public virtual IEnumerable<Tuple<string, string>> Tooltip
+        public virtual ICollection<string> Tooltip
         {
-            get
-            {
-                return this.m_Tooltip;
-            }
-            set
-            {
-                this.m_Tooltip = value;
-            }
+            get => this.m_Tooltip;
+            set => this.m_Tooltip = value.ToList();
         }
         
-        protected IEnumerable<Tuple<string, string>> m_Tooltip;
+        protected List<string> m_Tooltip;
 
         public JoyObject()
         {
@@ -180,7 +174,7 @@ namespace JoyLib.Code
 
             this.CachedActions = new List<IJoyAction>(actions);
 
-            this.Tooltip = new List<Tuple<string, string>>();
+            this.Tooltip = new List<string>();
         }
 
         public IJoyAction FetchAction(string name)
