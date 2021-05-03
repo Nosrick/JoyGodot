@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Castle.Core.Internal;
 using Godot;
 using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code;
@@ -49,6 +50,12 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         public override void OnPointerEnter()
         {
             base.OnPointerEnter();
+            
+            if (Input.IsActionPressed("tooltip_show") == false
+                || this.Tooltip.IsNullOrEmpty())
+            {
+                return;
+            }
             
             GlobalConstants.GameManager.GUIManager.Tooltip.Show(
                 this.Name,
