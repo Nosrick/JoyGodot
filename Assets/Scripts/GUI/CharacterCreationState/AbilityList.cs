@@ -122,6 +122,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 part.Pressed = false;
                 part.PointRestriction = this.Points;
                 part.Value = 1;
+                part.Tooltip = new List<string> {ability.Description};
                 if (!part.IsConnected(
                     "ValueToggle",
                     this,

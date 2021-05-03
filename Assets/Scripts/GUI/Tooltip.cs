@@ -11,6 +11,28 @@ namespace JoyLib.Code.Unity.GUI
     public class Tooltip : GUIData
     {
         [Export] protected Vector2 PositionOffset { get; set; }
+
+        [Export]
+        public DynamicFont CustomFont
+        {
+            get => this.m_CustomFont;
+            set
+            {
+                this.m_CustomFont = value;
+
+                if (this.ItemCache.IsNullOrEmpty())
+                {
+                    return;
+                }
+                
+                foreach (var label in this.ItemCache)
+                {
+                    label.AddFontOverride("font", value);
+                }
+            }
+        }
+        
+        protected DynamicFont m_CustomFont;
         protected ManagedLabel Title { get; set; }
         protected Control IconSlot { get; set; }
         protected ManagedUIElement Icon { get; set; }
@@ -139,6 +161,7 @@ namespace JoyLib.Code.Unity.GUI
                             Align = Label.AlignEnum.Center,
                             Valign = Label.VAlign.Center
                         };
+                        item.AddFontOverride("font", this.CustomFont);
                         this.ContentContainer.AddChild(item);
                         this.ItemCache.Add(item);
                     }
@@ -178,14 +201,6 @@ namespace JoyLib.Code.Unity.GUI
 
             this.MainContainer.RectSize = new Vector2(this.MainContainer.RectSize.x, size);
             this.RectSize = this.MainContainer.GetRect().Grow(this.MainContainer.MarginLeft).Size;
-
-            /*
-            float height = this.ItemCache.Count(container => container.gameObject.activeSelf) * 0.055f;
-            this.RectTransform.anchorMin = new Vector2(0.4f, 0);
-            this.RectTransform.anchorMax = new Vector2(0.6f, height);
-            this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
-            this.RectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
-            */
         }
 
         protected void SetIcon(ISpriteState state)

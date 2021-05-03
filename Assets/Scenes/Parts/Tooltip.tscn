@@ -1,11 +1,12 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedLabel.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Scripts/GUI/Tooltip.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=5]
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=6]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -16,9 +17,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 4 )
+default_font = SubResource( 6 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -28,7 +29,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=5]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -50,6 +51,8 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+PositionOffset = Vector2( 32, 32 )
+CustomFont = ExtResource( 5 )
 
 [node name="Background" parent="." instance=ExtResource( 1 )]
 rect_min_size = Vector2( 0, 50 )
@@ -68,6 +71,7 @@ rect_min_size = Vector2( 0, 32 )
 mouse_filter = 2
 size_flags_horizontal = 9
 size_flags_vertical = 9
+custom_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -114,7 +118,7 @@ HAlign = 1
 m_ElementName = "SecondaryAccent"
 TitleCase = true
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 5 )
+CustomFont = SubResource( 3 )
 OverrideOutline = true
 FontSize = 36
 OverrideColour = true
@@ -133,7 +137,7 @@ margin_right = -5.0
 margin_bottom = 4.0
 rect_min_size = Vector2( 0, 32 )
 theme = SubResource( 2 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Name Of Object"
 align = 1
@@ -145,11 +149,12 @@ __meta__ = {
 [node name="Colour Lerper" type="Tween" parent="Main Container/Title Container/Title"]
 
 [node name="Content Container" type="VBoxContainer" parent="Main Container"]
-margin_top = 36.0
+margin_top = 37.0
 margin_right = 312.0
-margin_bottom = 36.0
+margin_bottom = 37.0
 mouse_filter = 2
 size_flags_vertical = 9
+custom_constants/separation = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
