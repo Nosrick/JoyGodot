@@ -4,13 +4,16 @@
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=2]
 
 [node name="Managed Cursor" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 64.0
+margin_bottom = 64.0
+mouse_filter = 2
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Colour Lerper" type="Tween" parent="."]
+[node name="Cursor Object" parent="." instance=ExtResource( 2 )]
+mouse_filter = 2
 
 [node name="Drag Object" parent="." instance=ExtResource( 2 )]
+mouse_filter = 2

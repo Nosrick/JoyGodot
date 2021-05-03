@@ -175,7 +175,7 @@ namespace JoyLib.Code.Helpers
         {
             if (disposing)
             {
-                this.Writer?.Dispose();
+                //this.Writer?.Dispose();
             }
         }
 

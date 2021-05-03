@@ -8,6 +8,7 @@ using Godot;
 using Godot.Collections;
 using JoyGodot.addons.Managed_Assets;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using Array = Godot.Collections.Array;
@@ -22,6 +23,10 @@ namespace JoyLib.Code.Unity.GUI
         protected HashSet<GUIData> ActiveGUIs { get; set; }
 
         protected Node RootUI { get; set; }
+        
+        protected Node CursorRoot { get; set; }
+        
+        public ManagedCursor Cursor { get; protected set; }
 
         public IDictionary<string, Theme> Themes { get; protected set; }
 
@@ -71,6 +76,8 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.GUIs is null)
             {
+                this.CursorRoot = this.RootUI.GetNode("../Cursor Control");
+
                 this.Themes = new System.Collections.Generic.Dictionary<string, Theme>();
 
                 this.GUIs = new HashSet<GUIData>();
@@ -296,6 +303,11 @@ namespace JoyLib.Code.Unity.GUI
                     this.Add(data);
                 }
             }
+
+            if (this.Cursor is null)
+            {
+                this.Cursor = this.CursorRoot.GetNode<ManagedCursor>("Cursor");
+            }
         }
 
         public void InstantiateUIScene(PackedScene ui)
@@ -347,13 +359,9 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.SetupManagedComponents(gui, crossFade, duration);
             }
-
-            Cursor cursor = (Cursor) this.GUIs.FirstOrDefault(data => data is Cursor);
-            if (cursor is null == false)
-            {
-                cursor.SetCursorSprites(this.Cursors["DefaultCursor"]);
-                cursor.SetCursorColours(this.CursorColours["DefaultCursor"]);
-            }
+            
+            this.Cursor.AddSpriteState(this.Cursors["DefaultCursor"]);
+            this.Cursor.OverrideAllColours(this.CursorColours["DefaultCursor"], crossFade, duration);
         }
 
         public void SetupManagedComponents(Control gui, bool crossFade = false, float duration = 0.1f)

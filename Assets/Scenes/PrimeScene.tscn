@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
+[ext_resource path="res://Assets/Scenes/Parts/ManagedCursor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Scripts/GameManager.cs" type="Script" id=3]
 
 [node name="Root" type="Node"]
@@ -8,19 +9,37 @@ script = ExtResource( 3 )
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="Cursor" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="MainUI" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Cursor Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cursor" parent="Cursor Control" instance=ExtResource( 1 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 0.0
+margin_bottom = 0.0
+
+[node name="Cursor Object" parent="Cursor Control/Cursor" index="0"]
+margin_right = -790.0
+margin_bottom = -416.0
+ElementName = "DefaultCursor"
+
+[node name="Drag Object" parent="Cursor Control/Cursor" index="1"]
+margin_right = -790.0
+margin_bottom = -416.0
 
 [node name="WorldHolder" type="Node2D" parent="."]
 
@@ -33,3 +52,5 @@ __meta__ = {
 [node name="WorldEntities" type="Node2D" parent="WorldHolder"]
 
 [node name="WorldFog" type="Node2D" parent="WorldHolder"]
+
+[editable path="Cursor Control/Cursor"]

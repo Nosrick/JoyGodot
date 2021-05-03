@@ -188,9 +188,11 @@ namespace JoyLib.Code.Graphics
                             fileName);
 
                         Image image = texture.GetData();
-                        int frameWidth = texture.GetWidth() / partFrames;
+                        int frameWidth = texture.GetHeight();
                         List<Texture> frames = new List<Texture>();
-                        for (int i = 0; i < texture.GetWidth(); i += frameWidth)
+                        int startPosition = position * frameWidth;
+                        int endPosition = (partFrames * frameWidth) + startPosition;
+                        for (int i = startPosition; i < endPosition; i += frameWidth)
                         {
                             ImageTexture imageTexture = new ImageTexture();
                             imageTexture.CreateFromImage(image.GetRect(new Rect2(new Vector2(i, 0),
