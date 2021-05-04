@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Castle.Core.Internal;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyGodot.Assets.Scripts.Managed_Assets;
@@ -18,6 +19,8 @@ namespace JoyLib.Code.Unity.GUI
     {
         protected ManagedLabel NameLabel { get; set; }
         protected ManagedLabel ValueLabel { get; set; }
+
+        public ICollection<string> Tooltip { get; set; }
 
         public ICollection<string> Values
         {
@@ -139,6 +142,48 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
 
+            this.Tooltip = new List<string> {"Example tooltip"};
+            
+            foreach (var child in this.GetChildren())
+            {
+                if (!(child is Control control))
+                {
+                    continue;
+                }
+                
+                if (control.IsConnected(
+                    "mouse_entered",
+                    this,
+                    nameof(this.OnPointerEnter)))
+                {
+                    control.Disconnect(
+                        "mouse_entered",
+                        this,
+                        nameof(this.OnPointerEnter));
+                }
+
+                control.Connect(
+                    "mouse_entered",
+                    this,
+                    nameof(this.OnPointerEnter));
+
+                if (control.IsConnected(
+                    "mouse_exited",
+                    this,
+                    nameof(this.OnPointerExit)))
+                {
+                    control.Disconnect(
+                        "mouse_exited",
+                        this,
+                        nameof(this.OnPointerExit));
+                }
+
+                control.Connect(
+                    "mouse_exited",
+                    this,
+                    nameof(this.OnPointerExit));
+            }
+
             this.NameLabel = this.GetNodeOrNull("Item Name") as ManagedLabel;
             if (this.NameLabel is null)
             {
@@ -170,6 +215,25 @@ namespace JoyLib.Code.Unity.GUI
             }
             
             this.EmitSignal("ValueChanged", this.ValueName, delta, this.Value);
+        }
+        
+        public void OnPointerEnter()
+        {
+            if (Input.IsActionPressed("tooltip_show") == false
+                || this.Tooltip.IsNullOrEmpty())
+            {
+                return;
+            }
+            
+            GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
+                this.Name,
+                null,
+                this.Tooltip);
+        }
+
+        public void OnPointerExit()
+        {
+            GlobalConstants.GameManager.GUIManager.Tooltip?.Hide();
         }
     }
 }

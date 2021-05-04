@@ -75,7 +75,6 @@ namespace JoyLib.Code.Godot
             Tooltip tooltip = (Tooltip) this.GuiManager.OpenGUI(GUINames.TOOLTIP);
             tooltip.Show(
                 this.JoyObject.JoyName,
-                null,
                 this.JoyObject.States[0],
                 this.JoyObject.Tooltip);
         }

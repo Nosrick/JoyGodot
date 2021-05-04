@@ -17,13 +17,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         IColourableElement,
         ISpriteStateElement
     {
-        [Export]
         public string ElementName
         {
             get => this.m_ElementName;
             set => this.m_ElementName = value;
         }
 
+        [Export]
         protected string m_ElementName = "SlotSprite";
         
         public bool Initialised { get; protected set; }

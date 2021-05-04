@@ -211,20 +211,12 @@ namespace JoyLib.Code.Entities.Items
 
         protected void ConstructDescription()
         {
-            List<Tuple<string, string>> data = new List<Tuple<string, string>>
+            List<string> data = new List<string>
             {
-                new Tuple<string, string>(
-                    "",
-                    this.ConditionString),
-                new Tuple<string, string>(
-                    "",
-                    this.WeightString),
-                new Tuple<string, string>(
-                    "",
-                    this.ItemType.MaterialDescription),
-                new Tuple<string, string>(
-                    "",
-                    this.SlotString)
+                this.ConditionString,
+                this.WeightString,
+                this.ItemType.MaterialDescription,
+                this.SlotString
             };
             /*data.Add(new Tuple<string, string>(
                 "",
@@ -233,27 +225,19 @@ namespace JoyLib.Code.Entities.Items
                 : this.ItemType.UnidentifiedDescription));*/
             if (this.ContentString.IsNullOrEmpty() == false)
             {
-                data.Add(new Tuple<string, string>(
-                    "",
-                    this.ContentString));
+                data.Add(this.ContentString);
             }
             
             if (this.OwnerString.IsNullOrEmpty() == false)
             {
-                data.Add(new Tuple<string, string>(
-                    "",
-                    "Owned by " + this.OwnerString));
+                data.Add("Owned by " + this.OwnerString);
             }
             else
             {
-                data.Add(new Tuple<string, string>(
-                    "",
-                    "Not owned"));
+                data.Add("Not owned");
             }
             
-            data.Add(new Tuple<string, string>(
-                    "",
-                    "Worth " + this.Value));
+            data.Add("Worth " + this.Value);
 
             this.Tooltip = data;
         }
