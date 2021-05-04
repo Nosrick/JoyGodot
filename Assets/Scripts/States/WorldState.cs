@@ -12,6 +12,7 @@ using JoyLib.Code.Physics;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
 using JoyLib.Code.World;
+using Thread = System.Threading.Thread;
 
 namespace JoyLib.Code.States
 {
@@ -35,7 +36,7 @@ namespace JoyLib.Code.States
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
         protected IConversationEngine ConversationEngine { get; set; }
 
-        protected IEnumerator TickTimer { get; set; }
+        protected Thread TickTimer { get; set; }
 
         protected IJoyObject PrimaryTarget { get; set; }
 
@@ -54,7 +55,9 @@ namespace JoyLib.Code.States
             this.ConversationEngine = this.GameManager.ConversationEngine;
             this.GUIManager = this.GameManager.GUIManager;
 
-            this.TickTimer = this.TickEvent();
+            //this.TickTimer = this.TickEvent();
+            this.TickTimer = new Thread(this.TickEvent);
+            this.TickTimer.Start();
 
             GlobalConstants.GameManager.Player.AliveChange -= this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.AliveChange += this.OnPlayerDeath;
@@ -163,7 +166,7 @@ namespace JoyLib.Code.States
             this.Tick();
         }
 
-        protected IEnumerator TickEvent()
+        protected void TickEvent()
         {
             while (true)
             {

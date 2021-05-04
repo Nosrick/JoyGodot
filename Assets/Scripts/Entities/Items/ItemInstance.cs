@@ -126,6 +126,9 @@ namespace JoyLib.Code.Entities.Items
 
             this.UniqueAbilities = uniqueAbilities is null == false ? new List<IAbility>(uniqueAbilities) : new List<IAbility>();
 
+            this.ItemHandler = GlobalConstants.GameManager.ItemHandler;
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
+
             this.CalculateValue();
             this.ConstructDescription();
 
@@ -137,9 +140,6 @@ namespace JoyLib.Code.Entities.Items
             {
                 this.StateIndex = 0;
             }
-
-            //this.ItemHandler = GlobalConstants.GameManager.ItemHandler;
-            //this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
 
             if (this.Prefab is null == false)
             {

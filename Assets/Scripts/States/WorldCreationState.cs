@@ -50,7 +50,7 @@ namespace JoyLib.Code.States
 
             //Generate the basic overworld
             this.m_World = new WorldInstance(
-                overworldGen.GenerateWorldSpace(WORLD_SIZE, "overworld"),
+                overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"),
                 new string[] {"overworld", "exterior"},
                 "Everse",
                 GlobalConstants.GameManager.EntityHandler,
