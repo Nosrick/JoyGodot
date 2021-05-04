@@ -58,14 +58,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             get => this.m_TitleCase;
             set
             {
-                if (value)
-                {
-                    this.Text = this.Text is null
-                        ? this.Text
-                        : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Text);
-                }
-
                 this.m_TitleCase = value;
+                this.Text = this.Text;
             }
         }
 
@@ -116,7 +110,25 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         protected bool m_HasFontColours;
 
-        [Export] public bool CacheFont { get; set; }
+        [Export]
+        public bool CacheFont
+        {
+            get => this.m_CacheFont;
+            set
+            {
+                this.m_CacheFont = value;
+                if (value)
+                {
+                    if (this.m_CustomFont is null)
+                    {
+                        return;
+                    }
+                    this.CustomFont = (DynamicFont) this.m_CustomFont.Duplicate();
+                }
+            }
+        }
+
+        protected bool m_CacheFont = true;
 
         [Export]
         public DynamicFont CustomFont
@@ -246,15 +258,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 this.MyLabel.Owner = this.GetTree()?.EditedSceneRoot;
 #endif
             }
-
             this.OutlineColour = this.OutlineColour;
             this.OutlineThickness = this.OutlineThickness;
             this.FontColour = this.FontColour;
             this.FontSize = this.FontSize;
+            
             this.MyLabel.Align = this.HAlign;
             this.MyLabel.Valign = this.VAlign;
 
-            this.MyLabel.AddFontOverride("font", this.m_CustomFont);
+            //this.MyLabel.AddFontOverride("font", this.m_CustomFont);
             this.MyLabel.Text = this.m_TextToSet;
         }
     }
