@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Castle.Core.Internal;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyGodot.Assets.Scripts.Managed_Assets;
@@ -25,6 +26,10 @@ namespace JoyLib.Code.Unity.GUI
         public bool UseRestriction { get; set; }
         
         public int PointRestriction { get; set; }
+
+        public ICollection<string> Tooltip { get; set; }
+        
+        protected bool MouseInside { get; set; }
 
         [Export]
         public bool TitleCase
@@ -106,12 +111,55 @@ namespace JoyLib.Code.Unity.GUI
         public override void _Ready()
         {
             base._Ready();
+
             this.ValueLabel = this.GetNodeOrNull("Item Value") as ManagedLabel;
             this.NameLabel = this.GetNodeOrNull("Item Name") as ManagedLabel;
             
             if (this.ValueLabel is null == false)
             {
                 this.ValueLabel.Text = this.CachedValue.ToString();
+            }
+
+            this.Tooltip = new List<string> {"Example tooltip"};
+
+            foreach (var child in this.GetChildren())
+            {
+                if (!(child is Control control))
+                {
+                    continue;
+                }
+                
+                if (control.IsConnected(
+                    "mouse_entered",
+                    this,
+                    nameof(this.OnPointerEnter)))
+                {
+                    control.Disconnect(
+                        "mouse_entered",
+                        this,
+                        nameof(this.OnPointerEnter));
+                }
+
+                control.Connect(
+                    "mouse_entered",
+                    this,
+                    nameof(this.OnPointerEnter));
+
+                if (control.IsConnected(
+                    "mouse_exited",
+                    this,
+                    nameof(this.OnPointerExit)))
+                {
+                    control.Disconnect(
+                        "mouse_exited",
+                        this,
+                        nameof(this.OnPointerExit));
+                }
+
+                control.Connect(
+                    "mouse_exited",
+                    this,
+                    nameof(this.OnPointerExit));
             }
         }
 
@@ -130,6 +178,25 @@ namespace JoyLib.Code.Unity.GUI
 
             this.Value = newValue;
             this.EmitSignal("ValueChanged", this.ValueName, delta, newValue);
+        }
+
+        public void OnPointerEnter()
+        {
+            if (Input.IsActionPressed("tooltip_show") == false
+                || this.Tooltip.IsNullOrEmpty())
+            {
+                return;
+            }
+            
+            GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
+                this.Name,
+                null,
+                this.Tooltip);
+        }
+
+        public void OnPointerExit()
+        {
+            GlobalConstants.GameManager.GUIManager.Tooltip?.Hide();
         }
     }
 }

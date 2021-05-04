@@ -325,7 +325,6 @@ namespace JoyLib.Code.Unity.GUI
                 ((Tooltip) this.GUIManager.OpenGUI(GUINames.TOOLTIP))
                     .Show(
                         this.Item.DisplayName,
-                        null,
                         this.Item.States[0],
                         this.Item.Tooltip);
             }

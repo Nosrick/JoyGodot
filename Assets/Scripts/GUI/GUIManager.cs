@@ -24,9 +24,11 @@ namespace JoyLib.Code.Unity.GUI
 
         protected Node RootUI { get; set; }
         
-        protected Node CursorRoot { get; set; }
+        protected Node PersistentRoot { get; set; }
         
         public ManagedCursor Cursor { get; protected set; }
+        
+        public Tooltip Tooltip { get; protected set; }
 
         public IDictionary<string, Theme> Themes { get; protected set; }
 
@@ -76,7 +78,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.GUIs is null)
             {
-                this.CursorRoot = this.RootUI.GetNode("../Cursor Control");
+                this.PersistentRoot = this.RootUI.GetNode("../Persistent UI");
 
                 this.Themes = new System.Collections.Generic.Dictionary<string, Theme>();
 
@@ -306,7 +308,13 @@ namespace JoyLib.Code.Unity.GUI
 
             if (this.Cursor is null)
             {
-                this.Cursor = this.CursorRoot.GetNode<ManagedCursor>("Cursor");
+                this.Cursor = this.PersistentRoot.GetNode<ManagedCursor>("Cursor");
+            }
+
+            if (this.Tooltip is null)
+            {
+                this.Tooltip = this.PersistentRoot.GetNode<Tooltip>("Tooltip");
+                this.SetupManagedComponents(this.Tooltip);
             }
         }
 
@@ -362,6 +370,7 @@ namespace JoyLib.Code.Unity.GUI
             
             this.Cursor.AddSpriteState(this.Cursors["DefaultCursor"]);
             this.Cursor.OverrideAllColours(this.CursorColours["DefaultCursor"], crossFade, duration);
+            this.SetupManagedComponents(this.Tooltip);
         }
 
         public void SetupManagedComponents(Control gui, bool crossFade = false, float duration = 0.1f)

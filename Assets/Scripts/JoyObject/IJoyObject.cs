@@ -32,7 +32,7 @@ namespace JoyLib.Code
         
         JoyObjectNode MyNode { get; }
         
-        IEnumerable<Tuple<string, string>> Tooltip { get; }
+        ICollection<string> Tooltip { get; }
         
         void Update();
 

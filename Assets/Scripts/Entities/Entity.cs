@@ -364,21 +364,21 @@ namespace JoyLib.Code.Entities
             this.HappinessIsDirty = true;
         }
 
-        protected IEnumerable<Tuple<string, string>> ConstructDescription()
+        protected ICollection<string> ConstructDescription()
         {
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
 
-            Tuple<string, string> relationship = null;
+            string relationship = null;
             if (this.PlayerControlled)
             {
-                relationship = new Tuple<string, string>("", "This is You");
+                relationship = "This is You";
             }
             else
             {
-                string relationshipName = "Stranger";
+                relationship = "Stranger";
                 try
                 {
-                    relationshipName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+                    relationship = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
                         this.RelationshipHandler.GetBestRelationship(
                                 this,
                                 GlobalConstants.GameManager.Player)
@@ -386,19 +386,15 @@ namespace JoyLib.Code.Entities
                 }
                 catch (Exception e)
                 { }
-
-                relationship = new Tuple<string, string>(
-                    "",
-                    relationshipName);
             }
 
-            List<Tuple<string, string>> data = new List<Tuple<string, string>>
+            List<string> data = new List<string>
             {
-                new Tuple<string, string>("", textInfo.ToTitleCase(this.CreatureType)),
-                new Tuple<string, string>("", textInfo.ToTitleCase(this.CurrentJob.Name)),
-                new Tuple<string, string>("", textInfo.ToTitleCase(this.Gender.Name)),
+                textInfo.ToTitleCase(this.CreatureType),
+                textInfo.ToTitleCase(this.CurrentJob.Name),
+                textInfo.ToTitleCase(this.Gender.Name),
                 relationship,
-                new Tuple<string, string>("", this.ConditionString)
+                this.ConditionString
             };
 
             return data;
@@ -1318,7 +1314,7 @@ namespace JoyLib.Code.Entities
 
         public List<IJob> Jobs { get; protected set; }
 
-        public override IEnumerable<Tuple<string, string>> Tooltip => this.ConstructDescription();
+        public override ICollection<string> Tooltip => this.ConstructDescription();
 
 
         public List<string> CultureNames
