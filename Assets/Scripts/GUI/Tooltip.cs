@@ -61,9 +61,9 @@ namespace JoyLib.Code.Unity.GUI
             this.Title = this.FindNode("Title") as ManagedLabel;
             this.IconSlot = this.FindNode("Icon Container") as Control;
             this.Icon = this.IconSlot?.GetNode<ManagedUIElement>("Icon");
-            this.Background = this.GetNode<Control>("Background");
-            this.MainContainer = this.GetNode<Control>("Main Container");
-            this.ContentContainer = this.FindNode("Content Container") as BoxContainer;
+            this.Background = this.GetNode<Control>("Margin Container/Background");
+            this.MainContainer = this.GetNode<Control>("Margin Container/Main Container");
+            this.ContentContainer = this.MainContainer.GetNode<BoxContainer>("Content Container");
             
             this.Hide();
         }
@@ -156,10 +156,11 @@ namespace JoyLib.Code.Unity.GUI
                     {
                         Label item = new Label
                         {
-                            SizeFlagsHorizontal = 3,
-                            SizeFlagsVertical = 1,
+                            SizeFlagsHorizontal = 1,
+                            SizeFlagsVertical = 9,
                             Align = Label.AlignEnum.Center,
-                            Valign = Label.VAlign.Center
+                            Valign = Label.VAlign.Center,
+                            Autowrap = true
                         };
                         item.AddFontOverride("font", this.CustomFont);
                         this.ContentContainer.AddChild(item);
@@ -189,18 +190,6 @@ namespace JoyLib.Code.Unity.GUI
             }
            
             this.Background.Visible = showBackground;
-
-            float size = 0;
-            foreach (var obj in this.MainContainer.GetChildren())
-            {
-                if (obj is Control control)
-                {
-                    size += control.GetRect().Size.y;
-                }
-            }
-
-            this.MainContainer.RectSize = new Vector2(this.MainContainer.RectSize.x, size);
-            this.RectSize = this.MainContainer.GetRect().Grow(this.MainContainer.MarginLeft).Size;
         }
 
         protected void SetIcon(ISpriteState state)
