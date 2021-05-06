@@ -70,8 +70,8 @@ namespace JoyLib.Code
             Node2D entityHolder = (Node2D) worldHolder.FindNode("WorldEntities");
             Node2D fogHolder = (Node2D) worldHolder.FindNode("WorldFog");
 
-            JoyObjectNode prefab = (JoyObjectNode) GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn").Instance();
-            ManagedSprite positionableSprite = (ManagedSprite) GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn").Instance();
+            PackedScene prefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn");
+            PackedScene positionableSprite = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn");
             Sprite fog = new Sprite();
             this.FloorPool = new GameObjectPool<ManagedSprite>(positionableSprite, floorHolder);
             this.WallPool = new GameObjectPool<JoyObjectNode>(prefab, wallHolder);

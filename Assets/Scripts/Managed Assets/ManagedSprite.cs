@@ -5,6 +5,7 @@ using Godot;
 using JoyGodot.addons.Managed_Assets;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Helpers;
 using Thread = System.Threading.Thread;
 using Timer = Godot.Timer;
 using Array = Godot.Collections.Array;
@@ -27,6 +28,8 @@ namespace JoyLib.Code.Unity
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
+
+        protected Tween TweenNode { get; set; }
 
         public ISpriteState CurrentSpriteState
         {
@@ -102,7 +105,14 @@ namespace JoyLib.Code.Unity
             }
 
             this.Parts = new List<Node2D>();
-            this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
+            this.m_States = new Dictionary<string, ISpriteState>();
+            this.TweenNode = this.GetNodeOrNull<Tween>("Tween");
+
+            if (this.TweenNode is null)
+            {
+                this.TweenNode = new Tween();
+                this.AddChild(this.TweenNode);
+            }
 
             this.Initialised = true;
         }
@@ -122,31 +132,6 @@ namespace JoyLib.Code.Unity
         public virtual bool RemoveStatesByName(string name)
         {
             return this.m_States.Remove(name);
-        }
-
-        public void SetTheme(Theme theme)
-        {
-            foreach (ISpriteState state in this.States)
-            {
-                foreach (SpritePart part in state.SpriteData.m_Parts)
-                {
-                    Texture icon = theme.GetIcon(part.m_Name, "SpritePart");
-                    if (icon is null == false)
-                    {
-                        part.m_FrameSprite = new List<Texture>
-                        {
-                            icon
-                        };
-                    }
-
-                    Color colour = theme.GetColor(part.m_Name, "SpritePart");
-                    part.m_PossibleColours = new List<Color>
-                    {
-                        colour
-                    };
-                    part.m_SelectedColour = 0;
-                }
-            }
         }
 
         public virtual ISpriteState GetState(string name)
@@ -220,6 +205,7 @@ namespace JoyLib.Code.Unity
                     {
                         this.ColourLerp(
                             this.Parts[i],
+                            this.SelfModulate,
                             colour,
                             duration);
                     }
@@ -250,14 +236,19 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.ColourLerp(this.Parts[i], colour, duration);
+                    this.ColourLerp(
+                        this.Parts[i], 
+                        this.Modulate, 
+                        colour, 
+                        duration,
+                        "modulate");
                 }
             }
             else
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour;
+                    this.Parts[i].Modulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour;
                 }
             }
 
@@ -307,43 +298,54 @@ namespace JoyLib.Code.Unity
 
         protected virtual void ColourLerp(
             Node2D sprite,
+            Color originalColour,
             Color newColour,
-            float duration)
+            float duration,
+            string property = "self_modulate",
+            bool modulateChildren = false)
         {
-            Thread lerpThread = new Thread(this.ColourLerpForThread);
-            lerpThread.Start(new ThreadLerpParams
+            if (this.IsInsideTree() == false)
             {
-                m_Duration = duration,
-                m_NewColour = newColour,
-                m_Sprite = sprite
-            });
-        }
-
-        protected void ColourLerpForThread(object param)
-        {
-            if (param is ThreadLerpParams lerpParams)
-            {
-                Timer timer = new Timer
-                {
-                    OneShot = true
-                };
-                timer.Start(lerpParams.m_Duration);
-                float lerp = 0f;
-                while (lerp < 1f)
-                {
-                    lerpParams.m_Sprite.SelfModulate.LinearInterpolate(lerpParams.m_NewColour, lerp);
-                    lerp = timer.WaitTime / lerpParams.m_Duration;
-                }
-
-                timer.Stop();
+                return;
             }
-        }
 
-        public struct ThreadLerpParams
-        {
-            public Node2D m_Sprite;
-            public Color m_NewColour;
-            public float m_Duration;
+            if (modulateChildren)
+            {
+                this.TweenNode.InterpolateProperty(
+                    sprite,
+                    property,
+                    originalColour,
+                    newColour,
+                    duration);
+                this.TweenNode.Start();
+
+                var children = this.GetAllChildren();
+                foreach (var child in children)
+                {
+                    if (child is Node2D node)
+                    {
+                        this.TweenNode.InterpolateProperty(
+                            node,
+                            property,
+                            originalColour,
+                            newColour,
+                            duration);
+
+                        this.TweenNode.Start();
+                    }
+                }
+            }
+            else
+            {
+                this.TweenNode.InterpolateProperty(
+                    sprite,
+                    property,
+                    originalColour,
+                    newColour,
+                    duration);
+
+                this.TweenNode.Start();
+            }
         }
     }
 }

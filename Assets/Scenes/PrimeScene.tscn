@@ -18,7 +18,7 @@ font_data = ExtResource( 4 )
 [node name="Root" type="Node"]
 script = ExtResource( 3 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Main Camera" type="Camera2D" parent="."]
 anchor_mode = 0
 
 [node name="MainUI" type="Control" parent="."]

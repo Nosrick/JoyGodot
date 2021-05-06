@@ -18,18 +18,27 @@ namespace Code.Collections
         /// <summary>
         /// The prefab we use to instantiate
         /// </summary>
-        protected T Prefab { get; set; }
+        protected PackedScene Prefab { get; set; }
         
         /// <summary>
         /// This is the GameObject that new instances will be parented to
         /// </summary>
         protected Node2D Parent { get; set; }
 
-        public GameObjectPool(T prefab, Node2D parent)
+        public GameObjectPool(PackedScene prefab, Node2D parent)
         {
             this.Objects = new List<T>();
             this.InactiveObjects = new List<T>();
             this.Prefab = prefab;
+            this.Parent = parent;
+        }
+
+        public GameObjectPool(T prefab, Node2D parent)
+        {
+            this.Objects = new List<T>();
+            this.InactiveObjects = new List<T>();
+            this.Prefab = new PackedScene();
+            this.Prefab.Pack(prefab);
             this.Parent = parent;
         }
 
@@ -44,8 +53,9 @@ namespace Code.Collections
                 return returnObject;
             }
 
-            T newObject = (T) this.Prefab.Duplicate();
+            T newObject = this.Prefab.Instance<T>();
             this.Objects.Add(newObject);
+            this.Parent.AddChild(newObject);
             return newObject;
         }
 
@@ -57,7 +67,9 @@ namespace Code.Collections
                 gameObject.SetProcess(false);
                 this.InactiveObjects.Add(gameObject);
                 gameObject.Visible = false;
+                this.Parent.RemoveChild(gameObject);
             }
+            
 
             return result;
         }

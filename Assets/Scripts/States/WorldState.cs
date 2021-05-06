@@ -22,7 +22,7 @@ namespace JoyLib.Code.States
 
         protected IWorldInstance m_Overworld;
 
-        protected Camera m_Camera;
+        protected Camera2D m_Camera;
 
         protected DateTime m_DateTime;
 
@@ -47,7 +47,7 @@ namespace JoyLib.Code.States
             this.m_ActiveWorld = activeWorldRef;
             this.m_Overworld = overworldRef;
 
-            this.m_Camera = (Camera) GlobalConstants.GameManager.MyNode.FindNode("Main Camera");
+            this.m_Camera = GlobalConstants.GameManager.MyNode.FindNode("Main Camera") as Camera2D;
 
             this.GameManager = GlobalConstants.GameManager;
             this.PhysicsManager = this.GameManager.PhysicsManager;
@@ -118,8 +118,9 @@ namespace JoyLib.Code.States
                 this.AutoTurn = true;
             }
             
-            this.m_Camera.Translation = new Vector3(player.WorldPosition.x, player.WorldPosition.y,
-                this.m_Camera.Translation.z);
+            this.m_Camera.Position = new Vector2(
+                player.WorldPosition.x, 
+                player.WorldPosition.y);
         }
 
         protected void SetEntityWorld(IWorldInstance world)
