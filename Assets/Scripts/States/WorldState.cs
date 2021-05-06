@@ -72,6 +72,11 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
+            this.GUIManager.InstantiateUIScene(
+                GD.Load<PackedScene>(
+                    GlobalConstants.GODOT_ASSETS_FOLDER +
+                    "Scenes/UI/MainGame.tscn"));
+            
             base.SetUpUi();
             this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
             this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);

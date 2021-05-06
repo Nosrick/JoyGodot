@@ -118,7 +118,7 @@ namespace JoyLib.Code.World
             this.m_Objects = new HashSet<IJoyObject>();
             this.m_ItemGUIDs = new HashSet<Guid>();
             this.m_Walls = new Dictionary<Vector2Int, IJoyObject>();
-            //this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
+            this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
 
             this.LightCalculator = new LightCalculator();
 
