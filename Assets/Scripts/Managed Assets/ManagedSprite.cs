@@ -38,7 +38,7 @@ namespace JoyLib.Code.Unity
                 if (this.IsDirty)
                 {
                     if (this.m_States.ContainsKey(this.ChosenSprite)
-                        && this.m_States[this.ChosenSprite].SpriteData.m_State
+                        && this.m_States[this.ChosenSprite].SpriteData.State
                             .Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
                     {
                         this.CachedState = this.m_States[this.ChosenSprite];
@@ -155,9 +155,9 @@ namespace JoyLib.Code.Unity
             }
 
             this.ChosenSprite = name;
-            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
+            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.State;
 
-            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_Frames);
 
             this.FrameIndex = 0;
             this.Finished = false;
@@ -199,7 +199,7 @@ namespace JoyLib.Code.Unity
 
             if (crossFade)
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
                     if (colours.TryGetValue(this.Parts[i].Name, out Color colour))
                     {
@@ -213,9 +213,9 @@ namespace JoyLib.Code.Unity
             }
             else
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour;
+                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.Parts[i].SelectedColour;
                 }
             }
 
@@ -234,7 +234,7 @@ namespace JoyLib.Code.Unity
 
             if (crossFade)
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
                     this.ColourLerp(
                         this.Parts[i], 
@@ -246,9 +246,9 @@ namespace JoyLib.Code.Unity
             }
             else
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
-                    this.Parts[i].Modulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour;
+                    this.Parts[i].Modulate = this.CurrentSpriteState.SpriteData.Parts[i].SelectedColour;
                 }
             }
 
@@ -264,9 +264,9 @@ namespace JoyLib.Code.Unity
                 part.Visible = false;
             }
 
-            if (this.Parts.Count < this.CurrentSpriteState.SpriteData.m_Parts.Count)
+            if (this.Parts.Count < this.CurrentSpriteState.SpriteData.Parts.Count)
             {
-                for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
                     AnimatedSprite newSprite = new AnimatedSprite
                     {
@@ -280,10 +280,10 @@ namespace JoyLib.Code.Unity
                 }
             }
 
-            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+            for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
             {
                 AnimatedSprite animatedSprite = (AnimatedSprite) this.Parts[i];
-                SpritePart spriteDataPart = this.CurrentSpriteState.SpriteData.m_Parts[i];
+                SpritePart spriteDataPart = this.CurrentSpriteState.SpriteData.Parts[i];
                 animatedSprite.Name = spriteDataPart.m_Name;
                 animatedSprite.Visible = true;
                 animatedSprite.Frames = new SpriteFrames
@@ -291,7 +291,7 @@ namespace JoyLib.Code.Unity
                     Frames = new Array(spriteDataPart.m_FrameSprite)
                 };
                 animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
-                animatedSprite.Play(this.CurrentSpriteState.SpriteData.m_State);
+                animatedSprite.Play(this.CurrentSpriteState.SpriteData.State);
                 animatedSprite.Frame = 0;
             }
         }

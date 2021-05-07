@@ -79,16 +79,16 @@ namespace JoyLib.Code.Unity.GUI
             }
             foreach (ISpriteState state in this.CursorObject.States)
             {
-                for (int j = 0; j < state.SpriteData.m_Parts.Count; j++)
+                for (int j = 0; j < state.SpriteData.Parts.Count; j++)
                 {
-                    SpritePart part = state.SpriteData.m_Parts[j];
+                    SpritePart part = state.SpriteData.Parts[j];
                     if (!colours.ContainsKey(part.m_Name))
                     {
                         continue;
                     }
 
                     part.m_PossibleColours = new List<Color> {colours[part.m_Name]};
-                    state.SpriteData.m_Parts[j] = part;
+                    state.SpriteData.Parts[j] = part;
                     this.CursorObject.Clear();
                 }
                 this.CursorObject.Clear();

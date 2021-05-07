@@ -88,7 +88,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.UISprites = new System.Collections.Generic.Dictionary<string, ISpriteState>();
 
                 this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
-                    .Select(data => new SpriteState(data.m_Name, data))
+                    .Select(data => new SpriteState(data.Name, data))
                     .Cast<ISpriteState>()
                     .ToDictionary(state => state.Name, state => state);
                 this.CursorColours = new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
@@ -253,19 +253,19 @@ namespace JoyLib.Code.Unity.GUI
                 var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet(tileSetName);
                 foreach (SpriteData data in spriteData)
                 {
-                    if (this.Themes.ContainsKey(data.m_Name) == false)
+                    if (this.Themes.ContainsKey(data.Name) == false)
                     {
                         Theme theme = new Theme();
-                        theme.SetIcon(data.m_Name, "ManagedUIElement", data.m_Parts.First().m_FrameSprite.FirstOrDefault());
-                        this.Themes.Add(data.m_Name, theme);
+                        theme.SetIcon(data.Name, "ManagedUIElement", data.Parts.First().m_FrameSprite.FirstOrDefault());
+                        this.Themes.Add(data.Name, theme);
                     }
                     
-                    if (this.UISprites.ContainsKey(data.m_Name))
+                    if (this.UISprites.ContainsKey(data.Name))
                     {
                         continue;
                     }
 
-                    this.UISprites.Add(data.m_Name, new SpriteState(data.m_Name, data));
+                    this.UISprites.Add(data.Name, new SpriteState(data.Name, data));
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using JoyLib.Code.Helpers;
 
@@ -8,15 +9,17 @@ namespace JoyGodot.addons.Managed_Assets
     [Serializable]
     public class SpriteData
     {
-        public string m_Name;
-        public string m_State;
-        public List<SpritePart> m_Parts;
+        public string Name { get; set; }
+        public string State { get; set; }
+        public List<SpritePart> Parts { get; set; }
+
+        public int Size { get; set; }
 
         public IDictionary<string, Color> GetRandomPartColours()
         {
-            IDictionary<string, Color> colours = new System.Collections.Generic.Dictionary<string, Color>();
+            IDictionary<string, Color> colours = new Dictionary<string, Color>();
 
-            foreach (SpritePart part in this.m_Parts)
+            foreach (SpritePart part in this.Parts)
             {
                 colours.Add(
                     part.m_Name,

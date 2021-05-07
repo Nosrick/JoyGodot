@@ -15,11 +15,29 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[node name="Root" type="Node"]
+[node name="Root" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Main Camera" type="Camera2D" parent="."]
-anchor_mode = 0
+offset = Vector2( 427, 240 )
+current = true
+
+[node name="WorldHolder" type="Node2D" parent="."]
+
+[node name="WorldFloors" type="Node2D" parent="WorldHolder"]
+
+[node name="WorldWalls" type="Node2D" parent="WorldHolder"]
+
+[node name="WorldObjects" type="Node2D" parent="WorldHolder"]
+
+[node name="WorldEntities" type="Node2D" parent="WorldHolder"]
+
+[node name="WorldFog" type="Node2D" parent="WorldHolder"]
 
 [node name="MainUI" type="Control" parent="."]
 anchor_right = 1.0
@@ -55,17 +73,5 @@ m_ElementName = "DefaultCursor"
 [node name="Drag Object" parent="Persistent UI/Cursor" index="1"]
 margin_right = -790.0
 margin_bottom = -416.0
-
-[node name="WorldHolder" type="Node2D" parent="."]
-
-[node name="WorldFloors" type="Node2D" parent="WorldHolder"]
-
-[node name="WorldWalls" type="Node2D" parent="WorldHolder"]
-
-[node name="WorldObjects" type="Node2D" parent="WorldHolder"]
-
-[node name="WorldEntities" type="Node2D" parent="WorldHolder"]
-
-[node name="WorldFog" type="Node2D" parent="WorldHolder"]
 
 [editable path="Persistent UI/Cursor"]

@@ -64,19 +64,19 @@ namespace JoyLib.Code.States
             //Make the upstairs
             if (this.m_ActiveWorld.Guid != this.m_Overworld.Guid)
             {
-                Node2D child = gameManager.FloorPool.Get();
-                child.Position = new Vector2(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y);
+                ManagedSprite child = gameManager.FloorPool.Get();
                 child.Name = this.m_ActiveWorld.Parent.Name + " stairs";
                 //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
                 //tooltip.WorldPosition = this.m_ActiveWorld.SpawnPoint;
                 //tooltip.RefreshTooltip = WorldState.GetTooltipData;
 
-                ManagedSprite sprite = (ManagedSprite) child;
-                sprite.Clear();
-                sprite.AddSpriteState(new SpriteState(
+                child.Clear();
+                child.AddSpriteState(new SpriteState(
                         child.Name,
                     this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()));
                 child.Visible = true;
+                child.Position = new Vector2(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y) 
+                                 * child.CurrentSpriteState.SpriteData.Size;
             }
 
             //Make each downstairs
@@ -84,7 +84,6 @@ namespace JoyLib.Code.States
             {
                 ManagedSprite child = gameManager.FloorPool.Get();
                 child.Name = pair.Value.Name + " stairs";
-                child.Position = new Vector2(pair.Key.x, pair.Key.y);
                 //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
                 //tooltip.WorldPosition = pair.Key;
                 child.Clear();
@@ -93,6 +92,8 @@ namespace JoyLib.Code.States
                     this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()), 
                     true);
                 child.Visible = true;
+                child.Position = new Vector2(pair.Key.x, pair.Key.y)
+                                 * child.CurrentSpriteState.SpriteData.Size;
             }
 
             ISpriteState state = null;
@@ -106,16 +107,13 @@ namespace JoyLib.Code.States
                     Sprite fog = gameManager.FogPool.Get();
                     fog.Name = "Fog of War";
                     fog.Visible = true;
-                    
+                    fog.Position = intPos.ToVec2 * GlobalConstants.SPRITE_SIZE;
                     
                     //Make the floor
                     ManagedSprite floor = gameManager.FloorPool.Get();
                     floor.Name = this.m_ActiveWorld.Name + " floor";
-                    //TooltipComponent tooltip = floor.GetComponent<TooltipComponent>();
-                    //tooltip.Move(intPos);
-                    //tooltip.RefreshTooltip = WorldState.GetTooltipData;
                     if (state is null
-                        || state.SpriteData.m_Name.Equals(this.m_ActiveWorld.Tiles[i, j].TileSet,
+                        || state.SpriteData.Name.Equals(this.m_ActiveWorld.Tiles[i, j].TileSet,
                             StringComparison.OrdinalIgnoreCase) == false)
                     {
                         state = new SpriteState(
@@ -124,6 +122,7 @@ namespace JoyLib.Code.States
                     }
                     floor.Clear();
                     floor.AddSpriteState(state);
+                    floor.Position = intPos.ToVec2 * floor.CurrentSpriteState.SpriteData.Size;
                     floor.Visible = true;
                 }
             }
@@ -133,9 +132,9 @@ namespace JoyLib.Code.States
             {
                 wall.MyWorld = this.m_ActiveWorld;
                 JoyObjectNode gameObject = gameManager.WallPool.Get();
+                //gameObject.Clear();
+                //gameObject.AddSpriteState(wall.States.First(), true);
                 gameObject.AttachJoyObject(wall);
-                gameObject.Clear();
-                gameObject.AddSpriteState(wall.States.First(), true);
                 gameObject.Visible = true;
             }
             
@@ -146,10 +145,10 @@ namespace JoyLib.Code.States
             {
                 JoyObjectNode gameObject = gameManager.EntityPool.Get();
                 gameObject.Visible = true;
-                gameObject.AttachJoyObject(entity);
 
-                gameObject.Clear();
-                gameObject.AddSpriteState(entity.States.First(), true);
+                //gameObject.Clear();
+                //gameObject.AddSpriteState(entity.States.First(), true);
+                gameObject.AttachJoyObject(entity);
                 this.CreateItems(entity.Contents, false);
                 this.CreateItems(entity.Equipment.Contents, false);
             }

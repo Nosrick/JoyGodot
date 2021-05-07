@@ -46,9 +46,9 @@ namespace JoyLib.Code.Graphics
             //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
             SpriteData iconData = new SpriteData
             {
-                m_Name = "default",
-                m_State = "default",
-                m_Parts = new List<SpritePart>
+                Name = "default",
+                State = "default",
+                Parts = new List<SpritePart>
                 {
                     new SpritePart
                     {
@@ -73,7 +73,7 @@ namespace JoyLib.Code.Graphics
 
             this.Icons.Add("default", new List<Tuple<string, SpriteData>>
             {
-                new Tuple<string, SpriteData>(iconData.m_Name, iconData)
+                new Tuple<string, SpriteData>(iconData.Name, iconData)
             });
 
             string[] files =
@@ -98,7 +98,7 @@ namespace JoyLib.Code.Graphics
         {
             if (this.Icons.ContainsKey(tileSet))
             {
-                this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.m_Name, dataToAdd));
+                this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd));
             }
             else
             {
@@ -106,7 +106,7 @@ namespace JoyLib.Code.Graphics
                     tileSet,
                     new List<Tuple<string, SpriteData>>
                     {
-                        new Tuple<string, SpriteData>(dataToAdd.m_Name, dataToAdd)
+                        new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd)
                     }));
             }
 
@@ -129,16 +129,19 @@ namespace JoyLib.Code.Graphics
             List<SpriteData> spriteData = new List<SpriteData>();
             Dictionary tileSetDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(spriteDict, "TileSet");
             string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
-            Array tileSetArray = this.ValueExtractor.GetValueFromDictionary<Array>(tileSetDict, "SpriteData");
-            ICollection<Dictionary> tileSetDicts =
-                this.ValueExtractor.GetCollectionFromArray<Dictionary>(tileSetArray);
-            foreach (Dictionary dict in tileSetDicts)
+            ICollection<Dictionary> tileSetArray = this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
+            foreach (Dictionary dict in tileSetArray)
             {
                 try
                 {
                     List<SpritePart> parts = new List<SpritePart>();
 
                     string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                    int size = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Size");
+                    if (size == 0)
+                    {
+                        size = GlobalConstants.SPRITE_SIZE;
+                    }
                     string state = this.ValueExtractor.GetValueFromDictionary<string>(dict, "State") ?? "default";
                     Array partsArray = this.ValueExtractor.GetValueFromDictionary<Array>(dict, "Part");
                     ICollection<Dictionary> partDicts =
@@ -246,9 +249,10 @@ namespace JoyLib.Code.Graphics
                     spriteData.Add(
                         new SpriteData
                         {
-                            m_Name = name,
-                            m_Parts = parts,
-                            m_State = state
+                            Name = name,
+                            Parts = parts,
+                            State = state,
+                            Size = size
                         });
                 }
                 catch (Exception e)
@@ -277,7 +281,7 @@ namespace JoyLib.Code.Graphics
         {
             List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
                 .SelectMany(x => x.Value.Where(pair => pair.Item1.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
-                .Where(pair => pair.Item2.m_State.Equals(state, StringComparison.OrdinalIgnoreCase))
+                .Where(pair => pair.Item2.State.Equals(state, StringComparison.OrdinalIgnoreCase))
                 .Select(x => x.Item2)
                 .ToList();
 

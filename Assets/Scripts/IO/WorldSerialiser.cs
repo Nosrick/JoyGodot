@@ -153,7 +153,7 @@ namespace JoyLib.Code.IO
 
         protected void SetUpSpriteStates(string tileSet, ISpriteState state)
         {
-            foreach (SpritePart part in state.SpriteData.m_Parts)
+            foreach (SpritePart part in state.SpriteData.Parts)
             {
                 //part.m_FrameSprite = this.ObjectIcons.(tileSet, state.Name, part.m_Name, state.SpriteData.m_State);
             }

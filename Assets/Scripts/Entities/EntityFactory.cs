@@ -195,7 +195,7 @@ namespace JoyLib.Code.Entities
                 {
                     SpriteData data = spriteData[i];
                     states.Add(new SpriteState(
-                        data.m_Name,
+                        data.Name,
                         data));
                 }
 

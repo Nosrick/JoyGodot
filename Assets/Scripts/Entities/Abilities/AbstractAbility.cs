@@ -53,7 +53,7 @@ namespace JoyLib.Code.Entities.Abilities
             this.Tags = tags;
             this.Range = range;
             this.SpriteData = usingSprite;
-            this.UsingIcon = this.SpriteData?.m_Parts
+            this.UsingIcon = this.SpriteData?.Parts
                 .FirstOrDefault(part => part.m_Name.Equals("icon", StringComparison.OrdinalIgnoreCase))?
                 .m_FrameSprite.FirstOrDefault();
 

@@ -125,7 +125,8 @@ namespace JoyLib.Code.States
             
             this.m_Camera.Position = new Vector2(
                 player.WorldPosition.x, 
-                player.WorldPosition.y);
+                player.WorldPosition.y)
+                * GlobalConstants.SPRITE_SIZE;
         }
 
         protected void SetEntityWorld(IWorldInstance world)

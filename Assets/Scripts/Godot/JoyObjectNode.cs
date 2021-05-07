@@ -20,16 +20,17 @@ namespace JoyLib.Code.Godot
         {
         }
 
-        public JoyObjectNode(IJoyObject joyObject)
-            : this()
+        public override void _Ready()
         {
-            this.AttachJoyObject(joyObject);
+            base._Ready();
+
             this.GuiManager = GlobalConstants.GameManager.GUIManager;
         }
 
         public void AttachJoyObject(IJoyObject joyObject)
         {
             this.JoyObject = joyObject;
+            this.Name = joyObject.ToString();
             this.SpeechBubble = this.GetNodeOrNull<ManagedSprite>("Speech Bubble");
             this.Clear();
             ISpriteState state = this.JoyObject.States.FirstOrDefault();
@@ -37,6 +38,7 @@ namespace JoyLib.Code.Godot
             {
                 return;
             }
+            this.Position = joyObject.WorldPosition.ToVec2 * state.SpriteData.Size;
             this.AddSpriteState(state);
             this.OverrideAllColours(state.SpriteData.GetRandomPartColours());
         }
@@ -53,7 +55,7 @@ namespace JoyLib.Code.Godot
             {
                 this.SpeechBubble.Clear();
                 this.SpeechBubble.AddSpriteState(need);
-                Texture needSprite = need.SpriteData.m_Parts.First(
+                Texture needSprite = need.SpriteData.Parts.First(
                         part =>
                             part.m_Data.Any(data => data.Equals("need", StringComparison.OrdinalIgnoreCase)))
                                 .m_FrameSprite.FirstOrDefault();
@@ -72,7 +74,7 @@ namespace JoyLib.Code.Godot
 
             GlobalConstants.ActionLog.Log("MOUSE ON " + this.JoyObject.JoyName);
 
-            Tooltip tooltip = (Tooltip) this.GuiManager.OpenGUI(GUINames.TOOLTIP);
+            Tooltip tooltip = this.GuiManager.Tooltip;
             tooltip.Show(
                 this.JoyObject.JoyName,
                 this.JoyObject.States[0],
@@ -82,7 +84,7 @@ namespace JoyLib.Code.Godot
         public void OnPointerExit()
         {
             GlobalConstants.ActionLog.Log("MOUSE OFF " + this.JoyObject.JoyName);
-            this.GuiManager.CloseGUI(GUINames.TOOLTIP);
+            this.GuiManager.Tooltip.Hide();
         }
     }
 }

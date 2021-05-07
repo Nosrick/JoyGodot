@@ -72,7 +72,10 @@ namespace JoyLib.Code
 
             PackedScene prefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn");
             PackedScene positionableSprite = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn");
-            Sprite fog = new Sprite();
+            Sprite fog = new Sprite
+            {
+                Texture = GD.Load<Texture>(GlobalConstants.GODOT_ASSETS_FOLDER + "Sprites/obscure.png")
+            };
             this.FloorPool = new GameObjectPool<ManagedSprite>(positionableSprite, floorHolder);
             this.WallPool = new GameObjectPool<JoyObjectNode>(prefab, wallHolder);
             this.EntityPool = new GameObjectPool<JoyObjectNode>(prefab, entityHolder);

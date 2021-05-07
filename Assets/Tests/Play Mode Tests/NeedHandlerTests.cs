@@ -35,15 +35,15 @@ namespace Tests
                                {
                                    new SpriteData
                                    {
-                                       m_Name = "DEFAULT",
-                                       m_Parts = new List<SpritePart>
+                                       Name = "DEFAULT",
+                                       Parts = new List<SpritePart>
                                        {
                                            new SpritePart
                                            {
                                                m_Frames = 1
                                            }
                                        },
-                                       m_State = "DEFAULT"
+                                       State = "DEFAULT"
                                    }
                                }));
 

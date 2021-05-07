@@ -38,7 +38,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 if (this.IsDirty)
                 {
                     if (this.m_States.ContainsKey(this.ChosenSprite)
-                        && this.m_States[this.ChosenSprite].SpriteData.m_State
+                        && this.m_States[this.ChosenSprite].SpriteData.State
                             .Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
                     {
                         this.CachedState = this.m_States[this.ChosenSprite];
@@ -171,7 +171,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         {
             foreach (ISpriteState state in this.States)
             {
-                foreach (SpritePart part in state.SpriteData.m_Parts)
+                foreach (SpritePart part in state.SpriteData.Parts)
                 {
                     Texture icon = theme.GetIcon(part.m_Name, nameof(this.GetType));
                     if (icon is null == false)
@@ -213,9 +213,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
 
             this.ChosenSprite = name;
-            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
+            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.State;
 
-            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_Frames);
 
             this.FrameIndex = 0;
             this.Finished = false;
@@ -339,7 +339,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (crossFade)
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
                     if (colours.TryGetValue(this.Parts[i].Name, out Color colour))
                     {
@@ -353,9 +353,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
             else
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
-                    colours.TryGetValue(this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name, out Color colour);
+                    colours.TryGetValue(this.CurrentSpriteState.SpriteData.Parts[i].m_Name, out Color colour);
                     this.Parts[i].SelfModulate = colour;
                 }
             }
@@ -382,7 +382,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 if (modulateChildren)
                 {
-                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                     {
                         this.ColourLerp(
                             this.Parts[i],
@@ -405,7 +405,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 if (modulateChildren)
                 {
-                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                     {
                         this.Parts[i].SelfModulate = colour;
                     }
@@ -428,7 +428,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 part.Visible = false;
             }
 
-            int partsCount = this.CurrentSpriteState.SpriteData.m_Parts.Count;
+            int partsCount = this.CurrentSpriteState.SpriteData.Parts.Count;
             if (this.Parts.Count < partsCount)
             {
                 for (int i = this.Parts.Count; i < partsCount; i++)
@@ -455,11 +455,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 }
             }
 
-            int maxSortingOrder = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_SortingOrder);
-            int minSortingOrder = this.CurrentSpriteState.SpriteData.m_Parts.Min(part => part.m_SortingOrder);
+            int maxSortingOrder = this.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_SortingOrder);
+            int minSortingOrder = this.CurrentSpriteState.SpriteData.Parts.Min(part => part.m_SortingOrder);
             for (int i = 0; i < partsCount; i++)
             {
-                var part = this.CurrentSpriteState.SpriteData.m_Parts[i];
+                var part = this.CurrentSpriteState.SpriteData.Parts[i];
                 NinePatchRect patchRect = this.Parts[i];
                 patchRect.Name = part.m_Name;
                 patchRect.Visible = true;

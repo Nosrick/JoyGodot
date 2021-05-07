@@ -16,7 +16,7 @@ namespace JoyLib.Code
         
         public const int MAX_LIGHT = 32;
 
-        public const int SPRITE_SIZE = 16;
+        public const int SPRITE_SIZE = 128;
         public const int DEFAULT_SUCCESS_THRESHOLD = 7;
         public const int MINIMUM_SUCCESS_THRESHOLD = 4;
         public const int MAXIMUM_SUCCESS_THRESHOLD = 9;
