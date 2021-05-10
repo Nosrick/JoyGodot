@@ -60,7 +60,7 @@ namespace JoyLib.Code
         protected List<ISpriteState> m_States;
 
         public List<IJoyAction> CachedActions { get; protected set; }
-        public JoyObjectNode MyNode { get; protected set; }
+        public JoyObjectNode MyNode { get; set; }
 
         public IRollable Roller { get; protected set; }
 

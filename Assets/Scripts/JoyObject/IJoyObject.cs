@@ -30,7 +30,7 @@ namespace JoyLib.Code
         
         List<IJoyAction> CachedActions { get; }
         
-        JoyObjectNode MyNode { get; }
+        JoyObjectNode MyNode { get; set; }
         
         ICollection<string> Tooltip { get; }
         

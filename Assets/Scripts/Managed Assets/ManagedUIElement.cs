@@ -241,7 +241,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
         }
 
-        public override void _Process(float delta)
+        public override void _PhysicsProcess(float delta)
         {
             if (this.CurrentSpriteState is null)
             {

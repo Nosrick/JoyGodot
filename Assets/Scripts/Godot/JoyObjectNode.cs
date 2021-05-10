@@ -30,6 +30,7 @@ namespace JoyLib.Code.Godot
         public void AttachJoyObject(IJoyObject joyObject)
         {
             this.JoyObject = joyObject;
+            this.JoyObject.MyNode = this;
             this.Name = joyObject.ToString();
             this.SpeechBubble = this.GetNodeOrNull<ManagedSprite>("Speech Bubble");
             this.Clear();

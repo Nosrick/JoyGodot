@@ -47,13 +47,23 @@ namespace JoyLib.Code.States
             this.m_ActiveWorld = activeWorldRef;
             this.m_Overworld = overworldRef;
 
-            this.m_Camera = GlobalConstants.GameManager.MyNode.FindNode("Main Camera") as Camera2D;
-
             this.GameManager = GlobalConstants.GameManager;
             this.PhysicsManager = this.GameManager.PhysicsManager;
             this.RelationshipHandler = this.GameManager.RelationshipHandler;
             this.ConversationEngine = this.GameManager.ConversationEngine;
             this.GUIManager = this.GameManager.GUIManager;
+            
+            this.m_Camera = new Camera2D
+            {
+                AnchorMode = Camera2D.AnchorModeEnum.DragCenter,
+                ProcessMode = Camera2D.Camera2DProcessMode.Physics,
+                Current = true,
+                ZIndex = 100,
+                ZAsRelative = false,
+                Zoom = new Vector2(4f, 4f)
+            };
+            
+            GlobalConstants.GameManager.Player.MyNode.AddChild(this.m_Camera);
 
             //this.TickTimer = this.TickEvent();
             this.TickTimer = new Thread(this.TickEvent);
@@ -122,11 +132,6 @@ namespace JoyLib.Code.States
             {
                 this.AutoTurn = true;
             }
-            
-            this.m_Camera.Position = new Vector2(
-                player.WorldPosition.x, 
-                player.WorldPosition.y)
-                * GlobalConstants.SPRITE_SIZE;
         }
 
         protected void SetEntityWorld(IWorldInstance world)

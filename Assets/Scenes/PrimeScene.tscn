@@ -23,10 +23,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Main Camera" type="Camera2D" parent="."]
-offset = Vector2( 427, 240 )
-current = true
-
 [node name="WorldHolder" type="Node2D" parent="."]
 
 [node name="WorldFloors" type="Node2D" parent="WorldHolder"]
@@ -38,6 +34,7 @@ current = true
 [node name="WorldEntities" type="Node2D" parent="WorldHolder"]
 
 [node name="WorldFog" type="Node2D" parent="WorldHolder"]
+visible = false
 
 [node name="MainUI" type="Control" parent="."]
 anchor_right = 1.0
