@@ -91,7 +91,7 @@ namespace JoyLib.Code.Graphics
                     else
                     {
                         part.m_PossibleColours.Add(colours[part.m_Name]);
-                        part.m_SelectedColour = part.m_PossibleColours.Count;
+                        part.m_SelectedColour = part.m_PossibleColours.Count - 1;
                     }
                 }
                 
