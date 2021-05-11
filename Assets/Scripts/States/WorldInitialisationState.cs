@@ -122,6 +122,8 @@ namespace JoyLib.Code.States
                     }
                     floor.Clear();
                     floor.AddSpriteState(state);
+                    float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / state.SpriteData.Size;
+                    floor.Scale = new Vector2(scale, scale);
                     floor.Position = intPos.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
                     floor.Visible = true;
                 }
