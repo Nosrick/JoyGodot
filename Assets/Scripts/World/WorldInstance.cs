@@ -749,6 +749,7 @@ namespace JoyLib.Code.World
 
         public void Dispose()
         {
+            /*
             foreach (IEntity entity in this.m_Entities)
             {
                 //entity.Dispose();
@@ -768,6 +769,7 @@ namespace JoyLib.Code.World
             this.m_Areas = null;
 
             //GlobalConstants.GameManager.GUIDManager.ReleaseGUID(this.Guid);
+            */
         }
 
         ~WorldInstance()

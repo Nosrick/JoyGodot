@@ -43,9 +43,9 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            Vector2 mousePosition = mouseEvent.Position;
+            Vector2 mousePosition = mouseEvent.GlobalPosition;
 
-            this.RectPosition = new Vector2(mousePosition.x, mousePosition.y);
+            this.RectGlobalPosition = new Vector2(mousePosition.x, mousePosition.y);
         }
 
         public void SetCursorSize(int width, int height)

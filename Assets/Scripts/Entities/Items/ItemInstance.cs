@@ -6,6 +6,7 @@ using Godot;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
+using JoyLib.Code.Godot;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -95,7 +96,7 @@ namespace JoyLib.Code.Entities.Items
             IRollable roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
-            Node2D gameObject = null,
+            JoyObjectNode gameObject = null,
             List<IItemInstance> contents = null,
             bool active = false)
             : base(
@@ -155,25 +156,25 @@ namespace JoyLib.Code.Entities.Items
             */
         }
 
-        public void Instantiate(bool recursive = true, Node2D gameObject = null, bool active = false)
+        public void Instantiate(bool recursive = true, JoyObjectNode gameObject = null, bool active = false)
         {
-            /*
             if (gameObject is null)
             {
-                MonoBehaviourHandler monoBehaviourHandler = GlobalConstants.GameManager.ItemPool.Get()
-                    .GetComponent<MonoBehaviourHandler>();
-                monoBehaviourHandler.AttachJoyObject(this);
+                JoyObjectNode joyObjectNode = GlobalConstants.GameManager.ItemPool.Get();
+                joyObjectNode.AttachJoyObject(this);
+
+                this.MyNode = joyObjectNode;
             }
             else
             {
-                MonoBehaviourHandler monoBehaviourHandler = gameObject.GetComponent<MonoBehaviourHandler>();
-                monoBehaviourHandler.AttachJoyObject(this);
+                gameObject.AttachJoyObject(this);
+
+                this.MyNode = gameObject;
             }
-        
-            this.MonoBehaviourHandler.SetSpriteLayer("Objects");
-            this.MonoBehaviourHandler.Clear();
-            this.MonoBehaviourHandler.AddSpriteState(this.States[this.StateIndex]);
-            this.MonoBehaviourHandler.gameObject.SetActive(active);
+            
+            this.MyNode.Clear();
+            this.MyNode.AddSpriteState(this.States[this.StateIndex]);
+            this.MyNode.Visible = active;
             
             if (!recursive)
             {
@@ -187,7 +188,6 @@ namespace JoyLib.Code.Entities.Items
                     instance.Instantiate(true, GlobalConstants.GameManager.ItemPool.Get());
                 }
             }
-            */
         }
 
         public IItemInstance Copy(IItemInstance copy)

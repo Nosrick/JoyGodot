@@ -59,8 +59,7 @@ namespace JoyLib.Code.States
                 ProcessMode = Camera2D.Camera2DProcessMode.Physics,
                 Current = true,
                 ZIndex = 100,
-                ZAsRelative = false,
-                Zoom = new Vector2(4f, 4f)
+                ZAsRelative = false
             };
             
             GlobalConstants.GameManager.Player.MyNode.AddChild(this.m_Camera);

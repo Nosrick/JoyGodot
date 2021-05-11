@@ -39,9 +39,11 @@ namespace JoyLib.Code.Godot
             {
                 return;
             }
-            this.Position = joyObject.WorldPosition.ToVec2 * state.SpriteData.Size;
+            this.Position = joyObject.WorldPosition.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
             this.AddSpriteState(state);
             this.OverrideAllColours(state.SpriteData.GetRandomPartColours());
+            float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
+            this.Scale = new Vector2(scale, scale);
         }
 
         public void SetSpeechBubble(bool on, ISpriteState need = null)

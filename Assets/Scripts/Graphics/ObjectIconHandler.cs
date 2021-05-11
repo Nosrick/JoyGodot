@@ -140,7 +140,7 @@ namespace JoyLib.Code.Graphics
                     int size = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Size");
                     if (size == 0)
                     {
-                        size = GlobalConstants.SPRITE_SIZE;
+                        size = GlobalConstants.SPRITE_TEXTURE_SIZE;
                     }
                     string state = this.ValueExtractor.GetValueFromDictionary<string>(dict, "State") ?? "default";
                     Array partsArray = this.ValueExtractor.GetValueFromDictionary<Array>(dict, "Part");

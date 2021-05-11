@@ -76,7 +76,7 @@ namespace JoyLib.Code.States
                     this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()));
                 child.Visible = true;
                 child.Position = new Vector2(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y) 
-                                 * child.CurrentSpriteState.SpriteData.Size;
+                                 * GlobalConstants.SPRITE_WORLD_SIZE;
             }
 
             //Make each downstairs
@@ -93,7 +93,7 @@ namespace JoyLib.Code.States
                     true);
                 child.Visible = true;
                 child.Position = new Vector2(pair.Key.x, pair.Key.y)
-                                 * child.CurrentSpriteState.SpriteData.Size;
+                                 * GlobalConstants.SPRITE_WORLD_SIZE;
             }
 
             ISpriteState state = null;
@@ -107,7 +107,7 @@ namespace JoyLib.Code.States
                     Sprite fog = gameManager.FogPool.Get();
                     fog.Name = "Fog of War";
                     fog.Visible = true;
-                    fog.Position = intPos.ToVec2 * GlobalConstants.SPRITE_SIZE;
+                    fog.Position = intPos.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
                     
                     //Make the floor
                     ManagedSprite floor = gameManager.FloorPool.Get();
@@ -122,7 +122,7 @@ namespace JoyLib.Code.States
                     }
                     floor.Clear();
                     floor.AddSpriteState(state);
-                    floor.Position = intPos.ToVec2 * floor.CurrentSpriteState.SpriteData.Size;
+                    floor.Position = intPos.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
                     floor.Visible = true;
                 }
             }
@@ -132,8 +132,6 @@ namespace JoyLib.Code.States
             {
                 wall.MyWorld = this.m_ActiveWorld;
                 JoyObjectNode gameObject = gameManager.WallPool.Get();
-                //gameObject.Clear();
-                //gameObject.AddSpriteState(wall.States.First(), true);
                 gameObject.AttachJoyObject(wall);
                 gameObject.Visible = true;
             }
@@ -145,9 +143,6 @@ namespace JoyLib.Code.States
             {
                 JoyObjectNode gameObject = gameManager.EntityPool.Get();
                 gameObject.Visible = true;
-
-                //gameObject.Clear();
-                //gameObject.AddSpriteState(entity.States.First(), true);
                 gameObject.AttachJoyObject(entity);
                 this.CreateItems(entity.Contents, false);
                 this.CreateItems(entity.Equipment.Contents, false);
