@@ -44,10 +44,10 @@
               "Position": 0,
               "SortOrder": 1,
               "Colour": [
-                "#ea7d10ff",
-                "#ee113dff",
-                "#25e4c4ff",
-                "#f8be49ff"
+                "#ea7d10",
+                "#ee113d",
+                "#25e4c4",
+                "#f8be49"
               ]
             },
             {
@@ -60,7 +60,7 @@
               "Position": 0,
               "SortOrder": 2,
               "Colour": [
-                "#12c2f8ff"
+                "#12c2f8"
               ]
             },
             {
@@ -73,7 +73,7 @@
               "Position": 0,
               "SortOrder": 3,
               "Colour": [
-                "#f8be49ff"
+                "#f8be49"
               ]
             },
             {
@@ -86,7 +86,7 @@
               "Position": 0,
               "SortOrder": 4,
               "Colour": [
-                "#f2f2f2ff"
+                "#f2f2f2"
               ]
             },
             {
@@ -99,7 +99,7 @@
               "Position": 0,
               "SortOrder": 5,
               "Colour": [
-                "#020a55ff"
+                "#020a55"
               ]
             }
           ]

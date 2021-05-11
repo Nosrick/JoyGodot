@@ -48,7 +48,7 @@
               ],
               "Position": 1,
               "Colour": [
-                "#3c1701ff"
+                "#3c1701"
               ]
             },
             {
@@ -60,7 +60,7 @@
               ],
               "Position": 1,
               "Colour": [
-                "#f8be49ff"
+                "#f8be49"
               ]
             },
             {
@@ -72,7 +72,7 @@
               ],
               "Position": 1,
               "Colour": [
-                "#e5fbf3ff"
+                "#e5fbf3"
               ]
             },
             {
@@ -84,7 +84,7 @@
               ],
               "Position": 1,
               "Colour": [
-                "#ffffffff"
+                "#ffffff"
               ]
             }
           ]
@@ -101,7 +101,7 @@
               ],
               "Position": 0,
               "Colour": [
-                "#3c1701ff"
+                "#3c1701"
               ]
             },
             {
@@ -113,7 +113,7 @@
               ],
               "Position": 0,
               "Colour": [
-                "#ba5017ff"
+                "#ba5017"
               ]
             },
             {
@@ -125,7 +125,7 @@
               ],
               "Position": 0,
               "Colour": [
-                "#f08b32ff"
+                "#f08b32"
               ]
             },
             {
@@ -137,7 +137,7 @@
               ],
               "Position": 0,
               "Colour": [
-                "#ffffffff"
+                "#ffffff"
               ]
             }
           ]
