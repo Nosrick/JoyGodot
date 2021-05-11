@@ -293,6 +293,7 @@ namespace JoyLib.Code.Unity
                 animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
                 animatedSprite.Play(this.CurrentSpriteState.SpriteData.State);
                 animatedSprite.Frame = 0;
+                animatedSprite.SelfModulate = spriteDataPart.SelectedColour;
             }
         }
 
