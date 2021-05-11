@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyLib.Code;
 using JoyLib.Code.Graphics;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
@@ -32,6 +31,9 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         {
             this.CursorObject.Clear();
             this.CursorObject.AddSpriteState(state);
+            const int size = GlobalConstants.SPRITE_WORLD_SIZE;
+            this.CursorObject.RectSize = new Vector2(size, size);
+            this.DragObject.RectSize = new Vector2(size, size);
         }
 
         public void OverrideAllColours(IDictionary<string, Color> colours, bool crossfade = false,
@@ -55,8 +57,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
             if (@event is InputEventMouseMotion motion)
             {
-                this.CursorObject.SetPosition(motion.Position);
-                this.DragObject.SetPosition(motion.Position);
+                this.CursorObject.RectPosition = motion.Position;
+                this.DragObject.RectPosition = motion.Position;
             }
         }
     }
