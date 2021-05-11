@@ -22,7 +22,7 @@
               ],
               "Filename": "environments/overworld-grass.png",
               "Frames": 1,
-              "Colour": ["#625565ff"]
+              "Colour": ["#625565"]
             }
           ]
         },
@@ -38,7 +38,7 @@
               ],
               "Filename": "environments/naga-pits32.png",
               "Frames": 1,
-              "Colour": ["#8fd3ffff"]
+              "Colour": ["#8fd3ff"]
             }
           ]
         }

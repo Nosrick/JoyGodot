@@ -14,7 +14,7 @@
               "Frames": 1,
               "Filename": "environments/overworld-dirt.png",
               "SortOrder": 0,
-              "Colour": ["#9e4539ff"]
+              "Colour": ["#9e4539"]
             },
             {
               "Name": "grass",
@@ -23,7 +23,7 @@
               "Frames": 1,
               "Filename": "environments/overworld-grass.png",
               "SortOrder": 1,
-              "Colour": ["#1ebc73ff"]
+              "Colour": ["#1ebc73"]
             }
           ]
         }]
