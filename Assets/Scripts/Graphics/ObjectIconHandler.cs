@@ -305,30 +305,32 @@ namespace JoyLib.Code.Graphics
                 {
                     ImageTexture imageTexture = new ImageTexture();
                     imageTexture.CreateFromImage(sheet.GetRect(new Rect2(x, y, size, size)), 2);
-                    if (imageTexture.GetData().GetData().All(b => b == 0))
+                    
+                    if (imageTexture.GetData().IsInvisible())
                     {
                         continue;
+                    }
+                    
+                    if (this.CachedTiles.ContainsKey(fileName))
+                    {
+                        if (this.CachedTiles[fileName].ContainsKey(p) == false)
+                        {
+                            this.CachedTiles[fileName].Add(p, imageTexture);
+                        }
+                    }
+                    else
+                    {
+                        this.CachedTiles.Add(
+                            fileName,
+                            new System.Collections.Generic.Dictionary<int, Texture>
+                            {
+                                {p, imageTexture}
+                            });
                     }
 
                     if (p >= position && p < position + frames)
                     {
                         sprites.Add(imageTexture);
-                        if (this.CachedTiles.ContainsKey(fileName))
-                        {
-                            if (this.CachedTiles[fileName].ContainsKey(p) == false)
-                            {
-                                this.CachedTiles[fileName].Add(p, imageTexture);
-                            }
-                        }
-                        else
-                        {
-                            this.CachedTiles.Add(
-                                fileName,
-                                new System.Collections.Generic.Dictionary<int, Texture>
-                                {
-                                    {p, imageTexture}
-                                });
-                        }
                     }
                     else if (p > position + frames)
                     {
