@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,10 +21,19 @@ namespace JoyLib.Code.Graphics
 
         protected JSONValueExtractor ValueExtractor { get; set; }
 
+        protected IDictionary<string, Texture> CachedTextures { get; set; }
+
+        //First key is the file name
+        //Second key is the position
+        //Value is the List of frames from that position
+        protected IDictionary<string, IDictionary<int, Texture>> CachedTiles { get; set; }
+
         public ObjectIconHandler(RNG roller)
         {
             this.Roller = roller;
             this.ValueExtractor = new JSONValueExtractor();
+            this.CachedTextures = new System.Collections.Generic.Dictionary<string, Texture>();
+            this.CachedTiles = new System.Collections.Generic.Dictionary<string, IDictionary<int, Texture>>();
             this.Load();
         }
 
@@ -129,7 +139,8 @@ namespace JoyLib.Code.Graphics
             List<SpriteData> spriteData = new List<SpriteData>();
             Dictionary tileSetDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(spriteDict, "TileSet");
             string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
-            ICollection<Dictionary> tileSetArray = this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
+            ICollection<Dictionary> tileSetArray =
+                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
             foreach (Dictionary dict in tileSetArray)
             {
                 try
@@ -142,6 +153,7 @@ namespace JoyLib.Code.Graphics
                     {
                         size = GlobalConstants.SPRITE_TEXTURE_SIZE;
                     }
+
                     string state = this.ValueExtractor.GetValueFromDictionary<string>(dict, "State") ?? "default";
                     Array partsArray = this.ValueExtractor.GetValueFromDictionary<Array>(dict, "Part");
                     ICollection<Dictionary> partDicts =
@@ -185,24 +197,11 @@ namespace JoyLib.Code.Graphics
                             colours.Add(new Color(code));
                         }
 
-                        Texture texture = GD.Load<Texture>(
-                            GlobalConstants.GODOT_ASSETS_FOLDER +
-                            GlobalConstants.SPRITES_FOLDER +
-                            fileName);
-
-                        Image image = texture.GetData();
-                        int frameWidth = texture.GetHeight();
-                        List<Texture> frames = new List<Texture>();
-                        int startPosition = position * frameWidth;
-                        int endPosition = (partFrames * frameWidth) + startPosition;
-                        for (int i = startPosition; i < endPosition; i += frameWidth)
-                        {
-                            ImageTexture imageTexture = new ImageTexture();
-                            imageTexture.CreateFromImage(image.GetRect(new Rect2(new Vector2(i, 0),
-                                new Vector2(frameWidth, frameWidth))), 2);
-                            imageTexture.ResourceLocalToScene = true;
-                            frames.Add(imageTexture);
-                        }
+                        List<Texture> frames = this.ChopSprites(
+                            fileName,
+                            this.TryGetTextureFromCache(fileName),
+                            partFrames,
+                            position);
 
                         int halfway = frames.Count / 2;
                         if (frames.Count > 1)
@@ -212,21 +211,6 @@ namespace JoyLib.Code.Graphics
                                 frames.Add(frames[i]);
                             }
                         }
-
-                        /*
-                        SpriteFrames spriteFrames = new SpriteFrames();
-                        if (spriteFrames.GetAnimationNames().Contains(state) == false)
-                        {
-                            spriteFrames.AddAnimation(state);
-                            spriteFrames.SetAnimationLoop(state, true);
-                            spriteFrames.SetAnimationSpeed(state, GlobalConstants.FRAMES_PER_SECOND);
-                        }
-
-                        for (int i = 0; i < frames.Count; i++)
-                        {
-                            spriteFrames.AddFrame(state, frames[i], i);
-                        }
-                        */
 
                         SpritePart part = new SpritePart
                         {
@@ -264,6 +248,98 @@ namespace JoyLib.Code.Graphics
             }
 
             return this.AddSpriteDataRange(tileSetName, spriteData);
+        }
+
+        protected Texture TryGetTextureFromCache(string fileName)
+        {
+            if (this.CachedTextures.ContainsKey(fileName))
+            {
+                return this.CachedTextures[fileName];
+            }
+
+            Texture texture = GD.Load<Texture>(
+                GlobalConstants.GODOT_ASSETS_FOLDER +
+                GlobalConstants.SPRITES_FOLDER +
+                fileName);
+            this.CachedTextures.Add(fileName, texture);
+            return texture;
+        }
+
+        protected List<Texture> ChopSprites(string fileName, Texture texture, int frames, int position)
+        {
+            List<Texture> sprites = new List<Texture>();
+
+            Image sheet = texture.GetData();
+            int width = sheet.GetWidth();
+            int height = sheet.GetHeight();
+            const int size = GlobalConstants.SPRITE_TEXTURE_SIZE;
+
+            int index = 0;
+            if (this.CachedTiles.ContainsKey(fileName))
+            {
+                if (this.CachedTiles[fileName].ContainsKey(position))
+                {
+                    for (index = position; index < position + frames; index++)
+                    {
+                        if (this.CachedTiles[fileName].ContainsKey(index))
+                        {
+                            sprites.Add(this.CachedTiles[fileName][index]);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (sprites.Count == frames)
+                    {
+                        return sprites;
+                    }
+                }
+            }
+
+            int p = 0;
+            for (int y = 0; y < height; y += size)
+            {
+                for (int x = 0; x < width; x += size)
+                {
+                    ImageTexture imageTexture = new ImageTexture();
+                    imageTexture.CreateFromImage(sheet.GetRect(new Rect2(x, y, size, size)), 2);
+                    if (imageTexture.GetData().GetData().All(b => b == 0))
+                    {
+                        continue;
+                    }
+
+                    if (p >= position && p < position + frames)
+                    {
+                        sprites.Add(imageTexture);
+                        if (this.CachedTiles.ContainsKey(fileName))
+                        {
+                            if (this.CachedTiles[fileName].ContainsKey(p) == false)
+                            {
+                                this.CachedTiles[fileName].Add(p, imageTexture);
+                            }
+                        }
+                        else
+                        {
+                            this.CachedTiles.Add(
+                                fileName,
+                                new System.Collections.Generic.Dictionary<int, Texture>
+                                {
+                                    {p, imageTexture}
+                                });
+                        }
+                    }
+                    else if (p > position + frames)
+                    {
+                        return sprites;
+                    }
+
+                    p++;
+                }
+            }
+
+            return sprites;
         }
 
         public IEnumerable<SpriteData> ReturnDefaultData()
