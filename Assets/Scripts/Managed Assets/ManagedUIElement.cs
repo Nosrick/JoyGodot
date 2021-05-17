@@ -455,7 +455,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 }
             }
 
-            int maxSortingOrder = this.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_SortingOrder);
             int minSortingOrder = this.CurrentSpriteState.SpriteData.Parts.Min(part => part.m_SortingOrder);
             for (int i = 0; i < partsCount; i++)
             {

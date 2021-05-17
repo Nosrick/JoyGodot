@@ -15,6 +15,8 @@ namespace JoyLib.Code.Godot
         protected IGUIManager GuiManager { get; set; }
 
         protected ManagedSprite SpeechBubble { get; set; }
+        
+        protected Area2D Collider { get; set; }
 
         public JoyObjectNode()
         {
@@ -25,6 +27,7 @@ namespace JoyLib.Code.Godot
             base._Ready();
 
             this.GuiManager = GlobalConstants.GameManager.GUIManager;
+            this.Collider = this.GetNode<Area2D>("Mouse Collision");
         }
 
         public void AttachJoyObject(IJoyObject joyObject)
@@ -44,6 +47,9 @@ namespace JoyLib.Code.Godot
             this.OverrideAllColours(state.SpriteData.GetRandomPartColours());
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
             this.Scale = new Vector2(scale, scale);
+            var shape = this.Collider.GetChild<CollisionShape2D>(0).Shape as RectangleShape2D;
+            shape.Extents = new Vector2(GlobalConstants.SPRITE_WORLD_SIZE * 1.8f, GlobalConstants.SPRITE_WORLD_SIZE * 1.8f);
+            this.MoveChild(this.Collider, this.GetChildCount() - 1);
         }
 
         public void SetSpeechBubble(bool on, ISpriteState need = null)
@@ -70,17 +76,17 @@ namespace JoyLib.Code.Godot
 
         public void OnPointerEnter()
         {
+            GlobalConstants.ActionLog.Log("MOUSE ON " + this.JoyObject.JoyName);
+            
             if (this.JoyObject.Tooltip.IsNullOrEmpty())
             {
                 return;
             }
 
-            GlobalConstants.ActionLog.Log("MOUSE ON " + this.JoyObject.JoyName);
-
             Tooltip tooltip = this.GuiManager.Tooltip;
             tooltip.Show(
                 this.JoyObject.JoyName,
-                this.JoyObject.States[0],
+                this.JoyObject.States.FirstOrDefault(),
                 this.JoyObject.Tooltip);
         }
 

@@ -60,7 +60,7 @@ namespace JoyLib.Code
             base._Ready();
             this.BegunInitialisation = true;
             
-            Input.SetMouseMode(Input.MouseMode.Hidden);
+            //Input.SetMouseMode(Input.MouseMode.Hidden);
 
             this.LoadingMessage = "Initialising object pools";
             Node2D worldHolder = this.GetNode<Node2D>("WorldHolder");

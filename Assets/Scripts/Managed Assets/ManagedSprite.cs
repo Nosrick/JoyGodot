@@ -6,8 +6,6 @@ using JoyGodot.addons.Managed_Assets;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
-using Thread = System.Threading.Thread;
-using Timer = Godot.Timer;
 using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Unity
@@ -95,6 +93,27 @@ namespace JoyLib.Code.Unity
         public override void _Ready()
         {
             this.Initialise();
+        }
+
+        public override void _PhysicsProcess(float delta)
+        {
+            base._PhysicsProcess(delta);
+
+            var player = GlobalConstants.GameManager.Player;
+
+            if (player is null)
+            {
+                return;
+            }
+
+            if (this.Material is ShaderMaterial shaderMaterial)
+            {
+                shaderMaterial.SetShaderParam("happiness", player.OverallHappiness);
+                foreach (ShaderMaterial childMaterial in this.Parts.Select(part => part.Material as ShaderMaterial))
+                {
+                    childMaterial?.SetShaderParam("happiness", player.OverallHappiness);
+                }
+            }
         }
 
         public virtual void Initialise()
@@ -270,7 +289,9 @@ namespace JoyLib.Code.Unity
                 {
                     AnimatedSprite newSprite = new AnimatedSprite
                     {
-                        Centered = true
+                        Centered = true,
+                        UseParentMaterial = true,
+                        Material = this.Material
                     };
                     this.Parts.Add(newSprite);
                     this.AddChild(newSprite);
@@ -280,6 +301,7 @@ namespace JoyLib.Code.Unity
                 }
             }
 
+            int minSortingOrder = this.CurrentSpriteState.SpriteData.Parts.Min(part => part.m_SortingOrder);
             for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
             {
                 AnimatedSprite animatedSprite = (AnimatedSprite) this.Parts[i];
@@ -290,6 +312,8 @@ namespace JoyLib.Code.Unity
                 {
                     Frames = new Array(spriteDataPart.m_FrameSprite)
                 };
+                int normaliseSortOrder = spriteDataPart.m_SortingOrder - minSortingOrder;
+                this.MoveChild(animatedSprite, normaliseSortOrder);
                 animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
                 animatedSprite.Play(this.CurrentSpriteState.SpriteData.State);
                 animatedSprite.Frame = 0;
