@@ -1,4 +1,5 @@
 ﻿using JoyLib.Code.Entities.Statistics;
+using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 
@@ -6,7 +7,7 @@ namespace JoyLib.Code.Entities.Needs
 {
     public interface INeed : IBasicValue<int>
     {
-
+        event ValueChangedEventHandler<int> ValueChanged; 
         bool FindFulfilmentObject(IEntity actor);
 
         bool Interact(IEntity actor, IJoyObject obj);

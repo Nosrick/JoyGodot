@@ -73,7 +73,26 @@ namespace JoyLib.Code.Entities
 
         protected NeedAIData m_CurrentTarget;
 
-        public float OverallHappiness => this.m_CachedHappiness;
+        public float OverallHappiness
+        {
+            get
+            {
+                if (this.HappinessIsDirty)
+                {
+                    float oldHappiness = this.m_CachedHappiness;
+                    this.m_CachedHappiness = this.CalculateOverallHappiness();
+                    this.HappinessChange?.Invoke(this, new ValueChangedEventArgs<float>
+                    {
+                        Delta = this.m_CachedHappiness - oldHappiness,
+                        Name = "Happiness",
+                        NewValue = this.m_CachedHappiness
+                    });
+                    this.HappinessIsDirty = false;
+                }
+
+                return this.m_CachedHappiness;
+            }
+        }
         protected float m_CachedHappiness;
 
         public bool HappinessIsDirty
@@ -250,6 +269,12 @@ namespace JoyLib.Code.Entities
 
             this.m_Needs = needs;
 
+            foreach (INeed need in this.m_Needs.Values)
+            {
+                need.ValueChanged -= this.MarkHappinessDirty;
+                need.ValueChanged += this.MarkHappinessDirty;
+            }
+
             this.m_Skills = skills;
 
             this.m_Abilities = template.Abilities.ToList();
@@ -361,6 +386,11 @@ namespace JoyLib.Code.Entities
 
             this.StatisticChange -= this.RecalculateDVs;
             this.StatisticChange += this.RecalculateDVs;
+            this.HappinessIsDirty = true;
+        }
+
+        protected void MarkHappinessDirty(object sender, ValueChangedEventArgs<int> args)
+        {
             this.HappinessIsDirty = true;
         }
 

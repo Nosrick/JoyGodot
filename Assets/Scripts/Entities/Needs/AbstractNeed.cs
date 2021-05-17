@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Godot;
 using JoyGodot.addons.Managed_Assets;
+using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
@@ -115,6 +116,7 @@ namespace JoyLib.Code.Entities.Needs
             }
         }
 
+        public event ValueChangedEventHandler<int> ValueChanged;
         public abstract bool FindFulfilmentObject(IEntity actor);
 
         public abstract INeed Copy();
@@ -153,6 +155,12 @@ namespace JoyLib.Code.Entities.Needs
         public int ModifyValue(int value)
         {
             this.m_Value = Math.Max(0, Math.Min(this.m_MaximumValue, this.m_Value + value));
+            this.ValueChanged?.Invoke(this, new ValueChangedEventArgs<int>
+            {
+                Delta = value,
+                Name = this.Name,
+                NewValue = this.m_Value
+            });
             return this.m_Value;
         }
 
