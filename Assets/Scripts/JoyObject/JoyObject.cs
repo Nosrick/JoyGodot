@@ -60,7 +60,18 @@ namespace JoyLib.Code
         protected List<ISpriteState> m_States;
 
         public List<IJoyAction> CachedActions { get; protected set; }
-        public JoyObjectNode MyNode { get; set; }
+
+        public JoyObjectNode MyNode
+        {
+            get => this.m_MyNode;
+            set
+            {
+                this.m_MyNode = value;
+                this.Move(this.WorldPosition);
+            }
+        }
+
+        protected JoyObjectNode m_MyNode;
 
         public IRollable Roller { get; protected set; }
 
@@ -222,6 +233,12 @@ namespace JoyLib.Code
         public void Move(Vector2Int newPosition)
         {
             this.WorldPosition = newPosition;
+
+            if (this.MyNode is null)
+            {
+                return;
+            }
+            this.MyNode.Position = (newPosition * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2;
         }
 
         public int DamageValue(string name, int value)

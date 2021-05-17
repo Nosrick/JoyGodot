@@ -805,7 +805,7 @@ namespace JoyLib.Code.Entities
         public new void Move(Vector2Int position)
         {
             base.Move(position);
-            foreach (IJoyObject joyObject in this.Contents)
+            foreach (IItemInstance joyObject in this.Contents)
             {
                 joyObject.Move(position);
             }

@@ -204,6 +204,8 @@ namespace JoyLib.Code.States
 
         public override void HandleInput(InputEvent @event)
         {
+            InputEvent action = @event;
+            
             bool hasMoved = false;
             IEntity player = this.m_ActiveWorld.Player;
 
@@ -221,12 +223,7 @@ namespace JoyLib.Code.States
             }
             */
 
-            if (!(@event is InputEventAction action))
-            {
-                return;
-            }
-
-            if (action.Action.Equals("auto turn", StringComparison.OrdinalIgnoreCase))
+            if (action.IsActionReleased("auto turn"))
             {
                 this.AutoTurn = !this.AutoTurn;
                 this.ManualAutoTurn = this.AutoTurn;
@@ -239,7 +236,7 @@ namespace JoyLib.Code.States
 
             Vector2Int newPlayerPoint = this.m_ActiveWorld.Player.WorldPosition;
 
-            if (action.Action.Equals("close all windows", StringComparison.OrdinalIgnoreCase))
+            if (action.IsActionReleased("close all windows"))
             {
                 if (this.GUIManager.AreAnyOpen() == false)
                 {
@@ -251,7 +248,7 @@ namespace JoyLib.Code.States
                 }
             }
 
-            if (action.Action.Equals("toggle inventory", StringComparison.OrdinalIgnoreCase))
+            if (action.IsActionReleased("toggle inventory"))
             {
                 this.GUIManager.ToggleGUI(GUINames.INVENTORY);
                 if (this.GUIManager.IsActive(GUINames.INVENTORY) == false)
@@ -259,19 +256,19 @@ namespace JoyLib.Code.States
                     this.GUIManager.CloseGUI(GUINames.INVENTORY_CONTAINER);
                 }
             }
-            else if (action.Action.Equals("toggle equipment", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("toggle equipment"))
             {
                 this.GUIManager.ToggleGUI(GUINames.EQUIPMENT);
             }
-            else if (action.Action.Equals("toggle journal", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("toggle journal"))
             {
                 this.GUIManager.ToggleGUI(GUINames.QUEST_JOURNAL);
             }
-            else if (action.Action.Equals("toggle job management", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("toggle job management"))
             {
                 this.GUIManager.ToggleGUI(GUINames.JOB_MANAGEMENT);
             }
-            else if (action.Action.Equals("toggle character sheet", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("toggle character sheet"))
             {
                 this.GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
             }
@@ -287,7 +284,7 @@ namespace JoyLib.Code.States
                 return;
             }
 
-            if (action.Action.Equals("interact", StringComparison.OrdinalIgnoreCase))
+            if (action.IsActionReleased("interact"))
             {
                 //Going up a level
                 if (this.m_ActiveWorld.Parent != null && player.WorldPosition == this.m_ActiveWorld.SpawnPoint &&
@@ -306,60 +303,60 @@ namespace JoyLib.Code.States
                 }
             }
 
-            if (action.Action.Equals("skip turn", StringComparison.OrdinalIgnoreCase))
+            if (action.IsActionReleased("skip turn"))
             {
                 this.Tick();
             }
             //North
-            else if (action.Action.Equals("N", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("N"))
             {
-                newPlayerPoint.y += 1;
+                newPlayerPoint.y -= 1;
                 hasMoved = true;
             }
             //North east
-            else if (action.Action.Equals("NE", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("NE"))
             {
                 newPlayerPoint.x += 1;
-                newPlayerPoint.y += 1;
+                newPlayerPoint.y -= 1;
                 hasMoved = true;
             }
             //East
-            else if (action.Action.Equals("E", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("E"))
             {
                 newPlayerPoint.x += 1;
                 hasMoved = true;
             }
             //South east
-            else if (action.Action.Equals("SE", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("SE"))
             {
                 newPlayerPoint.x += 1;
-                newPlayerPoint.y -= 1;
+                newPlayerPoint.y += 1;
                 hasMoved = true;
             }
             //South
-            else if (action.Action.Equals("S", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("S"))
             {
-                newPlayerPoint.y -= 1;
+                newPlayerPoint.y += 1;
                 hasMoved = true;
             }
             //South west
-            else if (action.Action.Equals("SW", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("SW"))
             {
                 newPlayerPoint.x -= 1;
-                newPlayerPoint.y -= 1;
+                newPlayerPoint.y += 1;
                 hasMoved = true;
             }
             //West
-            else if (action.Action.Equals("W", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("W"))
             {
                 newPlayerPoint.x -= 1;
                 hasMoved = true;
             }
             //North west
-            else if (action.Action.Equals("NW", StringComparison.OrdinalIgnoreCase))
+            else if (action.IsActionReleased("NW"))
             {
                 newPlayerPoint.x -= 1;
-                newPlayerPoint.y += 1;
+                newPlayerPoint.y -= 1;
                 hasMoved = true;
             }
 

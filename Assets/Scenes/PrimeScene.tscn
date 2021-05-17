@@ -15,14 +15,8 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[node name="Root" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 1
+[node name="Root" type="Node"]
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="WorldHolder" type="Node2D" parent="."]
 
@@ -46,10 +40,8 @@ z_index = 5
 [node name="Persistent UI" type="CanvasLayer" parent="."]
 
 [node name="Tooltip" parent="Persistent UI" instance=ExtResource( 2 )]
-visible = false
 CustomFont = SubResource( 1 )
 
 [node name="Cursor" parent="Persistent UI" instance=ExtResource( 1 )]
-visible = false
 
 [editable path="Persistent UI/Cursor"]

@@ -52,6 +52,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 Text = "Fill Needs"
 CustomFont = SubResource( 1 )
+ColourMultiplier = 0.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -70,6 +71,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 Text = "Empty Needs"
 CustomFont = SubResource( 2 )
+ColourMultiplier = 0.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),

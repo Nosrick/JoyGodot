@@ -43,6 +43,11 @@ namespace JoyLib.Code
             return left.x != right.x || left.y != right.y;
         }
 
+        public static Vector2Int operator *(Vector2Int left, int right)
+        {
+            return new Vector2Int(left.x * right, left.y * right);
+        }
+
         public static Vector2Int Zero => new Vector2Int(0, 0);
 
         public Vector2 ToVec2 => new Vector2(this.x, this.y);
