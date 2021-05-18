@@ -60,41 +60,6 @@ namespace JoyLib.Code.States
             };
             
             this.m_ActiveWorld.Initialise();
-            //int terrainLayer = LayerMask.NameToLayer("Terrain");
-            //Make the upstairs
-            if (this.m_ActiveWorld.Guid != this.m_Overworld.Guid)
-            {
-                ManagedSprite child = gameManager.FloorPool.Get();
-                child.Name = this.m_ActiveWorld.Parent.Name + " stairs";
-                //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
-                //tooltip.WorldPosition = this.m_ActiveWorld.SpawnPoint;
-                //tooltip.RefreshTooltip = WorldState.GetTooltipData;
-
-                child.Clear();
-                child.AddSpriteState(new SpriteState(
-                        child.Name,
-                    this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()));
-                child.Visible = true;
-                child.Position = new Vector2(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y) 
-                                 * GlobalConstants.SPRITE_WORLD_SIZE;
-            }
-
-            //Make each downstairs
-            foreach(KeyValuePair<Vector2Int, IWorldInstance> pair in this.m_ActiveWorld.Areas)
-            {
-                ManagedSprite child = gameManager.FloorPool.Get();
-                child.Name = pair.Value.Name + " stairs";
-                //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
-                //tooltip.WorldPosition = pair.Key;
-                child.Clear();
-                child.AddSpriteState(new SpriteState(
-                        child.Name,
-                    this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()), 
-                    true);
-                child.Visible = true;
-                child.Position = new Vector2(pair.Key.x, pair.Key.y)
-                                 * GlobalConstants.SPRITE_WORLD_SIZE;
-            }
 
             ISpriteState state = null;
             for(int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
@@ -127,6 +92,45 @@ namespace JoyLib.Code.States
                     floor.Position = intPos.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
                     floor.Visible = true;
                 }
+            }
+            
+            //Make the upstairs
+            if (this.m_ActiveWorld.Guid != this.m_Overworld.Guid)
+            {
+                ManagedSprite child = gameManager.FloorPool.Get();
+                child.Name = this.m_ActiveWorld.Parent.Name + " stairs";
+                //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
+                //tooltip.WorldPosition = this.m_ActiveWorld.SpawnPoint;
+                //tooltip.RefreshTooltip = WorldState.GetTooltipData;
+
+                child.Clear();
+                child.AddSpriteState(new SpriteState(
+                    child.Name,
+                    this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()));
+                child.Visible = true;
+                child.Position = new Vector2(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y) 
+                                 * GlobalConstants.SPRITE_WORLD_SIZE;
+                float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
+                child.Scale = new Vector2(scale, scale);
+            }
+
+            //Make each downstairs
+            foreach(KeyValuePair<Vector2Int, IWorldInstance> pair in this.m_ActiveWorld.Areas)
+            {
+                ManagedSprite child = gameManager.FloorPool.Get();
+                child.Name = pair.Value.Name + " stairs";
+                //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
+                //tooltip.WorldPosition = pair.Key;
+                child.Clear();
+                child.AddSpriteState(new SpriteState(
+                        child.Name,
+                        this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()), 
+                    true);
+                child.Visible = true;
+                child.Position = new Vector2(pair.Key.x, pair.Key.y)
+                                 * GlobalConstants.SPRITE_WORLD_SIZE;
+                float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
+                child.Scale = new Vector2(scale, scale);
             }
             
             //Create the walls
