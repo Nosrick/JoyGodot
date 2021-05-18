@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=7 format=2]
+[gd_resource type="VisualShader" load_steps=11 format=2]
 
 [sub_resource type="VisualShaderNodeScalarUniform" id=1]
 uniform_name = "happiness"
@@ -12,20 +12,33 @@ output_port_for_preview = 0
 function = 5
 
 [sub_resource type="VisualShaderNodeExpression" id=4]
-size = Vector2( 428.936, 215.4 )
+size = Vector2( 517, 317 )
 expression = "hsvOutput = hsvInput;
-hsvOutput.g = hsvOutput.g = saturation;"
+hsvOutput.g = saturation;"
 
-[sub_resource type="VisualShaderNodeScalarClamp" id=5]
-output_port_for_preview = 0
+[sub_resource type="VisualShaderNodeInput" id=5]
+input_name = "texture"
 
-[sub_resource type="VisualShaderNodeInput" id=6]
+[sub_resource type="VisualShaderNodeTexture" id=7]
 output_port_for_preview = 0
-input_name = "color"
+source = 5
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeVectorOp" id=9]
+operator = 2
+
+[sub_resource type="VisualShaderNodeInput" id=10]
+input_name = "modulate_color"
+
+[sub_resource type="VisualShaderNodeColorUniform" id=11]
+uniform_name = "tintColour"
+
+[sub_resource type="VisualShaderNodeScalarClamp" id=6]
+output_port_for_preview = 0
 
 [resource]
-code = "shader_type spatial;
-render_mode specular_schlick_ggx;
+code = "shader_type canvas_item;
+render_mode unshaded;
 
 uniform float happiness;
 
@@ -37,13 +50,27 @@ void vertex() {
 }
 
 void fragment() {
-// Input:9
-	vec3 n_out9p0 = COLOR.rgb;
+// Input:19
+
+// Texture:20
+	vec3 n_out20p0;
+	float n_out20p1;
+	{
+		vec4 TEXTURE_tex_read = texture(TEXTURE, UV.xy);
+		n_out20p0 = TEXTURE_tex_read.rgb;
+		n_out20p1 = TEXTURE_tex_read.a;
+	}
+
+// Input:23
+	vec3 n_out23p0 = MODULATE.rgb;
+
+// VectorOp:22
+	vec3 n_out22p0 = n_out20p0 * n_out23p0;
 
 // VectorFunc:16
 	vec3 n_out16p0;
 	{
-		vec3 c = n_out9p0;
+		vec3 c = n_out22p0;
 		vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
 		vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
 		vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
@@ -60,25 +87,26 @@ void fragment() {
 	float n_in6p2 = 1.00000;
 	float n_out6p0 = clamp(n_out11p0, n_in6p1, n_in6p2);
 
-// Expression:20
-	vec3 n_out20p0;
-	n_out20p0 = vec3(0.0, 0.0, 0.0);
+// Expression:18
+	vec3 n_out18p0;
+	n_out18p0 = vec3(0.0, 0.0, 0.0);
 	{
-		n_out20p0 = n_out16p0;
-		n_out20p0.g = n_out20p0.g = n_out6p0;
+		n_out18p0 = n_out16p0;
+		n_out18p0.g = n_out6p0;
 	}
 
 // VectorFunc:17
 	vec3 n_out17p0;
 	{
-		vec3 c = n_out20p0;
+		vec3 c = n_out18p0;
 		vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
 		vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
 		n_out17p0 = c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 	}
 
 // Output:0
-	ALBEDO = n_out17p0;
+	COLOR.rgb = n_out17p0;
+	COLOR.a = n_out20p1;
 
 }
 
@@ -87,23 +115,34 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -438, 68 )
-nodes/fragment/0/position = Vector2( 920, 120 )
-nodes/fragment/6/node = SubResource( 5 )
-nodes/fragment/6/position = Vector2( -100, 340 )
-nodes/fragment/9/node = SubResource( 6 )
-nodes/fragment/9/position = Vector2( -340, 100 )
+graph_offset = Vector2( -1809.3, -378.97 )
+mode = 1
+flags/light_only = false
+flags/unshaded = true
+nodes/fragment/0/position = Vector2( 0, 80 )
+nodes/fragment/6/node = SubResource( 6 )
+nodes/fragment/6/position = Vector2( -1300, 260 )
 nodes/fragment/11/node = SubResource( 1 )
-nodes/fragment/11/position = Vector2( -340, 440 )
+nodes/fragment/11/position = Vector2( -1500, 260 )
 nodes/fragment/16/node = SubResource( 2 )
-nodes/fragment/16/position = Vector2( -120, 120 )
+nodes/fragment/16/position = Vector2( -1040, 60 )
 nodes/fragment/17/node = SubResource( 3 )
-nodes/fragment/17/position = Vector2( 640, 120 )
-nodes/fragment/20/node = SubResource( 4 )
-nodes/fragment/20/position = Vector2( 100, 120 )
-nodes/fragment/20/size = Vector2( 428.936, 215.4 )
-nodes/fragment/20/input_ports = "0,1,hsvInput;1,0,saturation;"
-nodes/fragment/20/output_ports = "0,1,hsvOutput;"
-nodes/fragment/20/expression = "hsvOutput = hsvInput;
-hsvOutput.g = hsvOutput.g = saturation;"
-nodes/fragment/connections = PoolIntArray( 11, 0, 6, 0, 16, 0, 20, 0, 6, 0, 20, 1, 9, 0, 16, 0, 20, 0, 17, 0, 17, 0, 0, 0 )
+nodes/fragment/17/position = Vector2( -240, 160 )
+nodes/fragment/18/node = SubResource( 4 )
+nodes/fragment/18/position = Vector2( -800, 160 )
+nodes/fragment/18/size = Vector2( 517, 317 )
+nodes/fragment/18/input_ports = "0,1,hsvInput;1,0,saturation;"
+nodes/fragment/18/output_ports = "0,1,hsvOutput;"
+nodes/fragment/18/expression = "hsvOutput = hsvInput;
+hsvOutput.g = saturation;"
+nodes/fragment/19/node = SubResource( 5 )
+nodes/fragment/19/position = Vector2( -1660, -240 )
+nodes/fragment/20/node = SubResource( 7 )
+nodes/fragment/20/position = Vector2( -1460, -300 )
+nodes/fragment/22/node = SubResource( 9 )
+nodes/fragment/22/position = Vector2( -1220, 60 )
+nodes/fragment/23/node = SubResource( 10 )
+nodes/fragment/23/position = Vector2( -1520, 60 )
+nodes/fragment/24/node = SubResource( 11 )
+nodes/fragment/24/position = Vector2( -1520, 140 )
+nodes/fragment/connections = PoolIntArray( 19, 0, 20, 2, 20, 1, 0, 1, 22, 0, 16, 0, 16, 0, 18, 0, 11, 0, 6, 0, 6, 0, 18, 1, 18, 0, 17, 0, 17, 0, 0, 0, 20, 0, 22, 0, 23, 0, 22, 1 )

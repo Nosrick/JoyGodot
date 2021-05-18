@@ -1,42 +1,65 @@
-﻿using Godot;
+﻿using System.Linq;
+using Godot;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
 
 namespace JoyLib.Code.Godot
 {
     public class CheatInterface : GUIData
     {
+        protected IEntity Player { get; set; }
+
+        public override void _Ready()
+        {
+            base._Ready();
+            
+            this.Player = GlobalConstants.GameManager.Player;
+        }
+
         public void FillNeeds()
         {
-            var player = GlobalConstants.GameManager.Player;
-
-            if (player is null)
+            if (this.Player is null)
             {
                 return;
             }
 
-            foreach (var need in player.Needs.Values)
+            foreach (var need in this.Player.Needs.Values)
             {
-                need.Fulfill(need.HappinessThreshold);
+                need.SetValue(need.HappinessThreshold);
             }
 
-            player.HappinessIsDirty = true;
+            this.Player.HappinessIsDirty = true;
         }
 
         public void EmptyNeeds()
         {
-            var player = GlobalConstants.GameManager.Player;
-
-            if (player is null)
+            if (this.Player is null)
             {
                 return;
             }
 
-            foreach (var need in player.Needs.Values)
+            foreach (var need in this.Player.Needs.Values)
             {
-                need.Decay(need.HappinessThreshold);
+                need.SetValue(0);
             }
 
-            player.HappinessIsDirty = true;
+            this.Player.HappinessIsDirty = true;
+        }
+
+        public void EmptyOneNeed()
+        {
+            if (this.Player is null)
+            {
+                return;
+            }
+            
+            var need = this.Player.Needs.Values
+                .OrderByDescending(n => n.Value)
+                .First();
+            need.SetValue(0);
+            
+            this.Player.HappinessIsDirty = true;
         }
     }
 }

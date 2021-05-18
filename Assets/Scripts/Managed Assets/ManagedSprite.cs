@@ -203,8 +203,7 @@ namespace JoyLib.Code.Unity
         }
 
         public virtual void OverrideAllColours(
-            IDictionary<string,
-                Color> colours,
+            IDictionary<string, Color> colours,
             bool crossFade = false,
             float duration = 0.1f,
             bool modulateChildren = false)
@@ -224,7 +223,7 @@ namespace JoyLib.Code.Unity
                     {
                         this.ColourLerp(
                             this.Parts[i],
-                            this.SelfModulate,
+                            this.Modulate,
                             colour,
                             duration);
                     }
@@ -234,7 +233,7 @@ namespace JoyLib.Code.Unity
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.Parts[i].SelectedColour;
+                    this.Parts[i].Modulate = this.CurrentSpriteState.SpriteData.Parts[i].SelectedColour;
                 }
             }
 
@@ -317,7 +316,9 @@ namespace JoyLib.Code.Unity
                 animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
                 animatedSprite.Play(this.CurrentSpriteState.SpriteData.State);
                 animatedSprite.Frame = 0;
-                animatedSprite.SelfModulate = spriteDataPart.SelectedColour;
+                animatedSprite.Modulate = spriteDataPart.SelectedColour;
+                var spriteMaterial = animatedSprite.Material as ShaderMaterial;
+                spriteMaterial.SetShaderParam("tintColour", spriteDataPart.SelectedColour);
             }
         }
 
@@ -326,7 +327,7 @@ namespace JoyLib.Code.Unity
             Color originalColour,
             Color newColour,
             float duration,
-            string property = "self_modulate",
+            string property = "modulate",
             bool modulateChildren = false)
         {
             if (this.IsInsideTree() == false)
