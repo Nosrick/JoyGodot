@@ -269,7 +269,6 @@ namespace JoyLib.Code.Unity
                     this.Parts[i].Modulate = this.CurrentSpriteState.SpriteData.Parts[i].SelectedColour;
                 }
             }
-
             this.IsDirty = true;
         }
 
@@ -317,8 +316,6 @@ namespace JoyLib.Code.Unity
                 animatedSprite.Play(this.CurrentSpriteState.SpriteData.State);
                 animatedSprite.Frame = 0;
                 animatedSprite.Modulate = spriteDataPart.SelectedColour;
-                var spriteMaterial = animatedSprite.Material as ShaderMaterial;
-                spriteMaterial.SetShaderParam("tintColour", spriteDataPart.SelectedColour);
             }
         }
 
