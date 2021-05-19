@@ -3,7 +3,7 @@
 [sub_resource type="VisualShaderNodeScalarUniform" id=1]
 uniform_name = "happiness"
 
-[sub_resource type="VisualShaderNodeExpression" id=4]
+[sub_resource type="VisualShaderNodeExpression" id=2]
 size = Vector2( 517, 317 )
 expression = "hsvOutput = hsvInput;
 hsvOutput.g = saturation;
@@ -11,21 +11,21 @@ hsvOutput.g = saturation;
 float luma = dot(hsvInput, vec3(0.2126729, 0.7151522, 0.0721750));
 hsvOutput =  luma + saturation * (hsvInput - luma);"
 
-[sub_resource type="VisualShaderNodeInput" id=5]
+[sub_resource type="VisualShaderNodeInput" id=3]
 input_name = "texture"
 
-[sub_resource type="VisualShaderNodeTexture" id=6]
+[sub_resource type="VisualShaderNodeTexture" id=4]
 output_port_for_preview = 0
 source = 5
 texture_type = 1
 
-[sub_resource type="VisualShaderNodeVectorOp" id=7]
+[sub_resource type="VisualShaderNodeVectorOp" id=5]
 operator = 2
 
-[sub_resource type="VisualShaderNodeInput" id=8]
+[sub_resource type="VisualShaderNodeInput" id=6]
 input_name = "modulate_color"
 
-[sub_resource type="VisualShaderNodeScalarFunc" id=9]
+[sub_resource type="VisualShaderNodeScalarFunc" id=7]
 function = 18
 
 [resource]
@@ -87,14 +87,14 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -1143.51, -398.87 )
+graph_offset = Vector2( -952.888, -438.029 )
 mode = 1
 flags/light_only = false
 flags/unshaded = true
 nodes/fragment/0/position = Vector2( -400, -140 )
 nodes/fragment/11/node = SubResource( 1 )
 nodes/fragment/11/position = Vector2( -1500, 260 )
-nodes/fragment/18/node = SubResource( 4 )
+nodes/fragment/18/node = SubResource( 2 )
 nodes/fragment/18/position = Vector2( -980, 60 )
 nodes/fragment/18/size = Vector2( 517, 317 )
 nodes/fragment/18/input_ports = "0,1,hsvInput;1,0,saturation;"
@@ -104,14 +104,14 @@ hsvOutput.g = saturation;
 
 float luma = dot(hsvInput, vec3(0.2126729, 0.7151522, 0.0721750));
 hsvOutput =  luma + saturation * (hsvInput - luma);"
-nodes/fragment/19/node = SubResource( 5 )
+nodes/fragment/19/node = SubResource( 3 )
 nodes/fragment/19/position = Vector2( -1660, -240 )
-nodes/fragment/20/node = SubResource( 6 )
+nodes/fragment/20/node = SubResource( 4 )
 nodes/fragment/20/position = Vector2( -1460, -300 )
-nodes/fragment/22/node = SubResource( 7 )
+nodes/fragment/22/node = SubResource( 5 )
 nodes/fragment/22/position = Vector2( -1220, 60 )
-nodes/fragment/23/node = SubResource( 8 )
+nodes/fragment/23/node = SubResource( 6 )
 nodes/fragment/23/position = Vector2( -1520, 60 )
-nodes/fragment/24/node = SubResource( 9 )
+nodes/fragment/24/node = SubResource( 7 )
 nodes/fragment/24/position = Vector2( -1240, 260 )
 nodes/fragment/connections = PoolIntArray( 19, 0, 20, 2, 20, 1, 0, 1, 20, 0, 22, 0, 23, 0, 22, 1, 19, 0, 20, 2, 20, 1, 0, 1, 20, 0, 22, 0, 23, 0, 22, 1, 11, 0, 24, 0, 24, 0, 18, 1, 18, 0, 0, 0, 22, 0, 18, 0 )
