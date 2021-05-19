@@ -5,6 +5,7 @@ using Godot;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
@@ -14,7 +15,7 @@ namespace JoyLib.Code.World
     [Serializable]
     public class WorldInstance : IWorldInstance
     {
-        public event EventHandler OnTick;
+        public event EmptyEventHandler OnTick;
         
         protected WorldTile[,] m_Tiles;
         protected byte[,] m_Costs;
@@ -279,6 +280,8 @@ namespace JoyLib.Code.World
 
                 itemRef.InWorld = false;
                 itemRef.MyWorld = null;
+
+                //GlobalConstants.GameManager.ItemPool.Retire(itemRef.MyNode);
             }
 
             return removed;
@@ -302,7 +305,7 @@ namespace JoyLib.Code.World
                 s_DateTime = s_DateTime.AddSeconds(6.0);
             }
 
-            this.OnTick?.Invoke(this, EventArgs.Empty);
+            this.OnTick?.Invoke();
 
             this.IsDirty = false;
         }
@@ -496,6 +499,8 @@ namespace JoyLib.Code.World
             this.m_EntityGUIDs.Add(entityRef.Guid);
             this.EntityHandler.Add(entityRef);
 
+            this.OnTick += entityRef.Tick;
+
             //Initialise a new GameObject here at some point
 
             this.CalculatePlayerIndex();
@@ -513,6 +518,8 @@ namespace JoyLib.Code.World
                 return;
             }
 
+            this.OnTick -= entity.Tick;
+
             this.m_Entities.Remove(entity);
             this.m_EntityGUIDs.Remove(entity.Guid);
             if (destroy)
@@ -522,7 +529,7 @@ namespace JoyLib.Code.World
 
             this.CalculatePlayerIndex();
 
-            //GlobalConstants.GameManager?.EntityPool.Retire(entity.MonoBehaviourHandler.gameObject);
+            GlobalConstants.GameManager?.EntityPool.Retire(entity.MyNode);
 
             this.IsDirty = true;
         }

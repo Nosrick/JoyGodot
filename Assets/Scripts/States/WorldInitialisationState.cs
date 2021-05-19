@@ -62,6 +62,7 @@ namespace JoyLib.Code.States
             this.m_ActiveWorld.Initialise();
 
             ISpriteState state = null;
+            float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
             for(int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
             {
                 for(int j = 0; j < this.m_ActiveWorld.Tiles.GetLength(1); j++)
@@ -69,10 +70,11 @@ namespace JoyLib.Code.States
                     Vector2Int intPos = new Vector2Int(i, j);
                     
                     //Make the fog of war
-                    Sprite fog = gameManager.FogPool.Get();
-                    fog.Name = "Fog of War";
+                    PositionableSprite fog = gameManager.FogPool.Get();
+                    fog.Name = "Fog of War " + intPos;
                     fog.Visible = true;
-                    fog.Position = intPos.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
+                    fog.Scale = new Vector2(scale, scale);
+                    fog.Move(intPos);
                     
                     //Make the floor
                     ManagedSprite floor = gameManager.FloorPool.Get();
@@ -87,7 +89,6 @@ namespace JoyLib.Code.States
                     }
                     floor.Clear();
                     floor.AddSpriteState(state);
-                    float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / state.SpriteData.Size;
                     floor.Scale = new Vector2(scale, scale);
                     floor.Position = intPos.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
                     floor.Visible = true;
@@ -110,7 +111,6 @@ namespace JoyLib.Code.States
                 child.Visible = true;
                 child.Position = new Vector2(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y) 
                                  * GlobalConstants.SPRITE_WORLD_SIZE;
-                float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
                 child.Scale = new Vector2(scale, scale);
             }
 
@@ -129,7 +129,6 @@ namespace JoyLib.Code.States
                 child.Visible = true;
                 child.Position = new Vector2(pair.Key.x, pair.Key.y)
                                  * GlobalConstants.SPRITE_WORLD_SIZE;
-                float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
                 child.Scale = new Vector2(scale, scale);
             }
             

@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://Assets/Shaders/Fog of War.tres" type="Shader" id=1]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/canSee = null
+shader_param/darkColour = null
+shader_param/lightColour = Color( 1, 1, 1, 1 )
+shader_param/lightLevel = null
+shader_param/minimumLight = null
+shader_param/minimumComfort = null
+shader_param/maximumComfort = 32.0
+shader_param/maximumLight = 32.0

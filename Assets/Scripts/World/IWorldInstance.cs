@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
+using JoyLib.Code.Events;
 using JoyLib.Code.World.Lighting;
 
 namespace JoyLib.Code.World
@@ -52,6 +53,6 @@ namespace JoyLib.Code.World
         Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags);
         void AddArea(Vector2Int key, IWorldInstance value);
 
-        event EventHandler OnTick;
+        event EmptyEventHandler OnTick;
     }
 }

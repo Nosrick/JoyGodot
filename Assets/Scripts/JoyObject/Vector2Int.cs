@@ -48,6 +48,11 @@ namespace JoyLib.Code
             return new Vector2Int(left.x * right, left.y * right);
         }
 
+        public override string ToString()
+        {
+            return "{ " + this.x + " : " + this.y + " }";
+        }
+
         public static Vector2Int Zero => new Vector2Int(0, 0);
 
         public Vector2 ToVec2 => new Vector2(this.x, this.y);

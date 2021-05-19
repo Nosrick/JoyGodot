@@ -32,8 +32,8 @@ z_index = 2
 z_index = 3
 
 [node name="WorldFog" type="Node2D" parent="WorldHolder"]
-visible = false
-z_index = 5
+z_index = 120
+z_as_relative = false
 
 [node name="MainUI" type="CanvasLayer" parent="."]
 

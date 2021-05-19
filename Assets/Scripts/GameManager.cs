@@ -72,15 +72,13 @@ namespace JoyLib.Code
 
             PackedScene prefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn");
             PackedScene positionableSprite = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn");
-            Sprite fog = new Sprite
-            {
-                Texture = GD.Load<Texture>(GlobalConstants.GODOT_ASSETS_FOLDER + "Sprites/obscure.png")
-            };
+            PackedScene fog =
+                GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/Fog of War.tscn");
             this.FloorPool = new GameObjectPool<ManagedSprite>(positionableSprite, floorHolder);
             this.WallPool = new GameObjectPool<JoyObjectNode>(prefab, wallHolder);
             this.EntityPool = new GameObjectPool<JoyObjectNode>(prefab, entityHolder);
             this.ItemPool = new GameObjectPool<JoyObjectNode>(prefab, objectHolder);
-            this.FogPool = new GameObjectPool<Sprite>(fog, fogHolder);
+            this.FogPool = new GameObjectPool<PositionableSprite>(fog, fogHolder);
 
             this.MyNode = this;
 
@@ -276,7 +274,7 @@ namespace JoyLib.Code
         public GameObjectPool<JoyObjectNode> WallPool { get; protected set; }
         public GameObjectPool<JoyObjectNode> EntityPool { get; protected set; }
         public GameObjectPool<JoyObjectNode> ItemPool { get; protected set; }
-        public GameObjectPool<Sprite> FogPool { get; protected set; }
+        public GameObjectPool<PositionableSprite> FogPool { get; protected set; }
         
         //public CheatInterface Cheats { get; set; }
 

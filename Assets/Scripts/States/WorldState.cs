@@ -7,6 +7,7 @@ using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Events;
+using JoyLib.Code.Godot;
 using JoyLib.Code.IO;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Unity;
@@ -29,7 +30,7 @@ namespace JoyLib.Code.States
         protected const int TICK_TIMER = 50;
         protected double m_TickTimer;
 
-        protected readonly WorldSerialiser m_WorldSerialiser;
+        protected WorldSerialiser WorldSerialiser { get; set; }
 
         protected IGameManager GameManager { get; set; }
         protected IPhysicsManager PhysicsManager { get; set; }
@@ -40,9 +41,11 @@ namespace JoyLib.Code.States
 
         protected IJoyObject PrimaryTarget { get; set; }
 
+        protected Node FogOfWarHolder { get; set; }
+
         public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef) : base()
         {
-            this.m_WorldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
+            this.WorldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
 
             this.m_ActiveWorld = activeWorldRef;
             this.m_Overworld = overworldRef;
@@ -62,6 +65,8 @@ namespace JoyLib.Code.States
                 ZAsRelative = false
             };
             
+            this.FogOfWarHolder = this.GameManager.MyNode.FindNode("WorldFog");
+            
             GlobalConstants.GameManager.Player.MyNode.AddChild(this.m_Camera);
 
             //this.TickTimer = this.TickEvent();
@@ -72,6 +77,19 @@ namespace JoyLib.Code.States
             GlobalConstants.GameManager.Player.AliveChange += this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.ConsciousnessChange -= this.OnPlayerConsciousChange;
             GlobalConstants.GameManager.Player.ConsciousnessChange += this.OnPlayerConsciousChange;
+
+            var player = this.PlayerWorld.Player;
+            for (int i = 0; i < this.FogOfWarHolder.GetChildCount(); i++)
+            {
+                PositionableSprite fog = this.FogOfWarHolder.GetChild(i) as PositionableSprite;
+                ShaderMaterial shaderMaterial = fog?.Material as ShaderMaterial;
+                shaderMaterial?.SetShaderParam("darkColour", player.VisionProvider.DarkColour);
+                shaderMaterial?.SetShaderParam("lightColour", player.VisionProvider.LightColour);
+                shaderMaterial?.SetShaderParam("minimumLight", player.VisionProvider.MinimumLightLevel);
+                shaderMaterial?.SetShaderParam("minimumComfort", player.VisionProvider.MinimumComfortLevel);
+                shaderMaterial?.SetShaderParam("maximumComfort", player.VisionProvider.MaximumComfortLevel);
+                shaderMaterial?.SetShaderParam("maximumLight", player.VisionProvider.MaximumLightLevel);
+            }
 
             this.Tick();
         }
@@ -465,38 +483,30 @@ namespace JoyLib.Code.States
 
         protected void DrawObjects()
         {
-            /*
-            IEntity player = this.m_ActiveWorld.Player;
-            for (int i = 0; i < this.m_FogOfWarHolder.transform.childCount; i++)
+            var player = this.m_ActiveWorld.Player;
+            for (int i = 0; i < this.FogOfWarHolder.GetChildCount(); i++)
             {
-                GameObject fog = this.m_FogOfWarHolder.transform.GetChild(i).gameObject;
-                Vector2Int position = fog.GetComponent<GridPosition>().WorldPosition;
+                PositionableSprite fog = this.FogOfWarHolder.GetChild(i) as PositionableSprite;
+                ShaderMaterial shaderMaterial = fog?.Material as ShaderMaterial;
 
-                if (this.GameManager.Cheats.CheatBank.TryGetValue("fullbright", out bool cheat) && cheat)
+                bool canSee = player.VisionProvider.CanSee(player, this.m_ActiveWorld, fog.WorldPosition);
+                int lightLevel = this.m_ActiveWorld.LightCalculator.Light.GetLight(fog.WorldPosition);
+                shaderMaterial?.SetShaderParam("canSee", canSee);
+                shaderMaterial?.SetShaderParam("lightLevel", lightLevel);
+
+                if (fog.WorldPosition == player.WorldPosition)
                 {
-                    fog.GetComponent<SpriteRenderer>().color = Color.clear;
-                }
-                else
-                {
-                    bool canSee = player.VisionProvider.CanSee(player, this.m_ActiveWorld, position);
-                    if (canSee)
-                    {
-                        int lightLevel = this.m_ActiveWorld.LightCalculator.Light.GetLight(position);
-                        fog.GetComponent<SpriteRenderer>().color = LightLevelHelper.GetColour(
-                            lightLevel,
-                            player.VisionProvider);
-                    }
-                    else
-                    {
-                        fog.GetComponent<SpriteRenderer>().color = player.VisionProvider.DarkColour;
-                    }
+                    GD.Print(shaderMaterial.GetShaderParam("lightLevel"));
+                    GD.Print(shaderMaterial.GetShaderParam("canSee"));
+                    GD.Print(shaderMaterial.GetShaderParam("minimumComfort"));
+                    GD.Print(shaderMaterial.GetShaderParam("maximumComfort"));
                 }
             }
-            */
         }
 
         public override GameState GetNextState()
         {
+            this.TickTimer.Abort();
             //this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StopCoroutine(this.TickTimer);
             return new WorldDestructionState(this.m_Overworld, this.m_ActiveWorld);
         }

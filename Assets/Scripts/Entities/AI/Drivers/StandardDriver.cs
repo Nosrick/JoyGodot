@@ -3,6 +3,7 @@ using System.Linq;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Needs;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 
@@ -12,19 +13,18 @@ namespace JoyLib.Code.Entities.AI.Drivers
     {
         protected IJoyAction WanderAction { get; set; }
 
-        //protected IPhysicsManager PhysicsManager { get; set; }
+        protected IPhysicsManager PhysicsManager { get; set; }
         
         protected RNG Roller { get; set; }
         
         protected bool Initialised { get; set; }
 
-        /*
         public StandardDriver(IPhysicsManager physicsManager = null, RNG roller = null)
         {
+            this.PhysicsManager = physicsManager ?? GlobalConstants.GameManager.PhysicsManager;
             this.Roller = roller ?? new RNG();
             this.Initialise();
         }
-        */
 
         protected void Initialise()
         {
@@ -34,7 +34,6 @@ namespace JoyLib.Code.Entities.AI.Drivers
             }
 
             this.WanderAction = ScriptingEngine.Instance.FetchAction("wanderaction");
-            //this.PhysicsManager = GlobalConstants.GameManager.PhysicsManager;
             this.Initialised = true;
         }
 
