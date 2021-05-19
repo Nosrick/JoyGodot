@@ -77,8 +77,12 @@ namespace JoyLib.Code.Godot
         public void OnPointerEnter()
         {
             GlobalConstants.ActionLog.Log("MOUSE ON " + this.JoyObject.JoyName);
+
+            var player = GlobalConstants.GameManager.Player;
             
-            if (this.JoyObject.Tooltip.IsNullOrEmpty())
+            if (this.JoyObject.Tooltip.IsNullOrEmpty()
+                || player is null
+                || player.VisionProvider.HasVisibility(player, player.MyWorld, this.JoyObject.WorldPosition) == false)
             {
                 return;
             }
