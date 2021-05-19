@@ -316,6 +316,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Tooltip = this.PersistentRoot.GetNode<Tooltip>("Tooltip");
                 this.SetupManagedComponents(this.Tooltip);
             }
+            this.Add(this.Tooltip);
         }
 
         public void InstantiateUIScene(PackedScene ui)

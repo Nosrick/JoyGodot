@@ -5,7 +5,7 @@
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedLabel.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=18]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -16,9 +16,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 10 )
+default_font = SubResource( 18 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=17]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -57,7 +57,7 @@ __meta__ = {
 }
 VAlign = 1
 OverrideColour = true
-CustomFont = SubResource( 9 )
+CustomFont = SubResource( 17 )
 FontSize = 36
 FontColour = Color( 1, 1, 1, 1 )
 OutlineColour = Color( 0, 0, 0, 1 )

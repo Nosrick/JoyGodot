@@ -70,6 +70,11 @@ namespace JoyLib.Code.Unity.GUI
 
         public override void _Input(InputEvent @event)
         {
+            if (this.GUIManager is null)
+            {
+                this.GUIManager = GlobalConstants.GameManager?.GUIManager;
+            }
+            
             if (@event is InputEventMouseMotion motion)
             {
                 this.UpdatePosition(motion);
@@ -127,6 +132,7 @@ namespace JoyLib.Code.Unity.GUI
             bool showBackground = true)
         {
             this.Display();
+            this.GUIManager?.OpenGUI(this.Name);
             
             if (!string.IsNullOrEmpty(title))
             {
@@ -195,7 +201,8 @@ namespace JoyLib.Code.Unity.GUI
         protected void SetIcon(ISpriteState state)
         {
             this.Icon.Clear();
-            this.Icon.AddSpriteState(state, true);
+            this.Icon.AddSpriteState(state);
+            this.Icon.OverrideAllColours(state.SpriteData.GetCurrentPartColours());
         }
     }
 }

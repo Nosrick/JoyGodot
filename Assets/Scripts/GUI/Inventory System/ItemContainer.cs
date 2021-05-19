@@ -37,7 +37,7 @@ namespace JoyLib.Code.Unity
 
         [Export] protected bool m_MoveUsedItem = false;
 
-        [Export] protected List<MoveContainerPriority> m_ContainerNames;
+        protected List<MoveContainerPriority> m_ContainerNames;
         protected List<ItemContainer> MoveToContainers { get; set; }
         public bool MoveUsedItem => this.m_MoveUsedItem;
 
@@ -154,6 +154,7 @@ namespace JoyLib.Code.Unity
                         this.SlotParent.AddChild(instance);
                         this.Slots.Add(instance);
                         this.GUIManager.SetupManagedComponents(instance);
+                        instance.Container = this;
                     }
                 }
 

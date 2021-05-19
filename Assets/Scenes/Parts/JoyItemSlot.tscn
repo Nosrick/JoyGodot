@@ -18,16 +18,19 @@ __meta__ = {
 ElementName = "SlotSprite"
 
 [node name="Background" parent="." instance=ExtResource( 4 )]
+mouse_filter = 2
 
 [node name="Icon" parent="." instance=ExtResource( 4 )]
 margin_left = 4.0
 margin_top = 4.0
 margin_right = -4.0
 margin_bottom = -4.0
+mouse_filter = 2
 
 [node name="Cooldown Overlay" type="TextureProgress" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 value = 33.0
 texture_progress = ExtResource( 2 )
 fill_mode = 5
@@ -38,10 +41,10 @@ __meta__ = {
 }
 
 [node name="Stack" type="Label" parent="."]
+anchor_top = 0.7
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
-margin_top = 45.0
 margin_right = -5.0
 margin_bottom = -5.0
 custom_fonts/font = ExtResource( 3 )
