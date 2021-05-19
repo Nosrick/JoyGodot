@@ -29,6 +29,11 @@ namespace JoyGodot.addons.Managed_Assets
             return colours;
         }
 
+        public IDictionary<string, Color> GetCurrentPartColours()
+        {
+            return this.Parts.ToDictionary(part => part.m_Name, part => part.SelectedColour);
+        }
+
         /*
         public void Dispose()
         {

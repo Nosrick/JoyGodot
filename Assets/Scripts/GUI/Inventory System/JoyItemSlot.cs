@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Entities;
@@ -9,7 +10,7 @@ namespace JoyLib.Code.Unity.GUI
 {
     public class JoyItemSlot : Control, IManagedElement
     {
-        protected TextureProgress m_CooldownOverlay;
+        protected TextureProgress CooldownOverlay { get; set; }
         
         [Export]
         public string ElementName { get; protected set; }
@@ -22,9 +23,9 @@ namespace JoyLib.Code.Unity.GUI
         [Export]
         protected bool m_UseRarityColor = false;
         
-        protected ManagedUIElement m_Icon;
+        protected ManagedUIElement Icon { get; set; }
         
-        protected Label m_Stack;
+        protected Label StackLabel { get; set; }
         
         public ItemContainer Container { get; set; }
 
@@ -49,7 +50,7 @@ namespace JoyLib.Code.Unity.GUI
         
         //public IConversationEngine ConversationEngine { get; set; }
 
-        public IGUIManager GUIManager { get; set; }
+        public IGUIManager GuiManager { get; set; }
 
         public ILiveEntityHandler EntityHandler { get; set; }
 
@@ -57,12 +58,13 @@ namespace JoyLib.Code.Unity.GUI
         
         protected static DragObject DragObject { get; set; }
 
-        public void OnEnable()
+        public override void _Ready()
         {
+            base._Ready();
             this.GetBits();
-            this.m_CooldownOverlay.Visible = false;
+            this.CooldownOverlay.Visible = false;
 
-            this.m_Icon._Ready();
+            this.Icon._Ready();
         }
         
         public void Initialise()
@@ -84,39 +86,30 @@ namespace JoyLib.Code.Unity.GUI
             }
             */
             UnstackActions = InputMap.GetActionList("unstack");
-            this.m_Stack = (Label) this.FindNode("Stack");
-            this.m_Icon = new ManagedUIElement
-            {
-                AnchorTop = 0.1f, 
-                AnchorBottom = 0.9f, 
-                AnchorRight = 0.9f, 
-                AnchorLeft = 0.1f,
-                MarginTop = 0,
-                MarginBottom = 0,
-                MarginLeft = 0,
-                MarginRight = 0
-            };
-            this.m_Icon._Ready();
+            this.CooldownOverlay = this.GetNode<TextureProgress>("Cooldown Overlay");
+            this.StackLabel = this.GetNode<Label>("Stack");
+            this.Icon = this.GetNode<ManagedUIElement>("Icon");
+            
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
+            this.GuiManager = GlobalConstants.GameManager.GUIManager;
             this.Initialised = true;
-            /*this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
-            this.GUIManager = GlobalConstants.GameManager.GUIManager;
-            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;*/
         }
 
         public virtual void Repaint()
         {
-            if (this.m_Icon is null == false)
+            if (this.Icon is null == false)
             {
                 if (!this.IsEmpty)
                 {
-                    this.m_Icon.Clear();
-                    this.m_Icon.AddSpriteState(this.Item.States[0]);
-                    this.m_Icon.Visible = true;
+                    this.Icon.Clear();
+                    this.Icon.AddSpriteState(this.Item.States.FirstOrDefault());
+                    this.Icon.OverrideAllColours(this.Item.States.FirstOrDefault()?.SpriteData.GetCurrentPartColours());
+                    this.Icon.Visible = true;
                 }
                 else
                 {
-                    this.m_Icon.Clear();
-                    this.m_Icon.Visible = false;
+                    this.Icon.Clear();
+                    this.Icon.Visible = false;
                 }
             }
         }
@@ -155,7 +148,8 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            if (action.Action.Equals("begin drag", StringComparison.OrdinalIgnoreCase))
+            if (action.Action.Equals("begin drag", StringComparison.OrdinalIgnoreCase)
+                && this.Container?.CanDrag == true)
             {
                 this.OnBeginDrag();
             }
@@ -237,7 +231,7 @@ namespace JoyLib.Code.Unity.GUI
                         SourceContainer = this.Container,
                         SourceSlot = this
                     };
-                    Cursor cursor = (Cursor)this.GUIManager.OpenGUI(GUINames.CURSOR);
+                    Cursor cursor = (Cursor)this.GuiManager.OpenGUI(GUINames.CURSOR);
                     cursor.DragObject?.Clear();
                     cursor.DragObject?.AddSpriteState(this.Item.States[0]);
                 }
@@ -295,7 +289,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             */
 
-            Cursor cursor = this.GUIManager.Get(GUINames.CURSOR) as Cursor;
+            Cursor cursor = this.GuiManager.Get(GUINames.CURSOR) as Cursor;
             cursor?.DragObject?.Clear();
             this.EndDrag();
         }
@@ -307,7 +301,7 @@ namespace JoyLib.Code.Unity.GUI
         
         public virtual void OnPointerEnter()
         {
-            if (this.GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
+            if (this.GuiManager.IsActive(GUINames.CONTEXT_MENU) == false)
             {
                 this.ShowTooltip();
             }
@@ -322,10 +316,10 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Container.ShowTooltips && this.Item is null == false)
             {
-                ((Tooltip) this.GUIManager.OpenGUI(GUINames.TOOLTIP))
+                ((Tooltip) this.GuiManager.OpenGUI(GUINames.TOOLTIP))
                     .Show(
                         this.Item.DisplayName,
-                        this.Item.States[0],
+                        this.Item.States.FirstOrDefault(),
                         this.Item.Tooltip);
             }
         }
@@ -334,7 +328,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Container.ShowTooltips)
             {
-                this.GUIManager.CloseGUI(GUINames.TOOLTIP);
+                this.GuiManager.CloseGUI(GUINames.TOOLTIP);
             }
         }
 

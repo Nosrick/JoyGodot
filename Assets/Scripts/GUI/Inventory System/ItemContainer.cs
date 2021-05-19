@@ -12,9 +12,13 @@ namespace JoyLib.Code.Unity
 {
     public class ItemContainer : GUIData
     {
+        public bool DynamicContainer => this.m_DynamicContainer;
+        
+        [Export] protected bool m_DynamicContainer;
+        
         [Export] protected string m_UseAction;
-        [Export] protected BoxContainer m_SlotParent;
-        [Export] protected JoyItemSlot m_SlotPrefab;
+        protected GridContainer SlotParent { get; set; }
+        protected PackedScene SlotPrefab { get; set; }
 
         [Export] protected bool m_CanDrag = false;
         public bool CanDrag => this.m_CanDrag;
@@ -85,20 +89,27 @@ namespace JoyLib.Code.Unity
             return 0;
         }
 
+        public override void _Ready()
+        {
+            base._Ready();
+            
+            this.SlotParent = this.FindNode("Slot Grid") as GridContainer;
+            this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyItemSlot.tscn");
+            this.OnEnable();
+        }
+
         public virtual void OnEnable()
         {
-            /*
             if (GlobalConstants.GameManager is null)
             {
                 return;
             }
 
             this.GUIManager = GlobalConstants.GameManager.GUIManager;
-            */
             if (this.Slots is null)
             {
                 this.Slots = new List<JoyItemSlot>();
-                Array children = this.GetChildren();
+                Array children = this.SlotParent.GetChildren();
                 foreach (var child in children)
                 {
                     if (child is JoyItemSlot slot)
@@ -131,7 +142,6 @@ namespace JoyLib.Code.Unity
             {
                 foreach (JoyItemSlot slot in this.Slots)
                 {
-                    slot.OnEnable();
                     slot.Container = this;
                     slot.Item = null;
                 }
@@ -140,7 +150,10 @@ namespace JoyLib.Code.Unity
                 {
                     for (int i = this.Slots.Count; i < container.Contents.Count(); i++)
                     {
-                        this.Slots.Add((JoyItemSlot) this.m_SlotPrefab.Duplicate());
+                        var instance = this.SlotPrefab.Instance() as JoyItemSlot;
+                        this.SlotParent.AddChild(instance);
+                        this.Slots.Add(instance);
+                        this.GUIManager.SetupManagedComponents(instance);
                     }
                 }
 
@@ -274,7 +287,7 @@ namespace JoyLib.Code.Unity
             }
             else
             {
-                this.m_SlotParent.AddChild(slot);
+                this.SlotParent.AddChild(slot);
                 this.Slots.Add(slot);
                 return true;
             }
@@ -335,11 +348,11 @@ namespace JoyLib.Code.Unity
                 return false;
             }
 
-            if (item is ItemInstance instance && instance.Guid != this.Owner.Guid)
+            if (item is IItemInstance instance && instance.Guid != this.Owner.Guid)
             {
                 if (this.Owner is IItemContainer container)
                 {
-                    if (container.CanAddContents(instance) | container.Contains(instance))
+                    if (container.CanAddContents(instance) || container.Contains(instance))
                     {
                         container.AddContents(instance);
                         IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
@@ -354,7 +367,7 @@ namespace JoyLib.Code.Unity
                         {
                             this.Slots.First(slot => slot.IsEmpty).Item = instance;
                         }
-                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
+                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs {Item = item});
                         return true;
                     }
                 }
@@ -521,11 +534,10 @@ namespace JoyLib.Code.Unity
         public virtual event ItemRemovedEventHandler OnRemoveItem;
     }
 
-    [Serializable]
-    public class MoveContainerPriority
+    public struct MoveContainerPriority
     {
-        public string m_ContainerName;
-        public int m_Priority;
-        public bool m_RequiresVisibility;
+        [Export] public string m_ContainerName;
+        [Export] public int m_Priority;
+        [Export] public bool m_RequiresVisibility;
     }
 }

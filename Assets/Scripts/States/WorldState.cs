@@ -67,9 +67,8 @@ namespace JoyLib.Code.States
             
             this.FogOfWarHolder = this.GameManager.MyNode.FindNode("WorldFog");
             
-            GlobalConstants.GameManager.Player.MyNode.AddChild(this.m_Camera);
+            GlobalConstants.GameManager?.Player?.MyNode?.AddChild(this.m_Camera);
 
-            //this.TickTimer = this.TickEvent();
             this.TickTimer = new Thread(this.TickEvent);
             this.TickTimer.Start();
 
@@ -109,7 +108,8 @@ namespace JoyLib.Code.States
             this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
             this.GUIManager.OpenGUI(GUINames.ACTION_LOG);
 
-            //this.GUIManager.Get(GUINames.INVENTORY).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
+            var inventory = this.GUIManager.Get(GUINames.INVENTORY) as ItemContainer;
+            inventory.Owner = this.PlayerWorld.Player;
             //GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
 
             /*
@@ -499,7 +499,6 @@ namespace JoyLib.Code.States
         public override GameState GetNextState()
         {
             this.TickTimer.Abort();
-            //this.GameManager.MyGameObject.GetComponent<MonoBehaviour>().StopCoroutine(this.TickTimer);
             return new WorldDestructionState(this.m_Overworld, this.m_ActiveWorld);
         }
 

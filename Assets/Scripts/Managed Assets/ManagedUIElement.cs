@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Godot;
 using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code;
@@ -326,6 +327,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             bool modulateChildren = false)
         {
             this.Initialise();
+
+            if (colours.IsNullOrEmpty())
+            {
+                return;
+            }
 
             if (this.CurrentSpriteState is null)
             {
