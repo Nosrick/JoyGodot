@@ -87,8 +87,7 @@ namespace JoyLib.Code.Godot
                 return;
             }
 
-            Tooltip tooltip = this.GuiManager.Tooltip;
-            tooltip.Show(
+            this.GuiManager.Tooltip?.Show(
                 this.JoyObject.JoyName,
                 this.JoyObject.States.FirstOrDefault(),
                 this.JoyObject.Tooltip);

@@ -219,12 +219,6 @@ namespace JoyLib.Code.Unity.GUI
         
         public void OnPointerEnter()
         {
-            if (Input.IsActionPressed("tooltip_show") == false
-                || this.Tooltip.IsNullOrEmpty())
-            {
-                return;
-            }
-            
             GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
                 this.Name,
                 null,

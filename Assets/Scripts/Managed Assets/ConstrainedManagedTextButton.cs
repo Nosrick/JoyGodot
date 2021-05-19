@@ -51,12 +51,6 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         {
             base.OnPointerEnter();
             
-            if (Input.IsActionPressed("tooltip_show") == false
-                || this.Tooltip.IsNullOrEmpty())
-            {
-                return;
-            }
-            
             GlobalConstants.GameManager.GUIManager.Tooltip.Show(
                 this.Name,
                 null,

@@ -44,7 +44,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (child is GUIData data)
                 {
-                    data.Show();
+                    data.Display();
                 }
             }
 

@@ -41,6 +41,8 @@ namespace JoyLib.Code.Unity.GUI
         protected Control MainContainer { get; set; }
         protected BoxContainer ContentContainer { get; set; }
         protected List<Label> ItemCache { get; set; }
+        
+        protected bool ShouldShow { get; set; }
 
         public override void _Ready()
         {
@@ -73,6 +75,26 @@ namespace JoyLib.Code.Unity.GUI
             if (this.GUIManager is null)
             {
                 this.GUIManager = GlobalConstants.GameManager?.GUIManager;
+            }
+
+            bool actionPressed = Input.IsActionPressed("tooltip_show");
+            
+            if (actionPressed && this.ShouldShow == false)
+            {
+                this.ShouldShow = true;
+            }
+            else if (actionPressed == false && this.ShouldShow)
+            {
+                this.ShouldShow = false;
+            }
+
+            if (this.ShouldShow)
+            {
+                this.GUIManager?.OpenGUI(this.Name);
+            }
+            else
+            {
+                this.GUIManager?.CloseGUI(this.Name);
             }
             
             if (@event is InputEventMouseMotion motion)
@@ -131,9 +153,12 @@ namespace JoyLib.Code.Unity.GUI
             ICollection<string> data = null, 
             bool showBackground = true)
         {
-            this.Display();
-            this.GUIManager?.OpenGUI(this.Name);
-            
+            if (this.ShouldShow)
+            {
+                this.Display();
+                this.GUIManager?.OpenGUI(this.Name);
+            }
+
             if (!string.IsNullOrEmpty(title))
             {
                 this.Title.Visible = true;
@@ -196,6 +221,12 @@ namespace JoyLib.Code.Unity.GUI
             }
            
             this.Background.Visible = showBackground;
+        }
+
+        public override void Close()
+        {
+            this.ShouldShow = false;
+            base.Close();
         }
 
         protected void SetIcon(ISpriteState state)

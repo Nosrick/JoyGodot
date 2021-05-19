@@ -478,7 +478,7 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
 
-            toOpen.Show();
+            toOpen.Display();
 
             this.ActiveGUIs.Add(toOpen);
 
