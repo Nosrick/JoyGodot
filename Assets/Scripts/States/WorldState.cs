@@ -489,18 +489,10 @@ namespace JoyLib.Code.States
                 PositionableSprite fog = this.FogOfWarHolder.GetChild(i) as PositionableSprite;
                 ShaderMaterial shaderMaterial = fog?.Material as ShaderMaterial;
 
-                bool canSee = player.VisionProvider.CanSee(player, this.m_ActiveWorld, fog.WorldPosition);
+                bool canSee = player.VisionProvider.HasVisibility(player, this.m_ActiveWorld, fog.WorldPosition);
                 int lightLevel = this.m_ActiveWorld.LightCalculator.Light.GetLight(fog.WorldPosition);
                 shaderMaterial?.SetShaderParam("canSee", canSee);
                 shaderMaterial?.SetShaderParam("lightLevel", lightLevel);
-
-                if (fog.WorldPosition == player.WorldPosition)
-                {
-                    GD.Print(shaderMaterial.GetShaderParam("lightLevel"));
-                    GD.Print(shaderMaterial.GetShaderParam("canSee"));
-                    GD.Print(shaderMaterial.GetShaderParam("minimumComfort"));
-                    GD.Print(shaderMaterial.GetShaderParam("maximumComfort"));
-                }
             }
         }
 
