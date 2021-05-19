@@ -499,9 +499,8 @@ namespace JoyLib.Code.World
             this.m_EntityGUIDs.Add(entityRef.Guid);
             this.EntityHandler.Add(entityRef);
 
+            this.OnTick -= entityRef.Tick;
             this.OnTick += entityRef.Tick;
-
-            //Initialise a new GameObject here at some point
 
             this.CalculatePlayerIndex();
             this.IsDirty = true;
