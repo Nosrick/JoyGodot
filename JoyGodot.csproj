@@ -74,7 +74,4 @@
     <Content Include="Assets\Scenes\LoadingScreen.tscn" />
     <Content Include="Assets\Scenes\MainGame.tscn" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Scripts\Godot\EditorPlugins" />
-  </ItemGroup>
 </Project>
