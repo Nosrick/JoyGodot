@@ -24,7 +24,7 @@
           },
           {
             "Name": "border",
-            "Filename": "UI/background-border.png",
+            "Filename": "UI/background-border-smooth.png",
             "Data": [
               "default"
             ],
