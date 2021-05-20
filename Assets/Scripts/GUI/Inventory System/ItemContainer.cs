@@ -171,6 +171,12 @@ namespace JoyLib.Code.Unity
             }
         }
 
+        public override void Display()
+        {
+            this.OnEnable();
+            base.Display();
+        }
+
         public void OnDisable()
         {
             this.GUIManager?.CloseGUI(GUINames.TOOLTIP);
