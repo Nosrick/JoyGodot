@@ -18,14 +18,7 @@ namespace Code.Unity.GUI.Managed_Assets
         public string ElementName
         {
             get => this.m_ElementName;
-            set
-            {
-                this.m_ElementName = value ?? "None";
-                if (this.Element is null == false)
-                {
-                    this.Element.ElementName = this.m_ElementName;
-                }
-            } 
+            set => this.m_ElementName = value ?? "None";
         }
 
         protected string m_ElementName;
@@ -292,8 +285,8 @@ namespace Code.Unity.GUI.Managed_Assets
                 GD.Print("Creating managed UI element");
                 if (ElementPrefab is null)
                 {
-                    GD.Print("ManagedUIElement prefab is null, creating from code node!");
-                    GD.Print("Prepare for trouble!");
+                    //GD.Print("ManagedUIElement prefab is null, creating from code node!");
+                    //GD.Print("Prepare for trouble!");
                     this.m_Element = new ManagedUIElement();
                 }
                 else
@@ -308,7 +301,6 @@ namespace Code.Unity.GUI.Managed_Assets
                 }
 
                 this.m_Element.Name = "Element";
-                this.m_Element.ElementName = this.m_ElementName;
                 this.m_Element.AnchorBottom = 1;
                 this.m_Element.AnchorRight = 1;
                 this.m_Element.MouseFilter = MouseFilterEnum.Ignore;
