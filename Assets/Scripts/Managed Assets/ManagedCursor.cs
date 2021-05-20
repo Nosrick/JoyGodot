@@ -22,10 +22,13 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 this.DragObject.Clear();
                 if (value is null)
                 {
+                    this.DragObject.Visible = false;
                     return;
                 }
                 
                 this.DragObject.AddSpriteState(value);
+                this.DragObject.OverrideAllColours(value.SpriteData.GetCurrentPartColours());
+                this.DragObject.Visible = true;
             }
         }
 
