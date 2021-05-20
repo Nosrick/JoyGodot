@@ -363,6 +363,12 @@ namespace JoyLib.Code.Unity.GUI
             this.SetupManagedComponents(gui);
 
             this.GUIs.Add(gui);
+
+            if (gui.Visible)
+            {
+                this.ActiveGUIs.Add(gui);
+            }
+            
             return true;
         }
 
@@ -479,7 +485,7 @@ namespace JoyLib.Code.Unity.GUI
                 return null;
             }
 
-            if (toOpen.m_ClosesOthers)
+            if (toOpen.ClosesOthers)
             {
                 List<GUIData> activeCopy = new List<GUIData>(this.ActiveGUIs);
                 foreach (GUIData widget in activeCopy)
@@ -510,7 +516,7 @@ namespace JoyLib.Code.Unity.GUI
             GUIData toClose = this.ActiveGUIs
                 .First(gui => gui.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
 
-            if (toClose.m_AlwaysOpen)
+            if (toClose.AlwaysOpen)
             {
                 return;
             }
@@ -528,7 +534,7 @@ namespace JoyLib.Code.Unity.GUI
 
             GUIData toClose = this.ActiveGUIs.First(data => data.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-            if (toClose.m_AlwaysOpen)
+            if (toClose.AlwaysOpen)
             {
                 return false;
             }
@@ -547,7 +553,7 @@ namespace JoyLib.Code.Unity.GUI
             GUIData toFront = this.ActiveGUIs.First(g => g.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             foreach (GUIData gui in this.ActiveGUIs)
             {
-                if (toFront.Equals(gui) || gui.m_AlwaysOnTop)
+                if (toFront.Equals(gui) || gui.AlwaysOnTop)
                 {
                     continue;
                 }
@@ -556,7 +562,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             GUIData[] found = this.ActiveGUIs
-                .Where(data => data.m_AlwaysOpen == false)
+                .Where(data => data.AlwaysOpen == false)
                 .ToArray();
             if (found.Any())
             {
@@ -568,7 +574,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             GUIData[] toClose = this.ActiveGUIs
                 .Where(gui => gui.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false
-                              && gui.m_AlwaysOpen == false)
+                              && gui.AlwaysOpen == false)
                 .ToArray();
 
             foreach (GUIData data in toClose)
@@ -581,7 +587,7 @@ namespace JoyLib.Code.Unity.GUI
         public void CloseAllGUIs()
         {
             GUIData[] toClose = this.ActiveGUIs
-                .Where(gui => gui.m_AlwaysOpen == false)
+                .Where(gui => gui.AlwaysOpen == false)
                 .ToArray();
 
             foreach (GUIData data in toClose)
@@ -589,12 +595,12 @@ namespace JoyLib.Code.Unity.GUI
                 data.Close();
             }
 
-            this.ActiveGUIs.RemoveWhere(guiData => guiData.m_AlwaysOpen == false);
+            this.ActiveGUIs.RemoveWhere(guiData => guiData.AlwaysOpen == false);
         }
 
         public bool RemovesControl()
         {
-            return this.ActiveGUIs.Any(gui => gui.m_RemovesControl);
+            return this.ActiveGUIs.Any(gui => gui.RemovesControl);
         }
 
         public bool IsActive(string name)
@@ -609,7 +615,7 @@ namespace JoyLib.Code.Unity.GUI
                 return this.ActiveGUIs.Count > 0;
             }
 
-            return this.ActiveGUIs.Count(data => data.m_AlwaysOpen == false) > 0;
+            return this.ActiveGUIs.Count(data => data.AlwaysOpen == false) > 0;
         }
 
         public void Dispose()

@@ -48,8 +48,6 @@ namespace JoyLib.Code.Unity.GUI
 
         public ILiveEntityHandler EntityHandler { get; set; }
 
-        protected IEntity Player { get; set; }
-
         protected static DragObject DragObject { get; set; }
 
         public override void _Ready()
@@ -161,7 +159,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.OnEndDrag();
             }
-            else if (action.ButtonIndex == (int) ButtonList.Right)
+            else if (action.ButtonIndex == (int) ButtonList.Right
+                && this.Item is null == false)
             {
                 if (this.Container.UseContextMenu)
                 {
@@ -340,9 +339,8 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
             
-            this.Player.MyWorld.AddObject(this.Item);
+            GlobalConstants.GameManager.Player.MyWorld.AddObject(this.Item);
             this.Container.RemoveItem(this.Item);
-            this.Item.InWorld = true;
             this.Item = null;
         }
 

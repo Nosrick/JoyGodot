@@ -10,38 +10,8 @@ namespace Code.Unity.GUI.Managed_Assets
     [Tool]
 #endif
     public class ManagedButton :
-        Control,
-        IColourableElement,
-        ISpriteStateElement
+        ManagedUIElement
     {
-        [Export]
-        public string ElementName
-        {
-            get => this.m_ElementName;
-            set => this.m_ElementName = value ?? "None";
-        }
-
-        protected string m_ElementName;
-        public bool Initialised { get; protected set; }
-
-        protected ManagedUIElement Element
-        {
-            get
-            {
-                if (this.m_Element is null)
-                {
-                    this.Initialise();
-                }
-
-                return this.m_Element;
-            }
-            set => this.m_Element = value;
-        }
-
-        protected ManagedUIElement m_Element;
-
-        protected static PackedScene ElementPrefab { get; set; }
-
         public bool MouseInside { get; protected set; }
 
         /// <summary>
@@ -195,18 +165,6 @@ namespace Code.Unity.GUI.Managed_Assets
         {
             base._EnterTree();
 
-            if (ElementPrefab is null)
-            {
-                GD.Print("Attempting to load ElementPrefab.");
-                ElementPrefab = GD.Load<PackedScene>(
-                    GlobalConstants.GODOT_ASSETS_FOLDER +
-                    "Scenes/Parts/ManagedUIElement.tscn");
-
-                GD.Print(ElementPrefab is null
-                    ? "Could not load ElementPrefab!"
-                    : "Got ElementPrefab.");
-            }
-
             this.Connect("mouse_entered", this, "OnPointerEnter");
             this.Connect("mouse_exited", this, "OnPointerExit");
 
@@ -248,115 +206,6 @@ namespace Code.Unity.GUI.Managed_Assets
         {
             this.Initialise();
             base._Draw();
-        }
-
-        public virtual void Initialise()
-        {
-            if (this.Initialised)
-            {
-                return;
-            }
-
-            if (this.Theme is null)
-            {
-                this.Theme = new Theme();
-            }
-
-            var child = this.GetNodeOrNull("Element");
-
-            if (child is null)
-            {
-                //GD.Print("No element!");
-            }
-            else if (child is ManagedUIElement element)
-            {
-                //GD.Print("Element found!");
-                //GD.Print(element.GetType().Name);
-                this.Element = element;
-            }
-            else
-            {
-                //GD.Print("Element found, but not correct type!");
-                //GD.Print(child.GetType().Name);
-            }
-
-            if (this.m_Element is null)
-            {
-                GD.Print("Creating managed UI element");
-                if (ElementPrefab is null)
-                {
-                    //GD.Print("ManagedUIElement prefab is null, creating from code node!");
-                    //GD.Print("Prepare for trouble!");
-                    this.m_Element = new ManagedUIElement();
-                }
-                else
-                {
-                    this.m_Element = ElementPrefab.Instance() as ManagedUIElement;
-
-                    if (this.m_Element is null)
-                    {
-                        //GD.Print("Failed to instantiate ManagedUIElement from Prefab!");
-                        return;
-                    }
-                }
-
-                this.m_Element.Name = "Element";
-                this.m_Element.AnchorBottom = 1;
-                this.m_Element.AnchorRight = 1;
-                this.m_Element.MouseFilter = MouseFilterEnum.Ignore;
-                this.AddChild(this.m_Element);
-#if TOOLS
-                this.m_Element.Owner = this.GetTree()?.EditedSceneRoot;
-#endif
-                this.MoveChild(this.m_Element, 0);
-            }
-
-            //GD.Print("Finished initialising " + this.Name);
-            //GD.Print(this.GetChildren());
-            this.Initialised = true;
-        }
-
-        public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
-        {
-            this.Element.AddSpriteState(state, changeToNew);
-        }
-
-        public bool RemoveStatesByName(string name)
-        {
-            return this.Element.RemoveStatesByName(name);
-        }
-
-        public ISpriteState GetState(string name)
-        {
-            return this.Element.GetState(name);
-        }
-
-        public bool ChangeState(string name)
-        {
-            return this.Element.ChangeState(name);
-        }
-
-        public void Clear()
-        {
-            this.Element.Clear();
-        }
-
-        public void OverrideAllColours(
-            IDictionary<string, Color> colours,
-            bool crossFade = false,
-            float duration = 0.1f,
-            bool modulateChildren = false)
-        {
-            this.Element.OverrideAllColours(colours, crossFade, duration, modulateChildren);
-        }
-
-        public void TintWithSingleColour(
-            Color colour,
-            bool crossFade = false,
-            float duration = 0.1f,
-            bool modulateChildren = false)
-        {
-            this.Element.TintWithSingleColour(colour, crossFade, duration, modulateChildren);
         }
 
         protected void DoStateTransition(SelectionState state, bool crossFade)

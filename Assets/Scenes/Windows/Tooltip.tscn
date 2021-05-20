@@ -8,7 +8,7 @@
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=7]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -19,9 +19,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=3]
-default_font = SubResource( 6 )
+default_font = SubResource( 7 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=6]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -133,7 +133,7 @@ OutlineThickness = 1
 OverrideOutline = true
 OverrideColour = true
 FontSize = 36
-CustomFont = SubResource( 7 )
+CustomFont = SubResource( 6 )
 
 [node name="Text" type="Label" parent="Margin Container/Main Container/Title Container/Title"]
 anchor_right = 1.0

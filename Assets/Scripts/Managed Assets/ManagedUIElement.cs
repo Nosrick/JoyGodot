@@ -10,9 +10,6 @@ using JoyLib.Code.Helpers;
 
 namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {
-#if TOOLS
-    [Tool]
-#endif
     public class ManagedUIElement :
         Control,
         IColourableElement,
@@ -56,6 +53,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected bool IsDirty { get; set; }
 
         protected ISpriteState CachedState { get; set; }
+        
+        protected IDictionary<string, Color> CachedColours { get; set; }
 
         public int FrameIndex { get; protected set; }
 
@@ -107,9 +106,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         public virtual void Initialise()
         {
-            if (this.Initialised || this.IsInsideTree() == false)
+            if (this.Initialised)
             {
                 return;
+            }
+
+            if (this.IsInsideTree() == false)
+            {
+                this.CallDeferred("Initialise");
             }
 
             this.Parts = new List<NinePatchRect>();
@@ -135,12 +139,18 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     Name = "Colour Lerper"
                 };
                 this.AddChild(this.TweenNode);
-#if TOOLS
-                this.TweenNode.Owner = this.GetTree()?.EditedSceneRoot;
-#endif
             }
 
             this.m_States = new Dictionary<string, ISpriteState>();
+            if (this.CachedState is null == false)
+            {
+                this.AddSpriteState(this.CachedState);
+            }
+
+            if (this.CachedColours is null == false)
+            {
+                this.OverrideAllColours(this.CachedColours);
+            }
 
             //GD.Print(this.Name + " initialised!");
             this.Initialised = true;
@@ -150,11 +160,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         {
             if (this.IsInsideTree() == false)
             {
+                this.CachedState = state;
                 return;
             }
             
             this.Initialise();
-            this.m_States.Add(state.Name, state);
+            if (this.m_States.ContainsKey(state.Name) == false)
+            {
+                this.m_States.Add(state.Name, state);
+            }
             this.IsDirty = true;
 
             if (changeToNew)
@@ -343,6 +357,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 state.OverrideColours(colours);
             }
 
+            if (this.IsInsideTree() == false)
+            {
+                this.CachedColours = colours;
+                return;
+            }
+
             if (crossFade)
             {
                 for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
@@ -455,9 +475,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);
-#if TOOLS
-                    patchRect.Owner = this.GetTree()?.EditedSceneRoot;
-#endif
                 }
             }
 

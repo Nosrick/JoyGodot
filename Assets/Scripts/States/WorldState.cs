@@ -268,7 +268,7 @@ namespace JoyLib.Code.States
 
             if (action.IsActionReleased("toggle inventory"))
             {
-                this.GUIManager.ToggleGUI(GUINames.INVENTORY);
+                this.ToggleWindow(GUINames.INVENTORY);
                 if (this.GUIManager.IsActive(GUINames.INVENTORY) == false)
                 {
                     this.GUIManager.CloseGUI(GUINames.INVENTORY_CONTAINER);
@@ -276,19 +276,19 @@ namespace JoyLib.Code.States
             }
             else if (action.IsActionReleased("toggle equipment"))
             {
-                this.GUIManager.ToggleGUI(GUINames.EQUIPMENT);
+                this.ToggleWindow(GUINames.EQUIPMENT);
             }
             else if (action.IsActionReleased("toggle journal"))
             {
-                this.GUIManager.ToggleGUI(GUINames.QUEST_JOURNAL);
+                this.ToggleWindow(GUINames.QUEST_JOURNAL);
             }
             else if (action.IsActionReleased("toggle job management"))
             {
-                this.GUIManager.ToggleGUI(GUINames.JOB_MANAGEMENT);
+                this.ToggleWindow(GUINames.JOB_MANAGEMENT);
             }
             else if (action.IsActionReleased("toggle character sheet"))
             {
-                this.GUIManager.ToggleGUI(GUINames.CHARACTER_SHEET);
+                this.ToggleWindow(GUINames.CHARACTER_SHEET);
             }
 
             if (this.GUIManager.AreAnyOpen() == false)
@@ -473,6 +473,13 @@ namespace JoyLib.Code.States
                     }
                 }
                 */
+        }
+
+        protected void ToggleWindow(string name)
+        {
+            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
+            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
+            this.GUIManager.ToggleGUI(name);
         }
 
         protected void Tick()

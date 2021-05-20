@@ -53,7 +53,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void Close()
         {
-            if (this.m_AlwaysOpen)
+            if (this.AlwaysOpen)
             {
                 return;
             }
@@ -82,13 +82,13 @@ namespace JoyLib.Code.Unity.GUI
             this.GUIManager.CloseGUI(this.Name);
         }
 
-        public bool m_RemovesControl;
+        [Export] public bool RemovesControl { get; protected set; }
 
-        public bool m_ClosesOthers;
+        [Export] public bool ClosesOthers { get; protected set; }
 
-        public bool m_AlwaysOpen;
+        [Export] public bool AlwaysOpen { get; protected set; }
 
-        public bool m_AlwaysOnTop;
+        [Export] public bool AlwaysOnTop { get; protected set; }
 
         public virtual event GUIClosedEventHandler OnGUIClose;
         public virtual event GUIOpenedEventHandler OnGUIOpen;

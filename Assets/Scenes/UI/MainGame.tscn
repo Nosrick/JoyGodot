@@ -52,6 +52,8 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+AlwaysOpen = true
+AlwaysOnTop = true
 
 [node name="Fill Needs" parent="Cheats" instance=ExtResource( 1 )]
 anchor_right = 0.0
@@ -67,6 +69,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 0.0
 Text = "Fill Needs"
 CustomFont = SubResource( 1 )
 
@@ -85,6 +88,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 0.0
 Text = "Empty Needs"
 CustomFont = SubResource( 2 )
 
@@ -103,10 +107,12 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 0.0
 Text = "Empty One Need"
 CustomFont = SubResource( 3 )
 
 [node name="Inventory" parent="." instance=ExtResource( 4 )]
+visible = false
 
 [connection signal="_Press" from="Cheats/Fill Needs" to="Cheats" method="FillNeeds"]
 [connection signal="_Press" from="Cheats/Empty Needs" to="Cheats" method="EmptyNeeds"]

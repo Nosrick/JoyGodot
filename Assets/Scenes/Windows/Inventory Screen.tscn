@@ -5,7 +5,7 @@
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedLabel.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -16,9 +16,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 3 )
+default_font = SubResource( 1 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -38,6 +38,9 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+RemovesControl = true
+ClosesOthers = true
+AlwaysOnTop = true
 m_DynamicContainer = true
 m_CanDrag = true
 m_CanDropItems = true
@@ -67,7 +70,7 @@ OutlineThickness = 1
 OverrideOutline = true
 OverrideColour = true
 FontSize = 36
-CustomFont = SubResource( 4 )
+CustomFont = SubResource( 3 )
 
 [node name="Element" parent="Title" instance=ExtResource( 1 )]
 m_ElementName = "AccentBackground"

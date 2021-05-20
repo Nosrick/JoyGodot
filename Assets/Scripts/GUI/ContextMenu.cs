@@ -17,11 +17,11 @@ public class ContextMenu : GUIData
     
     public override void _Ready()
     {
-        this.MainContainer = this.GetNode<VBoxContainer>("Margin Container/Main Container");
+        this.MainContainer = this.GetNode<VBoxContainer>("Margin Container/Main Margin/Main Container");
         this.ButtonPrefab =
             GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedTextButton.tscn");
         this.ListItems = new List<ManagedTextButton>();
-        this.ItemActions = new System.Collections.Generic.Dictionary<string, Action>();
+        this.ItemActions = new Dictionary<string, Action>();
     }
 
     public override void _Input(InputEvent @event)
@@ -33,7 +33,7 @@ public class ContextMenu : GUIData
             case InputEventMouseButton mouseButton:
             {
                 if (mouseButton.Pressed 
-                    && mouseButton.ButtonIndex != (int) ButtonList.Right)
+                    && this.GetRect().HasPoint(mouseButton.Position) == false)
                 {
                     this.GUIManager?.CloseGUI(this.Name);
                 }
@@ -71,6 +71,9 @@ public class ContextMenu : GUIData
         if (item is null)
         {
             item = this.ButtonPrefab.Instance() as ManagedTextButton;
+            item.ElementName = "SecondaryAccent";
+            item.RectMinSize = new Vector2(0, 32);
+            this.CallDeferred(nameof(this.DeferredItemSetup), item);
             this.MainContainer.AddChild(item);
             this.ListItems.Add(item);
         }
@@ -89,11 +92,18 @@ public class ContextMenu : GUIData
         });
     }
 
+    protected void DeferredItemSetup(ManagedTextButton button)
+    {
+        this.GUIManager.SetupManagedComponents(button);
+    }
+
     protected void PlayAction(string name)
     {
         if (this.ItemActions.TryGetValue(name, out Action action))
         {
             action.Invoke();
         }
+
+        this.GUIManager?.CloseGUI(this.Name);
     }
 }

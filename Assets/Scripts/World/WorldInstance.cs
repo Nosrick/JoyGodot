@@ -249,6 +249,7 @@ namespace JoyLib.Code.World
                 if (objectRef is IItemInstance item)
                 {
                     item.InWorld = true;
+                    item.MyNode.Visible = true;
                 }
             }
 
@@ -279,6 +280,7 @@ namespace JoyLib.Code.World
                 this.IsDirty = true;
 
                 itemRef.InWorld = false;
+                itemRef.MyNode.Visible = false;
                 itemRef.MyWorld = null;
 
                 //GlobalConstants.GameManager.ItemPool.Retire(itemRef.MyNode);

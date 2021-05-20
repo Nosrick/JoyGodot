@@ -20,6 +20,7 @@ __meta__ = {
 
 [node name="Margin Container" type="MarginContainer" parent="."]
 margin_right = 300.0
+margin_bottom = 8.0
 mouse_filter = 2
 size_flags_vertical = 0
 
@@ -27,10 +28,24 @@ size_flags_vertical = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 300.0
+margin_bottom = 8.0
 mouse_filter = 2
 m_ElementName = "AccentBackground"
 
-[node name="Main Container" type="VBoxContainer" parent="Margin Container"]
+[node name="Main Margin" type="MarginContainer" parent="Margin Container"]
 margin_right = 300.0
+margin_bottom = 8.0
+mouse_filter = 2
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="Main Container" type="VBoxContainer" parent="Margin Container/Main Margin"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 296.0
+margin_bottom = 4.0
 mouse_filter = 2
 size_flags_vertical = 0
+custom_constants/separation = 2

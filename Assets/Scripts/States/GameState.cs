@@ -19,7 +19,7 @@ namespace JoyLib.Code.States
             this.GUIManager.Clear();
             this.GUIManager.FindGUIs();
 
-            this.GUIManager.CloseAllOtherGUIs(GUINames.CURSOR);
+            //this.GUIManager.CloseAllOtherGUIs(GUINames.CURSOR);
         }
 
         public abstract void Start();
