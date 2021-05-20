@@ -4,6 +4,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Events;
+using JoyLib.Code.Physics;
 using JoyLib.Code.World.Lighting;
 
 namespace JoyLib.Code.World
@@ -34,6 +35,7 @@ namespace JoyLib.Code.World
         void AddObject(IJoyObject objectRef);
         bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef);
         IJoyObject GetObject(Vector2Int WorldPosition);
+        PhysicsResult IsObjectAt(Vector2Int worldPosition);
         void Tick();
         IEnumerable<IJoyObject> SearchForObjects(IEntity entityRef, IEnumerable<string> tags);
         IEnumerable<IEntity> SearchForEntities(IEntity actor, IEnumerable<string> searchCriteria);

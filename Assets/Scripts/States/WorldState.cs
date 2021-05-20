@@ -5,6 +5,7 @@ using Code.States;
 using Godot;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Events;
 using JoyLib.Code.Godot;
@@ -304,6 +305,12 @@ namespace JoyLib.Code.States
 
             if (action.IsActionReleased("interact"))
             {
+                if (this.m_ActiveWorld.IsObjectAt(player.WorldPosition) == PhysicsResult.ObjectCollision)
+                {
+                    this.m_ActiveWorld.PickUpObject(player);
+                    return;
+                }
+                
                 //Going up a level
                 if (this.m_ActiveWorld.Parent != null && player.WorldPosition == this.m_ActiveWorld.SpawnPoint &&
                     !player.HasMoved)

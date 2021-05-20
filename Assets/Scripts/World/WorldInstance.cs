@@ -7,6 +7,7 @@ using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
 
@@ -536,6 +537,26 @@ namespace JoyLib.Code.World
         public IEntity GetEntity(Vector2Int positionRef)
         {
             return this.m_Entities.FirstOrDefault(t => t.WorldPosition.Equals(positionRef));
+        }
+
+        public PhysicsResult IsObjectAt(Vector2Int worldPosition)
+        {
+            if (this.Objects.Any(o => o.WorldPosition == worldPosition))
+            {
+                return PhysicsResult.ObjectCollision;
+            }
+
+            if (this.Entities.Any(entity => entity.WorldPosition == worldPosition))
+            {
+                return PhysicsResult.EntityCollision;
+            }
+
+            if (this.Walls.ContainsKey(worldPosition))
+            {
+                return PhysicsResult.WallCollision;
+            }
+
+            return PhysicsResult.None;
         }
 
         public Sector GetSectorFromPoint(Vector2Int point)

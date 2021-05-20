@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace Code.Collections
@@ -46,13 +47,13 @@ namespace Code.Collections
         {
             if (this.InactiveObjects.Count > 0)
             {
-                T returnObject = this.InactiveObjects[0];
+                T returnObject = this.InactiveObjects.First();
                 this.InactiveObjects.RemoveAt(0);
                 this.Objects.Add(returnObject);
                 returnObject.SetProcess(true);
                 return returnObject;
             }
-
+            
             T newObject = this.Prefab.Instance<T>();
             this.Objects.Add(newObject);
             this.Parent.AddChild(newObject);
@@ -67,21 +68,18 @@ namespace Code.Collections
                 gameObject.SetProcess(false);
                 this.InactiveObjects.Add(gameObject);
                 gameObject.Visible = false;
-                this.Parent.RemoveChild(gameObject);
             }
             
-
             return result;
         }
 
         public void RetireAll()
         {
-            foreach (T gameObject in this.Objects)
+            var clone = new List<T>(this.Objects);
+            foreach (T gameObject in clone)
             {
-                gameObject.Visible = false;
+                this.Retire(gameObject);
             }
-            this.InactiveObjects.AddRange(this.Objects);
-            this.Objects.Clear();
         }
     }
 }
