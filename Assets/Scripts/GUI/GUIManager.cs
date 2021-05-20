@@ -29,6 +29,8 @@ namespace JoyLib.Code.Unity.GUI
         public ManagedCursor Cursor { get; protected set; }
         
         public Tooltip Tooltip { get; protected set; }
+        
+        public ContextMenu ContextMenu { get; protected set; }
 
         public IDictionary<string, Theme> Themes { get; protected set; }
 
@@ -317,6 +319,14 @@ namespace JoyLib.Code.Unity.GUI
                 this.SetupManagedComponents(this.Tooltip);
             }
             this.Add(this.Tooltip);
+
+            if (this.ContextMenu is null)
+            {
+                this.ContextMenu = this.PersistentRoot.GetNode<ContextMenu>("Context Menu");
+                this.SetupManagedComponents(this.ContextMenu);
+            }
+
+            this.Add(this.ContextMenu);
         }
 
         public void InstantiateUIScene(PackedScene ui)

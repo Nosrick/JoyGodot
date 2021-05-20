@@ -119,9 +119,9 @@ namespace JoyLib.Code.Unity.GUI
             return base.GetDragData(position);
         }
 
-        public override void _Input(InputEvent @event)
+        public override void _GuiInput(InputEvent @event)
         {
-            if (!(@event is InputEventAction action))
+            if (!(@event is InputEventMouseButton action))
             {
                 return;
             }
@@ -136,35 +136,39 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public virtual void OnPointerDown(InputEventAction action)
+        public virtual void OnPointerDown(InputEventMouseButton action)
         {
             if (action.Pressed == false)
             {
                 return;
             }
 
-            if (action.Action.Equals("begin drag", StringComparison.OrdinalIgnoreCase)
+            if (action.ButtonIndex == (int) ButtonList.Left
                 && this.Container?.CanDrag == true)
             {
                 this.OnBeginDrag();
             }
         }
 
-        public virtual void OnPointerUp(InputEventAction action)
+        public virtual void OnPointerUp(InputEventMouseButton action)
         {
             if (action.Pressed)
             {
                 return;
             }
 
-            if (action.Action.Equals("begin drag", StringComparison.OrdinalIgnoreCase))
+            if (action.ButtonIndex == (int) ButtonList.Left)
             {
                 this.OnEndDrag();
             }
-            else if (action.Action.Equals("open context menu", StringComparison.OrdinalIgnoreCase))
+            else if (action.ButtonIndex == (int) ButtonList.Right)
             {
                 if (this.Container.UseContextMenu)
-                { }
+                {
+                    this.GuiManager.ContextMenu.Clear();
+                    this.GuiManager.ContextMenu.AddItem("Drop", this.DropItem);
+                    this.GuiManager.OpenGUI(GUINames.CONTEXT_MENU);
+                }
                 else if (this.Container.MoveUsedItem)
                 {
                     this.Container.MoveItem(this.Item);
@@ -227,9 +231,8 @@ namespace JoyLib.Code.Unity.GUI
                         SourceContainer = this.Container,
                         SourceSlot = this
                     };
-                    Cursor cursor = (Cursor) this.GuiManager.OpenGUI(GUINames.CURSOR);
-                    cursor.DragObject?.Clear();
-                    cursor.DragObject?.AddSpriteState(this.Item.States[0]);
+                    var cursor = this.GuiManager.Cursor;
+                    cursor.DragSprite = this.Item.States.FirstOrDefault();
                 }
             }
         }
@@ -285,8 +288,8 @@ namespace JoyLib.Code.Unity.GUI
             }
             */
 
-            Cursor cursor = this.GuiManager.Get(GUINames.CURSOR) as Cursor;
-            cursor?.DragObject?.Clear();
+            var cursor = this.GuiManager.Cursor;
+            cursor.DragSprite = null;
             this.EndDrag();
         }
 
@@ -328,6 +331,20 @@ namespace JoyLib.Code.Unity.GUI
                 GlobalConstants.GameManager.GUIManager.Tooltip.Close();
             }
         }
+        
+        protected virtual void DropItem()
+        {
+            //Check if the item is droppable
+            if (this.Item is null || !this.Container.CanDropItems)
+            {
+                return;
+            }
+            
+            this.Player.MyWorld.AddObject(this.Item);
+            this.Container.RemoveItem(this.Item);
+            this.Item.InWorld = true;
+            this.Item = null;
+        }
 
         //TODO: Add item stacking
         /*
@@ -356,24 +373,6 @@ namespace JoyLib.Code.Unity.GUI
                 .GetComponent<ItemContainer>();
             container.Owner = this.Item;
             container.OnEnable();
-        }
-    }
-
-    protected virtual void DropItem()
-    {
-        this.GetBits();
-
-        //Check if the item is droppable
-        if (this.Item is null == false && this.Container.CanDropItems)
-        {
-            if (this.Item.MonoBehaviourHandler is ItemBehaviourHandler itemBehaviourHandler)
-            {
-                itemBehaviourHandler.DropItem();
-            }
-
-            this.Container.RemoveItem(this.Item);
-            this.Item.InWorld = true;
-            this.Item = null;
         }
     }
 

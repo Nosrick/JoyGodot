@@ -13,6 +13,8 @@ namespace JoyLib.Code.Unity.GUI
         
         Tooltip Tooltip { get; }
         
+        ContextMenu ContextMenu { get; }
+        
         void Clear();
 
         void FindGUIs();

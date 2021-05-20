@@ -24,6 +24,25 @@ public class ContextMenu : GUIData
         this.ItemActions = new System.Collections.Generic.Dictionary<string, Action>();
     }
 
+    public override void _Input(InputEvent @event)
+    {
+        base._Input(@event);
+
+        switch (@event)
+        {
+            case InputEventMouseButton mouseButton:
+            {
+                if (mouseButton.Pressed 
+                    && mouseButton.ButtonIndex != (int) ButtonList.Right)
+                {
+                    this.GUIManager?.CloseGUI(this.Name);
+                }
+
+                break;
+            }
+        }
+    }
+
     public void Clear()
     {
         foreach (var item in this.ListItems)
@@ -32,6 +51,18 @@ public class ContextMenu : GUIData
             item.Visible = false;
             item.Text = null;
         }
+    }
+
+    public override void Display()
+    {
+        base.Display();
+        this.RectPosition = this.GetViewport().GetMousePosition();
+    }
+
+    public override void Close()
+    {
+        base.Close();
+        this.Clear();
     }
 
     public void AddItem(string text, Action action)

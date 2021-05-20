@@ -8,7 +8,7 @@
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=6]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -18,10 +18,10 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="Theme" id=7]
-default_font = SubResource( 8 )
+[sub_resource type="Theme" id=3]
+default_font = SubResource( 6 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=7]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -60,6 +60,7 @@ CustomFont = ExtResource( 5 )
 [node name="Margin Container" type="MarginContainer" parent="."]
 margin_right = 330.0
 margin_bottom = 50.0
+mouse_filter = 2
 size_flags_vertical = 0
 
 [node name="Background" parent="Margin Container" instance=ExtResource( 1 )]
@@ -117,28 +118,28 @@ rect_min_size = Vector2( 0, 32 )
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 9
-theme = SubResource( 7 )
+theme = SubResource( 3 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 HAlign = 1
-OverrideColour = true
-CustomFont = SubResource( 9 )
-TitleCase = true
 OverrideSize = true
-Text = "Name Of Object"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 36
 OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
+Text = "Name Of Object"
+TitleCase = true
 OutlineThickness = 1
+OverrideOutline = true
+OverrideColour = true
+FontSize = 36
+CustomFont = SubResource( 7 )
 
 [node name="Text" type="Label" parent="Margin Container/Main Container/Title Container/Title"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 0, 32 )
-theme = SubResource( 7 )
+theme = SubResource( 3 )
 custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Name Of Object"
