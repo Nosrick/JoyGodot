@@ -325,6 +325,7 @@ namespace JoyLib.Code.Unity.GUI
             if (this.Container.ShowTooltips)
             {
                 this.GuiManager.CloseGUI(GUINames.TOOLTIP);
+                GlobalConstants.GameManager.GUIManager.Tooltip.Close();
             }
         }
 

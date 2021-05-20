@@ -40,6 +40,7 @@ z_as_relative = false
 [node name="Persistent UI" type="CanvasLayer" parent="."]
 
 [node name="Tooltip" parent="Persistent UI" instance=ExtResource( 2 )]
+PositionOffset = Vector2( 0, 0 )
 CustomFont = SubResource( 1 )
 
 [node name="Cursor" parent="Persistent UI" instance=ExtResource( 1 )]

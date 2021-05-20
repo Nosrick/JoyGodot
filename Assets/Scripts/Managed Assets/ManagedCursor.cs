@@ -11,6 +11,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         protected ManagedUIElement DragObject { get; set; }
         
         protected ManagedUIElement CursorObject { get; set; }
+        
+        public int CursorSize { get; protected set; }
 
         public ISpriteState DragSprite
         {
@@ -31,9 +33,9 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         {
             this.CursorObject.Clear();
             this.CursorObject.AddSpriteState(state);
-            const int size = GlobalConstants.SPRITE_WORLD_SIZE;
-            this.CursorObject.RectSize = new Vector2(size, size);
-            this.DragObject.RectSize = new Vector2(size, size);
+            this.CursorSize = GlobalConstants.SPRITE_WORLD_SIZE;
+            this.CursorObject.RectSize = new Vector2(this.CursorSize, this.CursorSize);
+            this.DragObject.RectSize = new Vector2(this.CursorSize, this.CursorSize);
         }
 
         public void OverrideAllColours(IDictionary<string, Color> colours, bool crossfade = false,

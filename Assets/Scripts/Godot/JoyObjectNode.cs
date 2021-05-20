@@ -82,7 +82,8 @@ namespace JoyLib.Code.Godot
             
             if (this.JoyObject.Tooltip.IsNullOrEmpty()
                 || player is null
-                || player.VisionProvider.HasVisibility(player, player.MyWorld, this.JoyObject.WorldPosition) == false)
+                || player.VisionProvider.HasVisibility(player, player.MyWorld, this.JoyObject.WorldPosition) == false
+                || this.GuiManager.IsActive(GUINames.TOOLTIP))
             {
                 return;
             }
@@ -96,7 +97,7 @@ namespace JoyLib.Code.Godot
         public void OnPointerExit()
         {
             GlobalConstants.ActionLog.Log("MOUSE OFF " + this.JoyObject.JoyName);
-            this.GuiManager.Tooltip.Hide();
+            this.GuiManager.Tooltip.Close();
         }
     }
 }

@@ -75,6 +75,7 @@ namespace JoyLib.Code.Unity.GUI
             if (this.GUIManager is null)
             {
                 this.GUIManager = GlobalConstants.GameManager?.GUIManager;
+                return;
             }
 
             bool actionPressed = Input.IsActionPressed("tooltip_show");
@@ -90,10 +91,12 @@ namespace JoyLib.Code.Unity.GUI
 
             if (this.ShouldShow)
             {
+                this.ShowCurrent();
                 this.GUIManager?.OpenGUI(this.Name);
             }
             else
             {
+                this.Hide();
                 this.GUIManager?.CloseGUI(this.Name);
             }
             
@@ -105,46 +108,36 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void UpdatePosition(InputEventMouseMotion motion)
         {
-            Vector2 mousePosition = motion.Position;
-
-            Vector2 offset = Vector2.Zero;
-            /*
-            if (mousePosition.x < Screen.width - this.RectTransform.sizeDelta.x)
+            if (this.GUIManager?.Cursor is null)
             {
-                offset.x += this.CursorRect.width / 2;
-            }
-            else
-            {
-                offset.x -= this.CursorRect.width / 2 + this.RectTransform.rect.width;
-            }
-
-            if (mousePosition.y > Screen.height - this.RectTransform.sizeDelta.y)
-            {
-                offset.y -= this.CursorRect.height / 2;
-            }
-            else
-            {
-                offset.y += this.CursorRect.height / 2 + this.RectTransform.rect.height;
+                return;
             }
             
-            switch (this.Canvas.renderMode)
-            {
-                case RenderMode.ScreenSpaceOverlay:
-                    mousePosition += offset;
-                    break;
-                
-                case RenderMode.ScreenSpaceCamera:
-                    mousePosition = this.MainCamera.ScreenToWorldPoint(mousePosition + offset);
-                    break;
-                
-                case RenderMode.WorldSpace:
-                    mousePosition = this.MainCamera.ScreenToWorldPoint(mousePosition + offset);
-                    break;
-            }
-            */
+            Vector2 mousePosition = motion.Position;
 
-            //this.transform.position = this.Canvas.transform.TransformPoint(mousePosition + offset);
-            this.RectPosition = mousePosition + this.PositionOffset;
+            Vector2 rectSize = this.MainContainer.RectSize;
+            Vector2 offset = Vector2.Zero;
+            Vector2 viewportSize = this.GetViewport().Size;
+            int cursorSize = this.GUIManager.Cursor.CursorSize;
+            if (mousePosition.x < viewportSize.x - rectSize.x)
+            {
+                offset.x += cursorSize / 2;
+            }
+            else
+            {
+                offset.x -= rectSize.x;
+            }
+
+            if (mousePosition.y > viewportSize.y - rectSize.y)
+            {
+                offset.y -= rectSize.y;
+            }
+            else
+            {
+                offset.y += cursorSize / 2;
+            }
+
+            this.RectPosition = mousePosition + this.PositionOffset + offset;
         }
 
         public virtual void Show(
@@ -153,11 +146,6 @@ namespace JoyLib.Code.Unity.GUI
             ICollection<string> data = null, 
             bool showBackground = true)
         {
-            if (this.ShouldShow)
-            {
-                this.Display();
-                this.GUIManager?.OpenGUI(this.Name);
-            }
 
             if (!string.IsNullOrEmpty(title))
             {
@@ -221,12 +209,41 @@ namespace JoyLib.Code.Unity.GUI
             }
            
             this.Background.Visible = showBackground;
+            
+            if (this.ShouldShow)
+            {
+                this.Display();
+                this.GUIManager?.OpenGUI(this.Name);
+            }
         }
 
-        public override void Close()
+        public virtual void ShowCurrent()
         {
-            this.ShouldShow = false;
-            base.Close();
+            this.Show(
+                this.Title.Text,
+                this.Icon.CurrentSpriteState,
+                this.ItemCache.Select(item => item.Text).ToList());
+        }
+
+        public override void Display()
+        {
+            if (this.ShouldShow
+                && this.Title.Text.IsNullOrEmpty() == false)
+            {
+                base.Display();
+            }
+        }
+
+        protected void WipeData()
+        {
+            this.Icon.Clear();
+            this.IconSlot.Visible = false;
+            this.Title.Text = null;
+            foreach (var item in this.ItemCache)
+            {
+                item.Visible = false;
+                item.Text = null;
+            }
         }
 
         protected void SetIcon(ISpriteState state)

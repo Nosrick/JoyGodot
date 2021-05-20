@@ -190,7 +190,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerExit()
         {
-            GlobalConstants.GameManager.GUIManager.Tooltip?.Hide();
+            GlobalConstants.GameManager.GUIManager.CloseGUI(GUINames.TOOLTIP);
+            GlobalConstants.GameManager.GUIManager.Tooltip.Close();
         }
     }
 }

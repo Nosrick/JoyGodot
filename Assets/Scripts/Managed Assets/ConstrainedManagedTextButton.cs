@@ -3,6 +3,7 @@ using Castle.Core.Internal;
 using Godot;
 using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code;
+using JoyLib.Code.Unity.GUI;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
@@ -61,7 +62,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         {
             base.OnPointerExit();
             
-            GlobalConstants.GameManager.GUIManager.Tooltip.Hide();
+            GlobalConstants.GameManager.GUIManager.CloseGUI(GUINames.TOOLTIP);
+            GlobalConstants.GameManager.GUIManager.Tooltip.Close();
         }
     }
 }
