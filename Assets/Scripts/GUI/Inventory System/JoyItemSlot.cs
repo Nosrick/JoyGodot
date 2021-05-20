@@ -340,6 +340,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             
             GlobalConstants.GameManager.Player.MyWorld.AddObject(this.Item);
+            this.Item.MyNode.Visible = true;
             this.Container.RemoveItem(this.Item);
             this.Item = null;
         }

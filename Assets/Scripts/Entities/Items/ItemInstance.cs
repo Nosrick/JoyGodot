@@ -77,8 +77,6 @@ namespace JoyLib.Code.Entities.Items
 
          
         public IEnumerable<IAbility> UniqueAbilities { get; protected set; }
-        
-        protected Node2D Prefab { get; set; }
 
         public IEnumerable<ISpriteState> Sprites => this.States;
         
@@ -96,7 +94,6 @@ namespace JoyLib.Code.Entities.Items
             IRollable roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
-            JoyObjectNode gameObject = null,
             List<IItemInstance> contents = null,
             bool active = false)
             : base(
@@ -110,13 +107,6 @@ namespace JoyLib.Code.Entities.Items
                 roller,
                 type.Tags)
         {
-            if (this.Prefab is null)
-            {
-                this.Prefab = gameObject is null == false 
-                    ? gameObject 
-                    : GD.Load<Node2D>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/ItemInstance");
-            }
-
             this.Initialise();
                 
             this.m_Type = type;
@@ -140,11 +130,6 @@ namespace JoyLib.Code.Entities.Items
             else
             {
                 this.StateIndex = 0;
-            }
-
-            if (this.Prefab is null == false)
-            {
-                this.Instantiate(true, gameObject, active);
             }
         }
 

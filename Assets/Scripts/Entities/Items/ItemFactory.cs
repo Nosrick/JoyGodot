@@ -171,8 +171,7 @@ namespace JoyLib.Code.Entities.Items
                 new[] { chosenState },
                 new RNG(),
                 new List<IAbility>(),
-                new List<IJoyAction>(),
-                this.ItemPool.Get());
+                new List<IJoyAction>());
 
             return itemInstance;
         }
