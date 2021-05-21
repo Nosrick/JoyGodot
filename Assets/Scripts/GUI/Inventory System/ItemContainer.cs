@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
+using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Events;
 using JoyLib.Code.Unity.GUI;
@@ -40,24 +41,20 @@ namespace JoyLib.Code.Unity
         protected List<MoveContainerPriority> m_ContainerNames;
         protected List<ItemContainer> MoveToContainers { get; set; }
         public bool MoveUsedItem => this.m_MoveUsedItem;
-
         protected List<JoyItemSlot> Slots { get; set; }
-
-        protected IJoyObject m_Owner;
-
         public List<MoveContainerPriority> ContainerPriorities => this.m_ContainerNames;
         
-        public IGUIManager GUIManager { get; set; }
-
-        public IJoyObject Owner
+        public IJoyObject JoyObjectOwner
         {
-            get => this.m_Owner;
+            get => this.m_JoyObjectOwner;
             set
             {
-                this.m_Owner = value;
+                this.m_JoyObjectOwner = value;
                 this.OnEnable();
             }
         }
+
+        protected IJoyObject m_JoyObjectOwner;
 
         public string UseAction => this.m_UseAction;
 
@@ -65,7 +62,7 @@ namespace JoyLib.Code.Unity
         {
             get
             {
-                if (this.Owner is IItemContainer container)
+                if (this.JoyObjectOwner is IItemContainer container)
                 {
                     return container.Contents;
                 }
@@ -73,6 +70,22 @@ namespace JoyLib.Code.Unity
                 return new List<IItemInstance>();
             }
         }
+
+        public string TitleText
+        {
+            get => this.Title?.Text;
+            set
+            {
+                if (this.Title is null)
+                {
+                    return;
+                }
+                
+                this.Title.Text = value;
+            }
+        }
+        
+        protected ManagedLabel Title { get; set; }
 
         protected int ComparePriorities(Tuple<string, int> left, Tuple<string, int> right)
         {
@@ -95,6 +108,7 @@ namespace JoyLib.Code.Unity
             
             this.SlotParent = this.FindNode("Slot Grid") as GridContainer;
             this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyItemSlot.tscn");
+            this.Title = this.FindNode("Title") as ManagedLabel;
             this.OnEnable();
         }
 
@@ -133,12 +147,12 @@ namespace JoyLib.Code.Unity
                 }
             }
 
-            if (this.Owner is null)
+            if (this.JoyObjectOwner is null)
             {
-                this.Owner = new VirtualStorage();
+                this.JoyObjectOwner = new VirtualStorage();
             }
 
-            if (this.Owner is IItemContainer container)
+            if (this.JoyObjectOwner is IItemContainer container)
             {
                 foreach (JoyItemSlot slot in this.Slots)
                 {
@@ -335,7 +349,7 @@ namespace JoyLib.Code.Unity
 
         public virtual bool CanAddItem(IItemInstance item)
         {
-            if (this.Owner is IItemContainer container)
+            if (this.JoyObjectOwner is IItemContainer container)
             {
                 return container.CanAddContents(item);
             }
@@ -350,14 +364,14 @@ namespace JoyLib.Code.Unity
 
         protected virtual bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
         {
-            if (this.Owner is null)
+            if (this.JoyObjectOwner is null)
             {
                 return false;
             }
 
-            if (item is IItemInstance instance && instance.Guid != this.Owner.Guid)
+            if (item is IItemInstance instance && instance.Guid != this.JoyObjectOwner.Guid)
             {
-                if (this.Owner is IItemContainer container)
+                if (this.JoyObjectOwner is IItemContainer container)
                 {
                     if (container.CanAddContents(instance) || container.Contains(instance))
                     {
@@ -410,13 +424,13 @@ namespace JoyLib.Code.Unity
 
         public virtual bool RemoveItem(IItemInstance item, int amount)
         {
-            if (this.Owner is null)
+            if (this.JoyObjectOwner is null)
             {
                 return false;
             }
 
             bool result = false;
-            if (this.Owner is IItemContainer container)
+            if (this.JoyObjectOwner is IItemContainer container)
             {
                 if (container.Contents.Any(i =>
                     i.IdentifiedName.Equals(item.IdentifiedName, StringComparison.OrdinalIgnoreCase)))
@@ -443,14 +457,14 @@ namespace JoyLib.Code.Unity
 
         public virtual bool RemoveItem(IItemInstance item)
         {
-            if (this.Owner is null)
+            if (this.JoyObjectOwner is null)
             {
                 return false;
             }
 
-            if (item.Guid != this.Owner.Guid)
+            if (item.Guid != this.JoyObjectOwner.Guid)
             {
-                if (this.Owner is IItemContainer container)
+                if (this.JoyObjectOwner is IItemContainer container)
                 {
                     if (container.Contains(item) == false ||
                         this.Slots.Any(slot => !(slot.Item is null) && slot.Item.Guid == item.Guid) == false)
@@ -474,13 +488,13 @@ namespace JoyLib.Code.Unity
 
         public virtual bool RemoveItem(int index)
         {
-            if (this.Owner is null)
+            if (this.JoyObjectOwner is null)
             {
                 return false;
             }
 
             if (index < this.Slots.Count
-                && this.Owner is IItemContainer container)
+                && this.JoyObjectOwner is IItemContainer container)
             {
                 JoyItemSlot slot = this.Slots[index];
                 IItemInstance item = slot.Item;
@@ -499,7 +513,7 @@ namespace JoyLib.Code.Unity
 
         public virtual bool StackOrSwap(ItemContainer destination, IItemInstance item)
         {
-            if (this.Owner.Equals(destination.Owner))
+            if (this.JoyObjectOwner.Equals(destination.JoyObjectOwner))
             {
                 return false;
             }

@@ -110,8 +110,8 @@ namespace JoyLib.Code.States
             this.GUIManager.OpenGUI(GUINames.ACTION_LOG);
 
             var inventory = this.GUIManager.Get(GUINames.INVENTORY) as ItemContainer;
-            inventory.Owner = this.PlayerWorld.Player;
-            //GUIManager.GetGUI(GUINames.EQUIPMENT).GetComponent<ItemContainer>().Owner = this.PlayerWorld.Player;
+            inventory.JoyObjectOwner = this.PlayerWorld.Player;
+            inventory.TitleText = this.PlayerWorld.Player.JoyName + "'s Inventory";
 
             /*
             EquipmentHandler equipmentHandler =
