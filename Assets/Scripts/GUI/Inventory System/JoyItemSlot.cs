@@ -47,8 +47,8 @@ namespace JoyLib.Code.Unity.GUI
         public IGUIManager GuiManager { get; set; }
 
         public ILiveEntityHandler EntityHandler { get; set; }
-
-        protected static DragObject DragObject { get; set; }
+        
+        protected static DragObject DragData { get; set; }
 
         public override void _Ready()
         {
@@ -107,17 +107,43 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
+        public override bool CanDropData(Vector2 position, object data)
+        {
+            return data is DragObject;
+        }
+
         public override void DropData(Vector2 position, object data)
         {
-            base.DropData(position, data);
+            if (!(data is DragObject dragObject))
+            {
+                return;
+            }
+            var cursor = this.GuiManager.Cursor;
+            cursor.DragSprite = null;
+
+            dragObject.SourceSlot.Item = this.Item;
+            this.Item = dragObject.Item;
+            
+            dragObject.SourceSlot.Repaint();
+            this.Repaint();
         }
 
         public override object GetDragData(Vector2 position)
         {
-            return base.GetDragData(position);
+            var cursor = this.GuiManager.Cursor;
+            cursor.DragSprite = this.Item.States.FirstOrDefault();
+
+            DragData = new DragObject
+            {
+                Item = this.Item,
+                SourceContainer = this.Container,
+                SourceSlot = this
+            };
+
+            return DragData;
         }
 
-        public override void _GuiInput(InputEvent @event)
+        public override void _Input(InputEvent @event)
         {
             if (!(@event is InputEventMouseButton action))
             {
@@ -136,16 +162,6 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnPointerDown(InputEventMouseButton action)
         {
-            if (action.Pressed == false)
-            {
-                return;
-            }
-
-            if (action.ButtonIndex == (int) ButtonList.Left
-                && this.Container?.CanDrag == true)
-            {
-                this.OnBeginDrag();
-            }
         }
 
         public virtual void OnPointerUp(InputEventMouseButton action)
@@ -224,12 +240,6 @@ namespace JoyLib.Code.Unity.GUI
                 else
                 */
                 {
-                    DragObject = new DragObject
-                    {
-                        Item = this.Item,
-                        SourceContainer = this.Container,
-                        SourceSlot = this
-                    };
                     var cursor = this.GuiManager.Cursor;
                     cursor.DragSprite = this.Item.States.FirstOrDefault();
                 }
@@ -238,63 +248,20 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnEndDrag()
         {
-            //GlobalConstants.ActionLog.AddText(eventData.pointerCurrentRaycast.gameObject.name);
-
-            /*
-            GameObject goResult = eventData.pointerCurrentRaycast.gameObject;
-
-            if (goResult is null)
+            if (DragData is null
+                || DragData.SourceSlot != this)
             {
-                if (this.Container.CanDrag
-                    && this.Container.CanDropItems)
-                {
-                    this.DropItem();
-                }
+                return;
             }
-            else
-            {
-                JoyItemSlot resultSlot = goResult.GetComponentInParent<JoyItemSlot>();
-                if (resultSlot is null == false)
-                {
-                    if (resultSlot.Container is null == false
-                        && resultSlot.Container != this.Container
-                        && this.Container.CanDrag
-                        && resultSlot.Container.CanDrag)
-                    {
-                        this.Container.StackOrSwap(resultSlot.Container, this.Item);
-                    }
-                }
-                else
-                {
-                    ItemContainer container = goResult.GetComponentInParent<ItemContainer>();
-                    if (container is null == false)
-                    {
-                        if (container != this.Container
-                            && this.Container.CanDrag
-                            && container.CanDrag)
-                        {
-                            this.Container.StackOrSwap(container, this.Item);
-                        }
-                    }
-                    else
-                    {
-                        if (this.Container.CanDropItems)
-                        {
-                            this.DropItem();
-                        }
-                    }
-                }
-            }
-            */
-
+            
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = null;
-            this.EndDrag();
-        }
 
-        protected virtual void EndDrag()
-        {
-            this.Repaint();
+            if (this.Container.GetGlobalRect().HasPoint(this.GetGlobalMousePosition()) == false)
+            {
+                DragData = null;
+                this.DropItem();
+            }
         }
 
         public virtual void OnPointerEnter()
@@ -398,12 +365,12 @@ namespace JoyLib.Code.Unity.GUI
         }
     }
     */
-    }
 
-    public struct DragObject
-    {
-        public IItemInstance Item { get; set; }
-        public JoyItemSlot SourceSlot { get; set; }
-        public ItemContainer SourceContainer { get; set; }
+        protected class DragObject : Resource
+        {
+            public IItemInstance Item { get; set; }
+            public JoyItemSlot SourceSlot { get; set; }
+            public ItemContainer SourceContainer { get; set; }
+        }
     }
 }
