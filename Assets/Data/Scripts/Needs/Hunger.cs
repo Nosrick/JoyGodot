@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Graphics;
 
@@ -149,7 +151,19 @@ namespace JoyLib.Code.Entities.Needs
 
             actor.AddContents(item);
             actor.MyWorld.RemoveObject(item.WorldPosition, item);
-            item.Interact(actor);
+            
+            var name = item.AllAbilities.FirstOrDefault(a => 
+                a.HasTag("ingestion")
+                && a.HasTag("food")
+                && a.HasTag("active")
+                )?.Name;
+            
+            if (name.IsNullOrEmpty())
+            {
+                return false;
+            }
+            
+            item.Interact(actor, name);
 
             return true;
         }

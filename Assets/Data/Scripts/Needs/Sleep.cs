@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Castle.Core.Internal;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Graphics;
 
@@ -88,8 +90,18 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return false;
             }
+
+            var name = item.AllAbilities.FirstOrDefault(a =>
+                    a.HasTag("sleep")
+                    && a.HasTag("active"))
+                ?.Name;
+
+            if (name.IsNullOrEmpty())
+            {
+                return false;
+            }
             
-            item.Interact(actor);
+            item.Interact(actor, name);
 
             return true;
         }

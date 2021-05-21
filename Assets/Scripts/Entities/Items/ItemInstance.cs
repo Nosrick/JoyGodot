@@ -232,21 +232,22 @@ namespace JoyLib.Code.Entities.Items
             this.User = user;
         }
 
-        public void Use()
+        public void Use(string abilityName)
         {
-            if (this.AllAbilities.Any() == false || this.User is null)
+            var ability = this.AllAbilities.FirstOrDefault(a =>
+                a.Name.Equals(abilityName, StringComparison.OrdinalIgnoreCase)
+                || a.InternalName.Equals(abilityName, StringComparison.OrdinalIgnoreCase));
+
+            if (ability is null)
             {
                 return;
             }
 
-            foreach (IAbility ability in this.AllAbilities)
-            {
-                ability.OnUse(this.User, this);
-            }
+            ability.OnUse(this.User, this);
 
-            foreach (IAbility ability in this.User.Abilities)
+            foreach (IAbility userAbility in this.User.Abilities)
             {
-                ability.OnUse(this.User, this);
+                userAbility.OnUse(this.User, this);
             }
             
             this.CalculateValue();
@@ -281,11 +282,11 @@ namespace JoyLib.Code.Entities.Items
             this.ConstructDescription();
         }
 
-        public void Interact(IEntity user)
+        public void Interact(IEntity user, string ability)
         {
             this.SetUser(user);
 
-            this.Use();
+            this.Use(ability);
 
             if(!this.Identified)
             {

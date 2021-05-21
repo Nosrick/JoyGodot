@@ -175,13 +175,33 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.OnEndDrag();
             }
-            else if (action.ButtonIndex == (int) ButtonList.Right
+            else if (
+                this.GetGlobalRect().HasPoint(action.GlobalPosition)
+                && action.ButtonIndex == (int) ButtonList.Right
                 && this.Item is null == false)
             {
                 if (this.Container.UseContextMenu)
                 {
-                    this.GuiManager.ContextMenu.Clear();
-                    this.GuiManager.ContextMenu.AddItem("Drop", this.DropItem);
+                    var contextMenu = this.GuiManager.ContextMenu;
+                    contextMenu.Clear();
+                    if (this.Container.CanDropItems)
+                    {
+                        contextMenu.AddItem("Drop", this.DropItem);
+                    }
+
+                    if (this.Container.CanUseItems)
+                    {
+                        foreach (var ability in this.Item.AllAbilities)
+                        {
+                            if (ability.HasTag("active"))
+                            {
+                                contextMenu.AddItem(ability.Name, () =>
+                                {
+                                    this.UseItem(ability.Name);
+                                });
+                            }
+                        }
+                    }
                     this.GuiManager.OpenGUI(GUINames.CONTEXT_MENU);
                 }
                 else if (this.Container.MoveUsedItem)
@@ -190,42 +210,6 @@ namespace JoyLib.Code.Unity.GUI
                 }
             }
         }
-        /*
-
-        //ContextMenu menu = this.GUIManager.Get(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
-        if (menu is null || this.Container.UseContextMenu == false)
-        {
-            return;
-        }
-
-        this.GetBits();
-
-            if (this.Item is null == false)
-            {
-                menu.Clear();
-                if (this.Item.HasTag("container"))
-                {
-                    menu.AddMenuItem("Open", this.OpenContainer);
-                }
-
-                List<IAbility> abilities = this.Item.AllAbilities.Where(ability => 
-                        ability.Tags.Any(tag => tag.Equals("active", StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
-                if (this.Container.CanUseItems && abilities.Any())
-                {
-                    foreach (IAbility ability in abilities)
-                    {
-                        //menu.AddMenuItem(ability.Name, this.OnUse);
-                    }
-                    //menu.AddMenuItem("Use", this.OnUse);
-                }
-
-                this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
-                this.GUIManager.CloseGUI(GUINames.TOOLTIP);
-                //menu.Show();
-            }
-        }
-*/
 
         public virtual void OnBeginDrag()
         {
@@ -310,6 +294,11 @@ namespace JoyLib.Code.Unity.GUI
             this.Item.MyNode.Visible = true;
             this.Container.RemoveItem(this.Item);
             this.Item = null;
+        }
+
+        protected virtual void UseItem(string abilityName)
+        {
+            this.Item?.Interact(GlobalConstants.GameManager.Player, abilityName);
         }
 
         //TODO: Add item stacking

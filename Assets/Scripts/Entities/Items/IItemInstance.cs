@@ -12,7 +12,7 @@ namespace JoyLib.Code.Entities.Items
 
         IItemInstance Copy(IItemInstance copy);
 
-        void Interact(IEntity user);
+        void Interact(IEntity user, string ability);
 
         void IdentifyMe();
 
