@@ -96,7 +96,6 @@ namespace JoyLib.Code.Unity.GUI
             }
             else
             {
-                this.Hide();
                 this.GUIManager?.CloseGUI(this.Name);
             }
             
@@ -234,7 +233,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        protected void WipeData()
+        public void WipeData()
         {
             this.Icon.Clear();
             this.IconSlot.Visible = false;

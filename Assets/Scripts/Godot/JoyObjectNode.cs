@@ -97,7 +97,8 @@ namespace JoyLib.Code.Godot
         public void OnPointerExit()
         {
             GlobalConstants.ActionLog.Log("MOUSE OFF " + this.JoyObject.JoyName);
-            this.GuiManager.Tooltip.Close();
+            this.GuiManager.CloseGUI(GUINames.TOOLTIP);
+            this.GuiManager.Tooltip.WipeData();
         }
     }
 }
