@@ -907,5 +907,6 @@ common/physics_fps=30
 
 [rendering]
 
+threads/thread_model=2
 2d/options/use_software_skinning=false
 environment/default_environment="res://default_env.tres"
