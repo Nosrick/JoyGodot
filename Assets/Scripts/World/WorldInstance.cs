@@ -53,7 +53,7 @@ namespace JoyLib.Code.World
 
         protected HashSet<Guid> m_ItemGUIDs;
 
-        protected HashSet<IJoyObject> m_Objects;
+        protected HashSet<IItemInstance> m_Items;
         
          
         protected Dictionary<Vector2Int, IJoyObject> m_Walls;
@@ -117,7 +117,7 @@ namespace JoyLib.Code.World
             this.m_Areas = new Dictionary<Vector2Int, IWorldInstance>();
             this.m_Entities = new HashSet<IEntity>();
             this.m_EntityGUIDs = new HashSet<Guid>();
-            this.m_Objects = new HashSet<IJoyObject>();
+            this.m_Items = new HashSet<IItemInstance>();
             this.m_ItemGUIDs = new HashSet<Guid>();
             this.m_Walls = new Dictionary<Vector2Int, IJoyObject>();
             this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
@@ -142,11 +142,11 @@ namespace JoyLib.Code.World
         /// <param name="tiles"></param>
         /// <param name="areas"></param>
         /// <param name="entities"></param>
-        /// <param name="objects"></param>
+        /// <param name="items"></param>
         /// <param name="tags"></param>
         /// <param name="name"></param>
         public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, IWorldInstance> areas, HashSet<IEntity> entities,
-            HashSet<IJoyObject> objects, Dictionary<Vector2Int, IJoyObject> walls, string[] tags, string name)
+            HashSet<IItemInstance> items, Dictionary<Vector2Int, IJoyObject> walls, string[] tags, string name)
         {
             this.Name = name;
             this.Tags = new List<string>(tags);
@@ -155,8 +155,8 @@ namespace JoyLib.Code.World
             this.m_Areas = areas;
             this.m_Entities = entities;
             this.m_EntityGUIDs = new HashSet<Guid>(this.m_Entities.Select(entity => entity.Guid));
-            this.m_Objects = objects;
-            this.m_ItemGUIDs = new HashSet<Guid>(this.m_Objects.Select(o => o.Guid).ToList());
+            this.m_Items = items;
+            this.m_ItemGUIDs = new HashSet<Guid>(this.m_Items.Select(o => o.Guid).ToList());
             this.m_Walls = walls;
             //this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
             this.CalculatePlayerIndex();
@@ -194,7 +194,7 @@ namespace JoyLib.Code.World
             //ObjectHolder = ObjectHolder ? ObjectHolder : GameObject.Find("WorldObjects");
             //EntityHolder = EntityHolder ? EntityHolder : GameObject.Find("WorldEntities");
             
-            this.m_Objects = new HashSet<IJoyObject>();
+            this.m_Items = new HashSet<IItemInstance>();
             this.m_Entities = new HashSet<IEntity>();
             //this.m_EntityGUIDs = new List<long>();
             //this.m_ItemGUIDs = new List<long>();
@@ -227,7 +227,7 @@ namespace JoyLib.Code.World
         protected void CalculateLightLevels()
         {
             //Do objects first
-            List<IItemInstance> objects = this.m_Objects.Where(o => o is IItemInstance item && item.ItemType.LightLevel > 0)
+            List<IItemInstance> objects = this.m_Items.Where(o => o is IItemInstance item && item.ItemType.LightLevel > 0)
                 .Cast<IItemInstance>()
                 .ToList();
 
@@ -237,28 +237,17 @@ namespace JoyLib.Code.World
             this.LightCalculator.Do(objects, this, this.Dimensions, this.Walls.Keys);
         }
 
-        public void AddObject(IJoyObject objectRef)
+        public void AddItem(IItemInstance objectRef)
         {
-            if (objectRef.IsWall)
-            {
-                this.AddWall(objectRef);
-            }
-            else
-            {
-                this.m_Objects.Add(objectRef);
-                this.m_ItemGUIDs.Add(objectRef.Guid);
-                if (objectRef is IItemInstance item)
-                {
-                    item.InWorld = true;
-                }
-            }
-
+            this.m_Items.Add(objectRef);
+            this.m_ItemGUIDs.Add(objectRef.Guid);
+            objectRef.InWorld = true;
             objectRef.MyWorld = this;
 
             this.IsDirty = true;
         }
 
-        protected void AddWall(IJoyObject wallRef)
+        public void AddWall(IJoyObject wallRef)
         {
             this.m_Walls.Add(wallRef.WorldPosition, wallRef);
             this.m_Costs[wallRef.WorldPosition.x, wallRef.WorldPosition.y] = byte.MaxValue;
@@ -268,12 +257,12 @@ namespace JoyLib.Code.World
         {
             bool removed = false;
 
-            if (this.m_Objects.Any(o => o.WorldPosition.Equals(positionRef) && itemRef.Guid.Equals(o.Guid)) == false)
+            if (this.m_Items.Any(o => o.WorldPosition.Equals(positionRef) && itemRef.Guid.Equals(o.Guid)) == false)
             {
                 return false;
             }
 
-            removed = this.m_Objects.Remove(itemRef) & this.m_ItemGUIDs.Remove(itemRef.Guid);
+            removed = this.m_Items.Remove(itemRef) & this.m_ItemGUIDs.Remove(itemRef.Guid);
 
             if (removed)
             {
@@ -290,7 +279,7 @@ namespace JoyLib.Code.World
 
         public IJoyObject GetObject(Vector2Int worldPosition)
         {
-            return this.m_Objects.FirstOrDefault(o => o.WorldPosition == worldPosition);
+            return this.m_Items.FirstOrDefault(o => o.WorldPosition == worldPosition);
         }
 
         public void Tick()
@@ -319,18 +308,18 @@ namespace JoyLib.Code.World
         /// <param name="objectType"></param>
         /// <param name="intentRef"></param>
         /// <returns></returns>
-        public IEnumerable<IJoyObject> SearchForObjects(IEntity entityRef, IEnumerable<string> tags)
+        public IEnumerable<IItemInstance> SearchForObjects(IEntity entityRef, IEnumerable<string> tags)
         {
-            List<IJoyObject> data = new List<IJoyObject>();
+            List<IItemInstance> data = new List<IItemInstance>();
 
             if (entityRef.VisionProvider.Vision.Any() == false)
             {
                 return data;
             }
 
-            List<IJoyObject> inSight = this.m_Objects
+            List<IItemInstance> inSight = this.m_Items
                 .Where(obj => entityRef.VisionProvider.CanSee(entityRef, this, obj.WorldPosition) == true).ToList();
-            foreach (IJoyObject obj in inSight)
+            foreach (IItemInstance obj in inSight)
             {
                 IEnumerable<string> intersect = obj.Tags.Intersect(tags);
                 if (tags.Any() == false || intersect.SequenceEqual(tags))
@@ -541,7 +530,7 @@ namespace JoyLib.Code.World
 
         public PhysicsResult IsObjectAt(Vector2Int worldPosition)
         {
-            if (this.Objects.Any(o => o.WorldPosition == worldPosition))
+            if (this.Items.Any(o => o.WorldPosition == worldPosition))
             {
                 return PhysicsResult.ObjectCollision;
             }
@@ -654,7 +643,7 @@ namespace JoyLib.Code.World
         public Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
         {
             Dictionary<Vector2Int, IJoyObject> objects = new Dictionary<Vector2Int, IJoyObject>();
-            foreach (IJoyObject joyObject in this.m_Objects)
+            foreach (IJoyObject joyObject in this.m_Items)
             {
                 int matches = 0;
                 foreach (string tag in tags)
@@ -718,9 +707,9 @@ namespace JoyLib.Code.World
             get { return this.m_Areas; }
         }
 
-        public HashSet<IJoyObject> Objects
+        public HashSet<IItemInstance> Items
         {
-            get { return this.m_Objects; }
+            get { return this.m_Items; }
         }
 
         public Dictionary<Vector2Int, IJoyObject> Walls

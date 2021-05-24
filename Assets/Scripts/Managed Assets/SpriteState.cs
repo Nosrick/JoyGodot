@@ -113,27 +113,9 @@ namespace JoyLib.Code.Graphics
             }
         }
 
-        public List<int> GetIndices()
-        {
-            return this.SpriteData.Parts.Select(part => part.m_SelectedColour).ToList();
-        }
-
         public void RandomiseColours()
         {
             this.OverrideColours(this.SpriteData.GetRandomPartColours());
-        }
-
-        public void SetColourIndices(List<int> indices)
-        {
-            for (int i = 0; i < indices.Count; i++)
-            {
-                for (int j = 0; j < this.SpriteData.Parts.Count; j++)
-                {
-                    SpritePart part = this.SpriteData.Parts[j];
-                    part.m_SelectedColour = indices[i];
-                    this.SpriteData.Parts[j] = part;
-                }
-            }
         }
 
         /*

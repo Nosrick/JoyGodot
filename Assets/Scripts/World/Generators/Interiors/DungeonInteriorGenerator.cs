@@ -68,9 +68,9 @@ namespace JoyLib.Code.World.Generators.Interiors
             return tiles;
         }
 
-        public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
+        public IEnumerable<IJoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
-            List<JoyObject> walls = new List<JoyObject>();
+            List<IJoyObject> walls = new List<IJoyObject>();
             List<SpriteData> spriteData = this.ObjectIcons.GetSprites(this.TileSet, "SurroundWall").ToList();
             List<SpriteState> spriteList = spriteData.Select(data => new SpriteState("SurroundWall", data)).ToList();
 

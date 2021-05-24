@@ -41,9 +41,9 @@ namespace JoyLib.Code.Entities.Items
             this.LiveItems.Add(item.Guid, item);
             if (item.InWorld 
                 && item.MyWorld is null == false 
-                && item.MyWorld.Objects.Any(o => o.Guid == item.Guid) == false)
+                && item.MyWorld.Items.Any(o => o.Guid == item.Guid) == false)
             {
-                item.MyWorld.AddObject(item);
+                item.MyWorld.AddItem(item);
             }
             return true;
         }
@@ -114,7 +114,7 @@ namespace JoyLib.Code.Entities.Items
             
             IItemInstance item = this.Get(GUID);
             item.MyWorld = world;
-            world.AddObject(item);
+            world.AddItem(item);
             return true;
         }
 

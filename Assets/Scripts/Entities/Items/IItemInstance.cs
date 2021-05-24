@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyLib.Code.Entities.Abilities;
+using JoyLib.Code.Godot;
 
 namespace JoyLib.Code.Entities.Items
 {
@@ -17,6 +18,8 @@ namespace JoyLib.Code.Entities.Items
         void IdentifyMe();
 
         void Deserialise();
+
+        void Instantiate(bool recursive = true, JoyObjectNode gameObject = null, bool active = false);
 
         Guid TakeMyItem(int index);
         

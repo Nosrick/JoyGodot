@@ -295,7 +295,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
             
-            GlobalConstants.GameManager.Player.MyWorld.AddObject(this.Item);
+            GlobalConstants.GameManager.Player.MyWorld.AddItem(this.Item);
             this.Item.MyNode.Visible = true;
             this.Container.RemoveItem(this.Item);
             this.Item = null;

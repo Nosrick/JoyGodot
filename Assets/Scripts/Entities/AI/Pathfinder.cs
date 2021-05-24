@@ -13,14 +13,7 @@ namespace JoyLib.Code.Entities.AI
         {
             IWorldInstance world = worldRef;
 
-            List<Vector2Int> walls = new List<Vector2Int>();
-            lock (world.Objects)
-            {
-                List<IJoyObject> tempList = world.Objects.ToList();
-                Dictionary<Vector2Int, IJoyObject> wallsDictionary = tempList.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
-
-                walls.AddRange(wallsDictionary.Keys);
-            }
+            List<Vector2Int> walls = new List<Vector2Int>(world.Walls.Keys);
 
             AStar pathfinder = new AStar();
 

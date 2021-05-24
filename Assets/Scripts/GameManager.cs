@@ -63,22 +63,22 @@ namespace JoyLib.Code
             Input.SetMouseMode(Input.MouseMode.Hidden);
 
             this.LoadingMessage = "Initialising object pools";
-            Node2D worldHolder = this.GetNode<Node2D>("WorldHolder");
-            Node2D floorHolder = (Node2D) worldHolder.FindNode("WorldFloors");
-            Node2D wallHolder = (Node2D) worldHolder.FindNode("WorldWalls");
-            Node2D objectHolder = (Node2D) worldHolder.FindNode("WorldObjects");
-            Node2D entityHolder = (Node2D) worldHolder.FindNode("WorldEntities");
-            Node2D fogHolder = (Node2D) worldHolder.FindNode("WorldFog");
+            this.WorldHolder = this.GetNode<Node2D>("WorldHolder");
+            this.FloorHolder = (Node2D) this.WorldHolder.FindNode("WorldFloors");
+            this.WallHolder = (Node2D) this.WorldHolder.FindNode("WorldWalls");
+            this.ItemHolder = (Node2D) this.WorldHolder.FindNode("WorldObjects");
+            this.EntityHolder = (Node2D) this.WorldHolder.FindNode("WorldEntities");
+            this.FogHolder = (Node2D) this.WorldHolder.FindNode("WorldFog");
 
             PackedScene prefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn");
             PackedScene positionableSprite = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn");
             PackedScene fog =
                 GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/Fog of War.tscn");
-            this.FloorPool = new GameObjectPool<ManagedSprite>(positionableSprite, floorHolder);
-            this.WallPool = new GameObjectPool<JoyObjectNode>(prefab, wallHolder);
-            this.EntityPool = new GameObjectPool<JoyObjectNode>(prefab, entityHolder);
-            this.ItemPool = new GameObjectPool<JoyObjectNode>(prefab, objectHolder);
-            this.FogPool = new GameObjectPool<PositionableSprite>(fog, fogHolder);
+            this.FloorPool = new GameObjectPool<ManagedSprite>(positionableSprite, this.FloorHolder);
+            this.WallPool = new GameObjectPool<JoyObjectNode>(prefab, this.WallHolder);
+            this.EntityPool = new GameObjectPool<JoyObjectNode>(prefab, this.EntityHolder);
+            this.ItemPool = new GameObjectPool<JoyObjectNode>(prefab, this.ItemHolder);
+            this.FogPool = new GameObjectPool<PositionableSprite>(fog, this.FogHolder);
 
             this.MyNode = this;
 
@@ -275,7 +275,14 @@ namespace JoyLib.Code
         public GameObjectPool<JoyObjectNode> EntityPool { get; protected set; }
         public GameObjectPool<JoyObjectNode> ItemPool { get; protected set; }
         public GameObjectPool<PositionableSprite> FogPool { get; protected set; }
-        
+        public Node2D WorldHolder { get; protected set; }
+        public Node2D FogHolder { get; protected set; }
+        public Node2D EntityHolder { get; protected set; }
+
+        public Node2D WallHolder { get; protected set; }
+        public Node2D FloorHolder { get; protected set; }
+        public Node2D ItemHolder { get; protected set; }
+
         //public CheatInterface Cheats { get; set; }
 
         public void Dispose()

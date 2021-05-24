@@ -8,9 +8,10 @@ using JoyLib.Code.Unity.GUI;
 
 namespace JoyLib.Code.Godot
 {
-    public class JoyObjectNode : ManagedSprite
+    public class JoyObjectNode : 
+        ManagedSprite
     {
-        protected IJoyObject JoyObject { get; set; }
+        public IJoyObject MyJoyObject { get; protected set; }
 
         protected IGUIManager GuiManager { get; set; }
 
@@ -32,17 +33,17 @@ namespace JoyLib.Code.Godot
 
         public void AttachJoyObject(IJoyObject joyObject)
         {
-            this.JoyObject = joyObject;
-            this.JoyObject.MyNode = this;
+            this.MyJoyObject = joyObject;
+            this.MyJoyObject.MyNode = this;
             this.Name = joyObject.ToString();
             this.SpeechBubble = this.GetNodeOrNull<ManagedSprite>("Speech Bubble");
             this.Clear();
-            ISpriteState state = this.JoyObject.States.FirstOrDefault();
+            ISpriteState state = this.MyJoyObject.States.FirstOrDefault();
             if (state is null)
             {
                 return;
             }
-            this.Position = joyObject.WorldPosition.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
+            this.Move(joyObject.WorldPosition);
             this.AddSpriteState(state);
             this.OverrideAllColours(state.SpriteData.GetCurrentPartColours());
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
@@ -76,27 +77,27 @@ namespace JoyLib.Code.Godot
 
         public void OnPointerEnter()
         {
-            GlobalConstants.ActionLog.Log("MOUSE ON " + this.JoyObject.JoyName);
+            GlobalConstants.ActionLog.Log("MOUSE ON " + this.MyJoyObject.JoyName);
 
             var player = GlobalConstants.GameManager.Player;
             
-            if (this.JoyObject.Tooltip.IsNullOrEmpty()
+            if (this.MyJoyObject.Tooltip.IsNullOrEmpty()
                 || player is null
-                || player.VisionProvider.HasVisibility(player, player.MyWorld, this.JoyObject.WorldPosition) == false
+                || player.VisionProvider.HasVisibility(player, player.MyWorld, this.MyJoyObject.WorldPosition) == false
                 || this.GuiManager.IsActive(GUINames.TOOLTIP))
             {
                 return;
             }
 
             this.GuiManager.Tooltip?.Show(
-                this.JoyObject.JoyName,
-                this.JoyObject.States.FirstOrDefault(),
-                this.JoyObject.Tooltip);
+                this.MyJoyObject.JoyName,
+                this.MyJoyObject.States.FirstOrDefault(),
+                this.MyJoyObject.Tooltip);
         }
 
         public void OnPointerExit()
         {
-            GlobalConstants.ActionLog.Log("MOUSE OFF " + this.JoyObject.JoyName);
+            GlobalConstants.ActionLog.Log("MOUSE OFF " + this.MyJoyObject.JoyName);
             this.GuiManager.CloseGUI(GUINames.TOOLTIP);
             this.GuiManager.Tooltip.WipeData();
         }

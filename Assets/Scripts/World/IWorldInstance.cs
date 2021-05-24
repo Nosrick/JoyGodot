@@ -17,7 +17,7 @@ namespace JoyLib.Code.World
         byte[,] Costs { get; }
         LightCalculator LightCalculator { get; }
         Dictionary<Vector2Int, IWorldInstance> Areas { get; }
-        HashSet<IJoyObject> Objects { get; }
+        HashSet<IItemInstance> Items { get; }
         HashSet<IEntity> Entities { get; }
         Dictionary<Vector2Int, IJoyObject> Walls { get; }
         Vector2Int SpawnPoint { get; set; }
@@ -32,12 +32,14 @@ namespace JoyLib.Code.World
         void Initialise();
         
         void SetDateTime(DateTime dateTime);
-        void AddObject(IJoyObject objectRef);
+        void AddItem(IItemInstance objectRef);
+        void AddWall(IJoyObject wall);
+        
         bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef);
         IJoyObject GetObject(Vector2Int WorldPosition);
         PhysicsResult IsObjectAt(Vector2Int worldPosition);
         void Tick();
-        IEnumerable<IJoyObject> SearchForObjects(IEntity entityRef, IEnumerable<string> tags);
+        IEnumerable<IItemInstance> SearchForObjects(IEntity entityRef, IEnumerable<string> tags);
         IEnumerable<IEntity> SearchForEntities(IEntity actor, IEnumerable<string> searchCriteria);
         IEntity GetRandomSentient();
         IEntity GetRandomSentientWorldWide();

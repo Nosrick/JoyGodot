@@ -195,18 +195,15 @@ namespace JoyLib.Code.Entities
                         template.CreatureType, 
                         "idle")
                     .ToList();
+                var firstIndices = spriteData.First().RandomiseIndices();
+
                 for (int i = 0; i < spriteData.Count; i++)
                 {
                     SpriteData data = spriteData[i];
+                    data.SetColourIndices(firstIndices);
                     states.Add(new SpriteState(
                         data.Name,
                         data));
-                }
-
-                states[0].RandomiseColours();
-                for (int i = 1; i < states.Count; i++)
-                {
-                    states[i].SetColourIndices(states[0].GetIndices());
                 }
 
                 selectedSprites = states;

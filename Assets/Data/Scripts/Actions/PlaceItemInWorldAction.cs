@@ -27,7 +27,7 @@ namespace JoyLib.Code.Scripting.Actions
             
             bool result = entity.RemoveContents(item);
             item.Move(entity.WorldPosition);
-            entity.MyWorld.AddObject(item);
+            entity.MyWorld.AddItem(item);
 
             if (result)
             {

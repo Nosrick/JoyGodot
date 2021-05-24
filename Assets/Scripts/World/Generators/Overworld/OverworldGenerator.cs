@@ -34,7 +34,7 @@ namespace JoyLib.Code.World.Generators.Overworld
         {
         }
 
-        public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
+        public IEnumerable<IJoyObject> GenerateWalls(WorldTile[,] worldTiles)
         {
             return new List<JoyObject>();
         }

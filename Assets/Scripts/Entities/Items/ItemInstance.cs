@@ -143,19 +143,9 @@ namespace JoyLib.Code.Entities.Items
 
         public void Instantiate(bool recursive = true, JoyObjectNode gameObject = null, bool active = false)
         {
-            if (gameObject is null)
-            {
-                JoyObjectNode joyObjectNode = GlobalConstants.GameManager.ItemPool.Get();
-                joyObjectNode.AttachJoyObject(this);
-
-                this.MyNode = joyObjectNode;
-            }
-            else
-            {
-                gameObject.AttachJoyObject(this);
-
-                this.MyNode = gameObject;
-            }
+            var joyObjectNode = gameObject ?? GlobalConstants.GameManager.ItemPool.Get();
+            joyObjectNode.AttachJoyObject(this);
+            this.MyNode = joyObjectNode;
             
             this.MyNode.Clear();
             this.MyNode.AddSpriteState(this.States[this.StateIndex]);
@@ -170,7 +160,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 if (item is ItemInstance instance)
                 {
-                    instance.Instantiate(true, GlobalConstants.GameManager.ItemPool.Get());
+                    instance.Instantiate(true, GlobalConstants.GameManager.ItemPool.Get(), active);
                 }
             }
         }

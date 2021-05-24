@@ -88,6 +88,14 @@ namespace JoyLib.Code
         GameObjectPool<JoyObjectNode> EntityPool { get; }
         GameObjectPool<JoyObjectNode> ItemPool { get; }
         GameObjectPool<PositionableSprite> FogPool { get; }
+        
+        Node2D WorldHolder { get; }
+        Node2D FogHolder { get; }
+        Node2D EntityHolder { get; }
+        Node2D FloorHolder { get; }
+        Node2D ItemHolder { get; }
+        Node2D WallHolder { get; }
+        
         void SetNextState(IGameState nextState = null);
 
         void Reset();

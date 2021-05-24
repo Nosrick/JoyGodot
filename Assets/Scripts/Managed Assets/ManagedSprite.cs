@@ -13,7 +13,8 @@ namespace JoyLib.Code.Unity
     public class ManagedSprite :
         Node2D,
         IColourableElement,
-        ISpriteStateElement
+        ISpriteStateElement,
+        IPosition
     {
         [Export] 
         public string ElementName
@@ -90,6 +91,8 @@ namespace JoyLib.Code.Unity
 
         protected List<Node2D> Parts { get; set; }
 
+        public Vector2Int WorldPosition { get; protected set; }
+
         public override void _Ready()
         {
             this.Initialise();
@@ -97,8 +100,11 @@ namespace JoyLib.Code.Unity
 
         public override void _PhysicsProcess(float delta)
         {
-            base._PhysicsProcess(delta);
-
+            if (this.Visible == false)
+            {
+                return;
+            }
+            
             var player = GlobalConstants.GameManager.Player;
 
             if (player is null)
@@ -369,6 +375,12 @@ namespace JoyLib.Code.Unity
 
                 this.TweenNode.Start();
             }
+        }
+        
+        public virtual void Move(Vector2Int position)
+        {
+            this.WorldPosition = position;
+            this.Position = (this.WorldPosition * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2;
         }
     }
 }

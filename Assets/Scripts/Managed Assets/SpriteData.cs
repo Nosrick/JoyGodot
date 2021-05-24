@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using JoyLib.Code;
 using JoyLib.Code.Helpers;
 
 namespace JoyGodot.addons.Managed_Assets
@@ -34,6 +35,39 @@ namespace JoyGodot.addons.Managed_Assets
             return this.Parts.ToDictionary(part => part.m_Name, part => part.SelectedColour);
         }
 
+        public void SetColourIndices(List<int> indices)
+        {
+            if (indices.Count != this.Parts.Count)
+            {
+                GlobalConstants.ActionLog.Log("Index count mismatch for SpriteData!", LogLevel.Warning);
+                return;
+            }
+
+            for (int i = 0; i < indices.Count; i++)
+            {
+                SpritePart part = this.Parts[i];
+                part.m_SelectedColour = indices[i];
+                this.Parts[i] = part;
+            }
+        }
+
+        public List<int> RandomiseIndices()
+        {
+            List<int> indices = new List<int>();
+            foreach (SpritePart part in this.Parts)
+            {
+                part.m_SelectedColour = GlobalConstants.GameManager.Roller.Roll(0, part.m_PossibleColours.Count);
+                indices.Add(part.m_SelectedColour);
+            }
+
+            return indices;
+        }
+
+        public List<int> GetIndices()
+        {
+            return this.Parts.Select(part => part.m_SelectedColour).ToList();
+        }
+
         /*
         public void Dispose()
         {
@@ -63,7 +97,9 @@ namespace JoyGodot.addons.Managed_Assets
     {
         public string m_Name;
         public int m_Frames;
+
         public string[] m_Data;
+
         //public SpriteFrames m_FrameSprite;
         public List<Texture> m_FrameSprite;
         public string m_Filename;

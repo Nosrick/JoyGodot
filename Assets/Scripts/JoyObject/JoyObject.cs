@@ -234,11 +234,7 @@ namespace JoyLib.Code
         {
             this.WorldPosition = newPosition;
 
-            if (this.MyNode is null)
-            {
-                return;
-            }
-            this.MyNode.Position = (newPosition * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2;
+            this.MyNode?.Move(newPosition);
         }
 
         public int DamageValue(string name, int value)

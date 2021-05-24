@@ -56,7 +56,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 Vector2Int point = availablePoints[this.Roller.Roll(0, availablePoints.Count)];
 
                 IItemInstance item = this.ItemFactory.CreateRandomWeightedItem();
-                worldRef.AddObject(item);
+                worldRef.AddItem(item);
                 item.Move(point);
                 placedItems.Add(item);
             }

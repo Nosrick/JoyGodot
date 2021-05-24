@@ -47,10 +47,10 @@ namespace JoyLib.Code.World.Generators.Interiors
                     gameManager.EntityHandler, 
                     roller);
 
-                List<JoyObject> walls = interiorGenerator.GenerateWalls(tiles);
-                foreach(JoyObject wall in walls)
+                IEnumerable<IJoyObject> walls = interiorGenerator.GenerateWalls(tiles);
+                foreach(IJoyObject wall in walls)
                 {
-                    worldInstance.AddObject(wall);
+                    worldInstance.AddWall(wall);
                 }
 
                 List<IItemInstance> items = itemPlacer.PlaceItems(worldInstance);

@@ -14,11 +14,8 @@ namespace JoyLib.Code.Graphics
         SpriteData SpriteData { get; }
 
         void RandomiseColours();
-        void SetColourIndices(List<int> indices);
         void OverrideColours(IDictionary<string, Color> colours, bool overwrite = false);
         void OverrideWithSingleColour(Color colour);
-
-        List<int> GetIndices();
         
         AnimationType AnimationType { get; }
         bool Looping { get; }
