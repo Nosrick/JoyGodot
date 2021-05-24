@@ -121,8 +121,10 @@ namespace JoyLib.Code.Unity.GUI
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = null;
 
-            this.Container.StackOrAdd(dragObject.Item);
-            dragObject.SourceContainer.RemoveItem(dragObject.Item);
+            if (this.Container.StackOrAdd(dragObject.Item))
+            {
+                dragObject.SourceContainer.RemoveItem(dragObject.Item);
+            }
         }
 
         public override object GetDragData(Vector2 position)
