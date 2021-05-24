@@ -228,6 +228,7 @@ namespace JoyLib.Code.Unity.GUI
         public void OnPointerExit()
         {
             GlobalConstants.GameManager.GUIManager.CloseGUI(GUINames.TOOLTIP);
+            GlobalConstants.GameManager.GUIManager.Tooltip.WipeData();
             GlobalConstants.GameManager.GUIManager.Tooltip.Close();
         }
     }
