@@ -7,7 +7,6 @@ namespace JoyLib.Code.Entities.Items
 {
     public interface ILiveItemHandler : IHandler<IItemInstance, Guid>
     {
-        bool Add(IItemInstance item);
         bool AddItems(IEnumerable<IItemInstance> item, bool addToWorld = false);
 
         bool RemoveItemFromWorld(Guid GUID);
@@ -25,9 +24,7 @@ namespace JoyLib.Code.Entities.Items
         void ClearLiveItems();
 
         IEnumerable<IItemInstance> GetItems(IEnumerable<Guid> guids);
-        
-        IEnumerable<IItemInstance> Values { get; }
-        
+
         NonUniqueDictionary<Guid, Guid> QuestRewards { get; }
     }
 }
