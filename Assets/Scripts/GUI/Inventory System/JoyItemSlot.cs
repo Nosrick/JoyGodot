@@ -248,8 +248,8 @@ namespace JoyLib.Code.Unity.GUI
 
             if (this.Container.GetGlobalRect().HasPoint(this.GetGlobalMousePosition()) == false)
             {
-                DragData = null;
-                this.DropItem();
+                //DragData = null;
+                //this.DropItem();
             }
         }
 
