@@ -121,11 +121,8 @@ namespace JoyLib.Code.Unity.GUI
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = null;
 
-            dragObject.SourceSlot.Item = this.Item;
-            this.Item = dragObject.Item;
-            
-            dragObject.SourceSlot.Repaint();
-            this.Repaint();
+            this.Container.StackOrAdd(dragObject.Item);
+            dragObject.SourceContainer.RemoveItem(dragObject.Item);
         }
 
         public override object GetDragData(Vector2 position)
@@ -202,6 +199,12 @@ namespace JoyLib.Code.Unity.GUI
                             }
                         }
                     }
+
+                    if (this.Item.HasTag("container"))
+                    {
+                        contextMenu.AddItem("Open", this.OpenContainer);
+                    }
+                    
                     this.GuiManager.OpenGUI(GUINames.CONTEXT_MENU);
                 }
                 else if (this.Container.MoveUsedItem)
@@ -295,65 +298,22 @@ namespace JoyLib.Code.Unity.GUI
             this.Container.RemoveItem(this.Item);
             this.Item = null;
         }
+        
+        protected virtual void OpenContainer()
+        {
+            if (!(this.GuiManager?.OpenGUI(GUINames.INVENTORY_CONTAINER) is ItemContainer container))
+            {
+                return;
+            }
+            
+            container.JoyObjectOwner = this.Item;
+            container.OnEnable();
+        }
 
         protected virtual void UseItem(string abilityName)
         {
             this.Item?.Interact(GlobalConstants.GameManager.Player, abilityName);
         }
-
-        //TODO: Add item stacking
-        /*
-        if (this.m_Stack != null) 
-        {
-            if (!IsEmpty && ObservedItem.MaxStack > 1 )
-            {
-                //Updates the stack and enables it.
-                this.m_Stack.text = ObservedItem.Stack.ToString();
-                this.m_Stack.enabled = true;
-            }
-            else
-            {
-                //If there is no item in this slot, disable stack field
-                this.m_Stack.enabled = false;
-            }
-        }
-    }
-
-    protected virtual void OpenContainer()
-    {
-        if (this.Item.HasTag("container"))
-        {
-            this.GUIManager?.OpenGUI(GUINames.INVENTORY_CONTAINER);
-            ItemContainer container = this.GUIManager?.Get(GUINames.INVENTORY_CONTAINER)
-                .GetComponent<ItemContainer>();
-            container.Owner = this.Item;
-            container.OnEnable();
-        }
-    }
-
-    public virtual void Unstack()
-    {
-        
-    }
-
-    public virtual void OnUse()
-    {
-        if (this.Item is null)
-        {
-            return;
-        }
-
-        if (this.Container.CanUseItems && this.Container.Owner is IEntity entity)
-        {
-            this.Item.Interact(entity);
-            this.Container.OnEnable();
-        }
-        else if (this.Container.MoveUsedItem)
-        {
-            this.Container.MoveItem(this.Item);
-        }
-    }
-    */
 
         protected class DragObject : Resource
         {

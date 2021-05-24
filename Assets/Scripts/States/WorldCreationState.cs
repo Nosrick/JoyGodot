@@ -97,9 +97,22 @@ namespace JoyLib.Code.States
             IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(
                 new string[] {"light source"},
                 true);
+
+            IItemInstance bag = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(
+                new[] {"container"},
+                true);
+            
             IJoyAction addItemAction = this.m_Player.FetchAction("additemaction");
             addItemAction.Execute(
                 new IJoyObject[] {this.m_Player, lightSource},
+                new[] {"pickup"},
+                new Dictionary<string, object>
+                {
+                    {"newOwner", true}
+                });
+
+            addItemAction.Execute(
+                new IJoyObject[] {this.m_Player, bag},
                 new[] {"pickup"},
                 new Dictionary<string, object>
                 {
@@ -126,7 +139,7 @@ namespace JoyLib.Code.States
 
             foreach (IItemInstance item in this.m_Player.Contents)
             {
-                GlobalConstants.GameManager.ItemPool.Retire((JoyObjectNode) item.MyNode);
+                GlobalConstants.GameManager.ItemPool.Retire(item.MyNode);
             }
 
             this.m_World.Tick();

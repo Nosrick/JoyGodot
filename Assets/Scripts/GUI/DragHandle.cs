@@ -16,7 +16,7 @@ namespace JoyLib.Code.Unity.GUI
             this.Parent = this.GetParent<Control>();
         }
 
-        public override void _Input(InputEvent @event)
+        public override void _GuiInput(InputEvent @event)
         {
             if (@event is InputEventMouseButton mouseButton)
             {

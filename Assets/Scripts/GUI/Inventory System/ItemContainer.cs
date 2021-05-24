@@ -6,6 +6,7 @@ using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Events;
+using JoyLib.Code.Helpers;
 using JoyLib.Code.Unity.GUI;
 using Array = Godot.Collections.Array;
 
@@ -50,6 +51,7 @@ namespace JoyLib.Code.Unity
             set
             {
                 this.m_JoyObjectOwner = value;
+                this.TitleText = value.JoyName;
                 this.OnEnable();
             }
         }
@@ -109,7 +111,13 @@ namespace JoyLib.Code.Unity
             this.SlotParent = this.FindNode("Slot Grid") as GridContainer;
             this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyItemSlot.tscn");
             this.Title = this.FindNode("Title") as ManagedLabel;
+            
             this.OnEnable();
+
+            for (int i = 0; i < this.SlotParent.Columns; i++)
+            {
+                this.AddSlot();
+            }
         }
 
         public virtual void OnEnable()
@@ -138,6 +146,7 @@ namespace JoyLib.Code.Unity
             {
                 this.m_ContainerNames = new List<MoveContainerPriority>();
             }
+            /*
             else
             {
                 Node root = this.GetTree().Root.FindNode("MainUI");
@@ -146,6 +155,7 @@ namespace JoyLib.Code.Unity
                     this.MoveToContainers.Add((ItemContainer) root.FindNode(priority.m_ContainerName));
                 }
             }
+            */
 
             if (this.JoyObjectOwner is null)
             {
@@ -164,9 +174,7 @@ namespace JoyLib.Code.Unity
                 {
                     for (int i = this.Slots.Count; i < container.Contents.Count(); i++)
                     {
-                        var instance = this.SlotPrefab.Instance() as JoyItemSlot;
-                        this.SlotParent.AddChild(instance);
-                        this.Slots.Add(instance);
+                        var instance = this.AddSlot(true);
                         this.GUIManager.SetupManagedComponents(instance);
                         instance.Container = this;
                     }
@@ -288,51 +296,60 @@ namespace JoyLib.Code.Unity
             return slots;
         }
 
-        public virtual bool AddSlot(JoyItemSlot slot, bool pool = true)
+        /// <summary>
+        /// Create a brand new, empty slot
+        /// </summary>
+        /// <param name="pool">Reuse an old abandoned slot?</param>
+        /// <param name="item">The item to be placed in the slot</param>
+        /// <returns>The created or recycled slot</returns>
+        public virtual JoyItemSlot AddSlot(bool pool, IItemInstance item = null)
         {
             if (pool)
             {
-                if (this.Slots.Any(itemSlot => itemSlot.Visible == false))
+                JoyItemSlot poolSlot = this.Slots.FirstOrDefault(itemSlot => itemSlot.Visible == false);
+                if (poolSlot is null)
                 {
-                    JoyItemSlot poolSlot = this.Slots.FirstOrDefault(itemSlot => itemSlot.Visible == false);
-                    if (poolSlot is null)
-                    {
-                        poolSlot = slot;
-                    }
-                    poolSlot.Visible = true;
-                    poolSlot.Item = slot.Item;
-                    return true;
+                    poolSlot = this.SlotPrefab.Instance() as JoyItemSlot;
                 }
 
-                return false;
+                return this.AddSlot(item, poolSlot);
             }
-            else
+            
+            return this.AddSlot();
+        }
+
+        protected virtual JoyItemSlot AddSlot(IItemInstance item = null, JoyItemSlot slot = null)
+        {
+            JoyItemSlot tempSlot = slot ?? this.SlotPrefab.Instance() as JoyItemSlot;
+            if (tempSlot is null == false)
             {
-                this.SlotParent.AddChild(slot);
-                this.Slots.Add(slot);
-                return true;
+                tempSlot.Visible = true;
+                tempSlot.Item = item;
+                this.SlotParent.AddChild(tempSlot);
+                this.Slots.Add(tempSlot);
+                return tempSlot;
             }
+            GlobalConstants.ActionLog.Log("Could not create slot for container " + this.Name, LogLevel.Error);
+            return null;
         }
 
         public virtual bool RemoveSlot(JoyItemSlot slot, bool pool = true)
         {
-            if (this.Slots.Any(itemSlot => itemSlot == slot))
+            var foundSlot = this.Slots.FirstOrDefault(itemSlot => itemSlot == slot);
+            if (foundSlot is null)
             {
-                if (pool)
-                {
-                    JoyItemSlot foundSlot = this.Slots.First(itemSlot => itemSlot == slot);
-                    foundSlot.Visible = false;
-                    return true;
-                }
-                else
-                {
-                    this.Slots.Remove(slot);
-                    slot.QueueFree();
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            if (pool)
+            {
+                foundSlot.Visible = false;
+                return true;
+            }
+            
+            this.Slots.Remove(slot);
+            slot.QueueFree();
+            return true;
         }
 
         public virtual bool RemoveAllSlots(bool pool = true)
@@ -386,7 +403,9 @@ namespace JoyLib.Code.Unity
                         }
                         else
                         {
-                            this.Slots.First(slot => slot.IsEmpty).Item = instance;
+                            var emptySlot = this.Slots.First(slot => slot.IsEmpty);
+                            emptySlot.Item = instance;
+                            emptySlot.Repaint();
                         }
                         this.OnAddItem?.Invoke(container, new ItemChangedEventArgs {Item = item});
                         return true;
@@ -476,6 +495,7 @@ namespace JoyLib.Code.Unity
                     foreach (JoyItemSlot joyItemSlot in this.Slots.Where(slot => !(slot.Item is null) && item.Equals(slot.Item)))
                     {
                         joyItemSlot.Item = null;
+                        joyItemSlot.Repaint();
                     }
                     this.OnRemoveItem?.Invoke(container, new ItemChangedEventArgs() {Item = item});
                 }
