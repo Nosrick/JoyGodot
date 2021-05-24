@@ -44,7 +44,7 @@ namespace JoyLib.Code.Godot
             }
             this.Position = joyObject.WorldPosition.ToVec2 * GlobalConstants.SPRITE_WORLD_SIZE;
             this.AddSpriteState(state);
-            this.OverrideAllColours(state.SpriteData.GetRandomPartColours());
+            this.OverrideAllColours(state.SpriteData.GetCurrentPartColours());
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
             this.Scale = new Vector2(scale, scale);
             var shape = this.Collider.GetChild<CollisionShape2D>(0).Shape as RectangleShape2D;
