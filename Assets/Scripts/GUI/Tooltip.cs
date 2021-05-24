@@ -43,6 +43,8 @@ namespace JoyLib.Code.Unity.GUI
         protected List<Label> ItemCache { get; set; }
         
         protected bool ShouldShow { get; set; }
+        
+        protected bool Empty { get; set; }
 
         public override void _Ready()
         {
@@ -89,12 +91,13 @@ namespace JoyLib.Code.Unity.GUI
                 this.ShouldShow = false;
             }
 
-            if (this.ShouldShow)
+            if (this.ShouldShow 
+                && this.Visible == false
+                && this.Empty == false)
             {
                 this.ShowCurrent();
-                this.GUIManager?.OpenGUI(this.Name);
             }
-            else
+            else if(this.ShouldShow == false && this.Visible)
             {
                 this.GUIManager?.CloseGUI(this.Name);
             }
@@ -145,11 +148,15 @@ namespace JoyLib.Code.Unity.GUI
             ICollection<string> data = null, 
             bool showBackground = true)
         {
+            GD.Print("TOOLTIP SHOW");
 
-            if (!string.IsNullOrEmpty(title))
+            bool allEmpty = true;
+            
+            if (!title.IsNullOrEmpty())
             {
                 this.Title.Visible = true;
                 this.Title.Text = title;
+                allEmpty = false;
             }
             else
             {
@@ -160,6 +167,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.IconSlot.Visible = true;
                 this.SetIcon(sprite);
+                allEmpty = false;
             }
             else
             {
@@ -168,6 +176,7 @@ namespace JoyLib.Code.Unity.GUI
 
             if (data.IsNullOrEmpty() == false)
             {
+                allEmpty = false;
                 if (this.ItemCache.Count < data.Count)
                 {
                     for (int i = this.ItemCache.Count; i < data.Count; i++)
@@ -208,6 +217,11 @@ namespace JoyLib.Code.Unity.GUI
             }
            
             this.Background.Visible = showBackground;
+
+            if (allEmpty)
+            {
+                this.Empty = true;
+            }
             
             if (this.ShouldShow)
             {
@@ -243,6 +257,8 @@ namespace JoyLib.Code.Unity.GUI
                 item.Visible = false;
                 item.Text = null;
             }
+
+            this.Empty = true;
         }
 
         protected void SetIcon(ISpriteState state)
