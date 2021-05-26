@@ -16,6 +16,11 @@ namespace JoyGodot.addons.Managed_Assets
 
         public int Size { get; set; }
 
+        public SpriteData()
+        {
+            this.Parts = new List<SpritePart>();
+        }
+
         public IDictionary<string, Color> GetRandomPartColours()
         {
             IDictionary<string, Color> colours = new Dictionary<string, Color>();

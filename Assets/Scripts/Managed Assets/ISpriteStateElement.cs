@@ -1,4 +1,5 @@
-﻿using JoyLib.Code.Graphics;
+﻿using Godot;
+using JoyLib.Code.Graphics;
 
 namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {

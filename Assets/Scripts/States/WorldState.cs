@@ -42,7 +42,7 @@ namespace JoyLib.Code.States
 
         protected IJoyObject PrimaryTarget { get; set; }
 
-        protected Node FogOfWarHolder { get; set; }
+        protected Node2D FogHolder { get; set; }
 
         public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef) : base()
         {
@@ -65,8 +65,8 @@ namespace JoyLib.Code.States
                 ZIndex = 100,
                 ZAsRelative = false
             };
-            
-            this.FogOfWarHolder = this.GameManager.MyNode.FindNode("WorldFog");
+
+            this.FogHolder = this.GameManager.FogHolder;
             
             GlobalConstants.GameManager?.Player?.MyNode?.AddChild(this.m_Camera);
 
@@ -79,9 +79,9 @@ namespace JoyLib.Code.States
             GlobalConstants.GameManager.Player.ConsciousnessChange += this.OnPlayerConsciousChange;
 
             var player = this.PlayerWorld.Player;
-            for (int i = 0; i < this.FogOfWarHolder.GetChildCount(); i++)
+            for (int i = 0; i < this.FogHolder.GetChildCount(); i++)
             {
-                PositionableSprite fog = this.FogOfWarHolder.GetChild(i) as PositionableSprite;
+                PositionableSprite fog = this.FogHolder.GetChild(i) as PositionableSprite;
                 ShaderMaterial shaderMaterial = fog?.Material as ShaderMaterial;
                 shaderMaterial?.SetShaderParam("darkColour", player.VisionProvider.DarkColour);
                 shaderMaterial?.SetShaderParam("lightColour", player.VisionProvider.LightColour);
@@ -500,9 +500,10 @@ namespace JoyLib.Code.States
             var player = this.m_ActiveWorld.Player;
 
             HashSet<Vector2Int> playerVision = new HashSet<Vector2Int>(player.Vision);
-            for (int i = 0; i < this.FogOfWarHolder.GetChildCount(); i++)
+
+            for (int i = 0; i < this.FogHolder.GetChildCount(); i++)
             {
-                PositionableSprite fog = this.FogOfWarHolder.GetChild<PositionableSprite>(i);
+                PositionableSprite fog = this.FogHolder.GetChild<PositionableSprite>(i);
                 ShaderMaterial shaderMaterial = fog?.Material as ShaderMaterial;
 
                 bool canSee = playerVision.Contains(fog.WorldPosition);
@@ -511,6 +512,7 @@ namespace JoyLib.Code.States
                 shaderMaterial?.SetShaderParam("lightLevel", lightLevel);
             }
 
+            /*
             for (int i = 0; i < this.GameManager.WallHolder.GetChildCount(); i++)
             {
                 var node = this.GameManager.WallHolder.GetChild<JoyObjectNode>(i);
@@ -532,6 +534,7 @@ namespace JoyLib.Code.States
                     node.SetProcess(canSee);
                 }
             }
+            */
 
             for (int i = 0; i < this.GameManager.EntityHolder.GetChildCount(); i++)
             {

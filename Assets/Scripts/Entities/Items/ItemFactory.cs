@@ -153,7 +153,7 @@ namespace JoyLib.Code.Entities.Items
                     "density", itemType.Material.Density)
             };
 
-            List<SpriteState> states = (from sprite in this.ObjectIcons.GetSprites(
+            List<SpriteState> states = (from sprite in this.ObjectIcons.GetManagedSprites(
                         itemType.SpriteSheet,
                         itemType.UnidentifiedName)
                     select new SpriteState(sprite.Name, sprite))

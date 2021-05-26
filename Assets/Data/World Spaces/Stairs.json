@@ -6,13 +6,14 @@
         "stairs"
       ],
       "TileSet": {
-        "Name": "Stairs",
+        "Name": "stairs",
+        "UseTileMap": true,
         "SpriteData": [
           {
-            "Name": "Upstairs",
+            "Name": "upstairs",
             "Part": [
               {
-                "Name": "Upstairs",
+                "Name": "upstairs",
                 "Data": ["default"],
                 "Position": 0,
                 "Filename": "environments/stairs.png"
@@ -20,10 +21,10 @@
             ]
           },
           {
-            "Name": "Downstairs",
+            "Name": "downstairs",
             "Part": [
               {
-                "Name": "Downstairs",
+                "Name": "downstairs",
                 "Data": ["default"],
                 "Position": 1,
                 "Filename": "environments/stairs.png"

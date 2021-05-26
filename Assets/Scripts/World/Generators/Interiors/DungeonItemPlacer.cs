@@ -42,9 +42,9 @@ namespace JoyLib.Code.World.Generators.Interiors
                 for (int j = 0; j < worldRef.Tiles.GetLength(1); j++)
                 {
                     Vector2Int position = new Vector2Int(i, j);
-                    if (worldRef.Walls.ContainsKey(position) == false
-                    && position != worldRef.SpawnPoint
-                    && worldRef.Areas.ContainsKey(position) == false)
+                    if (worldRef.Walls.Contains(position) == false
+                        && position != worldRef.SpawnPoint
+                        && worldRef.Areas.ContainsKey(position) == false)
                     {
                         availablePoints.Add(position);
                     }

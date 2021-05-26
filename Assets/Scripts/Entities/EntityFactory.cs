@@ -190,7 +190,7 @@ namespace JoyLib.Code.Entities
             {
                 List<ISpriteState> states = new List<ISpriteState>();
                 List<SpriteData> spriteData = this.ObjectIcons
-                    .GetSprites(
+                    .GetManagedSprites(
                         dominantCulture.Tileset, 
                         template.CreatureType, 
                         "idle")

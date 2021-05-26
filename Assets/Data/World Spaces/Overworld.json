@@ -4,6 +4,7 @@
       "Tags": ["Exterior"],
       "TileSet": {
         "Name": "Overworld",
+        "UseTileMap": true,
         "SpriteData": [{
           "Name": "SurroundFloor",
           "Part": [

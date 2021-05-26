@@ -21,9 +21,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             set => this.m_ElementName = value;
         }
 
-        [Export]
-        protected string m_ElementName = "SlotSprite";
-        
+        [Export] protected string m_ElementName = "SlotSprite";
+
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
@@ -35,6 +34,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 if (this.IsDirty)
                 {
+                    if (this.ChosenSprite.IsNullOrEmpty()
+                        || this.ChosenState.IsNullOrEmpty())
+                    {
+                        return this.States.FirstOrDefault();
+                    }
+                    
                     if (this.m_States.ContainsKey(this.ChosenSprite)
                         && this.m_States[this.ChosenSprite].SpriteData.State
                             .Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
@@ -53,7 +58,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected bool IsDirty { get; set; }
 
         protected ISpriteState CachedState { get; set; }
-        
+
         protected IDictionary<string, Color> CachedColours { get; set; }
 
         public int FrameIndex { get; protected set; }
@@ -163,12 +168,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 this.CachedState = state;
                 return;
             }
-            
+
             this.Initialise();
             if (this.m_States.ContainsKey(state.Name) == false)
             {
                 this.m_States.Add(state.Name, state);
             }
+
             this.IsDirty = true;
 
             if (changeToNew)
@@ -488,10 +494,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 patchRect.Texture = part.m_FrameSprite[this.FrameIndex];
                 int normaliseSortOrder = part.m_SortingOrder - minSortingOrder;
                 this.MoveChild(patchRect, normaliseSortOrder);
-                patchRect.PatchMarginLeft = part.m_PatchMargins[0];
-                patchRect.PatchMarginTop = part.m_PatchMargins[1];
-                patchRect.PatchMarginRight = part.m_PatchMargins[2];
-                patchRect.PatchMarginBottom = part.m_PatchMargins[3];
+                if (part.m_PatchMargins.IsNullOrEmpty() == false
+                    && part.m_PatchMargins.Length == 4)
+                {
+                    patchRect.PatchMarginLeft = part.m_PatchMargins[0];
+                    patchRect.PatchMarginTop = part.m_PatchMargins[1];
+                    patchRect.PatchMarginRight = part.m_PatchMargins[2];
+                    patchRect.PatchMarginBottom = part.m_PatchMargins[3];
+                }
+
                 patchRect.DrawCenter = part.m_DrawCentre;
                 patchRect.AxisStretchHorizontal = part.m_StretchMode;
                 patchRect.AxisStretchVertical = part.m_StretchMode;

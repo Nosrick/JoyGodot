@@ -13,7 +13,7 @@ namespace JoyLib.Code.Entities.AI
         {
             IWorldInstance world = worldRef;
 
-            List<Vector2Int> walls = new List<Vector2Int>(world.Walls.Keys);
+            HashSet<Vector2Int> walls = world.Walls;
 
             AStar pathfinder = new AStar();
 
@@ -93,7 +93,7 @@ namespace JoyLib.Code.Entities.AI
             set;
         }
 
-        public static List<Vector2Int> walls
+        public static HashSet<Vector2Int> walls
         {
             protected get;
             set;

@@ -59,6 +59,15 @@ namespace JoyLib.Code.States
 
             ISpriteState state = null;
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
+
+            var floorTileMap = gameManager.FloorTileMap;
+            floorTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet, true);
+            int surroundFloorIndex = floorTileMap.TileSet.FindTileByName("SurroundFloor");
+
+            var wallTileMap = gameManager.WallTileMap;
+            wallTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet);
+            int surroundWallIndex = wallTileMap.TileSet.FindTileByName("SurroundWall");
+            
             for (int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
             {
                 for (int j = 0; j < this.m_ActiveWorld.Tiles.GetLength(1); j++)
@@ -73,68 +82,32 @@ namespace JoyLib.Code.States
                     fog.Move(intPos);
 
                     //Make the floor
-                    ManagedSprite floor = gameManager.FloorPool.Get();
-                    floor.Name = this.m_ActiveWorld.Name + " floor";
-                    if (state is null
-                        || state.SpriteData.Name.Equals(this.m_ActiveWorld.Tiles[i, j].TileSet,
-                            StringComparison.OrdinalIgnoreCase) == false)
-                    {
-                        state = new SpriteState(
-                            "Floor",
-                            this.m_ObjectIcons.GetSprites(this.m_ActiveWorld.Tiles[i, j].TileSet, "surroundfloor")
-                                .First());
-                    }
-
-                    floor.Clear();
-                    floor.AddSpriteState(state);
-                    floor.Scale = new Vector2(scale, scale);
-                    floor.Move(intPos);
-                    floor.Visible = true;
+                    floorTileMap.SetCell(i, j, surroundFloorIndex);
                 }
             }
 
             //Make the upstairs
             if (this.m_ActiveWorld.Guid != this.m_Overworld.Guid)
             {
-                ManagedSprite child = gameManager.FloorPool.Get();
-                child.Name = this.m_ActiveWorld.Parent.Name + " stairs";
-                //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
-                //tooltip.WorldPosition = this.m_ActiveWorld.SpawnPoint;
-                //tooltip.RefreshTooltip = WorldState.GetTooltipData;
-
-                child.Clear();
-                child.AddSpriteState(new SpriteState(
-                    child.Name,
-                    this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()));
-                child.Visible = true;
-                child.Move(new Vector2Int(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y));
-                child.Scale = new Vector2(scale, scale);
+                floorTileMap.SetCellv(
+                    this.m_ActiveWorld.SpawnPoint.ToVec2, 
+                    floorTileMap.TileSet.FindTileByName("upstairs"));
             }
 
             //Make each downstairs
             foreach (KeyValuePair<Vector2Int, IWorldInstance> pair in this.m_ActiveWorld.Areas)
             {
-                ManagedSprite child = gameManager.FloorPool.Get();
-                child.Name = pair.Value.Name + " stairs";
-                //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
-                //tooltip.WorldPosition = pair.Key;
-                child.Clear();
-                child.AddSpriteState(new SpriteState(
-                        child.Name,
-                        this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()),
-                    true);
-                child.Visible = true;
-                child.Move(new Vector2Int(pair.Key.x, pair.Key.y));
-                child.Scale = new Vector2(scale, scale);
+                floorTileMap.SetCellv(
+                    pair.Key.ToVec2, 
+                    floorTileMap.TileSet.FindTileByName("downstairs"));
             }
 
             //Create the walls
-            foreach (IJoyObject wall in this.m_ActiveWorld.Walls.Values)
+            foreach (Vector2Int position in this.m_ActiveWorld.Walls)
             {
-                wall.MyWorld = this.m_ActiveWorld;
-                JoyObjectNode gameObject = gameManager.WallPool.Get();
-                gameObject.AttachJoyObject(wall);
-                gameObject.Visible = true;
+                wallTileMap.SetCellv(
+                    position.ToVec2,
+                    surroundWallIndex);
             }
 
             this.CreateItems(this.m_ActiveWorld.Items);

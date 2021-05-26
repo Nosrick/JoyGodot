@@ -19,7 +19,7 @@ namespace JoyLib.Code.World
         Dictionary<Vector2Int, IWorldInstance> Areas { get; }
         HashSet<IItemInstance> Items { get; }
         HashSet<IEntity> Entities { get; }
-        Dictionary<Vector2Int, IJoyObject> Walls { get; }
+        HashSet<Vector2Int> Walls { get; }
         Vector2Int SpawnPoint { get; set; }
         IWorldInstance Parent { get; set; }
         string Name { get; }
@@ -33,7 +33,7 @@ namespace JoyLib.Code.World
         
         void SetDateTime(DateTime dateTime);
         void AddItem(IItemInstance objectRef);
-        void AddWall(IJoyObject wall);
+        void AddWall(Vector2Int wall);
         
         bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef);
         IJoyObject GetObject(Vector2Int WorldPosition);

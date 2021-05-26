@@ -6,6 +6,6 @@ namespace JoyLib.Code.World.Generators
     {
         WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet);
         void GenerateTileObjects(WorldTile[,] worldTiles);
-        IEnumerable<IJoyObject> GenerateWalls(WorldTile[,] worldTiles);
+        HashSet<Vector2Int> GenerateWalls(WorldTile[,] worldTiles);
     }
 }

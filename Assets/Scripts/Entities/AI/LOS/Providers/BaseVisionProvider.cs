@@ -82,8 +82,8 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
         public virtual Vector2Int[] GetVisibleWalls(IEntity viewer, IWorldInstance world)
         {
             Vector2Int[] visibleWalls = viewer.MyWorld.Walls.Where(
-                wall => viewer.VisionProvider.CanSee(viewer, world, wall.Key))
-                .ToDictionary(wall => wall.Key, wall => wall.Value).Keys.ToArray();
+                    wall => viewer.VisionProvider.CanSee(viewer, world, wall))
+                .ToArray();
             return visibleWalls;
         }
 
@@ -101,7 +101,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                 viewer,
                 world,
                 world.Dimensions,
-                world.Walls.Keys);
+                world.Walls);
 
             this.Vision = this.Board.GetVision();
         }

@@ -56,7 +56,7 @@ namespace JoyLib.Code.World
         protected HashSet<IItemInstance> m_Items;
         
          
-        protected Dictionary<Vector2Int, IJoyObject> m_Walls;
+        protected HashSet<Vector2Int> m_Walls;
 
          
         protected Vector2Int m_SpawnPoint;
@@ -119,7 +119,7 @@ namespace JoyLib.Code.World
             this.m_EntityGUIDs = new HashSet<Guid>();
             this.m_Items = new HashSet<IItemInstance>();
             this.m_ItemGUIDs = new HashSet<Guid>();
-            this.m_Walls = new Dictionary<Vector2Int, IJoyObject>();
+            this.m_Walls = new HashSet<Vector2Int>();
             this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
 
             this.LightCalculator = new LightCalculator();
@@ -133,50 +133,6 @@ namespace JoyLib.Code.World
                 }
             }
 
-            this.Initialise();
-        }
-
-        /// <summary>
-        /// For creating a well-established WorldInstance
-        /// </summary>
-        /// <param name="tiles"></param>
-        /// <param name="areas"></param>
-        /// <param name="entities"></param>
-        /// <param name="items"></param>
-        /// <param name="tags"></param>
-        /// <param name="name"></param>
-        public WorldInstance(WorldTile[,] tiles, Dictionary<Vector2Int, IWorldInstance> areas, HashSet<IEntity> entities,
-            HashSet<IItemInstance> items, Dictionary<Vector2Int, IJoyObject> walls, string[] tags, string name)
-        {
-            this.Name = name;
-            this.Tags = new List<string>(tags);
-            this.m_Tiles = tiles;
-            this.m_Dimensions = new Vector2Int(tiles.GetLength(0), tiles.GetLength(1));
-            this.m_Areas = areas;
-            this.m_Entities = entities;
-            this.m_EntityGUIDs = new HashSet<Guid>(this.m_Entities.Select(entity => entity.Guid));
-            this.m_Items = items;
-            this.m_ItemGUIDs = new HashSet<Guid>(this.m_Items.Select(o => o.Guid).ToList());
-            this.m_Walls = walls;
-            //this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
-            this.CalculatePlayerIndex();
-
-            this.m_Costs = new byte[this.m_Tiles.GetLength(0), this.m_Tiles.GetLength(1)];
-            for (int x = 0; x < this.m_Costs.GetLength(0); x++)
-            {
-                for (int y = 0; y < this.m_Costs.GetLength(1); y++)
-                {
-                    this.m_Costs[x, y] = 1;
-                }
-            }
-
-            this.LightCalculator = new LightCalculator();
-
-            foreach (Vector2Int position in this.m_Walls.Keys)
-            {
-                this.m_Costs[position.x, position.y] = byte.MaxValue;
-            }
-            
             this.Initialise();
         }
 
@@ -234,7 +190,7 @@ namespace JoyLib.Code.World
             objects.AddRange(this.m_Entities.SelectMany(entity =>
                 entity.Contents.Where(instance => instance.ItemType.LightLevel > 0)));
 
-            this.LightCalculator.Do(objects, this, this.Dimensions, this.Walls.Keys);
+            this.LightCalculator.Do(objects, this, this.Dimensions, this.Walls);
         }
 
         public void AddItem(IItemInstance objectRef)
@@ -247,10 +203,10 @@ namespace JoyLib.Code.World
             this.IsDirty = true;
         }
 
-        public void AddWall(IJoyObject wallRef)
+        public void AddWall(Vector2Int wallRef)
         {
-            this.m_Walls.Add(wallRef.WorldPosition, wallRef);
-            this.m_Costs[wallRef.WorldPosition.x, wallRef.WorldPosition.y] = byte.MaxValue;
+            this.m_Walls.Add(wallRef);
+            this.m_Costs[wallRef.x, wallRef.y] = byte.MaxValue;
         }
 
         public bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef)
@@ -540,7 +496,7 @@ namespace JoyLib.Code.World
                 return PhysicsResult.EntityCollision;
             }
 
-            if (this.Walls.ContainsKey(worldPosition))
+            if (this.Walls.Contains(worldPosition))
             {
                 return PhysicsResult.WallCollision;
             }
@@ -630,8 +586,8 @@ namespace JoyLib.Code.World
         public List<Vector2Int> GetVisibleWalls(IEntity viewer)
         {
             List<Vector2Int> visibleWalls = this.Walls
-                .Where(wall => viewer.VisionProvider.CanSee(viewer, this, wall.Key))
-                .ToDictionary(wall => wall.Key, wall => wall.Value).Keys.ToList();
+                .Where(wall => viewer.VisionProvider.HasVisibility(viewer, this, wall))
+                .ToList();
             return visibleWalls;
         }
 
@@ -712,7 +668,7 @@ namespace JoyLib.Code.World
             get { return this.m_Items; }
         }
 
-        public Dictionary<Vector2Int, IJoyObject> Walls
+        public HashSet<Vector2Int> Walls
         {
             get { return this.m_Walls; }
         }

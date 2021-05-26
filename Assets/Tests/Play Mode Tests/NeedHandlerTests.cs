@@ -27,7 +27,7 @@ namespace Tests
             IGameManager gameManager = Mock.Of<IGameManager>(
                 manager => manager.RelationshipHandler == Mock.Of<IEntityRelationshipHandler>()
                 && manager.ObjectIconHandler == Mock.Of<IObjectIconHandler>(
-                    handler => handler.GetSprites(
+                    handler => handler.GetManagedSprites(
                         It.IsAny<string>(), 
                         It.IsAny<string>(),
                         It.IsAny<string>()) 

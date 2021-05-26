@@ -9,6 +9,7 @@
       "TileSet": 
         {
           "Name": "Naga Pits",
+          "UseTileMap": true,
           "SpriteData": [
             {
               "Name": "SurroundFloor",

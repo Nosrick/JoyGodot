@@ -45,8 +45,8 @@ namespace JoyLib.Code.States
             gameManager.EntityPool.RetireAll();
             gameManager.ItemPool.RetireAll();
             gameManager.FogPool.RetireAll();
-            gameManager.FloorPool.RetireAll();
-            gameManager.WallPool.RetireAll();
+            gameManager.FloorTileMap.Clear();
+            gameManager.WallTileMap.Clear();
 
             this.Done = true;
         }

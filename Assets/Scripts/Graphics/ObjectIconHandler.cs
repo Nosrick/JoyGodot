@@ -28,12 +28,15 @@ namespace JoyLib.Code.Graphics
         //Value is the List of frames from that position
         protected IDictionary<string, IDictionary<int, Texture>> CachedTiles { get; set; }
 
+        protected IDictionary<string, TileSet> TileSets { get; set; }
+
         public ObjectIconHandler(RNG roller)
         {
             this.Roller = roller;
             this.ValueExtractor = new JSONValueExtractor();
             this.CachedTextures = new System.Collections.Generic.Dictionary<string, Texture>();
             this.CachedTiles = new System.Collections.Generic.Dictionary<string, IDictionary<int, Texture>>();
+            this.TileSets = new System.Collections.Generic.Dictionary<string, TileSet>();
             this.Load();
         }
 
@@ -53,7 +56,13 @@ namespace JoyLib.Code.Graphics
 
             ImageTexture defaultImageTexture = new ImageTexture();
             defaultImageTexture.CreateFromImage(defaultSprite.GetData(), 2);
-            //defaultSprite.pivot = new Vector2(0.5f, 0.5f);
+
+            TileSet defaultSet = new TileSet();
+            defaultSet.CreateTile(0);
+            defaultSet.TileSetTexture(0, defaultImageTexture);
+            defaultSet.TileSetName(0, "default");
+            this.TileSets.Add("default", defaultSet);
+
             SpriteData iconData = new SpriteData
             {
                 Name = "default",
@@ -104,28 +113,66 @@ namespace JoyLib.Code.Graphics
             return true;
         }
 
-        public bool AddSpriteData(string tileSet, SpriteData dataToAdd)
+        public bool AddSpriteData(string tileSet, SpriteData dataToAdd, bool isTileSet)
         {
-            if (this.Icons.ContainsKey(tileSet))
+            if (isTileSet)
             {
-                this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd));
+                if (this.TileSets.TryGetValue(tileSet, out TileSet set))
+                {
+                    this.TileSets[tileSet] = this.AddSpriteDataToTileSet(set, dataToAdd);
+                }
+                else
+                {
+                    TileSet newSet = this.AddSpriteDataToTileSet(new TileSet(), dataToAdd);
+                    this.TileSets.Add(tileSet, newSet);
+                }
             }
             else
             {
-                this.Icons.Add(new KeyValuePair<string, List<Tuple<string, SpriteData>>>(
-                    tileSet,
-                    new List<Tuple<string, SpriteData>>
-                    {
-                        new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd)
-                    }));
+                if (this.Icons.ContainsKey(tileSet))
+                {
+                    this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd));
+                }
+                else
+                {
+                    this.Icons.Add(new KeyValuePair<string, List<Tuple<string, SpriteData>>>(
+                        tileSet,
+                        new List<Tuple<string, SpriteData>>
+                        {
+                            new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd)
+                        }));
+                }
             }
 
             return true;
         }
 
-        public bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd)
+        public TileSet AddSpriteDataToTileSet(TileSet set, SpriteData data)
         {
-            return dataToAdd.Aggregate(true, (current, data) => current & this.AddSpriteData(tileSet, data));
+            foreach (var part in data.Parts)
+            {
+                for (int i = 0; i < part.m_Frames; i++)
+                {
+                    if (set.FindTileByName(part.m_Name) >= 0)
+                    {
+                        continue;
+                    }
+                    
+                    var index = set.GetLastUnusedTileId();
+                    set.CreateTile(index);
+                    set.TileSetTexture(index, part.m_FrameSprite[i]);
+                    set.TileSetName(index, part.m_Name);
+                }
+            }
+
+            return set;
+        }
+
+        public bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd, bool isTileSet)
+        {
+            return dataToAdd.Aggregate(true,
+                (current, data) =>
+                    current & this.AddSpriteData(tileSet, data, isTileSet));
         }
 
         /// <summary>
@@ -141,6 +188,9 @@ namespace JoyLib.Code.Graphics
             string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
             ICollection<Dictionary> tileSetArray =
                 this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
+
+            bool isTileSet = this.ValueExtractor.GetValueFromDictionary<bool>(tileSetDict, "UseTileMap");
+            
             foreach (Dictionary dict in tileSetArray)
             {
                 try
@@ -247,7 +297,7 @@ namespace JoyLib.Code.Graphics
                 }
             }
 
-            return this.AddSpriteDataRange(tileSetName, spriteData);
+            return this.AddSpriteDataRange(tileSetName, spriteData, isTileSet);
         }
 
         protected Texture TryGetTextureFromCache(string fileName)
@@ -305,12 +355,12 @@ namespace JoyLib.Code.Graphics
                 {
                     ImageTexture imageTexture = new ImageTexture();
                     imageTexture.CreateFromImage(sheet.GetRect(new Rect2(x, y, size, size)), 2);
-                    
+
                     if (imageTexture.GetData().IsInvisible())
                     {
                         continue;
                     }
-                    
+
                     if (this.CachedTiles.ContainsKey(fileName))
                     {
                         if (this.CachedTiles[fileName].ContainsKey(p) == false)
@@ -350,12 +400,12 @@ namespace JoyLib.Code.Graphics
                 .Select(tuple => tuple.Item2.Copy());
         }
 
-        public SpriteData ReturnDefaultIcon()
+        public TileSet ReturnDefaultTileSet()
         {
-            return this.Icons["DEFAULT"].First().Item2;
+            return this.TileSets["default"];
         }
 
-        public IEnumerable<SpriteData> GetSprites(string tileSet, string tileName, string state = "DEFAULT")
+        public IEnumerable<SpriteData> GetManagedSprites(string tileSet, string tileName, string state = "DEFAULT")
         {
             List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
                 .SelectMany(x => x.Value.Where(pair => pair.Item1.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
@@ -363,14 +413,75 @@ namespace JoyLib.Code.Graphics
                 .Select(x => x.Item2)
                 .ToList();
 
-            return data.Any() == false ? this.ReturnDefaultData() : data;
+            return data.Any() ? data : this.ReturnDefaultData();
         }
 
-        public IEnumerable<SpriteData> GetTileSet(string tileSet)
+        public IEnumerable<SpriteData> GetSpritesForManagedAssets(string tileSet)
         {
-            return this.Icons.Where(pair => pair.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
+            List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
                 .SelectMany(pair => pair.Value)
-                .Select(pair => pair.Item2);
+                .Select(l => l.Item2)
+                .ToList();
+
+            return data.Any() ? data : this.ReturnDefaultData();
+        }
+
+        /// <summary>
+        /// Ideally this is to be used for world spaces ONLY
+        /// </summary>
+        /// <param name="tileSet">The name of the tile set</param>
+        /// <param name="addStairs">Whether to append the stairs tiles to the tile set</param>
+        /// <returns>The found tile set, or null if nothing was found</returns>
+        public TileSet GetStaticTileSet(string tileSet, bool addStairs = false)
+        {
+            if (!this.TileSets.TryGetValue(tileSet, out TileSet set))
+            {
+                return null;
+            }
+            
+            if (addStairs
+                && this.TileSets.TryGetValue("stairs", out TileSet stairs))
+            {
+                int index = set.GetLastUnusedTileId();
+                set.CreateTile(index);
+                set.TileSetName(index, "downstairs");
+                set.TileSetTexture(index, stairs.TileGetTexture(stairs.FindTileByName("downstairs")));
+
+                index = set.GetLastUnusedTileId();
+                set.CreateTile(index);
+                set.TileSetName(index, "upstairs");
+                set.TileSetTexture(index, stairs.TileGetTexture(stairs.FindTileByName("upstairs")));
+            }
+
+            return set;
+        }
+
+        public SpriteData GetStaticSpriteData(string tileSet)
+        {
+            SpriteData data = new SpriteData
+            {
+                Name = "default"
+            };
+            if (this.TileSets.TryGetValue(tileSet, out TileSet set))
+            {
+                foreach (int index in set.GetTilesIds())
+                {
+                    string name = set.TileGetName(index);
+                    Texture texture = set.TileGetTexture(index);
+                    data.Parts.Add(new SpritePart
+                    {
+                        m_Data = new []{"default"},
+                        m_Frames = 1,
+                        m_Name = name,
+                        m_FrameSprite = new List<Texture>{ texture },
+                        m_PossibleColours = new List<Color> { Colors.White },
+                        m_SortingOrder = index,
+                        m_StretchMode = NinePatchRect.AxisStretchMode.TileFit
+                    });
+                }
+            }
+
+            return data.Parts.Count > 0 ? data : this.ReturnDefaultData().First();
         }
 
         protected IDictionary<string, List<Tuple<string, SpriteData>>> Icons { get; set; }

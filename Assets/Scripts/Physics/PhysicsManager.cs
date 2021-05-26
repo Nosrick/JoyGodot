@@ -21,7 +21,7 @@ namespace JoyLib.Code.Physics
                 }
             }
 
-            if (worldRef.Walls.ContainsKey(to))
+            if (worldRef.Walls.Contains(to))
             {
                 return PhysicsResult.WallCollision;
             }

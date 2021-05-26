@@ -135,6 +135,7 @@ namespace JoyLib.Code.IO
         
         private void AssignIcons(IWorldInstance parent)
         {
+            /*
             foreach (IJoyObject wall in parent.Walls.Values)
             {
                 foreach (ISpriteState state in wall.States)
@@ -144,6 +145,7 @@ namespace JoyLib.Code.IO
 
                 wall.MyWorld = parent;
             }
+            */
 
             foreach(IWorldInstance world in parent.Areas.Values)
             {

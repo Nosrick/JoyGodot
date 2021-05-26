@@ -23,13 +23,13 @@ namespace JoyLib.Code.Unity.GUI
         protected HashSet<GUIData> ActiveGUIs { get; set; }
 
         protected Node RootUI { get; set; }
-        
+
         protected Node PersistentRoot { get; set; }
-        
+
         public ManagedCursor Cursor { get; protected set; }
-        
+
         public Tooltip Tooltip { get; protected set; }
-        
+
         public ContextMenu ContextMenu { get; protected set; }
 
         public IDictionary<string, Theme> Themes { get; protected set; }
@@ -88,11 +88,18 @@ namespace JoyLib.Code.Unity.GUI
                 this.ActiveGUIs = new HashSet<GUIData>();
 
                 this.UISprites = new System.Collections.Generic.Dictionary<string, ISpriteState>();
-
-                this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
-                    .Select(data => new SpriteState(data.Name, data))
-                    .Cast<ISpriteState>()
-                    .ToDictionary(state => state.Name, state => state);
+                
+                this.Cursors = new System.Collections.Generic.Dictionary<string, ISpriteState>();
+                var cursors = GlobalConstants.GameManager.ObjectIconHandler.GetSpritesForManagedAssets("Cursors");
+                foreach (SpriteData data in cursors)
+                {
+                    this.Cursors.Add(
+                        data.Name,
+                        new SpriteState(
+                            data.Name,
+                            data));
+                }
+                
                 this.CursorColours = new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
                 this.UISpriteColours = new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
                 this.LoadedFonts = new System.Collections.Generic.Dictionary<string, DynamicFont>
@@ -252,16 +259,9 @@ namespace JoyLib.Code.Unity.GUI
                     this.ValueExtractor.GetValueFromDictionary<Dictionary>(dictionary, "TileSet"),
                     "Name");
 
-                var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet(tileSetName);
-                foreach (SpriteData data in spriteData)
+                var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetSpritesForManagedAssets(tileSetName);
+                foreach (var data in spriteData)
                 {
-                    if (this.Themes.ContainsKey(data.Name) == false)
-                    {
-                        Theme theme = new Theme();
-                        theme.SetIcon(data.Name, "ManagedUIElement", data.Parts.First().m_FrameSprite.FirstOrDefault());
-                        this.Themes.Add(data.Name, theme);
-                    }
-                    
                     if (this.UISprites.ContainsKey(data.Name))
                     {
                         continue;
@@ -318,6 +318,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Tooltip = this.PersistentRoot.GetNode<Tooltip>("Tooltip");
                 this.SetupManagedComponents(this.Tooltip);
             }
+
             this.Add(this.Tooltip);
 
             if (this.ContextMenu is null)
@@ -334,13 +335,14 @@ namespace JoyLib.Code.Unity.GUI
             Array children = this.RootUI.GetChildren();
             if (children.IsNullOrEmpty() == false)
             {
-                for(int i = 0; i < children.Count; i++)
+                for (int i = 0; i < children.Count; i++)
                 {
                     Node child = this.RootUI.GetChild(0);
                     this.RootUI.RemoveChild(child);
                     child.QueueFree();
                 }
             }
+
             Control newUI = (Control) ui.Instance();
             newUI.AnchorBottom = 1;
             newUI.AnchorRight = 1;
@@ -368,7 +370,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.ActiveGUIs.Add(gui);
             }
-            
+
             return true;
         }
 
@@ -384,7 +386,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.SetupManagedComponents(gui, crossFade, duration);
             }
-            
+
             this.Cursor.AddSpriteState(this.Cursors["DefaultCursor"]);
             this.Cursor.OverrideAllColours(this.CursorColours["DefaultCursor"], crossFade, duration);
             this.SetupManagedComponents(this.Tooltip);
@@ -396,7 +398,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.SetUpManagedComponent(guiElement);
             }
-            
+
             Array managedComponents = gui.GetAllChildren();
             foreach (var component in managedComponents)
             {
@@ -418,7 +420,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 element.Initialise();
             }
-                
+
             if (element is ISpriteStateElement spriteStateElement)
             {
                 if (this.UISprites.TryGetValue(spriteStateElement.ElementName, out ISpriteState value))
@@ -432,9 +434,11 @@ namespace JoyLib.Code.Unity.GUI
                         LogLevel.Warning);
                 }
             }
+
             if (element is IColourableElement colourfulElement)
             {
-                if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName, out IDictionary<string, Color> value))
+                if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName,
+                    out IDictionary<string, Color> value))
                 {
                     colourfulElement.OverrideAllColours(value, crossFade, duration, true);
                 }

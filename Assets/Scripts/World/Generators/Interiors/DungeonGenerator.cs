@@ -40,15 +40,14 @@ namespace JoyLib.Code.World.Generators.Interiors
             for (int i = 1; i <= levels; i++)
             {
                 WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size, worldInfo.name);
+                HashSet<Vector2Int> walls = interiorGenerator.GenerateWalls(tiles);
                 WorldInstance worldInstance = new WorldInstance(
                     tiles, 
                     worldInfo.tags, 
                     worldInfo.name + " " + i, 
                     gameManager.EntityHandler, 
                     roller);
-
-                IEnumerable<IJoyObject> walls = interiorGenerator.GenerateWalls(tiles);
-                foreach(IJoyObject wall in walls)
+                foreach(Vector2Int wall in walls)
                 {
                     worldInstance.AddWall(wall);
                 }

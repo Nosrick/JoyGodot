@@ -64,8 +64,8 @@ namespace JoyLib.Code
 
             this.LoadingMessage = "Initialising object pools";
             this.WorldHolder = this.GetNode<Node2D>("WorldHolder");
-            this.FloorHolder = (Node2D) this.WorldHolder.FindNode("WorldFloors");
-            this.WallHolder = (Node2D) this.WorldHolder.FindNode("WorldWalls");
+            this.FloorTileMap = this.WorldHolder.FindNode("WorldFloors") as TileMap;
+            this.WallTileMap = this.WorldHolder.FindNode("WorldWalls") as TileMap;
             this.ItemHolder = (Node2D) this.WorldHolder.FindNode("WorldObjects");
             this.EntityHolder = (Node2D) this.WorldHolder.FindNode("WorldEntities");
             this.FogHolder = (Node2D) this.WorldHolder.FindNode("WorldFog");
@@ -74,8 +74,6 @@ namespace JoyLib.Code
             PackedScene positionableSprite = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn");
             PackedScene fog =
                 GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/Fog of War.tscn");
-            this.FloorPool = new GameObjectPool<ManagedSprite>(positionableSprite, this.FloorHolder);
-            this.WallPool = new GameObjectPool<JoyObjectNode>(prefab, this.WallHolder);
             this.EntityPool = new GameObjectPool<JoyObjectNode>(prefab, this.EntityHolder);
             this.ItemPool = new GameObjectPool<JoyObjectNode>(prefab, this.ItemHolder);
             this.FogPool = new GameObjectPool<PositionableSprite>(fog, this.FogHolder);
@@ -211,10 +209,8 @@ namespace JoyLib.Code
             this.m_StateManager.Stop();
             
             this.EntityPool.RetireAll();
-            this.FloorPool.RetireAll();
             this.FogPool.RetireAll();
             this.ItemPool.RetireAll();
-            this.WallPool.RetireAll();
 
             this.Dispose();
 
@@ -270,17 +266,14 @@ namespace JoyLib.Code
         
         public IEntity Player => this.EntityHandler.GetPlayer();
 
-        public GameObjectPool<ManagedSprite> FloorPool { get; protected set; }
-        public GameObjectPool<JoyObjectNode> WallPool { get; protected set; }
+        public TileMap FloorTileMap { get; protected set; }
+        public TileMap WallTileMap { get; protected set; }
         public GameObjectPool<JoyObjectNode> EntityPool { get; protected set; }
         public GameObjectPool<JoyObjectNode> ItemPool { get; protected set; }
         public GameObjectPool<PositionableSprite> FogPool { get; protected set; }
-        public Node2D WorldHolder { get; protected set; }
         public Node2D FogHolder { get; protected set; }
+        public Node2D WorldHolder { get; protected set; }
         public Node2D EntityHolder { get; protected set; }
-
-        public Node2D WallHolder { get; protected set; }
-        public Node2D FloorHolder { get; protected set; }
         public Node2D ItemHolder { get; protected set; }
 
         //public CheatInterface Cheats { get; set; }

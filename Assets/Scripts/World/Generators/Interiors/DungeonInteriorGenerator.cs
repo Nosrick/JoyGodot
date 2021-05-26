@@ -68,38 +68,17 @@ namespace JoyLib.Code.World.Generators.Interiors
             return tiles;
         }
 
-        public IEnumerable<IJoyObject> GenerateWalls(WorldTile[,] worldTiles)
+        public HashSet<Vector2Int> GenerateWalls(WorldTile[,] worldTiles)
         {
-            List<IJoyObject> walls = new List<IJoyObject>();
-            List<SpriteData> spriteData = this.ObjectIcons.GetSprites(this.TileSet, "SurroundWall").ToList();
-            List<SpriteState> spriteList = spriteData.Select(data => new SpriteState("SurroundWall", data)).ToList();
-
-            List<IBasicValue<float>> values = new List<IBasicValue<float>>
-            {
-                new ConcreteBasicFloatValue("weight", 1),
-                new ConcreteBasicFloatValue("bonus", 1),
-                new ConcreteBasicFloatValue("size", 1),
-                new ConcreteBasicFloatValue("hardness", 1),
-                new ConcreteBasicFloatValue("density", 1)
-            };
-
+            HashSet<Vector2Int> walls = new HashSet<Vector2Int>();
+            
             for (int i = 0; i < this.m_UntreatedTiles.GetLength(0); i++)
             {
                 for (int j = 0; j < this.m_UntreatedTiles.GetLength(1); j++)
                 {
                     if (this.m_UntreatedTiles[i, j] == GeneratorTileType.Perimeter || this.m_UntreatedTiles[i, j] == GeneratorTileType.Wall || this.m_UntreatedTiles[i, j] == GeneratorTileType.None)
                     {
-                        walls.Add(
-                            new JoyObject(
-                                "Wall", 
-                                this.GuidManager.AssignGUID(),
-                                this.DerivedValueHandler.GetItemStandardBlock(values), 
-                                new Vector2Int(i, j), 
-                                new string[] {}, 
-                                spriteList,
-                                this.TileSet,
-                                null,
-                                "wall", "interior"));
+                        walls.Add(new Vector2Int(i, j));
                     }
                 }
             }

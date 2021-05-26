@@ -23,7 +23,7 @@ namespace JoyLib.Code.World.Generators
 
             Vector2Int point = new Vector2Int(x, y);
 
-            while (worldRef.Walls.Keys.Any(l => l.Equals(point)))
+            while (worldRef.Walls.Any(l => l.Equals(point)))
             {
                 x = this.Roller.Roll(1, worldRef.Tiles.GetLength(0));
                 y = this.Roller.Roll(1, worldRef.Tiles.GetLength(1));
@@ -44,7 +44,7 @@ namespace JoyLib.Code.World.Generators
             Vector2Int point = new Vector2Int(x, y);
 
             int count = 0;
-            while (worldRef.Walls.Keys.Any(l => l == point) && 
+            while (worldRef.Walls.Contains(point) && 
                 (point.Equals(worldRef.SpawnPoint) || count < breakout))
             {
                 x = this.Roller.Roll(1, worldRef.Tiles.GetLength(0));
@@ -63,7 +63,7 @@ namespace JoyLib.Code.World.Generators
             else
             {
                 count = 0;
-                while (worldRef.Walls.Keys.Any(l => l == point) 
+                while (worldRef.Walls.Contains(point) 
                         && (point.Equals(worldRef.SpawnPoint) || count < breakout) 
                         && pathfinder.FindPath(point, worldRef.SpawnPoint, worldRef).Count == 0)
                 {

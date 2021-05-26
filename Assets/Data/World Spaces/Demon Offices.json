@@ -9,6 +9,7 @@
     "TileSet":
     {
       "Name": "Demon Offices",
+      "UseTileMap": true,
       "SpriteData": [
         {
           "Name": "SurroundFloor",

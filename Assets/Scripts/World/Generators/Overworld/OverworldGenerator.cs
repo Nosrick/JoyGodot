@@ -34,9 +34,9 @@ namespace JoyLib.Code.World.Generators.Overworld
         {
         }
 
-        public IEnumerable<IJoyObject> GenerateWalls(WorldTile[,] worldTiles)
+        public HashSet<Vector2Int> GenerateWalls(WorldTile[,] worldTiles)
         {
-            return new List<JoyObject>();
+            return new HashSet<Vector2Int>();
         }
     }
 }

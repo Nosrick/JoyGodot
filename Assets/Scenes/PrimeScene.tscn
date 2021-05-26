@@ -6,7 +6,7 @@
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/Scenes/Windows/Context Menu.tscn" type="PackedScene" id=5]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -21,10 +21,14 @@ script = ExtResource( 3 )
 
 [node name="WorldHolder" type="Node2D" parent="."]
 
-[node name="WorldFloors" type="Node2D" parent="WorldHolder"]
+[node name="WorldFloors" type="TileMap" parent="WorldHolder"]
+cell_size = Vector2( 32, 32 )
+format = 1
 
-[node name="WorldWalls" type="Node2D" parent="WorldHolder"]
+[node name="WorldWalls" type="TileMap" parent="WorldHolder"]
 z_index = 1
+cell_size = Vector2( 32, 32 )
+format = 1
 
 [node name="WorldObjects" type="Node2D" parent="WorldHolder"]
 z_index = 2
@@ -43,7 +47,7 @@ z_as_relative = false
 [node name="Tooltip" parent="Persistent UI" instance=ExtResource( 2 )]
 visible = false
 PositionOffset = Vector2( 0, 0 )
-CustomFont = SubResource( 1 )
+CustomFont = SubResource( 2 )
 
 [node name="Context Menu" parent="Persistent UI" instance=ExtResource( 5 )]
 visible = false

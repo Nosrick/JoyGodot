@@ -129,7 +129,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 1f);
             ISpriteState state = new SpriteState(
                 "player",
-                this.IconHandler.GetSprites(
+                this.IconHandler.GetManagedSprites(
                     culture.Tileset,
                     template.CreatureType,
                     "idle").First());
