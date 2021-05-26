@@ -48,8 +48,6 @@ namespace JoyLib.Code.Godot
             this.OverrideAllColours(state.SpriteData.GetCurrentPartColours());
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
             this.Scale = new Vector2(scale, scale);
-            var shape = this.Collider.GetChild<CollisionShape2D>(0).Shape as RectangleShape2D;
-            shape.Extents = new Vector2(GlobalConstants.SPRITE_WORLD_SIZE * 1.8f, GlobalConstants.SPRITE_WORLD_SIZE * 1.8f);
             this.MoveChild(this.Collider, this.GetChildCount() - 1);
         }
 

@@ -79,12 +79,20 @@ namespace JoyLib.Code.Unity.GUI
                 this.GUIManager = GlobalConstants.GameManager?.GUIManager;
                 return;
             }
+            
+            if (@event is InputEventMouseMotion motion)
+            {
+                this.UpdatePosition(motion.Position);
+            }
 
             bool actionPressed = Input.IsActionPressed("tooltip_show");
             
             if (actionPressed && this.ShouldShow == false)
             {
                 this.ShouldShow = true;
+                GD.Print("TOOLTIP SHOULD SHOW");
+                GD.Print("VISIBLE " + this.Visible);
+                GD.Print("EMPTY " + this.Empty);
             }
             else if (actionPressed == false && this.ShouldShow)
             {
@@ -101,27 +109,20 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.GUIManager?.CloseGUI(this.Name);
             }
-            
-            if (@event is InputEventMouseMotion motion)
-            {
-                this.UpdatePosition(motion);
-            }
         }
 
-        protected void UpdatePosition(InputEventMouseMotion motion)
+        protected void UpdatePosition(Vector2 position)
         {
             if (this.GUIManager?.Cursor is null)
             {
                 return;
             }
-            
-            Vector2 mousePosition = motion.Position;
 
             Vector2 rectSize = this.MainContainer.RectSize;
             Vector2 offset = Vector2.Zero;
             Vector2 viewportSize = this.GetViewport().Size;
             int cursorSize = this.GUIManager.Cursor.CursorSize;
-            if (mousePosition.x < viewportSize.x - rectSize.x)
+            if (position.x < viewportSize.x - rectSize.x)
             {
                 offset.x += cursorSize / 2;
             }
@@ -130,7 +131,7 @@ namespace JoyLib.Code.Unity.GUI
                 offset.x -= rectSize.x;
             }
 
-            if (mousePosition.y > viewportSize.y - rectSize.y)
+            if (position.y > viewportSize.y - rectSize.y)
             {
                 offset.y -= rectSize.y;
             }
@@ -139,7 +140,7 @@ namespace JoyLib.Code.Unity.GUI
                 offset.y += cursorSize / 2;
             }
 
-            this.RectPosition = mousePosition + this.PositionOffset + offset;
+            this.RectPosition = position + this.PositionOffset + offset;
         }
 
         public virtual void Show(
@@ -218,10 +219,7 @@ namespace JoyLib.Code.Unity.GUI
            
             this.Background.Visible = showBackground;
 
-            if (allEmpty)
-            {
-                this.Empty = true;
-            }
+            this.Empty = allEmpty;
             
             if (this.ShouldShow)
             {
@@ -249,6 +247,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public void WipeData()
         {
+            GD.Print("TOOLTIP WIPE DATA");
             this.Icon.Clear();
             this.IconSlot.Visible = false;
             this.Title.Text = null;
