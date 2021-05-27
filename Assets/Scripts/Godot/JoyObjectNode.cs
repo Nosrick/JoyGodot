@@ -81,8 +81,7 @@ namespace JoyLib.Code.Godot
             
             if (this.MyJoyObject.Tooltip.IsNullOrEmpty()
                 || player is null
-                || player.VisionProvider.HasVisibility(player, player.MyWorld, this.MyJoyObject.WorldPosition) == false
-                || this.GuiManager.IsActive(GUINames.TOOLTIP))
+                || player.VisionProvider.HasVisibility(player, player.MyWorld, this.MyJoyObject.WorldPosition) == false)
             {
                 return;
             }

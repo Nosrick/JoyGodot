@@ -59,10 +59,15 @@ public class ContextMenu : GUIData
         this.RectPosition = this.GetViewport().GetMousePosition();
     }
 
-    public override void Close(object sender)
+    public override bool Close(object sender)
     {
-        base.Close(sender);
-        this.Clear();
+        if (base.Close(sender))
+        {
+            this.Clear();
+            return true;
+        }
+
+        return false;
     }
 
     public void AddItem(string text, Action action)

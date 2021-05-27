@@ -525,8 +525,10 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            toClose.Close(sender);
-            this.ActiveGUIs.Remove(toClose);
+            if (toClose.Close(sender))
+            {
+                this.ActiveGUIs.Remove(toClose);
+            }
         }
 
         public bool RemoveActiveGUI(string name)

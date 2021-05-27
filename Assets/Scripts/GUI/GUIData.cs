@@ -51,11 +51,11 @@ namespace JoyLib.Code.Unity.GUI
             this.OnGUIOpen?.Invoke(this);
         }
 
-        public virtual void Close(object sender)
+        public virtual bool Close(object sender)
         {
             if (this.AlwaysOpen)
             {
-                return;
+                return false;
             }
             
             this.Visible = false;
@@ -69,6 +69,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             this.OnGUIClose?.Invoke(this);
+            return true;
         }
 
         public override void _Ready()

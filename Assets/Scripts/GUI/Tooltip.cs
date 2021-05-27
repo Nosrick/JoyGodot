@@ -108,7 +108,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             else if(this.ShouldShow == false && this.Visible)
             {
-                this.GUIManager?.CloseGUI(this, this.Name);
+                this.GUIManager?.CloseGUI(this.LastInteraction, this.Name);
             }
         }
 
@@ -152,6 +152,9 @@ namespace JoyLib.Code.Unity.GUI
             bool showBackground = true)
         {
             GD.Print("TOOLTIP SHOW");
+            GD.Print("SENDER IS " + sender);
+
+            this.LastInteraction = sender;
 
             bool allEmpty = true;
             
@@ -248,12 +251,12 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public override void Close(object sender)
+        public override bool Close(object sender)
         {
             if (this.LastInteraction != sender)
             {
                 this.LastInteraction = sender;
-                return;
+                return false;
             }
             
             GD.Print("TOOLTIP WIPE DATA");
@@ -268,7 +271,7 @@ namespace JoyLib.Code.Unity.GUI
 
             this.Empty = true;
             
-            base.Close(sender);
+            return base.Close(sender);
         }
 
         protected void SetIcon(ISpriteState state)
