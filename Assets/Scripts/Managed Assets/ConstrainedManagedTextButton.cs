@@ -53,6 +53,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             base.OnPointerEnter();
             
             GlobalConstants.GameManager.GUIManager.Tooltip.Show(
+                this, 
                 this.Name,
                 null,
                 this.Tooltip);
@@ -62,8 +63,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         {
             base.OnPointerExit();
             
-            GlobalConstants.GameManager.GUIManager.CloseGUI(GUINames.TOOLTIP);
-            GlobalConstants.GameManager.GUIManager.Tooltip.Close();
+            GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
+            GlobalConstants.GameManager.GUIManager.Tooltip.Close(this);
         }
     }
 }

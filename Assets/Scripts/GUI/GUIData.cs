@@ -51,7 +51,7 @@ namespace JoyLib.Code.Unity.GUI
             this.OnGUIOpen?.Invoke(this);
         }
 
-        public virtual void Close()
+        public virtual void Close(object sender)
         {
             if (this.AlwaysOpen)
             {
@@ -64,7 +64,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (child is GUIData data)
                 {
-                    data.Close();
+                    data.Close(sender);
                 }
             }
 
@@ -79,7 +79,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void ButtonClose()
         {
-            this.GUIManager.CloseGUI(this.Name);
+            this.GUIManager.CloseGUI(this, this.Name);
         }
 
         [Export] public bool RemovesControl { get; protected set; }

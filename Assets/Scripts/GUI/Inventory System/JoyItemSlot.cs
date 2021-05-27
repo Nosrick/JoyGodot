@@ -207,7 +207,7 @@ namespace JoyLib.Code.Unity.GUI
                         contextMenu.AddItem("Open", this.OpenContainer);
                     }
                     
-                    this.GuiManager.OpenGUI(GUINames.CONTEXT_MENU);
+                    this.GuiManager.OpenGUI(this, GUINames.CONTEXT_MENU);
                 }
                 else if (this.Container.MoveUsedItem)
                 {
@@ -272,6 +272,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.GuiManager.Tooltip
                     .Show(
+                        this, 
                         this.Item.DisplayName,
                         this.Item.States.FirstOrDefault(),
                         this.Item.Tooltip);
@@ -282,8 +283,7 @@ namespace JoyLib.Code.Unity.GUI
         {
             if (this.Container.ShowTooltips)
             {
-                this.GuiManager.CloseGUI(GUINames.TOOLTIP);
-                this.GuiManager.Tooltip.WipeData();
+                this.GuiManager.CloseGUI(this, GUINames.TOOLTIP);
             }
         }
         
@@ -303,7 +303,7 @@ namespace JoyLib.Code.Unity.GUI
         
         protected virtual void OpenContainer()
         {
-            if (!(this.GuiManager?.OpenGUI(GUINames.INVENTORY_CONTAINER) is ItemContainer container))
+            if (!(this.GuiManager?.OpenGUI(this, GUINames.INVENTORY_CONTAINER) is ItemContainer container))
             {
                 return;
             }

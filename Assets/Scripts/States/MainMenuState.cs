@@ -29,7 +29,7 @@ namespace JoyLib.Code.States
                     GlobalConstants.GODOT_ASSETS_FOLDER +
                     "Scenes/UI/MainMenu.tscn"));
             base.SetUpUi();
-            this.GUIManager.OpenGUI(GUINames.MAIN_MENU);
+            this.GUIManager.OpenGUI(this, GUINames.MAIN_MENU);
         }
 
         public override void Start()

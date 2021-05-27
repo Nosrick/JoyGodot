@@ -45,7 +45,7 @@ namespace JoyLib.Code.Entities.Conversation.Processors
             this.Initialise();
             //this.TradeWindow.SetActors(instigator, listener);
             
-            this.GUIManager.OpenGUI("Trade");
+            this.GUIManager.OpenGUI(this, GUINames.TRADE);
             
             return base.Interact(instigator, listener);
         }

@@ -88,6 +88,7 @@ namespace JoyLib.Code.Godot
             }
 
             this.GuiManager.Tooltip?.Show(
+                this, 
                 this.MyJoyObject.JoyName,
                 this.MyJoyObject.States.FirstOrDefault(),
                 this.MyJoyObject.Tooltip);
@@ -96,8 +97,7 @@ namespace JoyLib.Code.Godot
         public void OnPointerExit()
         {
             GlobalConstants.ActionLog.Log("MOUSE OFF " + this.MyJoyObject.JoyName);
-            this.GuiManager.CloseGUI(GUINames.TOOLTIP);
-            this.GuiManager.Tooltip.WipeData();
+            this.GuiManager.CloseGUI(this, GUINames.TOOLTIP);
         }
     }
 }

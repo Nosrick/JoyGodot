@@ -450,7 +450,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void ToggleGUI(string name)
+        public void ToggleGUI(object sender, string name)
         {
             if (this.ActiveGUIs.Any(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -459,16 +459,16 @@ namespace JoyLib.Code.Unity.GUI
                     .ToArray();
                 foreach (GUIData data in toToggle)
                 {
-                    this.CloseGUI(data.Name);
+                    this.CloseGUI(sender, data.Name);
                 }
             }
             else
             {
-                this.OpenGUI(name);
+                this.OpenGUI(sender, name);
             }
         }
 
-        public GUIData OpenGUI(string name, bool bringToFront = false)
+        public GUIData OpenGUI(object sender, string name, bool bringToFront = false)
         {
             if (this.ActiveGUIs.Any(widget => widget.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -494,7 +494,7 @@ namespace JoyLib.Code.Unity.GUI
                 List<GUIData> activeCopy = new List<GUIData>(this.ActiveGUIs);
                 foreach (GUIData widget in activeCopy)
                 {
-                    this.CloseGUI(widget.Name);
+                    this.CloseGUI(sender, widget.Name);
                 }
             }
 
@@ -510,7 +510,7 @@ namespace JoyLib.Code.Unity.GUI
             return toOpen;
         }
 
-        public void CloseGUI(string activeName)
+        public void CloseGUI(object sender, string activeName)
         {
             if (this.ActiveGUIs.Any(data => data.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
             {
@@ -525,7 +525,7 @@ namespace JoyLib.Code.Unity.GUI
                 return;
             }
 
-            toClose.Close();
+            toClose.Close(sender);
             this.ActiveGUIs.Remove(toClose);
         }
 
@@ -543,7 +543,7 @@ namespace JoyLib.Code.Unity.GUI
                 return false;
             }
 
-            toClose.Close();
+            toClose.Close(this);
             return this.ActiveGUIs.Remove(toClose);
         }
 
@@ -584,7 +584,7 @@ namespace JoyLib.Code.Unity.GUI
             foreach (GUIData data in toClose)
             {
                 this.ActiveGUIs.Remove(data);
-                data.Close();
+                data.Close(this);
             }
         }
 
@@ -596,7 +596,7 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (GUIData data in toClose)
             {
-                data.Close();
+                data.Close(this);
             }
 
             this.ActiveGUIs.RemoveWhere(guiData => guiData.AlwaysOpen == false);

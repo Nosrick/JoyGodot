@@ -29,7 +29,7 @@ namespace JoyGodot.Assets.Scripts.States
                     "Scenes/UI/LoadingScreen.tscn"));
             base.SetUpUi();
 
-            GlobalConstants.GameManager.GUIManager.OpenGUI(GUINames.LOADING_SCREEN);
+            GlobalConstants.GameManager.GUIManager.OpenGUI(this, GUINames.LOADING_SCREEN);
         }
 
         public override void Update()

@@ -105,9 +105,9 @@ namespace JoyLib.Code.States
                     "Scenes/UI/MainGame.tscn"));
             
             base.SetUpUi();
-            this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
-            this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
-            this.GUIManager.OpenGUI(GUINames.ACTION_LOG);
+            this.GUIManager.OpenGUI(this, GUINames.NEEDSRECT);
+            this.GUIManager.OpenGUI(this, GUINames.DERIVED_VALUES);
+            this.GUIManager.OpenGUI(this, GUINames.ACTION_LOG);
 
             var inventory = this.GUIManager.Get(GUINames.INVENTORY) as ItemContainer;
             inventory.JoyObjectOwner = this.PlayerWorld.Player;
@@ -259,7 +259,7 @@ namespace JoyLib.Code.States
             {
                 if (this.GUIManager.AreAnyOpen() == false)
                 {
-                    this.GUIManager.OpenGUI(GUINames.PAUSE);
+                    this.GUIManager.OpenGUI(this, GUINames.PAUSE);
                 }
                 else
                 {
@@ -272,7 +272,7 @@ namespace JoyLib.Code.States
                 this.ToggleWindow(GUINames.INVENTORY);
                 if (this.GUIManager.IsActive(GUINames.INVENTORY) == false)
                 {
-                    this.GUIManager.CloseGUI(GUINames.INVENTORY_CONTAINER);
+                    this.GUIManager.CloseGUI(this, GUINames.INVENTORY_CONTAINER);
                 }
             }
             else if (action.IsActionReleased("toggle equipment"))
@@ -294,8 +294,8 @@ namespace JoyLib.Code.States
 
             if (this.GUIManager.AreAnyOpen() == false)
             {
-                this.GUIManager.OpenGUI(GUINames.NEEDSRECT);
-                this.GUIManager.OpenGUI(GUINames.DERIVED_VALUES);
+                this.GUIManager.OpenGUI(this, GUINames.NEEDSRECT);
+                this.GUIManager.OpenGUI(this, GUINames.DERIVED_VALUES);
             }
 
             if (this.GUIManager.RemovesControl())
@@ -484,9 +484,9 @@ namespace JoyLib.Code.States
 
         protected void ToggleWindow(string name)
         {
-            this.GUIManager.CloseGUI(GUINames.CONTEXT_MENU);
-            this.GUIManager.CloseGUI(GUINames.TOOLTIP);
-            this.GUIManager.ToggleGUI(name);
+            this.GUIManager.CloseGUI(this, GUINames.CONTEXT_MENU);
+            this.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
+            this.GUIManager.ToggleGUI(this, name);
         }
 
         protected void Tick()

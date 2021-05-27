@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
@@ -45,6 +44,8 @@ namespace JoyLib.Code.Unity.GUI
         protected bool ShouldShow { get; set; }
         
         protected bool Empty { get; set; }
+        
+        protected object LastInteraction { get; set; }
 
         public override void _Ready()
         {
@@ -107,7 +108,7 @@ namespace JoyLib.Code.Unity.GUI
             }
             else if(this.ShouldShow == false && this.Visible)
             {
-                this.GUIManager?.CloseGUI(this.Name);
+                this.GUIManager?.CloseGUI(this, this.Name);
             }
         }
 
@@ -144,6 +145,7 @@ namespace JoyLib.Code.Unity.GUI
         }
 
         public virtual void Show(
+            object sender,
             string title = null,  
             ISpriteState sprite = null, 
             ICollection<string> data = null, 
@@ -224,13 +226,14 @@ namespace JoyLib.Code.Unity.GUI
             if (this.ShouldShow)
             {
                 this.Display();
-                this.GUIManager?.OpenGUI(this.Name);
+                this.GUIManager?.OpenGUI(sender, this.Name);
             }
         }
 
         public virtual void ShowCurrent()
         {
             this.Show(
+                this, 
                 this.Title.Text,
                 this.Icon.CurrentSpriteState,
                 this.ItemCache.Select(item => item.Text).ToList());
@@ -245,8 +248,14 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void WipeData()
+        public override void Close(object sender)
         {
+            if (this.LastInteraction != sender)
+            {
+                this.LastInteraction = sender;
+                return;
+            }
+            
             GD.Print("TOOLTIP WIPE DATA");
             this.Icon.Clear();
             this.IconSlot.Visible = false;
@@ -258,6 +267,8 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             this.Empty = true;
+            
+            base.Close(sender);
         }
 
         protected void SetIcon(ISpriteState state)

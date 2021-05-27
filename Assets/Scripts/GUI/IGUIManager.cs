@@ -19,7 +19,7 @@ namespace JoyLib.Code.Unity.GUI
 
         void FindGUIs();
 
-        void ToggleGUI(string name);
+        void ToggleGUI(object sender, string name);
 
         void SetupManagedComponents(Control gui, bool crossFade = false, float duration = 0.1F);
         void SetUpManagedComponent(IManagedElement element, bool crossFade = false, float duration = 0.1f);
@@ -33,9 +33,9 @@ namespace JoyLib.Code.Unity.GUI
 
         void RecolourGUIs(bool crossFade = false, float duration = 0.1f);
 
-        GUIData OpenGUI(string name, bool bringToFront = false);
+        GUIData OpenGUI(object sender, string name, bool bringToFront = false);
 
-        void CloseGUI(string activeName);
+        void CloseGUI(object sender, string activeName);
 
         void BringToFront(string name);
 

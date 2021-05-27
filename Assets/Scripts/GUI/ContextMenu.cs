@@ -35,7 +35,7 @@ public class ContextMenu : GUIData
                 if (mouseButton.Pressed 
                     && this.GetRect().HasPoint(mouseButton.Position) == false)
                 {
-                    this.GUIManager?.CloseGUI(this.Name);
+                    this.GUIManager?.CloseGUI(this, this.Name);
                 }
 
                 break;
@@ -59,9 +59,9 @@ public class ContextMenu : GUIData
         this.RectPosition = this.GetViewport().GetMousePosition();
     }
 
-    public override void Close()
+    public override void Close(object sender)
     {
-        base.Close();
+        base.Close(sender);
         this.Clear();
     }
 
@@ -104,6 +104,6 @@ public class ContextMenu : GUIData
             action.Invoke();
         }
 
-        this.GUIManager?.CloseGUI(this.Name);
+        this.GUIManager?.CloseGUI(this, this.Name);
     }
 }
