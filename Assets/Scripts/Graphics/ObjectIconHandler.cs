@@ -162,6 +162,7 @@ namespace JoyLib.Code.Graphics
                     set.CreateTile(index);
                     set.TileSetTexture(index, part.m_FrameSprite[i]);
                     set.TileSetName(index, part.m_Name);
+                    set.TileSetModulate(index, part.SelectedColour);
                 }
             }
 
