@@ -6,14 +6,24 @@
         "Name": "DefaultCursor",
         "Part": [
           {
-            "Name": "CursorHighlight",
+            "Name": "CursorOutline",
             "Filename": "UI/DefaultCursor.png",
             "Data": [
               "default"
             ],
             "Frames": 1,
             "Position": 0,
-            "SortOrder": 4
+            "SortOrder": 1
+          },
+          {
+            "Name": "CursorHighlight",
+            "Filename": "UI/DefaultCursor.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 1,
+            "SortOrder": 2
           },
           {
             "Name": "CursorBright",
@@ -22,18 +32,8 @@
               "default"
             ],
             "Frames": 1,
-            "Position": 1,
-            "SortOrder": 3
-          },
-          {
-            "Name": "CursorDark",
-            "Filename": "UI/DefaultCursor.png",
-            "Data": [
-              "default"
-            ],
-            "Frames": 1,
             "Position": 2,
-            "SortOrder": 2
+            "SortOrder": 3
           },
           {
             "Name": "CursorMid",
@@ -42,18 +42,18 @@
               "default"
             ],
             "Frames": 1,
-            "Position": 3,
-            "SortOrder": 1
+            "Position": 4,
+            "SortOrder": 4
           },
           {
-            "Name": "CursorOutline",
+            "Name": "CursorDark",
             "Filename": "UI/DefaultCursor.png",
             "Data": [
               "default"
             ],
             "Frames": 1,
-            "Position": 4,
-            "SortOrder": 0
+            "Position": 3,
+            "SortOrder": 3
           }
         ]
       }

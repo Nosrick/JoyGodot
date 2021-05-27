@@ -16,27 +16,27 @@
             "SortOrder": 1,
             "FillType": "stretch",
             "PatchMargins": [
-              9,
-              9,
-              9,
-              9
+              4,
+              4,
+              4,
+              4
             ]
           },
           {
             "Name": "border",
-            "Filename": "UI/background-border.png",
+            "Filename": "UI/background-border-smooth-full.png",
             "Data": [
               "default"
             ],
             "Frames": 1,
             "Position": 0,
             "SortOrder": 2,
-            "FillType": "tile-fit",
+            "FillType": "tile",
             "PatchMargins": [
-              9,
-              9,
-              9,
-              9
+              4,
+              4,
+              4,
+              4
             ],
             "DrawCentre": true
           }
