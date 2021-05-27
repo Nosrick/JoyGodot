@@ -269,11 +269,12 @@ namespace JoyLib.Code.Unity
 
             for (int i = 0; i < this.Slots.Count; i++)
             {
-                if (this.Slots[i].m_Slot.IsNullOrEmpty() == false)
+                if (this.Slots[i] is JoyConstrainedSlot constrainedSlot
+                    && constrainedSlot.Slot.IsNullOrEmpty() == false)
                 {
                     foreach (KeyValuePair<string, int> pair in requiredSlots)
                     {
-                        if (pair.Key.Equals(this.Slots[i].m_Slot, StringComparison.OrdinalIgnoreCase))
+                        if (pair.Key.Equals(constrainedSlot.Slot, StringComparison.OrdinalIgnoreCase))
                         {
                             if (takeFilledSlots == false 
                                 && this.Slots[i].IsEmpty
@@ -424,9 +425,9 @@ namespace JoyLib.Code.Unity
 
             if (item.ItemType.Slots.Any() == false)
             {
-                if (this.Slots.Any(slot => slot.IsEmpty && slot.m_Slot.IsNullOrEmpty()))
+                if (this.Slots.Any(slot => slot.IsEmpty))
                 {
-                    slots = new List<JoyItemSlot> { this.Slots.First(slot => slot.IsEmpty && slot.m_Slot.IsNullOrEmpty()) };
+                    slots = new List<JoyItemSlot> { this.Slots.First(slot => slot.IsEmpty) };
                 }
                 else
                 {

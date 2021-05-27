@@ -16,9 +16,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public bool Initialised { get; protected set; }
 
-        [Export] public string m_Slot;
-
-        [Export] protected bool m_UseRarityColor = false;
+        [Export] protected bool UseRarityColor { get; set; }
 
         protected ManagedUIElement Icon { get; set; }
 
