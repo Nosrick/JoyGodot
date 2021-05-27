@@ -18,6 +18,8 @@ namespace JoyLib.Code.Godot
         protected ManagedSprite SpeechBubble { get; set; }
         
         protected Area2D Collider { get; set; }
+        
+        public bool MouseOver { get; protected set; }
 
         public JoyObjectNode()
         {
@@ -86,6 +88,8 @@ namespace JoyLib.Code.Godot
                 return;
             }
 
+            this.MouseOver = true;
+
             this.GuiManager.Tooltip?.Show(
                 this, 
                 this.MyJoyObject.JoyName,
@@ -95,6 +99,8 @@ namespace JoyLib.Code.Godot
 
         public void OnPointerExit()
         {
+            this.MouseOver = false;
+            
             GlobalConstants.ActionLog.Log("MOUSE OFF " + this.MyJoyObject.JoyName);
             this.GuiManager.CloseGUI(this, GUINames.TOOLTIP);
         }

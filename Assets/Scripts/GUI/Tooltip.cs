@@ -3,6 +3,7 @@ using System.Linq;
 using Castle.Core.Internal;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyLib.Code.Godot;
 using JoyLib.Code.Graphics;
 
 namespace JoyLib.Code.Unity.GUI
@@ -90,10 +91,14 @@ namespace JoyLib.Code.Unity.GUI
             
             if (actionPressed && this.ShouldShow == false)
             {
-                this.ShouldShow = true;
-                GD.Print("TOOLTIP SHOULD SHOW");
-                GD.Print("VISIBLE " + this.Visible);
-                GD.Print("EMPTY " + this.Empty);
+                if (this.LastInteraction is JoyObjectNode node
+                    && node.MouseOver)
+                {
+                    this.ShouldShow = true;
+                    GD.Print("TOOLTIP SHOULD SHOW");
+                    GD.Print("VISIBLE " + this.Visible);
+                    GD.Print("EMPTY " + this.Empty);
+                }
             }
             else if (actionPressed == false && this.ShouldShow)
             {
@@ -106,9 +111,18 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.ShowCurrent();
             }
-            else if(this.ShouldShow == false && this.Visible)
+            else if(this.ShouldShow == false 
+                    && this.Visible)
             {
-                this.GUIManager?.CloseGUI(this.LastInteraction, this.Name);
+                var node = this.LastInteraction as JoyObjectNode;
+                if (node?.MouseOver == false)
+                {
+                    this.GUIManager?.CloseGUI(this.LastInteraction, this.Name);
+                }
+                else
+                {
+                    this.Hide();
+                }
             }
         }
 
