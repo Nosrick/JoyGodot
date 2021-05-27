@@ -63,7 +63,7 @@ namespace JoyLib.Code.Unity.GUI
             this.Initialised = true;
         }
 
-        protected void GetBits()
+        protected virtual void GetBits()
         {
             if (this.Initialised)
             {
@@ -77,9 +77,9 @@ namespace JoyLib.Code.Unity.GUI
             }
             */
             UnstackActions = InputMap.GetActionList("unstack");
-            this.CooldownOverlay = this.GetNode<TextureProgress>("Cooldown Overlay");
-            this.StackLabel = this.GetNode<Label>("Stack");
-            this.Icon = this.GetNode<ManagedUIElement>("Icon");
+            this.CooldownOverlay = this.GetNode<TextureProgress>("Background/Cooldown Overlay");
+            this.StackLabel = this.GetNode<Label>("Background/Stack");
+            this.Icon = this.GetNode<ManagedUIElement>("Background/Icon");
 
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
             this.GuiManager = GlobalConstants.GameManager.GUIManager;
