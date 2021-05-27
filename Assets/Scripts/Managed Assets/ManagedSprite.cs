@@ -299,9 +299,6 @@ namespace JoyLib.Code.Unity
                     };
                     this.Parts.Add(newSprite);
                     this.AddChild(newSprite);
-#if TOOLS
-                    newSprite.Owner = this.GetTree()?.EditedSceneRoot;
-#endif
                 }
             }
 
@@ -312,10 +309,17 @@ namespace JoyLib.Code.Unity
                 SpritePart spriteDataPart = this.CurrentSpriteState.SpriteData.Parts[i];
                 animatedSprite.Name = spriteDataPart.m_Name;
                 animatedSprite.Visible = true;
-                animatedSprite.Frames = new SpriteFrames
+                SpriteFrames frames = new SpriteFrames();
+                if(frames.HasAnimation(this.CurrentSpriteState.SpriteData.State) == false)
                 {
-                    Frames = new Array(spriteDataPart.m_FrameSprite)
-                };
+                    frames.AddAnimation(this.CurrentSpriteState.SpriteData.State);
+                }
+                foreach (var texture in spriteDataPart.m_FrameSprite)
+                {
+                    frames.AddFrame(this.CurrentSpriteState.SpriteData.State, texture);
+                }
+                
+                animatedSprite.Frames = frames;
                 int normaliseSortOrder = spriteDataPart.m_SortingOrder - minSortingOrder;
                 this.MoveChild(animatedSprite, normaliseSortOrder);
                 animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
