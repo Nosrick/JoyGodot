@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using CodingSeb.ExpressionEvaluator;
 using JoyLib.Code.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using NCalc;
 
 namespace JoyLib.Code.Scripting
 {
@@ -20,8 +20,6 @@ namespace JoyLib.Code.Scripting
         protected Assembly m_ScriptDLL;
 
         protected List<Type> m_Types;
-
-        protected ExpressionEvaluator Eval;
 
         public ScriptingEngine()
         {
@@ -87,11 +85,6 @@ namespace JoyLib.Code.Scripting
                         this.m_ScriptDLL = typeof(IJoyObject).Assembly;
                         this.m_Types = new List<Type>(this.m_ScriptDLL.GetExportedTypes());
                     }
-
-                    this.Eval = new ExpressionEvaluator
-                    {
-                        OptionForceIntegerNumbersEvaluationsAsDoubleByDefault = true
-                    };
                 }
                 catch (Exception ex)
                 {
@@ -230,7 +223,8 @@ namespace JoyLib.Code.Scripting
 
         public T Evaluate<T>(string code)
         {
-            return (T)Convert.ChangeType(this.Eval.Evaluate(code), typeof(T));
+            Expression expression = new Expression(code);
+            return (T)Convert.ChangeType(expression.Evaluate(), typeof(T));
         }
     }
 }
