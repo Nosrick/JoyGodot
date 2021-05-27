@@ -35,10 +35,11 @@ namespace JoyLib.Code.Unity.GUI
         }
 
         protected ICollection<string> m_Values;
-        
+
+        public bool MouseOver { get; protected set; }
+
         public int Minimum { get; set; }
         public int Maximum { get; set; }
-
         protected int Index { get; set; }
 
         [Export]
@@ -219,6 +220,8 @@ namespace JoyLib.Code.Unity.GUI
         
         public void OnPointerEnter()
         {
+            this.MouseOver = true;
+            
             GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
                 this, 
                 this.Name,
@@ -228,6 +231,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerExit()
         {
+            this.MouseOver = false;
+            
             GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
             GlobalConstants.GameManager.GUIManager.Tooltip.Close(this);
         }

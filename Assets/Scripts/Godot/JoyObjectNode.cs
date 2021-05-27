@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
@@ -9,7 +11,8 @@ using JoyLib.Code.Unity.GUI;
 namespace JoyLib.Code.Godot
 {
     public class JoyObjectNode : 
-        ManagedSprite
+        ManagedSprite,
+        ITooltipComponent
     {
         public IJoyObject MyJoyObject { get; protected set; }
 
@@ -18,12 +21,13 @@ namespace JoyLib.Code.Godot
         protected ManagedSprite SpeechBubble { get; set; }
         
         protected Area2D Collider { get; set; }
-        
-        public bool MouseOver { get; protected set; }
 
-        public JoyObjectNode()
+        public ICollection<string> Tooltip
         {
+            get => this.MyJoyObject?.Tooltip;
+            set{}
         }
+        public bool MouseOver { get; protected set; }
 
         public override void _Ready()
         {

@@ -29,7 +29,7 @@ namespace JoyLib.Code.Unity.GUI
 
         public ICollection<string> Tooltip { get; set; }
         
-        protected bool MouseInside { get; set; }
+        public bool MouseOver { get; protected set; }
 
         [Export]
         public bool TitleCase
@@ -182,6 +182,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerEnter()
         {
+            this.MouseOver = true;
+            
             GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
                 this, 
                 this.Name,
@@ -191,6 +193,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public void OnPointerExit()
         {
+            this.MouseOver = false;
+            
             GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
             GlobalConstants.GameManager.GUIManager.Tooltip.Close(this);
         }

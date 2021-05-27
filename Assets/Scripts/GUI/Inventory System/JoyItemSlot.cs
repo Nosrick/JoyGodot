@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Unity.GUI
 {
-    public class JoyItemSlot : Control, IManagedElement
+    public class JoyItemSlot : 
+        Control, 
+        IManagedElement,
+        ITooltipComponent
     {
         protected TextureProgress CooldownOverlay { get; set; }
 
@@ -45,7 +50,17 @@ namespace JoyLib.Code.Unity.GUI
         public IGUIManager GuiManager { get; set; }
 
         public ILiveEntityHandler EntityHandler { get; set; }
-        
+
+        public bool MouseOver { get; protected set; }
+
+        public ICollection<string> Tooltip
+        {
+            get => this.Item?.Tooltip;
+            set
+            {
+            }
+        }
+
         protected static DragObject DragData { get; set; }
 
         public override void _Ready()
@@ -253,6 +268,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnPointerEnter()
         {
+            this.MouseOver = true;
+            
             if (this.GuiManager.IsActive(GUINames.CONTEXT_MENU) == false)
             {
                 this.ShowTooltip();
@@ -261,6 +278,8 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnPointerExit()
         {
+            this.MouseOver = false;
+            
             this.CloseTooltip();
         }
 

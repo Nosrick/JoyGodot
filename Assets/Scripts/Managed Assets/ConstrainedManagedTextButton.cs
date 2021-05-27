@@ -10,13 +10,17 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
     #if TOOLS
     [Tool]
     #endif
-    public class ConstrainedManagedTextButton : ManagedTextButton, ITooltipComponent
+    public class ConstrainedManagedTextButton : 
+        ManagedTextButton, 
+        ITooltipComponent
     {
         public int PointRestriction { get; set; }
         
         public int Value { get; set; }
 
         public ICollection<string> Tooltip { get; set; }
+
+        public bool MouseOver { get; protected set; }
 
         [Signal]
         public delegate void ValuePress(string myName, int delta, bool newValue);
@@ -50,6 +54,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
         public override void OnPointerEnter()
         {
+            this.MouseOver = true;
             base.OnPointerEnter();
             
             GlobalConstants.GameManager.GUIManager.Tooltip.Show(
@@ -61,6 +66,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
         public override void OnPointerExit()
         {
+            this.MouseOver = false;
             base.OnPointerExit();
             
             GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
