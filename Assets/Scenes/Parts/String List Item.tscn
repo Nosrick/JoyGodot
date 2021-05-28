@@ -143,15 +143,15 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-Text = "Name"
 TitleCase = true
-OutlineThickness = 1
-OverrideOutline = true
 OverrideColour = true
-FontSize = 24
+OverrideOutline = true
 CustomFont = SubResource( 3 )
+FontSize = 24
+Text = "Name"
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
 
@@ -176,6 +176,17 @@ theme = SubResource( 6 )
 script = ExtResource( 5 )
 HAlign = 1
 VAlign = 1
+OverrideSize = true
+TitleCase = true
+OverrideColour = true
+OverrideOutline = true
+CustomFont = SubResource( 7 )
+FontSize = 24
+CacheFont = true
+Text = "<"
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -184,17 +195,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-Text = "<"
-TitleCase = true
-OutlineThickness = 1
-OverrideOutline = true
-OverrideColour = true
-FontSize = 24
-CacheFont = true
-CustomFont = SubResource( 7 )
 
 [node name="Text" type="Label" parent="Decrease Value"]
 anchor_right = 1.0
@@ -223,15 +223,15 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-Text = "Value"
 TitleCase = true
-OutlineThickness = 1
-OverrideOutline = true
 OverrideColour = true
-FontSize = 24
+OverrideOutline = true
 CustomFont = SubResource( 10 )
+FontSize = 24
+Text = "Value"
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
 
@@ -260,6 +260,17 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+OverrideSize = true
+TitleCase = true
+OverrideColour = true
+OverrideOutline = true
+CustomFont = SubResource( 14 )
+FontSize = 24
+CacheFont = true
+Text = ">"
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -268,17 +279,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-Text = ">"
-TitleCase = true
-OutlineThickness = 1
-OverrideOutline = true
-OverrideColour = true
-FontSize = 24
-CacheFont = true
-CustomFont = SubResource( 14 )
 
 [node name="Text" type="Label" parent="Increase Value"]
 anchor_right = 1.0
