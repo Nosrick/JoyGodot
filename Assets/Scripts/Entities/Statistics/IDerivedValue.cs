@@ -17,6 +17,6 @@
             get;
         }
         int SetBase(int data);
-        int SetEnhancement(int data);
+        int SetEnhancement(int data, bool changeToMatch = true);
     }
 }

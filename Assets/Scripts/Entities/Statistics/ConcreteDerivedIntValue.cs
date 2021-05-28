@@ -64,9 +64,13 @@ namespace JoyLib.Code.Entities.Statistics
             return this.Base;
         }
 
-        public int SetEnhancement(int data)
+        public int SetEnhancement(int data, bool changeToMatch = true)
         {
             this.Enhancement = Math.Max(0, data);
+            if (changeToMatch)
+            {
+                this.ModifyValue(data);
+            }
             return this.Enhancement;
         }
     }
