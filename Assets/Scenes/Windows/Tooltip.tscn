@@ -125,16 +125,16 @@ __meta__ = {
 }
 HAlign = 1
 m_ElementName = "SecondaryAccent"
-OverrideOutline = true
-TitleCase = true
-Text = "Name Of Object"
-OutlineColour = Color( 0, 0, 0, 1 )
 OverrideSize = true
+TitleCase = true
+OverrideColour = true
+OverrideOutline = true
 CustomFont = SubResource( 4 )
+FontSize = 36
+Text = "Name Of Object"
 OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
-FontSize = 36
-OverrideColour = true
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Margin Container/Main Container/Title Container/Title"]
 anchor_right = 1.0

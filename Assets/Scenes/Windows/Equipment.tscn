@@ -7,7 +7,7 @@
 [ext_resource path="res://Assets/Scripts/GUI/DragHandle.cs" type="Script" id=5]
 [ext_resource path="res://Assets/Scripts/GUI/Inventory System/ConstrainedItemContainer.cs" type="Script" id=6]
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -18,9 +18,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 9 )
+default_font = SubResource( 1 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -76,16 +76,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 VAlign = 1
-OverrideOutline = true
-TitleCase = true
-Text = "Equipment"
-OutlineColour = Color( 0, 0, 0, 1 )
 OverrideSize = true
-CustomFont = SubResource( 8 )
+TitleCase = true
+OverrideColour = true
+OverrideOutline = true
+CustomFont = SubResource( 3 )
+FontSize = 36
+Text = "Equipment"
 OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
-FontSize = 36
-OverrideColour = true
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Title"]
 anchor_right = 1.0
@@ -99,6 +99,8 @@ valign = 1
 [node name="Close Button" parent="." instance=ExtResource( 4 )]
 anchor_left = 0.922
 anchor_bottom = 0.1
+CustomFont = SubResource( 4 )
+Text = "X"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -106,8 +108,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "X"
-CustomFont = SubResource( 4 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 anchor_left = 0.02
