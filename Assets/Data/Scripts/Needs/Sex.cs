@@ -198,11 +198,14 @@ namespace JoyLib.Code.Entities.Needs
             int total = 0;
             foreach (IEntity participant in participants)
             {
-                IEnumerable<Tuple<string, int>> data = participant.GetData(tags.ToArray());
+                IEnumerable<Tuple<string, object>> data = participant.GetData(tags.ToArray());
                 int subTotal = 0;
-                foreach (Tuple<string, int> tuple in data)
+                foreach (Tuple<string, object> tuple in data)
                 {
-                    subTotal += tuple.Item2;
+                    if (tuple.Item2 is int value)
+                    {
+                        subTotal += value;
+                    }
                 }
                 subTotal /= data.Count();
                 total += subTotal;

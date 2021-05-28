@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
@@ -244,13 +245,16 @@ namespace JoyLib.Code.Entities.Abilities
         {
             bool canCast = false;
             IEnumerable<string> costs = this.Costs.Select(cost => cost.Item1);
-            IEnumerable<Tuple<string, int>> returnData = caster.GetData(costs);
+            IEnumerable<Tuple<string, int>> returnData = caster.GetData(costs)
+                .Where(tuple => tuple.Item2 is int)
+                .Select(tuple => new Tuple<string, int>(tuple.Item1, (int) tuple.Item2));
+                
             canCast = returnData.All(x => this.Costs.Any(cost =>
                 cost.Item1.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= cost.Item2));
 
             if(canCast)
             {
-
+                //TODO: Enact toll
             }
 
             return canCast;
@@ -261,7 +265,10 @@ namespace JoyLib.Code.Entities.Abilities
             bool meetsPrereqs = false;
 
             IEnumerable<string> prereqs = this.Prerequisites.Select(pair => pair.Key);
-            IEnumerable<Tuple<string, int>> returnData = actor.GetData(prereqs);
+            IEnumerable<Tuple<string, int>> returnData = actor.GetData(prereqs)
+                .Where(tuple => tuple.Item2 is int)
+                .Select(tuple => new Tuple<string, int>(tuple.Item1, (int) tuple.Item2));
+            
             meetsPrereqs = returnData.All(x => this.Prerequisites.Any(prereq =>
                 prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value));
 

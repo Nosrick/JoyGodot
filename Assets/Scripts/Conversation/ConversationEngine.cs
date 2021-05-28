@@ -332,7 +332,7 @@ namespace JoyLib.Code.Conversation
             foreach (ITopic topic in topics)
             {
                 ITopicCondition[] conditions = topic.Conditions;
-                List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
+                List<Tuple<string, object>> tuples = new List<Tuple<string, object>>();
 
                 foreach (ITopicCondition condition in conditions)
                 {

@@ -53,7 +53,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             if (parameter.Equals("skills", StringComparison.OrdinalIgnoreCase)
                 || entity.Skills.ContainsKey(parameter))
             {
-                IEnumerable<Tuple<string, int>> values = entity.GetData(new string[] {parameter});
+                IEnumerable<Tuple<string, object>> values = entity.GetData(new string[] {parameter});
 
                 return values.OrderByDescending(tuple => tuple.Item2)
                     .First()

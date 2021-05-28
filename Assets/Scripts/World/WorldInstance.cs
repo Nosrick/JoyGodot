@@ -299,7 +299,7 @@ namespace JoyLib.Code.World
                     continue;
                 }
 
-                IEnumerable<Tuple<string, int>> data = entity.GetData(searchCriteria.ToArray());
+                IEnumerable<Tuple<string, object>> data = entity.GetData(searchCriteria.ToArray());
                 IEnumerable<string> tags = data.Select(x => x.Item1);
                 if (tags.SequenceEqual(searchCriteria))
                 {

@@ -56,7 +56,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             get;
         }
 
-        bool FulfilsConditions(IEnumerable<Tuple<string, int>> values);
+        bool FulfilsConditions(IEnumerable<Tuple<string, object>> values);
         bool FulfilsConditions(IEnumerable<IJoyObject> participants);
 
         int Tick();

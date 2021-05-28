@@ -62,7 +62,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return this.Conditions.Select(c => c.Criteria).ToArray();
         }
 
-        public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
+        public bool FulfilsConditions(IEnumerable<Tuple<string, object>> values)
         {
             bool any = values.Any();
 
@@ -90,8 +90,10 @@ namespace JoyLib.Code.Conversation.Conversations
                         else
                         {
                             int value = values.Where(pair =>
-                                    pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
-                                .Max(tuple => tuple.Item2);
+                                    pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase)
+                                    && pair.Item2 is int)
+                                .Select(pair => (int) pair.Item2)
+                                .Max();
 
                             if (condition.FulfillsCondition(value) == false)
                             {
@@ -114,7 +116,7 @@ namespace JoyLib.Code.Conversation.Conversations
         {
             string[] criteria = this.Conditions.Select(c => c.Criteria).ToArray();
 
-            List<Tuple<string, int>> values = new List<Tuple<string, int>>();
+            List<Tuple<string, object>> values = new List<Tuple<string, object>>();
             foreach (IJoyObject participant in participants)
             {
                 if (participant is IEntity entity)

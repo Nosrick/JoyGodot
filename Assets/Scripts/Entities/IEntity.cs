@@ -76,7 +76,7 @@ namespace JoyLib.Code.Entities
             IEnumerable<ICulture> cultures);
         
         void AddQuest(IQuest quest);
-        IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args);
+        IEnumerable<Tuple<string, object>> GetData(IEnumerable<string> tags, params object[] args);
         void AddIdentifiedItem(string nameRef);
         bool RemoveItemFromPerson(IItemInstance item);
         bool RemoveEquipment(IItemInstance item);
