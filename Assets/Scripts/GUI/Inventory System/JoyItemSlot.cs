@@ -92,9 +92,9 @@ namespace JoyLib.Code.Unity.GUI
             }
             */
             UnstackActions = InputMap.GetActionList("unstack");
-            this.CooldownOverlay = this.GetNode<TextureProgress>("Background/Cooldown Overlay");
-            this.StackLabel = this.GetNode<Label>("Background/Stack");
-            this.Icon = this.GetNode<ManagedUIElement>("Background/Icon");
+            this.CooldownOverlay = this.FindNode("Cooldown Overlay") as TextureProgress;
+            this.StackLabel = this.FindNode("Stack") as Label;
+            this.Icon = this.FindNode("Icon") as ManagedUIElement;
 
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
             this.GuiManager = GlobalConstants.GameManager.GUIManager;

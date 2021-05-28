@@ -19,7 +19,7 @@ namespace JoyLib.Code.Unity
         [Export] protected bool m_DynamicContainer;
         
         [Export] protected string m_UseAction;
-        protected GridContainer SlotParent { get; set; }
+        protected Container SlotParent { get; set; }
         protected PackedScene SlotPrefab { get; set; }
 
         [Export] protected bool m_CanDrag = false;
@@ -45,7 +45,7 @@ namespace JoyLib.Code.Unity
         protected List<JoyItemSlot> Slots { get; set; }
         public List<MoveContainerPriority> ContainerPriorities => this.m_ContainerNames;
         
-        public IJoyObject JoyObjectOwner
+        public virtual IJoyObject JoyObjectOwner
         {
             get => this.m_JoyObjectOwner;
             set
@@ -108,13 +108,13 @@ namespace JoyLib.Code.Unity
         {
             base._Ready();
             
-            this.SlotParent = this.FindNode("Slot Grid") as GridContainer;
+            this.SlotParent = this.FindNode("Slot Grid") as Container;
             this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyItemSlot.tscn");
             this.Title = this.FindNode("Title") as ManagedLabel;
             
             this.OnEnable();
 
-            for (int i = 0; i < this.SlotParent.Columns; i++)
+            for (int i = 0; i < 10; i++)
             {
                 this.AddSlot();
             }
@@ -146,16 +146,6 @@ namespace JoyLib.Code.Unity
             {
                 this.m_ContainerNames = new List<MoveContainerPriority>();
             }
-            /*
-            else
-            {
-                Node root = this.GetTree().Root.FindNode("MainUI");
-                foreach (MoveContainerPriority priority in this.m_ContainerNames)
-                {
-                    this.MoveToContainers.Add((ItemContainer) root.FindNode(priority.m_ContainerName));
-                }
-            }
-            */
 
             if (this.JoyObjectOwner is null)
             {

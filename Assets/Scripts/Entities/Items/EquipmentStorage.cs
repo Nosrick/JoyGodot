@@ -94,7 +94,6 @@ namespace JoyLib.Code.Entities.Items
 
         public virtual IEnumerable<Tuple<string, IItemInstance>> GetSlotsAndContents(bool getEmpty = true)
         {
-            /*
             if (getEmpty == false)
             {
                 return this.m_Slots
@@ -108,8 +107,6 @@ namespace JoyLib.Code.Entities.Items
                 .Select(tuple => new Tuple<string, IItemInstance>(
                     tuple.Item1,
                     tuple.Item2 != Guid.Empty ? GlobalConstants.GameManager.ItemHandler.Get(tuple.Item2) : null));
-                    */
-            return new List<Tuple<string, IItemInstance>>();
         }
 
         public virtual bool CanAddContents(IItemInstance actor)

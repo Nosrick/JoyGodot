@@ -16,7 +16,7 @@
 [ext_resource path="res://Assets/Themes/DefaultTheme.tres" type="Theme" id=15]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=17]
 
-[sub_resource type="DynamicFont" id=26]
+[sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -27,9 +27,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 26 )
+default_font = SubResource( 1 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -49,7 +49,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=27]
+[sub_resource type="DynamicFont" id=5]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -60,9 +60,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=6]
-default_font = SubResource( 27 )
+default_font = SubResource( 5 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=7]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -121,7 +121,7 @@ default_font = ExtResource( 13 )
 
 [sub_resource type="Theme" id=15]
 
-[sub_resource type="DynamicFont" id=28]
+[sub_resource type="DynamicFont" id=16]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -132,9 +132,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=17]
-default_font = SubResource( 28 )
+default_font = SubResource( 16 )
 
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="DynamicFont" id=18]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -154,7 +154,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=29]
+[sub_resource type="DynamicFont" id=20]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -165,9 +165,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=21]
-default_font = SubResource( 29 )
+default_font = SubResource( 20 )
 
-[sub_resource type="DynamicFont" id=20]
+[sub_resource type="DynamicFont" id=22]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -300,18 +300,18 @@ rect_min_size = Vector2( 0, 42 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 2 )
-HAlign = 1
 VAlign = 1
-OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
+HAlign = 1
 FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 3 )
 Text = "Skill Points Remaining"
+OverrideOutline = true
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+FontSize = 24
 TitleCase = true
 OutlineThickness = 1
-OverrideOutline = true
 OverrideColour = true
-FontSize = 24
-CustomFont = SubResource( 1 )
 
 [node name="Text" parent="Character Creation Part 2/Main Container/Player Info Container/Skills Container/Points Remaining" index="0"]
 theme = SubResource( 2 )
@@ -357,18 +357,18 @@ margin_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 6 )
-HAlign = 1
 VAlign = 1
-OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
+HAlign = 1
 FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 7 )
 Text = "Ability Points Remaining"
+OverrideOutline = true
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+FontSize = 24
 TitleCase = true
 OutlineThickness = 1
-OverrideOutline = true
 OverrideColour = true
-FontSize = 24
-CustomFont = SubResource( 5 )
 
 [node name="Colour Lerper" type="Tween" parent="Character Creation Part 2/Main Container/Player Info Container/Abilities Container/Points Remaining"]
 
@@ -413,8 +413,16 @@ script = ExtResource( 17 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 8 )
+Text = "Back"
+OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+TitleCase = true
+OutlineThickness = 1
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -422,14 +430,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-Text = "Back"
-TitleCase = true
-OutlineThickness = 1
-FontSize = 24
-CustomFont = SubResource( 8 )
 
 [node name="Text" type="Label" parent="Character Creation Part 2/Back Button"]
 anchor_right = 1.0
@@ -449,8 +449,16 @@ script = ExtResource( 17 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 10 )
+Text = "Begin"
+OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+TitleCase = true
+OutlineThickness = 1
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -458,14 +466,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-Text = "Begin"
-TitleCase = true
-OutlineThickness = 1
-FontSize = 24
-CustomFont = SubResource( 10 )
 
 [node name="Text" type="Label" parent="Character Creation Part 2/Begin Button"]
 anchor_right = 1.0
@@ -569,7 +569,7 @@ script = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-m_ElementName = "DefaultWindow"
+m_ElementName = "AccentBackground"
 
 [node name="background" type="NinePatchRect" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Player Background"]
 self_modulate = Color( 0.603922, 0.0431373, 0.0431373, 1 )
@@ -615,7 +615,6 @@ script = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-m_ElementName = null
 
 [node name="Colour Lerper" type="Tween" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container/Player Name Container/Player Icon"]
 
@@ -688,6 +687,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 ActionMode = 1
+m_ElementName = "CharacterSheetIcon"
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -695,8 +696,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
-m_ElementName = "CharacterSheetIcon"
 
 [node name="Basic Info Scoller" type="ScrollContainer" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container"]
 margin_top = 46.0
@@ -731,17 +730,17 @@ margin_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 17 )
-HAlign = 1
 VAlign = 1
-OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
+HAlign = 1
 FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 18 )
 Text = "Statistics Points Remaining"
+OverrideOutline = true
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+FontSize = 24
 TitleCase = true
 OutlineThickness = 1
-OverrideOutline = true
-FontSize = 24
-CustomFont = SubResource( 16 )
 
 [node name="Text" parent="Character Creation Part 1/Main Container/Player Info Container/Statistics Container/Points Remaining" index="0"]
 theme = SubResource( 17 )
@@ -783,18 +782,18 @@ margin_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 21 )
-HAlign = 1
 VAlign = 1
-OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
+HAlign = 1
 FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 22 )
 Text = "Derived Value Points Remaining"
+OverrideOutline = true
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+FontSize = 24
 TitleCase = true
 OutlineThickness = 1
-OverrideOutline = true
 OverrideColour = true
-FontSize = 24
-CustomFont = SubResource( 20 )
 
 [node name="Text" parent="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container/Points Remaining" index="0"]
 theme = SubResource( 21 )
@@ -829,8 +828,16 @@ script = ExtResource( 17 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 24 )
+Text = "Next"
+OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 36
+TitleCase = true
+OutlineThickness = 1
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -838,14 +845,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
-OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-Text = "Next"
-TitleCase = true
-OutlineThickness = 1
-FontSize = 36
-CustomFont = SubResource( 24 )
 
 [node name="Text" type="Label" parent="Character Creation Part 1/Next Button"]
 anchor_right = 1.0

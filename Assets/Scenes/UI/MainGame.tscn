@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/Scripts/Godot/CheatInterface.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Scenes/Windows/Inventory Screen.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Assets/Scenes/Windows/Equipment.tscn" type="PackedScene" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
@@ -62,8 +63,8 @@ margin_right = 120.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-Text = "Fill Needs"
 CustomFont = SubResource( 1 )
+Text = "Fill Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -80,8 +81,8 @@ margin_right = 120.0
 margin_bottom = 62.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-Text = "Empty Needs"
 CustomFont = SubResource( 2 )
+Text = "Empty Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -98,8 +99,8 @@ margin_right = 120.0
 margin_bottom = 96.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-Text = "Empty One Need"
 CustomFont = SubResource( 3 )
+Text = "Empty One Need"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -118,6 +119,9 @@ ClosesOthers = false
 m_CanDropItems = false
 m_CanUseItems = false
 m_UseContextMenu = false
+
+[node name="Equipment" parent="." instance=ExtResource( 5 )]
+visible = false
 
 [connection signal="_Press" from="Cheats/Fill Needs" to="Cheats" method="FillNeeds"]
 [connection signal="_Press" from="Cheats/Empty Needs" to="Cheats" method="EmptyNeeds"]

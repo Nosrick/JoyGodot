@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Code.States;
 using Godot;
+using JoyGodot.Assets.Scripts.GUI.Inventory_System;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -110,14 +111,15 @@ namespace JoyLib.Code.States
             this.GUIManager.OpenGUI(this, GUINames.ACTION_LOG);
 
             var inventory = this.GUIManager.Get(GUINames.INVENTORY) as ItemContainer;
-            inventory.JoyObjectOwner = this.PlayerWorld.Player;
-            inventory.TitleText = this.PlayerWorld.Player.JoyName + "'s Inventory";
+            IEntity player = this.PlayerWorld.Player;
+            inventory.JoyObjectOwner = player;
+            inventory.TitleText = player.JoyName + "'s Inventory";
+
+            var equipment = this.GUIManager.Get(GUINames.EQUIPMENT) as ConstrainedItemContainer;
+            equipment.JoyObjectOwner = player;
+            equipment.TitleText = player.JoyName + "'s Equipment";
 
             /*
-            EquipmentHandler equipmentHandler =
-                this.GUIManager.Get(GUINames.EQUIPMENT).GetComponentInChildren<EquipmentHandler>();
-            equipmentHandler.SetPlayer(this.m_ActiveWorld.Player);
-
             var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();
             entryBanner.Activate(this.m_ActiveWorld.Name);
             */
