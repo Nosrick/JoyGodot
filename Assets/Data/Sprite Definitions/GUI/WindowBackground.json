@@ -41,6 +41,46 @@
             "DrawCentre": true
           }
         ]
+      },
+      {
+        "Name": "DefaultWindowSmooth",
+        "Part": [
+          {
+            "Name": "background",
+            "Filename": "UI/background-tile.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 1,
+            "FillType": "stretch",
+            "PatchMargins": [
+              4,
+              4,
+              4,
+              4
+            ]
+          },
+          {
+            "Name": "border",
+            "Filename": "UI/background-border-smooth.png",
+            "Data": [
+              "default"
+            ],
+            "Frames": 1,
+            "Position": 0,
+            "SortOrder": 2,
+            "FillType": "tile",
+            "PatchMargins": [
+              4,
+              4,
+              4,
+              4
+            ],
+            "DrawCentre": true
+          }
+        ]
       }
     ]
   }

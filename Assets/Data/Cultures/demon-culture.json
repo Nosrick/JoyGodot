@@ -286,6 +286,18 @@
                 "Value": "#1ebc73"
               }
             ]
+          },{
+            "Name": "DefaultWindowSmooth",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#0b8a8f"
+              },
+              {
+                "Name": "border",
+                "Value": "#1ebc73"
+              }
+            ]
           },
           {
             "Name": "SlotSprite",

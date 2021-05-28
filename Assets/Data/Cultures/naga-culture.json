@@ -1213,6 +1213,18 @@
                 "Value": "#fb6b1d"
               }
             ]
+          },{
+            "Name": "DefaultWindowSmooth",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#e83b3b"
+              },
+              {
+                "Name": "border",
+                "Value": "#fb6b1d"
+              }
+            ]
           },
           {
             "Name": "SlotSprite",
