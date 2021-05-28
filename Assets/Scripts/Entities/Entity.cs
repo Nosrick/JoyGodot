@@ -692,7 +692,7 @@ namespace JoyLib.Code.Entities
             //Fetch all job levels
             if (tagArray.Any(tag => tag.Equals("jobs", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from job in this.Jobs select new Tuple<string, object>(job.Name, 1));
+                data.AddRange(from job in this.Jobs select new Tuple<string, object>(job.Name, job.Experience));
             }
 
             //Fetch gender data
@@ -704,7 +704,7 @@ namespace JoyLib.Code.Entities
 
             //Fetch sex data
             if (tagArray.Any(tag => tag.Equals(this.Sex.Name, StringComparison.OrdinalIgnoreCase))
-                || tagArray.Any(tag => tag.Equals("sex")))
+                || tagArray.Any(tag => tag.Equals("biosex")))
             {
                 data.Add(new Tuple<string, object>("sex", this.Sex.Name));
             }
