@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Godot;
 using Object = System.Object;
@@ -16,6 +17,21 @@ namespace JoyLib.Code.Helpers
             typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private static readonly Random ROLLER = new Random();
+
+        public static string CombineToString(this ITuple tuple)
+        {
+            StringBuilder builder = new StringBuilder();
+            for(int i = 0; i < tuple.Length; i++)
+            {
+                builder.Append(tuple[i]);
+                if (i < tuple.Length - 1)
+                {
+                    builder.Append(" : ");
+                }
+            }
+
+            return builder.ToString();
+        }
 
         public static T GetRandom<T>(this ICollection<T> collection)
         {
