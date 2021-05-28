@@ -4,7 +4,7 @@
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/Scripts/GUI/Tools/StaticValueItem.cs" type="Script" id=3]
 
-[sub_resource type="DynamicFont" id=41]
+[sub_resource type="DynamicFont" id=9]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -15,9 +15,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 41 )
+default_font = SubResource( 9 )
 
-[sub_resource type="DynamicFont" id=39]
+[sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -37,7 +37,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=42]
+[sub_resource type="DynamicFont" id=10]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -48,9 +48,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=6]
-default_font = SubResource( 42 )
+default_font = SubResource( 10 )
 
-[sub_resource type="DynamicFont" id=40]
+[sub_resource type="DynamicFont" id=5]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -82,7 +82,7 @@ __meta__ = {
 }
 
 [node name="Item Name" type="Control" parent="."]
-anchor_right = 0.9
+anchor_right = 0.8
 anchor_bottom = 1.0
 mouse_filter = 2
 theme = SubResource( 2 )
@@ -92,16 +92,16 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-OverrideOutline = true
-TitleCase = true
-Text = "Name"
-OutlineColour = Color( 0, 0, 0, 1 )
 OverrideSize = true
-CustomFont = SubResource( 39 )
+TitleCase = true
+OverrideColour = true
+OverrideOutline = true
+CustomFont = SubResource( 1 )
+FontSize = 24
+Text = "Name"
 OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
-OverrideColour = true
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
 
@@ -119,7 +119,7 @@ __meta__ = {
 }
 
 [node name="Item Value" type="Control" parent="."]
-anchor_left = 0.9
+anchor_left = 0.8
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -130,16 +130,16 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-OverrideOutline = true
-TitleCase = true
-Text = "0"
-OutlineColour = Color( 0, 0, 0, 1 )
 OverrideSize = true
-CustomFont = SubResource( 40 )
+TitleCase = true
+OverrideColour = true
+OverrideOutline = true
+CustomFont = SubResource( 5 )
+FontSize = 24
+Text = "0"
 OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
-OverrideColour = true
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
 

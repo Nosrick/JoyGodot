@@ -99,7 +99,7 @@ namespace JoyLib.Code.Unity.GUI
             
             if (this.ValueLabel is null == false)
             {
-                this.ValueLabel.Text = this.CachedValue.ToString();
+                this.ValueLabel.Text = this.CachedValue;
             }
 
             this.Tooltip = new List<string> {"Example tooltip"};
