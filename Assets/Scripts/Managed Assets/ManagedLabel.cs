@@ -134,7 +134,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             get => this.Theme?.DefaultFont as DynamicFont;
             set
             {
-                this.m_CustomFont = this.CacheFont ? (DynamicFont) value.Duplicate() : value;
+                if (value is null)
+                {
+                    this.m_CustomFont = null;
+                }
+                else
+                {
+                    this.m_CustomFont = this.CacheFont ? (DynamicFont) value.Duplicate() : value;
+                }
 
                 if (this.MyLabel is null)
                 {
@@ -154,6 +161,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             get => this.m_FontColour;
             set
             {
+                if (this.OverrideColour == false)
+                {
+                    return;
+                }
+                
                 this.m_FontColour = value;
                 this.MyLabel?.AddColorOverride("font_color", this.m_FontColour);
                 this.m_HasFontColours = true;
@@ -170,7 +182,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             set
             {
                 this.m_FontSize = value;
-                if (this.m_CustomFont is null == false)
+                if (this.OverrideSize
+                    && this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.Size = this.m_FontSize;
                     this.UpdateTheme();
@@ -187,7 +200,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             set
             {
                 this.m_OutlineColour = value;
-                if (this.m_CustomFont is null == false)
+                if (this.OverrideOutline
+                    && this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.OutlineColor = value;
                     this.UpdateTheme();
@@ -204,7 +218,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             set
             {
                 this.m_OutlineThickness = value;
-                if (this.m_CustomFont is null == false)
+                if (this.OverrideOutline
+                    && this.m_CustomFont is null == false)
                 {
                     this.m_CustomFont.OutlineSize = value;
                     this.UpdateTheme();
