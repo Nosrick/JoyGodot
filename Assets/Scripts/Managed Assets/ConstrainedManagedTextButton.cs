@@ -37,6 +37,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 if (this.Pressed
                     && this.IncreaseCost > this.PointRestriction)
                 {
+                    this.Pressed = false;
                     return;
                 }
             }

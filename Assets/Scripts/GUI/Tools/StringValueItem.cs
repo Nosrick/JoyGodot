@@ -40,7 +40,31 @@ namespace JoyLib.Code.Unity.GUI
 
         public int Minimum { get; set; }
         public int Maximum { get; set; }
-        protected int Index { get; set; }
+
+        public string Selected
+        {
+            get
+            {
+                if (this.Index >= 0 && this.Index < this.Values.Count)
+                {
+                    return this.Values.ElementAt(this.Index);
+                }
+
+                return "INDEXING ERROR";
+            }
+        }
+
+        public int Index
+        {
+            get => this.m_Index;
+            set
+            {
+                this.m_Index = value;
+                this.Value = this.Selected;
+            }
+        }
+
+        protected int m_Index;
 
         [Export]
         public bool TitleCase
@@ -68,7 +92,7 @@ namespace JoyLib.Code.Unity.GUI
         protected bool m_TitleCase;
 
         [Signal]
-        public delegate void ValueChanged(string name, int delta, int newValue);
+        public delegate void ValueChanged(string name, int delta, string newValue);
 
         public string ValueName
         {
