@@ -2,6 +2,7 @@
 using System.Linq;
 using Godot;
 using JoyLib.Code;
+using JoyLib.Code.Helpers;
 
 namespace Code.Collections
 {
@@ -54,6 +55,17 @@ namespace Code.Collections
                     this.InactiveObjects.RemoveAt(0);
                     this.Objects.Add(returnObject);
                     returnObject.SetProcess(true);
+
+                    foreach (Node child in returnObject.GetAllChildren())
+                    {
+                        child.SetProcess(true);
+                            
+                        if (child is CanvasItem canvasItem)
+                        {
+                            canvasItem.Show();
+                        }
+                    }
+                    
                     return returnObject;
                 }
             }
@@ -77,6 +89,17 @@ namespace Code.Collections
                         gameObject.Name = "InactiveObject" + this.InactiveObjects.Count;
                         gameObject.SetProcess(false);
                         gameObject.Hide();
+
+                        foreach (Node child in gameObject.GetAllChildren())
+                        {
+                            child.SetProcess(false);
+                            
+                            if (child is CanvasItem canvasItem)
+                            {
+                                canvasItem.Hide();
+                            }
+                        }
+                        
                         this.InactiveObjects.Add(gameObject);
 
                         if (gameObject.Visible)
