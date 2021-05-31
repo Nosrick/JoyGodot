@@ -139,8 +139,6 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         public void ChangeValue(string name, int delta, int newValue)
         {
-            GD.Print(name + " : " + delta + " : " + newValue);
-
             var stat = this.m_Statistics.FirstOrDefault(statistic =>
                 statistic.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             

@@ -349,7 +349,7 @@ namespace JoyLib.Code.Cultures
             }
             catch (Exception e)
             {
-                GD.PrintErr("Could not find a culture for creature type " + type);
+                GD.PushError("Could not find a culture for creature type " + type);
                 throw new InvalidOperationException("Could not find a culture for creature type " + type, e);
             }
         }

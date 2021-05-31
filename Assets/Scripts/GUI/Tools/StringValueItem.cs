@@ -84,11 +84,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Name = value;
                 if (this.NameLabel is null)
                 {
-                    GD.Print(this.GetType().Name + " NameLabel is null!");
-                    if (this.IsInsideTree())
-                    {
-                        GD.Print(this.GetPath());
-                    }
+                    GD.PushWarning(this.GetType().Name + " NameLabel is null!");
 
                     return;
                 }
@@ -106,12 +102,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.ValueLabel is null)
                 {
-                    GD.Print(this.GetType().Name + " ValueLabel is null!");
-                    if (this.IsInsideTree())
-                    {
-                        GD.Print(this.GetPath());
-                    }
-
+                    GD.PushWarning(this.GetType().Name + " ValueLabel is null!");
                     return;
                 }
 
@@ -131,16 +122,11 @@ namespace JoyLib.Code.Unity.GUI
         public override void _Ready()
         {
             base._Ready();
-            GD.Print(this.GetType().Name + " initialising");
             this.Values = new List<string>();
             this.ValueLabel = this.GetNodeOrNull("Item Value") as ManagedLabel;
             if (this.ValueLabel is null)
             {
-                GD.Print("ValueLabel of " + this.GetType().Name + " is null!");
-                if (this.IsInsideTree())
-                {
-                    GD.Print(this.GetPath());
-                }
+                GD.PushError("ValueLabel of " + this.GetType().Name + " is null!");
             }
 
             this.Tooltip = new List<string> {"Example tooltip"};
@@ -188,18 +174,12 @@ namespace JoyLib.Code.Unity.GUI
             this.NameLabel = this.GetNodeOrNull("Item Name") as ManagedLabel;
             if (this.NameLabel is null)
             {
-                GD.Print("NameLabel of " + this.GetType().Name + " is null!");
-                if (this.IsInsideTree())
-                {
-                    GD.Print(this.GetPath());
-                }
+                GD.PushError("NameLabel of " + this.GetType().Name + " is null!");
             }
-            GD.Print(this.GetType().Name + " finished initialising");
         }
 
         public void ChangeValue(int delta = 1)
         {
-            GD.Print("Calling " + nameof(this.ChangeValue));
             this.Index += delta;
             if (this.Index < 0)
             {

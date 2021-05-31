@@ -43,7 +43,7 @@ namespace JoyLib.Code.States
 
             if (this.CharacterCreationHandler is null)
             {
-                GD.Print("CHARACTER CREATION NOT FOUND");
+                GD.PushError("CHARACTER CREATION NOT FOUND");
                 return;
             }
             

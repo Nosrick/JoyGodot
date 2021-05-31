@@ -96,9 +96,6 @@ namespace JoyLib.Code.Unity.GUI
                     && node.MouseOver)
                 {
                     this.ShouldShow = true;
-                    GD.Print("TOOLTIP SHOULD SHOW");
-                    GD.Print("VISIBLE " + this.Visible);
-                    GD.Print("EMPTY " + this.Empty);
                 }
             }
             else if (actionPressed == false && this.ShouldShow)
@@ -166,9 +163,6 @@ namespace JoyLib.Code.Unity.GUI
             ICollection<string> data = null, 
             bool showBackground = true)
         {
-            GD.Print("TOOLTIP SHOW");
-            GD.Print("SENDER IS " + sender);
-
             this.LastInteraction = sender;
 
             bool allEmpty = true;
@@ -274,7 +268,6 @@ namespace JoyLib.Code.Unity.GUI
                 return false;
             }
             
-            GD.Print("TOOLTIP WIPE DATA");
             this.Icon.Clear();
             this.IconSlot.Visible = false;
             this.Title.Text = null;

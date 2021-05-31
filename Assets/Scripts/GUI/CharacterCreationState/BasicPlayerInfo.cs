@@ -282,8 +282,6 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 
         public void OnValueChange(string name, int delta, int newIndex)
         {
-            GD.Print(nameof(this.OnValueChange));
-            GD.Print(name + " : " + delta + " : " + newIndex);
         }
 
         public void OnCultureChange(string name, int delta, int newIndex)

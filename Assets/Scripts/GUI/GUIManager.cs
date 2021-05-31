@@ -299,7 +299,6 @@ namespace JoyLib.Code.Unity.GUI
         public void FindGUIs()
         {
             Array guiData = this.RootUI.GetAllChildren();
-            GlobalConstants.ActionLog.Log(guiData);
             foreach (var child in guiData)
             {
                 if (child is GUIData data)

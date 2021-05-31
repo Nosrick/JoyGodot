@@ -142,15 +142,13 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         
         public void ChangeValue(string name, int delta, int newValue)
         {
-            GD.Print(name + " : " + delta + " : " + newValue);
-
             var derivedValue =
                 this.m_DerivedValues.FirstOrDefault(
                     value => value.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (derivedValue is null)
             {
-                GD.Print(name + " derived value not found!");
+                GD.PushError(name + " derived value not found!");
                 return;
             }
 

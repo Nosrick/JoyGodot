@@ -207,8 +207,6 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         public void BasicPlayerInfoChanged(string name, string newValue)
         {
-            GD.Print(name + " : " + newValue);
-
             if (name.Equals("Template") || name.Equals("Culture"))
             {
                 this.OnCultureChange(this.BasicPlayerInfo.CurrentTemplate);
@@ -253,8 +251,6 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 null,
                 new PlayerDriver());
             
-            GD.Print("PLAYER CREATED");
-            GD.Print(this.Player);
             this.PlayerCreated?.Invoke(this.Player);
         }
     }

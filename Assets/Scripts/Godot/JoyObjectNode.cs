@@ -45,11 +45,11 @@ namespace JoyLib.Code.Godot
             this.SpeechBubble = this.GetNodeOrNull<ManagedSprite>("Speech Bubble");
             this.Clear();
             ISpriteState state = this.MyJoyObject.States.FirstOrDefault();
+            this.Move(joyObject.WorldPosition);
             if (state is null)
             {
                 return;
             }
-            this.Move(joyObject.WorldPosition);
             this.AddSpriteState(state);
             this.OverrideAllColours(state.SpriteData.GetCurrentPartColours());
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
@@ -94,11 +94,16 @@ namespace JoyLib.Code.Godot
 
             this.MouseOver = true;
 
+            var tooltip = new List<string>(this.MyJoyObject.Tooltip)
+            {
+                "World: " + this.MyJoyObject.MyWorld.Name
+            };
+
             this.GuiManager.Tooltip?.Show(
                 this, 
                 this.MyJoyObject.JoyName,
                 this.MyJoyObject.States.FirstOrDefault(),
-                this.MyJoyObject.Tooltip);
+                tooltip);
         }
 
         public void OnPointerExit()

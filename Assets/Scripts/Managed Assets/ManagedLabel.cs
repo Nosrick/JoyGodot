@@ -143,12 +143,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     this.m_CustomFont = this.CacheFont ? (DynamicFont) value.Duplicate() : value;
                 }
 
-                if (this.MyLabel is null)
-                {
-                    GD.Print("Label not found!");
-                }
-
-                GD.Print(value is null ? "Clearing font" : "Setting font");
                 this.UpdateTheme();
             }
         }
@@ -259,7 +253,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             this.MyLabel = this.GetNodeOrNull("Text") as Label;
             if (this.MyLabel is null)
             {
-                GD.Print("Creating label");
                 this.MyLabel = new Label
                 {
                     Name = "Text",

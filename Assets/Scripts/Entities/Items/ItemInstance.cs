@@ -149,8 +149,15 @@ namespace JoyLib.Code.Entities.Items
             
             this.MyNode.Clear();
             this.MyNode.AddSpriteState(this.States[this.StateIndex]);
-            this.MyNode.Visible = active;
-            
+            if (active)
+            {
+                this.MyNode.Show();
+            }
+            else
+            {
+                this.MyNode.Hide();
+            }
+
             if (!recursive)
             {
                 return;

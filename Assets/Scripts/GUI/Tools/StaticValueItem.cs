@@ -48,12 +48,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Name = value;
                 if (this.NameLabel is null)
                 {
-                    GD.Print(this.GetType().Name + " NameLabel is null!");
-                    if (this.IsInsideTree())
-                    {
-                        GD.Print(this.GetPath());
-                    }
-
+                    GD.PushWarning(this.GetType().Name + " NameLabel is null!");
                     return;
                 }
                 
@@ -70,11 +65,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.ValueLabel is null)
                 {
-                    GD.Print(this.GetType().Name + " ValueLabel is null!");
-                    if (this.IsInsideTree())
-                    {
-                        GD.Print(this.GetPath());
-                    }
+                    GD.PushWarning(this.GetType().Name + " ValueLabel is null!");
                 }
                 else
                 {

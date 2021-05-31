@@ -897,6 +897,15 @@ interact={
 2d_render/layer_5="Fog of War"
 2d_render/layer_6="GUI"
 
+[logging]
+
+file_logging/enable_file_logging=true
+file_logging/log_path="res://logs/godot.log"
+
+[memory]
+
+limits/message_queue/max_size_kb=12000
+
 [mono]
 
 debugger_agent/wait_timeout=30000

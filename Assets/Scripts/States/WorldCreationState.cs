@@ -137,11 +137,6 @@ namespace JoyLib.Code.States
                     });
             }
 
-            foreach (IItemInstance item in this.m_Player.Contents)
-            {
-                GlobalConstants.GameManager.ItemPool.Retire(item.MyNode);
-            }
-
             this.m_World.Tick();
 
             this.Done = true;

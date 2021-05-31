@@ -141,8 +141,6 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         
         public void ChangeValue(string name, int delta, int newValue)
         {
-            GD.Print(name + " : " + delta + " : " + newValue);
-
             var skill = this.m_Skills.FirstOrDefault(s =>
                 s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 

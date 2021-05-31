@@ -77,7 +77,7 @@ namespace JoyLib.Code.States
                     //Make the fog of war
                     PositionableSprite fog = gameManager.FogPool.Get();
                     fog.Name = "Fog of War " + intPos;
-                    fog.Visible = true;
+                    fog.Show();
                     fog.Scale = new Vector2(scale, scale);
                     fog.Move(intPos);
 
@@ -116,7 +116,7 @@ namespace JoyLib.Code.States
             foreach (IEntity entity in this.m_ActiveWorld.Entities)
             {
                 JoyObjectNode gameObject = gameManager.EntityPool.Get();
-                gameObject.Visible = true;
+                gameObject.Show();
                 gameObject.AttachJoyObject(entity);
                 this.CreateItems(entity.Contents, false);
                 this.CreateItems(entity.Equipment.Contents, false);

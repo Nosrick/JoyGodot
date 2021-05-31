@@ -74,7 +74,6 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Initialise()
         {
-            GD.Print(this.GetType().Name + " initialised!");
             this.Initialised = true;
         }
 

@@ -207,14 +207,8 @@ namespace JoyGodot.addons.Managed_Assets
                 
                 if (this.MyLabel is null)
                 {
-                    GD.Print("Label not found!");
-                    if (this.IsInsideTree())
-                    {
-                        GD.Print(this.GetPath());
-                    }
+                    GD.PushWarning("Label not found!");
                 }
-
-                GD.Print(value is null ? "Clearing font" : "Setting font");
                 this.UpdateFontOverride();
             }
         }
@@ -261,7 +255,6 @@ namespace JoyGodot.addons.Managed_Assets
             this.MyLabel = this.GetNodeOrNull("Text") as Label;
             if (this.MyLabel is null)
             {
-                GD.Print("Creating label in " + this.GetType().Name);
                 this.MyLabel = new Label
                 {
                     Name = "Text",

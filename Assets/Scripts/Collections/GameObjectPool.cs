@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using JoyLib.Code;
 
 namespace Code.Collections
 {
@@ -10,17 +11,17 @@ namespace Code.Collections
         /// The active GameObjects
         /// </summary>
         protected List<T> Objects { get; set; }
-        
+
         /// <summary>
         /// The GameObjects which have been 'retired'
         /// </summary>
         protected List<T> InactiveObjects { get; set; }
-        
+
         /// <summary>
         /// The prefab we use to instantiate
         /// </summary>
         protected PackedScene Prefab { get; set; }
-        
+
         /// <summary>
         /// This is the GameObject that new instances will be parented to
         /// </summary>
@@ -45,15 +46,18 @@ namespace Code.Collections
 
         public T Get()
         {
-            if (this.InactiveObjects.Count > 0)
+            lock (this.InactiveObjects)
             {
-                T returnObject = this.InactiveObjects.First();
-                this.InactiveObjects.RemoveAt(0);
-                this.Objects.Add(returnObject);
-                returnObject.SetProcess(true);
-                return returnObject;
+                if (this.InactiveObjects.Count > 0)
+                {
+                    T returnObject = this.InactiveObjects.First();
+                    this.InactiveObjects.RemoveAt(0);
+                    this.Objects.Add(returnObject);
+                    returnObject.SetProcess(true);
+                    return returnObject;
+                }
             }
-            
+
             T newObject = this.Prefab.Instance<T>();
             this.Objects.Add(newObject);
             this.Parent.AddChild(newObject);
@@ -62,15 +66,32 @@ namespace Code.Collections
 
         public bool Retire(T gameObject)
         {
-            bool result = this.Objects.Remove(gameObject);
-            if (result)
+            lock (this.Objects)
             {
-                gameObject.SetProcess(false);
-                this.InactiveObjects.Add(gameObject);
-                gameObject.Visible = false;
+                bool result = this.Objects.Remove(gameObject);
+                if (result)
+                {
+                    lock (this.InactiveObjects)
+                    {
+                        GD.Print("Retiring " + gameObject.Name + " at " + this.Parent.Name);
+                        gameObject.Name = "InactiveObject" + this.InactiveObjects.Count;
+                        gameObject.SetProcess(false);
+                        gameObject.Hide();
+                        this.InactiveObjects.Add(gameObject);
+
+                        if (gameObject.Visible)
+                        {
+                            GD.PushWarning("Retired node is still visible! " + gameObject.Name);
+                        }
+                    }
+                }
+                else
+                {
+                    GD.PushWarning("Could not remove object " + gameObject?.Name + " from " + this.Parent.Name);
+                }
+
+                return result;
             }
-            
-            return result;
         }
 
         public void RetireAll()
@@ -79,6 +100,13 @@ namespace Code.Collections
             foreach (T gameObject in clone)
             {
                 this.Retire(gameObject);
+            }
+
+            if (this.InactiveObjects.Any(obj => obj.Visible))
+            {
+                GD.PushWarning("For some reason, not every node is invisible after being retired. " + this.Parent.Name);
+                var list = this.InactiveObjects.Where(obj => obj.Visible).ToList();
+                GD.PushWarning("Offenders:\n" + GlobalConstants.ActionLog.CollectionWalk(list));
             }
         }
     }

@@ -217,8 +217,6 @@ namespace Code.Unity.GUI.Managed_Assets
 
             Color tintColor;
 
-            GD.Print(this.Name + " transitioning to " + state);
-
             switch (state)
             {
                 case SelectionState.Normal:
@@ -276,8 +274,6 @@ namespace Code.Unity.GUI.Managed_Assets
             }
 
             this.EvaluateAndTransitionToSelectionState();
-
-            GD.Print("Pressed " + this.Name);
         }
 
         public override void _GuiInput(InputEvent @event)
