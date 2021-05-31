@@ -1,33 +1,34 @@
 ﻿{
-  "WorldInfo": [{
+  "WorldInfo": [
+    {
       "Name": "Plains",
-      "Tags": ["Exterior"],
+      "Tags": [
+        "Exterior"
+      ],
       "TileSet": {
         "Name": "Overworld",
         "UseTileMap": true,
-        "SpriteData": [{
-          "Name": "SurroundFloor",
-          "Part": [
-            {
-              "Name": "dirt",
-              "Position": 4,
-              "Data": ["default"],
-              "Frames": 1,
-              "Filename": "environments/overworld-dirt.png",
-              "SortOrder": 0,
-              "Colour": ["#9e4539"]
-            },
-            {
-              "Name": "grass",
-              "Position": 4,
-              "Data": ["default"],
-              "Frames": 1,
-              "Filename": "environments/overworld-grass.png",
-              "SortOrder": 1,
-              "Colour": ["#1ebc73"]
-            }
-          ]
-        }]
+        "SpriteData": [
+          {
+            "Name": "SurroundFloor",
+            "Part": [
+              {
+                "Name": "grass",
+                "Position": 4,
+                "Data": [
+                  "default"
+                ],
+                "Frames": 1,
+                "Filename": "environments/overworld-grass.png",
+                "SortOrder": 1,
+                "Colour": [
+                  "#1ebc73"
+                ]
+              }
+            ]
+          }
+        ]
       }
-    }]
+    }
+  ]
 }

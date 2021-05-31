@@ -161,7 +161,7 @@ namespace JoyLib.Code.Graphics
                     var index = set.GetLastUnusedTileId();
                     set.CreateTile(index);
                     set.TileSetTexture(index, part.m_FrameSprite[i]);
-                    set.TileSetName(index, part.m_Name);
+                    set.TileSetName(index, data.Name);
                     set.TileSetModulate(index, part.SelectedColour);
                 }
             }
