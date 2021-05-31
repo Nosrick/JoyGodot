@@ -116,6 +116,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 part.Value = stat.Value;
                 part.Visible = true;
                 part.UseRestriction = true;
+                part.IncreaseCost = 1;
+                part.DecreaseCost = -1;
                 if (!part.IsConnected(
                     "ValueChanged",
                     this,

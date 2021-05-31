@@ -14,9 +14,11 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         ManagedTextButton, 
         ITooltipComponent
     {
+        public bool UseRestriction { get; set; }
         public int PointRestriction { get; set; }
-        
-        public int Value { get; set; }
+
+        public int IncreaseCost { get; set; }
+        public int DecreaseCost { get; set; }
 
         public ICollection<string> Tooltip { get; set; }
 
@@ -30,16 +32,20 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
         protected override void Press()
         {
-            if (this.PointRestriction < this.Value)
+            if (this.UseRestriction)
             {
-                return;
+                if (this.Pressed
+                    && this.IncreaseCost > this.PointRestriction)
+                {
+                    return;
+                }
             }
             
             base.Press();
             this.EmitSignal(
                 "ValuePress",
                 this.Name,
-                this.Pressed ? 1 : -1,
+                this.Pressed ? this.IncreaseCost : this.DecreaseCost,
                 this.Pressed);
 
             if (this.ToggleMode)
@@ -47,7 +53,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 this.EmitSignal(
                     "ValueToggle", 
                     this.Name,
-                    this.Pressed ? 1 : -1,
+                    this.Pressed ? this.IncreaseCost : this.DecreaseCost,
                     this.Pressed);
             }
         }

@@ -116,6 +116,8 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 part.ValueName = derivedValue.Name;
                 part.Minimum = derivedValue.Base;
                 part.Maximum = derivedValue.Base + 5;
+                part.IncreaseCost = 1;
+                part.DecreaseCost = -1;
                 part.Value = derivedValue.Value;
                 part.Visible = true;
                 part.UseRestriction = true;

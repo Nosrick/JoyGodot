@@ -120,8 +120,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 part.Name = ability.Name;
                 part.Visible = true;
                 part.Pressed = false;
+                part.UseRestriction = true;
                 part.PointRestriction = this.Points;
-                part.Value = 1;
+                part.IncreaseCost = 1;
+                part.DecreaseCost = -1;
                 part.Tooltip = new List<string> {ability.Description};
                 if (!part.IsConnected(
                     "ValueToggle",

@@ -117,6 +117,8 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 part.Maximum = 3;
                 part.Value = skill.Value;
                 part.Visible = true;
+                part.IncreaseCost = 1;
+                part.DecreaseCost = -1;
                 part.UseRestriction = true;
                 if (!part.IsConnected(
                     "ValueChanged",

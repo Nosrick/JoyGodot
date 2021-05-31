@@ -35,14 +35,7 @@ public class CharacterSheet : GUIData
     
     public override void _Ready()
     {
-        this.ValueItemPrefab = GD.Load<PackedScene>(
-            GlobalConstants.GODOT_ASSETS_FOLDER
-            + "Scenes/Parts/Static Int List Item.tscn");
-
-        this.AbilityItemPrefab = GD.Load<PackedScene>(
-            GlobalConstants.GODOT_ASSETS_FOLDER
-            + "Scenes/Parts/ManagedLabel.tscn");
-
+        this.GetPrefabs();
         this.PageOne = this.GetNode<Control>("Page 1");
         this.PageTwo = this.GetNode<Control>("Page 2");
         
@@ -66,7 +59,18 @@ public class CharacterSheet : GUIData
         this.RefreshPlayer();
     }
 
-    public void RefreshPlayer()
+    protected virtual void GetPrefabs()
+    {
+        this.ValueItemPrefab = GD.Load<PackedScene>(
+            GlobalConstants.GODOT_ASSETS_FOLDER
+            + "Scenes/Parts/Static Int List Item.tscn");
+
+        this.AbilityItemPrefab = GD.Load<PackedScene>(
+            GlobalConstants.GODOT_ASSETS_FOLDER
+            + "Scenes/Parts/ManagedLabel.tscn");
+    }
+
+    public virtual void RefreshPlayer()
     {
         this.Player = GlobalConstants.GameManager.Player;
 
@@ -89,7 +93,7 @@ public class CharacterSheet : GUIData
         this.PlayerIconTwo.OverrideAllColours(spriteState.SpriteData.GetCurrentPartColours());
     }
 
-    protected void SetUpUi()
+    protected virtual void SetUpUi()
     {
         if (this.Player is null)
         {
@@ -221,13 +225,13 @@ public class CharacterSheet : GUIData
         this.SetUpUi();
     }
 
-    public void OpenPageOne()
+    public virtual void OpenPageOne()
     {
         this.PageOne.Visible = true;
         this.PageTwo.Visible = false;
     }
 
-    public void OpenPageTwo()
+    public virtual void OpenPageTwo()
     {
         this.PageOne.Visible = false;
         this.PageTwo.Visible = true;
