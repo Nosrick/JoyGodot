@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
-using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyLib.Code;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
-using JoyLib.Code.Unity.GUI;
 
 namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 {
@@ -367,7 +364,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             this.Initialise();
 
-            this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
+            this.m_States = new Dictionary<string, ISpriteState>();
             foreach (NinePatchRect part in this.Parts)
             {
                 part.Visible = false;
