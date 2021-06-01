@@ -498,7 +498,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             toOpen.Display();
-
+            toOpen.SetProcess(true);
             this.ActiveGUIs.Add(toOpen);
 
             if (bringToFront)
@@ -526,11 +526,12 @@ namespace JoyLib.Code.Unity.GUI
 
             if (toClose.Close(sender))
             {
+                toClose.SetProcess(false);
                 this.ActiveGUIs.Remove(toClose);
             }
         }
 
-        public bool RemoveActiveGUI(string name)
+        public bool RemoveActiveGUI(string name, bool close = false, bool disable = false)
         {
             if (this.ActiveGUIs.Any(data => data.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) == false)
             {
@@ -544,7 +545,15 @@ namespace JoyLib.Code.Unity.GUI
                 return false;
             }
 
-            toClose.Close(this);
+            if (close)
+            {
+                toClose.Close(this);
+            }
+            
+            if (disable)
+            {
+                toClose.SetProcess(false);
+            }
             return this.ActiveGUIs.Remove(toClose);
         }
 
@@ -584,8 +593,7 @@ namespace JoyLib.Code.Unity.GUI
 
             foreach (GUIData data in toClose)
             {
-                this.ActiveGUIs.Remove(data);
-                data.Close(this);
+                this.CloseGUI(data, data.Name);
             }
         }
 

@@ -45,7 +45,7 @@ namespace JoyLib.Code.Unity.GUI
 
         bool RemovesControl();
 
-        bool RemoveActiveGUI(string name);
+        bool RemoveActiveGUI(string name, bool close = false, bool disable = false);
 
         bool IsActive(string name);
 

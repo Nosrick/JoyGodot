@@ -1,6 +1,7 @@
 ﻿using Godot;
 using Godot.Collections;
 using JoyLib.Code.Events;
+using JoyLib.Code.Helpers;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -9,6 +10,17 @@ namespace JoyLib.Code.Unity.GUI
         protected IGUIManager m_GUIManager;
 
         public int DefaultSortingOrder { get; protected set; }
+
+        [Export] public bool RemovesControl { get; protected set; }
+
+        [Export] public bool ClosesOthers { get; protected set; }
+
+        [Export] public bool AlwaysOpen { get; protected set; }
+
+        [Export] public bool AlwaysOnTop { get; protected set; }
+
+        public virtual event GUIClosedEventHandler OnGUIClose;
+        public virtual event GUIOpenedEventHandler OnGUIOpen;
 
         public IGUIManager GUIManager
         {
@@ -29,7 +41,13 @@ namespace JoyLib.Code.Unity.GUI
 
         public override void _Input(InputEvent @event)
         {
+            if (this.Visible == false)
+            {
+                return;
+            }
+            
             base._Input(@event);
+
             if (@event.IsAction("ui_accept"))
             {
                 this.GUIManager?.BringToFront(this.Name);
@@ -38,13 +56,15 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void Display()
         {
-            this.Visible = true;
-            Array children = this.GetChildren();
+            this.Show();
+            Array children = this.GetAllChildren();
             foreach (var child in children)
             {
-                if (child is GUIData data)
+                if (child is Node node)
                 {
-                    data.Display();
+                    node.SetProcess(true);
+                    node.SetProcessInput(true);
+                    node.SetPhysicsProcess(true);
                 }
             }
 
@@ -58,13 +78,15 @@ namespace JoyLib.Code.Unity.GUI
                 return false;
             }
             
-            this.Visible = false;
-            Array children = this.GetChildren();
+            this.Hide();
+            Array children = this.GetAllChildren();
             foreach (var child in children)
             {
-                if (child is GUIData data)
+                if (child is Node node)
                 {
-                    data.Close(sender);
+                    node.SetProcess(false);
+                    node.SetProcessInput(false);
+                    node.SetPhysicsProcess(false);
                 }
             }
 
@@ -82,16 +104,5 @@ namespace JoyLib.Code.Unity.GUI
         {
             this.GUIManager.CloseGUI(this, this.Name);
         }
-
-        [Export] public bool RemovesControl { get; protected set; }
-
-        [Export] public bool ClosesOthers { get; protected set; }
-
-        [Export] public bool AlwaysOpen { get; protected set; }
-
-        [Export] public bool AlwaysOnTop { get; protected set; }
-
-        public virtual event GUIClosedEventHandler OnGUIClose;
-        public virtual event GUIOpenedEventHandler OnGUIOpen;
     }
 }
