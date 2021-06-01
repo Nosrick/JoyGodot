@@ -2,6 +2,7 @@
 using Godot;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Quests;
 using JoyLib.Code.Unity.GUI;
 
 namespace JoyLib.Code.Godot
@@ -60,6 +61,42 @@ namespace JoyLib.Code.Godot
             need.SetValue(0);
             
             this.Player.HappinessIsDirty = true;
+        }
+
+        public void AddQuest()
+        {
+            if (this.Player is null)
+            {
+                return;
+            }
+
+            var random = this.Player.MyWorld.GetRandomSentient();
+
+            IQuest quest = GlobalConstants.GameManager.QuestProvider.MakeRandomQuest(
+                this.Player, 
+                random, 
+                this.Player.MyWorld);
+
+            GlobalConstants.GameManager.QuestTracker.AddQuest(this.Player.Guid, quest);
+        }
+
+        public void CompleteQuest()
+        {
+            if (this.Player is null)
+            {
+                return;
+            }
+
+            var quest = GlobalConstants.GameManager.QuestTracker
+                .GetQuestsForEntity(this.Player.Guid)
+                .FirstOrDefault();
+
+            if (quest is null)
+            {
+                return;
+            }
+            
+            GlobalConstants.GameManager.QuestTracker.CompleteQuest(this.Player, quest);
         }
     }
 }
