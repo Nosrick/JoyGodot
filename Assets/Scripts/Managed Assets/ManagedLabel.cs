@@ -167,7 +167,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
         }
 
-        protected Color m_FontColour;
+        protected Color m_FontColour = Colors.White;
 
         [Export]
         public int FontSize
