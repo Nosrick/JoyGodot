@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/WorldState/JobManagement.cs" type="Script" id=2]
@@ -10,7 +10,7 @@
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=29]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -21,9 +21,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=3]
-default_font = SubResource( 2 )
+default_font = SubResource( 29 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=30]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -33,7 +33,10 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="Theme" id=5]
+default_font = SubResource( 30 )
+
+[sub_resource type="DynamicFont" id=6]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -43,18 +46,8 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="Theme" id=6]
-default_font = SubResource( 5 )
-
-[sub_resource type="DynamicFont" id=7]
-resource_local_to_scene = true
-size = 24
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-use_mipmaps = true
-extra_spacing_bottom = -10
-extra_spacing_char = 1
-font_data = ExtResource( 3 )
+[sub_resource type="Theme" id=7]
+default_font = SubResource( 6 )
 
 [sub_resource type="DynamicFont" id=8]
 resource_local_to_scene = true
@@ -66,7 +59,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=31]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -77,7 +70,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=10]
-default_font = SubResource( 9 )
+default_font = SubResource( 31 )
 
 [sub_resource type="DynamicFont" id=11]
 resource_local_to_scene = true
@@ -89,7 +82,10 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="Theme" id=12]
+default_font = SubResource( 11 )
+
+[sub_resource type="DynamicFont" id=13]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -99,18 +95,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="Theme" id=13]
-default_font = SubResource( 12 )
-
-[sub_resource type="DynamicFont" id=14]
-resource_local_to_scene = true
-size = 24
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-use_mipmaps = true
-extra_spacing_bottom = -10
-extra_spacing_char = 1
-font_data = ExtResource( 3 )
+[sub_resource type="Theme" id=14]
 
 [sub_resource type="DynamicFont" id=15]
 resource_local_to_scene = true
@@ -133,7 +118,6 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=17]
-default_font = SubResource( 16 )
 
 [sub_resource type="DynamicFont" id=18]
 resource_local_to_scene = true
@@ -145,9 +129,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="Theme" id=19]
-
-[sub_resource type="DynamicFont" id=20]
+[sub_resource type="DynamicFont" id=32]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -157,19 +139,10 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=21]
-resource_local_to_scene = true
-size = 24
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-use_mipmaps = true
-extra_spacing_bottom = -10
-extra_spacing_char = 1
-font_data = ExtResource( 3 )
+[sub_resource type="Theme" id=20]
+default_font = SubResource( 32 )
 
-[sub_resource type="Theme" id=22]
-
-[sub_resource type="DynamicFont" id=23]
+[sub_resource type="DynamicFont" id=22]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -190,7 +163,6 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=25]
-default_font = SubResource( 24 )
 
 [sub_resource type="DynamicFont" id=26]
 resource_local_to_scene = true
@@ -222,38 +194,6 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="Theme" id=29]
-
-[sub_resource type="DynamicFont" id=30]
-resource_local_to_scene = true
-size = 24
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-use_mipmaps = true
-extra_spacing_bottom = -10
-extra_spacing_char = 1
-font_data = ExtResource( 3 )
-
-[sub_resource type="DynamicFont" id=31]
-resource_local_to_scene = true
-size = 24
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-use_mipmaps = true
-extra_spacing_bottom = -10
-extra_spacing_char = 1
-font_data = ExtResource( 3 )
-
-[sub_resource type="DynamicFont" id=32]
-resource_local_to_scene = true
-size = 24
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-use_mipmaps = true
-extra_spacing_bottom = -10
-extra_spacing_char = 1
-font_data = ExtResource( 3 )
-
 [node name="Job Management" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -263,6 +203,7 @@ __meta__ = {
 }
 
 [node name="Page 1" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
@@ -356,37 +297,23 @@ custom_fonts/font = ExtResource( 5 )
 text = "Arseface"
 valign = 1
 
-[node name="Derived Value Label" type="Control" parent="Page 1/Main Container/Player Info Container/Derived Value Container"]
+[node name="Derived Value Label" type="Label" parent="Page 1/Main Container/Player Info Container/Derived Value Container"]
 margin_top = 36.0
 margin_right = 278.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 0, 32 )
 theme = SubResource( 3 )
+text = "Derived Values"
+align = 1
+valign = 1
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
-m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
 OverrideSize = true
-Text = "Derived Values"
-CustomFont = SubResource( 4 )
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
-
-[node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Derived Value Container/Derived Value Label"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 3 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Derived Values"
-align = 1
-valign = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Derived Value Container/Derived Value Label"]
 
@@ -423,47 +350,32 @@ __meta__ = {
 }
 TitleCase = true
 
-[node name="Item Name" type="Control" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector"]
+[node name="Item Name" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector"]
 anchor_right = 0.39
 anchor_bottom = 1.0
-theme = SubResource( 6 )
+theme = SubResource( 5 )
+text = "Name"
+align = 1
+valign = 1
 script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
-VAlign = 1
-m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
 OverrideSize = true
-Text = "Name"
-CustomFont = SubResource( 7 )
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Item Name"]
-
-[node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Item Name"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 6 )
-custom_fonts/font = SubResource( 8 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Name"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Decrease Value" type="Control" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector"]
 anchor_left = 0.4
 anchor_right = 0.5
 anchor_bottom = 1.0
-theme = SubResource( 10 )
+theme = SubResource( 7 )
 script = ExtResource( 4 )
 HAlign = 1
 VAlign = 1
@@ -482,7 +394,7 @@ OverrideOutline = true
 OverrideSize = true
 Text = "<"
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 11 )
+CustomFont = SubResource( 8 )
 OutlineThickness = 1
 CacheFont = true
 OverrideColour = true
@@ -491,55 +403,36 @@ OutlineColour = Color( 0, 0, 0, 1 )
 [node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Decrease Value"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "<"
 align = 1
 valign = 1
 
-[node name="Item Value" type="Control" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector"]
+[node name="Item Value" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector"]
 anchor_left = 0.51
 anchor_right = 0.89
 anchor_bottom = 1.0
-theme = SubResource( 13 )
+theme = SubResource( 10 )
+text = "Value"
+align = 1
+valign = 1
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
-m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
 OverrideSize = true
-Text = "Value"
-CustomFont = SubResource( 14 )
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Item Value"]
-
-[node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Item Value"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 13 )
-custom_fonts/font = SubResource( 15 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Value"
-align = 1
-valign = 1
-clip_text = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Increase Value" type="Control" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector"]
 anchor_left = 0.9
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 17 )
+theme = SubResource( 12 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -561,7 +454,7 @@ OverrideOutline = true
 OverrideSize = true
 Text = ">"
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 18 )
+CustomFont = SubResource( 13 )
 OutlineThickness = 1
 CacheFont = true
 OverrideColour = true
@@ -570,43 +463,29 @@ OutlineColour = Color( 0, 0, 0, 1 )
 [node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Increase Value"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 18 )
+custom_fonts/font = SubResource( 13 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = ">"
 align = 1
 valign = 1
 
-[node name="Statistics Label" type="Control" parent="Page 1/Main Container/Player Info Container/Statistic Container"]
+[node name="Statistics Label" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container"]
 margin_top = 36.0
 margin_right = 278.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 0, 32 )
 theme = SubResource( 3 )
-script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
-m_ElementName = "AccentBackground"
-FontSize = 24
-OverrideOutline = true
-OverrideSize = true
-Text = "Statistics"
-FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 4 )
-OutlineThickness = 1
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
-
-[node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Statistics Label"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 3 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Statistics"
 align = 1
 valign = 1
+script = ExtResource( 6 )
+TitleCase = true
+FontSize = 24
+OverrideOutline = true
+OverrideSize = true
+OutlineThickness = 1
+CacheFont = true
+OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Statistics Label"]
 
@@ -630,68 +509,44 @@ margin_bottom = 422.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Points Remaining Label" type="Control" parent="Page 1/Main Container/Player Info Container/Skill Container"]
+[node name="Points Remaining Label" type="Label" parent="Page 1/Main Container/Player Info Container/Skill Container"]
 margin_right = 279.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 theme = SubResource( 3 )
+text = "Experience Remaining"
+align = 1
+valign = 1
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
 m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
 OverrideSize = true
-Text = "Points Remaining"
-CustomFont = SubResource( 4 )
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
-
-[node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Skill Container/Points Remaining Label"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 3 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Points Remaining"
-align = 1
-valign = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Skill Container/Points Remaining Label"]
 
-[node name="Skills Label" type="Control" parent="Page 1/Main Container/Player Info Container/Skill Container"]
+[node name="Skills Label" type="Label" parent="Page 1/Main Container/Player Info Container/Skill Container"]
 margin_top = 36.0
 margin_right = 279.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 0, 32 )
 theme = SubResource( 3 )
-script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
-FontSize = 24
-OverrideOutline = true
-OverrideSize = true
-Text = "Skills"
-CustomFont = SubResource( 4 )
-OutlineThickness = 1
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
-
-[node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Skill Container/Skills Label"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 3 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
 text = "Skills"
 align = 1
 valign = 1
+script = ExtResource( 6 )
+m_ElementName = "AccentBackground"
+TitleCase = true
+FontSize = 24
+OverrideOutline = true
+OverrideSize = true
+OutlineThickness = 1
+CacheFont = true
+OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Skill Container/Skills Label"]
 
@@ -713,7 +568,7 @@ anchor_left = 0.88
 anchor_top = 0.91
 anchor_right = 0.98
 anchor_bottom = 0.98
-theme = SubResource( 19 )
+theme = SubResource( 14 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -733,14 +588,14 @@ TitleCase = true
 FontSize = 24
 Text = "Next"
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 20 )
+CustomFont = SubResource( 15 )
 OutlineThickness = 1
 OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Page 1/Next Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 21 )
+custom_fonts/font = SubResource( 16 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Next"
 align = 1
@@ -754,7 +609,7 @@ anchor_left = 0.012
 anchor_top = 0.91
 anchor_right = 0.112
 anchor_bottom = 0.98
-theme = SubResource( 22 )
+theme = SubResource( 17 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -776,7 +631,7 @@ OverrideOutline = true
 OverrideSize = true
 Text = "Buy"
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 23 )
+CustomFont = SubResource( 18 )
 OutlineThickness = 1
 CacheFont = true
 OverrideColour = true
@@ -785,7 +640,7 @@ OutlineColour = Color( 0, 0, 0, 1 )
 [node name="Text" type="Label" parent="Page 1/Buy Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 23 )
+custom_fonts/font = SubResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Buy"
 align = 1
@@ -888,36 +743,24 @@ custom_fonts/font = ExtResource( 5 )
 text = "Arseface"
 valign = 1
 
-[node name="Ability Label" type="Control" parent="Page 2/Main Container/Player Info Container/Ability Container"]
+[node name="Ability Label" type="Label" parent="Page 2/Main Container/Player Info Container/Ability Container"]
 margin_top = 36.0
 margin_right = 278.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 0, 32 )
-theme = SubResource( 25 )
+theme = SubResource( 20 )
+text = "Abilities"
+align = 1
+valign = 1
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
 m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
-Text = "Abilities"
-CustomFont = SubResource( 26 )
+OverrideSize = true
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
-
-[node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Ability Container/Ability Label"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 25 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Abilities"
-align = 1
-valign = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Ability Container/Ability Label"]
 
@@ -955,47 +798,29 @@ __meta__ = {
 }
 TitleCase = true
 
-[node name="Item Name" type="Control" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector"]
+[node name="Item Name" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector"]
 anchor_right = 0.39
 anchor_bottom = 1.0
-theme = SubResource( 6 )
+theme = SubResource( 5 )
+text = "Name"
+align = 1
+valign = 1
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
-m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
 OverrideSize = true
-Text = "Name"
-CustomFont = SubResource( 7 )
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Item Name"]
-
-[node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Item Name"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 6 )
-custom_fonts/font = SubResource( 8 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Name"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Decrease Value" type="Control" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector"]
 anchor_left = 0.4
 anchor_right = 0.5
 anchor_bottom = 1.0
-theme = SubResource( 10 )
+theme = SubResource( 7 )
 script = ExtResource( 4 )
 HAlign = 1
 VAlign = 1
@@ -1014,7 +839,7 @@ OverrideOutline = true
 OverrideSize = true
 Text = "<"
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 27 )
+CustomFont = SubResource( 22 )
 OutlineThickness = 1
 CacheFont = true
 OverrideColour = true
@@ -1025,8 +850,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -0.749161
 margin_bottom = -0.749161
-theme = SubResource( 10 )
-custom_fonts/font = SubResource( 27 )
+theme = SubResource( 7 )
+custom_fonts/font = SubResource( 22 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "<"
 align = 1
@@ -1035,49 +860,33 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Item Value" type="Control" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector"]
+[node name="Item Value" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector"]
 anchor_left = 0.51
 anchor_right = 0.89
 anchor_bottom = 1.0
-theme = SubResource( 13 )
+theme = SubResource( 10 )
+text = "Value"
+align = 1
+valign = 1
 script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
-VAlign = 1
-m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
 OverrideSize = true
-Text = "Value"
-CustomFont = SubResource( 14 )
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Item Value"]
-
-[node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Item Value"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 13 )
-custom_fonts/font = SubResource( 15 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Value"
-align = 1
-valign = 1
-clip_text = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Increase Value" type="Control" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector"]
 anchor_left = 0.9
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 17 )
+theme = SubResource( 12 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1099,7 +908,7 @@ OverrideOutline = true
 OverrideSize = true
 Text = ">"
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 28 )
+CustomFont = SubResource( 24 )
 OutlineThickness = 1
 CacheFont = true
 OverrideColour = true
@@ -1108,43 +917,30 @@ OutlineColour = Color( 0, 0, 0, 1 )
 [node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Increase Value"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 17 )
-custom_fonts/font = SubResource( 28 )
+theme = SubResource( 12 )
+custom_fonts/font = SubResource( 24 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = ">"
 align = 1
 valign = 1
 
-[node name="Misc Statistics Label" type="Control" parent="Page 2/Main Container/Player Info Container/Misc Statistics"]
+[node name="Misc Statistics Label" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics"]
 margin_top = 36.0
 margin_right = 279.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 0, 32 )
-theme = SubResource( 25 )
+theme = SubResource( 20 )
+text = "Misc Statistics"
+align = 1
+valign = 1
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
-m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
-Text = "Misc. Statistics"
-CustomFont = SubResource( 26 )
+OverrideSize = true
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
-
-[node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Misc Statistics Label"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 25 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Misc. Statistics"
-align = 1
-valign = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Misc Statistics Label"]
 
@@ -1169,39 +965,22 @@ margin_bottom = 422.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Points Remaining Label" type="Control" parent="Page 2/Main Container/Player Info Container/Blank Container"]
+[node name="Points Remaining Label" type="Label" parent="Page 2/Main Container/Player Info Container/Blank Container"]
 margin_right = 279.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 theme = SubResource( 3 )
+text = "Points Remaining"
+align = 1
+valign = 1
 script = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-HAlign = 1
-VAlign = 1
-m_ElementName = "AccentBackground"
 TitleCase = true
 FontSize = 24
 OverrideOutline = true
 OverrideSize = true
-Text = "Points Remaining"
-CustomFont = SubResource( 4 )
 OutlineThickness = 1
+CacheFont = true
 OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
-
-[node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Blank Container/Points Remaining Label"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme = SubResource( 3 )
-custom_colors/font_color = Color( 0, 0, 0, 0 )
-text = "Points Remaining"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Blank Container/Points Remaining Label"]
 
@@ -1210,7 +989,7 @@ anchor_left = 0.88
 anchor_top = 0.91
 anchor_right = 0.98
 anchor_bottom = 0.98
-theme = SubResource( 29 )
+theme = SubResource( 25 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1230,14 +1009,14 @@ TitleCase = true
 FontSize = 24
 Text = "Back"
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 30 )
+CustomFont = SubResource( 26 )
 OutlineThickness = 1
 OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Page 2/Back Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 31 )
+custom_fonts/font = SubResource( 27 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Back"
 align = 1
@@ -1251,7 +1030,7 @@ anchor_left = 0.012
 anchor_top = 0.91
 anchor_right = 0.112
 anchor_bottom = 0.98
-theme = SubResource( 22 )
+theme = SubResource( 17 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1273,7 +1052,7 @@ OverrideOutline = true
 OverrideSize = true
 Text = "Buy"
 FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 32 )
+CustomFont = SubResource( 28 )
 OutlineThickness = 1
 CacheFont = true
 OverrideColour = true
@@ -1282,7 +1061,7 @@ OutlineColour = Color( 0, 0, 0, 1 )
 [node name="Text" type="Label" parent="Page 2/Buy Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 32 )
+custom_fonts/font = SubResource( 28 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Buy"
 align = 1

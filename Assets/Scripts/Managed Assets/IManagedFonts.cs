@@ -14,7 +14,6 @@ namespace JoyLib.Code.Unity.GUI
         bool OverrideOutline { get; set; }
         bool HasFont { get; }
         bool HasFontColours { get; }
-        DynamicFont CustomFont { get; set; }
         Color FontColour { get; set; }
         int FontSize { get; set; }
         Color OutlineColour { get; set; }

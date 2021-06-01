@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedCursor.cs" type="Script" id=1]
-[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=2]
 
 [node name="Managed Cursor" type="Control"]
 anchor_right = 1.0
@@ -12,8 +12,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Cursor Object" parent="." instance=ExtResource( 2 )]
+[node name="Cursor Object" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Drag Object" parent="." instance=ExtResource( 2 )]
+[node name="Colour Lerper" type="Tween" parent="Cursor Object"]
+
+[node name="Drag Object" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="Drag Object"]

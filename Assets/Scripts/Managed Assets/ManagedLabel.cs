@@ -17,7 +17,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 #endif
     public class ManagedLabel :
         Label,
-        ISpriteStateElement
+        ISpriteStateElement,
+        IColourableElement
     {
         public string ElementName
         {
@@ -226,7 +227,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 return;
             }
 
-            if (this.OverrideSize)
+            if (this.OverrideSize && this.FontSize > 0)
             {
                 defaultFont.Size = this.FontSize;
             }
@@ -586,7 +587,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                         MarginBottom = 0,
                         MarginLeft = 0,
                         MarginRight = 0,
-                        MarginTop = 0
+                        MarginTop = 0,
+                        ShowBehindParent = true
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);

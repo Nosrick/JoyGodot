@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/ContextMenu.cs" type="Script" id=2]
 
 [sub_resource type="StyleBoxEmpty" id=1]
@@ -24,13 +24,17 @@ margin_bottom = 8.0
 mouse_filter = 2
 size_flags_vertical = 0
 
-[node name="Background" parent="Margin Container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="Background" type="Control" parent="Margin Container"]
 margin_right = 300.0
 margin_bottom = 8.0
 mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 m_ElementName = "AccentBackground"
+
+[node name="Colour Lerper" type="Tween" parent="Margin Container/Background"]
 
 [node name="Main Margin" type="MarginContainer" parent="Margin Container"]
 margin_right = 300.0
