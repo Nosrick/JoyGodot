@@ -8,6 +8,7 @@ using Godot.Collections;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Relationships;
+using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
 using Directory = System.IO.Directory;
@@ -34,9 +35,9 @@ namespace JoyLib.Code.Conversation
 
         public string ListenerInfo { get; protected set; }
 
-        public event EventHandler OnConverse;
-        public event EventHandler OnOpen;
-        public event EventHandler OnClose;
+        public event ConversationEventHandler OnConverse;
+        public event ConversationEventHandler OnOpen;
+        public event EmptyEventHandler OnClose;
 
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
@@ -205,7 +206,14 @@ namespace JoyLib.Code.Conversation
         {
             this.Instigator = instigator;
             this.Listener = listener;
+            
+            this.CalculateListenerInfo();
 
+            //this.OnOpen?.Invoke();
+        }
+
+        protected void CalculateListenerInfo()
+        {
             try
             {
                 IEnumerable<IRelationship> relationships =
@@ -229,42 +237,40 @@ namespace JoyLib.Code.Conversation
                     }
                 }
 
-                this.ListenerInfo = this.Listener.JoyName + ", " + chosenRelationship.DisplayName;
+                this.ListenerInfo = this.Listener.JoyName + ", " + chosenRelationship?.DisplayName;
             }
             catch (Exception e)
             {
                 this.ListenerInfo = this.Listener.JoyName + ", acquaintance.";
             }
-
-            this.OnOpen?.Invoke(this, EventArgs.Empty);
         }
 
-        public ITopic[] Converse(string topic, int index = 0)
+        public ICollection<ITopic> Converse(ITopic selectedTopic = null)
         {
-            if (this.CurrentTopics.Length == 0)
+            if (selectedTopic is null)
             {
-                this.CurrentTopics = this.m_Topics.Where(t => t.ID.Equals(topic, StringComparison.OrdinalIgnoreCase))
+                this.CurrentTopics = this.m_Topics
+                    .Where(t => t.ID.Equals("greeting", StringComparison.OrdinalIgnoreCase))
                     .ToArray();
 
                 this.CurrentTopics = this.SanitiseTopics(this.CurrentTopics);
+                this.OnOpen?.Invoke(null, this.CurrentTopics);
+            }
+            else
+            {
+                this.DoInteractions(selectedTopic);
             }
 
-            ITopic currentTopic = this.CurrentTopics[index];
-
-            this.DoInteractions(currentTopic);
-
-            if (this.Instigator is null == false && this.Listener is null == false)
+            if (this.CurrentTopics.Length == 0)
             {
-                this.SetActors(this.Instigator, this.Listener);
-                this.OnConverse?.Invoke(this, EventArgs.Empty);
+                this.OnClose?.Invoke();
+            }
+            else
+            {
+                this.CalculateListenerInfo();
             }
 
             return this.CurrentTopics;
-        }
-
-        public ITopic[] Converse(int index = 0)
-        {
-            return this.Converse("greeting", index);
         }
 
         protected void DoInteractions(ITopic currentTopic)
@@ -275,7 +281,7 @@ namespace JoyLib.Code.Conversation
 
             if (next.Length == 0)
             {
-                this.OnClose?.Invoke(this, EventArgs.Empty);
+                this.OnClose?.Invoke();
                 this.CurrentTopics = next;
                 this.Listener = null;
                 this.Instigator = null;
@@ -309,7 +315,7 @@ namespace JoyLib.Code.Conversation
 
             if (next.Length == 0)
             {
-                this.OnClose?.Invoke(this, EventArgs.Empty);
+                this.OnClose?.Invoke();
                 this.CurrentTopics = next;
                 this.Listener = null;
                 this.Instigator = null;
@@ -341,7 +347,7 @@ namespace JoyLib.Code.Conversation
                         this.Listener));
                 }
 
-                if (topic.FulfilsConditions(tuples.ToArray()))
+                if (topic.FulfilsConditions(tuples))
                 {
                     validTopics.Add(topic);
                 }

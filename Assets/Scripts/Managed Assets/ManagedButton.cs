@@ -280,6 +280,11 @@ namespace Code.Unity.GUI.Managed_Assets
         {
             base._GuiInput(@event);
 
+            if (this.Visible == false)
+            {
+                return;
+            }
+
             if (@event is InputEventMouseMotion motion)
             {
                 bool last = this.MouseInside;
@@ -294,8 +299,9 @@ namespace Code.Unity.GUI.Managed_Assets
             {
                 if (this.ActionMode == BaseButton.ActionModeEnum.Press)
                 {
-                    if (Input.IsActionJustPressed("ui_select")
-                        || Input.IsActionJustPressed("ui_accept"))
+                    if (@event is InputEventMouseButton mouseButton
+                        && (mouseButton.IsActionPressed("ui_select")
+                        || mouseButton.IsActionPressed("ui_accept")))
                     {
                         if (this.ToggleMode)
                         {

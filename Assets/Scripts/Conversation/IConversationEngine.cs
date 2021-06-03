@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Conversation
 {
     public interface IConversationEngine : IGuidHolder
     {
         void SetActors(IEntity instigator, IEntity listener);
-        ITopic[] Converse(string topic, int index = 0);
-        ITopic[] Converse(int index = 0);
+        ICollection<ITopic> Converse(ITopic selectedTopic = null);
         
         ITopic[] CurrentTopics { get; }
         ITopic[] AllTopics { get; }
@@ -18,8 +19,8 @@ namespace JoyLib.Code.Conversation
         string ListenerInfo { get; }
         string LastSaidWords { get; }
 
-        event EventHandler OnConverse;
-        event EventHandler OnOpen;
-        event EventHandler OnClose;
+        event ConversationEventHandler OnConverse;
+        event ConversationEventHandler OnOpen;
+        event EmptyEventHandler OnClose;
     }
 }

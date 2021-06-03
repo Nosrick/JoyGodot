@@ -135,7 +135,7 @@ namespace Tests
 
             target.SetActors(instigator, listener);
 
-            ITopic[] baseTopics = target.Converse();
+            ICollection<ITopic> baseTopics = target.Converse();
             bool ended = false;
             foreach (ITopic topic in baseTopics)
             {
@@ -145,10 +145,10 @@ namespace Tests
             Assert.That(ended, Is.True);
         }
 
-        private bool AdvanceToEnd(ITopic topic, ITopic[] baseTopics)
+        private bool AdvanceToEnd(ITopic topic, ICollection<ITopic> baseTopics)
         {
-            ITopic[] nextTopics = target.Converse(topic.ID);
-            if (nextTopics.Intersect(baseTopics).Count() == baseTopics.Length)
+            ICollection<ITopic> nextTopics = target.Converse(topic);
+            if (nextTopics.Intersect(baseTopics).Count() == baseTopics.Count)
             {
                 return true;
             }

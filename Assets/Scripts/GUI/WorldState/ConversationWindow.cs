@@ -8,6 +8,7 @@ using JoyLib.Code;
 using JoyLib.Code.Conversation;
 using JoyLib.Code.Conversation.Conversations;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Events;
 using JoyLib.Code.Unity.GUI;
 
 namespace JoyGodot.Assets.Scripts.GUI.WorldState
@@ -18,7 +19,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         protected Label ListenerName { get; set; }
         protected Label LastSaid { get; set; }
         protected VBoxContainer ItemParent { get; set; }
-        protected List<ManagedTextButton> Items { get; set; }
+        protected List<ConversationMenuItem> Items { get; set; }
         protected PackedScene MenuItemPrefab { get; set; }
         public IEntity Speaker { get; set; }
         public IEntity Listener { get; set; }
@@ -32,67 +33,71 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.ListenerName = this.FindNode("ListenerName") as Label;
             this.LastSaid = this.FindNode("LastSaid") as Label;
             this.ItemParent = this.FindNode("ConversationItems") as VBoxContainer;
-            this.Items = new List<ManagedTextButton>();
+            this.Items = new List<ConversationMenuItem>();
 
             this.MenuItemPrefab = GD.Load<PackedScene>(
                 GlobalConstants.GODOT_ASSETS_FOLDER
-                + "Scenes/Parts/ManagedTextButton.tscn");
+                + "Scenes/Parts/ConversationMenuItem.tscn");
 
             this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
+
+            this.ConversationEngine.OnOpen -= this.CreateMenuItems;
+            this.ConversationEngine.OnOpen += this.CreateMenuItems;
+            this.ConversationEngine.OnConverse -= this.CreateMenuItems;
+            this.ConversationEngine.OnConverse += this.CreateMenuItems;
+        }
+
+        public override void Display()
+        {
+            base.Display();
+
+            this.ConversationEngine.Converse();
         }
 
         public void SetActors(IEntity speaker, IEntity listener)
         {
             this.Speaker = speaker;
             this.Listener = listener;
-
-            this.ListenerName.Text = this.Listener.JoyName;
             this.ListenerIcon.Clear();
             this.ListenerIcon.AddSpriteState(this.Listener.States.First());
             this.ListenerIcon.OverrideAllColours(this.Listener.States.First().SpriteData.GetCurrentPartColours());
+
+            this.ConversationEngine.SetActors(this.Speaker, this.Listener);
+
+            this.ListenerName.Text = this.ConversationEngine.ListenerInfo;
         }
         
-        protected void CreateMenuItems()
+        protected void CreateMenuItems(ITopic lastTopic, ICollection<ITopic> topics)
         {
             bool newItems = false;
 
-            if (this.ConversationEngine.CurrentTopics.Length > this.Items.Count)
+            if (topics.Count > this.Items.Count)
             {
-                for (int i = this.Items.Count; i < this.ConversationEngine.CurrentTopics.Length; i++)
+                for (int i = this.Items.Count; i < topics.Count; i++)
                 {
-                    ManagedTextButton child = this.MenuItemPrefab.Instance() as ManagedTextButton;
+                    ConversationMenuItem child = this.MenuItemPrefab.Instance() as ConversationMenuItem;
+                    child.RectMinSize = new Vector2(0, 32);
                     this.ItemParent.AddChild(child);
                     this.Items.Add(child);
                     newItems = true;
                 }
             }
 
-            foreach (ManagedTextButton item in this.Items)
+            foreach (ConversationMenuItem item in this.Items)
             {
                 item.Hide();
             }
 
-            for (int i = 0; i < this.ConversationEngine.CurrentTopics.Length; i++)
+            for (int i = 0; i < topics.Count; i++)
             {
                 var current = this.Items[i];
-                ITopic currentTopic = this.ConversationEngine.CurrentTopics[i];
+                ITopic currentTopic = topics.ElementAt(i);
                 current.Text = currentTopic.Words;
                 current.Name = currentTopic.ID;
+                current.MyTopic = currentTopic;
                 current.Show();
-                if (current.IsConnected("_Press", this, nameof(this.OnItemClick)))
-                {
-                    current.Disconnect("_Press", this, nameof(this.OnItemClick));
-                }
-
-                current.Connect(
-                    "_Press",
-                    this,
-                    nameof(this.OnItemClick),
-                    new Array
-                    {
-                        currentTopic.ID,
-                        i
-                    });
+                current.OnClick -= this.OnItemClick;
+                current.OnClick += this.OnItemClick;
             }
 
             if (newItems)
@@ -101,9 +106,18 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             }
         }
 
-        protected void OnItemClick(string topic, int index)
+        protected void OnItemClick(ITopic topic)
         {
-            this.ConversationEngine.Converse(topic, index);
+            var currentTopics = this.ConversationEngine.Converse(topic);
+
+            if (currentTopics.Count == 0)
+            {
+                this.ButtonClose();
+                return;
+            }
+            
+            this.LastSaid.Text = this.ConversationEngine.LastSaidWords;
+            this.CreateMenuItems(topic, currentTopics);
         }
     }
 }
