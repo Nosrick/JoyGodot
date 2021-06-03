@@ -86,6 +86,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 {
                     ConversationMenuItem child = this.MenuItemPrefab.Instance() as ConversationMenuItem;
                     child.RectMinSize = new Vector2(0, 32);
+                    child.HAlign = Label.AlignEnum.Center;
+                    child.VAlign = Label.VAlign.Center;
+                    child.AutoWrap = true;
+                    
                     this.ItemParent.AddChild(child);
                     this.Items.Add(child);
                     newItems = true;

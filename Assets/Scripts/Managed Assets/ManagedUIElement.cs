@@ -120,7 +120,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 this.CallDeferred("Initialise");
             }
-
+            
             this.Parts = new List<NinePatchRect>();
             var children = this.GetAllChildren();
             foreach (var child in children)

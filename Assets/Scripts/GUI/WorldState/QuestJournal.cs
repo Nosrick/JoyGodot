@@ -54,6 +54,9 @@ namespace JoyLib.Code.Unity.GUI.WorldState
                     var instance = this.ItemPrefab.Instance() as QuestMenuItem;
                     instance.Hide();
                     instance.MouseFilter = MouseFilterEnum.Stop;
+                    instance.HAlign = Label.AlignEnum.Center;
+                    instance.VAlign = Label.VAlign.Center;
+                    instance.AutoWrap = true;
                     instance.Player = this.Player;
                     instance.QuestTracker = this.QuestTracker;
                     instance.QuestAbandoned -= this.RemoveQuestItem;

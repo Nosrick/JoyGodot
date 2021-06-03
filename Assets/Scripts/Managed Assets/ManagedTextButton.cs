@@ -54,8 +54,24 @@ namespace JoyGodot.addons.Managed_Assets
 
         protected Label.VAlign m_VAlign;
 
+        [Export]
+        public bool AutoWrap
+        {
+            get => this.m_AutoWrap;
+            set
+            {
+                this.m_AutoWrap = value;
+                if (this.MyLabel is null == false)
+                {
+                    this.MyLabel.Autowrap = value;
+                }
+            }
+        }
 
-        protected Label MyLabel { get; set; }
+        protected bool m_AutoWrap;
+        
+        protected Control ChildParent { get; set; }
+        public Label MyLabel { get; protected set; }
 
         [Signal]
         public delegate void _AlignChanged();
@@ -252,19 +268,33 @@ namespace JoyGodot.addons.Managed_Assets
 
             base.Initialise();
 
-            this.MyLabel = this.GetNodeOrNull("Text") as Label;
+            this.ChildParent = this.FindNode("ChildParent") as Control;
+            this.MyLabel = this.FindNode("Text") as Label;
             if (this.MyLabel is null)
             {
+                GD.PushWarning("Label is null in " + this.GetType().Name);
                 this.MyLabel = new Label
                 {
                     Name = "Text",
                     AnchorBottom = 1,
-                    AnchorRight = 1
+                    AnchorRight = 1,
+                    MarginTop = 4,
+                    MarginLeft = 4,
+                    MarginBottom = -4,
+                    MarginRight = -4,
                 };
-                this.AddChild(this.MyLabel);
-#if TOOLS
-                this.MyLabel.Owner = this.GetTree()?.EditedSceneRoot;
-#endif
+                if (this.ChildParent is null)
+                {
+                    this.AddChild(this.MyLabel);
+                }
+                else
+                {
+                    this.ChildParent.AddChild(this.MyLabel);
+                }
+            }
+            else
+            {
+                GD.Print("Label found!");
             }
             this.OutlineColour = this.OutlineColour;
             this.OutlineThickness = this.OutlineThickness;
@@ -274,8 +304,8 @@ namespace JoyGodot.addons.Managed_Assets
             this.MyLabel.Align = this.HAlign;
             this.MyLabel.Valign = this.VAlign;
 
-            //this.MyLabel.AddFontOverride("font", this.m_CustomFont);
             this.MyLabel.Text = this.m_TextToSet;
+            this.MyLabel.Autowrap = this.m_AutoWrap;
         }
     }
 }

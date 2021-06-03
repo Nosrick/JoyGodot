@@ -1,5 +1,6 @@
 ﻿using System;
 using Godot;
+using JoyGodot.addons.Managed_Assets;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
@@ -10,7 +11,7 @@ namespace JoyLib.Code.Unity.GUI
     #if TOOLS
     [Tool]
     #endif
-    public class QuestMenuItem : ManagedLabel
+    public class QuestMenuItem : ManagedTextButton
     {
         public IQuestTracker QuestTracker { get; set; }
         public IEntity Player { get; set; }

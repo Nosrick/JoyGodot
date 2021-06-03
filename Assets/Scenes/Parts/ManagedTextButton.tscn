@@ -35,6 +35,7 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+Text = "Text"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -44,21 +45,31 @@ StateColours = {
 }
 ColourMultiplier = 1.0
 OutlineColour = Color( 0, 0, 0, 1 )
-FontColour = Color( 1, 1, 1, 1 )
-Text = "Text"
 TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
 FontSize = 24
 CustomFont = SubResource( 2 )
+AutoWrap = true
 
-[node name="Text" type="Label" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Text" type="Label" parent="MarginContainer"]
+margin_top = 231.0
+margin_right = 854.0
+margin_bottom = 249.0
 custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Text"
 align = 1
 valign = 1
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
