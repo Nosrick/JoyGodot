@@ -254,7 +254,9 @@ namespace JoyLib.Code.Conversation
                     .ToArray();
 
                 this.CurrentTopics = this.SanitiseTopics(this.CurrentTopics);
-                this.OnOpen?.Invoke(null, this.CurrentTopics);
+                var greeting = this.CurrentTopics.FirstOrDefault();
+                this.DoInteractions(greeting);
+                this.OnOpen?.Invoke(greeting, this.CurrentTopics);
             }
             else
             {
@@ -275,6 +277,15 @@ namespace JoyLib.Code.Conversation
 
         protected void DoInteractions(ITopic currentTopic)
         {
+            if (currentTopic is null)
+            {
+                this.OnClose?.Invoke();
+                this.CurrentTopics = new ITopic[0];
+                this.Listener = null;
+                this.Instigator = null;
+                return;
+            }
+            
             ITopic[] next = currentTopic.Interact(this.Instigator, this.Listener);
 
             next = this.SanitiseTopics(next);

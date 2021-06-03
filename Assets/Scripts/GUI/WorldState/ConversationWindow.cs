@@ -41,10 +41,12 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
             this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
 
-            this.ConversationEngine.OnOpen -= this.CreateMenuItems;
-            this.ConversationEngine.OnOpen += this.CreateMenuItems;
-            this.ConversationEngine.OnConverse -= this.CreateMenuItems;
-            this.ConversationEngine.OnConverse += this.CreateMenuItems;
+            this.ConversationEngine.OnOpen -= this.ConversationDelegate;
+            this.ConversationEngine.OnOpen += this.ConversationDelegate;
+            /*
+            this.ConversationEngine.OnConverse -= this.ConversationDelegate;
+            this.ConversationEngine.OnConverse += this.ConversationDelegate;
+            */
         }
 
         public override void Display()
@@ -66,9 +68,16 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
             this.ListenerName.Text = this.ConversationEngine.ListenerInfo;
         }
-        
-        protected void CreateMenuItems(ITopic lastTopic, ICollection<ITopic> topics)
+
+        protected void ConversationDelegate(ITopic currentTopic, ICollection<ITopic> topics)
         {
+            this.CreateMenuItems(currentTopic.Words, topics);
+        }
+        
+        protected void CreateMenuItems(string lastSaid, ICollection<ITopic> topics)
+        {
+            this.LastSaid.Text = lastSaid;
+            
             bool newItems = false;
 
             if (topics.Count > this.Items.Count)
@@ -116,8 +125,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 return;
             }
             
-            this.LastSaid.Text = this.ConversationEngine.LastSaidWords;
-            this.CreateMenuItems(topic, currentTopics);
+            this.CreateMenuItems(this.ConversationEngine.LastSaidWords, currentTopics);
         }
     }
 }
