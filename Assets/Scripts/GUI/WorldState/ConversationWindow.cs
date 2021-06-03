@@ -61,8 +61,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.Speaker = speaker;
             this.Listener = listener;
             this.ListenerIcon.Clear();
-            this.ListenerIcon.AddSpriteState(this.Listener.States.First());
-            this.ListenerIcon.OverrideAllColours(this.Listener.States.First().SpriteData.GetCurrentPartColours());
+            this.ListenerIcon.AddSpriteState(this.Listener?.States.First());
+            this.ListenerIcon.OverrideAllColours(this.Listener?.States.First().SpriteData.GetCurrentPartColours());
 
             this.ConversationEngine.SetActors(this.Speaker, this.Listener);
 
@@ -71,6 +71,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
         protected void ConversationDelegate(ITopic currentTopic, ICollection<ITopic> topics)
         {
+            this.SetActors(this.ConversationEngine.Instigator, this.ConversationEngine.Listener);
             this.CreateMenuItems(currentTopic.Words, topics);
         }
         

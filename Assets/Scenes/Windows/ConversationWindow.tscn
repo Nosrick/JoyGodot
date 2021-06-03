@@ -59,6 +59,7 @@ margin_right = 48.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 size_flags_horizontal = 0
+m_ElementName = "None"
 
 [node name="ListenerName" type="Label" parent="MainContainer/TitleContainer/SpeakerContainer"]
 margin_left = 52.0
