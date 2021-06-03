@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
@@ -14,7 +15,7 @@ namespace JoyLib.Code.Unity.GUI
         public IQuestTracker QuestTracker { get; set; }
         public IEntity Player { get; set; }
         
-        public event EmptyEventHandler QuestAbandoned;
+        public event EventHandler QuestAbandoned;
 
         public IQuest MyQuest
         {
@@ -41,14 +42,16 @@ namespace JoyLib.Code.Unity.GUI
                 var contextMenu = GlobalConstants.GameManager.GUIManager.ContextMenu;
                 
                 contextMenu.Clear();
-                contextMenu.AddItem("Abandon", delegate
-                {
-                    this.QuestTracker?.AbandonQuest(this.Player, this.MyQuest);
-                    this.MyQuest = null;
-                    this.QuestAbandoned?.Invoke();
-                });
+                contextMenu.AddItem("Abandon", this.AbandonQuest);
                 GlobalConstants.GameManager.GUIManager.OpenGUI(this, GUINames.CONTEXT_MENU);
             }
+        }
+
+        protected void AbandonQuest()
+        {
+            this.QuestTracker?.AbandonQuest(this.Player, this.MyQuest);
+            this.MyQuest = null;
+            this.QuestAbandoned?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -13,7 +13,7 @@ public class ContextMenu : GUIData
     protected VBoxContainer MainContainer { get; set; }
     protected PackedScene ButtonPrefab { get; set; }
     protected List<ManagedTextButton> ListItems { get; set; }
-    protected IDictionary<string, Action> ItemActions { get; set; }
+    protected IDictionary<int, Action> ItemActions { get; set; }
     
     public override void _Ready()
     {
@@ -21,7 +21,7 @@ public class ContextMenu : GUIData
         this.ButtonPrefab =
             GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedTextButton.tscn");
         this.ListItems = new List<ManagedTextButton>();
-        this.ItemActions = new Dictionary<string, Action>();
+        this.ItemActions = new Dictionary<int, Action>();
     }
 
     public override void _Input(InputEvent @event)
@@ -47,7 +47,7 @@ public class ContextMenu : GUIData
     {
         foreach (var item in this.ListItems)
         {
-            this.ItemActions.Remove(item.Text);
+            this.ItemActions.Remove(item.GetHashCode());
             item.Visible = false;
             item.Text = null;
         }
@@ -87,13 +87,13 @@ public class ContextMenu : GUIData
         {
             item.Disconnect("_Press", this, "PlayAction");
         }
-        this.ItemActions.Add(text, action);
+        this.ItemActions.Add(item.GetHashCode(), action);
         item.Name = text;
         item.Text = text;
         item.Visible = true;
         item.Connect("_Press", this, "PlayAction", new Array
         {
-            text
+            item.GetHashCode()
         });
     }
 
@@ -102,9 +102,9 @@ public class ContextMenu : GUIData
         this.GUIManager.SetupManagedComponents(button);
     }
 
-    protected void PlayAction(string name)
+    protected void PlayAction(int hashcode)
     {
-        if (this.ItemActions.TryGetValue(name, out Action action))
+        if (this.ItemActions.TryGetValue(hashcode, out Action action))
         {
             action.Invoke();
         }
