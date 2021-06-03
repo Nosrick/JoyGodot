@@ -42,7 +42,7 @@ font_data = ExtResource( 4 )
 [sub_resource type="Theme" id=4]
 default_font = SubResource( 3 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=17]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -52,7 +52,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=18]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -62,7 +62,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=19]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -72,7 +72,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=20]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -82,14 +82,14 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="Theme" id=9]
+[sub_resource type="Theme" id=21]
 default_font = ExtResource( 13 )
 
-[sub_resource type="StyleBoxEmpty" id=10]
+[sub_resource type="StyleBoxEmpty" id=22]
 
-[sub_resource type="StyleBoxEmpty" id=11]
+[sub_resource type="StyleBoxEmpty" id=23]
 
-[sub_resource type="Theme" id=12]
+[sub_resource type="Theme" id=24]
 
 [sub_resource type="DynamicFont" id=13]
 resource_local_to_scene = true
@@ -117,7 +117,7 @@ font_data = ExtResource( 4 )
 [sub_resource type="Theme" id=16]
 default_font = SubResource( 15 )
 
-[sub_resource type="DynamicFont" id=17]
+[sub_resource type="DynamicFont" id=25]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -127,7 +127,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=18]
+[sub_resource type="DynamicFont" id=26]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -236,11 +236,12 @@ script = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-TitleCase = true
+m_ElementName = "AccentBackground"
+OverrideSize = true
 FontSize = 24
 OverrideOutline = true
-OverrideSize = true
 OutlineThickness = 1
+TitleCase = true
 OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Character Creation Part 2/Main Container/Player Info Container/Skills Container/Points Remaining"]
@@ -285,11 +286,12 @@ script = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-TitleCase = true
+m_ElementName = "AccentBackground"
+OverrideSize = true
 FontSize = 24
 OverrideOutline = true
-OverrideSize = true
 OutlineThickness = 1
+TitleCase = true
 OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Character Creation Part 2/Main Container/Player Info Container/Abilities Container/Points Remaining"]
@@ -337,6 +339,13 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+m_ElementName = "AccentBackground"
+FontSize = 24
+OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+TitleCase = true
+CustomFont = SubResource( 17 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -345,18 +354,12 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-TitleCase = true
-FontSize = 24
 Text = "Back"
-FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 5 )
-OutlineThickness = 1
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Character Creation Part 2/Back Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Back"
 align = 1
@@ -373,6 +376,13 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+m_ElementName = "AccentBackground"
+FontSize = 24
+OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+TitleCase = true
+CustomFont = SubResource( 19 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -381,18 +391,12 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-TitleCase = true
-FontSize = 24
 Text = "Begin"
-FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 7 )
-OutlineThickness = 1
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Character Creation Part 2/Begin Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 20 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Begin"
 align = 1
@@ -588,9 +592,9 @@ margin_left = 5.0
 margin_top = 5.0
 margin_right = -5.0
 margin_bottom = -5.0
-theme = SubResource( 9 )
-custom_styles/focus = SubResource( 10 )
-custom_styles/normal = SubResource( 11 )
+theme = SubResource( 21 )
+custom_styles/focus = SubResource( 22 )
+custom_styles/normal = SubResource( 23 )
 context_menu_enabled = false
 placeholder_text = "Arseface"
 __meta__ = {
@@ -603,11 +607,13 @@ __meta__ = {
 anchor_left = 0.847
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 12 )
+theme = SubResource( 24 )
 script = ExtResource( 14 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+ActionMode = 1
+m_ElementName = "CharacterSheetIcon"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -616,7 +622,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-ActionMode = 1
 
 [node name="Basic Info Scoller" type="ScrollContainer" parent="Character Creation Part 1/Main Container/Player Info Container/Basic Info Container"]
 margin_top = 46.0
@@ -658,11 +663,12 @@ script = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-TitleCase = true
+m_ElementName = "AccentBackground"
+OverrideSize = true
 FontSize = 24
 OverrideOutline = true
-OverrideSize = true
 OutlineThickness = 1
+TitleCase = true
 OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Character Creation Part 1/Main Container/Player Info Container/Statistics Container/Points Remaining"]
@@ -704,11 +710,12 @@ script = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-TitleCase = true
+m_ElementName = "AccentBackground"
+OverrideSize = true
 FontSize = 24
 OverrideOutline = true
-OverrideSize = true
 OutlineThickness = 1
+TitleCase = true
 OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Character Creation Part 1/Main Container/Player Info Container/Derived Values Container/Points Remaining"]
@@ -738,6 +745,13 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+m_ElementName = "AccentBackground"
+FontSize = 36
+OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+TitleCase = true
+CustomFont = SubResource( 25 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -746,18 +760,12 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-TitleCase = true
-FontSize = 36
 Text = "Next"
-FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 17 )
-OutlineThickness = 1
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Character Creation Part 1/Next Button"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 18 )
+custom_fonts/font = SubResource( 26 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Next"
 align = 1

@@ -103,9 +103,10 @@ align = 1
 valign = 1
 autowrap = true
 script = ExtResource( 2 )
-OverrideOutline = true
+m_ElementName = "SecondaryAccent"
 OverrideSize = true
 CacheFont = true
+OverrideOutline = true
 OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Margin Container/Main Container/Title Container/Title"]

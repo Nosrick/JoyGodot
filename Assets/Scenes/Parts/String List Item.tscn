@@ -103,11 +103,12 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+m_ElementName = "AccentBackground"
+OverrideSize = true
+CacheFont = true
 FontSize = 24
 OverrideOutline = true
-OverrideSize = true
 OutlineThickness = 1
-CacheFont = true
 OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
@@ -120,6 +121,17 @@ theme = SubResource( 4 )
 script = ExtResource( 5 )
 HAlign = 1
 VAlign = 1
+m_ElementName = "AccentBackground"
+OverrideSize = true
+CacheFont = true
+FontSize = 24
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideOutline = true
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+TitleCase = true
+OverrideColour = true
+CustomFont = SubResource( 5 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -128,17 +140,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-TitleCase = true
-FontSize = 24
-OverrideOutline = true
-OverrideSize = true
 Text = "<"
-FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 5 )
-OutlineThickness = 1
-CacheFont = true
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Decrease Value"]
 anchor_right = 1.0
@@ -164,11 +166,12 @@ text = "Value"
 align = 1
 valign = 1
 script = ExtResource( 3 )
+m_ElementName = "AccentBackground"
+OverrideSize = true
+CacheFont = true
 FontSize = 24
 OverrideOutline = true
-OverrideSize = true
 OutlineThickness = 1
-CacheFont = true
 OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
@@ -184,6 +187,17 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+m_ElementName = "AccentBackground"
+OverrideSize = true
+CacheFont = true
+FontSize = 24
+OutlineColour = Color( 0, 0, 0, 1 )
+OverrideOutline = true
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+TitleCase = true
+OverrideColour = true
+CustomFont = SubResource( 10 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -192,17 +206,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-TitleCase = true
-FontSize = 24
-OverrideOutline = true
-OverrideSize = true
 Text = ">"
-FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 10 )
-OutlineThickness = 1
-CacheFont = true
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Increase Value"]
 anchor_right = 1.0
