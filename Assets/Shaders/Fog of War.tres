@@ -8,18 +8,18 @@ constant = 32.0
 [sub_resource type="VisualShaderNodeScalarConstant" id=3]
 
 [sub_resource type="VisualShaderNodeExpression" id=4]
-size = Vector2( 614, 507 )
+size = Vector2( 697, 579 )
 expression = "if(light > maximumLight || light < minimumLight)
 {
 	alpha = 1f;
 }
 else if(light > maximumComfort)
 {
-	alpha = smoothstep(maximumComfort, 32, light);
+	alpha = smoothstep(maximumComfort, maximumLight, light);
 }
 else if(light < minimumComfort)
 {
-	alpha = smoothstep(minimumComfort, 0, light);
+	alpha = smoothstep(minimumComfort, minimumLight, light);
 }
 else
 {
@@ -42,7 +42,7 @@ else
 	alphaOut = 1f;
 }"
 
-[sub_resource type="VisualShaderNodeScalarInterp" id=7]
+[sub_resource type="VisualShaderNodeScalarSmoothStep" id=7]
 
 [sub_resource type="VisualShaderNodeColorUniform" id=8]
 uniform_name = "darkColour"
@@ -70,10 +70,10 @@ code = "shader_type canvas_item;
 uniform bool canSee;
 uniform vec4 darkColour : hint_color;
 uniform vec4 lightColour : hint_color;
-uniform float lightLevel;
-uniform float minimumLight;
 uniform float minimumComfort;
 uniform float maximumComfort;
+uniform float lightLevel;
+uniform float minimumLight;
 uniform float maximumLight;
 
 
@@ -95,29 +95,23 @@ void fragment() {
 	vec3 n_out3p0 = lightColour.rgb;
 	float n_out3p1 = lightColour.a;
 
-// Scalar:14
-	float n_out14p0 = 0.000000;
-
-// Scalar:13
-	float n_out13p0 = 32.000000;
-
-// ScalarUniform:4
-	float n_out4p0 = lightLevel;
-
-// ScalarMix:18
-	float n_out18p0 = mix(n_out14p0, n_out13p0, n_out4p0);
-
-// VectorMix:12
-	vec3 n_out12p0 = mix(n_out2p0, n_out3p0, vec3(n_out18p0));
-
-// ScalarUniform:8
-	float n_out8p0 = minimumLight;
-
 // ScalarUniform:6
 	float n_out6p0 = minimumComfort;
 
 // ScalarUniform:7
 	float n_out7p0 = maximumComfort;
+
+// ScalarUniform:4
+	float n_out4p0 = lightLevel;
+
+// ScalarSmoothStep:19
+	float n_out19p0 = smoothstep(n_out6p0, n_out7p0, n_out4p0);
+
+// VectorMix:12
+	vec3 n_out12p0 = mix(n_out2p0, n_out3p0, vec3(n_out19p0));
+
+// ScalarUniform:8
+	float n_out8p0 = minimumLight;
 
 // ScalarUniform:9
 	float n_out9p0 = maximumLight;
@@ -132,11 +126,11 @@ void fragment() {
 		}
 		else if(n_out4p0 > n_out7p0)
 		{
-			n_out15p0 = smoothstep(n_out7p0, 32, n_out4p0);
+			n_out15p0 = smoothstep(n_out7p0, n_out9p0, n_out4p0);
 		}
 		else if(n_out4p0 < n_out6p0)
 		{
-			n_out15p0 = smoothstep(n_out6p0, 0, n_out4p0);
+			n_out15p0 = smoothstep(n_out6p0, n_out8p0, n_out4p0);
 		}
 		else
 		{
@@ -173,7 +167,7 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -1640.57, -527.003 )
+graph_offset = Vector2( -1305.44, -94.75 )
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource( 8 )
@@ -197,8 +191,8 @@ nodes/fragment/13/position = Vector2( -1420, -440 )
 nodes/fragment/14/node = SubResource( 3 )
 nodes/fragment/14/position = Vector2( -1420, -520 )
 nodes/fragment/15/node = SubResource( 4 )
-nodes/fragment/15/position = Vector2( -1160, 100 )
-nodes/fragment/15/size = Vector2( 614, 507 )
+nodes/fragment/15/position = Vector2( -1220, 100 )
+nodes/fragment/15/size = Vector2( 697, 579 )
 nodes/fragment/15/input_ports = "0,0,minimumLight;1,0,minimumComfort;2,0,maximumComfort;3,0,maximumLight;4,0,light;"
 nodes/fragment/15/output_ports = "0,0,alpha;"
 nodes/fragment/15/expression = "if(light > maximumLight || light < minimumLight)
@@ -207,11 +201,11 @@ nodes/fragment/15/expression = "if(light > maximumLight || light < minimumLight)
 }
 else if(light > maximumComfort)
 {
-	alpha = smoothstep(maximumComfort, 32, light);
+	alpha = smoothstep(maximumComfort, maximumLight, light);
 }
 else if(light < minimumComfort)
 {
-	alpha = smoothstep(minimumComfort, 0, light);
+	alpha = smoothstep(minimumComfort, minimumLight, light);
 }
 else
 {
@@ -234,6 +228,6 @@ else
 	outputColour = darkColour;
 	alphaOut = 1f;
 }"
-nodes/fragment/18/node = SubResource( 7 )
-nodes/fragment/18/position = Vector2( -1100, -500 )
-nodes/fragment/connections = PoolIntArray( 2, 0, 12, 0, 3, 0, 12, 1, 4, 0, 15, 4, 9, 0, 15, 3, 7, 0, 15, 2, 6, 0, 15, 1, 8, 0, 15, 0, 16, 0, 17, 0, 12, 0, 17, 1, 2, 0, 17, 2, 17, 0, 0, 0, 17, 1, 0, 1, 15, 0, 17, 3, 18, 0, 12, 2, 14, 0, 18, 0, 13, 0, 18, 1, 4, 0, 18, 2 )
+nodes/fragment/19/node = SubResource( 7 )
+nodes/fragment/19/position = Vector2( -1100, -520 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 12, 0, 3, 0, 12, 1, 4, 0, 15, 4, 9, 0, 15, 3, 7, 0, 15, 2, 6, 0, 15, 1, 8, 0, 15, 0, 16, 0, 17, 0, 12, 0, 17, 1, 2, 0, 17, 2, 17, 0, 0, 0, 17, 1, 0, 1, 15, 0, 17, 3, 4, 0, 19, 2, 19, 0, 12, 2, 6, 0, 19, 0, 7, 0, 19, 1 )

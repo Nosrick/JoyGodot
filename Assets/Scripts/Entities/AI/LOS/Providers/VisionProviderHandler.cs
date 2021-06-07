@@ -70,7 +70,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                     ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MinimumLight")
                     : 0;
                     int minimumComfort = innerDict.Contains("MinimumComfort") 
-                    ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MinimumLight")
+                    ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MinimumComfort")
                     : minimumLight;
                     int maximumLight = innerDict.Contains("MaximumLight") 
                     ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MaximumLight")
