@@ -4,6 +4,8 @@ using System.Linq;
 using Godot;
 using JoyGodot.addons.Managed_Assets;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 using Array = Godot.Collections.Array;
@@ -92,32 +94,45 @@ namespace JoyLib.Code.Unity
         protected List<Node2D> Parts { get; set; }
 
         public Vector2Int WorldPosition { get; protected set; }
+        
+        protected static IEntity Player { get; set; }
 
         public override void _Ready()
         {
             this.Initialise();
         }
 
-        public override void _PhysicsProcess(float delta)
+        protected void GrabPlayer()
         {
-            if (this.Visible == false)
+            if (Player is null)
             {
-                return;
-            }
-            
-            var player = GlobalConstants.GameManager.Player;
+                Player = GlobalConstants.GameManager.Player;
 
-            if (player is null)
-            {
-                return;
+                if (Player is null)
+                {
+                    return;
+                }
+                
+                Player.HappinessChange -= this.SetHappiness;
+                Player.HappinessChange += this.SetHappiness;
+            
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = Player.OverallHappiness
+                });
             }
+        }
+        
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
+        {
+            float happiness = args.NewValue;
 
             if (this.Material is ShaderMaterial shaderMaterial)
             {
-                shaderMaterial.SetShaderParam("happiness", player.OverallHappiness);
+                shaderMaterial.SetShaderParam("happiness", happiness);
                 foreach (ShaderMaterial childMaterial in this.Parts.Select(part => part.Material as ShaderMaterial))
                 {
-                    childMaterial?.SetShaderParam("happiness", player.OverallHappiness);
+                    childMaterial?.SetShaderParam("happiness", happiness);
                 }
             }
         }
@@ -138,12 +153,16 @@ namespace JoyLib.Code.Unity
                 this.TweenNode = new Tween();
                 this.AddChild(this.TweenNode);
             }
+            
+            this.GrabPlayer();
 
             this.Initialised = true;
         }
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
+            this.GrabPlayer();
+            
             this.Initialise();
             this.m_States.Add(state.Name, state);
             this.IsDirty = true;

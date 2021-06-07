@@ -22,11 +22,11 @@ texture_type = 1
 [sub_resource type="VisualShaderNodeVectorOp" id=5]
 operator = 2
 
-[sub_resource type="VisualShaderNodeScalarFunc" id=6]
+[sub_resource type="VisualShaderNodeScalarFunc" id=7]
 function = 18
 
-[sub_resource type="VisualShaderNodeInput" id=7]
-input_name = "modulate_color"
+[sub_resource type="VisualShaderNodeInput" id=8]
+input_name = "color"
 
 [resource]
 code = "shader_type canvas_item;
@@ -54,7 +54,7 @@ void fragment() {
 	}
 
 // Input:25
-	vec3 n_out25p0 = MODULATE.rgb;
+	vec3 n_out25p0 = COLOR.rgb;
 
 // VectorOp:22
 	vec3 n_out22p0 = n_out20p0 * n_out25p0;
@@ -87,7 +87,7 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -1755.24, -457.13 )
+graph_offset = Vector2( -1746.24, -419.13 )
 mode = 1
 flags/light_only = false
 flags/unshaded = true
@@ -110,8 +110,8 @@ nodes/fragment/20/node = SubResource( 4 )
 nodes/fragment/20/position = Vector2( -1460, -300 )
 nodes/fragment/22/node = SubResource( 5 )
 nodes/fragment/22/position = Vector2( -1220, 60 )
-nodes/fragment/24/node = SubResource( 6 )
+nodes/fragment/24/node = SubResource( 7 )
 nodes/fragment/24/position = Vector2( -1240, 260 )
-nodes/fragment/25/node = SubResource( 7 )
-nodes/fragment/25/position = Vector2( -1560, 60 )
+nodes/fragment/25/node = SubResource( 8 )
+nodes/fragment/25/position = Vector2( -1469.24, 97.87 )
 nodes/fragment/connections = PoolIntArray( 19, 0, 20, 2, 20, 1, 0, 1, 20, 0, 22, 0, 19, 0, 20, 2, 20, 1, 0, 1, 20, 0, 22, 0, 11, 0, 24, 0, 24, 0, 18, 1, 18, 0, 0, 0, 22, 0, 18, 0, 25, 0, 22, 1 )

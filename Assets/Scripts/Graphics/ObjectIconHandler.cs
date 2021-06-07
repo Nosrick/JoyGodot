@@ -29,6 +29,8 @@ namespace JoyLib.Code.Graphics
         protected IDictionary<string, IDictionary<int, Texture>> CachedTiles { get; set; }
 
         protected IDictionary<string, TileSet> TileSets { get; set; }
+        
+        protected ShaderMaterial TileSetMaterial { get; set; }
 
         public ObjectIconHandler(RNG roller)
         {
@@ -46,6 +48,10 @@ namespace JoyLib.Code.Graphics
             {
                 return true;
             }
+
+            this.TileSetMaterial = GD.Load<ShaderMaterial>(
+                GlobalConstants.GODOT_ASSETS_FOLDER +
+                "Materials/TileSet Material.tres");
 
             this.Icons = new System.Collections.Generic.Dictionary<string, List<Tuple<string, SpriteData>>>();
 
@@ -163,6 +169,7 @@ namespace JoyLib.Code.Graphics
                     set.TileSetTexture(index, part.m_FrameSprite[i]);
                     set.TileSetName(index, data.Name);
                     set.TileSetModulate(index, part.SelectedColour);
+                    set.TileSetMaterial(index, this.TileSetMaterial);
                 }
             }
 
@@ -447,11 +454,13 @@ namespace JoyLib.Code.Graphics
                 set.CreateTile(index);
                 set.TileSetName(index, "downstairs");
                 set.TileSetTexture(index, stairs.TileGetTexture(stairs.FindTileByName("downstairs")));
+                set.TileSetMaterial(index, this.TileSetMaterial);
 
                 index = set.GetLastUnusedTileId();
                 set.CreateTile(index);
                 set.TileSetName(index, "upstairs");
                 set.TileSetTexture(index, stairs.TileGetTexture(stairs.FindTileByName("upstairs")));
+                set.TileSetMaterial(index, this.TileSetMaterial);
             }
 
             return set;

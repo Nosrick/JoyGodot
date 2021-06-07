@@ -1,78 +1,70 @@
-﻿using JoyLib.Code.Entities;
+﻿using Godot;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
 
 namespace JoyLib.Code.Graphics
 {
-    /*
-    public class HappinessShaderHandler : MonoBehaviour
+    public class HappinessShaderHandler : TileMap
     {
-        protected SpriteRenderer[] SpriteRenderers { get; set; }
         protected bool Enabled { get; set; }
 
-        protected const string _HAPPINESS = "_Happiness";
+        protected const string HAPPINESS = "happiness";
+        protected const string COLOUR = "colour";
+        protected IEntity Player { get; set; }
+        protected bool Initialised { get; set; }
 
-        protected bool PlayerDetected { get; set; }
-        
-        protected void Start()
+        public override void _Ready()
         {
-            this.SpriteRenderers = this.GetComponentsInChildren<SpriteRenderer>();
-
-            GlobalConstants.GameManager.SettingsManager.OnSettingChange -= this.UpdateSetting;
-            GlobalConstants.GameManager.SettingsManager.OnSettingChange += this.UpdateSetting;
-            
-            JoyWorldShaderSetting setting = GlobalConstants.GameManager.SettingsManager.GetSetting("Joy World Shader") as JoyWorldShaderSetting;
-            this.Enabled = setting?.value ?? false;
-            
-            this.SetHappiness(1f);
+            this.Enabled = true;
         }
 
-        protected void UpdateSetting(SettingChangedEventArgs args)
+        public override void _PhysicsProcess(float delta)
         {
-            if (args.Setting is JoyWorldShaderSetting shaderSetting)
-            {
-                this.Enabled = shaderSetting.value;
-
-                float happiness = GlobalConstants.GameManager?.Player?.OverallHappiness ?? 1f;
-                this.SetHappiness(happiness);
-            }
-        }
-
-        // Update is called once per frame
-        protected void Update()
-        {
-            IEntity player = GlobalConstants.GameManager?.Player;
-
-            if (player is null)
-            {
-                return;
-            }
-
-            if (this.PlayerDetected == false)
-            {
-                this.PlayerDetected = true;
-                player.HappinessIsDirty = true;
-            }
-            
-            if (player.HappinessIsDirty == false)
+            if (this.Initialised)
             {
                 return;
             }
             
-            this.SetHappiness(player.OverallHappiness);
+            this.Player = GlobalConstants.GameManager.Player;
+
+            if (this.Player is null)
+            {
+                return;
+            }
+
+            this.Initialised = this.TileSet is null == false;
+
+            if (this.Initialised == false)
+            {
+                return;
+            }
+
+            this.Player.HappinessChange -= this.SetHappiness;
+            this.Player.HappinessChange += this.SetHappiness;
+            this.Initialised = true;
+            this.SetHappiness(this, new ValueChangedEventArgs<float>
+            {
+                NewValue = this.Player.OverallHappiness
+            });
         }
 
-        protected void SetHappiness(float happinessRef)
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
         {
+            if (this.Initialised == false)
+            {
+                return;
+            }
+            
             float happiness = this.Enabled == false
                 ? 1f
-                : happinessRef;
+                : args.NewValue;
 
-            foreach (var renderer in this.SpriteRenderers)
+            foreach (int index in this.TileSet.GetTilesIds())
             {
-                renderer.material.SetFloat(_HAPPINESS, happiness);
+                var shaderMaterial = this.TileSet.TileGetMaterial(index);
+                shaderMaterial?.SetShaderParam(HAPPINESS, happiness);
             }
         }
     }
-    */
 }
 

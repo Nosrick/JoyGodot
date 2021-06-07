@@ -264,7 +264,7 @@ namespace JoyLib.Code
 
         public GUIDManager GUIDManager { get; protected set; }
         
-        public IEntity Player => this.EntityHandler.GetPlayer();
+        public IEntity Player => this.EntityHandler?.GetPlayer();
 
         public TileMap FloorTileMap { get; protected set; }
         public TileMap WallTileMap { get; protected set; }
