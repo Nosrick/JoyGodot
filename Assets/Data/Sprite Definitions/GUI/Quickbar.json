@@ -14,13 +14,7 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "tile",
-            "PatchMargins": [
-              4,
-              4,
-              4,
-              4
-            ]
+            "FillType": "stretch"
           }
         ]
       },
@@ -36,13 +30,7 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "tile",
-            "PatchMargins": [
-              4,
-              4,
-              4,
-              4
-            ]
+            "FillType": "stretch"
           },
           {
             "Name": "icon",
@@ -69,13 +57,7 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "tile",
-            "PatchMargins": [
-              4,
-              4,
-              4,
-              4
-            ]
+            "FillType": "stretch"
           },
           {
             "Name": "icon",
@@ -102,13 +84,7 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "tile",
-            "PatchMargins": [
-              4,
-              4,
-              4,
-              4
-            ]
+            "FillType": "stretch"
           },
           {
             "Name": "icon",
@@ -135,13 +111,7 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "tile",
-            "PatchMargins": [
-              4,
-              4,
-              4,
-              4
-            ]
+            "FillType": "stretch"
           },
           {
             "Name": "icon",
@@ -168,13 +138,7 @@
             "Frames": 1,
             "Position": 0,
             "SortOrder": 1,
-            "FillType": "tile",
-            "PatchMargins": [
-              4,
-              4,
-              4,
-              4
-            ]
+            "FillType": "stretch"
           },
           {
             "Name": "icon",
