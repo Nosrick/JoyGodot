@@ -4,18 +4,39 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Unity.GUI;
+using NUnit.Framework.Internal.Execution;
 
 namespace JoyLib.Code.Godot
 {
     public class CheatInterface : GUIData
     {
         protected IEntity Player { get; set; }
+        
+        protected int Pressed { get; set; }
 
         public override void _Ready()
         {
             base._Ready();
             
             this.Player = GlobalConstants.GameManager.Player;
+        }
+
+        public override void _Input(InputEvent @event)
+        {
+            if (@event.IsActionPressed("tooltip_show"))
+            {
+                this.Pressed += 1;
+
+                if (this.Pressed >= 3)
+                {
+                    this.Show();
+                }
+            }
+            else if(@event.IsActionPressed("close all windows"))
+            {
+                this.Pressed = 0;
+                this.Hide();
+            }
         }
 
         public void FillNeeds()
