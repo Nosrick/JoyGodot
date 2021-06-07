@@ -501,47 +501,23 @@ namespace JoyLib.Code.States
         {
             var player = this.m_ActiveWorld.Player;
 
-            HashSet<Vector2Int> playerVision = new HashSet<Vector2Int>(player.Vision);
+            var playerVision = player.VisionProvider; 
 
             for (int i = 0; i < this.FogHolder.GetChildCount(); i++)
             {
                 PositionableSprite fog = this.FogHolder.GetChild<PositionableSprite>(i);
                 ShaderMaterial shaderMaterial = fog?.Material as ShaderMaterial;
 
-                bool canSee = playerVision.Contains(fog.WorldPosition);
+                bool canSee = playerVision.HasVisibility(player, player.MyWorld, fog.WorldPosition);
                 int lightLevel = this.m_ActiveWorld.LightCalculator.Light.GetLight(fog.WorldPosition);
                 shaderMaterial?.SetShaderParam("canSee", canSee);
                 shaderMaterial?.SetShaderParam("lightLevel", lightLevel);
             }
 
-            /*
-            for (int i = 0; i < this.GameManager.WallHolder.GetChildCount(); i++)
-            {
-                var node = this.GameManager.WallHolder.GetChild<JoyObjectNode>(i);
-                bool canSee = playerVision.Contains(node.WorldPosition);
-                if (canSee != node.Visible)
-                {
-                    node.Visible = canSee;
-                    node.SetProcess(canSee);
-                }
-            }
-
-            for (int i = 0; i < this.GameManager.FloorHolder.GetChildCount(); i++)
-            {
-                var node = this.GameManager.FloorHolder.GetChild<ManagedSprite>(i);
-                bool canSee = playerVision.Contains(node.WorldPosition);
-                if (canSee != node.Visible)
-                {
-                    node.Visible = canSee;
-                    node.SetProcess(canSee);
-                }
-            }
-            */
-
             for (int i = 0; i < this.GameManager.EntityHolder.GetChildCount(); i++)
             {
                 var node = this.GameManager.EntityHolder.GetChild<JoyObjectNode>(i);
-                bool canSee = playerVision.Contains(node.WorldPosition);
+                bool canSee = playerVision.HasVisibility(player, player.MyWorld, node.WorldPosition);
                 if (canSee != node.Visible)
                 {
                     node.Visible = canSee;
@@ -554,7 +530,7 @@ namespace JoyLib.Code.States
 
                 if (node.MyJoyObject is IItemInstance item)
                 {
-                    bool canSee = playerVision.Contains(node.WorldPosition) & item.InWorld;
+                    bool canSee = playerVision.HasVisibility(player, player.MyWorld, node.WorldPosition) & item.InWorld;
                     if (canSee != node.Visible)
                     {
                         node.Visible = canSee;
