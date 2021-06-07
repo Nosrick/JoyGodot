@@ -1,12 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/Scripts/GUI/Inventory System/JoyConstrainedSlot.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Sprites/draw.png" type="Texture" id=2]
 [ext_resource path="res://Assets/Fonts/Silver - Tiny.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=4]
 [ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=6]
 
 [node name="Item Slot" type="Control"]
+material = ExtResource( 6 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -654.0

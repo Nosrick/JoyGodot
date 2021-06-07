@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/DragHandle.cs" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=5]
 [ext_resource path="res://Assets/Scripts/GUI/WorldState/QuestJournal.cs" type="Script" id=6]
+[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=7]
 
 [sub_resource type="DynamicFont" id=6]
 resource_local_to_scene = true
@@ -43,6 +44,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [node name="Quest Journal" type="Control"]
+material = ExtResource( 7 )
 anchor_left = 0.1
 anchor_top = 0.1
 anchor_right = 0.5
@@ -53,6 +55,7 @@ __meta__ = {
 }
 
 [node name="Background" type="Control" parent="."]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -65,11 +68,13 @@ m_ElementName = "DefaultWindowSmooth"
 [node name="Colour Lerper" type="Tween" parent="Background"]
 
 [node name="Drag Handle" type="Control" parent="."]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 0.1
 script = ExtResource( 2 )
 
 [node name="Title" type="Label" parent="."]
+use_parent_material = true
 anchor_right = 0.89
 anchor_bottom = 0.1
 margin_left = 5.0
@@ -79,15 +84,16 @@ text = "Quest Journal"
 valign = 1
 script = ExtResource( 3 )
 m_ElementName = "AccentBackground"
-OverrideSize = true
-CacheFont = true
-FontSize = 36
 OverrideOutline = true
-OutlineThickness = 1
-TitleCase = true
 OverrideColour = true
+CacheFont = true
+OverrideSize = true
+OutlineThickness = 1
+FontSize = 36
+TitleCase = true
 
 [node name="Close Button" type="Control" parent="."]
+use_parent_material = true
 anchor_left = 0.89
 anchor_right = 1.0
 anchor_bottom = 0.1
@@ -96,14 +102,14 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 m_ElementName = "AccentBackground"
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
-OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+FontSize = 24
 TitleCase = true
+OutlineColour = Color( 0, 0, 0, 1 )
 CustomFont = SubResource( 4 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -128,6 +134,7 @@ __meta__ = {
 }
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+use_parent_material = true
 anchor_left = 0.02
 anchor_top = 0.11
 anchor_right = 0.98
@@ -136,6 +143,7 @@ mouse_filter = 1
 scroll_horizontal_enabled = false
 
 [node name="Quest List" type="VBoxContainer" parent="ScrollContainer"]
+use_parent_material = true
 margin_right = 327.936
 margin_bottom = 334.08
 size_flags_horizontal = 3

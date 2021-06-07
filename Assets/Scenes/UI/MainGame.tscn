@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -10,10 +10,11 @@
 [ext_resource path="res://Assets/Scenes/Windows/QuestJournal.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Assets/Scenes/Windows/ConversationWindow.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Assets/Scenes/Windows/Quickbar.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=11]
 
 [sub_resource type="Theme" id=1]
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=2]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -33,7 +34,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=4]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -53,7 +54,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=6]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -73,7 +74,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=8]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -83,7 +84,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=9]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -115,6 +116,7 @@ AlwaysOpen = true
 AlwaysOnTop = true
 
 [node name="Fill Needs" type="Control" parent="Cheats"]
+material = ExtResource( 11 )
 margin_right = 120.0
 margin_bottom = 36.0
 size_flags_horizontal = 3
@@ -124,15 +126,14 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
 FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
-OutlineColour = Color( 0, 0, 0, 1 )
 TitleCase = true
-CustomFont = SubResource( 8 )
-Text = "Fill Needs"
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 2 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -140,6 +141,8 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Fill Needs"
 
 [node name="Text" type="Label" parent="Cheats/Fill Needs"]
 anchor_right = 1.0
@@ -154,6 +157,7 @@ __meta__ = {
 }
 
 [node name="Empty Needs" type="Control" parent="Cheats"]
+material = ExtResource( 11 )
 margin_top = 40.0
 margin_right = 120.0
 margin_bottom = 76.0
@@ -164,15 +168,14 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
 FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
-OutlineColour = Color( 0, 0, 0, 1 )
 TitleCase = true
-CustomFont = SubResource( 9 )
-Text = "Empty Needs"
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 4 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -180,6 +183,8 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Empty Needs"
 
 [node name="Text" type="Label" parent="Cheats/Empty Needs"]
 anchor_right = 1.0
@@ -194,6 +199,7 @@ __meta__ = {
 }
 
 [node name="Empty One Need" type="Control" parent="Cheats"]
+material = ExtResource( 11 )
 margin_top = 80.0
 margin_right = 120.0
 margin_bottom = 117.0
@@ -204,15 +210,14 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
 FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
-OutlineColour = Color( 0, 0, 0, 1 )
 TitleCase = true
-CustomFont = SubResource( 10 )
-Text = "Empty One Need"
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 6 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -220,6 +225,8 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Empty One Need"
 
 [node name="Text" type="Label" parent="Cheats/Empty One Need"]
 anchor_right = 1.0
@@ -234,6 +241,7 @@ __meta__ = {
 }
 
 [node name="Add Quest" type="Control" parent="Cheats"]
+material = ExtResource( 11 )
 margin_top = 121.0
 margin_right = 120.0
 margin_bottom = 157.0
@@ -244,19 +252,18 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
+CacheFont = true
+OverrideSize = true
 OutlineThickness = 1
 FontSize = 24
-OverrideOutline = true
-OverrideSize = true
-FontColour = Color( 1, 1, 1, 1 )
-CacheFont = true
-OutlineColour = Color( 0, 0, 0, 1 )
 TitleCase = true
-CustomFont = SubResource( 11 )
-Text = "Add Quest"
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 8 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -264,17 +271,20 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Add Quest"
 
 [node name="Text" type="Label" parent="Cheats/Add Quest"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Add Quest"
 align = 1
 valign = 1
 
 [node name="Complete Quest" type="Control" parent="Cheats"]
+material = ExtResource( 11 )
 margin_top = 161.0
 margin_right = 120.0
 margin_bottom = 198.0
@@ -285,18 +295,17 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-OutlineThickness = 1
-FontSize = 24
+HAlign = 1
 OverrideOutline = true
-OverrideSize = true
 FontColour = Color( 1, 1, 1, 1 )
 CacheFont = true
-OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+OutlineThickness = 1
+FontSize = 24
 TitleCase = true
-CustomFont = SubResource( 12 )
-Text = "Complete Quest"
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 9 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -304,11 +313,13 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Complete Quest"
 
 [node name="Text" type="Label" parent="Cheats/Complete Quest"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 9 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Complete Quest"
 align = 1

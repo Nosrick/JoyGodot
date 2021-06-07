@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=3]
 
 [sub_resource type="Theme" id=1]
 
@@ -26,6 +27,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [node name="Managed Text Button" type="Control"]
+material = ExtResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 1 )
@@ -33,9 +35,14 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-Text = "Text"
+HAlign = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+FontSize = 24
+TitleCase = true
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 2 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -44,12 +51,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-OutlineColour = Color( 0, 0, 0, 1 )
-TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
-FontSize = 24
-CustomFont = SubResource( 2 )
+Text = "Text"
 AutoWrap = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

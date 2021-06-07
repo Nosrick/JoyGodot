@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
+[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedLabel.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Scripts/GUI/Tools/IntValueItem.cs" type="Script" id=4]
@@ -78,6 +79,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [node name="Name" type="Control"]
+material = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -214.0
@@ -104,11 +106,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideSize = true
-CacheFont = true
 OverrideOutline = true
-OutlineThickness = 1
 OverrideColour = true
+CacheFont = true
+OverrideSize = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
 
@@ -121,18 +123,18 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 m_ElementName = "AccentBackground"
-OverrideSize = true
-CacheFont = true
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
 OverrideOutline = true
-OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
-TitleCase = true
 OverrideColour = true
+CacheFont = true
+OverrideSize = true
+OutlineThickness = 1
+FontSize = 24
+TitleCase = true
+OutlineColour = Color( 0, 0, 0, 1 )
 CustomFont = SubResource( 5 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -172,12 +174,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideSize = true
-CacheFont = true
-FontSize = 24
 OverrideOutline = true
-OutlineThickness = 1
 OverrideColour = true
+CacheFont = true
+OverrideSize = true
+OutlineThickness = 1
+FontSize = 24
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
 
@@ -190,18 +192,18 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 m_ElementName = "AccentBackground"
-OverrideSize = true
-CacheFont = true
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
 OverrideOutline = true
-OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
-TitleCase = true
 OverrideColour = true
+CacheFont = true
+OverrideSize = true
+OutlineThickness = 1
+FontSize = 24
+TitleCase = true
+OutlineColour = Color( 0, 0, 0, 1 )
 CustomFont = SubResource( 10 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),

@@ -405,5 +405,15 @@ namespace JoyLib.Code.Unity
             this.WorldPosition = position;
             this.Position = (this.WorldPosition * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2;
         }
+
+        public override void _ExitTree()
+        {
+            if (Player is null == false)
+            {
+                Player.HappinessChange -= this.SetHappiness;
+            }
+
+            base._ExitTree();
+        }
     }
 }

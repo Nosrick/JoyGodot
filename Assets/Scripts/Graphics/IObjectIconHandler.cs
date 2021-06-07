@@ -13,7 +13,8 @@ namespace JoyLib.Code.Graphics
         IEnumerable<SpriteData> GetManagedSprites(string tileSet, string tileName, string state = "DEFAULT");
         IEnumerable<SpriteData> GetSpritesForManagedAssets(string tileSet);
         TileSet GetStaticTileSet(string tileSet, bool addStairs = false);
-
         SpriteData GetStaticSpriteData(string tileSet);
+        ShaderMaterial TileSetMaterial { get; }
+        ShaderMaterial JoyMaterial { get; }
     }
 }

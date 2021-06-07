@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ConstrainedManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=3]
+[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
@@ -28,6 +29,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [node name="Managed Text Button" type="Control"]
+material = ExtResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 0, 24 )
@@ -36,8 +38,17 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OverrideColour = true
+OverrideSize = true
+OutlineThickness = 1
+FontSize = 24
+TitleCase = true
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 3 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -46,16 +57,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-TitleCase = true
-FontSize = 24
-OverrideOutline = true
-OverrideSize = true
 Text = "Text"
-FontColour = Color( 1, 1, 1, 1 )
-CustomFont = SubResource( 3 )
-OutlineThickness = 1
-OverrideColour = true
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Element" type="Control" parent="."]
 anchor_right = 1.0

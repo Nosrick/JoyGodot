@@ -585,7 +585,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                         MarginLeft = 0,
                         MarginRight = 0,
                         MarginTop = 0,
-                        ShowBehindParent = true
+                        ShowBehindParent = true,
+                        UseParentMaterial = true
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);

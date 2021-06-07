@@ -1,12 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/DragHandle.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=4]
 [ext_resource path="res://Assets/Scripts/GUI/WorldState/ConversationWindow.cs" type="Script" id=5]
+[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=6]
 
 [node name="Conversation Window" type="Control"]
+material = ExtResource( 6 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 5 )
@@ -18,6 +20,7 @@ ClosesOthers = true
 AlwaysOnTop = true
 
 [node name="Background" type="Control" parent="."]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -30,6 +33,7 @@ m_ElementName = "DefaultWindow"
 [node name="Colour Lerper" type="Tween" parent="Background"]
 
 [node name="MainContainer" type="VBoxContainer" parent="."]
+use_parent_material = true
 anchor_left = 0.01
 anchor_top = 0.02
 anchor_right = 0.99
@@ -40,19 +44,20 @@ __meta__ = {
 }
 
 [node name="TitleContainer" type="HBoxContainer" parent="MainContainer"]
+use_parent_material = true
 margin_right = 836.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 0, 48 )
 size_flags_vertical = 4
 
-[node name="Colour Lerper" type="Tween" parent="MainContainer/TitleContainer"]
-
 [node name="SpeakerContainer" type="HBoxContainer" parent="MainContainer/TitleContainer"]
+use_parent_material = true
 margin_right = 412.0
 margin_bottom = 48.0
 size_flags_horizontal = 0
 
 [node name="ListenerIcon" parent="MainContainer/TitleContainer/SpeakerContainer" instance=ExtResource( 3 )]
+use_parent_material = true
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 48.0
@@ -62,6 +67,7 @@ size_flags_horizontal = 0
 m_ElementName = "None"
 
 [node name="ListenerName" type="Label" parent="MainContainer/TitleContainer/SpeakerContainer"]
+use_parent_material = true
 margin_left = 52.0
 margin_top = 8.0
 margin_right = 412.0
@@ -77,6 +83,7 @@ __meta__ = {
 }
 
 [node name="LastSaid" type="Label" parent="MainContainer/TitleContainer"]
+use_parent_material = true
 margin_left = 416.0
 margin_right = 816.0
 margin_bottom = 48.0
@@ -89,6 +96,7 @@ valign = 1
 autowrap = true
 
 [node name="ItemContainer" type="MarginContainer" parent="MainContainer"]
+use_parent_material = true
 margin_top = 52.0
 margin_right = 836.0
 margin_bottom = 460.0
@@ -96,6 +104,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ConversationItems" type="VBoxContainer" parent="MainContainer/ItemContainer"]
+use_parent_material = true
 margin_right = 836.0
 margin_bottom = 408.0
 size_flags_horizontal = 3

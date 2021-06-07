@@ -5,6 +5,8 @@ using Castle.Core.Internal;
 using Godot;
 using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
 
@@ -39,7 +41,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                     {
                         return this.States.FirstOrDefault();
                     }
-                    
+
                     if (this.m_States.ContainsKey(this.ChosenSprite)
                         && this.m_States[this.ChosenSprite].SpriteData.State
                             .Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
@@ -104,6 +106,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
 
+        protected static IEntity Player { get; set; }
+
         public override void _Ready()
         {
             this.Initialise();
@@ -120,7 +124,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 this.CallDeferred("Initialise");
             }
-            
+
             this.Parts = new List<NinePatchRect>();
             var children = this.GetAllChildren();
             foreach (var child in children)
@@ -156,7 +160,51 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 this.OverrideAllColours(this.CachedColours);
             }
 
+            this.GrabPlayer();
+
             this.Initialised = true;
+        }
+
+        protected void GrabPlayer()
+        {
+            if (Player is null)
+            {
+                Player = GlobalConstants.GameManager?.Player;
+
+                if (Player is null)
+                {
+                    return;
+                }
+
+                Player.HappinessChange -= this.SetHappiness;
+                Player.HappinessChange += this.SetHappiness;
+
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
+        {
+            float happiness = args.NewValue;
+
+            try
+            {
+                if (this.Material is ShaderMaterial shaderMaterial)
+                {
+                    shaderMaterial.SetShaderParam("happiness", happiness);
+                    foreach (ShaderMaterial childMaterial in this.Parts.Select(part => part.Material as ShaderMaterial))
+                    {
+                        childMaterial?.SetShaderParam("happiness", happiness);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PushError("Object has been disposed!");
+            }
         }
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
@@ -168,6 +216,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
 
             this.Initialise();
+            this.GrabPlayer();
             if (this.m_States.ContainsKey(state.Name) == false)
             {
                 this.m_States.Add(state.Name, state);
@@ -475,7 +524,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                         MarginBottom = 0,
                         MarginLeft = 0,
                         MarginRight = 0,
-                        MarginTop = 0
+                        MarginTop = 0,
+                        Material = this.Material,
+                        UseParentMaterial = true
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);
@@ -573,6 +624,16 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
                 this.TweenNode.Start();
             }
+        }
+
+        public override void _ExitTree()
+        {
+            if (Player is null == false)
+            {
+                Player.HappinessChange -= this.SetHappiness;
+            }
+
+            base._ExitTree();
         }
     }
 }
