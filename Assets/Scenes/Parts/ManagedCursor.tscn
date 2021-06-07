@@ -15,6 +15,7 @@ __meta__ = {
 }
 
 [node name="Cursor Object" type="Control" parent="."]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -26,6 +27,7 @@ __meta__ = {
 [node name="Colour Lerper" type="Tween" parent="Cursor Object"]
 
 [node name="Drag Object" type="Control" parent="."]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2

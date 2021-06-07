@@ -30,6 +30,7 @@ font_data = ExtResource( 2 )
 
 [node name="Managed Text Button" type="Control"]
 material = ExtResource( 4 )
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 0, 24 )
@@ -38,16 +39,16 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
+VAlign = 1
 OverrideColour = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 3 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -56,10 +57,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "Text"
+ColourMultiplier = 1.0
 
 [node name="Element" type="Control" parent="."]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -71,6 +73,7 @@ __meta__ = {
 [node name="Colour Lerper" type="Tween" parent="Element"]
 
 [node name="Text" type="Label" parent="."]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )

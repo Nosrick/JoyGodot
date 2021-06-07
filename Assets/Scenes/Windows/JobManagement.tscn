@@ -321,13 +321,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Derived Value Container/Derived Value Label"]
 
@@ -381,13 +381,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Item Name"]
 
@@ -398,18 +398,18 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 theme = SubResource( 7 )
 script = ExtResource( 4 )
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 8 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -418,10 +418,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "<"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Decrease Value"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 8 )
@@ -441,13 +442,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Item Value"]
 
@@ -461,18 +462,18 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 13 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -481,10 +482,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = ">"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Increase Value"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 13 )
@@ -505,13 +507,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Statistics Label"]
 
@@ -549,13 +551,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Skill Container/Points Remaining Label"]
 
@@ -571,13 +573,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Skill Container/Skills Label"]
 
@@ -607,14 +609,14 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 15 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -623,10 +625,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "Next"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 1/Next Button"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 16 )
@@ -649,18 +652,18 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 18 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -669,10 +672,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "Buy"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 1/Buy Button"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 18 )
@@ -800,13 +804,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Ability Container/Ability Label"]
 
@@ -861,13 +865,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Item Name"]
 
@@ -878,18 +882,18 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 theme = SubResource( 7 )
 script = ExtResource( 4 )
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 21 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -898,10 +902,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "<"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Decrease Value"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -0.749161
@@ -930,13 +935,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Item Value"]
 
@@ -950,18 +955,18 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 22 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -970,10 +975,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = ">"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Increase Value"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 12 )
@@ -995,13 +1001,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Misc Statistics Label"]
 
@@ -1040,13 +1046,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
 TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Blank Container/Points Remaining Label"]
 
@@ -1061,14 +1067,14 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 24 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -1077,10 +1083,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "Back"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 2/Back Button"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 25 )
@@ -1103,18 +1110,18 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 26 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -1123,10 +1130,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "Buy"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 2/Buy Button"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 26 )

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Godot;
 using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyLib.Code;
+using JoyLib.Code.Entities;
+using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
@@ -13,6 +16,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         protected ManagedUIElement CursorObject { get; set; }
         
         public int CursorSize { get; protected set; }
+
+        protected IEntity Player { get; set; }
 
         public ISpriteState DragSprite
         {
@@ -54,6 +59,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             this.CursorObject = this.GetNode<ManagedUIElement>("Cursor Object");
             this.DragObject = this.GetNode<ManagedUIElement>("Drag Object");
             this.DragObject.Visible = false;
+            
+            this.GrabPlayer();
         }
 
         public override void _Input(InputEvent @event)
@@ -65,6 +72,61 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 this.CursorObject.RectPosition = motion.Position;
                 this.DragObject.RectPosition = motion.Position;
             }
+        }
+
+        public override void _PhysicsProcess(float delta)
+        {
+            base._PhysicsProcess(delta);
+            
+            this.GrabPlayer();
+        }
+
+        protected void GrabPlayer()
+        {
+            if (this.Player is null)
+            {
+                this.Player = GlobalConstants.GameManager?.Player;
+
+                if (this.Player is null)
+                {
+                    return;
+                }
+
+                this.Player.HappinessChange -= this.SetHappiness;
+                this.Player.HappinessChange += this.SetHappiness;
+
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
+        {
+            float happiness = args.NewValue;
+
+            try
+            {
+                if (this.Material is ShaderMaterial shaderMaterial)
+                {
+                    shaderMaterial.SetShaderParam("happiness", happiness);
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PushError("Object has been disposed!");
+            }
+        }
+
+        public override void _ExitTree()
+        {
+            if (this.Player is null == false)
+            {
+                this.Player.HappinessChange -= this.SetHappiness;
+            }
+
+            base._ExitTree();
         }
     }
 }

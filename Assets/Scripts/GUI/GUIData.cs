@@ -1,7 +1,9 @@
-﻿using Godot;
-using Godot.Collections;
+﻿using System;
+using Godot;
+using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Unity.GUI
 {
@@ -18,6 +20,8 @@ namespace JoyLib.Code.Unity.GUI
         [Export] public bool AlwaysOpen { get; protected set; }
 
         [Export] public bool AlwaysOnTop { get; protected set; }
+
+        protected IEntity Player { get; set; }
 
         public virtual event GUIClosedEventHandler OnGUIClose;
         public virtual event GUIOpenedEventHandler OnGUIOpen;
@@ -45,7 +49,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return;
             }
-            
+
             base._Input(@event);
 
             if (@event.IsAction("ui_accept"))
@@ -54,8 +58,53 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
+        protected void GrabPlayer()
+        {
+            if (this.Player is null)
+            {
+                this.Player = GlobalConstants.GameManager?.Player;
+
+                if (this.Player is null)
+                {
+                    return;
+                }
+
+                this.Player.HappinessChange -= this.SetHappiness;
+                this.Player.HappinessChange += this.SetHappiness;
+
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
+        {
+            float happiness = args.NewValue;
+
+            try
+            {
+                if (this.Material is ShaderMaterial shaderMaterial)
+                {
+                    shaderMaterial.SetShaderParam("happiness", happiness);
+                }
+
+                foreach (CanvasItem child in this.GetAllChildren())
+                {
+                    var material = child.Material as ShaderMaterial;
+                    material?.SetShaderParam("happiness", happiness);
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PushError("Object has been disposed!");
+            }
+        }
+
         public virtual void Display()
         {
+            this.GrabPlayer();
             this.Show();
             Array children = this.GetAllChildren();
             foreach (var child in children)
@@ -77,7 +126,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 return false;
             }
-            
+
             this.Hide();
             Array children = this.GetAllChildren();
             foreach (var child in children)
@@ -97,12 +146,27 @@ namespace JoyLib.Code.Unity.GUI
         public override void _Ready()
         {
             this.GUIManager = GlobalConstants.GameManager.GUIManager;
-            //this.GUIManager.Add(this);
+            
+            this.GrabPlayer();
+            this.SetHappiness(this, new ValueChangedEventArgs<float>
+            {
+                NewValue = 1f
+            });
         }
 
         public virtual void ButtonClose()
         {
             this.GUIManager.CloseGUI(this, this.Name);
+        }
+
+        public override void _ExitTree()
+        {
+            if (this.Player is null == false)
+            {
+                this.Player.HappinessChange -= this.SetHappiness;
+            }
+            
+            base._ExitTree();
         }
     }
 }

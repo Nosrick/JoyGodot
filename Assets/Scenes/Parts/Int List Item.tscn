@@ -6,7 +6,7 @@
 [ext_resource path="res://Assets/Scripts/GUI/Tools/IntValueItem.cs" type="Script" id=4]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=5]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=11]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -17,7 +17,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 1 )
+default_font = SubResource( 11 )
 
 [sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
@@ -42,7 +42,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=12]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -53,7 +53,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=7]
-default_font = SubResource( 6 )
+default_font = SubResource( 12 )
 
 [sub_resource type="DynamicFont" id=8]
 resource_local_to_scene = true
@@ -80,6 +80,7 @@ font_data = ExtResource( 2 )
 
 [node name="Name" type="Control"]
 material = ExtResource( 1 )
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -214.0
@@ -95,6 +96,7 @@ __meta__ = {
 TitleCase = true
 
 [node name="Item Name" type="Label" parent="."]
+use_parent_material = true
 anchor_right = 0.49
 anchor_bottom = 1.0
 theme = SubResource( 2 )
@@ -106,15 +108,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
 CacheFont = true
-OverrideSize = true
 OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
 
 [node name="Decrease Value" type="Control" parent="."]
+use_parent_material = true
 anchor_left = 0.5
 anchor_right = 0.6
 anchor_bottom = 1.0
@@ -123,18 +126,18 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 5 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -143,10 +146,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "<"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Decrease Value"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -0.749161
@@ -162,6 +166,7 @@ __meta__ = {
 }
 
 [node name="Item Value" type="Label" parent="."]
+use_parent_material = true
 anchor_left = 0.61
 anchor_right = 0.89
 anchor_bottom = 1.0
@@ -174,16 +179,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
+CacheFont = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
 
 [node name="Increase Value" type="Control" parent="."]
+use_parent_material = true
 anchor_left = 0.9
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -192,18 +198,18 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
 FontSize = 24
-TitleCase = true
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 10 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -212,10 +218,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = ">"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Increase Value"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 9 )
