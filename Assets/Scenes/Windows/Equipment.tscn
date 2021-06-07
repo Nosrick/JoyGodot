@@ -73,7 +73,6 @@ __meta__ = {
 }
 
 [node name="Title" type="Label" parent="."]
-use_parent_material = true
 anchor_right = 0.921
 anchor_bottom = 0.1
 margin_left = 5.0
@@ -85,13 +84,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideColour = true
-FontSize = 36
+OverrideOutline = true
+OutlineThickness = 1
 CacheFont = true
 TitleCase = true
-OutlineThickness = 1
-OverrideOutline = true
 OverrideSize = true
+OverrideColour = true
+FontSize = 36
 
 [node name="Close Button" type="Control" parent="."]
 material = ExtResource( 7 )
@@ -107,13 +106,13 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
+OutlineThickness = 1
+TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
 FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
-TitleCase = true
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 4 )
-AutoWrap = true
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -122,7 +121,7 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 Text = "X"
-ColourMultiplier = 1.0
+AutoWrap = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Close Button"]
 use_parent_material = true
@@ -134,7 +133,6 @@ __meta__ = {
 }
 
 [node name="Text" type="Label" parent="Close Button/MarginContainer"]
-use_parent_material = true
 margin_top = 7.0
 margin_right = 33.0
 margin_bottom = 25.0

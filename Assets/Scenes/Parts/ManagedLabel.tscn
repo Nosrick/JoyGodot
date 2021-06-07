@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedLabel.cs" type="Script" id=2]
-[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
@@ -18,7 +17,6 @@ font_data = ExtResource( 1 )
 default_font = SubResource( 1 )
 
 [node name="Managed Label" type="Label"]
-material = ExtResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )
@@ -31,8 +29,8 @@ __meta__ = {
 }
 m_ElementName = "AccentBackground"
 OverrideOutline = true
-OverrideColour = true
+OutlineThickness = 1
 CacheFont = true
 OverrideSize = true
-OutlineThickness = 1
+OverrideColour = true
 FontSize = 24

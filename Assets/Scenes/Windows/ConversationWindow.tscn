@@ -67,7 +67,6 @@ size_flags_horizontal = 0
 m_ElementName = "None"
 
 [node name="ListenerName" type="Label" parent="MainContainer/TitleContainer/SpeakerContainer"]
-use_parent_material = true
 margin_left = 52.0
 margin_top = 8.0
 margin_right = 412.0
@@ -83,7 +82,6 @@ __meta__ = {
 }
 
 [node name="LastSaid" type="Label" parent="MainContainer/TitleContainer"]
-use_parent_material = true
 margin_left = 416.0
 margin_right = 816.0
 margin_bottom = 48.0

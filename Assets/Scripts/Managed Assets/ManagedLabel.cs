@@ -216,6 +216,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         [Export] public int FontMinSize { get; set; }
 
         [Export] public int FontMaxSize { get; set; }
+        
+        protected static ShaderMaterial ChildMaterial { get; set; }
 
         protected void UpdateTheme()
         {
@@ -248,6 +250,16 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 return;
             }
 
+            if (GlobalConstants.GameManager.ObjectIconHandler is null)
+            {
+                return;
+            }
+
+            if (ChildMaterial is null)
+            {
+                ChildMaterial = GlobalConstants.GameManager.ObjectIconHandler.JoyMaterial;
+            }
+
             if (this.Theme is null)
             {
                 this.Theme = new Theme();
@@ -264,6 +276,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 if (child is NinePatchRect patchRect)
                 {
+                    patchRect.Material = ChildMaterial;
                     this.Parts.Add(patchRect);
                 }
 
@@ -586,7 +599,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                         MarginRight = 0,
                         MarginTop = 0,
                         ShowBehindParent = true,
-                        UseParentMaterial = true
+                        Material = ChildMaterial
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);

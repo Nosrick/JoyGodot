@@ -9,7 +9,7 @@
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=2]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -20,7 +20,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=3]
-default_font = SubResource( 4 )
+default_font = SubResource( 2 )
 
 [node name="Tooltip" type="PanelContainer"]
 material = ExtResource( 6 )
@@ -100,7 +100,6 @@ size_flags_vertical = 11
 m_ElementName = "None"
 
 [node name="Title" type="Label" parent="Margin Container/Main Container/Title Container"]
-use_parent_material = true
 margin_left = 32.0
 margin_right = 330.0
 margin_bottom = 32.0
@@ -115,9 +114,9 @@ autowrap = true
 script = ExtResource( 2 )
 m_ElementName = "SecondaryAccent"
 OverrideOutline = true
-OverrideColour = true
 CacheFont = true
 OverrideSize = true
+OverrideColour = true
 
 [node name="Colour Lerper" type="Tween" parent="Margin Container/Main Container/Title Container/Title"]
 
