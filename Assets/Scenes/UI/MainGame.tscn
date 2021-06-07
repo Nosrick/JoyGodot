@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -9,10 +9,11 @@
 [ext_resource path="res://Assets/Scenes/Windows/JobManagement.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Assets/Scenes/Windows/QuestJournal.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Assets/Scenes/Windows/ConversationWindow.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Assets/Scenes/Windows/Quickbar.tscn" type="PackedScene" id=10]
 
 [sub_resource type="Theme" id=1]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=8]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -32,7 +33,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=9]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -52,7 +53,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=10]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -72,7 +73,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=11]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -82,7 +83,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=12]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -101,6 +102,7 @@ __meta__ = {
 }
 
 [node name="Cheats" type="VBoxContainer" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -734.0
@@ -124,13 +126,13 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-TitleCase = true
+OutlineThickness = 1
+FontSize = 24
 FontColour = Color( 1, 1, 1, 1 )
 OutlineColour = Color( 0, 0, 0, 1 )
-FontSize = 24
-OutlineThickness = 1
-CustomFont = SubResource( 2 )
-ColourMultiplier = 1.0
+TitleCase = true
+CustomFont = SubResource( 8 )
+Text = "Fill Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -138,7 +140,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Fill Needs"
 
 [node name="Text" type="Label" parent="Cheats/Fill Needs"]
 anchor_right = 1.0
@@ -165,13 +166,13 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-TitleCase = true
+OutlineThickness = 1
+FontSize = 24
 FontColour = Color( 1, 1, 1, 1 )
 OutlineColour = Color( 0, 0, 0, 1 )
-FontSize = 24
-OutlineThickness = 1
-CustomFont = SubResource( 4 )
-ColourMultiplier = 1.0
+TitleCase = true
+CustomFont = SubResource( 9 )
+Text = "Empty Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -179,7 +180,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Empty Needs"
 
 [node name="Text" type="Label" parent="Cheats/Empty Needs"]
 anchor_right = 1.0
@@ -206,13 +206,13 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-TitleCase = true
+OutlineThickness = 1
+FontSize = 24
 FontColour = Color( 1, 1, 1, 1 )
 OutlineColour = Color( 0, 0, 0, 1 )
-FontSize = 24
-OutlineThickness = 1
-CustomFont = SubResource( 6 )
-ColourMultiplier = 1.0
+TitleCase = true
+CustomFont = SubResource( 10 )
+Text = "Empty One Need"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -220,7 +220,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Empty One Need"
 
 [node name="Text" type="Label" parent="Cheats/Empty One Need"]
 anchor_right = 1.0
@@ -247,17 +246,17 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-TitleCase = true
-OverrideSize = true
 OverrideColour = true
+OutlineThickness = 1
+FontSize = 24
 OverrideOutline = true
+OverrideSize = true
 FontColour = Color( 1, 1, 1, 1 )
 CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
-FontSize = 24
-OutlineThickness = 1
-CustomFont = SubResource( 8 )
-ColourMultiplier = 1.0
+TitleCase = true
+CustomFont = SubResource( 11 )
+Text = "Add Quest"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -265,12 +264,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Add Quest"
 
 [node name="Text" type="Label" parent="Cheats/Add Quest"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 11 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Add Quest"
 align = 1
@@ -289,16 +287,16 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-TitleCase = true
-OverrideSize = true
+OutlineThickness = 1
+FontSize = 24
 OverrideOutline = true
+OverrideSize = true
 FontColour = Color( 1, 1, 1, 1 )
 CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
-FontSize = 24
-OutlineThickness = 1
-CustomFont = SubResource( 9 )
-ColourMultiplier = 1.0
+TitleCase = true
+CustomFont = SubResource( 12 )
+Text = "Complete Quest"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -306,12 +304,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Complete Quest"
 
 [node name="Text" type="Label" parent="Cheats/Complete Quest"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 12 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Complete Quest"
 align = 1
@@ -319,6 +316,9 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Quickbar" parent="." instance=ExtResource( 10 )]
+AlwaysOpen = true
 
 [node name="Inventory" parent="." instance=ExtResource( 4 )]
 visible = false
