@@ -189,6 +189,7 @@ namespace JoyLib.Code.Unity.GUI.WorldState
                     var instance = this.AbilityItemPrefab.Instance() as ConstrainedManagedTextButton;
                     instance.ElementName = "AccentBackground";
                     instance.RectMinSize = new Vector2(0, 24);
+                    instance.ToggleMode = true;
                     this.AbilityList.AddChild(instance);
                 }
 
