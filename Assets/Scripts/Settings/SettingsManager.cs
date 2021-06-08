@@ -11,17 +11,38 @@ namespace JoyLib.Code.Settings
     public class SettingsManager : IHandler<ISetting, string>
     {
         public IEnumerable<ISetting> Values => this.Settings.Values;
-        
+
         public JSONValueExtractor ValueExtractor { get; protected set; }
-        
+
         protected IDictionary<string, ISetting> Settings { get; set; }
+
+        protected string SettingsDirectory => Directory.GetCurrentDirectory() +
+                                              GlobalConstants.ASSETS_FOLDER +
+                                              GlobalConstants.DATA_FOLDER +
+                                              "Settings";
+
+        public const string DYSLEXIC_MODE = "Dyslexic Mode";
+        public const string HAPPINESS_WORLD = "Happiness Affects World";
+        public const string HAPPINESS_UI = "Happiness Affects UI";
+        public const string HAPPINESS_CURSOR = "Happiness Affects Cursor";
+        
 
         public SettingsManager()
         {
             this.Settings = this.Load().ToDictionary(setting => setting.Name, setting => setting);
             this.ValueExtractor = new JSONValueExtractor();
+            
+            this.MakeDefaults();
         }
-        
+
+        protected void MakeDefaults()
+        {
+            this.Add(new Setting<bool>(DYSLEXIC_MODE));
+            this.Add(new Setting<bool>(HAPPINESS_WORLD, true));
+            this.Add(new Setting<bool>(HAPPINESS_UI, true));
+            this.Add(new Setting<bool>(HAPPINESS_CURSOR, true));
+        }
+
         public ISetting Get(string name)
         {
             return this.Settings.TryGetValue(name, out ISetting setting) ? setting : null;
@@ -33,7 +54,7 @@ namespace JoyLib.Code.Settings
             {
                 return false;
             }
-            
+
             this.Settings.Add(value.Name, value);
             return true;
         }
@@ -47,11 +68,8 @@ namespace JoyLib.Code.Settings
         {
             List<ISetting> settings = new List<ISetting>();
 
-            string[] files = System.IO.Directory.GetFiles(
-                Directory.GetCurrentDirectory() +
-                GlobalConstants.ASSETS_FOLDER +
-                GlobalConstants.DATA_FOLDER +
-                "Settings",
+            string[] files = Directory.GetFiles(
+                this.SettingsDirectory,
                 "*.json");
 
             foreach (string file in files)
@@ -73,21 +91,27 @@ namespace JoyLib.Code.Settings
                 ICollection<Dictionary> settingsArray =
                     this.ValueExtractor
                         .GetArrayValuesCollectionFromDictionary<Dictionary>(
-                            dictionary, 
+                            dictionary,
                             "Settings");
 
                 foreach (Dictionary settingsDict in settingsArray)
                 {
                     string name = this.ValueExtractor.GetValueFromDictionary<string>(settingsDict, "Name");
                     object value = this.ValueExtractor.GetValueFromDictionary<object>(settingsDict, "ObjectValue");
-                    
+
                     settings.Add(SettingsFactory.Create(name, value));
                 }
             }
 
             return settings;
         }
-        
+
+        public void Save()
+        {
+            string save = JSON.Print(this.Values);
+            File.WriteAllText(this.SettingsDirectory + "Settings.json", save);
+        }
+
         public void Dispose()
         {
             this.Settings = null;
