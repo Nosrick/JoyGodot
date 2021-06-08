@@ -28,6 +28,7 @@ using JoyLib.Code.Managers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Settings;
 using JoyLib.Code.States;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
@@ -103,6 +104,8 @@ namespace JoyLib.Code
             this.ActionLog = new ActionLog();
             
             this.LoadingMessage = "Revving up engines";
+
+            this.SettingsManager = new SettingsManager();
 
             this.GUIDManager = new GUIDManager();
 
@@ -260,6 +263,9 @@ namespace JoyLib.Code
         //public SettingsManager SettingsManager { get; protected set; }
         public IEntityFactory EntityFactory { get; protected set; }
         public IItemFactory ItemFactory { get; protected set; }
+        
+        public SettingsManager SettingsManager { get; protected set; }
+        
         public Node MyNode { get; protected set; }
 
         public GUIDManager GUIDManager { get; protected set; }

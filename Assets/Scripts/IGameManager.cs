@@ -24,6 +24,7 @@ using JoyLib.Code.Managers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
+using JoyLib.Code.Settings;
 using JoyLib.Code.States;
 using JoyLib.Code.Unity;
 using JoyLib.Code.Unity.GUI;
@@ -68,6 +69,8 @@ namespace JoyLib.Code
         IAbilityHandler AbilityHandler { get; }
         IDerivedValueHandler DerivedValueHandler { get; }
         IVisionProviderHandler VisionProviderHandler { get; }
+        
+        SettingsManager SettingsManager { get; }
         
         GUIDManager GUIDManager { get; }
         
