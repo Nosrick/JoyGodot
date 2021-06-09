@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities.Items
 {
     public class LiveItemHandler : ILiveItemHandler
     {
-        protected Dictionary<Guid, IItemInstance> LiveItems { get; set; }
+        protected System.Collections.Generic.Dictionary<Guid, IItemInstance> LiveItems { get; set; }
         
         public JSONValueExtractor ValueExtractor { get; protected set; }
         
@@ -25,7 +27,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> Load()
         {
-            this.LiveItems = new Dictionary<Guid, IItemInstance>();
+            this.LiveItems = new System.Collections.Generic.Dictionary<Guid, IItemInstance>();
 
             this.QuestRewards = new NonUniqueDictionary<Guid, Guid>();
             return new IItemInstance[0];
@@ -193,7 +195,7 @@ namespace JoyLib.Code.Entities.Items
 
         public void ClearLiveItems()
         {
-            this.LiveItems = new Dictionary<Guid, IItemInstance>();
+            this.LiveItems = new System.Collections.Generic.Dictionary<Guid, IItemInstance>();
         }
 
         ~LiveItemHandler()
@@ -220,5 +222,19 @@ namespace JoyLib.Code.Entities.Items
         }
 
         public IEnumerable<IItemInstance> Values => this.LiveItems.Values.ToList();
+        
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+
+            saveDict.Add("Items", new Array(this.LiveItems.Select(pair => pair.Value.Save())));
+            
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

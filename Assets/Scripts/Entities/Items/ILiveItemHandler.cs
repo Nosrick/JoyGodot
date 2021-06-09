@@ -5,7 +5,7 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Entities.Items
 {
-    public interface ILiveItemHandler : IHandler<IItemInstance, Guid>
+    public interface ILiveItemHandler : IHandler<IItemInstance, Guid>, ISerialisationHandler
     {
         bool AddItems(IEnumerable<IItemInstance> item, bool addToWorld = false);
 
