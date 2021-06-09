@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=1]
-[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=2]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=2]
 
 [node name="ManagedUIElement" type="Control"]
 material = ExtResource( 2 )

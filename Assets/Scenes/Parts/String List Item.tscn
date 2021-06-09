@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=1]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedLabel.cs" type="Script" id=3]
 [ext_resource path="res://Assets/Scripts/GUI/Tools/StringValueItem.cs" type="Script" id=4]

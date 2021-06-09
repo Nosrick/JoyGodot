@@ -6,7 +6,7 @@
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/Scripts/GUI/DragHandle.cs" type="Script" id=5]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=6]
-[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=7]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=7]
 
 [sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true

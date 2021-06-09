@@ -56,7 +56,7 @@ namespace JoyLib.Code.Graphics
 
             this.JoyMaterial = GD.Load<ShaderMaterial>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
-                "Materials/Default Material.tres");
+                "Materials/Default Sprite Material.tres");
 
             this.Icons = new System.Collections.Generic.Dictionary<string, List<Tuple<string, SpriteData>>>();
 

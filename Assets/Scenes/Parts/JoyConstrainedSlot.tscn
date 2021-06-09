@@ -5,7 +5,7 @@
 [ext_resource path="res://Assets/Fonts/Silver - Tiny.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=4]
 [ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=5]
-[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=6]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=6]
 
 [node name="Item Slot" type="Control"]
 material = ExtResource( 6 )

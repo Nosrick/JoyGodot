@@ -8,6 +8,7 @@ using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Settings;
 using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Unity
@@ -125,7 +126,11 @@ namespace JoyLib.Code.Unity
         
         protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
         {
-            float happiness = args.NewValue;
+            bool useHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                .Get(SettingsManager.HAPPINESS_WORLD)
+                .ObjectValue;
+            
+            float happiness = useHappiness ? args.NewValue : 1f;
 
             if (this.Material is ShaderMaterial shaderMaterial)
             {

@@ -10,7 +10,7 @@
 [ext_resource path="res://Assets/Scenes/Windows/QuestJournal.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Assets/Scenes/Windows/ConversationWindow.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Assets/Scenes/Windows/Quickbar.tscn" type="PackedScene" id=10]
-[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=11]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=11]
 
 [sub_resource type="Theme" id=1]
 

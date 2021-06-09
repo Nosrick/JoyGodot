@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/ContextMenu.cs" type="Script" id=2]
-[ext_resource path="res://Assets/Materials/Default Material.tres" type="Material" id=3]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 

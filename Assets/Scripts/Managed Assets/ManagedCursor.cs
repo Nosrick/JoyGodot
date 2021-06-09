@@ -6,6 +6,7 @@ using JoyLib.Code;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
+using JoyLib.Code.Settings;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
@@ -104,7 +105,11 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
         protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
         {
-            float happiness = args.NewValue;
+            bool useHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                .Get(SettingsManager.HAPPINESS_CURSOR)
+                .ObjectValue;
+            
+            float happiness = useHappiness ? args.NewValue : 1f;
 
             try
             {
