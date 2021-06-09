@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using Godot;
 using Godot.Collections;
 using JoyLib.Code.Helpers;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Settings
 {
@@ -11,47 +16,142 @@ namespace JoyLib.Code.Settings
         public string Name { get; }
         
         public object ObjectValue { get; }
+        
+        public ICollection<string> ValueNames { get; }
+        
+        public int Index { get; set; }
+
+        public Dictionary Save();
+
+        public void Load(string data);
     }
 
     public static class SettingsFactory
     {
-        private static Setting<T> InternalCreate<T>(string name, object value)
+        public static Setting<T> CastToSetting<T>(string name, ICollection<object> values)
         {
-            return new Setting<T>(name, (T) value);
+            if (values.All(v => v is T))
+            {
+                return new Setting<T>(name, values.Cast<T>().ToList());
+            }
+
+            throw new InvalidOperationException("Values do not constrain to one type.");
         }
         
-        public static ISetting Create(string name, object value)
+        public static ISetting Create(string name, ICollection<object> values)
         {
-            MethodInfo methodInfo = typeof(SettingsFactory).GetMethod(nameof(InternalCreate))?.MakeGenericMethod(value.GetType());
+            if (values.Count == 0)
+            {
+                return new Setting<bool>(
+                    "EMPTY VALUES",
+                    new List<bool> {false});
+            }
 
-            return (ISetting) methodInfo?.Invoke(null, new[] { name, value });
+            try
+            { 
+                MethodInfo methodInfo = typeof(SettingsFactory).GetMethod(nameof(CastToSetting))?.MakeGenericMethod(values.FirstOrDefault()?.GetType());
+
+                if (methodInfo is null)
+                {
+                    throw new InvalidOperationException();
+                }
+                
+                return (ISetting) methodInfo.Invoke(null, new object[] { name, values });
+            }
+            catch (Exception e)
+            {
+                GD.PushError("Could not create setting " + name);
+            }
+
+            return new Setting<bool>(
+                "EXCEPTION THROWN",
+                new List<bool> {false});
         }
     }
     
     public class Setting<T> : ISetting
     {
         public string Name { get; protected set; }
-        public object ObjectValue { get; protected set; }
+        public object ObjectValue => this.ValuesRange.ElementAt(this.Index);
 
-        public T Value
+        public ICollection<string> ValueNames
         {
-            get => (T) this.ObjectValue;
-            set => this.ObjectValue = value;
+            get => this.ValuesRange.Select(v => v.ToString()).ToList();
         }
 
-        public Type MyType => this.ObjectValue.GetType();
+        public ICollection<T> ValuesRange { get; set; }
+
+        public int Index
+        {
+            get => this.m_Index;
+            set
+            {
+                if (value >= 0 && value < this.ValuesRange.Count)
+                {
+                    this.m_Index = value;
+                }
+            }
+        }
+
+        protected int m_Index;
+
+        public T Value => (T) this.ObjectValue;
 
         protected static readonly JSONValueExtractor ValueExtractor = new JSONValueExtractor();
         
-        public Setting(string name, T value = default)
+        public Setting(
+            string name, 
+            ICollection<T> values,
+            int index = 0)
         {
             this.Name = name;
-            this.ObjectValue = value;
+            this.ValuesRange = values;
+            this.Index = index;
         }
         
-        public string Save()
+        public Dictionary Save()
         {
-            return JSON.Print(this);
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"ValuesRange", this.ValuesToArray()},
+                {"Index", this.Index}
+            };
+
+            return saveDict;
+        }
+
+        protected Array ValuesToArray()
+        {
+            Array array = new Array();
+
+            foreach (var value in this.ValuesRange)
+            {
+                array.Add(value);
+            }
+
+            return array;
+        }
+
+        protected string ValuesToString()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine("[");
+
+            for(int i = 0; i < this.ValuesRange.Count; i++)
+            {
+                builder.Append(this.ValuesRange.ElementAt(i));
+                if (i != this.ValuesRange.Count - 1)
+                {
+                    builder.Append(",");
+                }
+                builder.AppendLine();
+            }
+
+            builder.AppendLine("]");
+
+            return builder.ToString();
         }
 
         public void Load(string data)
@@ -70,7 +170,8 @@ namespace JoyLib.Code.Settings
             }
 
             this.Name =  ValueExtractor.GetValueFromDictionary<string>(dictionary, "Name");
-            this.ObjectValue = ValueExtractor.GetValueFromDictionary<object>(dictionary, "ObjectValue");
+            this.ValuesRange = ValueExtractor.GetArrayValuesCollectionFromDictionary<T>(dictionary, "ValuesRange");
+            this.Index = ValueExtractor.GetValueFromDictionary<int>(dictionary, "Index");
         }
     }
 }

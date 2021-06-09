@@ -1,0 +1,36 @@
+{
+	"Settings": [
+		{
+			"Name": "Dyslexic Mode",
+			"ValuesRange": [
+				false,
+				true
+			],
+			"Index": 0
+		},
+		{
+			"Name": "Happiness Affects World",
+			"ValuesRange": [
+				true,
+				false
+			],
+			"Index": 0
+		},
+		{
+			"Name": "Happiness Affects UI",
+			"ValuesRange": [
+				true,
+				false
+			],
+			"Index": 0
+		},
+		{
+			"Name": "Happiness Affects Cursor",
+			"ValuesRange": [
+				true,
+				false
+			],
+			"Index": 0
+		}
+	]
+}
