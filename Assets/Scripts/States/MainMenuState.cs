@@ -24,11 +24,12 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
-            GlobalConstants.GameManager.GUIManager.InstantiateUIScene(
+            this.GUIManager.Clear();
+            this.GUIManager.InstantiateUIScene(
                 GD.Load<PackedScene>(
                     GlobalConstants.GODOT_ASSETS_FOLDER +
                     "Scenes/UI/MainMenu.tscn"));
-            base.SetUpUi();
+            this.GUIManager.FindGUIs();
             this.GUIManager.OpenGUI(this, GUINames.MAIN_MENU);
         }
 

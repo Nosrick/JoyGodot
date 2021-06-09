@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Assets/Scenes/Windows/ConversationWindow.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Assets/Scenes/Windows/Quickbar.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=11]
+[ext_resource path="res://Assets/Scenes/Windows/SettingsScreen.tscn" type="PackedScene" id=12]
 
 [sub_resource type="Theme" id=1]
 
@@ -126,13 +127,13 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
-FontSize = 24
+VAlign = 1
 TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 2 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -168,13 +169,13 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
-FontSize = 24
+VAlign = 1
 TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 4 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -210,13 +211,13 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
-FontSize = 24
+VAlign = 1
 TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 6 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -252,17 +253,17 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
+VAlign = 1
+TitleCase = true
 FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
 OverrideColour = true
 CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
-FontSize = 24
-TitleCase = true
-OutlineColour = Color( 0, 0, 0, 1 )
 CustomFont = SubResource( 8 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -295,16 +296,16 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
-FontSize = 24
+VAlign = 1
 TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
+OverrideOutline = true
+OverrideSize = true
+CacheFont = true
 CustomFont = SubResource( 9 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -353,6 +354,9 @@ visible = false
 visible = false
 
 [node name="Conversation Window" parent="." instance=ExtResource( 9 )]
+visible = false
+
+[node name="Settings" parent="." instance=ExtResource( 12 )]
 visible = false
 
 [connection signal="_Press" from="Cheats/Fill Needs" to="Cheats" method="FillNeeds"]

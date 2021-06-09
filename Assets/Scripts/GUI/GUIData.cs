@@ -3,6 +3,7 @@ using Godot;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
+using JoyLib.Code.Settings;
 using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Unity.GUI
@@ -22,6 +23,8 @@ namespace JoyLib.Code.Unity.GUI
         [Export] public bool AlwaysOnTop { get; protected set; }
 
         protected IEntity Player { get; set; }
+
+        protected bool EnableHappiness { get; set; }
 
         public virtual event GUIClosedEventHandler OnGUIClose;
         public virtual event GUIOpenedEventHandler OnGUIOpen;
@@ -72,6 +75,25 @@ namespace JoyLib.Code.Unity.GUI
                 this.Player.HappinessChange -= this.SetHappiness;
                 this.Player.HappinessChange += this.SetHappiness;
 
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
+                
+                this.EnableHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                    .Get(SettingsManager.HAPPINESS_UI)
+                    .ObjectValue;
+                
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_UI))
+            {
+                this.EnableHappiness = (bool) args.NewValue;
                 this.SetHappiness(this, new ValueChangedEventArgs<float>
                 {
                     NewValue = this.Player.OverallHappiness
@@ -81,7 +103,7 @@ namespace JoyLib.Code.Unity.GUI
 
         protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
         {
-            float happiness = args.NewValue;
+            float happiness = this.EnableHappiness ? args.NewValue : 1f;
 
             try
             {
@@ -148,10 +170,6 @@ namespace JoyLib.Code.Unity.GUI
             this.GUIManager = GlobalConstants.GameManager.GUIManager;
             
             this.GrabPlayer();
-            this.SetHappiness(this, new ValueChangedEventArgs<float>
-            {
-                NewValue = 1f
-            });
         }
 
         public virtual void ButtonClose()
@@ -165,6 +183,8 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.Player.HappinessChange -= this.SetHappiness;
             }
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
             
             base._ExitTree();
         }

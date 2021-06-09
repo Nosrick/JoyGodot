@@ -32,12 +32,14 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
+            this.GUIManager.Clear();
             PackedScene scene = GD.Load<PackedScene>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 "Scenes/UI/Character Creation.tscn");
             
-            GlobalConstants.GameManager.GUIManager.InstantiateUIScene(scene);
-            base.SetUpUi();
+            this.GUIManager.InstantiateUIScene(scene);
+            
+            this.GUIManager.FindGUIs();
             
             this.CharacterCreationHandler = this.GUIManager.Get("Character Creation") as CharacterCreationHandler;
 

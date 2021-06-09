@@ -16,23 +16,26 @@ font_data = ExtResource( 1 )
 
 [node name="Menu Item" type="MarginContainer"]
 material = ExtResource( 3 )
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
+VAlign = 1
+Text = "Quest Item"
+AutoWrap = true
+AutoSize = true
+CacheFont = true
 FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
-AutoSize = true
-FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+OverrideSize = true
+FontSize = 24
+OutlineThickness = 1
+OverrideOutline = true
 CustomFont = SubResource( 1 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -42,5 +45,3 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-Text = "Quest Item"
-AutoWrap = true

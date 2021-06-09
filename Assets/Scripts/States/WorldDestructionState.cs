@@ -23,10 +23,6 @@ namespace JoyLib.Code.States
             this.DestroyWorld();
         }
 
-        public override void SetUpUi()
-        {
-        }
-
         public override void Stop()
         {
         }

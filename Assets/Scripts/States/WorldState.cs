@@ -100,12 +100,12 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
+            this.GUIManager.Clear();
             this.GUIManager.InstantiateUIScene(
                 GD.Load<PackedScene>(
                     GlobalConstants.GODOT_ASSETS_FOLDER +
                     "Scenes/UI/MainGame.tscn"));
-            
-            base.SetUpUi();
+            this.GUIManager.FindGUIs();
             this.GUIManager.OpenGUI(this, GUINames.NEEDSRECT);
             this.GUIManager.OpenGUI(this, GUINames.DERIVED_VALUES);
             this.GUIManager.OpenGUI(this, GUINames.ACTION_LOG);
@@ -261,7 +261,7 @@ namespace JoyLib.Code.States
             {
                 if (this.GUIManager.AreAnyOpen() == false)
                 {
-                    this.GUIManager.OpenGUI(this, GUINames.PAUSE);
+                    this.GUIManager.OpenGUI(this, GUINames.SETTINGS);
                 }
                 else
                 {

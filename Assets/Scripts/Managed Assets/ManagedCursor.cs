@@ -18,6 +18,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         
         public int CursorSize { get; protected set; }
 
+        protected bool EnableHappiness { get; set; }
+
         protected IEntity Player { get; set; }
 
         public ISpriteState DragSprite
@@ -60,7 +62,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             this.CursorObject = this.GetNode<ManagedUIElement>("Cursor Object");
             this.DragObject = this.GetNode<ManagedUIElement>("Drag Object");
             this.DragObject.Visible = false;
-            
+
             this.GrabPlayer();
         }
 
@@ -82,6 +84,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             this.GrabPlayer();
         }
 
+        
+
         protected void GrabPlayer()
         {
             if (this.Player is null)
@@ -92,10 +96,29 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 {
                     return;
                 }
-
+                
                 this.Player.HappinessChange -= this.SetHappiness;
                 this.Player.HappinessChange += this.SetHappiness;
 
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
+                
+                this.EnableHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                    .Get(SettingsManager.HAPPINESS_CURSOR)
+                    .ObjectValue;
+            
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_CURSOR))
+            {
+                this.EnableHappiness = (bool) args.NewValue;
                 this.SetHappiness(this, new ValueChangedEventArgs<float>
                 {
                     NewValue = this.Player.OverallHappiness
@@ -105,11 +128,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
         protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
         {
-            bool useHappiness = (bool) GlobalConstants.GameManager.SettingsManager
-                .Get(SettingsManager.HAPPINESS_CURSOR)
-                .ObjectValue;
-            
-            float happiness = useHappiness ? args.NewValue : 1f;
+            float happiness = this.EnableHappiness ? args.NewValue : 1f;
 
             try
             {
@@ -130,6 +149,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             {
                 this.Player.HappinessChange -= this.SetHappiness;
             }
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
 
             base._ExitTree();
         }

@@ -292,6 +292,17 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Clear()
         {
+            Array children = this.RootUI.GetChildren();
+            if (children.IsNullOrEmpty() == false)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    Node child = this.RootUI.GetChild(0);
+                    this.RootUI.RemoveChild(child);
+                    child.QueueFree();
+                }
+            }
+            
             this.ActiveGUIs.Clear();
             this.GUIs.Clear();
         }
@@ -331,23 +342,12 @@ namespace JoyLib.Code.Unity.GUI
 
         public void InstantiateUIScene(PackedScene ui)
         {
-            Array children = this.RootUI.GetChildren();
-            if (children.IsNullOrEmpty() == false)
-            {
-                for (int i = 0; i < children.Count; i++)
-                {
-                    Node child = this.RootUI.GetChild(0);
-                    this.RootUI.RemoveChild(child);
-                    child.QueueFree();
-                }
-            }
+            this.Clear();
 
             Control newUI = (Control) ui.Instance();
             newUI.AnchorBottom = 1;
             newUI.AnchorRight = 1;
             this.RootUI.AddChild(newUI);
-            children = newUI.GetChildren();
-            GlobalConstants.ActionLog.Log(children);
         }
 
         public bool Add(GUIData gui)

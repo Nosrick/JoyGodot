@@ -106,6 +106,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected Tween TweenNode { get; set; }
 
         protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
+        
+        protected bool EnableHappiness { get; set; }
 
         protected static IEntity Player { get; set; }
 
@@ -180,6 +182,25 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 Player.HappinessChange -= this.SetHappiness;
                 Player.HappinessChange += this.SetHappiness;
 
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
+                
+                this.EnableHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                    .Get(SettingsManager.HAPPINESS_UI)
+                    .ObjectValue;
+
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_UI))
+            {
+                this.EnableHappiness = (bool) args.NewValue;
                 this.SetHappiness(this, new ValueChangedEventArgs<float>
                 {
                     NewValue = Player.OverallHappiness
@@ -189,11 +210,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
         {
-            bool useHappiness = (bool) GlobalConstants.GameManager.SettingsManager
-                .Get(SettingsManager.HAPPINESS_UI)
-                .ObjectValue;
-            
-            float happiness = useHappiness ? args.NewValue : 1f;
+            float happiness = this.EnableHappiness ? args.NewValue : 1f;
 
             try
             {
@@ -530,7 +547,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                         MarginLeft = 0,
                         MarginRight = 0,
                         MarginTop = 0,
-                        Material = this.Material,
                         UseParentMaterial = true
                     };
                     this.Parts.Add(patchRect);
@@ -637,6 +653,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 Player.HappinessChange -= this.SetHappiness;
             }
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
 
             base._ExitTree();
         }

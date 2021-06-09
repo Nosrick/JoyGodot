@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Godot;
 using Godot.Collections;
+using JoyLib.Code.Events;
 using JoyLib.Code.Helpers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
@@ -26,8 +27,9 @@ namespace JoyLib.Code.Settings
         public const string HAPPINESS_WORLD = "Happiness Affects World";
         public const string HAPPINESS_UI = "Happiness Affects UI";
         public const string HAPPINESS_CURSOR = "Happiness Affects Cursor";
-        
 
+        public event ValueChangedEventHandler<object> ValueChanged;  
+        
         public SettingsManager()
         {
             this.ValueExtractor = new JSONValueExtractor();
@@ -56,8 +58,16 @@ namespace JoyLib.Code.Settings
             {
                 return false;
             }
+
+            int delta = setting.Index - index;
             
             setting.Index = index;
+            this.ValueChanged?.Invoke(this, new ValueChangedEventArgs<object>
+            {
+                Name = name,
+                NewValue = setting.ObjectValue,
+                Delta = delta
+            });
             return true;
         }
 

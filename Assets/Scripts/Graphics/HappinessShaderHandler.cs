@@ -1,6 +1,7 @@
 ﻿using Godot;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Events;
+using JoyLib.Code.Settings;
 
 namespace JoyLib.Code.Graphics
 {
@@ -15,7 +16,6 @@ namespace JoyLib.Code.Graphics
 
         public override void _Ready()
         {
-            this.Enabled = true;
         }
 
         public override void _PhysicsProcess(float delta)
@@ -31,6 +31,11 @@ namespace JoyLib.Code.Graphics
             {
                 return;
             }
+            
+            this.Enabled = (bool) GlobalConstants.GameManager.SettingsManager.Get(SettingsManager.HAPPINESS_WORLD).ObjectValue;
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+            GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
 
             this.Initialised = this.TileSet is null == false;
 
@@ -46,6 +51,18 @@ namespace JoyLib.Code.Graphics
             {
                 NewValue = this.Player.OverallHappiness
             });
+        }
+        
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_WORLD))
+            {
+                this.Enabled = (bool) args.NewValue;
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
         }
 
         protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
@@ -64,6 +81,13 @@ namespace JoyLib.Code.Graphics
                 var shaderMaterial = this.TileSet.TileGetMaterial(index);
                 shaderMaterial?.SetShaderParam(HAPPINESS, happiness);
             }
+        }
+
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
         }
     }
 }

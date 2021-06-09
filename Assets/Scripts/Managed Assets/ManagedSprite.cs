@@ -95,6 +95,8 @@ namespace JoyLib.Code.Unity
         protected List<Node2D> Parts { get; set; }
 
         public Vector2Int WorldPosition { get; protected set; }
+
+        protected bool EnableHappiness { get; set; }
         
         protected static IEntity Player { get; set; }
 
@@ -107,7 +109,7 @@ namespace JoyLib.Code.Unity
         {
             if (Player is null)
             {
-                Player = GlobalConstants.GameManager.Player;
+                Player = GlobalConstants.GameManager?.Player;
 
                 if (Player is null)
                 {
@@ -116,6 +118,13 @@ namespace JoyLib.Code.Unity
                 
                 Player.HappinessChange -= this.SetHappiness;
                 Player.HappinessChange += this.SetHappiness;
+
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
+                
+                this.EnableHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                    .Get(SettingsManager.HAPPINESS_WORLD)
+                    .ObjectValue;
             
                 this.SetHappiness(this, new ValueChangedEventArgs<float>
                 {
@@ -123,14 +132,22 @@ namespace JoyLib.Code.Unity
                 });
             }
         }
-        
+
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_WORLD))
+            {
+                this.EnableHappiness = (bool) args.NewValue;
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = Player.OverallHappiness
+                });
+            }
+        }
+
         protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
         {
-            bool useHappiness = (bool) GlobalConstants.GameManager.SettingsManager
-                .Get(SettingsManager.HAPPINESS_WORLD)
-                .ObjectValue;
-            
-            float happiness = useHappiness ? args.NewValue : 1f;
+            float happiness = this.EnableHappiness ? args.NewValue : 1f;
 
             if (this.Material is ShaderMaterial shaderMaterial)
             {
@@ -318,8 +335,7 @@ namespace JoyLib.Code.Unity
                     AnimatedSprite newSprite = new AnimatedSprite
                     {
                         Centered = true,
-                        UseParentMaterial = true,
-                        Material = this.Material
+                        UseParentMaterial = true
                     };
                     this.Parts.Add(newSprite);
                     this.AddChild(newSprite);
@@ -417,6 +433,8 @@ namespace JoyLib.Code.Unity
             {
                 Player.HappinessChange -= this.SetHappiness;
             }
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
 
             base._ExitTree();
         }
