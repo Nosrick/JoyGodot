@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -10,6 +11,7 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code
 {
@@ -404,6 +406,35 @@ namespace JoyLib.Code
         public void SetStates(IEnumerable<ISpriteState> states)
         {
             this.m_States = states.ToList();
+        }
+
+        public virtual Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+            
+            saveDict.Add("JoyName", this.JoyName);
+            saveDict.Add("WorldPosition", this.WorldPosition.Save());
+            saveDict.Add("MyWorld", this.MyWorld?.Name);
+
+            Array array = new Array(this.Tags);
+            saveDict.Add("Tags", array);
+
+            array = new Array();
+            foreach (IDerivedValue derivedValue in this.DerivedValues.Values)
+            {
+                array.Add(derivedValue.Save());
+            }
+
+            saveDict.Add("DerivedValues", array);
+            saveDict.Add("TileSet", this.TileSet);
+            saveDict.Add("Guid", this.Guid.ToString());
+
+            return saveDict;
+        }
+
+        public virtual void Load(string data)
+        {
+            throw new NotImplementedException();
         }
     }    
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Godot.Collections;
 
 namespace JoyLib.Code.Entities.Statistics
 {
@@ -27,6 +28,21 @@ namespace JoyLib.Code.Entities.Statistics
         {
             this.Value = value;
             return this.Value;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+
+            saveDict.Add("Name", this.Name);
+            saveDict.Add("Value", this.Value);
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

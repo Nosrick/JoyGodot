@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using Godot.Collections;
 using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code.Events;
 using JoyLib.Code.Graphics;
@@ -18,44 +19,46 @@ namespace JoyLib.Code.Entities.Needs
 
         public ISpriteState FulfillingSprite { get; set; }
 
-          public RNG Roller { get; protected set; }
+        public RNG Roller { get; protected set; }
 
         protected bool Initialised { get; set; }
 
-        public float PercentageFull => this.HappinessThreshold == 0 ? 1f : Mathf.Min(1f, this.Value / (float) this.HappinessThreshold);
+        public float PercentageFull => this.HappinessThreshold == 0
+            ? 1f
+            : Mathf.Min(1f, this.Value / (float) this.HappinessThreshold);
 
-          protected Dictionary<string, IJoyAction> m_CachedActions;
+        protected System.Collections.Generic.Dictionary<string, IJoyAction> m_CachedActions;
 
         //How quickly the need decays
         //The higher the number, the slower it decays
 
-          protected int m_Decay;
-          protected int m_DecayCounter;
-          protected bool m_DoesDecay;
+        protected int m_Decay;
+        protected int m_DecayCounter;
+        protected bool m_DoesDecay;
 
-         
+
         //How much of an impact this need has on overall happiness
         protected int m_Priority;
 
-         
+
         //How high the value has to be before it contributes to happiness
         protected int m_HappinessThreshold;
 
         //Current value
-          protected int m_Value;
-          protected int m_MaximumValue;
+        protected int m_Value;
+        protected int m_MaximumValue;
 
-         
+
         //Average for the day
         //Will be calculated by adding the value every hour, then dividing by 24 when the day is up
         protected int m_AverageForDay;
 
-         
+
         //Average for the week
         //Calculated by adding value for the day every day, then dividing by 7 when the week is up
         protected int m_AverageForWeek;
 
-          protected int m_AverageForMonth;
+        protected int m_AverageForMonth;
 
         public AbstractNeed(
             int decayRef,
@@ -72,7 +75,7 @@ namespace JoyLib.Code.Entities.Needs
             RNG roller = null)
         {
             this.Roller = roller is null ? new RNG() : roller;
-            this.m_CachedActions = new Dictionary<string, IJoyAction>();
+            this.m_CachedActions = new System.Collections.Generic.Dictionary<string, IJoyAction>();
 
             IJoyAction[] standardActions = this.FetchStandardActions();
 
@@ -218,5 +221,32 @@ namespace JoyLib.Code.Entities.Needs
         }
 
         public int HappinessThreshold => this.m_HappinessThreshold;
+
+        public virtual Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+
+            saveDict.Add("Name", this.Name);
+            saveDict.Add("Decay", this.m_Decay);
+            saveDict.Add("DecayCounter", this.m_DecayCounter);
+            saveDict.Add("DoesDecay", this.m_DoesDecay);
+
+            saveDict.Add("Priority", this.m_Priority);
+
+            saveDict.Add("HappinessThreshold", this.m_HappinessThreshold);
+            saveDict.Add("Value", this.m_Value);
+            saveDict.Add("MaximumValue", this.m_MaximumValue);
+
+            saveDict.Add("AverageForDay", this.m_AverageForDay);
+            saveDict.Add("AverageForWeek", this.m_AverageForWeek);
+            saveDict.Add("AverageForMonth", this.m_AverageForMonth);
+
+            return saveDict;
+        }
+
+        public virtual void Load(string data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

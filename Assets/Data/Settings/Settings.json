@@ -14,7 +14,7 @@
 				true,
 				false
 			],
-			"Index": 1
+			"Index": 0
 		},
 		{
 			"Name": "Happiness Affects UI",
@@ -30,7 +30,7 @@
 				true,
 				false
 			],
-			"Index": 1
+			"Index": 0
 		}
 	]
 }

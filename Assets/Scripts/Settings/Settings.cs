@@ -69,7 +69,9 @@ namespace JoyLib.Code.Settings
         }
     }
     
-    public class Setting<T> : ISetting
+    public class Setting<T> : 
+        ISetting,
+        ISerialisationHandler
     {
         public string Name { get; protected set; }
         public object ObjectValue => this.ValuesRange.ElementAt(this.Index);

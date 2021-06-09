@@ -15,7 +15,8 @@ namespace JoyLib.Code
         IDerivedValueContainer, 
         IDataContainer, 
         IGuidHolder,
-        ITickable
+        ITickable,
+        ISerialisationHandler
     {
         List<ISpriteState> States { get; }
         bool IsDestructible { get; }

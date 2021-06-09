@@ -1,6 +1,6 @@
 ﻿namespace JoyLib.Code.Entities.Statistics
 {
-    public interface IBasicValue<T> where T : struct 
+    public interface IBasicValue<T> : ISerialisationHandler where T : struct
     {
         string Name
         {

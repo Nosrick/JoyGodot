@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.AI;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Events;
-using JoyLib.Code.Helpers;
 using JoyLib.Code.Physics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.World.Lighting;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.World
 {
     [Serializable]
-    public class WorldInstance : IWorldInstance
+    public class WorldInstance : 
+        IWorldInstance
     {
         public event EmptyEventHandler OnTick;
         
@@ -26,9 +29,8 @@ namespace JoyLib.Code.World
 
          
         //Worlds and where to access them
-        protected Dictionary<Vector2Int, IWorldInstance> m_Areas;
+        protected System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance> m_Areas;
         
-        [NonSerialized]
         protected IWorldInstance m_Parent;
 
           
@@ -114,7 +116,7 @@ namespace JoyLib.Code.World
             this.Name = name;
             this.Tags = new List<string>(tags);
             this.m_Tiles = tiles;
-            this.m_Areas = new Dictionary<Vector2Int, IWorldInstance>();
+            this.m_Areas = new System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance>();
             this.m_Entities = new HashSet<IEntity>();
             this.m_EntityGUIDs = new HashSet<Guid>();
             this.m_Items = new HashSet<IItemInstance>();
@@ -426,7 +428,7 @@ namespace JoyLib.Code.World
                 entityRef.FetchAction("additemaction")
                     .Execute(new IJoyObject[] {entityRef, item},
                         tags.ToArray(),
-                        new Dictionary<string, object>
+                        new System.Collections.Generic.Dictionary<string, object>
                         {
                             {"newOwner", newOwner}
                         });
@@ -596,9 +598,9 @@ namespace JoyLib.Code.World
             get { return this.m_Tiles; }
         }
 
-        public Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
+        public System.Collections.Generic.Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
         {
-            Dictionary<Vector2Int, IJoyObject> objects = new Dictionary<Vector2Int, IJoyObject>();
+            System.Collections.Generic.Dictionary<Vector2Int, IJoyObject> objects = new System.Collections.Generic.Dictionary<Vector2Int, IJoyObject>();
             foreach (IJoyObject joyObject in this.m_Items)
             {
                 int matches = 0;
@@ -652,13 +654,67 @@ namespace JoyLib.Code.World
             return false;
         }
 
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+            
+            saveDict.Add("Name", this.Name);
+            saveDict.Add("Dimensions", this.Dimensions.Save());
+
+            Array array = new Array();
+
+            foreach (ISerialisationHandler s in this.Entities)
+            {
+                array.Add(s.Save());
+            }
+            saveDict.Add("Entities", array);
+
+            array = new Array();
+            foreach (ISerialisationHandler s in this.Items)
+            {
+                array.Add(s.Save());
+            }
+            saveDict.Add("Items", array);
+
+            array = new Array();
+            foreach (ISerialisationHandler s in this.Walls)
+            {
+                array.Add(s.Save());
+            }
+            saveDict.Add("Walls", array);
+
+            array = new Array();
+            foreach (ISerialisationHandler s in this.Tiles)
+            {
+                array.Add(s.Save());
+            }
+            saveDict.Add("Tiles", array);
+
+            Dictionary tempDict = new Dictionary();
+            foreach (KeyValuePair<Vector2Int, IWorldInstance> pair in this.Areas)
+            {
+                tempDict.Add("EntryPoint", pair.Key.Save());
+                tempDict.Add("World", pair.Value.Save());
+            }
+            saveDict.Add("Areas", tempDict);
+            
+            saveDict.Add("Guid", this.Guid.ToString());
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<string> Tags
         {
             get => this.m_Tags;
             protected set => this.m_Tags = new List<string>(value);
         }
 
-        public Dictionary<Vector2Int, IWorldInstance> Areas
+        public System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance> Areas
         {
             get { return this.m_Areas; }
         }

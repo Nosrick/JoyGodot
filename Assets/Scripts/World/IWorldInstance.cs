@@ -9,7 +9,12 @@ using JoyLib.Code.World.Lighting;
 
 namespace JoyLib.Code.World
 {
-    public interface IWorldInstance : ITagged, IDisposable, IGuidHolder, ITickable
+    public interface IWorldInstance : 
+        ITagged, 
+        IDisposable, 
+        IGuidHolder, 
+        ITickable,
+        ISerialisationHandler
     {
         HashSet<Guid> EntityGUIDs { get; }
         HashSet<Guid> ItemGUIDs { get; }

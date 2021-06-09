@@ -44,7 +44,7 @@ namespace JoyLib.Code.IO
             }
             try
             {
-                string json = JSON.Print(world, "\t");
+                string json = JSON.Print(world.Save(), "\t");
                 File.WriteAllText(directory + "/world.dat", json);
                 /*
                 StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
