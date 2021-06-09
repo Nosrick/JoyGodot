@@ -4,7 +4,7 @@ using JoyLib.Code.Entities;
 
 namespace JoyLib.Code.Quests
 {
-    public interface IQuestStep : ITagged
+    public interface IQuestStep : ITagged, ISerialisationHandler
     {
         IQuestAction Action { get; }
         List<Guid> Items { get; }

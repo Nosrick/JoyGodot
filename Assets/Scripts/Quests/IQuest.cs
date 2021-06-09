@@ -6,7 +6,7 @@ using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Quests
 {
-    public interface IQuest : ITagged
+    public interface IQuest : ITagged, ISerialisationHandler
     {
         List<IQuestStep> Steps { get; }
         QuestMorality Morality { get; }

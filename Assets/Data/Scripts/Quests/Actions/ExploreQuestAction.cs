@@ -12,25 +12,8 @@ using JoyLib.Code.World;
 namespace JoyLib.Code.Quests
 {
     [Serializable]
-    public class ExploreQuestAction : IQuestAction
+    public class ExploreQuestAction : AbstractQuestAction
     {
-        
-        public string[] Tags { get; protected set; }
-        
-        public string Description { get; protected set; }
-        
-        
-        public List<Guid> Items { get; protected set; }
-        
-        
-        public List<Guid> Areas { get; protected set; }
-        
-        
-        public List<Guid> Actors { get; protected set; }
-
-        
-        public RNG Roller { get; protected set; }
-
         public ExploreQuestAction()
         {}
         
@@ -41,7 +24,7 @@ namespace JoyLib.Code.Quests
             IEnumerable<string> tags,
             RNG roller = null)
         {
-            this.Roller = roller is null ? new RNG() : roller; 
+            this.Roller = roller ?? new RNG(); 
             List<string> tempTags = new List<string>();
             tempTags.Add("exploration");
             tempTags.AddRange(tags);
@@ -52,7 +35,7 @@ namespace JoyLib.Code.Quests
             this.Description = this.AssembleDescription();
         }
         
-        public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
+        public override IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
         {
             List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
 
@@ -78,7 +61,7 @@ namespace JoyLib.Code.Quests
             return step;
         }
 
-        public bool ExecutedSuccessfully(IJoyAction action)
+        public override bool ExecutedSuccessfully(IJoyAction action)
         {
             if (action.Name.Equals("enterworldaction", StringComparison.OrdinalIgnoreCase) == false)
             {
@@ -103,7 +86,7 @@ namespace JoyLib.Code.Quests
             return worlds.All(world => action.LastParticipants.First().HasDataKey(world.Name)) && action.Successful;
         }
 
-        public string AssembleDescription()
+        public override string AssembleDescription()
         {
             StringBuilder builder = new StringBuilder();
 
@@ -128,11 +111,11 @@ namespace JoyLib.Code.Quests
             return "Go to " + builder + ".";
         }
 
-        public void ExecutePrerequisites(IEntity questor)
+        public override void ExecutePrerequisites(IEntity questor)
         {
         }
 
-        public IQuestAction Create(IEnumerable<string> tags,
+        public override IQuestAction Create(IEnumerable<string> tags,
             IEnumerable<IItemInstance> items,
             IEnumerable<IJoyObject> actors,
             IEnumerable<IWorldInstance> areas,

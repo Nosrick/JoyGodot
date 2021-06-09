@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using JoyLib.Code.Entities;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Quests
 {
@@ -91,6 +93,29 @@ namespace JoyLib.Code.Quests
         public bool HasTag(string tag)
         {
             return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+
+            Array array = new Array(this.Actors.Select(guid => guid.ToString()));
+            saveDict.Add("Actors", array);
+
+            array = new Array(this.Areas.Select(guid => guid.ToString()));
+            saveDict.Add("Areas", array);
+
+            array = new Array(this.Items.Select(guid => guid.ToString()));
+            saveDict.Add("Items", array);
+
+            saveDict.Add("Action", this.Action.Save());
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

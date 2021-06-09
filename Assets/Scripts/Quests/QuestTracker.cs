@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Scripting;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Quests
 {
     public class QuestTracker : IQuestTracker
     {
-        protected Dictionary<Guid, List<IQuest>> EntityQuests { get; set; }
+        protected System.Collections.Generic.Dictionary<Guid, List<IQuest>> EntityQuests { get; set; }
         
         protected ILiveItemHandler ItemHandler { get; set; }
 
@@ -25,7 +27,7 @@ namespace JoyLib.Code.Quests
         {
             if (this.EntityQuests is null)
             {
-                this.EntityQuests = new Dictionary<Guid, List<IQuest>>();
+                this.EntityQuests = new System.Collections.Generic.Dictionary<Guid, List<IQuest>>();
             }
         }
 
@@ -97,6 +99,20 @@ namespace JoyLib.Code.Quests
             {
                 this.PerformQuestAction(questor, quest, completedAction);
             }
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+            
+            saveDict.Add("Quests", new Array(this.AllQuests.Select(quest => quest.Save())));
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

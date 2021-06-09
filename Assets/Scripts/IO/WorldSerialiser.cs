@@ -53,9 +53,10 @@ namespace JoyLib.Code.IO
                 writer.Close();
                 */
 
-                json = JSON.Print(GlobalConstants.GameManager.QuestTracker.AllQuests, "\t");
+                json = JSON.Print(GlobalConstants.GameManager.QuestTracker.Save(), "\t");
                 File.WriteAllText(directory + "/quests.dat", json);
 
+                /*
                 json = JSON.Print(GlobalConstants.GameManager.ItemHandler.QuestRewards, "\t");
                 File.WriteAllText(directory + "/rewards.dat", json);
 
@@ -70,6 +71,7 @@ namespace JoyLib.Code.IO
 
                 json = JSON.Print(GlobalConstants.GameManager.GUIDManager, "\t");
                 File.WriteAllText(directory + "/guids.dat", json);
+                */
             }
             catch(Exception e)
             {

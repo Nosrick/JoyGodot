@@ -8,7 +8,7 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Quests
 {
-    public interface IQuestAction
+    public interface IQuestAction : ISerialisationHandler
     {
         string[] Tags { get; }
         string Description { get; }

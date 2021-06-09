@@ -11,24 +11,9 @@ using JoyLib.Code.World;
 namespace JoyLib.Code.Quests
 {
     [Serializable]
-    public class DeliverQuestAction : IQuestAction
+    public class DeliverQuestAction : AbstractQuestAction
     {
-        
-        public string[] Tags { get; protected set; }
-
-        
-        public string Description { get; protected set; }
-        
-        
-        public List<Guid> Items { get; protected set; }
-        
-        public List<Guid> Actors { get; protected set; }
-        
-        public List<Guid> Areas { get; protected set; }
-
-        
         protected IItemFactory ItemFactory { get; set; }
-
         
         public RNG Roller { get; protected set; }
 
@@ -57,7 +42,7 @@ namespace JoyLib.Code.Quests
             this.ItemFactory = itemFactory is null || GlobalConstants.GameManager is null == false ? GlobalConstants.GameManager.ItemFactory : itemFactory;
         }
         
-        public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
+        public override IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
         {
             IItemInstance deliveryItem = null;
             List<IItemInstance> backpack = provider.Contents.ToList();
@@ -87,14 +72,14 @@ namespace JoyLib.Code.Quests
             return step;
         }
 
-        public void ExecutePrerequisites(IEntity questor)
+        public override void ExecutePrerequisites(IEntity questor)
         {
             GlobalConstants.ActionLog.Log("Adding the following items to " + questor + " inventory");
             GlobalConstants.ActionLog.Log(this.Items);
             questor.AddContents(GlobalConstants.GameManager.ItemHandler.GetItems(this.Items));
         }
 
-        public bool ExecutedSuccessfully(IJoyAction action)
+        public override bool ExecutedSuccessfully(IJoyAction action)
         {
             if (action.LastTags.Any(tag => tag.Equals("item", StringComparison.OrdinalIgnoreCase)) == false)
             {
@@ -130,7 +115,7 @@ namespace JoyLib.Code.Quests
                    && action.Successful;
         }
 
-        public string AssembleDescription()
+        public override string AssembleDescription()
         {
             StringBuilder itemBuilder = new StringBuilder();
             for (int i = 0; i < this.Items.Count; i++)
@@ -169,7 +154,7 @@ namespace JoyLib.Code.Quests
             return "Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".";
         }
 
-        public IQuestAction Create(IEnumerable<string> tags,
+        public override IQuestAction Create(IEnumerable<string> tags,
             IEnumerable<IItemInstance> items,
             IEnumerable<IJoyObject> actors,
             IEnumerable<IWorldInstance> areas,

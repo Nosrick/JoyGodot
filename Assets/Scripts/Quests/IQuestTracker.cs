@@ -5,7 +5,7 @@ using JoyLib.Code.Scripting;
 
 namespace JoyLib.Code.Quests
 {
-    public interface IQuestTracker
+    public interface IQuestTracker : ISerialisationHandler
     {
         List<IQuest> AllQuests { get; }
 

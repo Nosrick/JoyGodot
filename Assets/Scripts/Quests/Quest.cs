@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Quests
 {
@@ -159,6 +161,27 @@ namespace JoyLib.Code.Quests
             }
             fullString += " " + rewardString + ".";
             return fullString;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+            
+            saveDict.Add("Guid", this.ID.ToString());
+            saveDict.Add("Questor", this.Questor.ToString());
+            saveDict.Add("Instigator", this.Instigator.ToString());
+            saveDict.Add("CurrentStep", this.CurrentStep);
+
+            saveDict.Add("RewardGuids", new Array(this.RewardGUIDs.Select(guid => guid.ToString())));
+            
+            saveDict.Add("Steps", new Array(this.Steps.Select(step => step.Save())));
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
         }
 
         public List<IQuestStep> Steps { get; protected set; }
