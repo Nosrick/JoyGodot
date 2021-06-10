@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
+using Godot.Collections;
 
 namespace JoyLib.Code.Entities.Needs
 {
-    public class FulfillmentData
+    public class FulfillmentData : ISerialisationHandler
     {
         public FulfillmentData(string name, int counter, IJoyObject[] targets)
         {
@@ -33,6 +35,23 @@ namespace JoyLib.Code.Entities.Needs
         {
             get;
             protected set;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"Counter", this.Counter},
+                {"Targets", new Array(this.Targets.Select(o => o.Guid.ToString()))}
+            };
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

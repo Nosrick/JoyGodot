@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Castle.Core.Internal;
+using Godot.Collections;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
 using JoyLib.Code.Entities.Abilities;
@@ -25,6 +26,7 @@ using JoyLib.Code.Quests;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities
 {
@@ -118,39 +120,261 @@ namespace JoyLib.Code.Entities
         protected bool m_HappinessIsDirty;
 
 
-        protected NeedDataSerialisable CurrentTargetSerialise
+        public string ContentString { get; }
+        public event ItemRemovedEventHandler ItemRemoved;
+        public event ItemAddedEventHandler ItemAdded;
+
+        public string CreatureType { get; protected set; }
+
+        public IBioSex Sex { get; protected set; }
+
+        public IGender Gender { get; protected set; }
+
+        public NeedAIData CurrentTarget
         {
-            get => new NeedDataSerialisable
+            get { return this.m_CurrentTarget; }
+            set { this.m_CurrentTarget = value; }
+        }
+
+        public IDriver Driver => this.m_Driver;
+
+        public List<IAbility> AllAbilities
+        {
+            get
             {
-                idle = this.CurrentTarget.idle,
-                intent = this.CurrentTarget.intent,
-                need = this.CurrentTarget.need,
-                searching = this.CurrentTarget.searching,
-                targetGuid = this.CurrentTarget.target?.Guid ?? Guid.Empty,
-                targetPoint = this.CurrentTarget.targetPoint,
-                targetType = this.CurrentTarget.target is null ? "none" : this.CurrentTarget.target.GetType().Name
-            };
+                List<IAbility> allAbilities = this.Abilities;
+                allAbilities.AddRange(this.Equipment.Contents.SelectMany(item => item.AllAbilities));
+                return allAbilities;
+            }
+        }
+
+        public EquipmentStorage Equipment => this.m_Equipment;
+
+        public IDictionary<string, IEntityStatistic> Statistics
+        {
+            get { return this.m_Statistics; }
+        }
+
+        public IDictionary<string, IEntitySkill> Skills
+        {
+            get { return this.m_Skills; }
+        }
+
+        public IDictionary<string, INeed> Needs
+        {
+            get { return this.m_Needs; }
+        }
+
+        public List<IAbility> Abilities => this.m_Abilities;
+
+        public string JobName
+        {
+            get { return this.m_CurrentJob.Name; }
+        }
+
+        public bool Sentient
+        {
+            get { return this.Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
+        }
+
+        public int Size
+        {
+            get { return this.m_Size; }
+        }
+
+        public IEnumerable<Vector2Int> Vision
+        {
+            get { return this.m_VisionProvider.Vision; }
+        }
+
+        public bool PlayerControlled { get; set; }
+
+        public IItemInstance NaturalWeapons => this.m_NaturalWeapons;
+
+        public List<string> IdentifiedItems => this.m_IdentifiedItems;
+
+        public IJob CurrentJob => this.m_CurrentJob;
+
+        public bool HasMoved { get; set; }
+
+        public FulfillmentData FulfillmentData
+        {
+            get => this.m_FulfillmentData;
             set
             {
-                this.m_CurrentTarget = new NeedAIData
-                {
-                    idle = value.idle,
-                    intent = value.intent,
-                    need = value.need,
-                    searching = value.searching,
-                    targetPoint = value.targetPoint
-                };
+                this.m_FulfillmentData = value;
 
-                if (value.targetType == typeof(IEntity).Name)
+                if (value is null)
                 {
-                    this.m_CurrentTarget.target = GlobalConstants.GameManager.EntityHandler.Get(value.targetGuid);
+                    this.MyNode.SetSpeechBubble(false);
+                    return;
                 }
-                else if (value.targetType == typeof(IItemInstance).Name)
+
+                if (this.m_FulfillmentData.Name.IsNullOrEmpty() == false
+                    && this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
                 {
-                    this.m_CurrentTarget.target = GlobalConstants.GameManager.ItemHandler.Get(value.targetGuid);
+                    this.MyNode.SetSpeechBubble(this.m_FulfillmentData.Counter > 0,
+                        this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
                 }
             }
         }
+
+        public ISexuality Sexuality
+        {
+            get => this.m_Sexuality;
+            set => this.m_Sexuality = value;
+        }
+
+        public IRomance Romance
+        {
+            get => this.m_Romance;
+            set => this.m_Romance = value;
+        }
+
+        public IAbility TargetingAbility { get; set; }
+
+        public int Mana
+        {
+            get { return this.DerivedValues[DerivedValueName.MANA].Maximum; }
+        }
+
+        public int ManaRemaining
+        {
+            get { return this.DerivedValues[DerivedValueName.MANA].Value; }
+        }
+
+        public int ComposureRemaining
+        {
+            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Value; }
+        }
+
+        public int Composure
+        {
+            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Maximum; }
+        }
+
+        public int Concentration
+        {
+            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Maximum; }
+        }
+
+        public int ConcentrationRemaining
+        {
+            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Value; }
+        }
+
+        public Vector2Int TargetPoint { get; set; }
+
+        protected int RegenTicker { get; set; }
+
+        //public Quest QuestOffered { get; set; }
+
+        public List<ICulture> Cultures => this.m_Cultures;
+
+        public IVision VisionProvider => this.m_VisionProvider;
+
+        public List<string> Slots => this.m_Slots;
+
+        public int VisionMod => 7;
+
+        protected string ConditionString
+        {
+            get
+            {
+                float percentage = this.HitPointsRemaining / (float) this.HitPoints;
+                if (Math.Abs(this.LastPercentage - percentage) < 0.02f && this.LastConditionString.IsNullOrEmpty() == false)
+                {
+                    return this.LastConditionString;
+                }
+
+                string condition = this.Equals(GlobalConstants.GameManager.Player)
+                    ? "You are "
+                    : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject)
+                      + " " + this.Gender.IsOrAre + " ";
+                
+                if (this.Conscious == false)
+                {
+                    condition += "unconscious";
+                }
+                else if (percentage > 0.9f)
+                {
+                    condition += "uninjured";
+                }
+                else if (percentage > 0.7f)
+                {
+                    condition += "lightly injured";
+                }
+                else if (percentage > 0.5f)
+                {
+                    condition += "moderately injured";
+                }
+                else if (percentage > 0.3f)
+                {
+                    condition += "severely injured";
+                }
+                else if (percentage > 0.1f)
+                {
+                    condition += "gravely injured";
+                }
+                else
+                {
+                    condition += "barely conscious";
+                }
+
+                this.LastPercentage = percentage;
+                this.LastConditionString = condition;
+                return condition;
+            }
+        }
+
+        protected float LastPercentage { get; set; }
+        protected string LastConditionString { get; set; }
+
+        public Queue<Vector2Int> PathfindingData
+        {
+            get { return this.m_PathfindingData; }
+            set { this.m_PathfindingData = value; }
+        }
+
+        public IPathfinder Pathfinder
+        {
+            get { return this.m_Pathfinder; }
+        }
+
+        public override IWorldInstance MyWorld
+        {
+            get => this.m_MyWorld;
+            set
+            {
+                this.m_MyWorld = value;
+                foreach (IItemInstance item in this.Contents)
+                {
+                    item.MyWorld = value;
+                }
+            }
+        }
+
+        public bool Conscious => this.HitPointsRemaining > 0;
+
+        public List<IJob> Jobs { get; protected set; }
+
+        public override ICollection<string> Tooltip => this.ConstructDescription();
+        
+        public List<string> CultureNames
+        {
+            get
+            {
+                if (this.m_CultureNames is null)
+                {
+                    this.m_CultureNames = this.Cultures.Select(culture => culture.CultureName).ToList();
+                }
+
+                return this.m_CultureNames;
+            }
+            protected set => this.m_CultureNames = value;
+        }
+
+        protected List<string> m_CultureNames;
 
         protected IDriver m_Driver;
 
@@ -158,11 +382,11 @@ namespace JoyLib.Code.Entities
 
         protected Queue<Vector2Int> m_PathfindingData;
 
-        [NonSerialized] protected IWorldInstance m_MyWorld;
+        protected IWorldInstance m_MyWorld;
 
-        [NonSerialized] protected const int REGEN_TICK_TIME = 10;
+        protected const int REGEN_TICK_TIME = 10;
 
-        [NonSerialized] protected const int ATTACK_THRESHOLD = -50;
+        protected const int ATTACK_THRESHOLD = -50;
 
         public IEnumerable<IItemInstance> Contents => GlobalConstants.GameManager.ItemHandler.GetItems(this.m_Backpack);
 
@@ -1102,265 +1326,50 @@ namespace JoyLib.Code.Entities
             throw new InvalidOperationException("No value of " + name + " found on " + this.JoyName);
         }
 
-        public string ContentString { get; }
-        public event ItemRemovedEventHandler ItemRemoved;
-        public event ItemAddedEventHandler ItemAdded;
-
-        public string CreatureType { get; protected set; }
-
-        public IBioSex Sex { get; protected set; }
-
-        public IGender Gender { get; protected set; }
-
-        public NeedAIData CurrentTarget
+        public override Dictionary Save()
         {
-            get { return this.m_CurrentTarget; }
-            set { this.m_CurrentTarget = value; }
-        }
+            Dictionary saveDict = base.Save();
+            
+            saveDict.Add("Statistics", new Array(this.Statistics.Values.Select(statistic => statistic.Save())));
+            saveDict.Add("Skills", new Array(this.Skills.Values.Select(skill => skill.Save())));
+            saveDict.Add("Needs", new Array(this.Needs.Values.Select(need => need.Save())));
+            saveDict.Add("Abilities", new Array(this.Abilities.Select(ability => ability.Save())));
+            saveDict.Add("Equipment", this.Equipment.Save());
+            saveDict.Add("Backpack", new Array(this.m_Backpack.Select(guid => guid.ToString())));
+            saveDict.Add("Sexuality", this.Sexuality.Save());
+            saveDict.Add("Sex", this.Sex.Save());
+            saveDict.Add("Romance", this.Romance.Save());
+            saveDict.Add("IdentifiedItems", this.IdentifiedItems);
+            saveDict.Add("CurrentJob", this.CurrentJob.Name);
+            saveDict.Add("Slots", this.Slots);
+            saveDict.Add("Cultures", this.CultureNames);
+            saveDict.Add("Size", this.Size);
+            saveDict.Add("VisionProvider", this.VisionProvider.Name);
+            saveDict.Add("FulfilmentData", this.FulfillmentData.Save());
+            saveDict.Add("NeedData", this.CurrentTarget.Save());
+            saveDict.Add("PlayerControlled", this.PlayerControlled);
+            saveDict.Add("RegenTicker", this.RegenTicker);
+            saveDict.Add("PathfindingData", new Array(this.PathfindingData.Select(i => i.Save())));
+            saveDict.Add("HasMoved", this.HasMoved);
 
-        public IDriver Driver => this.m_Driver;
-
-        public List<IAbility> AllAbilities
-        {
-            get
+            Array tempArray = new Array();
+            foreach (var job in this.Jobs)
             {
-                List<IAbility> allAbilities = this.Abilities;
-                allAbilities.AddRange(this.Equipment.Contents.SelectMany(item => item.AllAbilities));
-                return allAbilities;
+                Dictionary tempDict = new Dictionary
+                {
+                    {"Name", job.Name}, 
+                    {"Experience", job.Experience}
+                };
+                tempArray.Add(tempDict);
             }
+            saveDict.Add("Jobs", tempArray);
+            
+            return saveDict;
         }
 
-        public EquipmentStorage Equipment => this.m_Equipment;
-
-        public IDictionary<string, IEntityStatistic> Statistics
+        public override void Load(string data)
         {
-            get { return this.m_Statistics; }
+            throw new NotImplementedException();
         }
-
-        public IDictionary<string, IEntitySkill> Skills
-        {
-            get { return this.m_Skills; }
-        }
-
-        public IDictionary<string, INeed> Needs
-        {
-            get { return this.m_Needs; }
-        }
-
-        public List<IAbility> Abilities => this.m_Abilities;
-
-        public string JobName
-        {
-            get { return this.m_CurrentJob.Name; }
-        }
-
-        public bool Sentient
-        {
-            get { return this.Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
-        }
-
-        public int Size
-        {
-            get { return this.m_Size; }
-        }
-
-        public IEnumerable<Vector2Int> Vision
-        {
-            get { return this.m_VisionProvider.Vision; }
-        }
-
-        public bool PlayerControlled { get; set; }
-
-        public IItemInstance NaturalWeapons => this.m_NaturalWeapons;
-
-        public List<string> IdentifiedItems => this.m_IdentifiedItems;
-
-        public IJob CurrentJob => this.m_CurrentJob;
-
-        public bool HasMoved { get; set; }
-
-        public FulfillmentData FulfillmentData
-        {
-            get => this.m_FulfillmentData;
-            set
-            {
-                this.m_FulfillmentData = value;
-
-                if (value is null)
-                {
-                    this.MyNode.SetSpeechBubble(false);
-                    return;
-                }
-
-                if (this.m_FulfillmentData.Name.IsNullOrEmpty() == false
-                    && this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
-                {
-                    this.MyNode.SetSpeechBubble(this.m_FulfillmentData.Counter > 0,
-                        this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
-                }
-            }
-        }
-
-        public ISexuality Sexuality
-        {
-            get => this.m_Sexuality;
-            set => this.m_Sexuality = value;
-        }
-
-        public IRomance Romance
-        {
-            get => this.m_Romance;
-            set => this.m_Romance = value;
-        }
-
-        public IAbility TargetingAbility { get; set; }
-
-        public int Mana
-        {
-            get { return this.DerivedValues[DerivedValueName.MANA].Maximum; }
-        }
-
-        public int ManaRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.MANA].Value; }
-        }
-
-        public int ComposureRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Value; }
-        }
-
-        public int Composure
-        {
-            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Maximum; }
-        }
-
-        public int Concentration
-        {
-            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Maximum; }
-        }
-
-        public int ConcentrationRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Value; }
-        }
-
-        public Vector2Int TargetPoint { get; set; }
-
-        protected int RegenTicker { get; set; }
-
-        //public Quest QuestOffered { get; set; }
-
-        public List<ICulture> Cultures => this.m_Cultures;
-
-        public IVision VisionProvider => this.m_VisionProvider;
-
-        public List<string> Slots => this.m_Slots;
-
-        public int VisionMod => 7;
-
-        protected string ConditionString
-        {
-            get
-            {
-                float percentage = this.HitPointsRemaining / (float) this.HitPoints;
-                if (this.LastPercentage == percentage && this.LastConditionString.IsNullOrEmpty() == false)
-                {
-                    return this.LastConditionString;
-                }
-
-                /*
-                string condition = this.Equals(GlobalConstants.GameManager.Player)
-                    ? "You are "
-                    : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject)
-                      + " " + this.Gender.IsOrAre + " ";
-                      */
-                string condition = "This is fine";
-                /*
-                if (this.Conscious == false)
-                {
-                    condition += "unconscious";
-                }
-                else if (percentage > 0.9f)
-                {
-                    condition += "uninjured";
-                }
-                else if (percentage > 0.7f)
-                {
-                    condition += "lightly injured";
-                }
-                else if (percentage > 0.5f)
-                {
-                    condition += "moderately injured";
-                }
-                else if (percentage > 0.3f)
-                {
-                    condition += "severely injured";
-                }
-                else if (percentage > 0.1f)
-                {
-                    condition += "gravely injured";
-                }
-                else
-                {
-                    condition += "barely conscious";
-                }
-                */
-
-                this.LastPercentage = percentage;
-                this.LastConditionString = condition;
-                return condition;
-            }
-        }
-
-        protected float LastPercentage { get; set; }
-        protected string LastConditionString { get; set; }
-
-        public Queue<Vector2Int> PathfindingData
-        {
-            get { return this.m_PathfindingData; }
-            set { this.m_PathfindingData = value; }
-        }
-
-        public IPathfinder Pathfinder
-        {
-            get { return this.m_Pathfinder; }
-        }
-
-        public override IWorldInstance MyWorld
-        {
-            get => this.m_MyWorld;
-            set
-            {
-                this.m_MyWorld = value;
-                foreach (IItemInstance item in this.Contents)
-                {
-                    item.MyWorld = value;
-                }
-            }
-        }
-
-        public bool Conscious => this.HitPointsRemaining > 0;
-
-        public List<IJob> Jobs { get; protected set; }
-
-        public override ICollection<string> Tooltip => this.ConstructDescription();
-
-
-        public List<string> CultureNames
-        {
-            get
-            {
-                if (this.m_CultureNames is null)
-                {
-                    this.m_CultureNames = this.Cultures.Select(culture => culture.CultureName).ToList();
-                }
-
-                return this.m_CultureNames;
-            }
-            protected set => this.m_CultureNames = value;
-        }
-
-        protected List<string> m_CultureNames;
     }
 }

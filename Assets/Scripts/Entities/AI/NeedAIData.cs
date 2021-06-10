@@ -1,8 +1,9 @@
 ﻿using System;
+using Godot.Collections;
 
 namespace JoyLib.Code.Entities.AI
 {
-    public class NeedAIData
+    public class NeedAIData : ISerialisationHandler
     {
         public IJoyObject target;
         public Vector2Int targetPoint;
@@ -36,16 +37,25 @@ namespace JoyLib.Code.Entities.AI
                 need = "none"
             };
         }
-    }
 
-    public class NeedDataSerialisable
-    {
-        public Guid targetGuid;
-        public string targetType;
-        public Vector2Int targetPoint;
-        public bool searching;
-        public Intent intent;
-        public bool idle;
-        public string need;
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"TargetPoint", this.targetPoint.Save()},
+                {"Target", this.target?.Guid.ToString()},
+                {"Searching", this.searching},
+                {"Intent", this.intent.ToString()},
+                {"Idle", this.idle},
+                {"Need", this.need}
+            };
+            
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

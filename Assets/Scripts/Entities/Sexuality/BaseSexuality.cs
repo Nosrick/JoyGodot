@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using JoyLib.Code.Entities.Relationships;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities.Sexuality
 {
@@ -91,6 +93,25 @@ namespace JoyLib.Code.Entities.Sexuality
         public bool Compatible(IEntity me, IEntity them)
         {
             return this.Processor.Compatible(me, them);
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"Tags", new Array(this.Tags)},
+                {"DecaysNeed", this.DecaysNeed},
+                {"MatingThreshold", this.MatingThreshold},
+                {"Processor", this.Processor?.Name}
+            };
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -69,7 +69,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public virtual bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point)
         {
-            int lightLevel = world.LightCalculator.Light.GetLight(point);
+            int lightLevel = world.LightCalculator?.Light.GetLight(point) ?? 0;
             return this.CanSee(viewer, world, point) && lightLevel >= this.MinimumLightLevel && lightLevel <= this.MaximumLightLevel;
         }
 

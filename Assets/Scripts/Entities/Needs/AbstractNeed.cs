@@ -224,22 +224,20 @@ namespace JoyLib.Code.Entities.Needs
 
         public virtual Dictionary Save()
         {
-            Dictionary saveDict = new Dictionary();
-
-            saveDict.Add("Name", this.Name);
-            saveDict.Add("Decay", this.m_Decay);
-            saveDict.Add("DecayCounter", this.m_DecayCounter);
-            saveDict.Add("DoesDecay", this.m_DoesDecay);
-
-            saveDict.Add("Priority", this.m_Priority);
-
-            saveDict.Add("HappinessThreshold", this.m_HappinessThreshold);
-            saveDict.Add("Value", this.m_Value);
-            saveDict.Add("MaximumValue", this.m_MaximumValue);
-
-            saveDict.Add("AverageForDay", this.m_AverageForDay);
-            saveDict.Add("AverageForWeek", this.m_AverageForWeek);
-            saveDict.Add("AverageForMonth", this.m_AverageForMonth);
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"Decay", this.m_Decay},
+                {"DecayCounter", this.m_DecayCounter},
+                {"DoesDecay", this.m_DoesDecay},
+                {"Priority", this.m_Priority},
+                {"HappinessThreshold", this.m_HappinessThreshold},
+                {"Value", this.m_Value},
+                {"MaximumValue", this.m_MaximumValue},
+                {"AverageForDay", this.m_AverageForDay},
+                {"AverageForWeek", this.m_AverageForWeek},
+                {"AverageForMonth", this.m_AverageForMonth}
+            };
 
             return saveDict;
         }

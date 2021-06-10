@@ -414,7 +414,7 @@ namespace JoyLib.Code
             
             saveDict.Add("JoyName", this.JoyName);
             saveDict.Add("WorldPosition", this.WorldPosition.Save());
-            saveDict.Add("MyWorld", this.MyWorld?.Name);
+            saveDict.Add("MyWorld", this.MyWorld?.Guid.ToString());
 
             Array array = new Array(this.Tags);
             saveDict.Add("Tags", array);

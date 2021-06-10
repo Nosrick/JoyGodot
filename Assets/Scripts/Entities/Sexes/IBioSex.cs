@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities.Sexes
 {
-    public interface IBioSex
+    public interface IBioSex: ISerialisationHandler
     {
         bool CanBirth
         {

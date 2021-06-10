@@ -8,7 +8,7 @@ using JoyLib.Code.Graphics;
 
 namespace JoyLib.Code.Entities.Abilities
 {
-    public interface IAbility : ITagged
+    public interface IAbility : ITagged, ISerialisationHandler
     {
         //When the ability is added to the user
         bool OnAdd(IEntity entity);

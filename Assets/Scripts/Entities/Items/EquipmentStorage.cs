@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using JoyLib.Code.Events;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities.Items
 {
     [Serializable]
-    public class EquipmentStorage : JoyObject, IItemContainer
+    public class EquipmentStorage : IItemContainer, ISerialisationHandler
     {
         protected List<Tuple<string, Guid>> m_Slots;
 
-        public override int HitPointsRemaining => 1;
-        public override int HitPoints => 1;
+        public virtual string ContentString { get; }
+        public virtual event ItemRemovedEventHandler ItemRemoved;
+        public virtual event ItemAddedEventHandler ItemAdded;
 
         public IEnumerable<IItemInstance> Contents =>
             this.GetSlotsAndContents(false)
@@ -21,7 +24,6 @@ namespace JoyLib.Code.Entities.Items
         public EquipmentStorage()
         {
             this.m_Slots = new List<Tuple<string, Guid>>();
-            this.JoyName = "Equipment";
         }
 
         public EquipmentStorage(IEnumerable<string> slots)
@@ -31,7 +33,6 @@ namespace JoyLib.Code.Entities.Items
             {
                 this.m_Slots.Add(new Tuple<string, Guid>(slot, Guid.Empty));
             }
-            this.JoyName = "Equipment";
         }
         
         protected virtual IEnumerable<string> GetRequiredSlots(IItemInstance item)
@@ -42,7 +43,7 @@ namespace JoyLib.Code.Entities.Items
                 return slots;
             }
 
-            Dictionary<string, int> requiredSlots = new Dictionary<string, int>();
+            System.Collections.Generic.Dictionary<string, int> requiredSlots = new System.Collections.Generic.Dictionary<string, int>();
 
             foreach (string slot in item.ItemType.Slots)
             {
@@ -56,7 +57,7 @@ namespace JoyLib.Code.Entities.Items
                 }
             }
 
-            Dictionary<string, int> copySlots = new Dictionary<string, int>(requiredSlots);
+            System.Collections.Generic.Dictionary<string, int> copySlots = new System.Collections.Generic.Dictionary<string, int>(requiredSlots);
 
             foreach (Tuple<string, Guid> tuple in this.m_Slots)
             {
@@ -220,9 +221,28 @@ namespace JoyLib.Code.Entities.Items
 
             return this.m_Slots.Count(s => s.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase));
         }
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
 
-        public virtual string ContentString { get; }
-        public virtual event ItemRemovedEventHandler ItemRemoved;
-        public virtual event ItemAddedEventHandler ItemAdded;
+            Array slotArray = new Array();
+
+            foreach ((string slot, Guid item) in this.m_Slots)
+            {
+                slotArray.Add(new Dictionary
+                {
+                    {slot, item.ToString()}
+                });
+            }
+
+            saveDict.Add("Slots", slotArray);
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

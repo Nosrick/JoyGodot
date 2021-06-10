@@ -3,7 +3,7 @@ using JoyLib.Code.Entities.Relationships;
 
 namespace JoyLib.Code.Entities.Romance
 {
-    public interface IRomance : ITagged
+    public interface IRomance : ITagged, ISerialisationHandler
     {
         bool WillRomance(IEntity me, IEntity them, IEnumerable<IRelationship> relationships);
         bool Compatible(IEntity me, IEntity them);

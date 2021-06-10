@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance.Processors;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities.Romance
 {
@@ -94,6 +96,26 @@ namespace JoyLib.Code.Entities.Romance
         public bool Compatible(IEntity me, IEntity them)
         {
             return this.Processor.Compatible(me, them);
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"Tags", new Array(this.Tags)},
+                {"DecaysNeed", this.DecaysNeed},
+                {"BondingThreshold", this.BondingThreshold},
+                {"RomanceThreshold", this.RomanceThreshold},
+                {"Processor", this.Processor?.Name}
+            };
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
         }
     }
 }
