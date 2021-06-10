@@ -302,19 +302,22 @@ namespace JoyLib.Code.Entities.Relationships
             Dictionary tempDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(data, "Relationships");
             foreach (DictionaryEntry entry in tempDict)
             {
-                Dictionary relationshipDict = entry.Value as Dictionary;
-                var name = this.ValueExtractor.GetValueFromDictionary<string>(relationshipDict, "Name");
-                IRelationship relationship =
-                    this.RelationshipTypes
-                        .FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                relationship?.Load((Dictionary) entry.Value);
-
-                if (relationship is null)
+                ICollection<Dictionary> relationshipDicts = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry.Value as Array);
+                foreach (Dictionary relationshipDict in relationshipDicts)
                 {
-                    continue;
-                }
+                    var name = this.ValueExtractor.GetValueFromDictionary<string>(relationshipDict, "Name");
+                    IRelationship relationship =
+                        this.RelationshipTypes
+                            .FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    relationship?.Load(relationshipDict);
+
+                    if (relationship is null)
+                    {
+                        continue;
+                    }
                 
-                this.m_Relationships.Add((long) entry.Key, relationship);
+                    this.m_Relationships.Add(long.Parse(entry.Key.ToString()), relationship);
+                }
             }
         }
     }

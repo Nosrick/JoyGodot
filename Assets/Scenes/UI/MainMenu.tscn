@@ -10,7 +10,7 @@
 
 [sub_resource type="Theme" id=1]
 
-[sub_resource type="DynamicFont" id=13]
+[sub_resource type="DynamicFont" id=2]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -32,7 +32,7 @@ font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=4]
 
-[sub_resource type="DynamicFont" id=14]
+[sub_resource type="DynamicFont" id=5]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -54,7 +54,7 @@ font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=7]
 
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="DynamicFont" id=8]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -76,7 +76,7 @@ font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=10]
 
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="DynamicFont" id=11]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -158,9 +158,10 @@ margin_bottom = 87.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 1 )
-CacheFont = true
 FontSize = 36
-CustomFont = SubResource( 13 )
+CacheFont = true
+CustomFont = SubResource( 2 )
+Text = "New Game"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -168,7 +169,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "New Game"
 
 [node name="Text" parent="Button Container/New Game Button/MarginContainer" index="0"]
 margin_top = 28.0
@@ -186,9 +186,10 @@ margin_bottom = 178.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 4 )
-CacheFont = true
 FontSize = 36
-CustomFont = SubResource( 14 )
+CacheFont = true
+CustomFont = SubResource( 5 )
+Text = "Load Game"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -196,7 +197,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Load Game"
 
 [node name="Text" parent="Button Container/Load Game Button/MarginContainer" index="0"]
 margin_top = 28.0
@@ -214,9 +214,10 @@ margin_bottom = 269.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 7 )
-CacheFont = true
 FontSize = 36
-CustomFont = SubResource( 15 )
+CacheFont = true
+CustomFont = SubResource( 8 )
+Text = "Settings"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -224,7 +225,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Settings"
 
 [node name="Text" parent="Button Container/Settings/MarginContainer" index="0"]
 margin_top = 28.0
@@ -242,9 +242,10 @@ margin_bottom = 360.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 10 )
-CacheFont = true
 FontSize = 36
-CustomFont = SubResource( 16 )
+CacheFont = true
+CustomFont = SubResource( 11 )
+Text = "Quit To Desktop"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -252,7 +253,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Quit To Desktop"
 
 [node name="Text" parent="Button Container/Quit to Desktop/MarginContainer" index="0"]
 margin_top = 28.0
@@ -265,6 +265,7 @@ text = "Quit To Desktop"
 visible = false
 
 [connection signal="_Press" from="Button Container/New Game Button" to="." method="NewGame"]
+[connection signal="_Press" from="Button Container/Load Game Button" to="." method="LoadGame"]
 [connection signal="_Press" from="Button Container/Settings" to="." method="Settings"]
 [connection signal="_Press" from="Button Container/Quit to Desktop" to="." method="QuitGame"]
 

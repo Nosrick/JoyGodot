@@ -353,6 +353,16 @@ namespace JoyLib.Code.Entities.Relationships
             Dictionary outerValues = valueExtractor.GetValueFromDictionary<Dictionary>(data, "Values");
             foreach (DictionaryEntry outerValue in outerValues)
             {
+                IDictionary<Guid, int> values = new System.Collections.Generic.Dictionary<Guid, int>();
+                Guid key = new Guid(outerValue.Key.ToString());
+                foreach (DictionaryEntry innerValue in outerValue.Value as Dictionary)
+                {
+                    Guid participant = new Guid(innerValue.Key.ToString());
+                    int value = int.Parse(innerValue.Value.ToString());
+                    values.Add(participant, value);
+                }
+
+                this.m_Values.Add(key, values);
             }
         }
     }

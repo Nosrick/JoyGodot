@@ -1,4 +1,6 @@
 ﻿using Godot;
+using JoyLib.Code.IO;
+using JoyLib.Code.World;
 
 namespace JoyLib.Code.Unity.GUI.MainMenuState
 {
@@ -13,6 +15,12 @@ namespace JoyLib.Code.Unity.GUI.MainMenuState
         {
             GlobalConstants.GameManager.GUIManager.CloseAllGUIs();
             GlobalConstants.GameManager.SetNextState(new States.CharacterCreationState());
+        }
+
+        public void LoadGame()
+        {
+            WorldSerialiser worldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
+            IWorldInstance worldInstance = worldSerialiser.Deserialise("Everse");
         }
 
         public void Settings()
