@@ -46,12 +46,6 @@ namespace JoyLib.Code.IO
             {
                 string json = JSON.Print(world.Save(), "\t");
                 File.WriteAllText(directory + "/world.dat", json);
-                /*
-                StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "/save/" + world.Name + "/sav.dat", false);
-                JsonSerializer serializer = JsonSerializer.CreateDefault();
-                serializer.Serialize(writer, world);
-                writer.Close();
-                */
 
                 json = JSON.Print(GlobalConstants.GameManager.QuestTracker.Save(), "\t");
                 File.WriteAllText(directory + "/quests.dat", json);
@@ -59,15 +53,12 @@ namespace JoyLib.Code.IO
                 json = JSON.Print(GlobalConstants.GameManager.ItemHandler.Save(), "\t");
                 File.WriteAllText(directory + "/items.dat", json);
 
-                /*
-                json = JSON.Print(GlobalConstants.GameManager.RelationshipHandler.Values, "\t");
+                json = JSON.Print(GlobalConstants.GameManager.RelationshipHandler.Save(), "\t");
                 File.WriteAllText(directory + "/relationships.dat", json);
 
+                /*
                 json = JSON.Print(GlobalConstants.GameManager.EntityHandler.Values, "\t");
                 File.WriteAllText(directory + "/entities.dat", json);
-
-                json = JSON.Print(GlobalConstants.GameManager.GUIDManager, "\t");
-                File.WriteAllText(directory + "/guids.dat", json);
                 */
             }
             catch(Exception e)

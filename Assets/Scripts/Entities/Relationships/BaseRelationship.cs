@@ -2,33 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using Godot.Collections;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities.Relationships
 {
     [Serializable]
     public class BaseRelationship : IRelationship
     {
-         
         protected HashSet<string> m_Tags;
-        
-         
         public string Name { get; protected set; }
-
-         
         public string DisplayName { get; protected set; }
-
-         
         public HashSet<string> UniqueTags { get; protected set; }
-
-         
         public int MaxParticipants { get; protected set; }
 
         //Yeesh, this is messy
         //But this is a key value pair for how each participant feels about the other in the relationship
-         
         protected IDictionary<Guid, IDictionary<Guid, int>> m_Values;
         
-         
         protected List<Guid> m_Participants;
         
         public IEnumerable<string> Tags
@@ -44,7 +35,7 @@ namespace JoyLib.Code.Entities.Relationships
             this.UniqueTags = new HashSet<string>();
             this.MaxParticipants = 1;
             this.m_Participants = new List<Guid>();
-            this.m_Values = new Dictionary<Guid, IDictionary<Guid, int>>();
+            this.m_Values = new System.Collections.Generic.Dictionary<Guid, IDictionary<Guid, int>>();
             this.m_Tags = new HashSet<string>();
         }
         
@@ -84,7 +75,7 @@ namespace JoyLib.Code.Entities.Relationships
             {
                 this.m_Participants.Add(newParticipant);
 
-                this.m_Values.Add(newParticipant, new Dictionary<Guid, int>());
+                this.m_Values.Add(newParticipant, new System.Collections.Generic.Dictionary<Guid, int>());
 
                 foreach(KeyValuePair<Guid, IDictionary<Guid, int>> pair in this.m_Values)
                 {
@@ -231,7 +222,7 @@ namespace JoyLib.Code.Entities.Relationships
             {
                 this.m_Participants.Remove(currentGUID);
                 this.m_Values.Remove(currentGUID);
-                foreach (Dictionary<Guid, int> relationship in this.m_Values.Values)
+                foreach (System.Collections.Generic.Dictionary<Guid, int> relationship in this.m_Values.Values)
                 {
                     if(relationship.ContainsKey(currentGUID))
                     {
@@ -297,6 +288,41 @@ namespace JoyLib.Code.Entities.Relationships
             relationship.ModifyValueOfAllParticipants(value);
 
             return relationship;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"DisplayName", this.DisplayName},
+                {"Tags", new Array(this.Tags)},
+                {"UniqueTags", new Array(this.UniqueTags)},
+                {"MaxParticipants", this.MaxParticipants},
+                {"Participants", new Array(this.m_Participants.Select(guid => guid.ToString()))}
+            };
+
+            Dictionary values = new Dictionary();
+
+            foreach (KeyValuePair<Guid, IDictionary<Guid, int>> dictPair in this.m_Values)
+            {
+                Dictionary innerValues = new Dictionary();
+                foreach (KeyValuePair<Guid, int> pair in dictPair.Value)
+                {
+                    innerValues.Add(pair.Key.ToString(), pair.Value);
+                }
+
+                values.Add(dictPair.Key.ToString(), innerValues);
+            }
+
+            saveDict.Add("Values", values);
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

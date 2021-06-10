@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities.Relationships
 {
-    public interface IRelationship : ITagged
+    public interface IRelationship : 
+        ITagged,
+        ISerialisationHandler
     {
         IDictionary<Guid, int> GetValuesOfParticipant(Guid GUID);
 

@@ -3,7 +3,9 @@ using JoyLib.Code.Collections;
 
 namespace JoyLib.Code.Entities.Relationships
 {
-    public interface IEntityRelationshipHandler : IHandler<IRelationship, long>
+    public interface IEntityRelationshipHandler : 
+        IHandler<IRelationship, long>,
+        ISerialisationHandler
     {
         bool Add(IRelationship relationship);
         bool Destroy(long ID);

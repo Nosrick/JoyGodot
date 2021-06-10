@@ -8,6 +8,7 @@ using Godot.Collections;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Helpers;
 using JoyLib.Code.Scripting;
+using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
@@ -277,6 +278,27 @@ namespace JoyLib.Code.Entities.Relationships
         ~EntityRelationshipHandler()
         {
             this.Dispose();
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+
+            Dictionary valueDict = new Dictionary();
+            foreach (long key in this.m_Relationships.Keys)
+            {
+                Array relationships = new Array(this.m_Relationships[key].Select(r => r.Save()));
+                valueDict.Add(key, relationships);
+            }
+            
+            saveDict.Add("Relationships", valueDict);
+
+            return saveDict;
+        }
+
+        public void Load(string data)
+        {
+            throw new NotImplementedException();
         }
     }
 }
