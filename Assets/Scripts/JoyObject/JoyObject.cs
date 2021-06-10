@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Godot;
 using Godot.Collections;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Statistics;
@@ -15,7 +14,6 @@ using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code
 {
-    [Serializable]
     public class JoyObject : IComparable, IJoyObject
     {
         public event ValueChangedEventHandler<int> OnDerivedValueChange;
@@ -38,6 +36,14 @@ namespace JoyLib.Code
         public bool IsDestructible { get; protected set; }
         
         public virtual IWorldInstance MyWorld { get; set; }
+
+        public Guid WorldGuid
+        {
+            get => this.MyWorld?.Guid ?? this.m_WorldGuid;
+            set => this.m_WorldGuid = value;
+        }
+
+        protected Guid m_WorldGuid;
 
         public Guid Guid { get; protected set; }
 
@@ -88,6 +94,8 @@ namespace JoyLib.Code
         public JoyObject()
         {
             this.Guid = Guid.Empty;
+            this.Roller = new RNG();
+            this.DerivedValues = new System.Collections.Generic.Dictionary<string, IDerivedValue>();
         }
 
         /// <summary>
@@ -112,7 +120,7 @@ namespace JoyLib.Code
             params string[] tags)
         {
             this.TileSet = tileSet;
-            this.Roller = roller is null ? new RNG() : roller; 
+            this.Roller = roller ?? new RNG(); 
             List<IJoyAction> tempActions = new List<IJoyAction>(); 
             foreach(string action in actions)
             {
@@ -410,31 +418,50 @@ namespace JoyLib.Code
 
         public virtual Dictionary Save()
         {
-            Dictionary saveDict = new Dictionary();
-            
-            saveDict.Add("JoyName", this.JoyName);
-            saveDict.Add("WorldPosition", this.WorldPosition.Save());
-            saveDict.Add("MyWorld", this.MyWorld?.Guid.ToString());
+            Dictionary saveDict = new Dictionary
+            {
+                {"JoyName", this.JoyName},
+                {"WorldPosition", this.WorldPosition.Save()},
+                {"MyWorld", this.WorldGuid.ToString()},
+                {"TileSet", this.TileSet},
+                {"Guid", this.Guid.ToString()},
+                {"Tags", new Array(this.Tags)}
+            };
 
-            Array array = new Array(this.Tags);
-            saveDict.Add("Tags", array);
-
-            array = new Array();
+            Array array = new Array();
             foreach (IDerivedValue derivedValue in this.DerivedValues.Values)
             {
                 array.Add(derivedValue.Save());
             }
 
             saveDict.Add("DerivedValues", array);
-            saveDict.Add("TileSet", this.TileSet);
-            saveDict.Add("Guid", this.Guid.ToString());
 
             return saveDict;
         }
 
         public virtual void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.WorldHandler.ValueExtractor;
+
+            this.JoyName = valueExtractor.GetValueFromDictionary<string>(data, "JoyName");
+            this.WorldPosition.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "WorldPosition"));
+            string worldGuidString = valueExtractor.GetValueFromDictionary<string>(data, "MyWorld");
+            this.WorldGuid = worldGuidString is null ? Guid.Empty : new Guid(worldGuidString);
+            this.TileSet = valueExtractor.GetValueFromDictionary<string>(data, "TileSet");
+            this.Guid = new Guid(valueExtractor.GetValueFromDictionary<string>(data, "Guid"));
+            this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+
+            ICollection<Dictionary> dvCollection = valueExtractor
+                .GetArrayValuesCollectionFromDictionary<Dictionary>(
+                    data, 
+                    "DerivedValues");
+            foreach (Dictionary dvDict in dvCollection)
+            {
+                string name = valueExtractor.GetValueFromDictionary<string>(dvDict, "Name");
+                IDerivedValue derivedValue = GlobalConstants.GameManager.DerivedValueHandler.Get(name);
+                derivedValue.Load(dvDict);
+                this.DerivedValues.Add(derivedValue.Name, derivedValue);
+            }
         }
     }    
 }

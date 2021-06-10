@@ -25,6 +25,8 @@ namespace JoyLib.Code
         
         string TileSet { get; }
         
+        Guid WorldGuid { get; set; }
+        
         IRollable Roller { get; }
         
         IWorldInstance MyWorld { get; set; }

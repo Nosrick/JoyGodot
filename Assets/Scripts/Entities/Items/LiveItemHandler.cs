@@ -225,16 +225,24 @@ namespace JoyLib.Code.Entities.Items
         
         public Dictionary Save()
         {
-            Dictionary saveDict = new Dictionary();
-
-            saveDict.Add("Items", new Array(this.LiveItems.Select(pair => pair.Value.Save())));
+            Dictionary saveDict = new Dictionary
+            {
+                {"Items", new Array(this.LiveItems.Select(pair => pair.Value.Save()))}
+            };
             
             return saveDict;
         }
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var items = this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Items");
+
+            foreach (Dictionary itemDict in items)
+            {
+                IItemInstance item = new ItemInstance();
+                item.Load(itemDict);
+                this.LiveItems.Add(item.Guid, item);
+            }
         }
     }
 }

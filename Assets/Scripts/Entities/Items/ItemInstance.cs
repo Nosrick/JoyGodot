@@ -167,7 +167,7 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                string contentString = "It contains ";
+                string contentString = "it contains ";
 
                 List<IItemInstance> items = this.Contents.ToList();
                 if (items.Any() == false)
@@ -221,6 +221,9 @@ namespace JoyLib.Code.Entities.Items
         public ILiveItemHandler ItemHandler { get; set; }
         
         public ILiveEntityHandler EntityHandler { get; set; }
+        
+        public ItemInstance()
+        { }
 
         public ItemInstance(
             Guid guid,
@@ -583,7 +586,22 @@ namespace JoyLib.Code.Entities.Items
 
         public override void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+            
+            base.Load(data);
+            
+            string itemType = valueExtractor.GetValueFromDictionary<string>(data, "ItemType");
+            this.m_Type = GlobalConstants.GameManager.ItemDatabase.Get(itemType);
+            this.m_Contents = new List<Guid>(
+                valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Contents")
+                    .Select(s => new Guid(s)));
+            string owner = valueExtractor.GetValueFromDictionary<string>(data, "Owner");
+            this.OwnerGUID = owner is null ? Guid.Empty : new Guid(owner);
+            this.m_Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
+            this.InWorld = valueExtractor.GetValueFromDictionary<bool>(data, "InWorld");
+            this.UniqueAbilities = new List<IAbility>(
+                valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "UniqueAbilities")
+                    .Select(s => GlobalConstants.GameManager.AbilityHandler.Get(s)));
         }
     }
 }

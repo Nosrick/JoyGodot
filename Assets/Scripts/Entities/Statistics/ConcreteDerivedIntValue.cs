@@ -77,19 +77,25 @@ namespace JoyLib.Code.Entities.Statistics
 
         public Dictionary Save()
         {
-            Dictionary saveDict = new Dictionary();
-
-            saveDict.Add("Name", this.Name);
-            saveDict.Add("Base", this.Base);
-            saveDict.Add("Enhancement", this.Enhancement);
-            saveDict.Add("Value", this.Value);
-
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name}, 
+                {"Base", this.Base}, 
+                {"Enhancement", this.Enhancement}, 
+                {"Value", this.Value}
+            };
+            
             return saveDict;
         }
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.DerivedValueHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Base = valueExtractor.GetValueFromDictionary<int>(data, "Base");
+            this.Enhancement = valueExtractor.GetValueFromDictionary<int>(data, "Enhancement");
+            this.Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
         }
     }
 
