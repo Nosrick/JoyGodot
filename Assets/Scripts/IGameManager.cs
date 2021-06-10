@@ -69,6 +69,7 @@ namespace JoyLib.Code
         IAbilityHandler AbilityHandler { get; }
         IDerivedValueHandler DerivedValueHandler { get; }
         IVisionProviderHandler VisionProviderHandler { get; }
+        IWorldHandler WorldHandler { get; }
         
         SettingsManager SettingsManager { get; }
         

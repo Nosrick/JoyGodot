@@ -139,6 +139,8 @@ namespace JoyLib.Code.States
 
             this.m_World.Tick();
 
+            GlobalConstants.GameManager.WorldHandler.Add(this.m_World);
+
             this.Done = true;
         }
 

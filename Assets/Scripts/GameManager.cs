@@ -110,6 +110,8 @@ namespace JoyLib.Code
             this.GUIDManager = new GUIDManager();
 
             GlobalConstants.ActionLog = this.ActionLog;
+
+            this.WorldHandler = new WorldHandler();
             
             this.Roller = new RNG();
 
@@ -255,6 +257,7 @@ namespace JoyLib.Code
         public IAbilityHandler AbilityHandler { get; protected set; }
         public IDerivedValueHandler DerivedValueHandler { get; protected set; }
         public IVisionProviderHandler VisionProviderHandler { get; protected set; }
+        public IWorldHandler WorldHandler { get; protected set; }
         
         public IRumourMill RumourMill { get; protected set; }
 
