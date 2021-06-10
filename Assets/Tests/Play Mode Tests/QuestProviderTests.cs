@@ -129,7 +129,7 @@ namespace Tests
             foreach (IQuest quest in quests)
             {
                 Assert.That(quest.Rewards, Is.Not.Empty);
-                Assert.That(quest.Steps, Is.Not.Empty);
+                Assert.That(quest.Actions, Is.Not.Empty);
             }
         }
 
