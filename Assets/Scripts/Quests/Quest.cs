@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Godot.Collections;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -14,16 +15,28 @@ namespace JoyLib.Code.Quests
     public class Quest : IQuest
     {
         protected List<string> m_Tags;
+
+        public Quest()
+        {
+            this.Actions = new List<IQuestAction>();
+            this.Morality = QuestMorality.Neutral;
+            this.RewardGUIDs = new List<Guid>();
+            this.Instigator = Guid.Empty;
+            this.Questor = Guid.Empty;
+            this.CurrentStep = 0;
+            this.ID = Guid.Empty;
+            this.m_Tags = new List<string>();
+        }
         
         public Quest(
-            List<IQuestStep> steps,
+            List<IQuestAction> steps,
             QuestMorality morality,
             IEnumerable<IItemInstance> rewards,
             Guid instigator,
             Guid questor,
             IEnumerable<string> tags)
         {
-            this.Steps = steps;
+            this.Actions = steps;
             this.Morality = morality;
             this.RewardGUIDs = rewards.Select(instance => instance.Guid).ToList();
             this.Instigator = instigator;
@@ -51,14 +64,14 @@ namespace JoyLib.Code.Quests
 
         public bool FulfilsRequirements(IEntity questor, IJoyAction action)
         {
-            return this.Steps[this.CurrentStep].Action.ExecutedSuccessfully(action);
+            return this.Actions[this.CurrentStep].ExecutedSuccessfully(action);
         }
 
         public void StartQuest(IEntity questor)
         {
-            foreach (IQuestStep step in this.Steps)
+            foreach (IQuestAction step in this.Actions)
             {
-                step.StartQuest(questor);
+                step.ExecutePrerequisites(questor);
             }
         }
 
@@ -68,15 +81,15 @@ namespace JoyLib.Code.Quests
             {
                 case IItemInstance itemInstance:
                 {
-                    return this.Steps[this.CurrentStep].Items.Contains(itemInstance.Guid);
+                    return this.Actions[this.CurrentStep].Items.Contains(itemInstance.Guid);
                 }
                 case IEntity entity:
                 {
-                    return this.Steps[this.CurrentStep].Actors.Contains(entity.Guid);
+                    return this.Actions[this.CurrentStep].Actors.Contains(entity.Guid);
                 }
                 case IWorldInstance worldInstance:
                 {
-                    return this.Steps[this.CurrentStep].Areas.Contains(worldInstance.Guid);
+                    return this.Actions[this.CurrentStep].Areas.Contains(worldInstance.Guid);
                 }
                 default:
                     return false;
@@ -155,9 +168,9 @@ namespace JoyLib.Code.Quests
                 }
             }
 
-            for (int j = 0; j < this.Steps.Count; j++)
+            for (int j = 0; j < this.Actions.Count; j++)
             {
-                fullString += this.Steps[j].ToString();
+                fullString += this.Actions[j].AssembleDescription();
             }
             fullString += " " + rewardString + ".";
             return fullString;
@@ -165,26 +178,61 @@ namespace JoyLib.Code.Quests
 
         public Dictionary Save()
         {
-            Dictionary saveDict = new Dictionary();
-            
-            saveDict.Add("Guid", this.ID.ToString());
-            saveDict.Add("Questor", this.Questor.ToString());
-            saveDict.Add("Instigator", this.Instigator.ToString());
-            saveDict.Add("CurrentStep", this.CurrentStep);
-
-            saveDict.Add("RewardGuids", new Array(this.RewardGUIDs.Select(guid => guid.ToString())));
-            
-            saveDict.Add("Steps", new Array(this.Steps.Select(step => step.Save())));
+            Dictionary saveDict = new Dictionary
+            {
+                {"Guid", this.ID.ToString()},
+                {"Questor", this.Questor.ToString()},
+                {"Instigator", this.Instigator.ToString()},
+                {"CurrentStep", this.CurrentStep},
+                {"RewardGuids", new Array(this.RewardGUIDs.Select(guid => guid.ToString()))},
+                {"Actions", new Array(this.Actions.Select(step => step.Save()))}
+            };
 
             return saveDict;
         }
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemDatabase.ValueExtractor;
+            string guidString = valueExtractor.GetValueFromDictionary<string>(data, "Guid");
+            this.ID = guidString is null ? Guid.Empty : new Guid(guidString);
+
+            guidString = valueExtractor.GetValueFromDictionary<string>(data, "Questor");
+            this.Questor = guidString is null ? Guid.Empty : new Guid(guidString);
+
+            guidString = valueExtractor.GetValueFromDictionary<string>(data, "Instigator");
+            this.Instigator = guidString is null ? Guid.Empty : new Guid(guidString);
+
+            this.CurrentStep = valueExtractor.GetValueFromDictionary<int>(data, "CurrentStep");
+            this.RewardGUIDs = valueExtractor
+                .GetArrayValuesCollectionFromDictionary<string>(
+                    data,
+                    "RewardGuids")
+                .Select(s => new Guid(s))
+                .ToList();
+
+            this.Actions = new List<IQuestAction>();
+            var actionDicts = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Actions");
+            foreach (Dictionary actionDict in actionDicts)
+            {
+                string type = valueExtractor.GetValueFromDictionary<string>(actionDict, "Type");
+                if (type.IsNullOrEmpty())
+                {
+                    continue;
+                }
+                
+                IQuestAction action = QuestActionFactory.Create(type);
+                if (action is null)
+                {
+                    continue;
+                }
+                
+                action.Load(actionDict);
+                this.Actions.Add(action);
+            }
         }
 
-        public List<IQuestStep> Steps { get; protected set; }
+        public List<IQuestAction> Actions { get; protected set; }
         
         public QuestMorality Morality { get; protected set; }
         
@@ -201,7 +249,7 @@ namespace JoyLib.Code.Quests
 
         public Guid ID { get; protected set; }
 
-        public bool IsComplete => this.CurrentStep == this.Steps.Count;
+        public bool IsComplete => this.CurrentStep == this.Actions.Count;
 
         public IEnumerable<string> Tags
         {

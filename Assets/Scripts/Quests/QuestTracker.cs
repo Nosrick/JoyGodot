@@ -103,16 +103,33 @@ namespace JoyLib.Code.Quests
 
         public Dictionary Save()
         {
-            Dictionary saveDict = new Dictionary();
+            Dictionary saveDict = new Dictionary
+            {
+                {"Quests", new Array(this.AllQuests.Select(quest => quest.Save()))}
+            };
             
-            saveDict.Add("Quests", new Array(this.AllQuests.Select(quest => quest.Save())));
-
             return saveDict;
         }
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            var questsCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Quests");
+
+            foreach (Dictionary questDict in questsCollection)
+            {
+                IQuest quest = new Quest();
+                quest.Load(questDict);
+                if (this.EntityQuests.ContainsKey(quest.Questor))
+                {
+                    this.EntityQuests[quest.Questor].Add(quest);
+                }
+                else
+                {
+                    this.EntityQuests.Add(quest.Questor, new List<IQuest> { quest });
+                }
+            }
         }
     }
 }

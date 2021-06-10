@@ -71,10 +71,16 @@ namespace JoyLib.Code.IO
             string json = File.ReadAllText(directory + "/world.dat");
 
             json = File.ReadAllText(directory + "/relationships.dat");
-
             Dictionary tempDict = this.GetDictionary(json);
-
             GlobalConstants.GameManager.RelationshipHandler.Load(tempDict);
+
+            json = File.ReadAllText(directory + "/items.dat");
+            tempDict = this.GetDictionary(json);
+            GlobalConstants.GameManager.ItemHandler.Load(tempDict);
+
+            json = File.ReadAllText(directory + "/quests.dat");
+            tempDict = this.GetDictionary(json);
+            GlobalConstants.GameManager.QuestTracker.Load(tempDict);
             
             /*
             IWorldInstance world = JSON.Parse<IWorldInstance>(json);

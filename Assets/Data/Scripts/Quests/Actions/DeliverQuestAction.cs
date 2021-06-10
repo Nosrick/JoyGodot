@@ -10,7 +10,6 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Quests
 {
-    [Serializable]
     public class DeliverQuestAction : AbstractQuestAction
     {
         protected IItemFactory ItemFactory { get; set; }
@@ -22,9 +21,9 @@ namespace JoyLib.Code.Quests
         }
         
         public DeliverQuestAction(
-            IEnumerable<IItemInstance> items,
-            IEnumerable<IJoyObject> actors,
-            IEnumerable<IWorldInstance> areas,
+            IEnumerable<Guid> items,
+            IEnumerable<Guid> actors,
+            IEnumerable<Guid> areas,
              IEnumerable<string> tags,
             IItemFactory itemFactory = null,
             RNG roller = null)
@@ -32,44 +31,14 @@ namespace JoyLib.Code.Quests
             List<string> tempTags = new List<string>();
             tempTags.Add("deliver");
             tempTags.AddRange(tags);
-            this.Items = items.Select(instance => instance.Guid).ToList();
-            this.Actors = actors.Select(instance => instance.Guid).ToList();
-            this.Areas = areas.Select(instance => instance.Guid).ToList();
+            this.Items = items.ToList();
+            this.Actors = actors.ToList();
+            this.Areas = areas.ToList();
             this.Tags = tempTags.ToArray();
             this.Description = this.AssembleDescription();
 
             this.Roller = roller is null ? new RNG() : roller;
             this.ItemFactory = itemFactory is null || GlobalConstants.GameManager is null == false ? GlobalConstants.GameManager.ItemFactory : itemFactory;
-        }
-        
-        public override IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
-        {
-            IItemInstance deliveryItem = null;
-            List<IItemInstance> backpack = provider.Contents.ToList();
-            if (backpack.Count > 0)
-            {
-                int result = this.Roller.Roll(0, backpack.Count);
-
-                deliveryItem = backpack[result];
-            }
-            IEntity endPoint = overworld.GetRandomSentientWorldWide();
-            if(deliveryItem == null)
-            {
-                deliveryItem = this.ItemFactory.CreateRandomWeightedItem();
-            }
-            deliveryItem.SetOwner(endPoint.Guid);
-
-            this.Items = new List<Guid> {deliveryItem.Guid};
-            this.Actors = new List<Guid> {endPoint.Guid};
-            this.Areas = new List<Guid>();
-
-            IQuestStep step = new ConcreteQuestStep(
-                this, 
-                this.Items, 
-                this.Actors, 
-                this.Areas,
-                this.Tags);
-            return step;
         }
 
         public override void ExecutePrerequisites(IEntity questor)
@@ -154,18 +123,33 @@ namespace JoyLib.Code.Quests
             return "Deliver " + itemBuilder.ToString() + " to " + actorBuilder.ToString() + ".";
         }
 
-        public override IQuestAction Create(IEnumerable<string> tags,
-            IEnumerable<IItemInstance> items,
-            IEnumerable<IJoyObject> actors,
-            IEnumerable<IWorldInstance> areas,
-            IItemFactory itemFactory = null)
+        public override IQuestAction Create(
+            IEntity questor, 
+            IEntity provider, 
+            IWorldInstance overworld,
+            IEnumerable<string> tags)
         {
+            this.ItemFactory ??= GlobalConstants.GameManager.ItemFactory;
+            
+            IItemInstance deliveryItem = null;
+            List<IItemInstance> backpack = provider.Contents.ToList();
+            if (backpack.Count > 0)
+            {
+                int result = this.Roller.Roll(0, backpack.Count);
+
+                deliveryItem = backpack[result];
+            }
+            IEntity endPoint = overworld.GetRandomSentientWorldWide();
+            deliveryItem ??= this.ItemFactory.CreateRandomWeightedItem();
+            deliveryItem.SetOwner(endPoint.Guid);
+
+            List<string> myTags = new List<string>(tags);
+            
             return new DeliverQuestAction(
-                items,
-                actors,
-                areas,
-                tags, 
-                itemFactory);
+                new List<Guid> {deliveryItem.Guid},
+                new List<Guid> {endPoint.Guid},
+                new List<Guid>(),
+                myTags);
         }
     }
 }

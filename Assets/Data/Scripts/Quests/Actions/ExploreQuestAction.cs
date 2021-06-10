@@ -11,16 +11,22 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Quests
 {
-    [Serializable]
     public class ExploreQuestAction : AbstractQuestAction
     {
         public ExploreQuestAction()
-        {}
-        
+        {
+            this.Roller = new RNG();
+            this.Items = new List<Guid>();
+            this.Actors = new List<Guid>();
+            this.Areas = new List<Guid>();
+            this.Tags = new string[0];
+            this.Description = string.Empty;
+        }
+
         public ExploreQuestAction(
-            IEnumerable<IItemInstance> items,
-            IEnumerable<IJoyObject> actors,
-            IEnumerable<IWorldInstance> areas,
+            IEnumerable<Guid> items,
+            IEnumerable<Guid> actors,
+            IEnumerable<Guid> areas,
             IEnumerable<string> tags,
             RNG roller = null)
         {
@@ -28,37 +34,11 @@ namespace JoyLib.Code.Quests
             List<string> tempTags = new List<string>();
             tempTags.Add("exploration");
             tempTags.AddRange(tags);
-            this.Items = items.Select(instance => instance.Guid).ToList();
-            this.Actors = actors.Select(instance => instance.Guid).ToList();
-            this.Areas = areas.Select(instance => instance.Guid).ToList();
+            this.Items = items.ToList();
+            this.Actors = actors.ToList();
+            this.Areas = areas.ToList();
             this.Tags = tempTags.ToArray();
             this.Description = this.AssembleDescription();
-        }
-        
-        public override IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
-        {
-            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
-
-            worlds = worlds.Where(instance => questor.HasDataKey(instance.Name) == false).ToList();
-            if (worlds.Any() == false)
-            {
-                GlobalConstants.ActionLog.Log(questor + " has explored the whole world!", LogLevel.Warning);
-                worlds = overworld.GetWorlds(overworld);
-            }
-            
-            int result = this.Roller.Roll(0, worlds.Count);
-
-            this.Items = new List<Guid>();
-            this.Actors = new List<Guid>();
-            this.Areas = new List<Guid> { worlds[result].Guid };
-
-            IQuestStep step = new ConcreteQuestStep(
-                this, 
-                this.Items, 
-                this.Actors, 
-                this.Areas,
-                this.Tags);
-            return step;
         }
 
         public override bool ExecutedSuccessfully(IJoyAction action)
@@ -115,17 +95,30 @@ namespace JoyLib.Code.Quests
         {
         }
 
-        public override IQuestAction Create(IEnumerable<string> tags,
-            IEnumerable<IItemInstance> items,
-            IEnumerable<IJoyObject> actors,
-            IEnumerable<IWorldInstance> areas,
-            IItemFactory itemFactory = null)
+        public override IQuestAction Create(
+            IEntity questor, 
+            IEntity provider, 
+            IWorldInstance overworld,
+            IEnumerable<string> tags)
         {
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
+
+            List<string> myTags = new List<string>(tags);
+
+            worlds = worlds.Where(instance => questor.HasDataKey(instance.Name) == false).ToList();
+            if (worlds.Any() == false)
+            {
+                GlobalConstants.ActionLog.Log(questor + " has explored the whole world!", LogLevel.Warning);
+                worlds = overworld.GetWorlds(overworld);
+            }
+            
+            int result = this.Roller.Roll(0, worlds.Count);
+
             return new ExploreQuestAction(
-                items,
-                actors,
-                areas,
-                tags);
+                new List<Guid>(),
+                new List<Guid>(),
+                new List<Guid> { worlds[result].Guid },
+                myTags);
         }
     }
 }

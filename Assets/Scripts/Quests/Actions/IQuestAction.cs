@@ -17,8 +17,6 @@ namespace JoyLib.Code.Quests
         List<Guid> Areas { get; }
         
         RNG Roller { get; }
-
-        IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags);
         bool ExecutedSuccessfully(IJoyAction action);
 
         string AssembleDescription();
@@ -26,10 +24,9 @@ namespace JoyLib.Code.Quests
         void ExecutePrerequisites(IEntity questor);
 
         IQuestAction Create(
-            IEnumerable<string> tags,
-            IEnumerable<IItemInstance> items,
-            IEnumerable<IJoyObject> actors,
-            IEnumerable<IWorldInstance> areas,
-            IItemFactory itemFactory = null);
+            IEntity questor, 
+            IEntity provider, 
+            IWorldInstance overworld, 
+            IEnumerable<string> tags);
     }
 }

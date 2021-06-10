@@ -8,7 +8,7 @@ namespace JoyLib.Code.Quests
 {
     public interface IQuest : ITagged, ISerialisationHandler
     {
-        List<IQuestStep> Steps { get; }
+        List<IQuestAction> Actions { get; }
         QuestMorality Morality { get; }
         
         List<Guid> RewardGUIDs { get; }

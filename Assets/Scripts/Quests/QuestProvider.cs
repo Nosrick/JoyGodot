@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
@@ -44,25 +45,21 @@ namespace JoyLib.Code.Quests
         {
             GlobalConstants.GameManager.ItemHandler.CleanUpRewards();
             
-            List<IQuestStep> steps = new List<IQuestStep>();
+            List<IQuestAction> actions = new List<IQuestAction>();
 
             //int numberOfSteps = RNG.instance.Roll(1, 4);
             int numberOfSteps = 1;
             for (int i = 0; i < numberOfSteps; i++)
             {
                 int result = this.Roller.Roll(0, this.Actions.Count);
-                IQuestAction action = this.Actions[result].Create(
-                    new string[0],
-                    new List<IItemInstance>(),
-                    new List<IJoyObject>(),
-                    new List<IWorldInstance>());
-                steps.Add(action.Make(questor, provider, overworldRef, action.Tags));
+                IQuestAction action = this.Actions[result].Create(questor, provider, overworldRef, new string[0]);
+                actions.Add(action);
             }
 
-            IEnumerable<string> tagsForAllSteps = steps.SelectMany(step => step.Tags);
-            var rewards = this.GetRewards(questor, provider, steps);
+            IEnumerable<string> tagsForAllSteps = actions.SelectMany(step => step.Tags);
+            var rewards = this.GetRewards(questor, provider, actions);
             Quest quest = new Quest(
-                steps, 
+                actions, 
                 QuestMorality.Neutral, 
                 rewards, 
                 provider.Guid, 
@@ -78,12 +75,7 @@ namespace JoyLib.Code.Quests
 
             foreach (IQuestAction action in this.Actions)
             {
-                IQuestAction newAction = action.Create(
-                    new string[0],
-                    new List<IItemInstance>(),
-                    new List<IJoyObject>(),
-                    new List<IWorldInstance>());
-                List<IQuestStep> steps = new List<IQuestStep>{newAction.Make(questor, provider, overworldRef, newAction.Tags)};
+                List<IQuestAction> steps = new List<IQuestAction>{action.Create(questor, provider, overworldRef, new string[0])};
                 quests.Add(new Quest(
                     steps, 
                     QuestMorality.Neutral, 
@@ -101,10 +93,10 @@ namespace JoyLib.Code.Quests
             throw new System.NotImplementedException();
         }
 
-        private List<IItemInstance> GetRewards(IEntity questor, IEntity provider, List<IQuestStep> steps)
+        private List<IItemInstance> GetRewards(IEntity questor, IEntity provider, List<IQuestAction> actions)
         {
             List<IItemInstance> rewards = new List<IItemInstance>();
-            int reward = ((steps.Count * 100) + (this.EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
+            int reward = ((actions.Count * 100) + (this.EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
             rewards.Add(this.BagOfGoldHelper.GetBagOfGold(reward));
             foreach (IItemInstance item in rewards)
             {
