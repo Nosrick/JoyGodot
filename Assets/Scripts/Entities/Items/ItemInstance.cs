@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
-using Godot;
+using Godot.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -11,13 +11,12 @@ using JoyLib.Code.Graphics;
 using JoyLib.Code.Rollers;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities.Items
 {
-    [Serializable]
     public class ItemInstance : JoyObject, IItemInstance
     {
-        [NonSerialized]
         protected const string DURABILITY = "durability";
 
         protected IEntity User { get; set; }
@@ -66,7 +65,7 @@ namespace JoyLib.Code.Entities.Items
             protected set
             {
                 this.m_OwnerGUID = value;
-                this.m_OwnerString = EntityHandler?.Get(this.m_OwnerGUID).JoyName;
+                this.m_OwnerString = this.EntityHandler?.Get(this.m_OwnerGUID).JoyName;
             }
         }
 
@@ -74,6 +73,145 @@ namespace JoyLib.Code.Entities.Items
         {
             get => this.m_OwnerString;
         }
+
+        public bool Identified
+        {
+            get => this.m_Identified;
+            protected set => this.m_Identified = value;
+        }
+
+        public bool Broken => this.GetValue(DerivedValueName.DURABILITY) <= 0;
+
+        public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
+
+        public string ConditionString
+        {
+            get
+            {
+                float durability = this.GetValue(DURABILITY);
+                float maximum = this.GetMaximum(DURABILITY);
+                if (durability == 0)
+                {
+                    return "Broken";
+                }
+                if (durability / maximum < 0.25)
+                {
+                    return "In poor condition";
+                }
+
+                if (durability / maximum < 0.5)
+                {
+                    return "In fair condition";
+                }
+                if (durability / maximum < 0.75)
+                {
+                    return "In good condition";
+                }
+
+                return "In great condition";
+            }
+        }
+
+        public string SlotString
+        {
+            get
+            {
+                if (this.ItemType.Slots.Contains("None") || this.ItemType.Slots.IsNullOrEmpty())
+                {
+                    return "This item can be thrown";
+                }
+                return "This is equipped to " + string.Join(", ", this.ItemType.Slots);
+            }
+        }
+
+        public string DisplayName => this.Identified ? this.m_Type.IdentifiedName : this.m_Type.UnidentifiedName;
+
+        public string IdentifiedName => this.m_Type.IdentifiedName;
+
+        public string DisplayDescription => this.Identified ? this.m_Type.Description : this.m_Type.UnidentifiedDescription;
+
+        public float Weight
+        {
+            get
+            {
+                return this.m_Type.Weight + this.Contents.Sum(item => item.Weight);
+            }
+        }
+
+         
+        public bool InWorld
+        {
+            get;
+            set;
+        }
+
+        public string WeightString 
+        {
+            get
+            {
+                const string weight = "Weighs ";
+                if (this.Weight < 1000)
+                {
+                    return weight + this.Weight + " grams";
+                }
+                return weight + (this.Weight / 1000f) + " kilograms";
+            }
+        }
+
+        public IEnumerable<IItemInstance> Contents
+        {
+            get => this.ItemHandler?.GetItems(this.m_Contents);
+        }
+
+        public string ContentString
+        {
+            get
+            {
+                string contentString = "It contains ";
+
+                List<IItemInstance> items = this.Contents.ToList();
+                if (items.Any() == false)
+                {
+                    contentString = "";
+                    return contentString;
+                }
+
+                IDictionary<string, int> occurrences = new System.Collections.Generic.Dictionary<string, int>();
+                foreach (IItemInstance item in items)
+                {
+                    if (occurrences.ContainsKey(item.JoyName))
+                    {
+                        occurrences[item.JoyName] += 1;
+                    }
+                    else
+                    {
+                        occurrences.Add(item.JoyName, 1);
+                    }
+                }
+
+                IEnumerable<string> itemNames = occurrences.Select(pair => pair.Value > 1 ? pair.Key + "s" : pair.Key);
+                contentString += string.Join(", ", itemNames);
+                return contentString;
+            }
+        }
+
+        public event ItemRemovedEventHandler ItemRemoved;
+        public event ItemAddedEventHandler ItemAdded;
+
+        public IEnumerable<IAbility> AllAbilities
+        {
+            get
+            {
+                List<IAbility> abilities = new List<IAbility>();
+                abilities.AddRange(this.UniqueAbilities);
+                abilities.AddRange(this.ItemType.Abilities);
+                return abilities;
+            }
+        }
+
+        public BaseItemType ItemType => this.m_Type;
+
+        public int Value => this.m_Value;
 
          
         public IEnumerable<IAbility> UniqueAbilities { get; protected set; }
@@ -429,143 +567,23 @@ namespace JoyLib.Code.Entities.Items
             }
         }
 
-        public bool Identified
+        public override Dictionary Save()
         {
-            get => this.m_Identified;
-            protected set => this.m_Identified = value;
+            Dictionary saveDict = base.Save();
+            
+            saveDict.Add("ItemType", this.ItemType.IdentifiedName);
+            saveDict.Add("Contents", new Array(this.m_Contents.Select(guid => guid.ToString())));
+            saveDict.Add("Owner", this.OwnerGUID.ToString());
+            saveDict.Add("Value", this.Value);
+            saveDict.Add("InWorld", this.InWorld);
+            saveDict.Add("UniqueAbilities", new Array(this.UniqueAbilities.Select(ability => ability.Save())));
+
+            return saveDict;
         }
 
-        public bool Broken => this.GetValue(DerivedValueName.DURABILITY) <= 0;
-
-        public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
-
-        public string ConditionString
+        public override void Load(string data)
         {
-            get
-            {
-                float durability = this.GetValue(DURABILITY);
-                float maximum = this.GetMaximum(DURABILITY);
-                if (durability == 0)
-                {
-                    return "Broken";
-                }
-                if (durability / maximum < 0.25)
-                {
-                    return "In poor condition";
-                }
-
-                if (durability / maximum < 0.5)
-                {
-                    return "In fair condition";
-                }
-                if (durability / maximum < 0.75)
-                {
-                    return "In good condition";
-                }
-
-                return "In great condition";
-            }
+            throw new NotImplementedException();
         }
-
-        public string SlotString
-        {
-            get
-            {
-                if (this.ItemType.Slots.Contains("None") || this.ItemType.Slots.IsNullOrEmpty())
-                {
-                    return "This item can be thrown";
-                }
-                return "This is equipped to " + string.Join(", ", this.ItemType.Slots);
-            }
-        }
-
-        public string DisplayName => this.Identified ? this.m_Type.IdentifiedName : this.m_Type.UnidentifiedName;
-
-        public string IdentifiedName => this.m_Type.IdentifiedName;
-
-        public string DisplayDescription => this.Identified ? this.m_Type.Description : this.m_Type.UnidentifiedDescription;
-
-        public float Weight
-        {
-            get
-            {
-                return this.m_Type.Weight + this.Contents.Sum(item => item.Weight);
-            }
-        }
-
-         
-        public bool InWorld
-        {
-            get;
-            set;
-        }
-
-        public string WeightString 
-        {
-            get
-            {
-                const string weight = "Weighs ";
-                if (this.Weight < 1000)
-                {
-                    return weight + this.Weight + " grams";
-                }
-                return weight + (this.Weight / 1000f) + " kilograms";
-            }
-        }
-
-        public IEnumerable<IItemInstance> Contents
-        {
-            get => this.ItemHandler?.GetItems(this.m_Contents);
-        }
-
-        public string ContentString
-        {
-            get
-            {
-                string contentString = "It contains ";
-
-                List<IItemInstance> items = this.Contents.ToList();
-                if (items.Any() == false)
-                {
-                    contentString = "";
-                    return contentString;
-                }
-
-                IDictionary<string, int> occurrences = new Dictionary<string, int>();
-                foreach (IItemInstance item in items)
-                {
-                    if (occurrences.ContainsKey(item.JoyName))
-                    {
-                        occurrences[item.JoyName] += 1;
-                    }
-                    else
-                    {
-                        occurrences.Add(item.JoyName, 1);
-                    }
-                }
-
-                IEnumerable<string> itemNames = occurrences.Select(pair => pair.Value > 1 ? pair.Key + "s" : pair.Key);
-                contentString += string.Join(", ", itemNames);
-                return contentString;
-            }
-        }
-
-        public event ItemRemovedEventHandler ItemRemoved;
-        public event ItemAddedEventHandler ItemAdded;
-
-        public IEnumerable<IAbility> AllAbilities
-        {
-            get
-            {
-                List<IAbility> abilities = new List<IAbility>();
-                abilities.AddRange(this.UniqueAbilities);
-                abilities.AddRange(this.ItemType.Abilities);
-                return abilities;
-            }
-        }
-
-        public BaseItemType ItemType => this.m_Type;
-
-        public int Value => this.m_Value;
     }
 }

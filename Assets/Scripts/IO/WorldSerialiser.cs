@@ -55,11 +55,6 @@ namespace JoyLib.Code.IO
 
                 json = JSON.Print(GlobalConstants.GameManager.RelationshipHandler.Save(), "\t");
                 File.WriteAllText(directory + "/relationships.dat", json);
-
-                /*
-                json = JSON.Print(GlobalConstants.GameManager.EntityHandler.Values, "\t");
-                File.WriteAllText(directory + "/entities.dat", json);
-                */
             }
             catch(Exception e)
             {
