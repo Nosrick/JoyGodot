@@ -67,35 +67,21 @@ namespace JoyLib.Code.World
             return saveDict;
         }
 
-        public void Load(string data)
+        public void Load(Dictionary data)
         {
             JSONValueExtractor valueExtractor = GlobalConstants.GameManager.SettingsManager.ValueExtractor;
 
-            JSONParseResult result = JSON.Parse(data);
-            
-            if (result.Error != Error.Ok)
-            {
-                GlobalConstants.ActionLog.Log("Could not parse JSON for WorldTile", LogLevel.Warning);
-                return;
-            }
-
-            if (!(result.Result is Dictionary dictionary))
-            {
-                GlobalConstants.ActionLog.Log("Could not parse JSON to Dictionary for WorldTile", LogLevel.Warning);
-                return;
-            }
-
             this.m_Tags = new HashSet<string>(
                 valueExtractor.GetArrayValuesCollectionFromDictionary<string>(
-                    dictionary, 
+                    data, 
                     "Tags"));
 
             this.TileName = valueExtractor.GetValueFromDictionary<string>(
-                dictionary,
+                data,
                 "TileName");
 
             this.TileSet = valueExtractor.GetValueFromDictionary<string>(
-                dictionary,
+                data,
                 "TileSet");
         }
     }

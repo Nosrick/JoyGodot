@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using JoyGodot.addons.Managed_Assets;
 using JoyLib.Code.Collections;
 using JoyLib.Code.Cultures;
@@ -68,6 +69,13 @@ namespace JoyLib.Code.IO
             string directory = Directory.GetCurrentDirectory() + "/save/" + worldName;
 
             string json = File.ReadAllText(directory + "/world.dat");
+
+            json = File.ReadAllText(directory + "/relationships.dat");
+
+            Dictionary tempDict = this.GetDictionary(json);
+
+            GlobalConstants.GameManager.RelationshipHandler.Load(tempDict);
+            
             /*
             IWorldInstance world = JSON.Parse<IWorldInstance>(json);
             world.Initialise();
@@ -106,6 +114,27 @@ namespace JoyLib.Code.IO
             
             return world;
             */
+            return null;
+        }
+
+        protected Dictionary GetDictionary(string data)
+        {
+            JSONParseResult result = JSON.Parse(data);
+
+            if (result.Error != Error.Ok)
+            {
+                GD.PushError("Could not parse JSON!\n" +
+                             "At line: " + result.ErrorLine + "\n" +
+                             "Error message: " + result.ErrorString);
+                return null;
+            }
+
+            if (result.Result is Dictionary dictionary)
+            {
+                return dictionary;
+            }
+            
+            GD.PushError("Could not parse JSON into dictionary!");
             return null;
         }
 

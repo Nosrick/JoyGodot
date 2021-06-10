@@ -74,7 +74,7 @@ namespace JoyLib.Code.Entities.Statistics
             return saveDict;
         }
 
-        public void Load(string data)
+        public void Load(Dictionary data)
         {
             throw new NotImplementedException();
         }

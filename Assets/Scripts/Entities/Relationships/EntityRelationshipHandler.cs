@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -296,9 +297,25 @@ namespace JoyLib.Code.Entities.Relationships
             return saveDict;
         }
 
-        public void Load(string data)
+        public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            Dictionary tempDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(data, "Relationships");
+            foreach (DictionaryEntry entry in tempDict)
+            {
+                Dictionary relationshipDict = entry.Value as Dictionary;
+                var name = this.ValueExtractor.GetValueFromDictionary<string>(relationshipDict, "Name");
+                IRelationship relationship =
+                    this.RelationshipTypes
+                        .FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                relationship?.Load((Dictionary) entry.Value);
+
+                if (relationship is null)
+                {
+                    continue;
+                }
+                
+                this.m_Relationships.Add((long) entry.Key, relationship);
+            }
         }
     }
 }

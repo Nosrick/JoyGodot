@@ -69,26 +69,12 @@ namespace JoyLib.Code
             return saveDict;
         }
 
-        public void Load(string data)
+        public void Load(Dictionary data)
         {
             JSONValueExtractor valueExtractor = GlobalConstants.GameManager.SettingsManager.ValueExtractor;
 
-            JSONParseResult result = JSON.Parse(data);
-
-            if (result.Error != Error.Ok)
-            {
-                GlobalConstants.ActionLog.Log("Could not parse JSON for Vector2Int", LogLevel.Warning);
-                return;
-            }
-
-            if (!(result.Result is Dictionary dictionary))
-            {
-                GlobalConstants.ActionLog.Log("Could not parse JSON to Dictionary for Vector2Int", LogLevel.Warning);
-                return;
-            }
-
-            this.x = valueExtractor.GetValueFromDictionary<int>(dictionary, "x");
-            this.y = valueExtractor.GetValueFromDictionary<int>(dictionary, "y");
+            this.x = valueExtractor.GetValueFromDictionary<int>(data, "x");
+            this.y = valueExtractor.GetValueFromDictionary<int>(data, "y");
         }
     }
 }

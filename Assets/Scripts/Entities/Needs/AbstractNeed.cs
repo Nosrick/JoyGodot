@@ -242,7 +242,7 @@ namespace JoyLib.Code.Entities.Needs
             return saveDict;
         }
 
-        public virtual void Load(string data)
+        public virtual void Load(Dictionary data)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,7 @@ using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Settings
 {
-    public interface ISetting
+    public interface ISetting : ISerialisationHandler
     {
         public string Name { get; }
         
@@ -20,10 +20,6 @@ namespace JoyLib.Code.Settings
         public ICollection<string> ValueNames { get; }
         
         public int Index { get; set; }
-
-        public Dictionary Save();
-
-        public void Load(string data);
     }
 
     public static class SettingsFactory
@@ -69,9 +65,7 @@ namespace JoyLib.Code.Settings
         }
     }
     
-    public class Setting<T> : 
-        ISetting,
-        ISerialisationHandler
+    public class Setting<T> : ISetting
     {
         public string Name { get; protected set; }
         public object ObjectValue => this.ValuesRange.ElementAt(this.Index);
@@ -156,24 +150,11 @@ namespace JoyLib.Code.Settings
             return builder.ToString();
         }
 
-        public void Load(string data)
+        public void Load(Dictionary data)
         {
-            var result = JSON.Parse(data);
-            if (result.Error != Error.Ok)
-            {
-                GD.PushError("Failed trying to load setting " + this.Name);
-                return;
-            }
-            
-            if (!(result.Result is Dictionary dictionary))
-            {
-                GD.PushError("Could not parse JSON to Dictionary for setting " + this.Name);
-                return;
-            }
-
-            this.Name =  ValueExtractor.GetValueFromDictionary<string>(dictionary, "Name");
-            this.ValuesRange = ValueExtractor.GetArrayValuesCollectionFromDictionary<T>(dictionary, "ValuesRange");
-            this.Index = ValueExtractor.GetValueFromDictionary<int>(dictionary, "Index");
+            this.Name =  ValueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.ValuesRange = ValueExtractor.GetArrayValuesCollectionFromDictionary<T>(data, "ValuesRange");
+            this.Index = ValueExtractor.GetValueFromDictionary<int>(data, "Index");
         }
     }
 }

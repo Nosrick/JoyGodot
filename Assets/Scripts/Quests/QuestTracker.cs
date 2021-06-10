@@ -110,7 +110,7 @@ namespace JoyLib.Code.Quests
             return saveDict;
         }
 
-        public void Load(string data)
+        public void Load(Dictionary data)
         {
             throw new NotImplementedException();
         }

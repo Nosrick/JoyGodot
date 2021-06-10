@@ -432,7 +432,7 @@ namespace JoyLib.Code
             return saveDict;
         }
 
-        public virtual void Load(string data)
+        public virtual void Load(Dictionary data)
         {
             throw new NotImplementedException();
         }

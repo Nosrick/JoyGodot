@@ -6,6 +6,6 @@ namespace JoyLib.Code
     {
         Dictionary Save();
 
-        void Load(string data);
+        void Load(Dictionary data);
     }
 }

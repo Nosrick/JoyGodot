@@ -581,7 +581,7 @@ namespace JoyLib.Code.Entities.Items
             return saveDict;
         }
 
-        public override void Load(string data)
+        public override void Load(Dictionary data)
         {
             throw new NotImplementedException();
         }
