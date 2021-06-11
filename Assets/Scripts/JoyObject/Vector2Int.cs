@@ -34,6 +34,14 @@ namespace JoyLib.Code
             : this(vector2.x, vector2.y, roundDown)
         { }
 
+        public Vector2Int(Dictionary data)
+        {
+            JSONValueExtractor valueExtractor = GlobalConstants.GameManager.SettingsManager.ValueExtractor;
+
+            this.x = valueExtractor.GetValueFromDictionary<int>(data, "x");
+            this.y = valueExtractor.GetValueFromDictionary<int>(data, "y");
+        }
+
         public static bool operator ==(Vector2Int left, Vector2Int right)
         {
             return left.x == right.x && left.y == right.y;
@@ -71,6 +79,7 @@ namespace JoyLib.Code
 
         public void Load(Dictionary data)
         {
+            GD.PushError("Using the Load of Vector2Int! DOES NOT FUNCTION!");
             JSONValueExtractor valueExtractor = GlobalConstants.GameManager.SettingsManager.ValueExtractor;
 
             this.x = valueExtractor.GetValueFromDictionary<int>(data, "x");

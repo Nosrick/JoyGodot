@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Godot.Collections;
 using JoyLib.Code.Entities.Relationships;
 using JoyLib.Code.Entities.Romance.Processors;
@@ -115,7 +116,17 @@ namespace JoyLib.Code.Entities.Romance
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+            this.DecaysNeed = valueExtractor.GetValueFromDictionary<bool>(data, "DecaysNeed");
+            this.BondingThreshold = valueExtractor.GetValueFromDictionary<int>(data, "BondingThreshold");
+            this.RomanceThreshold = valueExtractor.GetValueFromDictionary<int>(data, "RomanceThreshold");
+            string processorName = valueExtractor.GetValueFromDictionary<string>(data, "Processor");
+            this.Processor = processorName.IsNullOrEmpty() == false 
+                ? GlobalConstants.GameManager.RomanceHandler.GetProcessor(processorName) 
+                : new AromanticProcessor();
         }
     }
 }

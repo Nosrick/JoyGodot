@@ -61,7 +61,7 @@ namespace JoyLib.Code.States
             this.Done = true;
 
             IWorldInstance playerWorld = overworld.Player.MyWorld;
-            this.m_NextState = new WorldState(overworld, playerWorld);
+            this.m_NextState = new WorldInitialisationState(overworld, playerWorld);
         }
 
         public override GameState GetNextState()

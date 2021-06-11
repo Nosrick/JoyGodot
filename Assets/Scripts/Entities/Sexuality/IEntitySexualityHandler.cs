@@ -2,5 +2,6 @@
 {
     public interface IEntitySexualityHandler : IHandler<ISexuality, string>
     {
+        ISexualityPreferenceProcessor GetProcessor(string name);
     }
 }

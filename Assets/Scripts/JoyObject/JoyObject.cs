@@ -95,7 +95,9 @@ namespace JoyLib.Code
         {
             this.Guid = Guid.Empty;
             this.Roller = new RNG();
+            this.m_States = new List<ISpriteState>();
             this.DerivedValues = new System.Collections.Generic.Dictionary<string, IDerivedValue>();
+            this.CachedActions = new List<IJoyAction>();
         }
 
         /// <summary>
@@ -425,16 +427,10 @@ namespace JoyLib.Code
                 {"MyWorld", this.WorldGuid.ToString()},
                 {"TileSet", this.TileSet},
                 {"Guid", this.Guid.ToString()},
-                {"Tags", new Array(this.Tags)}
+                {"Tags", new Array(this.Tags)},
+                {"DerivedValues", new Array(this.DerivedValues.Values.Select(dv => dv.Save()))},
+                {"SpriteStates", new Array(this.States.Select(state => state.Save()))}
             };
-
-            Array array = new Array();
-            foreach (IDerivedValue derivedValue in this.DerivedValues.Values)
-            {
-                array.Add(derivedValue.Save());
-            }
-
-            saveDict.Add("DerivedValues", array);
 
             return saveDict;
         }
@@ -444,23 +440,31 @@ namespace JoyLib.Code
             var valueExtractor = GlobalConstants.GameManager.WorldHandler.ValueExtractor;
 
             this.JoyName = valueExtractor.GetValueFromDictionary<string>(data, "JoyName");
-            this.WorldPosition.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "WorldPosition"));
+            this.WorldPosition = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "WorldPosition"));
             string worldGuidString = valueExtractor.GetValueFromDictionary<string>(data, "MyWorld");
             this.WorldGuid = worldGuidString is null ? Guid.Empty : new Guid(worldGuidString);
             this.TileSet = valueExtractor.GetValueFromDictionary<string>(data, "TileSet");
             this.Guid = new Guid(valueExtractor.GetValueFromDictionary<string>(data, "Guid"));
             this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
 
-            ICollection<Dictionary> dvCollection = valueExtractor
+            ICollection<Dictionary> dictCollection = valueExtractor
                 .GetArrayValuesCollectionFromDictionary<Dictionary>(
                     data, 
                     "DerivedValues");
-            foreach (Dictionary dvDict in dvCollection)
+            foreach (Dictionary dvDict in dictCollection)
             {
                 string name = valueExtractor.GetValueFromDictionary<string>(dvDict, "Name");
                 IDerivedValue derivedValue = GlobalConstants.GameManager.DerivedValueHandler.Get(name);
                 derivedValue.Load(dvDict);
                 this.DerivedValues.Add(derivedValue.Name, derivedValue);
+            }
+
+            dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "SpriteStates");
+            foreach (Dictionary dict in dictCollection)
+            {
+                ISpriteState state = new SpriteState();
+                state.Load(dict);
+                this.States.Add(state);
             }
         }
     }    

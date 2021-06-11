@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Castle.Core.Internal;
 using Godot.Collections;
 using JoyLib.Code.Entities.Sexes.Processors;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities.Sexes
 {
@@ -63,7 +65,9 @@ namespace JoyLib.Code.Entities.Sexes
             {
                 {"Name", this.Name}, 
                 {"CanBirth", this.CanBirth}, 
-                {"CanFertilise", this.CanFertilise}
+                {"CanFertilise", this.CanFertilise},
+                {"Tags", new Array(this.Tags)},
+                {"Processor", this.Processor?.Name}
             };
             
             return saveDict;
@@ -71,7 +75,16 @@ namespace JoyLib.Code.Entities.Sexes
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+            this.CanBirth = valueExtractor.GetValueFromDictionary<bool>(data, "CanBirth");
+            this.CanFertilise = valueExtractor.GetValueFromDictionary<bool>(data, "CanFertilise");
+            string processorName = valueExtractor.GetValueFromDictionary<string>(data, "Processor");
+            this.Processor = processorName.IsNullOrEmpty() == false 
+                ? GlobalConstants.GameManager.BioSexHandler.GetProcessor(processorName) 
+                : new NeutralProcessor();
         }
     }
 }

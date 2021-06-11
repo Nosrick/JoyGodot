@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Godot.Collections;
 using JoyLib.Code.Entities.Relationships;
 using Array = Godot.Collections.Array;
@@ -111,7 +112,16 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+            this.DecaysNeed = valueExtractor.GetValueFromDictionary<bool>(data, "DecaysNeed");
+            this.MatingThreshold = valueExtractor.GetValueFromDictionary<int>(data, "MatingThreshold");
+            string processorName = valueExtractor.GetValueFromDictionary<string>(data, "Processor");
+            this.Processor = processorName.IsNullOrEmpty() == false 
+                ? GlobalConstants.GameManager.SexualityHandler.GetProcessor(processorName) 
+                : new AsexualProcessor();
         }
     }
 }

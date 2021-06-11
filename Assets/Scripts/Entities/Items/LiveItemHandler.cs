@@ -122,11 +122,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IItemInstance Get(Guid guid)
         {
-            if (this.LiveItems.ContainsKey(guid))
-            {
-                return this.LiveItems[guid];
-            }
-            throw new InvalidOperationException("No item found with GUID " + guid);
+            return this.LiveItems.TryGetValue(guid, out IItemInstance item) ? item : null;
         }
 
         public IEnumerable<IItemInstance> GetQuestRewards(Guid questID)

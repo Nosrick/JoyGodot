@@ -203,6 +203,7 @@ namespace JoyLib.Code.Entities
                     data.SetColourIndices(firstIndices);
                     states.Add(new SpriteState(
                         data.Name,
+                        dominantCulture.Tileset,
                         data));
                 }
 

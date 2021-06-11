@@ -95,6 +95,13 @@ namespace JoyLib.Code.Entities.Sexuality
             return sexualities;
         }
 
+        public ISexualityPreferenceProcessor GetProcessor(string name)
+        {
+            return this.PreferenceProcessors.TryGetValue(name, out ISexualityPreferenceProcessor processor) 
+                ? processor 
+                : new AsexualProcessor();
+        }
+
         public ISexuality Get(string sexuality)
         {
             if (this.Sexualities is null)

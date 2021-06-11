@@ -156,7 +156,10 @@ namespace JoyLib.Code.Entities.Items
             List<SpriteState> states = (from sprite in this.ObjectIcons.GetManagedSprites(
                         itemType.SpriteSheet,
                         itemType.UnidentifiedName)
-                    select new SpriteState(sprite.Name, sprite))
+                    select new SpriteState(
+                        sprite.Name, 
+                        itemType.SpriteSheet,
+                        sprite))
                 .ToList();
 
             ISpriteState chosenState = this.Roller.SelectFromCollection(states);

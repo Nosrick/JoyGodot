@@ -97,6 +97,7 @@ namespace JoyLib.Code.Unity.GUI
                         data.Name,
                         new SpriteState(
                             data.Name,
+                            "Cursors",
                             data));
                 }
                 
@@ -267,7 +268,7 @@ namespace JoyLib.Code.Unity.GUI
                         continue;
                     }
 
-                    this.UISprites.Add(data.Name, new SpriteState(data.Name, data));
+                    this.UISprites.Add(data.Name, new SpriteState(data.Name, tileSetName, data));
                 }
             }
         }

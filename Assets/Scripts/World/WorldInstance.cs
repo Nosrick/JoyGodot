@@ -36,11 +36,8 @@ namespace JoyLib.Code.World
           
         public HashSet<Guid> EntityGUIDs
         {
-            get => this.m_EntityGUIDs;
-            protected set => this.m_EntityGUIDs = value;
+            get => new HashSet<Guid>(this.Entities.Select(entity => entity.Guid));
         }
-
-        protected HashSet<Guid> m_EntityGUIDs;
         
         protected HashSet<IEntity> m_Entities;
 
@@ -49,11 +46,8 @@ namespace JoyLib.Code.World
           
         public HashSet<Guid> ItemGUIDs
         {
-            get => this.m_ItemGUIDs;
-            protected set => this.m_ItemGUIDs = value;
+            get => new HashSet<Guid>(this.Items.Select(item => item.Guid));
         }
-
-        protected HashSet<Guid> m_ItemGUIDs;
 
         protected HashSet<IItemInstance> m_Items;
         
@@ -93,6 +87,13 @@ namespace JoyLib.Code.World
          
         protected List<string> m_Tags;
 
+        public WorldInstance()
+        {
+            this.Roller = new RNG();
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
+            this.LightCalculator = new LightCalculator();
+        }
+
         /// <summary>
         /// A template for adding stuff to later. A blank WorldInstance.
         /// </summary>
@@ -118,9 +119,7 @@ namespace JoyLib.Code.World
             this.m_Tiles = tiles;
             this.m_Areas = new System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance>();
             this.m_Entities = new HashSet<IEntity>();
-            this.m_EntityGUIDs = new HashSet<Guid>();
             this.m_Items = new HashSet<IItemInstance>();
-            this.m_ItemGUIDs = new HashSet<Guid>();
             this.m_Walls = new HashSet<Vector2Int>();
             this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
 
@@ -198,7 +197,6 @@ namespace JoyLib.Code.World
         public void AddItem(IItemInstance objectRef)
         {
             this.m_Items.Add(objectRef);
-            this.m_ItemGUIDs.Add(objectRef.Guid);
             objectRef.InWorld = true;
             objectRef.MyWorld = this;
 
@@ -220,7 +218,7 @@ namespace JoyLib.Code.World
                 return false;
             }
 
-            removed = this.m_Items.Remove(itemRef) & this.m_ItemGUIDs.Remove(itemRef.Guid);
+            removed = this.m_Items.Remove(itemRef);
 
             if (removed)
             {
@@ -444,7 +442,6 @@ namespace JoyLib.Code.World
         public void AddEntity(IEntity entityRef)
         {
             this.m_Entities.Add(entityRef);
-            this.m_EntityGUIDs.Add(entityRef.Guid);
             this.EntityHandler.Add(entityRef);
 
             this.OnTick -= entityRef.Tick;
@@ -468,7 +465,6 @@ namespace JoyLib.Code.World
             this.OnTick -= entity.Tick;
 
             this.m_Entities.Remove(entity);
-            this.m_EntityGUIDs.Remove(entity.Guid);
             if (destroy)
             {
                 this.EntityHandler.Destroy(entity.Guid);
@@ -656,56 +652,109 @@ namespace JoyLib.Code.World
 
         public Dictionary Save()
         {
-            Dictionary saveDict = new Dictionary();
-            
-            saveDict.Add("Name", this.Name);
-            saveDict.Add("Dimensions", this.Dimensions.Save());
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"Dimensions", this.Dimensions.Save()},
+                {"Entities", new Array(this.Entities.Select(entity => entity.Save()))},
+                {"Items", new Array(this.Items.Select(item => item.Save()))},
+                {"Walls", new Array(this.Walls.Select(wall => wall.Save()))}
+            };
 
             Array array = new Array();
-
-            foreach (ISerialisationHandler s in this.Entities)
-            {
-                array.Add(s.Save());
-            }
-            saveDict.Add("Entities", array);
-
-            array = new Array();
-            foreach (ISerialisationHandler s in this.Items)
-            {
-                array.Add(s.Save());
-            }
-            saveDict.Add("Items", array);
-
-            array = new Array();
-            foreach (ISerialisationHandler s in this.Walls)
-            {
-                array.Add(s.Save());
-            }
-            saveDict.Add("Walls", array);
-
-            array = new Array();
             foreach (ISerialisationHandler s in this.Tiles)
             {
                 array.Add(s.Save());
             }
             saveDict.Add("Tiles", array);
 
-            Dictionary tempDict = new Dictionary();
+            Array areaArray = new Array();
             foreach (KeyValuePair<Vector2Int, IWorldInstance> pair in this.Areas)
             {
-                tempDict.Add("EntryPoint", pair.Key.Save());
-                tempDict.Add("World", pair.Value.Save());
+                Dictionary tempDict = new Dictionary
+                {
+                    {"EntryPoint", pair.Key.Save()}, 
+                    {"World", pair.Value.Save()}
+                };
+                areaArray.Add(tempDict);
             }
-            saveDict.Add("Areas", tempDict);
+            saveDict.Add("Areas", areaArray);
             
             saveDict.Add("Guid", this.Guid.ToString());
+            
+            saveDict.Add("Tags", new Array(this.Tags));
+            
+            saveDict.Add("SpawnPoint", this.SpawnPoint.Save());
 
             return saveDict;
         }
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+
+            this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+
+            Vector2Int dimensions = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Dimensions"));
+            this.m_Dimensions = dimensions;
+
+            this.m_Costs = new byte[dimensions.x, dimensions.y];
+            this.Guid = new Guid(valueExtractor.GetValueFromDictionary<string>(data, "Guid"));
+
+            var dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Tiles");
+            this.m_Tiles = new WorldTile[dimensions.x, dimensions.y];
+            for (int x = 0; x < dimensions.x; x++)
+            {
+                for (int y = 0; y < dimensions.y; y++)
+                {
+                    WorldTile tile = new WorldTile();
+                    tile.Load(dictCollection.ElementAt((dimensions.x * x) + y));
+                    this.m_Tiles[x, y] = tile;
+                }
+            }
+
+            this.SpawnPoint = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "SpawnPoint"));
+            
+            dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Walls");
+            this.m_Walls = new HashSet<Vector2Int>();
+            foreach (Dictionary dict in dictCollection)
+            {
+                this.AddWall(new Vector2Int(dict));
+            }
+
+            dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Items");
+            this.m_Items = new HashSet<IItemInstance>();
+            foreach (Dictionary dict in dictCollection)
+            {
+                IItemInstance item = new ItemInstance();
+                item.Load(dict);
+                GlobalConstants.GameManager.ItemHandler.Add(item);
+                this.AddItem(item);
+            }
+
+            dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Entities");
+            this.m_Entities = new HashSet<IEntity>();
+            foreach (Dictionary dict in dictCollection)
+            {
+                IEntity entity = new Entity();
+                entity.Load(dict);
+                GlobalConstants.GameManager.EntityHandler.Add(entity);
+                this.AddEntity(entity);
+            }
+
+            dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Areas");
+            this.m_Areas = new System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance>();
+            foreach (Dictionary dict in dictCollection)
+            {
+                Vector2Int entry = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(dict, "EntryPoint"));
+                IWorldInstance world = new WorldInstance();
+                world.Load(valueExtractor.GetValueFromDictionary<Dictionary>(dict, "World"));
+                this.AddArea(entry, world);
+            }
+
+            this.Initialised = true;
         }
 
         public IEnumerable<string> Tags

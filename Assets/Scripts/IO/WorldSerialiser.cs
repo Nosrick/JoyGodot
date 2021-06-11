@@ -82,45 +82,12 @@ namespace JoyLib.Code.IO
             tempDict = this.GetDictionary(json);
             GlobalConstants.GameManager.QuestTracker.Load(tempDict);
             
-            /*
-            IWorldInstance world = JSON.Parse<IWorldInstance>(json);
-            world.Initialise();
+            json = File.ReadAllText(directory + "/world.dat");
+            tempDict = this.GetDictionary(json);
+            IWorldInstance overworld = new WorldInstance();
+            overworld.Load(tempDict);
 
-            json = File.ReadAllText(directory + "/items.dat");
-            IEnumerable<IItemInstance> items =
-                JSON.Parse<IEnumerable<IItemInstance>>(json);
-            this.Items(items, world);
-
-            json = File.ReadAllText(directory + "/entities.dat");
-            IEnumerable<IEntity> entities =
-                JSON.Parse<IEnumerable<IEntity>>(json);
-            this.Entities(entities, world);
-
-            json = File.ReadAllText(directory + "/relationships.dat");
-            IEnumerable<IRelationship> relationships =
-                JSON.Parse<IEnumerable<IRelationship>>(json);
-            this.Relationships(relationships);
-
-            json = File.ReadAllText(directory + "/quests.dat");
-            IEnumerable<IQuest> quests = JSON.Parse<IEnumerable<IQuest>>(json);
-            this.Quests(quests);
-
-            json = File.ReadAllText(directory + "/rewards.dat");
-            NonUniqueDictionary<Guid, Guid> rewards =
-                JSON.Parse<NonUniqueDictionary<Guid, Guid>>(json);
-            this.QuestRewards(rewards);
-
-            json = File.ReadAllText(directory + "/guids.dat");
-            GUIDManager guidManager =
-                JSON.Parse<GUIDManager>(json);
-
-            GlobalConstants.GameManager.GUIDManager.Deserialise(guidManager.RecycleList);
-            this.LinkWorlds(world);
-            this.AssignIcons(world);
-            
-            return world;
-            */
-            return null;
+            return overworld;
         }
 
         protected Dictionary GetDictionary(string data)

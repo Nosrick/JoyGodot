@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
@@ -242,7 +243,22 @@ namespace JoyLib.Code.Entities.Items
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.m_Slots = new List<Tuple<string, Guid>>();
+
+            Array slots = valueExtractor.GetValueFromDictionary<Array>(data, "Slots");
+            foreach (Dictionary dictionary in slots)
+            {
+                foreach(DictionaryEntry entry in dictionary)
+                {
+                    this.m_Slots.Add(
+                    new Tuple<string, Guid>(
+                        entry.Key.ToString(),
+                        new Guid(entry.Value.ToString())));
+                    
+                }
+            }
         }
     }
 }

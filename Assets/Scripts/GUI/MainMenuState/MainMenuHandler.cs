@@ -1,5 +1,6 @@
 ﻿using Godot;
 using JoyLib.Code.IO;
+using JoyLib.Code.States;
 using JoyLib.Code.World;
 
 namespace JoyLib.Code.Unity.GUI.MainMenuState
@@ -20,7 +21,9 @@ namespace JoyLib.Code.Unity.GUI.MainMenuState
         public void LoadGame()
         {
             WorldSerialiser worldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
-            IWorldInstance worldInstance = worldSerialiser.Deserialise("Everse");
+            IWorldInstance overworld = worldSerialiser.Deserialise("Everse");
+            GlobalConstants.GameManager.GUIManager.CloseAllGUIs();
+            GlobalConstants.GameManager.SetNextState(new WorldInitialisationState(overworld, overworld.GetPlayerWorld(overworld)));
         }
 
         public void Settings()

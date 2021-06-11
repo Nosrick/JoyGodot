@@ -116,6 +116,13 @@ namespace JoyLib.Code.Entities.Romance
             throw new InvalidOperationException("Sexuality of type " + romance + " not found.");
         }
 
+        public IRomanceProcessor GetProcessor(string name)
+        {
+            return this.Processors.TryGetValue(name, out IRomanceProcessor processor)
+                ? processor
+                : new AromanticProcessor();
+        }
+
         public bool Add(IRomance value)
         {
             if (this.RomanceTypes.ContainsKey(value.Name))

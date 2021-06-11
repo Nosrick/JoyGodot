@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot.Collections;
+using JoyLib.Code.Collections;
 using JoyLib.Code.Entities.Abilities;
 using JoyLib.Code.Entities.Statistics;
 using JoyLib.Code.Events;
@@ -65,7 +66,7 @@ namespace JoyLib.Code.Entities.Items
             protected set
             {
                 this.m_OwnerGUID = value;
-                this.m_OwnerString = this.EntityHandler?.Get(this.m_OwnerGUID).JoyName;
+                this.m_OwnerString = this.EntityHandler?.Get(this.m_OwnerGUID)?.JoyName;
             }
         }
 
@@ -223,7 +224,11 @@ namespace JoyLib.Code.Entities.Items
         public ILiveEntityHandler EntityHandler { get; set; }
         
         public ItemInstance()
-        { }
+        {
+            this.Data = new NonUniqueDictionary<object, object>();
+            this.ItemHandler = GlobalConstants.GameManager.ItemHandler;
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler; 
+        }
 
         public ItemInstance(
             Guid guid,

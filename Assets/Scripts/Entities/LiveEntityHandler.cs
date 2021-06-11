@@ -15,6 +15,7 @@ namespace JoyLib.Code.Entities
 
         public LiveEntityHandler()
         {
+            this.ValueExtractor = new JSONValueExtractor();
             this.m_Entities = new Dictionary<Guid, IEntity>();
         }
 
@@ -58,7 +59,7 @@ namespace JoyLib.Code.Entities
 
         public IEntity Get(Guid GUID)
         {
-            return this.m_Entities.ContainsKey(GUID) ? this.m_Entities[GUID] : null;
+            return this.m_Entities.TryGetValue(GUID, out IEntity entity) ? entity : null;
         }
 
         public IEnumerable<IEntity> Load()

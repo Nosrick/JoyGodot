@@ -5,7 +5,7 @@ using JoyGodot.addons.Managed_Assets;
 
 namespace JoyLib.Code.Graphics
 {
-    public interface ISpriteState
+    public interface ISpriteState : ISerialisationHandler
     {
         string Name { get; }
 

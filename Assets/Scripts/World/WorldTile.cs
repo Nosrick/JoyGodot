@@ -12,6 +12,11 @@ namespace JoyLib.Code.World
     {
         protected HashSet<string> m_Tags;
 
+        public WorldTile()
+        {
+            this.m_Tags = new HashSet<string>();
+        }
+        
         public WorldTile(string tileName, string tileSet, IEnumerable<string> tags)
         {
             this.TileName = tileName;

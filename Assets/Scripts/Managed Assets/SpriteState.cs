@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using JoyGodot.addons.Managed_Assets;
 
 namespace JoyLib.Code.Graphics
 {
-    [Serializable]
     public class SpriteState : ISpriteState
     {
         public SpriteData SpriteData
@@ -18,6 +18,8 @@ namespace JoyLib.Code.Graphics
         protected SpriteData m_SpriteData;
 
         public string Name { get; protected set; }
+        
+        public string TileSet { get; protected set; }
 
         public AnimationType AnimationType { get; protected set; }
 
@@ -25,8 +27,12 @@ namespace JoyLib.Code.Graphics
 
         public bool IsAnimated { get; set; }
 
+        public SpriteState()
+        { }
+
         public SpriteState(
             string name,
+            string tileSet,
             SpriteData spriteData,
             AnimationType animationType = AnimationType.PingPong,
             bool animated = true,
@@ -36,6 +42,8 @@ namespace JoyLib.Code.Graphics
             this.SpriteData = spriteData;
 
             this.Name = name;
+
+            this.TileSet = tileSet;
 
             this.AnimationType = animationType;
 
@@ -130,5 +138,39 @@ namespace JoyLib.Code.Graphics
             this.Dispose();
         }
         */
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"TileSet", this.TileSet},
+                {"IsAnimated", this.IsAnimated},
+                {"Looping", this.Looping},
+                {"AnimationType", this.AnimationType.ToString()},
+                {"Name", this.SpriteData?.Name},
+                {"DataState", this.SpriteData?.State}
+            };
+
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.EntityHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.TileSet = valueExtractor.GetValueFromDictionary<string>(data, "TileSet");
+            this.IsAnimated = valueExtractor.GetValueFromDictionary<bool>(data, "IsAnimated");
+            this.Looping = valueExtractor.GetValueFromDictionary<bool>(data, "Looping");
+            this.AnimationType = (AnimationType) Enum.Parse(
+                typeof(AnimationType),
+                valueExtractor.GetValueFromDictionary<string>(data, "AnimationType"));
+            string dataState = valueExtractor.GetValueFromDictionary<string>(data, "DataState");
+            this.m_SpriteData = GlobalConstants.GameManager.ObjectIconHandler
+                .GetManagedSprites(
+                    this.TileSet,
+                    this.Name,
+                    dataState)
+                .FirstOrDefault();
+        }
     }
 }

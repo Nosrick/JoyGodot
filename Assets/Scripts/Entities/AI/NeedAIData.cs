@@ -1,4 +1,5 @@
 ﻿using System;
+using Castle.Core.Internal;
 using Godot.Collections;
 
 namespace JoyLib.Code.Entities.AI
@@ -49,13 +50,31 @@ namespace JoyLib.Code.Entities.AI
                 {"Idle", this.idle},
                 {"Need", this.need}
             };
-            
+
             return saveDict;
         }
 
         public void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+            this.targetPoint = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "TargetPoint"));
+            string target = valueExtractor.GetValueFromDictionary<string>(data, "Target");
+            Guid guid = target.IsNullOrEmpty() ? Guid.Empty : new Guid(target);
+
+            IJoyObject tempTarget = GlobalConstants.GameManager.EntityHandler.Get(guid) 
+                                    ?? (IJoyObject) GlobalConstants.GameManager.ItemHandler.Get(guid);
+
+            this.target = tempTarget;
+
+            this.searching = valueExtractor.GetValueFromDictionary<bool>(data, "Searching");
+            this.intent = (Intent) Enum.Parse(
+                typeof(Intent),
+                valueExtractor.GetValueFromDictionary<string>(
+                    data, 
+                    "Intent"));
+
+            this.idle = valueExtractor.GetValueFromDictionary<bool>(data, "Idle");
+            this.need = valueExtractor.GetValueFromDictionary<string>(data, "Need");
         }
     }
 }

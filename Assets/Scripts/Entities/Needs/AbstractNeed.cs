@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Godot.Collections;
 using JoyGodot.addons.Managed_Assets;
@@ -14,8 +15,11 @@ namespace JoyLib.Code.Entities.Needs
     {
         public virtual string Name
         {
-            get => "abstractneed";
+            get => this.m_Name;
+            protected set => this.m_Name = value;
         }
+
+        protected string m_Name;
 
         public ISpriteState FulfillingSprite { get; set; }
 
@@ -101,15 +105,13 @@ namespace JoyLib.Code.Entities.Needs
             this.FulfillingSprite = fulfillingSprite;
             if (this.FulfillingSprite is null)
             {
-                /*
-                SpriteData data = GlobalConstants.GameManager.ObjectIconHandler?.GetFrame(
+                SpriteData data = GlobalConstants.GameManager.ObjectIconHandler?.GetManagedSprites(
                     "needs",
-                    this.Name);
-                    */
-                SpriteData data = null;
+                    this.Name)
+                    .FirstOrDefault();
                 if (data is null == false)
                 {
-                    this.FulfillingSprite = new SpriteState(this.Name, data);
+                    this.FulfillingSprite = new SpriteState(this.Name, "needs", data);
                 }
             }
 
@@ -244,7 +246,19 @@ namespace JoyLib.Code.Entities.Needs
 
         public virtual void Load(Dictionary data)
         {
-            throw new NotImplementedException();
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.m_Decay = valueExtractor.GetValueFromDictionary<int>(data, "Decay");
+            this.m_DecayCounter = valueExtractor.GetValueFromDictionary<int>(data, "DecayCounter");
+            this.m_DoesDecay = valueExtractor.GetValueFromDictionary<bool>(data, "DoesDecay");
+            this.m_Priority = valueExtractor.GetValueFromDictionary<int>(data, "Priority");
+            this.m_HappinessThreshold = valueExtractor.GetValueFromDictionary<int>(data, "HappinessThreshold");
+            this.m_Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
+            this.m_MaximumValue = valueExtractor.GetValueFromDictionary<int>(data, "MaximumValue");
+            this.m_AverageForDay = valueExtractor.GetValueFromDictionary<int>(data, "AverageForDay");
+            this.m_AverageForWeek = valueExtractor.GetValueFromDictionary<int>(data, "AverageForWeek");
+            this.m_AverageForMonth = valueExtractor.GetValueFromDictionary<int>(data, "AverageForMonth");
         }
     }
 }

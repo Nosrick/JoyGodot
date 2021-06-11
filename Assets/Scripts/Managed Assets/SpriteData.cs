@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using JoyLib.Code;
 using JoyLib.Code.Helpers;
+using Array = Godot.Collections.Array;
 
 namespace JoyGodot.addons.Managed_Assets
 {
-    [Serializable]
     public class SpriteData
     {
         public string Name { get; set; }
@@ -23,7 +24,7 @@ namespace JoyGodot.addons.Managed_Assets
 
         public IDictionary<string, Color> GetRandomPartColours()
         {
-            IDictionary<string, Color> colours = new Dictionary<string, Color>();
+            IDictionary<string, Color> colours = new System.Collections.Generic.Dictionary<string, Color>();
 
             foreach (SpritePart part in this.Parts)
             {
@@ -97,7 +98,6 @@ namespace JoyGodot.addons.Managed_Assets
         */
     }
 
-    [Serializable]
     public class SpritePart
     {
         public string m_Name;

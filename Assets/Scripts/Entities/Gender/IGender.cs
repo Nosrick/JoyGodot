@@ -1,6 +1,6 @@
 ﻿namespace JoyLib.Code.Entities.Gender
 {
-    public interface IGender
+    public interface IGender : ISerialisationHandler
     {
         string Possessive { get; }
         string PersonalSubject { get; }

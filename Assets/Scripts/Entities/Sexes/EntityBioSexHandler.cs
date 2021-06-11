@@ -102,6 +102,13 @@ namespace JoyLib.Code.Entities.Sexes
             return null;
         }
 
+        public IBioSexProcessor GetProcessor(string name)
+        {
+            return this.Processors.TryGetValue(name, out IBioSexProcessor processor) 
+                ? processor 
+                : new NeutralProcessor();
+        }
+
         public bool Add(IBioSex value)
         {
             if (this.Sexes.ContainsKey(value.Name))
