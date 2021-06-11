@@ -184,7 +184,7 @@ namespace JoyLib.Code.Quests
                 {"Questor", this.Questor.ToString()},
                 {"Instigator", this.Instigator.ToString()},
                 {"CurrentStep", this.CurrentStep},
-                {"RewardGuids", new Array(this.RewardGUIDs.Select(guid => guid.ToString()))},
+                {"Rewards", new Array(this.Rewards.Select(instance => instance.Save()))},
                 {"Actions", new Array(this.Actions.Select(step => step.Save()))}
             };
 
@@ -204,12 +204,19 @@ namespace JoyLib.Code.Quests
             this.Instigator = guidString is null ? Guid.Empty : new Guid(guidString);
 
             this.CurrentStep = valueExtractor.GetValueFromDictionary<int>(data, "CurrentStep");
-            this.RewardGUIDs = valueExtractor
-                .GetArrayValuesCollectionFromDictionary<string>(
-                    data,
-                    "RewardGuids")
-                .Select(s => new Guid(s))
-                .ToList();
+
+            var rewardDicts = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Rewards");
+
+            List<IItemInstance> rewards = new List<IItemInstance>();
+            foreach (Dictionary dict in rewardDicts)
+            {
+                IItemInstance item = new ItemInstance();
+                item.Load(dict);
+                rewards.Add(item);
+            }
+            GlobalConstants.GameManager.ItemHandler.AddQuestRewards(this.ID, rewards);
+
+            this.RewardGUIDs = rewards.Select(instance => instance.Guid).ToList();
 
             this.Actions = new List<IQuestAction>();
             var actionDicts = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Actions");
