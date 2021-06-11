@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot.Collections;
 using JoyLib.Code.Helpers;
+using Array = Godot.Collections.Array;
 
 namespace JoyLib.Code.Entities
 {
@@ -16,7 +18,7 @@ namespace JoyLib.Code.Entities
         public LiveEntityHandler()
         {
             this.ValueExtractor = new JSONValueExtractor();
-            this.m_Entities = new Dictionary<Guid, IEntity>();
+            this.m_Entities = new System.Collections.Generic.Dictionary<Guid, IEntity>();
         }
 
         public bool Add(IEntity created)
@@ -79,13 +81,35 @@ namespace JoyLib.Code.Entities
 
         public void ClearLiveEntities()
         {
-            this.m_Entities = new Dictionary<Guid, IEntity>();
+            this.m_Entities = new System.Collections.Generic.Dictionary<Guid, IEntity>();
         }
 
         public void Dispose()
         {
             GarbageMan.Dispose(this.m_Entities);
             this.m_Entities = null;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Entities", new Array(this.Values.Select(entity => entity.Save()))}
+            };
+            
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var entityDicts = this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Entities");
+
+            foreach (Dictionary dict in entityDicts)
+            {
+                IEntity entity = new Entity();
+                entity.Load(dict);
+                this.Add(entity);
+            }
         }
     }
 }

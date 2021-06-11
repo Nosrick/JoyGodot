@@ -168,7 +168,12 @@ namespace JoyLib.Code.Entities.Items
         {
             get
             {
-                string contentString = "it contains ";
+                if (this.ContentsDirty == false)
+                {
+                    return this.CachedContentString;
+                }
+                
+                string contentString = "It contains ";
 
                 List<IItemInstance> items = this.Contents.ToList();
                 if (items.Any() == false)
@@ -192,9 +197,14 @@ namespace JoyLib.Code.Entities.Items
 
                 IEnumerable<string> itemNames = occurrences.Select(pair => pair.Value > 1 ? pair.Key + "s" : pair.Key);
                 contentString += string.Join(", ", itemNames);
+                this.CachedContentString = contentString;
                 return contentString;
             }
         }
+        
+        protected bool ContentsDirty { get; set; }
+        
+        protected string CachedContentString { get; set; }
 
         public event ItemRemovedEventHandler ItemRemoved;
         public event ItemAddedEventHandler ItemAdded;
@@ -448,18 +458,6 @@ namespace JoyLib.Code.Entities.Items
             }
             
             this.ConstructDescription();
-        }
-
-        public Guid TakeMyItem(int index)
-        {
-            if(index > 0 && index < this.m_Contents.Count)
-            {
-                Guid item = this.m_Contents[index];
-                this.m_Contents.RemoveAt(index);
-                return item;
-            }
-
-            throw new InvalidOperationException("No item to take at selected index!");
         }
 
         public bool Contains(IItemInstance actor)

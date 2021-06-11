@@ -656,8 +656,8 @@ namespace JoyLib.Code.World
             {
                 {"Name", this.Name},
                 {"Dimensions", this.Dimensions.Save()},
-                {"Entities", new Array(this.Entities.Select(entity => entity.Save()))},
-                {"Items", new Array(this.Items.Select(item => item.Save()))},
+                {"EntityGuids", new Array(this.EntityGUIDs.Select(guid => guid.ToString()))},
+                {"ItemGuids", new Array(this.ItemGUIDs.Select(guid => guid.ToString()))},
                 {"Walls", new Array(this.Walls.Select(wall => wall.Save()))}
             };
 
@@ -724,23 +724,21 @@ namespace JoyLib.Code.World
                 this.AddWall(new Vector2Int(dict));
             }
 
-            dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Items");
+            var stringCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "ItemGuids");
             this.m_Items = new HashSet<IItemInstance>();
-            foreach (Dictionary dict in dictCollection)
+            foreach (string guid in stringCollection)
             {
-                IItemInstance item = new ItemInstance();
-                item.Load(dict);
-                GlobalConstants.GameManager.ItemHandler.Add(item);
+                Guid itemGuid = new Guid(guid);
+                IItemInstance item = GlobalConstants.GameManager.ItemHandler.Get(itemGuid);
                 this.AddItem(item);
             }
 
-            dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Entities");
+            stringCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "EntityGuids");
             this.m_Entities = new HashSet<IEntity>();
-            foreach (Dictionary dict in dictCollection)
+            foreach (string guid in stringCollection)
             {
-                IEntity entity = new Entity();
-                entity.Load(dict);
-                GlobalConstants.GameManager.EntityHandler.Add(entity);
+                Guid entityGuid = new Guid(guid);
+                IEntity entity = GlobalConstants.GameManager.EntityHandler.Get(entityGuid);
                 this.AddEntity(entity);
             }
 

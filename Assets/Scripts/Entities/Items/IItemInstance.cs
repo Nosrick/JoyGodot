@@ -20,8 +20,6 @@ namespace JoyLib.Code.Entities.Items
         void Deserialise();
 
         void Instantiate(bool recursive = true, JoyObjectNode gameObject = null, bool active = false);
-
-        Guid TakeMyItem(int index);
         
         bool Identified { get; }
         

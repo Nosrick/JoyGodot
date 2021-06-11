@@ -64,7 +64,6 @@ namespace JoyLib.Code.Entities.Items
             
             IItemInstance item = this.Get(GUID);
             item.MyWorld?.RemoveObject(item.WorldPosition, item);
-            //LiveItems.Remove(GUID);
             return true;
 
         }
@@ -134,7 +133,6 @@ namespace JoyLib.Code.Entities.Items
 
         public void CleanUpRewards()
         {
-            /*
             this.QuestRewards = new NonUniqueDictionary<Guid, Guid>(
                 this.QuestRewards
                     .Where(tuple =>
@@ -146,32 +144,17 @@ namespace JoyLib.Code.Entities.Items
                 .ToList();
             foreach (var guid in cleanup)
             {
-                IItemInstance item = this.Get(guid);
-                if (item.MonoBehaviourHandler is null)
-                {
-                    GlobalConstants.ActionLog.AddText("No MBH found on " + item);
-                }
-                item.Dispose();
-            }
-            */
-        }
-
-        public void AddQuestReward(Guid questID, Guid reward)
-        {
-            this.QuestRewards.Add(questID, reward);
-        }
-
-        public void AddQuestRewards(Guid questID, IEnumerable<Guid> rewards)
-        {
-            foreach (Guid reward in rewards)
-            {
-                this.QuestRewards.Add(questID, reward);
+                this.Destroy(guid);
             }
         }
 
         public void AddQuestRewards(Guid questID, IEnumerable<IItemInstance> rewards)
         {
-            this.AddQuestRewards(questID, rewards.Select(instance => instance.Guid));
+            this.AddItems(rewards);
+            foreach (Guid reward in rewards.Select(r => r.Guid))
+            {
+                this.QuestRewards.Add(questID, reward);
+            }
         }
 
         public IEnumerable<IItemInstance> GetItems(IEnumerable<Guid> guids)
@@ -237,7 +220,7 @@ namespace JoyLib.Code.Entities.Items
             {
                 IItemInstance item = new ItemInstance();
                 item.Load(itemDict);
-                this.LiveItems.Add(item.Guid, item);
+                this.Add(item);
             }
         }
     }

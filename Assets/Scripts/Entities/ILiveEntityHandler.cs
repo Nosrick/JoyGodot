@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JoyLib.Code.Entities
 {
-    public interface ILiveEntityHandler : IHandler<IEntity, Guid>
+    public interface ILiveEntityHandler : IHandler<IEntity, Guid>, ISerialisationHandler
     {
         IEntity GetPlayer();
 

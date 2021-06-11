@@ -45,7 +45,7 @@ namespace JoyLib.Code.Quests
             this.ID = GlobalConstants.GameManager.GUIDManager.AssignGUID();
             GlobalConstants.ActionLog.Log("Rewards for quest " + this.ID);
             GlobalConstants.ActionLog.Log(rewards);
-            GlobalConstants.GameManager.ItemHandler.AddQuestRewards(this.ID, this.RewardGUIDs);
+            GlobalConstants.GameManager.ItemHandler.AddQuestRewards(this.ID, rewards);
             this.Tags = new List<string>(tags);
         }
 

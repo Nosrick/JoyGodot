@@ -54,6 +54,9 @@ namespace JoyLib.Code.IO
                 json = JSON.Print(GlobalConstants.GameManager.ItemHandler.Save(), "\t");
                 File.WriteAllText(directory + "/items.dat", json);
 
+                json = JSON.Print(GlobalConstants.GameManager.EntityHandler.Save(), "\t");
+                File.WriteAllText(directory + "/entities.dat", json);
+
                 json = JSON.Print(GlobalConstants.GameManager.RelationshipHandler.Save(), "\t");
                 File.WriteAllText(directory + "/relationships.dat", json);
             }
@@ -68,11 +71,13 @@ namespace JoyLib.Code.IO
         {
             string directory = Directory.GetCurrentDirectory() + "/save/" + worldName;
 
-            string json = File.ReadAllText(directory + "/world.dat");
-
-            json = File.ReadAllText(directory + "/relationships.dat");
+            string json = File.ReadAllText(directory + "/relationships.dat");
             Dictionary tempDict = this.GetDictionary(json);
             GlobalConstants.GameManager.RelationshipHandler.Load(tempDict);
+
+            json = File.ReadAllText(directory + "/entities.dat");
+            tempDict = this.GetDictionary(json);
+            GlobalConstants.GameManager.EntityHandler.Load(tempDict);
 
             json = File.ReadAllText(directory + "/items.dat");
             tempDict = this.GetDictionary(json);
@@ -109,134 +114,6 @@ namespace JoyLib.Code.IO
             
             GD.PushError("Could not parse JSON into dictionary!");
             return null;
-        }
-
-        private void LinkWorlds(IWorldInstance parent)
-        {
-            foreach (IWorldInstance world in parent.Areas.Values)
-            {
-                world.Parent = parent;
-                this.LinkWorlds(world);
-            }
-        }
-        
-        private void AssignIcons(IWorldInstance parent)
-        {
-            /*
-            foreach (IJoyObject wall in parent.Walls.Values)
-            {
-                foreach (ISpriteState state in wall.States)
-                {
-                    this.SetUpSpriteStates(wall.TileSet, state);
-                }
-
-                wall.MyWorld = parent;
-            }
-            */
-
-            foreach(IWorldInstance world in parent.Areas.Values)
-            {
-                this.AssignIcons(world);
-            }
-        }
-
-        protected void SetUpSpriteStates(string tileSet, ISpriteState state)
-        {
-            foreach (SpritePart part in state.SpriteData.Parts)
-            {
-                //part.m_FrameSprite = this.ObjectIcons.(tileSet, state.Name, part.m_Name, state.SpriteData.m_State);
-            }
-        }
-
-        protected void HandleContents(IItemContainer container)
-        {
-            foreach (IItemInstance item in container.Contents)
-            {
-                foreach (ISpriteState state in item.States)
-                {
-                    this.SetUpSpriteStates(item.TileSet, state);
-                }
-
-                foreach (IItemInstance content in item.Contents)
-                {
-                    foreach (ISpriteState state in content.States)
-                    {
-                        this.SetUpSpriteStates(content.TileSet, state);
-                    }
-                    this.HandleContents(content);
-                }
-            }
-        }
-
-        private void QuestRewards(NonUniqueDictionary<Guid, Guid> rewards)
-        {
-            foreach (Guid questID in rewards.Keys)
-            {
-                GlobalConstants.GameManager.ItemHandler.AddQuestRewards(questID, rewards.FetchValuesForKey(questID));
-            }
-        }
-
-        private void Quests(IEnumerable<IQuest> quests)
-        {
-            foreach (IQuest quest in quests)
-            {
-                GlobalConstants.GameManager.QuestTracker.AddQuest(quest.Questor, quest);
-            }
-        }
-
-        private void Relationships(IEnumerable<IRelationship> relationships)
-        {
-            foreach (IRelationship relationship in relationships)
-            {
-                GlobalConstants.GameManager.RelationshipHandler.Add(relationship);
-            }
-        }
-
-        private void Items(IEnumerable<IItemInstance> items, IWorldInstance overworld)
-        {
-            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
-            foreach (IItemInstance item in items)
-            {
-                item.Deserialise();
-                
-                foreach (ISpriteState state in item.States)
-                {
-                    this.SetUpSpriteStates(item.TileSet, state);
-                }
-
-                item.MyWorld = worlds.FirstOrDefault(world => world.ItemGUIDs.Contains(item.Guid));
-                
-                GlobalConstants.GameManager.ItemHandler.Add(item);
-            }
-        }
-
-        private void Entities(IEnumerable<IEntity> entities, IWorldInstance overworld)
-        {
-            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
-            foreach (IEntity entity in entities)
-            {
-                List<ICulture> cultures = entity.CultureNames.Select(name => GlobalConstants.GameManager.CultureHandler.GetByCultureName(name)).ToList();
-
-                entity.Deserialise(cultures);
-                
-                foreach (ISpriteState state in entity.States)
-                {
-                    this.SetUpSpriteStates(entity.TileSet, state);
-                }
-
-                foreach (INeed need in entity.Needs.Values)
-                {
-                    /*
-                    need.FulfillingSprite = new SpriteState(
-                        need.Name, 
-                        GlobalConstants.GameManager.ObjectIconHandler.GetFrame(
-                            "needs", 
-                            need.Name));
-                            */
-                }
-
-                worlds.First(world => world.EntityGUIDs.Contains(entity.Guid))?.AddEntity(entity);
-            }
         }
     }
 }
