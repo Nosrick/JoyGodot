@@ -346,11 +346,6 @@ namespace JoyLib.Code.Entities.Items
                 this.ItemType.MaterialDescription,
                 this.SlotString
             };
-            /*data.Add(new Tuple<string, string>(
-                "",
-                this.Identified
-                ? this.ItemType.Description
-                : this.ItemType.UnidentifiedDescription));*/
             if (this.ContentString.IsNullOrEmpty() == false)
             {
                 data.Add(this.ContentString);
@@ -607,6 +602,8 @@ namespace JoyLib.Code.Entities.Items
             this.UniqueAbilities = new List<IAbility>(
                 valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "UniqueAbilities")
                     .Select(s => GlobalConstants.GameManager.AbilityHandler.Get(s)));
+
+            this.ConstructDescription();
         }
     }
 }

@@ -1523,6 +1523,8 @@ namespace JoyLib.Code.Entities
                 job.AddExperience(experience);
                 this.Jobs.Add(job);
             }
+
+            this.Tooltip = this.ConstructDescription();
         }
     }
 }
