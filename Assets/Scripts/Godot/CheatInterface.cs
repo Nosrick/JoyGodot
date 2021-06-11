@@ -117,7 +117,7 @@ namespace JoyLib.Code.Godot
                 return;
             }
             
-            GlobalConstants.GameManager.QuestTracker.CompleteQuest(this.Player, quest);
+            GlobalConstants.GameManager.QuestTracker.CompleteQuest(this.Player, quest, true);
         }
     }
 }

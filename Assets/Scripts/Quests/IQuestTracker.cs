@@ -15,7 +15,7 @@ namespace JoyLib.Code.Quests
 
         void AddQuest(Guid GUID, IQuest quest);
 
-        void CompleteQuest(IEntity questor, IQuest quest);
+        void CompleteQuest(IEntity questor, IQuest quest, bool force = false);
 
         void FailQuest(IEntity questor, IQuest quest);
 

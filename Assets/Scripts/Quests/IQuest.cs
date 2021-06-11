@@ -31,6 +31,6 @@ namespace JoyLib.Code.Quests
 
         void StartQuest(IEntity questor);
 
-        bool CompleteQuest(IEntity questor);
+        bool CompleteQuest(IEntity questor, bool force = false);
     }
 }

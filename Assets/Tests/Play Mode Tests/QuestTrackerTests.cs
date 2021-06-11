@@ -79,10 +79,10 @@ namespace Tests
             //given
             IJoyAction action = Mock.Of<IJoyAction>();
             IQuest quest = Mock.Of<IQuest>(
-                q => q.AdvanceStep() == true
+                q => q.AdvanceStep()
                 && q.FulfilsRequirements(this.left, action) == true
-                && q.CompleteQuest(this.left) == true
-                && q.IsComplete == true);
+                && q.CompleteQuest(this.left, false) == true
+                && q.IsComplete);
 
             this.target.AddQuest(this.left.Guid, quest);
             quest.StartQuest(this.left);

@@ -66,10 +66,14 @@ namespace JoyLib.Code.Quests
             GlobalConstants.ActionLog.Log(quest);
         }
 
-        public void CompleteQuest(IEntity questor, IQuest quest)
+        public void CompleteQuest(IEntity questor, IQuest quest, bool force = false)
         {
+            if (!quest.CompleteQuest(questor, force))
+            {
+                return;
+            }
+            
             GlobalConstants.ActionLog.Log(questor + " completed " + quest.ID);
-            quest.CompleteQuest(questor);
             this.EntityQuests[questor.Guid].Remove(quest);
             GlobalConstants.GameManager.ItemHandler.CleanUpRewards();
         }

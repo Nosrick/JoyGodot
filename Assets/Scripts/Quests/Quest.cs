@@ -96,8 +96,13 @@ namespace JoyLib.Code.Quests
             }
         }
 
-        public bool CompleteQuest(IEntity questor)
+        public bool CompleteQuest(IEntity questor, bool force = false)
         {
+            if (force)
+            {
+                this.CurrentStep = this.Actions.Count;
+            }
+            
             if (this.IsComplete == false)
             {
                 return false;
