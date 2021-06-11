@@ -1,19 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JoyLib.Code.Entities;
+using JoyLib.Code.Quests;
 
 namespace JoyLib.Code.Scripting
 {
     public abstract class AbstractAction : IJoyAction
     {
-        protected AbstractAction(/*IQuestTracker questTracker = null*/)
+        protected AbstractAction(IQuestTracker questTracker = null)
         {
-            /*
-            if (GlobalConstants.GameManager is null == false)
-            {
-                this.QuestTracker = questTracker ?? GlobalConstants.GameManager.QuestTracker;
-            }
-            */
+            this.QuestTracker = questTracker ?? GlobalConstants.GameManager?.QuestTracker;
         }
         
         public abstract bool Execute(
@@ -39,7 +35,7 @@ namespace JoyLib.Code.Scripting
             this.LastArgs = args;
             this.Successful = true;
 
-            //this.QuestTracker?.PerformQuestAction(this.LastParticipants.First() as IEntity, this);
+            this.QuestTracker?.PerformQuestAction(this.LastParticipants.First() as IEntity, this);
         }
 
         public virtual string Name => "abstractaction";
@@ -48,6 +44,6 @@ namespace JoyLib.Code.Scripting
         public IEnumerable<string> LastTags { get; protected set; }
         public IDictionary<string, object> LastArgs { get; protected set; }
         public bool Successful { get; protected set; }
-        //public IQuestTracker QuestTracker { get; set; }
+        public IQuestTracker QuestTracker { get; set; }
     }
 }

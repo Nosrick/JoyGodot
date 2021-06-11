@@ -528,9 +528,14 @@ namespace JoyLib.Code.States
             for (int i = 0; i < this.GameManager.ItemHolder.GetChildCount(); i++)
             {
                 var node = this.GameManager.ItemHolder.GetChild<JoyObjectNode>(i);
-
+                
                 if (node.MyJoyObject is IItemInstance item)
                 {
+                    if (item.InWorld == false)
+                    {
+                        continue;
+                    }
+                    
                     bool canSee = playerVision.HasVisibility(player, player.MyWorld, node.WorldPosition) & item.InWorld;
                     if (canSee != node.Visible)
                     {

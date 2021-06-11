@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JoyLib.Code.Quests;
 
 namespace JoyLib.Code.Scripting
 {
@@ -44,5 +45,7 @@ namespace JoyLib.Code.Scripting
         {
             get;
         }
+        
+        IQuestTracker QuestTracker { get; set; }
     }
 }
