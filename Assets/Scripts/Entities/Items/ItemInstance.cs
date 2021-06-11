@@ -83,6 +83,8 @@ namespace JoyLib.Code.Entities.Items
 
         public bool Broken => this.GetValue(DerivedValueName.DURABILITY) <= 0;
 
+        public override ICollection<string> Tooltip => this.ConstructDescription();
+
         public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
 
         public string ConditionString
@@ -197,7 +199,9 @@ namespace JoyLib.Code.Entities.Items
 
                 IEnumerable<string> itemNames = occurrences.Select(pair => pair.Value > 1 ? pair.Key + "s" : pair.Key);
                 contentString += string.Join(", ", itemNames);
+
                 this.CachedContentString = contentString;
+                this.ContentsDirty = false;
                 return contentString;
             }
         }
@@ -277,7 +281,6 @@ namespace JoyLib.Code.Entities.Items
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
 
             this.CalculateValue();
-            this.ConstructDescription();
 
             if (this.States.Count > 1)
             {
@@ -347,7 +350,7 @@ namespace JoyLib.Code.Entities.Items
             return newItem;
         }
 
-        protected void ConstructDescription()
+        protected List<string> ConstructDescription()
         {
             List<string> data = new List<string>
             {
@@ -372,7 +375,7 @@ namespace JoyLib.Code.Entities.Items
             
             data.Add("Worth " + this.Value);
 
-            this.Tooltip = data;
+            return data;
         }
         
         public void SetUser(IEntity user)
@@ -399,7 +402,6 @@ namespace JoyLib.Code.Entities.Items
             }
             
             this.CalculateValue();
-            this.ConstructDescription();
         }
 
         protected void Initialise()
@@ -426,8 +428,6 @@ namespace JoyLib.Code.Entities.Items
                     item.SetOwner(newOwner, true);
                 }
             }
-
-            this.ConstructDescription();
         }
 
         public void Interact(IEntity user, string ability)
@@ -456,8 +456,6 @@ namespace JoyLib.Code.Entities.Items
             {
                 other.IdentifyMe();
             }
-            
-            this.ConstructDescription();
         }
 
         public bool Contains(IItemInstance actor)
@@ -499,12 +497,13 @@ namespace JoyLib.Code.Entities.Items
             {
                 this.m_Contents.Add(actor.Guid);
 
+                this.ContentsDirty = true;
+
                 this.CalculateValue();
-                this.ConstructDescription();
 
                 actor.InWorld = false;
                 
-                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
                 return true;
             }
 
@@ -514,12 +513,13 @@ namespace JoyLib.Code.Entities.Items
         public bool AddContents(IEnumerable<IItemInstance> actors)
         {
             IEnumerable<IItemInstance> itemInstances = actors as IItemInstance[] ?? actors.ToArray();
-            this.m_Contents.AddRange(itemInstances.Where(actor => 
-                    this.m_Contents.Any(item => item == actor.Guid) == false)
+            this.m_Contents.AddRange(
+                itemInstances.Where(this.CanAddContents)
                 .Select(instance => instance.Guid));
 
+            this.ContentsDirty = true;
+            
             this.CalculateValue();
-            this.ConstructDescription();
             foreach (IItemInstance actor in itemInstances)
             {
                 this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
@@ -535,8 +535,9 @@ namespace JoyLib.Code.Entities.Items
                 return false;
             }
 
+            this.ContentsDirty = true;
+
             this.CalculateValue();
-            this.ConstructDescription();
             this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs { Item = actor });
 
             return true;
@@ -556,7 +557,6 @@ namespace JoyLib.Code.Entities.Items
             }
 
             this.CalculateValue();
-            this.ConstructDescription();
         }
 
         protected void CalculateValue()
@@ -601,7 +601,7 @@ namespace JoyLib.Code.Entities.Items
                 valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "UniqueAbilities")
                     .Select(s => GlobalConstants.GameManager.AbilityHandler.Get(s)));
 
-            this.ConstructDescription();
+            this.ContentsDirty = true;
         }
     }
 }
