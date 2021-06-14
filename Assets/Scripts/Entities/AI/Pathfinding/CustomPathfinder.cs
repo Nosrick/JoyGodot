@@ -5,7 +5,6 @@ using Algorithms;
 
 namespace JoyLib.Code.Entities.AI
 {
-    [Serializable]
     public struct PathFinderNode
     {
         public int F;
@@ -17,7 +16,6 @@ namespace JoyLib.Code.Entities.AI
         public int PY;
     }
 
-    [Serializable]
     public class CustomPathfinder : IPathfinder
     {
         public bool Stopped { get; set; }
@@ -105,7 +103,7 @@ namespace JoyLib.Code.Entities.AI
 
                 for(int i = 0; i < (this.Diagonals == true ? 8 : 4); i++)
                 {
-                    PathFinderNode newNode;
+                    PathFinderNode newNode = new PathFinderNode();
                     newNode.X = parentNode.X + direction[i, 0];
                     newNode.Y = parentNode.Y + direction[i, 1];
 

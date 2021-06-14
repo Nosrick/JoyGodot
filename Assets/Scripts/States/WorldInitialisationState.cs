@@ -90,7 +90,7 @@ namespace JoyLib.Code.States
             if (this.m_ActiveWorld.Guid != this.m_Overworld.Guid)
             {
                 floorTileMap.SetCellv(
-                    this.m_ActiveWorld.SpawnPoint.ToVec2, 
+                    this.m_ActiveWorld.SpawnPoint.ToVec2(), 
                     floorTileMap.TileSet.FindTileByName("upstairs"));
             }
 
@@ -98,7 +98,7 @@ namespace JoyLib.Code.States
             foreach (KeyValuePair<Vector2Int, IWorldInstance> pair in this.m_ActiveWorld.Areas)
             {
                 floorTileMap.SetCellv(
-                    pair.Key.ToVec2, 
+                    pair.Key.ToVec2(), 
                     floorTileMap.TileSet.FindTileByName("downstairs"));
             }
 
@@ -106,7 +106,7 @@ namespace JoyLib.Code.States
             foreach (Vector2Int position in this.m_ActiveWorld.Walls)
             {
                 wallTileMap.SetCellv(
-                    position.ToVec2,
+                    position.ToVec2(),
                     surroundWallIndex);
             }
 

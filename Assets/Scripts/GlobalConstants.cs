@@ -1,5 +1,7 @@
-﻿using Godot;
+﻿using System.Diagnostics;
+using Godot;
 using JoyLib.Code.Helpers;
+using Environment = System.Environment;
 
 namespace JoyLib.Code
 {
@@ -12,7 +14,7 @@ namespace JoyLib.Code
         public const string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
         public const string SETTINGS_FOLDER = DATA_FOLDER + "Settings/";
 
-        public static readonly bool IS_EDITOR = Engine.EditorHint;
+        public static readonly bool DEBUG_MODE = Debugger.IsAttached;
         
         public const int MAX_LIGHT = 32;
 

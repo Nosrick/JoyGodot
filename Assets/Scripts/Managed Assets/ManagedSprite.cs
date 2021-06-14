@@ -424,7 +424,7 @@ namespace JoyLib.Code.Unity
         public virtual void Move(Vector2Int position)
         {
             this.WorldPosition = position;
-            this.Position = (this.WorldPosition * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2;
+            this.Position = (this.WorldPosition * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2();
         }
 
         public override void _ExitTree()

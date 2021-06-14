@@ -9,7 +9,7 @@ namespace JoyLib.Code.Godot
         public void Move(Vector2Int position)
         {
             this.WorldPosition = position;
-            this.Position = (position * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2;
+            this.Position = (position * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2();
         }
     }
 }

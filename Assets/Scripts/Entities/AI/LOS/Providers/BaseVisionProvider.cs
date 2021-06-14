@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
@@ -7,7 +6,6 @@ using JoyLib.Code.World;
 
 namespace JoyLib.Code.Entities.AI.LOS.Providers
 {
-    [Serializable]
     public class BaseVisionProvider : IVision
     {
         public string Name { get; protected set; }
@@ -89,7 +87,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
 
         public virtual Rect2 GetVisionRect(IEntity viewer)
         {
-            Rect2 visionRect = new Rect2(viewer.WorldPosition.ToVec2, new Vector2(viewer.VisionMod * 2 + 1, viewer.VisionMod * 2 + 1));
+            Rect2 visionRect = new Rect2(viewer.WorldPosition.ToVec2(), new Vector2(viewer.VisionMod * 2 + 1, viewer.VisionMod * 2 + 1));
             return visionRect;
         }
 

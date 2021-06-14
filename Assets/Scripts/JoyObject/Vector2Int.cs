@@ -9,6 +9,14 @@ namespace JoyLib.Code
     {
         public int x;
         public int y;
+
+        /*
+        public Vector2Int()
+        {
+            this.x = 0;
+            this.y = 0;
+        }
+        */
         
         public Vector2Int(int x, int y)
         {
@@ -62,9 +70,35 @@ namespace JoyLib.Code
             return "{ " + this.x + " : " + this.y + " }";
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector2Int other)
+            {
+                return this.x == other.x && this.y == other.y;
+            }
+
+            return false;
+        }
+
+        public bool Equals(Vector2Int other)
+        {
+            return this.x == other.x && this.y == other.y;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (this.x * 397) ^ this.y;
+            }
+        }
+
         public static Vector2Int Zero => new Vector2Int(0, 0);
 
-        public Vector2 ToVec2 => new Vector2(this.x, this.y);
+        public Vector2 ToVec2()
+        {
+            return new Vector2(this.x, this.y);
+        }
 
         public Dictionary Save()
         {

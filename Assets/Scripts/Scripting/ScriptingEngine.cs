@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Godot;
 using JoyLib.Code.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
-using NCalc;
+using Directory = System.IO.Directory;
+using Expression = NCalc.Expression;
+using File = System.IO.File;
 
 namespace JoyLib.Code.Scripting
 {
@@ -27,67 +30,62 @@ namespace JoyLib.Code.Scripting
             {
                 try
                 {
-                    if (GlobalConstants.IS_EDITOR)
+                    string dir = Directory.GetCurrentDirectory() +
+                                 GlobalConstants.ASSETS_FOLDER +
+                                 GlobalConstants.SCRIPTS_FOLDER;
+                    string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
+
+                    List<SyntaxTree> builtFiles = new List<SyntaxTree>();
+
+                    foreach (string scriptFile in scriptFiles)
                     {
-                        string dir = Directory.GetCurrentDirectory() + "/" + GlobalConstants.SCRIPTS_FOLDER;
-                        string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
+                        string contents = File.ReadAllText(scriptFile);
+                        SyntaxTree builtFile = CSharpSyntaxTree.ParseText(contents);
+                        builtFiles.Add(builtFile);
+                    }
 
-                        List<SyntaxTree> builtFiles = new List<SyntaxTree>();
+                    GlobalConstants.ActionLog.Log("Found " + scriptFiles.Length + " script files.");
+                    List<MetadataReference> libs = new List<MetadataReference>
+                    {
+                        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(ISet<bool>).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Vector2).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly
+                            .Location)
+                    };
+                    CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
+                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-                        foreach (string scriptFile in scriptFiles)
+                    MemoryStream memory = new MemoryStream();
+                    EmitResult result = compilation.Emit(memory);
+
+                    if (result.Success == false)
+                    {
+                        foreach (var diagnostic in result.Diagnostics)
                         {
-                            string contents = File.ReadAllText(scriptFile);
-                            SyntaxTree builtFile = CSharpSyntaxTree.ParseText(contents);
-                            builtFiles.Add(builtFile);
-                        }
-
-                        GlobalConstants.ActionLog.Log("Loaded " + scriptFiles.Length + " script files.");
-                        List<MetadataReference> libs = new List<MetadataReference>
-                        {
-                            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                            MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
-                            MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
-                            MetadataReference.CreateFromFile(typeof(Queue<bool>).Assembly.Location),
-                            MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
-                            MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly
-                                .Location)
-                        };
-                        CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
-                            new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-
-                        MemoryStream memory = new MemoryStream();
-                        EmitResult result = compilation.Emit(memory);
-
-                        if (result.Success == false)
-                        {
-                            foreach (var diagnostic in result.Diagnostics)
+                            if (diagnostic.Severity != DiagnosticSeverity.Error)
                             {
-                                if (diagnostic.Severity != DiagnosticSeverity.Error)
-                                {
-                                    continue;
-                                }
-
-                                GlobalConstants.ActionLog.Log(diagnostic.Severity.ToString(), LogLevel.Error);
-                                GlobalConstants.ActionLog.Log(diagnostic.GetMessage(), LogLevel.Error);
-                                GlobalConstants.ActionLog.Log(diagnostic.Location.ToString(), LogLevel.Error);
+                                continue;
                             }
+
+                            GlobalConstants.ActionLog.Log(diagnostic.GetMessage(), LogLevel.Error);
+                            GlobalConstants.ActionLog.Log(diagnostic.Location.ToString(), LogLevel.Error);
                         }
-
-                        memory.Seek(0, SeekOrigin.Begin);
-                        this.m_ScriptDLL = Assembly.Load(memory.ToArray());
-
-                        //this.m_Types = new List<Type>(this.m_ScriptDLL.GetTypes());
-                        this.m_Types = new List<Type>(typeof(IJoyObject).Assembly.GetExportedTypes());
-                        //this.m_Types.AddRange(typeof(IJoyObject).Assembly.GetExportedTypes());
                     }
-                    else
-                    {
-                        this.m_ScriptDLL = typeof(IJoyObject).Assembly;
-                        this.m_Types = new List<Type>(this.m_ScriptDLL.GetExportedTypes());
-                    }
+
+                    memory.Seek(0, SeekOrigin.Begin);
+                    this.m_ScriptDLL = Assembly.Load(memory.ToArray());
+
+                    this.m_Types = new List<Type>(this.m_ScriptDLL.GetExportedTypes());
+                    this.m_Types.AddRange(typeof(IJoyObject).Assembly.GetExportedTypes());
+                    this.m_Types = this.m_Types.Distinct(new JoyLibTypeComparer()).ToList();
                 }
                 catch (Exception ex)
                 {
+                    GlobalConstants.ActionLog.Log("Failed to create script library.", LogLevel.Error);
                     GlobalConstants.ActionLog.StackTrace(ex);
                 }
             }
@@ -97,19 +95,21 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = this.m_Types.FirstOrDefault(t => t.Name.Equals(type, StringComparison.OrdinalIgnoreCase));
+                Type directType =
+                    this.m_Types.FirstOrDefault(t => t.Name.Equals(type, StringComparison.OrdinalIgnoreCase));
 
                 if (directType is null)
                 {
                     throw new Exception();
                 }
-                
+
                 return Activator.CreateInstance(directType);
             }
             catch (Exception ex)
             {
                 GlobalConstants.ActionLog.StackTrace(ex);
-                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + type, LogLevel.Error);
+                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + type,
+                    LogLevel.Error);
                 return default;
             }
         }
@@ -132,7 +132,9 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type[] types = this.m_Types.Where(t => typeof(T).IsAssignableFrom(t) && t.IsAbstract == false).ToArray();
+                Type[] types = this.m_Types.Where(t => typeof(T).IsAssignableFrom(t) && t.IsAbstract == false)
+                    .Distinct()
+                    .ToArray();
                 List<T> children = new List<T>();
                 foreach (Type tempType in types)
                 {
@@ -144,7 +146,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.StackTrace(e);
-                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + nameof(T), LogLevel.Error);
+                GlobalConstants.ActionLog.Log(
+                    "Error when searching for Type in ScriptingEngine, type name " + nameof(T), LogLevel.Error);
                 return default;
             }
         }
@@ -153,7 +156,8 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type directType = this.m_Types.FirstOrDefault(type => type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
+                Type directType = this.m_Types.FirstOrDefault(type =>
+                    type.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
 
                 List<Type> children = new List<Type>();
                 if (directType is null == false)
@@ -172,7 +176,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception ex)
             {
                 GlobalConstants.ActionLog.StackTrace(ex);
-                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + typeName, LogLevel.Error);
+                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + typeName,
+                    LogLevel.Error);
                 return default;
             }
         }
@@ -188,7 +193,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.StackTrace(e);
-                GlobalConstants.ActionLog.Log("Error when searching for Type in ScriptingEngine, type name " + nameof(type), LogLevel.Error);
+                GlobalConstants.ActionLog.Log(
+                    "Error when searching for Type in ScriptingEngine, type name " + nameof(type), LogLevel.Error);
                 return default;
             }
         }
@@ -197,7 +203,7 @@ namespace JoyLib.Code.Scripting
         {
             try
             {
-                Type type = this.m_Types.Single(t => t.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase));
+                Type type = this.m_Types.First(t => t.Name.Equals(actionName, StringComparison.OrdinalIgnoreCase));
 
                 IJoyAction action = (IJoyAction) Activator.CreateInstance(type);
                 return action;
@@ -205,7 +211,8 @@ namespace JoyLib.Code.Scripting
             catch (Exception e)
             {
                 GlobalConstants.ActionLog.StackTrace(e);
-                GlobalConstants.ActionLog.Log("Error when finding action, no such action " + actionName, LogLevel.Error);
+                GlobalConstants.ActionLog.Log("Error when finding action, no such action " + actionName,
+                    LogLevel.Error);
                 return default;
             }
         }
@@ -224,7 +231,27 @@ namespace JoyLib.Code.Scripting
         public T Evaluate<T>(string code)
         {
             Expression expression = new Expression(code);
-            return (T)Convert.ChangeType(expression.Evaluate(), typeof(T));
+            return (T) Convert.ChangeType(expression.Evaluate(), typeof(T));
+        }
+    }
+
+    public class JoyLibTypeComparer : IEqualityComparer<Type>
+    {
+        public bool Equals(Type x, Type y)
+        {
+            if (x is null || y is null)
+            {
+                return false;
+            }
+
+            bool namespaceEquals = x.Namespace is null || y.Namespace is null ? false : x.Namespace.Equals(y.Namespace);
+
+            return x.Name.Equals(y.Name) && namespaceEquals;
+        }
+
+        public int GetHashCode(Type obj)
+        {
+            return (obj.Namespace + ":" + obj.Name).GetHashCode();
         }
     }
 }
