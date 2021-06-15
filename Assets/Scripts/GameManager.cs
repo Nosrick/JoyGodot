@@ -92,6 +92,17 @@ namespace JoyLib.Code
             this.ActionLog.Update();
         }
 
+        public override void _Notification(int what)
+        {
+            base._Notification(what);
+
+            if (what == MainLoop.NotificationCrash
+                || what == MainLoop.NotificationWmQuitRequest)
+            {
+                this.ActionLog.Flush();
+            }
+        }
+
         public override void _Input(InputEvent @event)
         {
             base._Input(@event);

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
 using File = System.IO.File;
 
 namespace JoyLib.Code.Helpers
@@ -69,6 +67,11 @@ namespace JoyLib.Code.Helpers
             {
                 this.History.RemoveAt(0);
             }
+        }
+
+        public void Flush()
+        {
+            this.ServiceQueue();
         }
 
         public void Log(object objectToPrint, LogLevel logLevel = LogLevel.Information)
