@@ -50,11 +50,10 @@ namespace JoyLib.Code.Scripting
                         MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(ISet<bool>).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(Vector2).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Vector2Int).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(System.Collections.Immutable.ImmutableArray).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly
-                            .Location)
+                        MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly.Location)
                     };
                     CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
                         new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));

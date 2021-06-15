@@ -57,24 +57,13 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public void LogAction(Entity actor, string actionString)
-        {
-            this.Log(actor.JoyName + " is " + actionString, LogLevel.Gameplay);
-        }
-
         protected void ServiceQueue()
         {
-            bool written = false;
             while (this.m_Queue.Count > 0)
             {
                 this.Writer.WriteLine(this.m_Queue.Dequeue());
-                written = true;
             }
-
-            if (written)
-            {
-                this.Writer.Flush();
-            }
+            this.Writer.Flush();
 
             while (this.History.Count > LINES_TO_KEEP)
             {
