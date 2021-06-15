@@ -16,7 +16,7 @@
         public const string INVENTORY_CONTAINER = "Inventory Container";
         public const string ACTION_LOG = "ActionLog";
         public const string SETTINGS = "Settings";
-        public const string PAUSE = "Pause Screen";
+        public const string PAUSE = "PauseScreen";
         public const string ENTRY_BANNER = "Entry Banner";
         public const string LOADING_SCREEN = "Loading Screen";
         public const string MAIN_MENU = "Main Menu";

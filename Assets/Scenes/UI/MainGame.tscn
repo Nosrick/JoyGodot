@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://Assets/Scenes/Windows/Quickbar.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=11]
 [ext_resource path="res://Assets/Scenes/Windows/SettingsScreen.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Assets/Scenes/Windows/PauseScreen.tscn" type="PackedScene" id=13]
 
 [sub_resource type="Theme" id=1]
 
@@ -127,14 +128,15 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
+FontSize = 24
 CustomFont = SubResource( 2 )
+Text = "Fill Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -143,7 +145,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-Text = "Fill Needs"
 
 [node name="Text" type="Label" parent="Cheats/Fill Needs"]
 anchor_right = 1.0
@@ -169,14 +170,15 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
+FontSize = 24
 CustomFont = SubResource( 4 )
+Text = "Empty Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -185,7 +187,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-Text = "Empty Needs"
 
 [node name="Text" type="Label" parent="Cheats/Empty Needs"]
 anchor_right = 1.0
@@ -211,14 +212,15 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
 TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
 OutlineThickness = 1
+FontSize = 24
 CustomFont = SubResource( 6 )
+Text = "Empty One Need"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -227,7 +229,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-Text = "Empty One Need"
 
 [node name="Text" type="Label" parent="Cheats/Empty One Need"]
 anchor_right = 1.0
@@ -253,18 +254,19 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
-OutlineThickness = 1
-OverrideOutline = true
+HAlign = 1
 OverrideSize = true
-OverrideColour = true
+TitleCase = true
+OverrideOutline = true
 CacheFont = true
+OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+OverrideColour = true
+FontSize = 24
 CustomFont = SubResource( 8 )
+Text = "Add Quest"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -273,7 +275,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-Text = "Add Quest"
 
 [node name="Text" type="Label" parent="Cheats/Add Quest"]
 anchor_right = 1.0
@@ -296,17 +297,18 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
-OutlineThickness = 1
-OverrideOutline = true
+HAlign = 1
 OverrideSize = true
+TitleCase = true
+OverrideOutline = true
 CacheFont = true
+OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
+FontSize = 24
 CustomFont = SubResource( 9 )
+Text = "Complete Quest"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -315,7 +317,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-Text = "Complete Quest"
 
 [node name="Text" type="Label" parent="Cheats/Complete Quest"]
 anchor_right = 1.0
@@ -354,6 +355,9 @@ visible = false
 visible = false
 
 [node name="Conversation Window" parent="." instance=ExtResource( 9 )]
+visible = false
+
+[node name="PauseScreen" parent="." instance=ExtResource( 13 )]
 visible = false
 
 [node name="Settings" parent="." instance=ExtResource( 12 )]
