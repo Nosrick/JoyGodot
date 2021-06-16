@@ -112,7 +112,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 var part = this.Parts[i];
                 part.ValueName = stat.Name;
                 part.Minimum = 1;
-                part.Maximum = 10;
+                part.Maximum = 7;
                 part.Value = stat.Value;
                 part.Visible = true;
                 part.UseRestriction = true;
