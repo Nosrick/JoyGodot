@@ -133,7 +133,8 @@ namespace JoyLib.Code.Unity.GUI
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = null;
 
-            if (this.Container.StackOrAdd(dragObject.Item))
+            if(this.Container.CanAddItem(dragObject.Item) 
+               && this.Container.StackOrAdd(dragObject.Item))
             {
                 dragObject.SourceContainer.RemoveItem(dragObject.Item);
             }

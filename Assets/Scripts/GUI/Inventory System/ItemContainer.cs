@@ -182,6 +182,92 @@ namespace JoyLib.Code.Unity
                 }
             }
         }
+        
+        public virtual bool StackOrAdd(JoyItemSlot slot, IItemInstance item)
+        {
+            return this.StackOrAdd(new[] {slot}, item);
+        }
+
+        protected virtual bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
+        {
+            if (this.JoyObjectOwner is null)
+            {
+                return false;
+            }
+
+            if (item.Guid != this.JoyObjectOwner.Guid)
+            {
+                if (this.JoyObjectOwner is IItemContainer container)
+                {
+                    if (container.CanAddContents(item))
+                    {
+                        container.AddContents(item);
+                        IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
+                        if (joyItemSlots.Any())
+                        {
+                            foreach (JoyItemSlot slot in joyItemSlots)
+                            {
+                                slot.Item = item;
+                            }
+                        }
+                        else
+                        {
+                            var emptySlot = this.Slots.First(slot => slot.IsEmpty);
+                            emptySlot.Item = item;
+                            emptySlot.Repaint();
+                        }
+                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs {Item = item});
+                        return true;
+                    }
+                    if (container.Contains(item))
+                    {
+                        IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
+                        if (joyItemSlots.Any())
+                        {
+                            foreach (JoyItemSlot slot in joyItemSlots)
+                            {
+                                slot.Item = item;
+                            }
+                        }
+                        else
+                        {
+                            var emptySlot = this.Slots.First(slot => slot.IsEmpty);
+                            emptySlot.Item = item;
+                            emptySlot.Repaint();
+                        }
+
+                        return false;
+                    }
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        public virtual bool StackOrAdd(IItemInstance item)
+        {
+            List<JoyItemSlot> slots = null;
+
+            if (item.ItemType.Slots.Any() == false)
+            {
+                if (this.Slots.Any(slot => slot.IsEmpty))
+                {
+                    slots = new List<JoyItemSlot> { this.Slots.First(slot => slot.IsEmpty) };
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                slots = this.GetRequiredSlots(item);
+            }
+
+            return this.StackOrAdd(slots, item);
+        }
 
         public override void Display()
         {
@@ -363,73 +449,6 @@ namespace JoyLib.Code.Unity
             }
 
             return false;
-        }
-
-        public virtual bool StackOrAdd(JoyItemSlot slot, IItemInstance item)
-        {
-            return this.StackOrAdd(new[] {slot}, item);
-        }
-
-        protected virtual bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
-        {
-            if (this.JoyObjectOwner is null)
-            {
-                return false;
-            }
-
-            if (item is IItemInstance instance && instance.Guid != this.JoyObjectOwner.Guid)
-            {
-                if (this.JoyObjectOwner is IItemContainer container)
-                {
-                    if (container.CanAddContents(instance) || container.Contains(instance))
-                    {
-                        container.AddContents(instance);
-                        IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
-                        if (joyItemSlots.Any())
-                        {
-                            foreach (JoyItemSlot slot in joyItemSlots)
-                            {
-                                slot.Item = instance;
-                            }
-                        }
-                        else
-                        {
-                            var emptySlot = this.Slots.First(slot => slot.IsEmpty);
-                            emptySlot.Item = instance;
-                            emptySlot.Repaint();
-                        }
-                        this.OnAddItem?.Invoke(container, new ItemChangedEventArgs {Item = item});
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            return false;
-        }
-
-        public virtual bool StackOrAdd(IItemInstance item)
-        {
-            List<JoyItemSlot> slots = null;
-
-            if (item.ItemType.Slots.Any() == false)
-            {
-                if (this.Slots.Any(slot => slot.IsEmpty))
-                {
-                    slots = new List<JoyItemSlot> { this.Slots.First(slot => slot.IsEmpty) };
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                slots = this.GetRequiredSlots(item);
-            }
-
-            return this.StackOrAdd(slots, item);
         }
 
         public virtual bool RemoveItem(IItemInstance item, int amount)

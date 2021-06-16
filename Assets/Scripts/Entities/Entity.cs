@@ -1173,7 +1173,7 @@ namespace JoyLib.Code.Entities
 
         public virtual bool CanAddContents(IItemInstance actor)
         {
-            return true;
+            return actor.Guid != this.Guid && !this.Contains(actor);
         }
 
         public virtual bool Contains(IItemInstance actor)
