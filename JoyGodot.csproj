@@ -54,6 +54,7 @@
     <Content Include="Assets\Data\Rumours\BaseRumours.json" />
     <Content Include="Assets\Data\Settings\DyslexicMode.json" />
     <Content Include="Assets\Data\Settings\GUIDefaults.json" />
+    <Content Include="Assets\Data\Settings\Settings.json" />
     <Content Include="Assets\Data\Sexes\DefaultSexes.json" />
     <Content Include="Assets\Data\Sexualities\DefaultSexualities.json" />
     <Content Include="Assets\Data\Skills\DefaultSkills.json" />
