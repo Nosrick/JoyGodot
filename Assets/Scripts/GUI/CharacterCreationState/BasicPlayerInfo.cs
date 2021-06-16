@@ -96,7 +96,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 this.EntityTemplateHandler.Values
                     .Select(template => template.CreatureType)
                     .ToArray(),
-                "OnTemplateChange");
+                nameof(this.OnTemplateChange));
 
             this.CurrentTemplate = this.EntityTemplateHandler.Get(item.Value);
 
@@ -105,7 +105,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 this.CultureHandler.GetByCreatureType(item.Value)
                     .Select(c => c.CultureName)
                     .ToArray(),
-                "OnCultureChange");
+                nameof(this.OnCultureChange));
 
             this.CurrentCulture = this.CultureHandler.GetByCultureName(item.Value);
 
@@ -117,35 +117,35 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             item = this.AddItem(
                 "Job",
                 this.CurrentCulture.Jobs,
-                "OnJobChange");
+                nameof(this.OnValueChange));
 
             this.CurrentJob = item.Value;
 
             item = this.AddItem(
                 "Sex",
                 this.CurrentCulture.Sexes,
-                "OnValueChange");
+                nameof(this.OnValueChange));
 
             this.CurrentSex = item.Value;
 
             item = this.AddItem(
                 "Gender",
                 this.CurrentCulture.Genders,
-                "OnValueChange");
+                nameof(this.OnValueChange));
 
             this.CurrentGender = item.Value;
 
             item = this.AddItem(
                 "Romance",
                 this.CurrentCulture.RomanceTypes,
-                "OnValueChange");
+                nameof(this.OnValueChange));
 
             this.CurrentRomance = item.Value;
 
             item = this.AddItem(
                 "Sexuality",
                 this.CurrentCulture.Sexualities,
-                "OnValueChange");
+                nameof(this.OnValueChange));
 
             this.CurrentSexuality = item.Value;
         }
@@ -275,30 +275,81 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             return item;
         }
 
+        protected void UpdateValues()
+        {
+            var tempPart = this.GetItem("species");
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Species selector!");
+                return;
+            }
+            this.CurrentTemplate = this.EntityTemplateHandler.Get(tempPart.Value);
+
+            tempPart = this.GetItem("culture");
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Culture selector!");
+                return;
+            }
+            this.CurrentCulture = this.CultureHandler.GetByCultureName(tempPart.Value);
+
+            tempPart = this.GetItem("job");
+            this.CurrentJob = tempPart.Value;
+
+            var bioSexPart = this.GetItem("sex");
+            if (bioSexPart is null)
+            {
+                GD.PushError("Could not find Sex selector!");
+                return;
+            }
+            this.CurrentSex = bioSexPart.Value;
+
+            var genderPart = this.GetItem("gender");
+            if (genderPart is null)
+            {
+                GD.PushError("Could not find Gender selector!");
+                return;
+            }
+            this.CurrentGender = genderPart.Value;
+
+            tempPart = this.GetItem("romance");
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Romance selector!");
+                return;
+            }
+            this.CurrentRomance = tempPart.Value;
+
+            tempPart = this.GetItem("sexuality");
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Sexuality selector!");
+                return;
+            }
+            this.CurrentSexuality = tempPart.Value;
+        }
+
         protected StringValueItem GetItem(string name)
         {
             return this.Parts.FirstOrDefault(part => part.ValueName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public void OnValueChange(string name, int delta, int newIndex)
+        public void OnValueChange(string name, int delta, string newValue)
         {
+            this.UpdateValues();
+            this.EmitSignal("ValueChanged", name, newValue);
         }
 
-        public void OnCultureChange(string name, int delta, int newIndex)
+        public void OnCultureChange(string name, int delta, string newValue)
         {
             this.OnChange();
-            this.EmitSignal("ValueChanged", "Culture", this.CurrentCulture.CultureName);
+            this.EmitSignal("ValueChanged", "Culture", newValue);
         }
 
-        public void OnTemplateChange(string name, int delta, int newIndex)
+        public void OnTemplateChange(string name, int delta, string newValue)
         {
             this.OnChange(true);
-            this.EmitSignal("ValueChanged", "Template", this.CurrentTemplate.CreatureType);
-        }
-
-        public void OnJobChange(string name, int delta, int newIndex)
-        {
-            this.CurrentJob = this.GetItem("job").Value;
+            this.EmitSignal("ValueChanged", "Template", newValue);
         }
     }
 }
