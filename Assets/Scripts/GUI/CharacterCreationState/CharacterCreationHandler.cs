@@ -70,10 +70,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 this,
                 nameof(this.BasicPlayerInfoChanged));
 
-            if (this.StatisticsList is null == false)
-            {
-                this.StatisticsList.Points = STATISTIC_POINTS_MAX;
-            }
+            this.StatisticsList.Connect(
+                "StatisticChanged",
+                this,
+                nameof(this.OnStatisticChange));
+
+            this.StatisticsList.Points = STATISTIC_POINTS_MAX;
 
             if (this.DerivedValuesList is null == false)
             {
@@ -144,7 +146,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 true);
 
             this.SetUpStatistics(template);
-            this.SetUpDerivedValues(template);
+            this.SetUpDerivedValues();
             this.SetUpSkills(template);
             this.SetUpAbilities(
                 template,
@@ -159,12 +161,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.StatisticsList.Statistics = template.Statistics.Values;
         }
 
-        protected void SetUpDerivedValues(IEntityTemplate template)
+        protected void SetUpDerivedValues()
         {
             this.DerivedValuesList.Points = DERIVED_VALUE_POINTS_MAX;
             this.DerivedValuesList.DerivedValues =
                 GlobalConstants.GameManager.DerivedValueHandler
-                    .GetEntityStandardBlock(template.Statistics.Values)
+                    .GetEntityStandardBlock(this.StatisticsList.Statistics)
                     .Values;
         }
 
@@ -212,6 +214,11 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             {
                 this.OnCultureChange(this.BasicPlayerInfo.CurrentTemplate);
             }
+        }
+
+        public void OnStatisticChange(string name, int delta, int newValue)
+        {
+            this.SetUpDerivedValues();
         }
 
         public void NextScreen()
