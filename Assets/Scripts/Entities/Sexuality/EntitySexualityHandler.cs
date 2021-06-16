@@ -72,11 +72,10 @@ namespace JoyLib.Code.Entities.Sexuality
                         : 0;
                     string processorName = sexuality.Contains("Processor")
                         ? this.ValueExtractor.GetValueFromDictionary<string>(sexuality, "Processor")
-                        : "Asexual";
+                        : "asexual";
                     ICollection<string> tags =
                         this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(sexuality, "Tags");
-                    this.PreferenceProcessors.TryGetValue(processorName,
-                        out ISexualityPreferenceProcessor preferenceProcessor);
+                    var preferenceProcessor = this.GetProcessor(processorName);
                     
                     sexualities.Add(
                         new BaseSexuality(
@@ -97,9 +96,10 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public ISexualityPreferenceProcessor GetProcessor(string name)
         {
-            return this.PreferenceProcessors.TryGetValue(name, out ISexualityPreferenceProcessor processor) 
-                ? processor 
-                : new AsexualProcessor();
+            return this.PreferenceProcessors
+                       .FirstOrDefault(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase))
+                       .Value
+                   ?? new AsexualProcessor();
         }
 
         public ISexuality Get(string sexuality)
