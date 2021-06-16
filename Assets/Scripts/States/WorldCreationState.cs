@@ -4,6 +4,7 @@ using Godot;
 using JoyLib.Code.Entities;
 using JoyLib.Code.Entities.Items;
 using JoyLib.Code.Godot;
+using JoyLib.Code.IO;
 using JoyLib.Code.Scripting;
 using JoyLib.Code.World;
 using JoyLib.Code.World.Generators;
@@ -140,6 +141,9 @@ namespace JoyLib.Code.States
             this.m_World.Tick();
 
             GlobalConstants.GameManager.WorldHandler.Add(this.m_World);
+
+            WorldSerialiser worldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
+            worldSerialiser.Serialise(this.m_World);
 
             this.Done = true;
         }

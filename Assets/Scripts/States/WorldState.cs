@@ -262,7 +262,6 @@ namespace JoyLib.Code.States
                 if (this.GUIManager.AreAnyOpen() == false)
                 {
                     this.GUIManager.OpenGUI(this, GUINames.PAUSE);
-                    this.WorldSerialiser.Serialise(this.Overworld);
                 }
                 else
                 {
