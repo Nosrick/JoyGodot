@@ -84,7 +84,7 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
                         ? this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Algorithm")
                         : nameof(FOVShadowCasting);
 
-                    IFOVHandler handler = (IFOVHandler) ScriptingEngine.Instance.FetchAndInitialise(visionProvider);
+                    IFOVHandler handler = (IFOVHandler) GlobalConstants.ScriptingEngine.FetchAndInitialise(visionProvider);
                     
                     visionTypes.Add(
                         new BaseVisionProvider(

@@ -117,7 +117,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
             foreach (string action in actions)
             {
-                this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
+                this.m_CachedActions.Add(action, GlobalConstants.ScriptingEngine.FetchAction(action));
             }
         }
 
@@ -180,9 +180,9 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
         protected IJoyAction[] FetchStandardActions()
         {
             List<IJoyAction> actions = new List<IJoyAction>();
-            actions.Add(ScriptingEngine.Instance.FetchAction("seekaction"));
-            actions.Add(ScriptingEngine.Instance.FetchAction("wanderaction"));
-            actions.Add(ScriptingEngine.Instance.FetchAction("fulfillneedaction"));
+            actions.Add(GlobalConstants.ScriptingEngine.FetchAction("seekaction"));
+            actions.Add(GlobalConstants.ScriptingEngine.FetchAction("wanderaction"));
+            actions.Add(GlobalConstants.ScriptingEngine.FetchAction("fulfillneedaction"));
 
             return actions.ToArray();
         }

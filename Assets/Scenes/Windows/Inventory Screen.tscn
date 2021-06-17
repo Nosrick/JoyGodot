@@ -96,12 +96,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
 OutlineThickness = 1
-CacheFont = true
-TitleCase = true
 OverrideSize = true
 OverrideColour = true
+OverrideOutline = true
+CacheFont = true
+TitleCase = true
 FontSize = 36
 
 [node name="Close Button" type="Control" parent="."]
@@ -114,15 +114,8 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-m_ElementName = "AccentBackground"
-OutlineThickness = 1
-TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
-CustomFont = SubResource( 4 )
+HAlign = 1
 ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -132,6 +125,13 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 Text = "X"
+m_ElementName = "AccentBackground"
+OutlineThickness = 1
+OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+CustomFont = SubResource( 4 )
 
 [node name="Text" type="Label" parent="Close Button"]
 anchor_right = 1.0

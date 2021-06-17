@@ -31,14 +31,14 @@ namespace JoyGodot.Assets.Scripts.Quests
             this.Roller = roller;
             this.EntityRelationshipHandler = entityRelationshipHandler;
 
-            this.Actions = ScriptingEngine.Instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
+            this.Actions = GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
         protected void Initialise()
         {
             this.EntityRelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
 
-            this.Actions = ScriptingEngine.Instance.FetchAndInitialiseChildren<IQuestAction>().ToList();
+            this.Actions = GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IQuestAction>().ToList();
         }
 
         public IQuest MakeRandomQuest(IEntity questor, IEntity provider, IWorldInstance overworldRef)

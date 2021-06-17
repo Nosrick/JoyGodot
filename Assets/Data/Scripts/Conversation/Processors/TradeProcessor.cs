@@ -1,12 +1,15 @@
-﻿using JoyGodot.Assets.Scripts.Conversation.Conversations;
+﻿using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.GUI;
+using JoyGodot.Assets.Scripts.GUI.WorldState;
+using JoyGodot.Assets.Scripts.Helpers;
 
 namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class TradeProcessor : TopicData
     {
-        //protected TradeWindow TradeWindow { get; set; }
+        protected TradeWindow TradeWindow { get; set; }
         protected IGUIManager GUIManager { get; set; }
 
         public TradeProcessor()
@@ -24,26 +27,23 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 
         protected void Initialise()
         {
-            /*
-            if (this.TradeWindow == null || this.GUIManager is null)
+            if (this.TradeWindow is null || this.GUIManager is null)
             {
                 try
                 {
-                    this.GUIManager = GlobalConstants.GameManager.GUIManager;
-                    this.TradeWindow = this.GUIManager.Get(GUINames.TRADE).GetComponent<TradeWindow>();
+                    this.GUIManager = GlobalConstants.GameManager?.GUIManager;
+                    //this.TradeWindow = this.GUIManager?.Get(GUINames.TRADE) as TradeWindow;
                 }
                 catch
                 {
-                    GlobalConstants.ActionLog.AddText("Could not load TradeProcessor bits. Trying again later.", LogLevel.Warning);
                 }
             }
-            */
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
             this.Initialise();
-            //this.TradeWindow.SetActors(instigator, listener);
+            //this.TradeWindow?.SetActors(instigator, listener);
             
             this.GUIManager.OpenGUI(this, GUINames.TRADE);
             

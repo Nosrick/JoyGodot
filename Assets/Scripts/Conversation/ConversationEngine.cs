@@ -128,9 +128,9 @@ namespace JoyGodot.Assets.Scripts.Conversation
                         ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(line, "Actions").ToArray()
                         : new string[0];
 
-                    IEnumerable<IJoyAction> actions = ScriptingEngine.Instance.FetchActions(actionStrings);
+                    IEnumerable<IJoyAction> actions = GlobalConstants.ScriptingEngine.FetchActions(actionStrings);
 
-                    var processorBase = processorName.IsNullOrEmpty() ? null : ScriptingEngine.Instance.FetchAndInitialise(processorName);
+                    var processorBase = processorName.IsNullOrEmpty() ? null : GlobalConstants.ScriptingEngine.FetchAndInitialise(processorName);
                     if (processorBase is ITopic topicProcessor)
                     {
                         topicProcessor.Initialise(

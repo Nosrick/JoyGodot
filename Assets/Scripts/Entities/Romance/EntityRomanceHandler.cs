@@ -32,7 +32,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Romance
         {
             List<IRomance> romances = new List<IRomance>();
 
-            this.Processors = ScriptingEngine.Instance.FetchAndInitialiseChildren<IRomanceProcessor>()
+            this.Processors = GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IRomanceProcessor>()
                 .ToDictionary(processor => processor.Name, processor => processor);
             
             string[] files =
@@ -98,7 +98,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Romance
                 }
             }
 
-            romances.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IRomance>());
+            romances.AddRange(GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IRomance>());
             return romances;
         }
         

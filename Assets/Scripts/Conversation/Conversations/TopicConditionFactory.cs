@@ -14,7 +14,7 @@ namespace JoyGodot.Assets.Scripts.Conversation.Conversations
         {
             if (s_ConditionTypes is null)
             {
-                s_ConditionTypes = ScriptingEngine.Instance.FetchTypeAndChildren(typeof(ITopicCondition)).ToList();
+                s_ConditionTypes = GlobalConstants.ScriptingEngine.FetchTypeAndChildren(typeof(ITopicCondition)).ToList();
             }
         }
         

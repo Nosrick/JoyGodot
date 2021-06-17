@@ -6,7 +6,7 @@ namespace JoyGodot.Assets.Scripts.Quests.Actions
     {
         public static IQuestAction Create(string name)
         {
-            IQuestAction action = ScriptingEngine.Instance.FetchAndInitialise(name) as IQuestAction;
+            IQuestAction action = GlobalConstants.ScriptingEngine.FetchAndInitialise(name) as IQuestAction;
             return action;
         }
     }

@@ -113,7 +113,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
 
             foreach (string action in actions)
             {
-                this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
+                this.m_CachedActions.Add(action, GlobalConstants.ScriptingEngine.FetchAction(action));
             }
         }
 

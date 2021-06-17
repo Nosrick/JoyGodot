@@ -17,10 +17,6 @@ namespace JoyGodot.Assets.Scripts.Scripting
 {
     public class ScriptingEngine
     {
-        private static readonly Lazy<ScriptingEngine> LAZY = new Lazy<ScriptingEngine>(() => new ScriptingEngine());
-
-        public static ScriptingEngine Instance => LAZY.Value;
-
         protected Assembly m_ScriptDLL;
 
         protected List<Type> m_Types;

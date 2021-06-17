@@ -420,7 +420,7 @@ namespace JoyGodot.Assets.Scripts.Entities
             this.Data = new NonUniqueDictionary<object, object>(); 
             foreach(string action in STANDARD_ACTIONS)
             {
-                this.CachedActions.Add(ScriptingEngine.Instance.FetchAction(action));
+                this.CachedActions.Add(GlobalConstants.ScriptingEngine.FetchAction(action));
             }
             this.Initialise();
         }
@@ -526,7 +526,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
             this.m_Cultures = cultures.ToList();
 
-            this.m_Pathfinder = (IPathfinder) ScriptingEngine.Instance.FetchAndInitialise("custompathfinder");
+            this.m_Pathfinder = (IPathfinder) GlobalConstants.ScriptingEngine.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();
 
             this.m_FulfillmentData = new FulfillmentData(

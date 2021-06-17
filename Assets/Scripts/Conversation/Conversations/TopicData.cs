@@ -163,7 +163,7 @@ namespace JoyGodot.Assets.Scripts.Conversation.Conversations
         protected IJoyAction[] GetStandardActions()
         {
             string[] standardActions = {"fulfillneedaction", "modifyrelationshippointsaction"};
-            IJoyAction[] actions = (ScriptingEngine.Instance.FetchActions(standardActions)).ToArray();
+            IJoyAction[] actions = (GlobalConstants.ScriptingEngine.FetchActions(standardActions)).ToArray();
 
             return actions;
         }

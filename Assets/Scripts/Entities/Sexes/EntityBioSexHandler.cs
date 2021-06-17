@@ -32,7 +32,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Sexes
         {
             List<IBioSex> sexes = new List<IBioSex>();
 
-            this.Processors = ScriptingEngine.Instance.FetchAndInitialiseChildren<IBioSexProcessor>()
+            this.Processors = GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IBioSexProcessor>()
                 .ToDictionary(processor => processor.Name, processor => processor);
             
             string[] files =
@@ -89,7 +89,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Sexes
                 }
             }
 
-            sexes.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IBioSex>());
+            sexes.AddRange(GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IBioSex>());
             return sexes;
         }
 

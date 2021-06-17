@@ -109,7 +109,7 @@ namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
                     List<ITopicCondition> conditions =
                         conditionStrings.Select(this.ParseCondition).ToList();
 
-                    var processorBase = processor.IsNullOrEmpty() ? null : ScriptingEngine.Instance.FetchAndInitialise(processor);
+                    var processorBase = processor.IsNullOrEmpty() ? null : GlobalConstants.ScriptingEngine.FetchAndInitialise(processor);
                     if (processorBase is null == false)
                     {
                         IRumour processorObject = (IRumour) processorBase;

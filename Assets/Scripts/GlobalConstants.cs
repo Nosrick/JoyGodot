@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 
 namespace JoyGodot.Assets.Scripts
 {
@@ -33,5 +34,7 @@ namespace JoyGodot.Assets.Scripts
         public static IGameManager GameManager { get; set; }
 
         public static ActionLog ActionLog { get; set; }
+        
+        public static ScriptingEngine ScriptingEngine { get; set; }
     }
 }

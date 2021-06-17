@@ -15,7 +15,7 @@ namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours.Parameters
 
         protected List<IParameterProcessor> LoadProcessors()
         {
-            return new List<IParameterProcessor>(ScriptingEngine.Instance.FetchAndInitialiseChildren<IParameterProcessor>());
+            return new List<IParameterProcessor>(GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IParameterProcessor>());
         }
 
         public IParameterProcessor Get(string parameter)

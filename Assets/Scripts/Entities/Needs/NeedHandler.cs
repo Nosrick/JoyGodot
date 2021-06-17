@@ -33,7 +33,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
         {
             try
             {
-                return Scripting.ScriptingEngine.Instance.FetchAndInitialiseChildren<INeed>().ToList();
+                return GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<INeed>().ToList();
             }
             catch(Exception ex)
             {
@@ -48,7 +48,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
             {
                 Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
 
-                IEnumerable<INeed> needTypes = Scripting.ScriptingEngine.Instance.FetchAndInitialiseChildren<INeed>();
+                IEnumerable<INeed> needTypes = GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<INeed>();
 
                 foreach (INeed type in needTypes)
                 {

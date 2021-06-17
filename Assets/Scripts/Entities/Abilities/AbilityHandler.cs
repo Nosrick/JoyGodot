@@ -35,7 +35,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
 
         public IEnumerable<IAbility> Load()
         {
-            return ScriptingEngine.Instance.FetchAndInitialiseChildren<IAbility>();
+            return GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IAbility>();
         }
 
         public IAbility Get(string nameRef)

@@ -34,7 +34,7 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Drivers
                 return;
             }
 
-            this.WanderAction = ScriptingEngine.Instance.FetchAction("wanderaction");
+            this.WanderAction = GlobalConstants.ScriptingEngine.FetchAction("wanderaction");
             this.Initialised = true;
         }
 

@@ -9,7 +9,6 @@ using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
-using JoyGodot.Assets.Scripts.Scripting;
 
 namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
@@ -120,7 +119,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 relationship.ModifyValueOfParticipant(this.Left.Guid, this.Right.Guid, difference);
             }
 
-            ScriptingEngine.Instance.FetchAction("tradeaction").Execute(
+            GlobalConstants.ScriptingEngine.FetchAction("tradeaction").Execute(
                 new IJoyObject[] {this.Left, this.Right},
                 new[] {"trade", "give", "item"},
                 new Dictionary<string, object>

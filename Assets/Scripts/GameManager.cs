@@ -26,6 +26,7 @@ using JoyGodot.Assets.Scripts.Managers;
 using JoyGodot.Assets.Scripts.Physics;
 using JoyGodot.Assets.Scripts.Quests;
 using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 using JoyGodot.Assets.Scripts.Settings;
 using JoyGodot.Assets.Scripts.States;
 using JoyGodot.Assets.Scripts.World;
@@ -85,7 +86,7 @@ namespace JoyGodot.Assets.Scripts
         public override void _Process(float delta)
         {
             this.m_StateManager?.Update();
-            this.ActionLog.Update();
+            this.ActionLog?.Update();
         }
 
         public override void _Notification(int what)
@@ -109,14 +110,15 @@ namespace JoyGodot.Assets.Scripts
         {
             this.LoadingMessage = "Initialising action log";
             this.ActionLog = new ActionLog();
+            GlobalConstants.ActionLog = this.ActionLog;
+            
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
             
             this.LoadingMessage = "Revving up engines";
 
             this.SettingsManager = new SettingsManager();
 
             this.GUIDManager = new GUIDManager();
-
-            GlobalConstants.ActionLog = this.ActionLog;
 
             this.WorldHandler = new WorldHandler();
             

@@ -126,7 +126,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             List<IJoyAction> tempActions = new List<IJoyAction>(); 
             foreach(string action in actions)
             {
-                tempActions.Add(ScriptingEngine.Instance.FetchAction(action));
+                tempActions.Add(GlobalConstants.ScriptingEngine.FetchAction(action));
             }
 
             this.Initialise(

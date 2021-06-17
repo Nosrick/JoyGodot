@@ -96,7 +96,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
                 }
             }
 
-            relationships.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IRelationship>());
+            relationships.AddRange(GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IRelationship>());
 
             return relationships;
         }

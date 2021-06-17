@@ -260,7 +260,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
                 eval = eval.Replace(value.Name, value.Value.ToString());
             }
 
-            return ScriptingEngine.Instance.Evaluate<int>(eval);
+            return GlobalConstants.ScriptingEngine.Evaluate<int>(eval);
         }
 
         public void Dispose()

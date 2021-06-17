@@ -31,7 +31,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Sexuality
 
         public IEnumerable<ISexuality> Load()
         {
-            this.PreferenceProcessors = ScriptingEngine.Instance
+            this.PreferenceProcessors = GlobalConstants.ScriptingEngine
                 .FetchAndInitialiseChildren<ISexualityPreferenceProcessor>()
                 .ToDictionary(processor => processor.Name, processor => processor);
 
@@ -89,7 +89,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Sexuality
             }
 
             IEnumerable<ISexuality> extraSexualities =
-                ScriptingEngine.Instance.FetchAndInitialiseChildren<ISexuality>();
+                GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<ISexuality>();
             sexualities.AddRange(extraSexualities);
 
             return sexualities;
