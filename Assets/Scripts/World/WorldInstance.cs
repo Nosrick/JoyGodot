@@ -1,19 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Events;
-using JoyLib.Code.Physics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.World.Lighting;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Physics;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.World.Lighting;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.World
+namespace JoyGodot.Assets.Scripts.World
 {
     [Serializable]
     public class WorldInstance : 

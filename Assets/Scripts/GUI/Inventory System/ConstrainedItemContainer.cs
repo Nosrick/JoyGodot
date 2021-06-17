@@ -2,12 +2,9 @@
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Unity;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {

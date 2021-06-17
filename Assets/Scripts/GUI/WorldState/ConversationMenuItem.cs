@@ -1,6 +1,6 @@
 ﻿using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {

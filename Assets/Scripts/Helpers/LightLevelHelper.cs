@@ -1,7 +1,7 @@
 ﻿using Godot;
-using JoyLib.Code.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class LightLevelHelper
     {

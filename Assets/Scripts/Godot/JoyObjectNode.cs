@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.GUI.WorldState;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Unity;
-using JoyLib.Code.Unity.GUI;
 
-namespace JoyLib.Code.Godot
+namespace JoyGodot.Assets.Scripts.Godot
 {
     public class JoyObjectNode :
         ManagedSprite,

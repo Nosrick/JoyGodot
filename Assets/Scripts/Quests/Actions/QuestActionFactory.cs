@@ -1,6 +1,6 @@
-﻿using JoyLib.Code.Scripting;
+﻿using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Scripts.Quests.Actions
 {
     public static class QuestActionFactory
     {

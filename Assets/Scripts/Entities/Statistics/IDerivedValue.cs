@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Entities.Statistics
+﻿namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public interface IDerivedValue : IBasicValue<int>
     {

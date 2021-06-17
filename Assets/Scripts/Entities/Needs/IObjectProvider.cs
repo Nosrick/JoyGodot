@@ -1,7 +1,7 @@
-﻿namespace JoyLib.Code.Entities.Needs
+﻿namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
     public interface IObjectProvider<T> where T : INeed
     {
-        JoyObject[] FindFulfillmentObject(Entity searcher);
+        JoyObject.JoyObject[] FindFulfillmentObject(Entity searcher);
     }
 }

@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Entities.Sexes.Processors;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Sexes.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Sexes
+namespace JoyGodot.Assets.Scripts.Entities.Sexes
 {
     public class EntityBioSexHandler : IEntityBioSexHandler
     {

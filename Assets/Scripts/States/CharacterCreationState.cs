@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using Godot;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.Unity.GUI.CharacterCreationState;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.GUI.CharacterCreationState;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class CharacterCreationState : GameState
     {

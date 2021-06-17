@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Castle.Core.Internal;
-using Code.Unity.GUI.Managed_Assets;
 using Godot;
 using Godot.Collections;
-using JoyGodot.addons.Managed_Assets;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public class GUIManager : IGUIManager
     {

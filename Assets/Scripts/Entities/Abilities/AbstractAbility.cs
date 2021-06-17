@@ -5,15 +5,15 @@ using System.Linq;
 using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Scripting;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Abilities
+namespace JoyGodot.Assets.Scripts.Entities.Abilities
 {
     public abstract class AbstractAbility : IAbility
     {

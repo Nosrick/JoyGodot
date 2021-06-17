@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot.Collections;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
-    public class ItemInstance : JoyObject, IItemInstance
+    public class ItemInstance : JoyObject.JoyObject, IItemInstance
     {
         protected const string DURABILITY = "durability";
 

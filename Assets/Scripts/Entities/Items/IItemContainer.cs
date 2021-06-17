@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Events;
+using JoyGodot.Assets.Scripts.Events;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public interface IItemContainer
     {

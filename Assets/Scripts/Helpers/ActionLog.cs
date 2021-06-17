@@ -6,7 +6,7 @@ using System.Text;
 using Godot;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public class ActionLog : IDisposable
     {

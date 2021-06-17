@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Entities.Abilities;
 
 namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {

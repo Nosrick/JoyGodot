@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities.AI.LOS;
-using JoyLib.Code.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Boards;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.World.Lighting
+namespace JoyGodot.Assets.Scripts.World.Lighting
 {
     public class LightCalculator
     {

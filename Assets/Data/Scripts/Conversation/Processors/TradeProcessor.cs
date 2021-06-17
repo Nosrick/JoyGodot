@@ -1,8 +1,8 @@
-﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Unity.GUI;
+﻿using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.GUI;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class TradeProcessor : TopicData
     {

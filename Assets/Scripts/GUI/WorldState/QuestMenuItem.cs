@@ -1,12 +1,10 @@
 ﻿using System;
 using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Events;
-using JoyLib.Code.Quests;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
     #if TOOLS
     [Tool]

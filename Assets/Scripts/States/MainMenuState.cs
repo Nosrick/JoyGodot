@@ -1,11 +1,9 @@
-﻿using System.Linq;
-using Godot;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.IO;
-using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.World;
+﻿using Godot;
+using JoyGodot.Assets.Scripts.GUI;
+using JoyGodot.Assets.Scripts.IO;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     class MainMenuState : GameState
     {

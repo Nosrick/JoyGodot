@@ -1,8 +1,4 @@
-﻿using JoyLib.Code;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Unity.GUI;
-
-namespace JoyGodot.Assets.Scripts.GUI.WorldState
+﻿namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
     public class Quickbar : GUIData
     {

@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Physics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Physics;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Entities.AI.Drivers
+namespace JoyGodot.Assets.Scripts.Entities.AI.Drivers
 {
     public class StandardDriver : AbstractDriver
     {

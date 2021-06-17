@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities.Jobs
+namespace JoyGodot.Assets.Scripts.Entities.Jobs
 {
     public interface IJobHandler : IHandler<IJob, string>
     {

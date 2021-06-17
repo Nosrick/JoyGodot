@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Scripts.Quests
 {
     public interface IQuestTracker : ISerialisationHandler
     {

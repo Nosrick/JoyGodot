@@ -1,7 +1,7 @@
 ﻿using System;
-using JoyLib.Code.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
 
-namespace JoyLib.Code.Events
+namespace JoyGodot.Assets.Scripts.Events
 {
     public delegate void JobChangedEventHandler(object sender, JobChangedEventArgs args);
     

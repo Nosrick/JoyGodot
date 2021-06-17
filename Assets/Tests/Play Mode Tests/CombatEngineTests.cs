@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyLib.Code;
-using JoyLib.Code.Combat;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Combat;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class CombatEngineTests
     {
@@ -179,15 +179,15 @@ namespace Tests
         public void MakeEntities()
         {
             this.attacker = Mock.Of<IEntity>(
-                entity => entity.Statistics == attackerStats
-                          && entity.Skills == attackerSkills
-                          && entity.Equipment == attackerEquipment
+                entity => entity.Statistics == this.attackerStats
+                          && entity.Skills == this.attackerSkills
+                          && entity.Equipment == this.attackerEquipment
                           && entity.Abilities == this.attackerAbilities
                           && entity.DerivedValues == this.attackerDVs);
             this.defender = Mock.Of<IEntity>(
-                entity => entity.Statistics == defenderStats
-                          && entity.Skills == defenderSkills
-                          && entity.Equipment == defenderEquipment
+                entity => entity.Statistics == this.defenderStats
+                          && entity.Skills == this.defenderSkills
+                          && entity.Equipment == this.defenderEquipment
                           && entity.Abilities == this.defenderAbilities
                           && entity.DerivedValues == this.defenderDVs);
         }

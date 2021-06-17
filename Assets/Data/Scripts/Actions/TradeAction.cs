@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Scripting.Actions
+namespace JoyGodot.Assets.Data.Scripts.Actions
 {
     public class TradeAction : AbstractAction
     {

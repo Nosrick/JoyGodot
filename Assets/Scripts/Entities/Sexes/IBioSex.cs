@@ -1,8 +1,9 @@
 ﻿//This identifies whether a creature can give birth or not, etc
 
 using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities.Sexes
+namespace JoyGodot.Assets.Scripts.Entities.Sexes
 {
     public interface IBioSex: ISerialisationHandler
     {

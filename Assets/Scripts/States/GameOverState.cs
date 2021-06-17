@@ -1,9 +1,7 @@
 ﻿using Godot;
-using JoyLib.Code;
-using JoyLib.Code.States;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.World;
 
-namespace Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class GameOverState : GameState
     {

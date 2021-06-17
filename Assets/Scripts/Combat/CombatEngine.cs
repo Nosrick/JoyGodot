@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Combat
+namespace JoyGodot.Assets.Scripts.Combat
 {
     public class CombatEngine : ICombatEngine
     {

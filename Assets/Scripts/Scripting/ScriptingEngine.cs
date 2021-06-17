@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Godot;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -12,7 +13,7 @@ using Directory = System.IO.Directory;
 using Expression = NCalc.Expression;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Scripting
+namespace JoyGodot.Assets.Scripts.Scripting
 {
     public class ScriptingEngine
     {

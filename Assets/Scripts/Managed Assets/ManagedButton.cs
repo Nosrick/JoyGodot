@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Graphics;
 
-namespace Code.Unity.GUI.Managed_Assets
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
 #if TOOLS
     [Tool]

@@ -6,14 +6,15 @@ using System.Linq;
 using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Relationships
+namespace JoyGodot.Assets.Scripts.Entities.Relationships
 {
     public class EntityRelationshipHandler : IEntityRelationshipHandler
     {

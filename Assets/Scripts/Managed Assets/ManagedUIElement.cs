@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Events;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Settings;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Settings;
 
-namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public class ManagedUIElement :
         Control,

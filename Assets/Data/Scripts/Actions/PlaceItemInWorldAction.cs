@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
+﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Scripting.Actions
+namespace JoyGodot.Assets.Data.Scripts.Actions
 {
     public class PlaceItemInWorldAction : AbstractAction
     {

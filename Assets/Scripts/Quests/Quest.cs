@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot.Collections;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Quests.Actions;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Scripts.Quests
 {
     [Serializable]
     public class Quest : IQuest

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using JoyLib.Code.Quests;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Scripting
+namespace JoyGodot.Assets.Scripts.Scripting
 {
     public interface IJoyAction
     {

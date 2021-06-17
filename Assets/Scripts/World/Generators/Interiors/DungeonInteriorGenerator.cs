@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Managers;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managers;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.World.Generators.Interiors
+namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 {
     public class DungeonInteriorGenerator : IWorldSpaceGenerator
     {

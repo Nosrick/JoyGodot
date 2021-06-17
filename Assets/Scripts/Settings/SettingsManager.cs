@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Events;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Settings
+namespace JoyGodot.Assets.Scripts.Settings
 {
     public class SettingsManager : IHandler<ISetting, string>
     {

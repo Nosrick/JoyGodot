@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Scripts.Quests.Actions
 {
     public interface IQuestAction : ISerialisationHandler
     {

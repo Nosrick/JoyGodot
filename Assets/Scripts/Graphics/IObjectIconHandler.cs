@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
-using JoyGodot.addons.Managed_Assets;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Graphics
+namespace JoyGodot.Assets.Scripts.Graphics
 {
     public interface IObjectIconHandler
     {

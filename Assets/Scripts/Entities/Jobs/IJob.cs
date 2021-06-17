@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Godot;
-using JoyLib.Code.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
 
-namespace JoyLib.Code.Entities.Jobs
+namespace JoyGodot.Assets.Scripts.Entities.Jobs
 {
     public interface IJob
     {

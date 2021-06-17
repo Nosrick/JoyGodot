@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Unity.GUI
+﻿namespace JoyGodot.Assets.Scripts.GUI
 {
     public static class GUINames
     {

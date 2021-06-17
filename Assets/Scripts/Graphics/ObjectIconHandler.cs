@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
-using File = Godot.File;
 
-namespace JoyLib.Code.Graphics
+namespace JoyGodot.Assets.Scripts.Graphics
 {
     public class ObjectIconHandler : IObjectIconHandler
     {

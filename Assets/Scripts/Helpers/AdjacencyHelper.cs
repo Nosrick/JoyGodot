@@ -1,7 +1,8 @@
 ﻿using System;
 using Godot;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class AdjacencyHelper
     {

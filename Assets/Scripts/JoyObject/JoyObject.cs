@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts.JoyObject
 {
     public class JoyObject : IComparable, IJoyObject
     {

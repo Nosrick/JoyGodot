@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Collections;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.Relationships
+namespace JoyGodot.Assets.Scripts.Entities.Relationships
 {
     public interface IEntityRelationshipHandler : 
         IHandler<IRelationship, long>,

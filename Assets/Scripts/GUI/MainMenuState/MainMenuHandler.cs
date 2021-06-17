@@ -1,9 +1,8 @@
-﻿using Godot;
-using JoyLib.Code.IO;
-using JoyLib.Code.States;
-using JoyLib.Code.World;
+﻿using JoyGodot.Assets.Scripts.IO;
+using JoyGodot.Assets.Scripts.States;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Unity.GUI.MainMenuState
+namespace JoyGodot.Assets.Scripts.GUI.MainMenuState
 {
     public class MainMenuHandler : GUIData
     {

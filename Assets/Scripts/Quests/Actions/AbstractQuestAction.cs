@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Scripts.Quests.Actions
 {
     public abstract class AbstractQuestAction : IQuestAction
     {

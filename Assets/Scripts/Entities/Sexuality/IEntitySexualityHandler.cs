@@ -1,4 +1,7 @@
-﻿namespace JoyLib.Code.Entities.Sexuality
+﻿using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities.Sexuality.Processors;
+
+namespace JoyGodot.Assets.Scripts.Entities.Sexuality
 {
     public interface IEntitySexualityHandler : IHandler<ISexuality, string>
     {

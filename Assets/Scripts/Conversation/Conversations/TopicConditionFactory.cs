@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Conversation.Conversations.Conditions;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Conversation.Conversations
+namespace JoyGodot.Assets.Scripts.Conversation.Conversations
 {
     public class TopicConditionFactory
     {

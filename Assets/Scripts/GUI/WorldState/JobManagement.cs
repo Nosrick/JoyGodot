@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.GUI.Tools;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
 
-namespace JoyLib.Code.Unity.GUI.WorldState
+namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
     public class JobManagement : GUIData
     {

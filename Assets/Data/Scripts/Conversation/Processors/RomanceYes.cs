@@ -1,8 +1,10 @@
-﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Rollers;
+﻿using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class RomanceYes : TopicData
     {

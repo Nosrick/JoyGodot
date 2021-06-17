@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Godot;
-using JoyLib.Code.IO;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
-using JoyLib.Code.World.Generators;
-using JoyLib.Code.World.Generators.Interiors;
-using JoyLib.Code.World.Generators.Overworld;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.IO;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
+using JoyGodot.Assets.Scripts.World.Generators;
+using JoyGodot.Assets.Scripts.World.Generators.Interiors;
+using JoyGodot.Assets.Scripts.World.Generators.Overworld;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class WorldCreationState : GameState
     {

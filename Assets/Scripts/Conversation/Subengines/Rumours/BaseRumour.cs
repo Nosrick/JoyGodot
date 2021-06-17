@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core;
 using Castle.Core.Internal;
-using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Entities;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours.Parameters;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Conversation.Conversations.Rumours
+namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
 {
     public class BaseRumour : IRumour
     {

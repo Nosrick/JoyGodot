@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
-using JoyLib.Code.Events;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Events;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     [Serializable]
     public class EquipmentStorage : IItemContainer, ISerialisationHandler

@@ -1,6 +1,8 @@
 ﻿using Godot;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Godot
+namespace JoyGodot.Assets.Scripts.Godot
 {
     public class PositionableSprite : Sprite, IPosition
     {

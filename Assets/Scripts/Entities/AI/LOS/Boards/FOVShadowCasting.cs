@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Entities.AI.LOS
+namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Boards
 {
     [Serializable]
     public class FOVShadowCasting : IFOVHandler

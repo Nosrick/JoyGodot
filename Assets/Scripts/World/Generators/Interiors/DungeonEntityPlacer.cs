@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Physics;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Physics;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.World.Generators.Interiors
+namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 {
     public class DungeonEntityPlacer
     {

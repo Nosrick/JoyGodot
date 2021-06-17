@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Godot;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.World
+namespace JoyGodot.Assets.Scripts.World
 {
     [Serializable]
     public class WorldTile : ISerialisationHandler

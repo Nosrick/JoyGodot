@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
     public class JoyConstrainedSlot : JoyItemSlot
     {

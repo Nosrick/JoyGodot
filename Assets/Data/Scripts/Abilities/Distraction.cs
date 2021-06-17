@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Statistics;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
 
-namespace JoyLib.Code.Entities.Abilities
+namespace JoyGodot.Assets.Data.Scripts.Abilities
 {
     public class Distraction : AbstractAbility
     {

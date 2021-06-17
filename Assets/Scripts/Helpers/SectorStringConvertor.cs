@@ -1,6 +1,6 @@
-﻿using JoyLib.Code.Entities.AI;
+﻿using JoyGodot.Assets.Scripts.Entities.AI;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class SectorStringConvertor
     {

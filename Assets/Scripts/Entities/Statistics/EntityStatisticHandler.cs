@@ -2,11 +2,11 @@
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public class EntityStatisticHandler : IEntityStatisticHandler
     {

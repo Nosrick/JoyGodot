@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.World.Generators
+namespace JoyGodot.Assets.Scripts.World.Generators
 {
     public class SpawnPointPlacer
     {

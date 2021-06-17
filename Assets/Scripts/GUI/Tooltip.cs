@@ -2,12 +2,10 @@
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Godot;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Graphics;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public class Tooltip : GUIData
     {

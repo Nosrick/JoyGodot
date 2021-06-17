@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Castle.Core.Internal;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI.Tools
 {
     #if TOOLS
     [Tool]

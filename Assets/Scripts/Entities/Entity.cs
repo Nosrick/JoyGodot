@@ -4,33 +4,35 @@ using System.Globalization;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot.Collections;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Quests;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Entities.AI.Drivers;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.AI.Pathfinding;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexes;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Quests;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities
 {
-    public class Entity : JoyObject, IEntity
+    public class Entity : JoyObject.JoyObject, IEntity
     {
         public event ValueChangedEventHandler<int> StatisticChange;
         public event ValueChangedEventHandler<int> SkillChange;
@@ -676,7 +678,7 @@ namespace JoyLib.Code.Entities
 
             foreach (string name in this.DerivedValues.Keys)
             {
-                IDerivedValue dv = DerivedValueHandler.Calculate(name, this.Statistics.Values);
+                IDerivedValue dv = this.DerivedValueHandler.Calculate(name, this.Statistics.Values);
                 if (this.DerivedValues[name].Base == dv.Base)
                 {
                     continue;
@@ -771,7 +773,7 @@ namespace JoyLib.Code.Entities
         public void AddQuest(IQuest quest)
         {
             quest.StartQuest(this);
-            QuestTracker?.AddQuest(this.Guid, quest);
+            this.QuestTracker?.AddQuest(this.Guid, quest);
         }
 
         public bool AddJob(IJob job)

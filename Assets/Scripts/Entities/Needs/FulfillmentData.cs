@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
-using NUnit.Framework;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.JoyObject;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
     public class FulfillmentData : ISerialisationHandler
     {

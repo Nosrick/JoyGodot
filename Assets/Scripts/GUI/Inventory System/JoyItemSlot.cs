@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
     public class JoyItemSlot : 
         Control, 

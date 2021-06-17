@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Cultures
+namespace JoyGodot.Assets.Scripts.Cultures
 {
     public class CultureHandler : ICultureHandler
     {

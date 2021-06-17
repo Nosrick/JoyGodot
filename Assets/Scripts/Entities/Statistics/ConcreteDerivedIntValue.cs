@@ -2,7 +2,7 @@
 using Godot;
 using Godot.Collections;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     [Serializable]
     public class ConcreteDerivedIntValue : IDerivedValue

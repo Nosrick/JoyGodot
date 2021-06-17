@@ -2,14 +2,10 @@
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyGodot.addons.Managed_Assets;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Conversation;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Events;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.Conversation;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {

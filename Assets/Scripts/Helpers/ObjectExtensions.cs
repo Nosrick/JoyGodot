@@ -9,7 +9,7 @@ using Godot;
 using Object = System.Object;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class ObjectExtensions
     {

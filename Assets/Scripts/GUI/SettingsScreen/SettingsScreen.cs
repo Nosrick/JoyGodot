@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyLib.Code.Settings;
+using JoyGodot.Assets.Scripts.GUI.Tools;
+using JoyGodot.Assets.Scripts.Settings;
 
-namespace JoyLib.Code.Unity.GUI.SettingsScreen
+namespace JoyGodot.Assets.Scripts.GUI.SettingsScreen
 {
     public class SettingsScreen : GUIData
     {

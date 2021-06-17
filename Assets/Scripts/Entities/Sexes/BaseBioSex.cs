@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Castle.Core.Internal;
 using Godot.Collections;
-using JoyLib.Code.Entities.Sexes.Processors;
+using JoyGodot.Assets.Scripts.Entities.Sexes.Processors;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Sexes
+namespace JoyGodot.Assets.Scripts.Entities.Sexes
 {
     [Serializable]
     public class BaseBioSex : IBioSex

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot.Collections;
-using JoyLib.Code.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Sexuality.Processors;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Sexuality
+namespace JoyGodot.Assets.Scripts.Entities.Sexuality
 {
     [Serializable]
     public class BaseSexuality : ISexuality

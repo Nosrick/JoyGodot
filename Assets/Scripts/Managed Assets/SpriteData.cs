@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using Godot.Collections;
-using JoyLib.Code;
-using JoyLib.Code.Helpers;
-using Array = Godot.Collections.Array;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyGodot.addons.Managed_Assets
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public class SpriteData
     {

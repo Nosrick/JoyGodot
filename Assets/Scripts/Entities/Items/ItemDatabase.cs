@@ -5,14 +5,14 @@ using System.Linq;
 using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public class ItemDatabase : IItemDatabase
     {

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Collections;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public interface ILiveItemHandler : IHandler<IItemInstance, Guid>, ISerialisationHandler
     {

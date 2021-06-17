@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Quests
+﻿namespace JoyGodot.Assets.Scripts.Quests
 {
     public enum QuestMorality
     {

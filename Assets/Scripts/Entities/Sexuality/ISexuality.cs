@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
 
-namespace JoyLib.Code.Entities.Sexuality
+namespace JoyGodot.Assets.Scripts.Entities.Sexuality
 {
     public interface ISexuality : ITagged, ISerialisationHandler
     {

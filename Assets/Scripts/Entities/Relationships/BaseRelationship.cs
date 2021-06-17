@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot.Collections;
+using JoyGodot.Assets.Scripts.JoyObject;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Relationships
+namespace JoyGodot.Assets.Scripts.Entities.Relationships
 {
     [Serializable]
     public class BaseRelationship : IRelationship

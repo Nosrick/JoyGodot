@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
-using Godot;
-using JoyLib.Code.Helpers;
-using Environment = System.Environment;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts
 {
     public static class GlobalConstants
     {

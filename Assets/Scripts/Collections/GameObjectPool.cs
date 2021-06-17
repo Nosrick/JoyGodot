@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyLib.Code;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace Code.Collections
+namespace JoyGodot.Assets.Scripts.Collections
 {
     public class GameObjectPool<T> where T : Node2D
     {

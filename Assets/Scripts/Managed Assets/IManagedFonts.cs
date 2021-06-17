@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using Godot;
-using Godot.Collections;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+﻿using Godot;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public interface IManagedFonts : IColourableElement
     {

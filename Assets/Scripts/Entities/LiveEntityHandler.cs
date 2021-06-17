@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities
 {
     public class LiveEntityHandler : ILiveEntityHandler
     {

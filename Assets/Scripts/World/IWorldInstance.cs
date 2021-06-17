@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Events;
-using JoyLib.Code.Physics;
-using JoyLib.Code.World.Lighting;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Physics;
+using JoyGodot.Assets.Scripts.World.Lighting;
 
-namespace JoyLib.Code.World
+namespace JoyGodot.Assets.Scripts.World
 {
     public interface IWorldInstance : 
         ITagged, 

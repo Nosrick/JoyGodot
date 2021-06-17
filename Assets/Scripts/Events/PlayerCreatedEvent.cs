@@ -1,7 +1,6 @@
-﻿using System;
-using JoyLib.Code.Entities;
+﻿using JoyGodot.Assets.Scripts.Entities;
 
-namespace JoyLib.Code.Events
+namespace JoyGodot.Assets.Scripts.Events
 {
     public delegate void PlayerCreatedHandler(IEntity player);
 }

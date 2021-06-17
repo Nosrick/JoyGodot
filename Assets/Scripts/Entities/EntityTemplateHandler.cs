@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities
 {
     public class EntityTemplateHandler : IEntityTemplateHandler
     {

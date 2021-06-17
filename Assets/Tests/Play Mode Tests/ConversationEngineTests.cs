@@ -1,23 +1,24 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyLib.Code;
-using JoyLib.Code.Conversation;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Conversation;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class ConversationEngineTests
     {
@@ -37,9 +38,9 @@ namespace Tests
         {
             GlobalConstants.ActionLog = new ActionLog();
             
-            prefab = GD.Load<Node2D>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/JoyObject.tscn");
+            this.prefab = GD.Load<Node2D>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/JoyObject.tscn");
 
-            scriptingEngine = new ScriptingEngine();
+            this.scriptingEngine = new ScriptingEngine();
 
             ILiveEntityHandler entityHandler = Mock.Of<ILiveEntityHandler>();
 
@@ -55,7 +56,7 @@ namespace Tests
                     w => w.GetRandomSentient() == Mock.Of<IEntity>(
                         e => e.JoyName == "NAME2")));
 
-            world = Mock.Of<IWorldInstance>(
+            this.world = Mock.Of<IWorldInstance>(
                 w => w.GetRandomSentientWorldWide() == questObject
                      && w.GetRandomSentient() == questObject
                      && w.GetWorlds(It.IsAny<IWorldInstance>()) == new List<IWorldInstance>
@@ -85,19 +86,19 @@ namespace Tests
                     4,
                     GlobalConstants.DEFAULT_SUCCESS_THRESHOLD));
 
-            instigator = Mock.Of<IEntity>(
+            this.instigator = Mock.Of<IEntity>(
                 entity => entity.PlayerControlled == true
-                          && entity.MyWorld == world
+                          && entity.MyWorld == this.world
                           && entity.Needs == needs
                           && entity.Statistics == stats
                           && entity.Sentient == true
                           && entity.Guid == Guid.NewGuid());
 
-            listener = Mock.Of<IEntity>(entity => entity.MyWorld == world
-                                                  && entity.Needs == needs
-                                                  && entity.Statistics == stats
-                                                  && entity.Sentient == true
-                                                  && entity.Guid == Guid.NewGuid());
+            this.listener = Mock.Of<IEntity>(entity => entity.MyWorld == this.world
+                                                       && entity.Needs == needs
+                                                       && entity.Statistics == stats
+                                                       && entity.Sentient == true
+                                                       && entity.Guid == Guid.NewGuid());
 
             GlobalConstants.GameManager = Mock.Of<IGameManager>(
                 manager => manager.Player == this.instigator
@@ -117,7 +118,7 @@ namespace Tests
             //given
 
             //when
-            ITopic[] topics = target.AllTopics;
+            ITopic[] topics = this.target.AllTopics;
 
             //then
             Assert.That(topics, Is.Not.Empty);
@@ -133,13 +134,13 @@ namespace Tests
         {
             int depth = 0;
 
-            target.SetActors(instigator, listener);
+            this.target.SetActors(this.instigator, this.listener);
 
-            ICollection<ITopic> baseTopics = target.Converse();
+            ICollection<ITopic> baseTopics = this.target.Converse();
             bool ended = false;
             foreach (ITopic topic in baseTopics)
             {
-                ended = AdvanceToEnd(topic, baseTopics);
+                ended = this.AdvanceToEnd(topic, baseTopics);
             }
 
             Assert.That(ended, Is.True);
@@ -147,7 +148,7 @@ namespace Tests
 
         private bool AdvanceToEnd(ITopic topic, ICollection<ITopic> baseTopics)
         {
-            ICollection<ITopic> nextTopics = target.Converse(topic);
+            ICollection<ITopic> nextTopics = this.target.Converse(topic);
             if (nextTopics.Intersect(baseTopics).Count() == baseTopics.Count)
             {
                 return true;
@@ -155,7 +156,7 @@ namespace Tests
 
             foreach (ITopic next in nextTopics)
             {
-                AdvanceToEnd(next, baseTopics);
+                this.AdvanceToEnd(next, baseTopics);
             }
 
             return true;

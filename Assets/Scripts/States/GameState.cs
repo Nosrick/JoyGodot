@@ -1,7 +1,7 @@
 using Godot;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.GUI;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public abstract class GameState : IGameState
     {

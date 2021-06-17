@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Godot;
+﻿using System.Collections.Generic;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI.Tools
 {
     public interface IValueItem<T> : ITooltipComponent
     {

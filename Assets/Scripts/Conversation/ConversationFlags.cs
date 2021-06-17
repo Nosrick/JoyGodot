@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Conversation
+﻿namespace JoyGodot.Assets.Scripts.Conversation
 {
     public enum ConversationFlags
     {

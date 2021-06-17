@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities
 {
     public interface IEntityTemplate : ITagged
     {

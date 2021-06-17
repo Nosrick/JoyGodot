@@ -1,7 +1,7 @@
-﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Quests;
+﻿using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class TaskPresentationProcessor : TopicData
     {

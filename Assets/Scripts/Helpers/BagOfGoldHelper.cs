@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Items;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public class BagOfGoldHelper
     {

@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
-using JoyLib.Code.Quests;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Entities.AI.Drivers;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexes;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities
 {
     public interface IEntity : IJoyObject, IItemContainer
     {

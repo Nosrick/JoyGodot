@@ -1,6 +1,9 @@
-﻿using JoyLib.Code.Graphics;
+﻿using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Morality : AbstractNeed
     {

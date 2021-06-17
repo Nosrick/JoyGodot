@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Events;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Settings;
-using Array = Godot.Collections.Array;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Settings;
 
-namespace JoyLib.Code.Unity
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public class ManagedSprite :
         Node2D,

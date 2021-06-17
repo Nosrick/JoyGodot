@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Conversation.Conversations
+namespace JoyGodot.Assets.Scripts.Conversation.Conversations
 {
     public class TopicData : ITopic
     {
@@ -112,7 +113,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return true;
         }
 
-        public bool FulfilsConditions(IEnumerable<JoyObject> participants)
+        public bool FulfilsConditions(IEnumerable<JoyObject.JoyObject> participants)
         {
             string[] criteria = this.Conditions.Select(c => c.Criteria).ToArray();
 

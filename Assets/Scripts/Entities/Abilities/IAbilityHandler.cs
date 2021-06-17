@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
 
-namespace JoyLib.Code.Entities.Abilities
+namespace JoyGodot.Assets.Scripts.Entities.Abilities
 {
     public interface IAbilityHandler : IHandler<IAbility, string>
     {

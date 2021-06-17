@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Entities.Romance.Processors;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Romance.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Romance
+namespace JoyGodot.Assets.Scripts.Entities.Romance
 {
     public class EntityRomanceHandler : IEntityRomanceHandler
     {

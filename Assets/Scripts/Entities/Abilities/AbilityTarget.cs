@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Entities.Abilities
+﻿namespace JoyGodot.Assets.Scripts.Entities.Abilities
 {
     public enum AbilityTarget
     {

@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using JoyLib.Code.World;
-using Tanis.Collections;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Entities.AI
+namespace JoyGodot.Assets.Scripts.Entities.AI
 {
     public class Pathfinder
     {

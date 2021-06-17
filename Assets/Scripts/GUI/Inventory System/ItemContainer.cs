@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Events;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Unity
+namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
     public class ItemContainer : GUIData
     {

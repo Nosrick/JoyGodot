@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Algorithms;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.AI
+namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
 {
     public struct PathFinderNode
     {

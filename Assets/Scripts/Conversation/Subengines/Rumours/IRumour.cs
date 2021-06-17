@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Conversation.Subengines.Rumours
+namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
 {
     public interface IRumour
     {

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyGodot.addons.Managed_Assets;
 
-namespace JoyLib.Code.Graphics
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public class SpriteState : ISpriteState
     {

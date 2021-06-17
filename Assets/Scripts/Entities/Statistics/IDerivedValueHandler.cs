@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Godot;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public interface IDerivedValueHandler : IHandler<IDerivedValue, string>
     {

@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Code.States;
 using Godot;
+using JoyGodot.Assets.Scripts.Conversation;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
-using JoyLib.Code.Conversation;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Events;
-using JoyLib.Code.Godot;
-using JoyLib.Code.IO;
-using JoyLib.Code.Physics;
-using JoyLib.Code.Unity;
-using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.IO;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Physics;
+using JoyGodot.Assets.Scripts.World;
 using Thread = System.Threading.Thread;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class WorldState : GameState
     {

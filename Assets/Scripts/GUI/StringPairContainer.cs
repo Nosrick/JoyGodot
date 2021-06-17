@@ -2,7 +2,7 @@
 using Castle.Core.Internal;
 using Godot;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public class StringPairContainer : Node2D
     {

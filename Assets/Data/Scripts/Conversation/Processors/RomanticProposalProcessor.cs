@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class RomanticProposalProcessor : TopicData
     {

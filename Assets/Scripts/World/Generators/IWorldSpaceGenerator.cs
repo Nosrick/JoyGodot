@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.World.Generators
+namespace JoyGodot.Assets.Scripts.World.Generators
 {
     public interface IWorldSpaceGenerator
     {

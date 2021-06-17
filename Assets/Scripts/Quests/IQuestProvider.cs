@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Quests.Actions;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Scripts.Quests
 {
     public interface IQuestProvider
     {

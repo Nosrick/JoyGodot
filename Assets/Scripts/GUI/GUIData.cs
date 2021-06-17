@@ -1,12 +1,12 @@
 ﻿using System;
 using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Events;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Settings;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Settings;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public class GUIData : Control
     {

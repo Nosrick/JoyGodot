@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Sexuality.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Sexuality
+namespace JoyGodot.Assets.Scripts.Entities.Sexuality
 {
     public class EntitySexualityHandler : IEntitySexualityHandler
     {

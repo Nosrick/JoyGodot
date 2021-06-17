@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using Castle.Core.Internal;
 using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.GUI;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
 {

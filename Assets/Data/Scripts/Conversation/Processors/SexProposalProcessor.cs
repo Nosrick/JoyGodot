@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class SexProposalProcessor : TopicData
     {

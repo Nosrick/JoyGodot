@@ -1,15 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
-using Code.Collections;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Managers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Exceptions;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Managers;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public class ItemFactory : IItemFactory
     {

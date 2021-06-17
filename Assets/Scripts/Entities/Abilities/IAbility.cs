@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Entities.Abilities
+namespace JoyGodot.Assets.Scripts.Entities.Abilities
 {
     public interface IAbility : ITagged, ISerialisationHandler
     {

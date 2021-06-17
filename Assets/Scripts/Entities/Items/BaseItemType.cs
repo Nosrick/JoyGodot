@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     [Serializable]
     public class BaseItemType

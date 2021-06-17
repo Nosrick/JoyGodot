@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class AlgorithmsElf
     {

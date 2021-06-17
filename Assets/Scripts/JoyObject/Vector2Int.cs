@@ -1,9 +1,10 @@
 ﻿using System;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts.JoyObject
 {
     public struct Vector2Int : ISerialisationHandler
     {

@@ -1,11 +1,7 @@
 using System.Globalization;
-using System.Xml.Schema;
-using Code.Unity.GUI.Managed_Assets;
 using Godot;
-using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Unity.GUI;
 
-namespace JoyGodot.addons.Managed_Assets
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
 #if TOOLS
     [Tool]

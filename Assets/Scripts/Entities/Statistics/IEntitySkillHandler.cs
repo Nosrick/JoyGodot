@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public interface IEntitySkillHandler : IHandler<IEntitySkill, string>
     {

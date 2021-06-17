@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace JoyLib.Code.Entities.Sexes.Processors
+namespace JoyGodot.Assets.Scripts.Entities.Sexes.Processors
 {
     public class FemaleProcessor : IBioSexProcessor
     {

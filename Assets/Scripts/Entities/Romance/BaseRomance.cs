@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot.Collections;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance.Processors;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Romance.Processors;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Romance
+namespace JoyGodot.Assets.Scripts.Entities.Romance
 {
     [Serializable]
     public class BaseRomance : IRomance

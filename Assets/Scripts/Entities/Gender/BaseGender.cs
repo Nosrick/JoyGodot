@@ -1,7 +1,7 @@
 ﻿using System;
 using Godot.Collections;
 
-namespace JoyLib.Code.Entities.Gender
+namespace JoyGodot.Assets.Scripts.Entities.Gender
 {
     [Serializable]
     public class BaseGender : IGender

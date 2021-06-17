@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.GUI.Tools;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Unity.GUI.CharacterCreationState
+namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {
     public class StatisticsList : Control
     {

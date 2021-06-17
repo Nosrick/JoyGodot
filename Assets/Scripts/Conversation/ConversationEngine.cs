@@ -5,16 +5,17 @@ using System.Linq;
 using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Events;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Conversation
+namespace JoyGodot.Assets.Scripts.Conversation
 {
     public class ConversationEngine : IConversationEngine
     {

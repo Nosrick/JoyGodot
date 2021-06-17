@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using JoyLib.Code;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class RomanceTests
     {

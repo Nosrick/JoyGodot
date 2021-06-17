@@ -1,9 +1,10 @@
-﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.World;
+﻿using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class LocalAreaInfoProcessor : TopicData
     {

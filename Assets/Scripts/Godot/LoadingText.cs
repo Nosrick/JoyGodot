@@ -1,17 +1,18 @@
 using Godot;
-using System;
-using JoyLib.Code;
 
-public class LoadingText : Label
+namespace JoyGodot.Assets.Scripts.Godot
 {
-    public override void _Ready()
-    { }
-
-    public override void _Process(float delta)
+    public class LoadingText : Label
     {
-        if (GlobalConstants.GameManager is null == false)
+        public override void _Ready()
+        { }
+
+        public override void _Process(float delta)
         {
-            this.Text = GlobalConstants.GameManager.LoadingMessage;
+            if (GlobalConstants.GameManager is null == false)
+            {
+                this.Text = GlobalConstants.GameManager.LoadingMessage;
+            }
         }
     }
 }

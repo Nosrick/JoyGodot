@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class BondingProposalProcessor : TopicData
     {
@@ -24,10 +26,10 @@ namespace JoyLib.Code.Entities.Conversation.Processors
 
         protected override ITopic[] FetchNextTopics()
         {
-            IEntity listener = ConversationEngine.Listener;
-            IEntity instigator = ConversationEngine.Instigator;
+            IEntity listener = this.ConversationEngine.Listener;
+            IEntity instigator = this.ConversationEngine.Instigator;
             IEnumerable<IRelationship> relationships =
-                RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"romantic"});
+                this.RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"romantic"});
             int highestValue = int.MinValue;
             IRelationship chosenRelationship = null;
 

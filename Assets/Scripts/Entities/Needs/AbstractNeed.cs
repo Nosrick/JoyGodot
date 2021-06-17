@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code.Events;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
     public abstract class AbstractNeed : INeed
     {

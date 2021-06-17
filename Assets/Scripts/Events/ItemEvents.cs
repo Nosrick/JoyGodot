@@ -1,7 +1,7 @@
 ﻿using System;
-using JoyLib.Code.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Items;
 
-namespace JoyLib.Code.Events
+namespace JoyGodot.Assets.Scripts.Events
 {
     public delegate void ItemRemovedEventHandler(IItemContainer sender, ItemChangedEventArgs args);
 

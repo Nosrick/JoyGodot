@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Quests;
-using JoyLib.Code.Unity.GUI;
-using NUnit.Framework.Internal.Execution;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.GUI;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Godot
+namespace JoyGodot.Assets.Scripts.Godot
 {
     public class CheatInterface : GUIData
     {

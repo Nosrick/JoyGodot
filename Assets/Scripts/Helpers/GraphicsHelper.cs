@@ -2,7 +2,7 @@
 using Castle.Core.Internal;
 using Godot;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class GraphicsHelper
     {

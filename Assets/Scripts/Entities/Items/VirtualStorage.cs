@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Events;
+using JoyGodot.Assets.Scripts.Events;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     [Serializable]
-    public class VirtualStorage : JoyObject, IItemContainer
+    public class VirtualStorage : JoyObject.JoyObject, IItemContainer
     {
         protected List<IItemInstance> m_Contents;
         public IEnumerable<IItemInstance> Contents => this.m_Contents;

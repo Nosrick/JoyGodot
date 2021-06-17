@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections;
-using JoyLib.Code;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Quests;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Quests;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class QuestTrackerTests
     {

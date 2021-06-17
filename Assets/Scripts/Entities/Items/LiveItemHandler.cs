@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public class LiveItemHandler : ILiveItemHandler
     {

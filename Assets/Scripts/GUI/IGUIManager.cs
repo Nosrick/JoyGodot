@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Graphics;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public interface IGUIManager : IHandler<GUIData, string>
     {

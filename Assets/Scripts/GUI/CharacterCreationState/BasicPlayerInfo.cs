@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyLib.Code;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexes;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.GUI.Tools;
+using JoyGodot.Assets.Scripts.Helpers;
 
 namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {

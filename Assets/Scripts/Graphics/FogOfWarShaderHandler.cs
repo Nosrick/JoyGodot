@@ -1,7 +1,4 @@
-﻿using JoyLib.Code.Entities;
-using JoyLib.Code.Helpers;
-
-namespace JoyLib.Code.Graphics
+﻿namespace JoyGodot.Assets.Scripts.Graphics
 {
     /*
     public class FogOfWarShaderHandler

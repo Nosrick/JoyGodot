@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
-using JoyLib.Code;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
 #if TOOLS
     [Tool]

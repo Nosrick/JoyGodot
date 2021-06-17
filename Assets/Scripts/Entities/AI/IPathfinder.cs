@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Godot;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.AI
+namespace JoyGodot.Assets.Scripts.Entities.AI
 {
     public interface IPathfinder
     {

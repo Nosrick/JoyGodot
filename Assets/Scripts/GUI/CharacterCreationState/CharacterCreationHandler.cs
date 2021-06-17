@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.CharacterCreationState;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI.Drivers;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Unity.GUI.CharacterCreationState
+namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {
     public class CharacterCreationHandler : GUIData
     {

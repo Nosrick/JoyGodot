@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code
+﻿namespace JoyGodot.Assets.Scripts.JoyObject
 {
     public struct Rect2Int
     {
@@ -11,7 +11,7 @@
         public int xMax => this.x + this.width;
         public int yMax => this.y + this.height;
 
-        public int Area => this.width * height;
+        public int Area => this.width * this.height;
 
         public Rect2Int(Vector2Int position, Vector2Int sizes)
         {

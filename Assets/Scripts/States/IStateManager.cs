@@ -1,7 +1,6 @@
 ﻿using Godot;
-using JoyLib.Code.States;
 
-namespace Joy.Code.Managers
+namespace JoyGodot.Assets.Scripts.States
 {
     public interface IStateManager
     {

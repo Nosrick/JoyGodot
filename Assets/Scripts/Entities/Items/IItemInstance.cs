@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Godot;
+﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public interface IItemInstance : IJoyObject, IItemContainer, IOwnable
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code.World
+namespace JoyGodot.Assets.Scripts.World
 {
     public class WorldHandler : IWorldHandler
     {

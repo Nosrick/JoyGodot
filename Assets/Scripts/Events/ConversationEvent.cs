@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
 
-namespace JoyLib.Code.Events
+namespace JoyGodot.Assets.Scripts.Events
 {
     public delegate void ConversationEventHandler(ITopic selectedTopic, ICollection<ITopic> currentTopics);
     

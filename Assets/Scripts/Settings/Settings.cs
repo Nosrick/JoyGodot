@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Settings
+namespace JoyGodot.Assets.Scripts.Settings
 {
     public interface ISetting : ISerialisationHandler
     {

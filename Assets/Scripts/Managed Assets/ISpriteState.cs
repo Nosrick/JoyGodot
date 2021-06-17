@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Godot;
-using JoyGodot.addons.Managed_Assets;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Graphics
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public interface ISpriteState : ISerialisationHandler
     {

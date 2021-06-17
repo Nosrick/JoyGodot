@@ -1,22 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Godot;
-using JoyLib.Code;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class RumourMillTests
     {
@@ -34,9 +33,9 @@ namespace Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            scriptingEngine = new ScriptingEngine();
+            this.scriptingEngine = new ScriptingEngine();
             
-            target = new ConcreteRumourMill();
+            this.target = new ConcreteRumourMill();
 
             IWorldInstance world = Mock.Of<IWorldInstance>();
 
@@ -66,12 +65,12 @@ namespace Tests
 
             IDictionary<string, IEntitySkill> skills = gameManager.SkillHandler.GetDefaultSkillBlock();
 
-            left = Mock.Of<IEntity>(
+            this.left = Mock.Of<IEntity>(
                 entity => entity.PlayerControlled == true
                 && entity.JoyName == "TEST1"
                 && entity.Skills == skills);
 
-            right = Mock.Of<IEntity>(
+            this.right = Mock.Of<IEntity>(
                 entity => entity.JoyName == "TEST2"
                           && entity.Skills == skills);
         }
@@ -84,14 +83,14 @@ namespace Tests
             //when
             
             //then
-            Assert.That(target.RumourTypes, Is.Not.Empty);
+            Assert.That(this.target.RumourTypes, Is.Not.Empty);
         }
 
         [Test]
         public void RumourMill_ShouldMake_ValidRumours()
         {
             //given
-            IRumour[] rumours = target.GenerateOneRumourOfEachType(new IJoyObject[] {left, right});
+            IRumour[] rumours = this.target.GenerateOneRumourOfEachType(new IJoyObject[] {this.left, this.right});
 
             //then
             foreach (IRumour rumour in rumours)

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code.Entities.Jobs
+namespace JoyGodot.Assets.Scripts.Entities.Jobs
 {
     [Serializable]
     public class JobType : IJob

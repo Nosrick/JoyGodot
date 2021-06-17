@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Godot;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Boards;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Entities.AI.LOS.Providers
+namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
 {
     public class BaseVisionProvider : IVision
     {

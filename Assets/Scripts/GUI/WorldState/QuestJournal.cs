@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Quests;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Unity.GUI.WorldState
+namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
     public class QuestJournal : GUIData
     {

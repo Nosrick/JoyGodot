@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Quests;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Scripting
+namespace JoyGodot.Assets.Scripts.Scripting
 {
     public abstract class AbstractAction : IJoyAction
     {

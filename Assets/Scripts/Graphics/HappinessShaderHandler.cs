@@ -1,9 +1,9 @@
 ﻿using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Events;
-using JoyLib.Code.Settings;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Settings;
 
-namespace JoyLib.Code.Graphics
+namespace JoyGodot.Assets.Scripts.Graphics
 {
     public class HappinessShaderHandler : TileMap
     {

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using Godot;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Entities.AI.LOS.Providers
+namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
 {
     public interface IVision
     {

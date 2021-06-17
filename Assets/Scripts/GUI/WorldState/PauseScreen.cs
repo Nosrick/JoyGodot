@@ -1,7 +1,4 @@
-﻿using JoyLib.Code;
-using JoyLib.Code.IO;
-using JoyLib.Code.States;
-using JoyLib.Code.Unity.GUI;
+﻿using JoyGodot.Assets.Scripts.IO;
 
 namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
@@ -30,12 +27,12 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         public void SaveExit()
         {
             this.WorldSerialiser.Serialise(GlobalConstants.GameManager.Player.MyWorld.GetOverworld());
-            GlobalConstants.GameManager.SetNextState(new MainMenuState());
+            GlobalConstants.GameManager.SetNextState(new States.MainMenuState());
         }
 
         public void ExitNoSave()
         {
-            GlobalConstants.GameManager.SetNextState(new MainMenuState());
+            GlobalConstants.GameManager.SetNextState(new States.MainMenuState());
         }
     }
 }

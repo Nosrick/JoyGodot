@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
     public class NeedHandler : INeedHandler
     {

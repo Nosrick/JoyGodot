@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexes;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Cultures
+namespace JoyGodot.Assets.Scripts.Cultures
 {
     public interface ICulture
     {

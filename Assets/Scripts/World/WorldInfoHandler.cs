@@ -5,13 +5,14 @@ using System.Linq;
 using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.World
+namespace JoyGodot.Assets.Scripts.World
 {
     public interface IWorldInfoHandler : IHandler<WorldInfo, string>
     {

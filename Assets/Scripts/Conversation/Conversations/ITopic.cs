@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Conversation.Conversations
+namespace JoyGodot.Assets.Scripts.Conversation.Conversations
 {
     public interface ITopic
     {
@@ -54,7 +54,7 @@ namespace JoyLib.Code.Conversation.Conversations
         string[] GetConditionTags();
 
         bool FulfilsConditions(IEnumerable<Tuple<string, object>> values);
-        bool FulfilsConditions(IEnumerable<JoyObject> participants);
+        bool FulfilsConditions(IEnumerable<JoyObject.JoyObject> participants);
 
         ITopic[] Interact(IEntity instigator, IEntity listener);
 

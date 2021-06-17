@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace JoyLib.Code.Cultures
+namespace JoyGodot.Assets.Scripts.Cultures
 {
     public struct NameData
     {

@@ -1,7 +1,7 @@
 ﻿using Godot;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class WorldDestructionState : GameState
     {

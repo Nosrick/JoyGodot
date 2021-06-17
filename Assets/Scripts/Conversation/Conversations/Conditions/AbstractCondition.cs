@@ -1,6 +1,4 @@
-using System;
-
-namespace JoyLib.Code.Conversation.Conversations
+namespace JoyGodot.Assets.Scripts.Conversation.Conversations.Conditions
 {
     public abstract class AbstractCondition : ITopicCondition
     {

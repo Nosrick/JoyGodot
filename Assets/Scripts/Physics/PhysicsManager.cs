@@ -1,7 +1,8 @@
-﻿using JoyLib.Code.Entities;
-using JoyLib.Code.World;
+﻿using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Physics
+namespace JoyGodot.Assets.Scripts.Physics
 {
     public interface IPhysicsManager
     {

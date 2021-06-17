@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using JoyLib.Code.Entities;
+using JoyGodot.Assets.Scripts.Entities;
 
-namespace JoyLib.Code.Conversation.Conversations
+namespace JoyGodot.Assets.Scripts.Conversation.Conversations
 {
     public class LocalAreaInfoProcessor : TopicData
     {
