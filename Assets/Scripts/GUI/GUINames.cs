@@ -8,7 +8,7 @@
         public const string EQUIPMENT = "Equipment";
         public const string CONVERSATION = "Conversation Window";
         public const string CONTEXT_MENU = "Context Menu";
-        public const string TRADE = "Trade";
+        public const string TRADE = "TradeWindow";
         public const string QUEST_JOURNAL = "Quest Journal";
         public const string TOOLTIP = "Tooltip";
         public const string JOB_MANAGEMENT = "Job Management";
