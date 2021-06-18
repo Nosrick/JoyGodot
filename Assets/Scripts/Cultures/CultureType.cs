@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
+
 using Godot;
 using JoyGodot.Assets.Scripts.Entities.Gender;
 using JoyGodot.Assets.Scripts.Entities.Jobs;
@@ -9,6 +9,7 @@ using JoyGodot.Assets.Scripts.Entities.Romance;
 using JoyGodot.Assets.Scripts.Entities.Sexes;
 using JoyGodot.Assets.Scripts.Entities.Sexuality;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Rollers;
 
 namespace JoyGodot.Assets.Scripts.Cultures

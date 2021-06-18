@@ -1,7 +1,8 @@
 ﻿using System;
-using Castle.Core.Internal;
+
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
 
 namespace JoyGodot.Assets.Scripts.Entities.AI

@@ -14,8 +14,34 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
     public class TradeWindow : GUIData
     {
-        public IEntity Left { get; protected set; }
-        public IEntity Right { get; protected set; }
+        public IEntity Left
+        {
+            get => this.m_Left;
+            set
+            {
+                this.m_Left = value;
+                if (this.Left is null == false && this.Right is null == false)
+                {
+                    this.SetActors();
+                }
+            }
+        }
+
+        protected IEntity m_Left;
+        public IEntity Right
+        {
+            get => this.m_Right;
+            set
+            {
+                this.m_Right = value;
+                if (this.Left is null == false && this.Right is null == false)
+                {
+                    this.SetActors();
+                }
+            }
+        }
+
+        protected IEntity m_Right;
 
         protected Label LeftValue { get; set; }
         protected Label RightValue { get; set; }
@@ -74,11 +100,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             return base.Close(sender);
         }
 
-        public void SetActors(IEntity left, IEntity right)
+        public void SetActors()
         {
-            this.Left = left;
-            this.Right = right;
-
             this.LeftInventory.JoyObjectOwner = this.Left;
             this.LeftOffering.JoyObjectOwner = new VirtualStorage();
 

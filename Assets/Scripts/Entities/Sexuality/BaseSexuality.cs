@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
+
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
 using JoyGodot.Assets.Scripts.Entities.Sexuality.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.Entities.Sexuality

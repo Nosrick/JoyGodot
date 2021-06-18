@@ -20,6 +20,8 @@ namespace JoyGodot.Assets.Scripts.GUI
 
         void ToggleGUI(object sender, string name);
 
+        T Get<T>(string name) where T : GUIData;
+
         void SetupManagedComponents(Control gui, bool crossFade = false, float duration = 0.1F);
         void SetUpManagedComponent(IManagedElement element, bool crossFade = false, float duration = 0.1f);
 

@@ -18,19 +18,9 @@ namespace JoyGodot.Assets.Scripts.Helpers
 
         private static readonly Random ROLLER = new Random();
 
-        public static string CombineToString(this ITuple tuple)
+        public static string CombineToString<T, K>(this Tuple<T, K> tuple)
         {
-            StringBuilder builder = new StringBuilder();
-            for(int i = 0; i < tuple.Length; i++)
-            {
-                builder.Append(tuple[i]);
-                if (i < tuple.Length - 1)
-                {
-                    builder.Append(" : ");
-                }
-            }
-
-            return builder.ToString();
+            return tuple.Item1 + " : " + tuple.Item2;
         }
 
         public static T GetRandom<T>(this ICollection<T> collection)
@@ -58,6 +48,11 @@ namespace JoyGodot.Assets.Scripts.Helpers
             }
 
             return (type.IsValueType & type.IsPrimitive);
+        }
+
+        public static bool IsNullOrEmpty(this IEnumerable enumerable)
+        {
+            return enumerable == null || enumerable.GetEnumerator().MoveNext() == false;
         }
 
         public static Object Copy(this Object originalObject)

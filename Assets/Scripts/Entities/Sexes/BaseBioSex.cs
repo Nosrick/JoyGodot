@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Castle.Core.Internal;
+
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Entities.Sexes.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.Entities.Sexes

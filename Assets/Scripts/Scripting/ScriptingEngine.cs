@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Godot;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
 using Microsoft.CodeAnalysis;
@@ -12,6 +11,7 @@ using Microsoft.CodeAnalysis.Emit;
 using Directory = System.IO.Directory;
 using Expression = NCalc.Expression;
 using File = System.IO.File;
+using Object = Godot.Object;
 
 namespace JoyGodot.Assets.Scripts.Scripting
 {
@@ -45,12 +45,10 @@ namespace JoyGodot.Assets.Scripts.Scripting
                     List<MetadataReference> libs = new List<MetadataReference>
                     {
                         MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                        MetadataReference.CreateFromFile(typeof(Object).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(ISet<bool>).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Vector2).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(System.Collections.Immutable.ImmutableArray).Assembly.Location),
                         MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Castle.Core.Internal.CollectionExtensions).Assembly.Location)
+                        MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location)
                     };
                     CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
                         new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));

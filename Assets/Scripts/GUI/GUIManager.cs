@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Castle.Core.Internal;
+
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Helpers;
@@ -65,6 +65,11 @@ namespace JoyGodot.Assets.Scripts.GUI
         public GUIData Get(string name)
         {
             return this.GUIs.FirstOrDefault(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public T Get<T>(string name) where T : GUIData
+        {
+            return (T) this.GUIs.FirstOrDefault(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public IEnumerable<GUIData> Load()

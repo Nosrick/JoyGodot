@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
+
 using Godot;
 using JoyGodot.Assets.Scripts.Entities.AI.LOS.Boards;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.World;
 

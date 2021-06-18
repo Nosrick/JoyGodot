@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
+
 using Godot;
 using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Events;
