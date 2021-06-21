@@ -17,72 +17,11 @@ namespace JoyGodot.Assets.Scripts.Scripting
 {
     public class ScriptingEngine
     {
-        protected Assembly m_ScriptDLL;
-
-        protected List<Type> m_Types;
+        protected Type[] m_Types;
 
         public ScriptingEngine()
         {
-            if (this.m_Types is null)
-            {
-                try
-                {
-                    string dir = Directory.GetCurrentDirectory() +
-                                 GlobalConstants.ASSETS_FOLDER +
-                                 GlobalConstants.SCRIPTS_FOLDER;
-                    string[] scriptFiles = Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories);
-
-                    List<SyntaxTree> builtFiles = new List<SyntaxTree>();
-
-                    foreach (string scriptFile in scriptFiles)
-                    {
-                        string contents = File.ReadAllText(scriptFile);
-                        SyntaxTree builtFile = CSharpSyntaxTree.ParseText(contents);
-                        builtFiles.Add(builtFile);
-                    }
-
-                    GlobalConstants.ActionLog.Log("Found " + scriptFiles.Length + " script files.");
-                    List<MetadataReference> libs = new List<MetadataReference>
-                    {
-                        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(Object).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(ISet<bool>).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(GlobalConstants).Assembly.Location),
-                        MetadataReference.CreateFromFile(typeof(IQueryable).Assembly.Location)
-                    };
-                    CSharpCompilation compilation = CSharpCompilation.Create("JoyScripts", builtFiles, libs,
-                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-
-                    MemoryStream memory = new MemoryStream();
-                    EmitResult result = compilation.Emit(memory);
-
-                    if (result.Success == false)
-                    {
-                        foreach (var diagnostic in result.Diagnostics)
-                        {
-                            if (diagnostic.Severity != DiagnosticSeverity.Error)
-                            {
-                                continue;
-                            }
-
-                            GlobalConstants.ActionLog.Log(diagnostic.GetMessage(), LogLevel.Error);
-                            GlobalConstants.ActionLog.Log(diagnostic.Location.ToString(), LogLevel.Error);
-                        }
-                    }
-
-                    memory.Seek(0, SeekOrigin.Begin);
-                    this.m_ScriptDLL = Assembly.Load(memory.ToArray());
-
-                    this.m_Types = new List<Type>(typeof(IJoyObject).Assembly.GetExportedTypes());
-                    this.m_Types.AddRange(this.m_ScriptDLL.GetExportedTypes());
-                    this.m_Types = this.m_Types.Distinct(new JoyLibTypeComparer()).ToList();
-                }
-                catch (Exception ex)
-                {
-                    GlobalConstants.ActionLog.Log("Failed to create script library.", LogLevel.Error);
-                    GlobalConstants.ActionLog.StackTrace(ex);
-                }
-            }
+            this.m_Types = this.GetType().Assembly.GetExportedTypes();
         }
 
         public object FetchAndInitialise(string type)

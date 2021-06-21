@@ -76,9 +76,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Assets\Tests\**" />
+    <Compile Remove="JoyGodot.Generator\**" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Assets\Tests\**" />
+    <EmbeddedResource Remove="JoyGodot.Generator\**" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Data\Scripts\Conversation\Conditions" />
