@@ -153,7 +153,7 @@ namespace JoyGodot.Assets.Scripts.Godot
                 }
                 else
                 {
-                    var player = entity.MyWorld.Player;
+                    var player = GlobalConstants.GameManager.Player;
                     if (AdjacencyHelper.IsAdjacent(player.WorldPosition, entity.WorldPosition))
                     {
                         contextMenu.AddItem(

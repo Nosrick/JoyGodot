@@ -18,28 +18,14 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         public IItemContainer Left
         {
             get => this.m_Left;
-            set
-            {
-                this.m_Left = value;
-                if (this.Left is null == false && this.Right is null == false)
-                {
-                    this.SetActors();
-                }
-            }
+            set => this.m_Left = value;
         }
 
         protected IItemContainer m_Left;
         public IItemContainer Right
         {
             get => this.m_Right;
-            set
-            {
-                this.m_Right = value;
-                if (this.Left is null == false && this.Right is null == false)
-                {
-                    this.SetActors();
-                }
-            }
+            set => this.m_Right = value;
         }
 
         protected IItemContainer m_Right;
@@ -103,13 +89,16 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
         public void SetActors(IItemContainer left, IItemContainer right)
         {
-            
+            this.Left = left;
+            this.Right = right;
+            this.SetActors();
         }
 
-        public void SetActors()
+        protected void SetActors()
         {
             this.LeftInventory.ContainerOwner = this.Left;
             this.LeftOffering.ContainerOwner = new VirtualStorage();
+            this.LeftOffering.TitleText = "You are offering";
 
             this.RightInventory.ContainerOwner = this.Right;
             this.RightOffering.ContainerOwner = new VirtualStorage();
@@ -156,6 +145,12 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
             this.LeftOffering.RemoveAllItems();
             this.RightOffering.RemoveAllItems();
+
+            this.LeftInventory.ContainerOwner = this.Left;
+            this.LeftInventory.OnEnable();
+
+            this.RightInventory.ContainerOwner = this.Right;
+            this.RightInventory.OnEnable();
 
             this.Tally();
 

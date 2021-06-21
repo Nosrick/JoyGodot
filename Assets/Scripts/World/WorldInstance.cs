@@ -8,6 +8,7 @@ using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.AI;
 using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Physics;
 using JoyGodot.Assets.Scripts.Rollers;
@@ -17,8 +18,7 @@ using Array = Godot.Collections.Array;
 namespace JoyGodot.Assets.Scripts.World
 {
     [Serializable]
-    public class WorldInstance : 
-        IWorldInstance
+    public class WorldInstance : IWorldInstance
     {
         public event EmptyEventHandler OnTick;
         
@@ -162,24 +162,12 @@ namespace JoyGodot.Assets.Scripts.World
                 child.Initialise();
             }
             
-            this.CalculatePlayerIndex();
-            
             this.Initialised = true;
         }
 
         public void SetDateTime(DateTime dateTime)
         {
             s_DateTime = dateTime;
-        }
-
-        protected void CalculatePlayerIndex()
-        {
-            IEntity player = this.m_Entities.FirstOrDefault(entity => entity.PlayerControlled);
-            if (player is null == false)
-            {
-                this.Player = player;
-                this.EntityHandler.SetPlayer(player);
-            }
         }
 
         protected void CalculateLightLevels()
@@ -318,14 +306,9 @@ namespace JoyGodot.Assets.Scripts.World
                 return null;
             }
 
-            List<IEntity> sentients = this.m_Entities.Where(x => x.Sentient).ToList();
+            List<IEntity> sentients = this.m_Entities.Where(x => x.Sentient && x.PlayerControlled == false).ToList();
 
-            if (!(this.Player is null))
-            {
-                sentients = sentients.Where(entity => entity.Guid.Equals(this.Player.Guid) == false).ToList();
-            }
-
-            return sentients.Count > 0 ? sentients[this.Roller.Roll(0, sentients.Count)] : null;
+            return sentients.Count > 0 ? sentients.GetRandom() : null;
         }
 
         public IEntity GetRandomSentientWorldWide()
@@ -448,7 +431,6 @@ namespace JoyGodot.Assets.Scripts.World
             this.OnTick -= entityRef.Tick;
             this.OnTick += entityRef.Tick;
 
-            this.CalculatePlayerIndex();
             this.IsDirty = true;
 
             entityRef.MyWorld = this;
@@ -471,7 +453,6 @@ namespace JoyGodot.Assets.Scripts.World
                 this.EntityHandler.Destroy(entity.Guid);
             }
 
-            this.CalculatePlayerIndex();
 
             GlobalConstants.GameManager?.EntityPool.Retire(entity.MyNode);
 
@@ -799,12 +780,6 @@ namespace JoyGodot.Assets.Scripts.World
         {
             get { return this.m_Name; }
             protected set { this.m_Name = value; }
-        }
-
-        public IEntity Player
-        {
-            get;
-            protected set;
         }
 
         public Vector2Int Dimensions

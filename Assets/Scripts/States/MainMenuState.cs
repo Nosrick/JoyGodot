@@ -58,7 +58,7 @@ namespace JoyGodot.Assets.Scripts.States
             IWorldInstance overworld = this.m_WorldSerialiser.Deserialise("Everse");
             this.Done = true;
 
-            IWorldInstance playerWorld = overworld.Player.MyWorld;
+            IWorldInstance playerWorld = GlobalConstants.GameManager.EntityHandler.GetPlayer().MyWorld;
             this.m_NextState = new WorldInitialisationState(overworld, playerWorld);
         }
 

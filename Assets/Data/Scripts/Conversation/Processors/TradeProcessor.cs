@@ -28,7 +28,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
             //this.TradeWindow?.SetActors(instigator, listener);
 
             var tradeWindow = GlobalConstants.GameManager.GUIManager.Get<TradeWindow>(GUINames.TRADE);
-            tradeWindow.SetActors();
+            tradeWindow.SetActors(instigator, listener);
             GlobalConstants.GameManager.GUIManager.OpenGUI(this, GUINames.TRADE);
             
             return base.Interact(instigator, listener);

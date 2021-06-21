@@ -52,7 +52,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 this.m_ContainerOwner = value;
                 this.TitleText = value.JoyName;
-                this.OnEnable();
             }
         }
 
@@ -76,7 +75,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
         }
         
-        protected ManagedLabel Title { get; set; }
+        protected Label Title { get; set; }
 
         protected int ComparePriorities(Tuple<string, int> left, Tuple<string, int> right)
         {
@@ -99,7 +98,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             
             this.SlotParent = this.FindNode("Slot Grid") as Container;
             this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyItemSlot.tscn");
-            this.Title = this.FindNode("Title") as ManagedLabel;
+            this.Title = this.FindNode("Title") as Label;
             
             this.OnEnable();
 
@@ -131,44 +130,34 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
 
             this.MoveToContainers = new List<ItemContainer>();
-            if (this.m_ContainerNames is null)
+            this.m_ContainerNames ??= new List<MoveContainerPriority>();
+            this.ContainerOwner ??= new VirtualStorage();
+
+            foreach (JoyItemSlot slot in this.Slots)
             {
-                this.m_ContainerNames = new List<MoveContainerPriority>();
+                slot.Container = this;
+                slot.Item = null;
             }
 
-            if (this.ContainerOwner is null)
+            if (this.Slots.Count < this.ContainerOwner.Contents.Count())
             {
-                this.ContainerOwner = new VirtualStorage();
+                for (int i = this.Slots.Count; i < this.ContainerOwner.Contents.Count(); i++)
+                {
+                    var instance = this.AddSlot(true);
+                    this.GUIManager.SetupManagedComponents(instance);
+                    instance.Container = this;
+                }
             }
 
-            if (this.ContainerOwner is IItemContainer container)
+            List<IItemInstance> contents = this.ContainerOwner.Contents.ToList();
+            foreach (IItemInstance item in contents)
             {
-                foreach (JoyItemSlot slot in this.Slots)
-                {
-                    slot.Container = this;
-                    slot.Item = null;
-                }
+                this.StackOrAdd(item);
+            }
 
-                if (this.Slots.Count < container.Contents.Count())
-                {
-                    for (int i = this.Slots.Count; i < container.Contents.Count(); i++)
-                    {
-                        var instance = this.AddSlot(true);
-                        this.GUIManager.SetupManagedComponents(instance);
-                        instance.Container = this;
-                    }
-                }
-
-                List<IItemInstance> contents = container.Contents.ToList();
-                foreach (IItemInstance item in contents)
-                {
-                    this.StackOrAdd(item);
-                }
-
-                foreach (JoyItemSlot slot in this.Slots.Where(slot => slot.Visible))
-                {
-                    slot.Repaint();
-                }
+            foreach (JoyItemSlot slot in this.Slots.Where(slot => slot.Visible))
+            {
+                slot.Repaint();
             }
         }
         

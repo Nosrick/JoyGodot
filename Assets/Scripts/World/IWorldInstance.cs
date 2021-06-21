@@ -30,7 +30,6 @@ namespace JoyGodot.Assets.Scripts.World
         Vector2Int SpawnPoint { get; set; }
         IWorldInstance Parent { get; set; }
         string Name { get; }
-        IEntity Player { get; }
         Vector2Int Dimensions { get; }
         bool IsDirty { get; }
         

@@ -77,7 +77,7 @@ namespace JoyGodot.Assets.Scripts.States
             GlobalConstants.GameManager.Player.ConsciousnessChange -= this.OnPlayerConsciousChange;
             GlobalConstants.GameManager.Player.ConsciousnessChange += this.OnPlayerConsciousChange;
 
-            var player = this.PlayerWorld.Player;
+            var player = GlobalConstants.GameManager.Player;
             for (int i = 0; i < this.FogHolder.GetChildCount(); i++)
             {
                 PositionableSprite fog = this.FogHolder.GetChild(i) as PositionableSprite;
@@ -109,7 +109,7 @@ namespace JoyGodot.Assets.Scripts.States
             this.GUIManager.OpenGUI(this, GUINames.ACTION_LOG);
 
             var inventory = this.GUIManager.Get(GUINames.INVENTORY) as ItemContainer;
-            IEntity player = this.PlayerWorld.Player;
+            IEntity player = GlobalConstants.GameManager.Player;
             inventory.ContainerOwner = player;
             inventory.TitleText = player.JoyName + "'s Inventory";
 
@@ -125,7 +125,7 @@ namespace JoyGodot.Assets.Scripts.States
 
         public override void Start()
         {
-            this.m_ActiveWorld.Player.Tick();
+            this.m_ActiveWorld.Tick();
 
             this.SetEntityWorld(this.Overworld);
         }
@@ -135,7 +135,7 @@ namespace JoyGodot.Assets.Scripts.States
 
         public override void Update()
         {
-            IEntity player = this.m_ActiveWorld.Player;
+            IEntity player = GlobalConstants.GameManager.Player;
 
             if ((player.FulfillmentData is null || player.FulfillmentData.Counter <= 0)
                 && this.AutoTurn
@@ -169,8 +169,7 @@ namespace JoyGodot.Assets.Scripts.States
         {
             this.Done = true;
 
-            IWorldInstance oldWorld = this.m_ActiveWorld;
-            IEntity player = oldWorld.Player;
+            IEntity player = GlobalConstants.GameManager.Player;
 
             newWorld.Initialise();
             player.FetchAction("enterworldaction")
@@ -182,8 +181,6 @@ namespace JoyGodot.Assets.Scripts.States
                         {"world", newWorld}
                     });
             this.m_ActiveWorld = newWorld;
-
-            player = this.m_ActiveWorld.Player;
 
             player.Move(spawnPoint);
             player.Tick();
@@ -226,7 +223,7 @@ namespace JoyGodot.Assets.Scripts.States
             InputEvent action = @event;
             
             bool hasMoved = false;
-            IEntity player = this.m_ActiveWorld.Player;
+            IEntity player = GlobalConstants.GameManager.Player;
 
             /*
             if(Input.GetMouseButtonDown(0))
@@ -253,7 +250,7 @@ namespace JoyGodot.Assets.Scripts.States
                 return;
             }
 
-            Vector2Int newPlayerPoint = this.m_ActiveWorld.Player.WorldPosition;
+            Vector2Int newPlayerPoint = GlobalConstants.GameManager.Player.WorldPosition;
 
             if (action.IsActionReleased("close all windows"))
             {
@@ -497,7 +494,7 @@ namespace JoyGodot.Assets.Scripts.States
 
         protected void DrawObjects()
         {
-            var player = this.m_ActiveWorld.Player;
+            var player = GlobalConstants.GameManager.Player;
 
             var playerVision = player.VisionProvider; 
 
