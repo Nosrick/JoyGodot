@@ -15,6 +15,14 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
         protected List<Tuple<string, Guid>> m_Slots;
 
         public virtual string ContentString { get; }
+
+        public string JoyName => "Equipment";
+
+        public Guid Guid
+        {
+            get; 
+            protected set;
+        }
         public virtual event ItemRemovedEventHandler ItemRemoved;
         public virtual event ItemAddedEventHandler ItemAdded;
 
@@ -26,11 +34,12 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
         public EquipmentStorage()
         {
             this.m_Slots = new List<Tuple<string, Guid>>();
+            this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
         }
 
         public EquipmentStorage(IEnumerable<string> slots)
+            : this()
         {
-            this.m_Slots = new List<Tuple<string, Guid>>();
             foreach (string slot in slots)
             {
                 this.m_Slots.Add(new Tuple<string, Guid>(slot, Guid.Empty));

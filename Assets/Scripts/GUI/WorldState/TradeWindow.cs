@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Godot;
@@ -14,7 +15,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
     public class TradeWindow : GUIData
     {
-        public IEntity Left
+        public IItemContainer Left
         {
             get => this.m_Left;
             set
@@ -27,8 +28,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             }
         }
 
-        protected IEntity m_Left;
-        public IEntity Right
+        protected IItemContainer m_Left;
+        public IItemContainer Right
         {
             get => this.m_Right;
             set
@@ -41,7 +42,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             }
         }
 
-        protected IEntity m_Right;
+        protected IItemContainer m_Right;
 
         protected Label LeftValue { get; set; }
         protected Label RightValue { get; set; }
@@ -100,16 +101,20 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             return base.Close(sender);
         }
 
+        public void SetActors(IItemContainer left, IItemContainer right)
+        {
+            
+        }
+
         public void SetActors()
         {
-            this.LeftInventory.JoyObjectOwner = this.Left;
-            this.LeftOffering.JoyObjectOwner = new VirtualStorage();
+            this.LeftInventory.ContainerOwner = this.Left;
+            this.LeftOffering.ContainerOwner = new VirtualStorage();
 
-            this.RightInventory.JoyObjectOwner = this.Right;
-            this.RightOffering.JoyObjectOwner = new VirtualStorage();
+            this.RightInventory.ContainerOwner = this.Right;
+            this.RightOffering.ContainerOwner = new VirtualStorage();
 
-            this.RightOffering.TitleText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.PersonalSubject) +
-                                  " " + this.Right.Gender.IsOrAre + " offering";
+            this.RightOffering.TitleText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.JoyName + "'s offering");
             this.RightInventory.TitleText = this.Right.JoyName;
 
             this.Tally();
@@ -121,11 +126,15 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
             int rightValue = this.RightOffering.Contents.Sum(item => item.Value);
 
-            int? relationshipValue = this.RelationshipHandler?.GetHighestRelationshipValue(this.Right, this.Left);
-
-            if (relationshipValue is null)
+            int relationshipValue = 0;
+            relationshipValue = this.RelationshipHandler.GetHighestRelationshipValue(this.Left.Guid, this.Right.Guid);
+            
+            int difference = leftValue - rightValue;
+            IEnumerable<IRelationship> relationships =
+                this.RelationshipHandler?.Get(new[] {this.Left.Guid, this.Right.Guid});
+            foreach (IRelationship relationship in relationships)
             {
-                return false;
+                relationship.ModifyValueOfParticipant(this.Left.Guid, this.Right.Guid, difference);
             }
 
             if (!(leftValue + relationshipValue >= rightValue))
@@ -133,23 +142,17 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 return false;
             }
 
-            int difference = leftValue - rightValue;
-
-            IEnumerable<IRelationship> relationships =
-                this.RelationshipHandler?.Get(new IJoyObject[] {this.Left, this.Right});
-            foreach (IRelationship relationship in relationships)
+            if (this.Left is IJoyObject leftObject && this.Right is IJoyObject rightObject)
             {
-                relationship.ModifyValueOfParticipant(this.Left.Guid, this.Right.Guid, difference);
+                GlobalConstants.ScriptingEngine.FetchAction("tradeaction").Execute(
+                    new[] {leftObject, rightObject},
+                    new[] {"trade", "give", "item"},
+                    new Dictionary<string, object>
+                    {
+                        {"leftOffering", this.LeftOffering.Contents},
+                        {"rightOffering", this.RightOffering.Contents}
+                    });
             }
-
-            GlobalConstants.ScriptingEngine.FetchAction("tradeaction").Execute(
-                new IJoyObject[] {this.Left, this.Right},
-                new[] {"trade", "give", "item"},
-                new Dictionary<string, object>
-                {
-                    {"leftOffering", this.LeftOffering.Contents},
-                    {"rightOffering", this.RightOffering.Contents}
-                });
 
             this.LeftOffering.RemoveAllItems();
             this.RightOffering.RemoveAllItems();
@@ -180,8 +183,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             int rightValue = this.RightOffering.Contents.Sum(item => item.Value);
 
             this.LeftValue.Text = "Your value: " + leftValue;
-            this.RightValue.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.Gender.Possessive) +
-                                   " value: " + rightValue;
+            this.RightValue.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.JoyName) +
+                                   "'s value: " + rightValue;
         }
 
         protected void Tally(IItemContainer container, ItemChangedEventArgs args)

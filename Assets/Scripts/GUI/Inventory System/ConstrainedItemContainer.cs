@@ -46,12 +46,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 this.m_ContainerNames = new List<MoveContainerPriority>();
             }
 
-            if (this.JoyObjectOwner is null)
+            if (this.ContainerOwner is null)
             {
-                this.JoyObjectOwner = new VirtualStorage();
+                this.ContainerOwner = new VirtualStorage();
             }
 
-            if (this.JoyObjectOwner is IEntity entity)
+            if (this.ContainerOwner is IEntity entity)
             {
                 var contents = entity.Equipment.GetSlotsAndContents().ToList();
                 

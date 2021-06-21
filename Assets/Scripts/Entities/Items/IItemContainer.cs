@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Events;
 
 namespace JoyGodot.Assets.Scripts.Entities.Items
 {
-    public interface IItemContainer
+    public interface IItemContainer : IJoyNameHolder, IGuidHolder
     {
         IEnumerable<IItemInstance> Contents { get; }
 

@@ -45,33 +45,22 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         protected List<JoyItemSlot> Slots { get; set; }
         public List<MoveContainerPriority> ContainerPriorities => this.m_ContainerNames;
         
-        public virtual IJoyObject JoyObjectOwner
+        public virtual IItemContainer ContainerOwner
         {
-            get => this.m_JoyObjectOwner;
+            get => this.m_ContainerOwner;
             set
             {
-                this.m_JoyObjectOwner = value;
+                this.m_ContainerOwner = value;
                 this.TitleText = value.JoyName;
                 this.OnEnable();
             }
         }
 
-        protected IJoyObject m_JoyObjectOwner;
+        protected IItemContainer m_ContainerOwner;
 
         public string UseAction => this.m_UseAction;
 
-        public IEnumerable<IItemInstance> Contents
-        {
-            get
-            {
-                if (this.JoyObjectOwner is IItemContainer container)
-                {
-                    return container.Contents;
-                }
-
-                return new List<IItemInstance>();
-            }
-        }
+        public IEnumerable<IItemInstance> Contents => this.ContainerOwner.Contents;
 
         public string TitleText
         {
@@ -147,12 +136,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 this.m_ContainerNames = new List<MoveContainerPriority>();
             }
 
-            if (this.JoyObjectOwner is null)
+            if (this.ContainerOwner is null)
             {
-                this.JoyObjectOwner = new VirtualStorage();
+                this.ContainerOwner = new VirtualStorage();
             }
 
-            if (this.JoyObjectOwner is IItemContainer container)
+            if (this.ContainerOwner is IItemContainer container)
             {
                 foreach (JoyItemSlot slot in this.Slots)
                 {
@@ -190,14 +179,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         protected virtual bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
         {
-            if (this.JoyObjectOwner is null)
+            if (this.ContainerOwner is null)
             {
                 return false;
             }
 
-            if (item.Guid != this.JoyObjectOwner.Guid)
+            if (item.Guid != this.ContainerOwner.Guid)
             {
-                if (this.JoyObjectOwner is IItemContainer container)
+                if (this.ContainerOwner is IItemContainer container)
                 {
                     if (container.CanAddContents(item))
                     {
@@ -443,7 +432,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool CanAddItem(IItemInstance item)
         {
-            if (this.JoyObjectOwner is IItemContainer container)
+            if (this.ContainerOwner is IItemContainer container)
             {
                 return container.CanAddContents(item);
             }
@@ -453,13 +442,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool RemoveItem(IItemInstance item, int amount)
         {
-            if (this.JoyObjectOwner is null)
+            if (this.ContainerOwner is null)
             {
                 return false;
             }
 
             bool result = false;
-            if (this.JoyObjectOwner is IItemContainer container)
+            if (this.ContainerOwner is IItemContainer container)
             {
                 if (container.Contents.Any(i =>
                     i.IdentifiedName.Equals(item.IdentifiedName, StringComparison.OrdinalIgnoreCase)))
@@ -486,14 +475,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool RemoveItem(IItemInstance item)
         {
-            if (this.JoyObjectOwner is null)
+            if (this.ContainerOwner is null)
             {
                 return false;
             }
 
-            if (item.Guid != this.JoyObjectOwner.Guid)
+            if (item.Guid != this.ContainerOwner.Guid)
             {
-                if (this.JoyObjectOwner is IItemContainer container)
+                if (this.ContainerOwner is IItemContainer container)
                 {
                     if (container.Contains(item) == false ||
                         this.Slots.Any(slot => !(slot.Item is null) && slot.Item.Guid == item.Guid) == false)
@@ -518,13 +507,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool RemoveItem(int index)
         {
-            if (this.JoyObjectOwner is null)
+            if (this.ContainerOwner is null)
             {
                 return false;
             }
 
             if (index < this.Slots.Count
-                && this.JoyObjectOwner is IItemContainer container)
+                && this.ContainerOwner is IItemContainer container)
             {
                 JoyItemSlot slot = this.Slots[index];
                 IItemInstance item = slot.Item;
@@ -543,7 +532,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool StackOrSwap(ItemContainer destination, IItemInstance item)
         {
-            if (this.JoyObjectOwner.Equals(destination.JoyObjectOwner))
+            if (this.ContainerOwner.Equals(destination.ContainerOwner))
             {
                 return false;
             }

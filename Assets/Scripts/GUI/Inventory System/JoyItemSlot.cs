@@ -323,7 +323,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return;
             }
             
-            container.JoyObjectOwner = this.Item;
+            container.ContainerOwner = this.Item;
             container.OnEnable();
         }
 
