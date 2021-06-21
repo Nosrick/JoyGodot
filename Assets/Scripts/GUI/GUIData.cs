@@ -137,6 +137,11 @@ namespace JoyGodot.Assets.Scripts.GUI
                     node.SetProcessInput(true);
                     node.SetPhysicsProcess(true);
                 }
+
+                if (child is GUIData data)
+                {
+                    data.Display();
+                }
             }
 
             this.OnGUIOpen?.Invoke(this);
@@ -158,6 +163,11 @@ namespace JoyGodot.Assets.Scripts.GUI
                     node.SetProcess(false);
                     node.SetProcessInput(false);
                     node.SetPhysicsProcess(false);
+                }
+
+                if (child is GUIData data)
+                {
+                    data.Close(sender);
                 }
             }
 
