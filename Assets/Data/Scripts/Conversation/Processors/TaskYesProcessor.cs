@@ -37,7 +37,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 
             IGameManager gameManager = GlobalConstants.GameManager;
             this.QuestTracker = gameManager.QuestTracker;
-            this.Player = gameManager.EntityHandler.GetPlayer();
+            this.Player = gameManager.Player;
 
             this.Initialised = true;
         }
