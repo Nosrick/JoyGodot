@@ -273,11 +273,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 {
                     Name = "Text",
                     AnchorBottom = 1,
-                    AnchorRight = 1,
-                    MarginTop = 4,
-                    MarginLeft = 4,
-                    MarginBottom = -4,
-                    MarginRight = -4,
+                    AnchorRight = 1
                 };
                 if (this.ChildParent is null)
                 {
