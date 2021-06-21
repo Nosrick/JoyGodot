@@ -204,7 +204,8 @@ namespace JoyGodot.Assets.Scripts.Conversation.Conversations
             string[] tags = this.RelationshipHandler is null
                 ? new string[0]
                 : this.RelationshipHandler.Get(
-                    new IJoyObject[] {instigator, listener}).SelectMany(relationship => relationship.Tags).ToArray();
+                    new[] {instigator.Guid, listener.Guid})
+                    .SelectMany(relationship => relationship.Tags).ToArray();
 
             influence.Execute(
                 new IJoyObject[] {instigator, listener},
@@ -222,7 +223,7 @@ namespace JoyGodot.Assets.Scripts.Conversation.Conversations
                     {"value", listener.Statistics[EntityStatistic.PERSONALITY].Value}
                 });
 
-            bool? isFamily = this.RelationshipHandler?.IsFamily(instigator, listener);
+            bool? isFamily = this.RelationshipHandler?.IsFamily(instigator.Guid, listener.Guid);
 
             if (isFamily is null == false && isFamily == true)
             {

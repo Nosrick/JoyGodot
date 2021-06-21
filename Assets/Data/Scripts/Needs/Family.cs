@@ -98,8 +98,10 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 participants.Add(actor);
                 participants.Add(possible);
 
-                string[] relationshipTags = new[] {"family"};
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                string[] relationshipTags = {"family"};
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(
+                    participants.Select(o => o.Guid), 
+                    relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -120,8 +122,10 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                     participants.Add(actor);
                     participants.Add(possible);
 
-                    string[] relationshipTags = new[] {"friendship"};
-                    IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants, relationshipTags);
+                    string[] relationshipTags = {"friendship"};
+                    IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(
+                        participants.Select(o => o.Guid), 
+                        relationshipTags);
 
                     foreach (IRelationship relationship in relationships)
                     {

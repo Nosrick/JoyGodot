@@ -96,7 +96,8 @@ namespace JoyGodot.Assets.Scripts.Quests
         private List<IItemInstance> GetRewards(IEntity questor, IEntity provider, List<IQuestAction> actions)
         {
             List<IItemInstance> rewards = new List<IItemInstance>();
-            int reward = ((actions.Count * 100) + (this.EntityRelationshipHandler.GetHighestRelationshipValue(provider, questor)));
+            int reward = ((actions.Count * 100) + 
+                          (this.EntityRelationshipHandler.GetHighestRelationshipValue(provider.Guid, questor.Guid)));
             rewards.Add(this.BagOfGoldHelper.GetBagOfGold(reward));
             foreach (IItemInstance item in rewards)
             {

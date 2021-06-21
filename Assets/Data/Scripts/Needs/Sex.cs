@@ -102,8 +102,10 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 List<IJoyObject> participants = new List<IJoyObject>();
                 participants.Add(actor);
                 participants.Add(mate);
-                string[] relationshipTags = new string[] { "sexual" };
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants, relationshipTags);
+                string[] relationshipTags = { "sexual" };
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(
+                    participants.Select(o => o.Guid), 
+                    relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -146,7 +148,7 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
             this.GetBits();
 
             if (actor.Sexuality.WillMateWith(actor, partner, this.RelationshipHandler.Get(
-                    new IJoyObject[] { actor, partner },
+                    new Guid[] { actor.Guid, partner.Guid },
                     new string[] { "sexual" })))
             {
                 int satisfaction = this.CalculateSatisfaction(

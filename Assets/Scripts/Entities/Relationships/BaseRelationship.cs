@@ -280,20 +280,19 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
         }
 
         public IRelationship Create(
-            IEnumerable<IJoyObject> participants)
+            IEnumerable<Guid> participants)
         {
             return new BaseRelationship(
                 this.Name,
                 this.DisplayName,
                 this.MaxParticipants,
                 this.UniqueTags,
-                participants.Select(o => o.Guid),
+                participants,
                 null,
                 this.Tags);
         }
 
-        public IRelationship CreateWithValue(
-            IEnumerable<IJoyObject> participants,
+        public IRelationship CreateWithValue(IEnumerable<Guid> participants,
             int value)
         {
             IRelationship relationship = this.Create(participants);

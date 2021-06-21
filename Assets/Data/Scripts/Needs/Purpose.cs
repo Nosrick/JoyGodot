@@ -100,7 +100,9 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 List<IJoyObject> participants = new List<IJoyObject> {actor, possible};
 
                 string[] relationshipTags = new[] {"friendship"};
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(participants, relationshipTags);
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(
+                    participants.Select(o => o.Guid), 
+                    relationshipTags);
 
                 if (relationships is null)
                 {
@@ -157,7 +159,7 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                     {"doAll", true}
                 });
 
-            if (this.RelationshipHandler.IsFamily(actor, listener))
+            if (this.RelationshipHandler.IsFamily(actor.Guid, listener.Guid))
             {
                 this.m_CachedActions["fulfillneedaction"].Execute(
                     new IJoyObject[] {actor, listener},

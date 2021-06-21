@@ -110,11 +110,11 @@ namespace JoyGodot.Assets.Scripts.States
 
             var inventory = this.GUIManager.Get(GUINames.INVENTORY) as ItemContainer;
             IEntity player = this.PlayerWorld.Player;
-            inventory.JoyObjectOwner = player;
+            inventory.ContainerOwner = player;
             inventory.TitleText = player.JoyName + "'s Inventory";
 
             var equipment = this.GUIManager.Get(GUINames.EQUIPMENT) as ConstrainedItemContainer;
-            equipment.JoyObjectOwner = player;
+            equipment.ContainerOwner = player;
             equipment.TitleText = player.JoyName + "'s Equipment";
 
             /*

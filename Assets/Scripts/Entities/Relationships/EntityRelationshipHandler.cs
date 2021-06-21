@@ -112,9 +112,9 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
             return this.m_Relationships.RemoveByKey(ID) > 0;
         }
 
-        public IRelationship CreateRelationship(IEnumerable<IJoyObject> participants, IEnumerable<string> tags)
+        public IRelationship CreateRelationship(IEnumerable<Guid> participants, IEnumerable<string> tags)
         {
-            long hash = BaseRelationship.GenerateHash(participants.Select(o => o.Guid));
+            long hash = BaseRelationship.GenerateHash(participants);
             if (this.m_Relationships.ContainsKey(hash))
             {
                 List<IRelationship> relationships = this.m_Relationships[hash];
@@ -168,7 +168,9 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
             throw new InvalidOperationException("Relationship type " + tags.Print() + " not found.");
         }
 
-        public IRelationship CreateRelationshipWithValue(IEnumerable<IJoyObject> participants, IEnumerable<string> tags,
+        public IRelationship CreateRelationshipWithValue(
+            IEnumerable<Guid> participants, 
+            IEnumerable<string> tags,
             int value)
         {
             IRelationship relationship = this.CreateRelationship(participants, tags);
@@ -177,11 +179,12 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
             return relationship;
         }
 
-        public IEnumerable<IRelationship> Get(IEnumerable<IJoyObject> participants, IEnumerable<string> tags = null,
+        public IEnumerable<IRelationship> Get(
+            IEnumerable<Guid> participants, 
+            IEnumerable<string> tags = null,
             bool createNewIfNone = false)
         {
-            IEnumerable<Guid> GUIDs = participants.Select(p => p.Guid);
-            long hash = BaseRelationship.GenerateHash(GUIDs);
+            long hash = BaseRelationship.GenerateHash(participants);
 
             List<IRelationship> relationships = new List<IRelationship>();
             
@@ -215,12 +218,12 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
             return relationships.ToArray();
         }
 
-        public int GetHighestRelationshipValue(IJoyObject speaker, IJoyObject listener, IEnumerable<string> tags = null)
+        public int GetHighestRelationshipValue(Guid speaker, Guid listener, IEnumerable<string> tags = null)
         {
             try
             {
                 return this.GetBestRelationship(speaker, listener, tags)
-                    .GetRelationshipValue(speaker.Guid, listener.Guid);
+                    .GetRelationshipValue(speaker, listener);
             }
             catch (Exception e)
             {
@@ -229,17 +232,19 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
             }
         }
 
-        public IRelationship GetBestRelationship(IJoyObject speaker, IJoyObject listener,
+        public IRelationship GetBestRelationship(
+            Guid speaker, 
+            Guid listener,
             IEnumerable<string> tags = null)
         {
-            IJoyObject[] participants = {speaker, listener};
+            Guid[] participants = {speaker, listener};
             IEnumerable<IRelationship> relationships = this.Get(participants, tags, false);
 
             int highestValue = int.MinValue;
             IRelationship bestMatch = null;
             foreach (IRelationship relationship in relationships)
             {
-                int value = relationship.GetRelationshipValue(speaker.Guid, listener.Guid);
+                int value = relationship.GetRelationshipValue(speaker, listener);
                 if (value > highestValue)
                 {
                     highestValue = value;
@@ -249,22 +254,22 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
 
             if (bestMatch is null)
             {
-                throw new InvalidOperationException("No relationship between " + speaker.JoyName + " and " + listener.JoyName + ".");
+                throw new InvalidOperationException("No relationship between " + speaker + " and " + listener + ".");
             }
 
             return bestMatch;
         }
 
-        public IEnumerable<IRelationship> GetAllForObject(IJoyObject actor)
+        public IEnumerable<IRelationship> GetAllForObject(Guid actor)
         {
-            return this.m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor.Guid) is null == false)
+            return this.m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor) is null == false)
                 .Select(tuple => tuple.Item2)
                 .ToArray();
         }
 
-        public bool IsFamily(IJoyObject speaker, IJoyObject listener)
+        public bool IsFamily(Guid speaker, Guid listener)
         {
-            IJoyObject[] participants = { speaker, listener };
+            Guid[] participants = { speaker, listener };
             IEnumerable<IRelationship> relationships = this.Get(participants, new[] {"family"});
 
             return relationships.Any();

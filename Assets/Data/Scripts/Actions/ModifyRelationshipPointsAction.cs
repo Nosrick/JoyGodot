@@ -47,7 +47,10 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
                 return false;
             }
 
-            IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(participants, tags, true);
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(
+                participants.Select(o => o.Guid), 
+                tags, 
+                true);
 
             bool doAll = args.TryGetValue("doAll", out arg) && (bool) arg;
 

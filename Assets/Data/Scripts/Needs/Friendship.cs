@@ -89,8 +89,10 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 participants.Add(actor);
                 participants.Add(possible);
 
-                string[] relationshipTags = new[] {"friendship"};
-                IEnumerable<IRelationship> relationships = this.EntityRelationshipHandler.Get(participants, relationshipTags);
+                string[] relationshipTags = {"friendship"};
+                IEnumerable<IRelationship> relationships = this.EntityRelationshipHandler.Get(
+                    participants.Select(o => o.Guid), 
+                    relationshipTags);
                 
                 foreach (IRelationship relationship in relationships)
                 {

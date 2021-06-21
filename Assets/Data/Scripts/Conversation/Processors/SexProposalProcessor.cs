@@ -32,13 +32,19 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 
             IJoyObject[] participants = {instigator, listener};
             
-            List<IRelationship> relationships = this.RelationshipHandler.Get(participants, new[] {"sexual"}, false).ToList();
+            List<IRelationship> relationships = this.RelationshipHandler.Get(
+                participants.Select(o => o.Guid), 
+                new[] {"sexual"}, 
+                false)
+                .ToList();
 
             if (relationships.IsNullOrEmpty()
                 && listener.Sexuality.Compatible(listener, instigator)
                 && instigator.Sexuality.Compatible(instigator, listener))
             {
-                relationships.Add(this.RelationshipHandler.CreateRelationship(participants, new string[] {"sexual"}));
+                relationships.Add(this.RelationshipHandler.CreateRelationship(
+                    participants.Select(o => o.Guid), 
+                    new[] {"sexual"}));
             }
             
             if (listener.Sexuality.WillMateWith(listener, instigator, relationships) == false

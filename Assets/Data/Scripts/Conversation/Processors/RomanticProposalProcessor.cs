@@ -31,7 +31,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
             IEntity listener = this.ConversationEngine.Listener;
             IEntity instigator = this.ConversationEngine.Instigator;
             List<IRelationship> relationships = this.RelationshipHandler
-                .Get(new IJoyObject[] {instigator, listener})
+                .Get(new[] {instigator.Guid, listener.Guid})
                 .ToList();
             if (listener.Romance.WillRomance(listener, instigator, relationships)
             && instigator.Romance.WillRomance(instigator, listener, relationships))
@@ -42,13 +42,13 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                 IRelationship selectedRelationship = this.RelationshipHandler.RelationshipTypes.First(relationship =>
                     relationship.Name.Equals(relationshipType, StringComparison.OrdinalIgnoreCase));
 
-                relationships = this.RelationshipHandler.GetAllForObject(instigator).ToList();
+                relationships = this.RelationshipHandler.GetAllForObject(instigator.Guid).ToList();
 
                 bool unique = relationships.Any(relationship =>
                     relationship.Name.Equals(selectedRelationship.Name)
                     && relationship.UniqueTags.Intersect(selectedRelationship.UniqueTags).Any());
 
-                relationships = this.RelationshipHandler.GetAllForObject(listener).ToList();
+                relationships = this.RelationshipHandler.GetAllForObject(listener.Guid).ToList();
                 
                 unique |= relationships.Any(relationship =>
                     relationship.Name.Equals(selectedRelationship.Name)

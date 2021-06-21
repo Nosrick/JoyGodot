@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JoyGodot.Assets.Scripts.Conversation.Conversations;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
@@ -29,7 +30,9 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
             IEntity listener = this.ConversationEngine.Listener;
             IEntity instigator = this.ConversationEngine.Instigator;
             IEnumerable<IRelationship> relationships =
-                this.RelationshipHandler.Get(new IJoyObject[] {instigator, listener}, new[] {"romantic"});
+                this.RelationshipHandler.Get(
+                    new[] {instigator.Guid, listener.Guid}, 
+                    new[] {"romantic"});
             int highestValue = int.MinValue;
             IRelationship chosenRelationship = null;
 

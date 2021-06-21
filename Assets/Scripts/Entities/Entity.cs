@@ -644,8 +644,8 @@ namespace JoyGodot.Assets.Scripts.Entities
                 {
                     relationship = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
                         this.RelationshipHandler.GetBestRelationship(
-                                this,
-                                GlobalConstants.GameManager.Player)
+                                this.Guid,
+                                GlobalConstants.GameManager.Player.Guid)
                             .DisplayName);
                 }
                 catch (Exception e)
@@ -974,7 +974,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                     continue;
                 }
 
-                List<IRelationship> relationships = this.RelationshipHandler?.GetAllForObject(this).ToList();
+                List<IRelationship> relationships = this.RelationshipHandler?.GetAllForObject(this.Guid).ToList();
 
                 if (relationships.IsNullOrEmpty())
                 {

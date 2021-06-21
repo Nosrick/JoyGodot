@@ -218,7 +218,7 @@ namespace JoyGodot.Assets.Scripts.Conversation
             try
             {
                 IEnumerable<IRelationship> relationships =
-                    this.RelationshipHandler.Get(new IJoyObject[] {this.Instigator, this.Listener});
+                    this.RelationshipHandler.Get(new[] {this.Instigator.Guid, this.Listener.Guid});
 
                 IRelationship chosenRelationship = null;
                 int best = Int32.MinValue;

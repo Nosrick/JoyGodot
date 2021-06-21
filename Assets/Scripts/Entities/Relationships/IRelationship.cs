@@ -31,9 +31,9 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
 
         long GenerateHashFromInstance();
 
-        IRelationship Create(IEnumerable<IJoyObject> participants);
+        IRelationship Create(IEnumerable<Guid> participants);
         
-        IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
+        IRelationship CreateWithValue(IEnumerable<Guid> participants, int value);
 
         string Name { get; }
 

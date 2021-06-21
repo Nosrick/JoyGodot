@@ -16,12 +16,12 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         IDataContainer, 
         IGuidHolder,
         ITickable,
-        ISerialisationHandler
+        ISerialisationHandler,
+        IJoyNameHolder
     {
         List<ISpriteState> States { get; }
         bool IsDestructible { get; }
         bool IsWall { get; }
-        string JoyName { get; }
         
         string TileSet { get; }
         

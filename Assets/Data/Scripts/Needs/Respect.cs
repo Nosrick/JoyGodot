@@ -145,7 +145,7 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
             bool result = base.Tick(actor);
             if (this.m_DecayCounter == 0 && this.m_DoesDecay)
             {
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler.GetAllForObject(actor);
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.GetAllForObject(actor.Guid);
 
                 if (relationships.Any() == false)
                 {
