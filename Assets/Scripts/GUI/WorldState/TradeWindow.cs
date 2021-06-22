@@ -103,7 +103,18 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.RightInventory.ContainerOwner = this.Right;
             this.RightOffering.ContainerOwner = new VirtualStorage();
 
-            this.RightOffering.TitleText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.JoyName + "'s offering");
+            if (this.Right is IEntity right)
+            {
+                this.RightOffering.TitleText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+                    right.Gender.PersonalSubject) +
+                    " " + right.Gender.IsOrAre +
+                         " offering";
+            }
+            else
+            {
+                this.RightOffering.TitleText = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Right.JoyName + "'s offering");
+            }
+            
             this.RightInventory.TitleText = this.Right.JoyName;
 
             this.Tally();
