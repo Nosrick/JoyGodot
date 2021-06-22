@@ -131,7 +131,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = null;
 
-            if(this.Container.CanAddItem(dragObject.Item) 
+            if(this.Container.CanAddItem(dragObject.Item, dragObject.SourceContainer.Name) 
                && this.Container.StackOrAdd(dragObject.Item))
             {
                 dragObject.SourceContainer.RemoveItem(dragObject.Item);

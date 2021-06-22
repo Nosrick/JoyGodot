@@ -43,7 +43,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             this.MoveToContainers = new List<ItemContainer>();
             if (this.m_ContainerNames is null)
             {
-                this.m_ContainerNames = new List<MoveContainerPriority>();
+                this.m_ContainerNames = new Array<MoveContainerPriority>();
             }
 
             if (this.ContainerOwner is null)
