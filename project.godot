@@ -726,6 +726,13 @@ _global_script_class_icons={
 "VisualShaderToolsvec2Compose": ""
 }
 
+[MonoCustomResourceRegistry]
+
+ClassPrefix=""
+SearchType=0
+ResourceScriptDirectories=[ "res://" ]
+ResourcePrototypeDirectories=[ "res://ResourcePrototypes" ]
+
 [application]
 
 config/name="JoyGodot"
@@ -741,7 +748,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray(  )
+enabled=PoolStringArray( "res://addons/CustomResourceRegistry/plugin.cfg" )
 
 [input]
 
