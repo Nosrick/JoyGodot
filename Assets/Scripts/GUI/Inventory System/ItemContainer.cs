@@ -271,6 +271,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 slot.Item = null;
                 slot.Repaint();
             }
+            
+            this.ContainerOwner.Clear();
         }
 
         public virtual bool MoveItem(IItemInstance item)
