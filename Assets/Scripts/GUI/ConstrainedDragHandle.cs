@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 
 namespace JoyGodot.Assets.Scripts.GUI
 {
@@ -56,6 +57,8 @@ namespace JoyGodot.Assets.Scripts.GUI
                     switch (this.Constraint)
                     {
                         case ConstraintType.Anchors:
+                            GD.PushWarning("Anchors mode not implemented yet!");
+                            /*
                             if (this.HorizontalConstraint)
                             {
                                 if (this.Parent.AnchorLeft > mouseMotion.Position.x
@@ -77,6 +80,7 @@ namespace JoyGodot.Assets.Scripts.GUI
 
                                 this.Parent.RectGlobalPosition += new Vector2(0, mouseMotion.Relative.y);
                             }
+                            */
                             break;
                         
                         case ConstraintType.Pixels:
@@ -101,6 +105,15 @@ namespace JoyGodot.Assets.Scripts.GUI
 
                                 this.Parent.RectGlobalPosition += new Vector2(0, mouseMotion.Relative.y);
                             }
+                    
+                            Vector2 parentRect = this.Parent.RectGlobalPosition;
+                            this.Parent.RectGlobalPosition = new Vector2(
+                                this.HorizontalConstraint
+                                    ? Mathf.Clamp(parentRect.x, this.XMin, this.XMax)
+                                    : parentRect.x,
+                                this.VerticalConstraint
+                                    ? Mathf.Clamp(parentRect.y, this.YMin, this.YMax)
+                                    : parentRect.y);
                             break;
                     }
                 }
