@@ -42,6 +42,8 @@ namespace JoyGodot.Assets.Scripts.Entities
         public event BooleanChangedEventHandler AliveChange;
         public event ValueChangedEventHandler<float> HappinessChange;
 
+        public event ValueChangedEventHandler<int> NeedChange; 
+
         protected IDictionary<string, IEntityStatistic> m_Statistics;
 
         protected IDictionary<string, IEntitySkill> m_Skills;
@@ -626,6 +628,7 @@ namespace JoyGodot.Assets.Scripts.Entities
         protected void MarkHappinessDirty(object sender, ValueChangedEventArgs<int> args)
         {
             this.HappinessIsDirty = true;
+            this.NeedChange?.Invoke(this, args);
         }
 
         protected ICollection<string> ConstructDescription()
@@ -1419,6 +1422,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                 string name = valueExtractor.GetValueFromDictionary<string>(needDict, "Name");
                 INeed need = GlobalConstants.GameManager.NeedHandler.Get(name);
                 need.Load(needDict);
+                need.ValueChanged += this.MarkHappinessDirty;
                 this.m_Needs.Add(need.Name, need);
             }
 

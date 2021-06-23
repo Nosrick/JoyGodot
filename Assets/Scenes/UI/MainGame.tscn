@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://Assets/Scenes/Windows/PauseScreen.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Assets/Scenes/Windows/TradeWindow.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Assets/Scripts/GUI/GUIData.cs" type="Script" id=15]
+[ext_resource path="res://Assets/Scenes/Windows/NeedsPanel.tscn" type="PackedScene" id=16]
 
 [sub_resource type="Theme" id=1]
 
@@ -134,7 +135,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Fill Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -142,7 +142,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
+Text = "Fill Needs"
 OutlineColour = Color( 0, 0, 0, 1 )
 OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
@@ -176,7 +176,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Empty Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -184,7 +183,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
+Text = "Empty Needs"
 OutlineColour = Color( 0, 0, 0, 1 )
 OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
@@ -218,7 +217,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Empty One Need"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -226,7 +224,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
+Text = "Empty One Need"
 OutlineColour = Color( 0, 0, 0, 1 )
 OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
@@ -260,7 +258,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Add Quest"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -268,7 +265,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
+Text = "Add Quest"
 OverrideOutline = true
 OutlineColour = Color( 0, 0, 0, 1 )
 CacheFont = true
@@ -303,7 +300,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Complete Quest"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -311,7 +307,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
+Text = "Complete Quest"
 OverrideOutline = true
 OutlineColour = Color( 0, 0, 0, 1 )
 CacheFont = true
@@ -363,6 +359,8 @@ visible = false
 
 [node name="TradeWindow" parent="." instance=ExtResource( 14 )]
 visible = false
+
+[node name="NeedsPanel" parent="." instance=ExtResource( 16 )]
 
 [node name="PauseScreen" parent="." instance=ExtResource( 13 )]
 visible = false

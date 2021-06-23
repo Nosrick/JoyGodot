@@ -102,5 +102,7 @@ namespace JoyGodot.Assets.Scripts.Entities
         event BooleanChangedEventHandler AliveChange;
 
         event ValueChangedEventHandler<float> HappinessChange;
+
+        event ValueChangedEventHandler<int> NeedChange;
     }
 }
