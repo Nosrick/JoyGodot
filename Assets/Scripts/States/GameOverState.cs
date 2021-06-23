@@ -26,10 +26,6 @@ namespace JoyGodot.Assets.Scripts.States
             gameManager.WallTileMap.Clear();
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void Update()
         {
         }

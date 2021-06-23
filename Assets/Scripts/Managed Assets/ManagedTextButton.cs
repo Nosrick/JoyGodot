@@ -219,7 +219,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 
                 if (this.MyLabel is null)
                 {
-                    GD.PushWarning("Label not found!");
+                    //GD.PushWarning("Label not found!");
                 }
                 this.UpdateFontOverride();
             }
@@ -286,7 +286,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             }
             else
             {
-                GD.Print("Label found!");
+                //GD.Print("Label found!");
             }
             this.OutlineColour = this.OutlineColour;
             this.OutlineThickness = this.OutlineThickness;

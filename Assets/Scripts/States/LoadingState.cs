@@ -15,10 +15,6 @@ namespace JoyGodot.Assets.Scripts.States
         {
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void SetUpUi()
         {
             GlobalConstants.GameManager.GUIManager.InstantiateUIScene(

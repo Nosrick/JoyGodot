@@ -89,5 +89,15 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 item.Hide();
             }
         }
+
+        public override void DisconnectEvents()
+        {
+            base.DisconnectEvents();
+
+            foreach (var item in this.Items)
+            {
+                item.QuestAbandoned -= this.RemoveQuestItem;
+            }
+        }
     }
 }

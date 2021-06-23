@@ -23,10 +23,6 @@ namespace JoyGodot.Assets.Scripts.States
             this.DestroyWorld();
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void Update()
         {
         }

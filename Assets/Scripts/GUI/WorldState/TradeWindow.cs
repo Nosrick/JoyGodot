@@ -67,6 +67,16 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
         }
 
+        public override void DisconnectEvents()
+        {
+            base.DisconnectEvents();
+            
+            this.LeftOffering.OnAddItem -= this.Tally;
+            this.LeftOffering.OnRemoveItem -= this.Tally;
+            this.RightOffering.OnAddItem -= this.Tally;
+            this.RightOffering.OnRemoveItem -= this.Tally;
+        }
+
         public override bool Close(object sender)
         {
             foreach (IItemInstance item in this.LeftOffering.Contents)

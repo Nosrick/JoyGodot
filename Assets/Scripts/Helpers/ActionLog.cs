@@ -116,13 +116,19 @@ namespace JoyGodot.Assets.Scripts.Helpers
 
         public void StackTrace(Exception exception)
         {
-            this.Log(exception.Message, LogLevel.Error);
-            this.Log(exception.StackTrace, LogLevel.Error);
-
-            Exception innerException = exception.InnerException;
-            if (innerException is null == false)
+            while (true)
             {
-                this.StackTrace(innerException);
+                this.Log(exception.Message, LogLevel.Error);
+                this.Log(exception.StackTrace, LogLevel.Error);
+
+                Exception innerException = exception.InnerException;
+                if (innerException is null == false)
+                {
+                    exception = innerException;
+                    continue;
+                }
+
+                break;
             }
         }
 

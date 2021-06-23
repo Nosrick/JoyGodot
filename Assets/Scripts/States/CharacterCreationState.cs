@@ -20,17 +20,12 @@ namespace JoyGodot.Assets.Scripts.States
         {
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void LoadContent()
         {
         }
 
         public override void SetUpUi()
         {
-            this.GUIManager.Clear();
             PackedScene scene = GD.Load<PackedScene>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 "Scenes/UI/Character Creation.tscn");

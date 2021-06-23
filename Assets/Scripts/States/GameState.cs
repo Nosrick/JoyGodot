@@ -14,19 +14,16 @@ namespace JoyGodot.Assets.Scripts.States
 
         public virtual void SetUpUi()
         {
-            //Thread.Sleep(200);
-
-            this.GUIManager.Clear();
             this.GUIManager.FindGUIs();
-
-            //this.GUIManager.CloseAllOtherGUIs(GUINames.CURSOR);
         }
 
         public abstract void Start();
 
-        public abstract void Stop();
+        public virtual void Stop()
+        {
+            this.GUIManager.Clear();
+        }
 
-        //ALWAYS call base.Update() from derived classes
         public abstract void Update();
 
         public abstract void HandleInput(InputEvent @event);

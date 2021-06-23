@@ -6,8 +6,6 @@ using Godot.Collections;
 using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.Helpers;
-using JoyGodot.Assets.Scripts.JoyObject;
-using JoyGodot.Assets.Scripts.Managed_Assets;
 using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.GUI.Inventory_System

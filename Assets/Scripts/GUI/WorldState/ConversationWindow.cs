@@ -45,8 +45,9 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             */
         }
 
-        public override void _ExitTree()
+        public override void DisconnectEvents()
         {
+            base.DisconnectEvents();
             this.ConversationEngine.OnOpen -= this.ConversationDelegate;
         }
 

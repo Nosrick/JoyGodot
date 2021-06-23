@@ -84,7 +84,7 @@ namespace JoyGodot.Assets.Scripts.Collections
                 {
                     lock (this.InactiveObjects)
                     {
-                        GD.Print("Retiring " + gameObject.Name + " at " + this.Parent.Name);
+                        //GD.Print("Retiring " + gameObject.Name + " at " + this.Parent.Name);
                         gameObject.Name = "InactiveObject" + this.InactiveObjects.Count;
                         gameObject.SetProcess(false);
                         gameObject.Hide();

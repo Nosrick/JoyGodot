@@ -35,9 +35,6 @@ namespace JoyGodot.Assets.Scripts.States
             this.InstantiateWorld();
         }
 
-        public override void Stop()
-        { }
-
         public override void Update()
         { }
 

@@ -22,7 +22,6 @@ namespace JoyGodot.Assets.Scripts.States
 
         public override void SetUpUi()
         {
-            this.GUIManager.Clear();
             this.GUIManager.InstantiateUIScene(
                 GD.Load<PackedScene>(
                     GlobalConstants.GODOT_ASSETS_FOLDER +
@@ -32,10 +31,6 @@ namespace JoyGodot.Assets.Scripts.States
         }
 
         public override void Start()
-        {
-        }
-
-        public override void Stop()
         {
         }
 

@@ -36,10 +36,6 @@ namespace JoyGodot.Assets.Scripts.States
             this.CreateWorld();
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void LoadContent()
         {
         }

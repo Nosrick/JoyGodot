@@ -112,15 +112,18 @@ namespace JoyGodot.Assets.Scripts.GUI
                     shaderMaterial.SetShaderParam("happiness", happiness);
                 }
 
-                foreach (CanvasItem child in this.GetAllChildren())
+                foreach (var child in this.GetAllChildren())
                 {
-                    var material = child.Material as ShaderMaterial;
-                    material?.SetShaderParam("happiness", happiness);
+                    if (child is CanvasItem canvasItem)
+                    {
+                        var material = canvasItem.Material as ShaderMaterial;
+                        material?.SetShaderParam("happiness", happiness);
+                    }
                 }
             }
             catch (Exception e)
             {
-                GD.PushError("Object has been disposed!");
+                GlobalConstants.ActionLog.StackTrace(e);
             }
         }
 
@@ -187,16 +190,28 @@ namespace JoyGodot.Assets.Scripts.GUI
             this.GUIManager.CloseGUI(this, this.Name);
         }
 
-        public override void _ExitTree()
+        public virtual void DisconnectEvents()
         {
             if (this.Player is null == false)
             {
                 this.Player.HappinessChange -= this.SetHappiness;
             }
+            else
+            {
+                GD.PushWarning("Player is null in " + this.Name);
+            }
 
             GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
-            
-            base._ExitTree();
+
+            var guiChildren = this.GetAllChildren();
+
+            foreach (var guiChild in guiChildren)
+            {
+                if (guiChild is GUIData data)
+                {
+                    data.DisconnectEvents();
+                }
+            }
         }
     }
 }

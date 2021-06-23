@@ -105,7 +105,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
                 this.Name = value;
                 if (this.NameLabel is null)
                 {
-                    GD.PushWarning(this.GetType().Name + " NameLabel is null!");
+                    //GD.PushWarning(this.GetType().Name + " NameLabel is null!");
 
                     return;
                 }
@@ -123,7 +123,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
             {
                 if (this.ValueLabel is null)
                 {
-                    GD.PushWarning(this.GetType().Name + " ValueLabel is null!");
+                    //GD.PushWarning(this.GetType().Name + " ValueLabel is null!");
                     return;
                 }
 

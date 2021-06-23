@@ -300,6 +300,11 @@ namespace JoyGodot.Assets.Scripts.GUI
                 for (int i = 0; i < children.Count; i++)
                 {
                     Node child = this.RootUI.GetChild(0);
+                    if (child is GUIData data)
+                    {
+                        data.DisconnectEvents();
+                    }
+                    
                     this.RootUI.RemoveChild(child);
                     child.QueueFree();
                 }
