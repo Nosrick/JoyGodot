@@ -102,6 +102,8 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public void Load(Dictionary data)
         {
+            this.m_Entities = new System.Collections.Generic.Dictionary<Guid, IEntity>();
+            
             var entityDicts = this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Entities");
 
             foreach (Dictionary dict in entityDicts)

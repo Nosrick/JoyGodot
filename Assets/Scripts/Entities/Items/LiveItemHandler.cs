@@ -214,6 +214,9 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
 
         public void Load(Dictionary data)
         {
+            this.LiveItems = new System.Collections.Generic.Dictionary<Guid, IItemInstance>();
+            this.QuestRewards = new NonUniqueDictionary<Guid, Guid>();
+            
             var items = this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Items");
 
             foreach (Dictionary itemDict in items)

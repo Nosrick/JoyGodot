@@ -69,9 +69,6 @@ namespace JoyGodot.Assets.Scripts.States
             
             GlobalConstants.GameManager?.Player?.MyNode?.AddChild(this.m_Camera);
 
-            this.TickTimer = new Thread(this.TickEvent);
-            this.TickTimer.Start();
-
             GlobalConstants.GameManager.Player.AliveChange -= this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.AliveChange += this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.ConsciousnessChange -= this.OnPlayerConsciousChange;
@@ -124,9 +121,21 @@ namespace JoyGodot.Assets.Scripts.States
 
         public override void Start()
         {
+            this.TickTimer = new Thread(this.TickEvent);
+            this.TickTimer.Start();
+            
             this.m_ActiveWorld.Tick();
 
             this.SetEntityWorld(this.Overworld);
+        }
+
+        public override void Stop()
+        {
+            base.Stop();
+            
+            this.GameManager.RetireAll();
+
+            this.TickTimer.Abort();
         }
 
         public override void Update()

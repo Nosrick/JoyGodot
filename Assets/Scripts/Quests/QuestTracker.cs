@@ -117,6 +117,8 @@ namespace JoyGodot.Assets.Scripts.Quests
 
         public void Load(Dictionary data)
         {
+            this.EntityQuests = new System.Collections.Generic.Dictionary<Guid, List<IQuest>>();
+            
             var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
 
             var questsCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Quests");
