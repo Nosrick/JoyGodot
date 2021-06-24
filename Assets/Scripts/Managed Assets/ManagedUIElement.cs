@@ -173,6 +173,10 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
                 if (Player is null)
                 {
+                    this.SetHappiness(this, new ValueChangedEventArgs<float>
+                    {
+                        NewValue = 1f
+                    });
                     return;
                 }
 
@@ -188,7 +192,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
                 this.SetHappiness(this, new ValueChangedEventArgs<float>
                 {
-                    NewValue = Player.OverallHappiness
+                    NewValue = this.EnableHappiness ? Player.OverallHappiness : 1f
                 });
             }
         }
@@ -519,7 +523,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                         MarginLeft = 0,
                         MarginRight = 0,
                         MarginTop = 0,
-                        Material = GlobalConstants.GameManager.ObjectIconHandler.UiMaterial
+                        UseParentMaterial = true
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);

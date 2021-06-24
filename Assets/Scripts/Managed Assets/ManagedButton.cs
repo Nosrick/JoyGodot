@@ -256,6 +256,17 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             this.DoStateTransition(this.CurrentSelectionState, true);
         }
 
+        protected override void UpdateSprites()
+        {
+            base.UpdateSprites();
+
+            foreach (var part in this.Parts)
+            {
+                part.UseParentMaterial = false;
+                part.Material = GlobalConstants.GameManager.ObjectIconHandler.UiMaterial;
+            }
+        }
+
         protected virtual void Press()
         {
             if (!this.Visible || this.Disabled || this.IsInsideTree() == false)

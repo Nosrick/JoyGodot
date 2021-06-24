@@ -108,6 +108,7 @@ __meta__ = {
 m_ElementName = "DefaultWindow"
 
 [node name="background" type="NinePatchRect" parent="Background"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 2 )
@@ -122,6 +123,7 @@ __meta__ = {
 }
 
 [node name="border" type="NinePatchRect" parent="Background"]
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 6 )
@@ -158,8 +160,8 @@ margin_bottom = 87.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 1 )
-FontSize = 36
 CacheFont = true
+FontSize = 36
 CustomFont = SubResource( 2 )
 Text = "New Game"
 StateColours = {
@@ -172,7 +174,7 @@ StateColours = {
 
 [node name="Text" parent="Button Container/New Game Button/MarginContainer" index="0"]
 margin_top = 28.0
-margin_right = 342.0
+margin_right = 338.0
 margin_bottom = 59.0
 custom_fonts/font = SubResource( 3 )
 text = "New Game"
@@ -186,8 +188,8 @@ margin_bottom = 178.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 4 )
-FontSize = 36
 CacheFont = true
+FontSize = 36
 CustomFont = SubResource( 5 )
 Text = "Load Game"
 StateColours = {
@@ -200,7 +202,7 @@ StateColours = {
 
 [node name="Text" parent="Button Container/Load Game Button/MarginContainer" index="0"]
 margin_top = 28.0
-margin_right = 342.0
+margin_right = 338.0
 margin_bottom = 59.0
 custom_fonts/font = SubResource( 6 )
 text = "Load Game"
@@ -214,8 +216,8 @@ margin_bottom = 269.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 7 )
-FontSize = 36
 CacheFont = true
+FontSize = 36
 CustomFont = SubResource( 8 )
 Text = "Settings"
 StateColours = {
@@ -228,7 +230,7 @@ StateColours = {
 
 [node name="Text" parent="Button Container/Settings/MarginContainer" index="0"]
 margin_top = 28.0
-margin_right = 342.0
+margin_right = 338.0
 margin_bottom = 59.0
 custom_fonts/font = SubResource( 9 )
 text = "Settings"
@@ -242,8 +244,8 @@ margin_bottom = 360.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 10 )
-FontSize = 36
 CacheFont = true
+FontSize = 36
 CustomFont = SubResource( 11 )
 Text = "Quit To Desktop"
 StateColours = {
@@ -256,7 +258,7 @@ StateColours = {
 
 [node name="Text" parent="Button Container/Quit to Desktop/MarginContainer" index="0"]
 margin_top = 28.0
-margin_right = 342.0
+margin_right = 338.0
 margin_bottom = 59.0
 custom_fonts/font = SubResource( 12 )
 text = "Quit To Desktop"
