@@ -138,14 +138,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 slot.Item = null;
             }
 
-            if (this.Slots.Count < this.ContainerOwner.Contents.Count())
+            for (int i = this.Slots.Count; i < this.ContainerOwner.Contents.Count(); i++)
             {
-                for (int i = this.Slots.Count; i < this.ContainerOwner.Contents.Count(); i++)
-                {
-                    var instance = this.AddSlot(true);
-                    this.GUIManager.SetupManagedComponents(instance);
-                    instance.Container = this;
-                }
+                var instance = this.AddSlot(true);
+                this.GUIManager.SetupManagedComponents(instance);
+                instance.Container = this;
             }
 
             List<IItemInstance> contents = this.ContainerOwner.Contents.ToList();

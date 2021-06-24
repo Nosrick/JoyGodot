@@ -5,6 +5,7 @@ using Godot.Collections;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Managed_Assets;
+using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
@@ -51,9 +52,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 this.ContainerOwner = new VirtualStorage();
             }
 
-            if (this.ContainerOwner is IEntity entity)
+            if (this.ContainerOwner is EquipmentStorage equipment)
             {
-                var contents = entity.Equipment.GetSlotsAndContents().ToList();
+                var contents = equipment.GetSlotsAndContents().ToList();
                 
                 if (this.Slots.Count < contents.Count)
                 {
@@ -86,6 +87,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 {
                     slot.Repaint();
                 }
+            }
+            else if (this.ContainerOwner is IEntity entity)
+            {
+                this.ContainerOwner = entity.Equipment;
+                this.OnEnable();
             }
         }
     }
