@@ -334,6 +334,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
 
         public void Load(Dictionary data)
         {
+            this.m_Values = new System.Collections.Generic.Dictionary<Guid, IDictionary<Guid, int>>();
+        
             var valueExtractor = GlobalConstants.GameManager.RelationshipHandler.ValueExtractor;
             this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
             this.DisplayName = valueExtractor.GetValueFromDictionary<string>(data, "DisplayName");
