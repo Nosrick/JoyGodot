@@ -1531,6 +1531,7 @@ namespace JoyGodot.Assets.Scripts.Entities
             }
 
             this.Tooltip = this.ConstructDescription();
+            this.HappinessIsDirty = true;
         }
     }
 }
