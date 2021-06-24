@@ -54,7 +54,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
 
         protected void SetValue()
         {
-            this.Foreground.AnchorRight = this.DerivedValue.Value / (float) this.DerivedValue.Maximum;
+            float value = this.DerivedValue.Value / (float) this.DerivedValue.Maximum;
+            this.Foreground.AnchorRight = value > 0 ? value : 0;
             this.ValueLabel.Text = this.DerivedValue.Value + "/" + this.DerivedValue.Maximum;
         }
 
