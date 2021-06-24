@@ -2,8 +2,8 @@
 {
     public static class GUINames
     {
-        public const string NEEDSRECT = "NeedsRect";
-        public const string DERIVED_VALUES = "Derived Values Container";
+        public const string NEEDS_PANEL = "NeedsPanel";
+        public const string DERIVED_VALUES = "DerivedValuesPanel";
         public const string INVENTORY = "Inventory";
         public const string EQUIPMENT = "Equipment";
         public const string CONVERSATION = "Conversation Window";
@@ -17,7 +17,7 @@
         public const string ACTION_LOG = "ActionLog";
         public const string SETTINGS = "Settings";
         public const string PAUSE = "PauseScreen";
-        public const string ENTRY_BANNER = "Entry Banner";
+        public const string ENTRY_BANNER = "EntryBanner";
         public const string LOADING_SCREEN = "Loading Screen";
         public const string MAIN_MENU = "Main Menu";
     }

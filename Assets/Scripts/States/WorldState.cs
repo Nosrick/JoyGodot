@@ -100,7 +100,7 @@ namespace JoyGodot.Assets.Scripts.States
                     GlobalConstants.GODOT_ASSETS_FOLDER +
                     "Scenes/UI/MainGame.tscn"));
             this.GUIManager.FindGUIs();
-            this.GUIManager.OpenGUI(this, GUINames.NEEDSRECT);
+            this.GUIManager.OpenGUI(this, GUINames.NEEDS_PANEL);
             this.GUIManager.OpenGUI(this, GUINames.DERIVED_VALUES);
             this.GUIManager.OpenGUI(this, GUINames.ACTION_LOG);
 
@@ -296,7 +296,7 @@ namespace JoyGodot.Assets.Scripts.States
 
             if (this.GUIManager.AreAnyOpen() == false)
             {
-                this.GUIManager.OpenGUI(this, GUINames.NEEDSRECT);
+                this.GUIManager.OpenGUI(this, GUINames.NEEDS_PANEL);
                 this.GUIManager.OpenGUI(this, GUINames.DERIVED_VALUES);
             }
 

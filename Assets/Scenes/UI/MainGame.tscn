@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://Assets/Scenes/Windows/TradeWindow.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Assets/Scripts/GUI/GUIData.cs" type="Script" id=15]
 [ext_resource path="res://Assets/Scenes/Windows/NeedsPanel.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Assets/Scenes/Windows/DerivedValuePanel.tscn" type="PackedScene" id=17]
 
 [sub_resource type="Theme" id=1]
 
@@ -135,6 +136,8 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+Text = "Fill Needs"
+CustomFont = SubResource( 2 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -142,13 +145,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Fill Needs"
-OutlineColour = Color( 0, 0, 0, 1 )
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
 TitleCase = true
 FontSize = 24
-CustomFont = SubResource( 2 )
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Fill Needs"]
 anchor_right = 1.0
@@ -176,6 +177,8 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+Text = "Empty Needs"
+CustomFont = SubResource( 4 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -183,13 +186,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Empty Needs"
-OutlineColour = Color( 0, 0, 0, 1 )
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
 TitleCase = true
 FontSize = 24
-CustomFont = SubResource( 4 )
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Empty Needs"]
 anchor_right = 1.0
@@ -217,6 +218,8 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+Text = "Empty One Need"
+CustomFont = SubResource( 6 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -224,13 +227,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Empty One Need"
-OutlineColour = Color( 0, 0, 0, 1 )
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
 TitleCase = true
 FontSize = 24
-CustomFont = SubResource( 6 )
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Empty One Need"]
 anchor_right = 1.0
@@ -258,6 +259,8 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+Text = "Add Quest"
+CustomFont = SubResource( 8 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -265,17 +268,15 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Add Quest"
-OverrideOutline = true
-OutlineColour = Color( 0, 0, 0, 1 )
-CacheFont = true
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
 TitleCase = true
-FontSize = 24
 OverrideSize = true
 OverrideColour = true
-CustomFont = SubResource( 8 )
+OverrideOutline = true
+CacheFont = true
+FontSize = 24
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Add Quest"]
 anchor_right = 1.0
@@ -300,6 +301,8 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+Text = "Complete Quest"
+CustomFont = SubResource( 9 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -307,16 +310,14 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Complete Quest"
+TitleCase = true
+OverrideSize = true
 OverrideOutline = true
-OutlineColour = Color( 0, 0, 0, 1 )
 CacheFont = true
+FontSize = 24
 OutlineThickness = 1
 FontColour = Color( 1, 1, 1, 1 )
-TitleCase = true
-FontSize = 24
-OverrideSize = true
-CustomFont = SubResource( 9 )
+OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Complete Quest"]
 anchor_right = 1.0
@@ -331,7 +332,15 @@ __meta__ = {
 }
 
 [node name="Quickbar" parent="." instance=ExtResource( 10 )]
+anchor_bottom = 0.65
 AlwaysOpen = true
+
+[node name="NeedsPanel" parent="." instance=ExtResource( 16 )]
+visible = false
+
+[node name="DerivedValuePanel" parent="." instance=ExtResource( 17 )]
+anchor_left = 0.7
+anchor_top = 0.7
 
 [node name="Inventory" parent="." instance=ExtResource( 4 )]
 visible = false
@@ -359,8 +368,6 @@ visible = false
 
 [node name="TradeWindow" parent="." instance=ExtResource( 14 )]
 visible = false
-
-[node name="NeedsPanel" parent="." instance=ExtResource( 16 )]
 
 [node name="PauseScreen" parent="." instance=ExtResource( 13 )]
 visible = false

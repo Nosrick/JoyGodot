@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Scripts/GUI/WorldState/DerivedValuesPanel.cs" type="Script" id=2]
+
+[node name="DerivedValuePanel" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+AlwaysOpen = true
+HorizontalAnchor = 2
+VerticalAnchor = 2
+
+[node name="Background" parent="." instance=ExtResource( 1 )]
+m_ElementName = "DefaultWindowSmooth"
+
+[node name="BarContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_constants/separation = 1

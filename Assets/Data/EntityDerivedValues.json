@@ -4,29 +4,29 @@
       "Name": "hitpoints",
       "Formula": "endurance * 3",
       "BackgroundColour": "#f01f5a",
-      "TextColour": "#0d000d",
-      "OutlineColour": "#fffed9"
+      "OutlineColour": "#0d000d",
+      "TextColour": "#fffed9"
     },
     {
       "Name": "concentration",
       "Formula": "focus * 3",
       "BackgroundColour": "#2e994a",
-      "TextColour": "#0d000d",
-      "OutlineColour": "#fffed9"
+      "OutlineColour": "#0d000d",
+      "TextColour": "#fffed9"
     },
     {
       "Name": "composure",
       "Formula": "wit * 3",
       "BackgroundColour": "#386aba",
-      "TextColour": "#0d000d",
-      "OutlineColour": "#fffed9"
+      "OutlineColour": "#0d000d",
+      "TextColour": "#fffed9"
     },
     {
       "Name": "mana",
       "Formula": "endurance + focus + wit",
       "BackgroundColour": "#30f5df",
-      "TextColour": "#0d000d",
-      "OutlineColour": "#fffed9"
+      "OutlineColour": "#0d000d",
+      "TextColour": "#fffed9"
     }
   ]
 }

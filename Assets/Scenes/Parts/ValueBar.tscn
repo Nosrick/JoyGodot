@@ -1,0 +1,70 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/Sprites/draw.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Fonts/Silver - Tiny.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Assets/Scripts/GUI/Tools/ValueBar.cs" type="Script" id=3]
+
+[node name="ValueBar" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="TextureRect" parent="."]
+modulate = Color( 0.12549, 0.12549, 0.12549, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Foreground" type="TextureRect" parent="."]
+modulate = Color( 0.917647, 0.917647, 0.917647, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+texture = ExtResource( 1 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Name" type="Label" parent="."]
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 5.0
+margin_right = -10.0
+margin_bottom = -5.0
+custom_fonts/font = ExtResource( 2 )
+text = "Value Name"
+valign = 1
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Value" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 5.0
+margin_right = -10.0
+margin_bottom = -5.0
+custom_fonts/font = ExtResource( 2 )
+text = "Value/Maximum"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
