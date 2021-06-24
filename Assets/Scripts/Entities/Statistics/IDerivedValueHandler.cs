@@ -18,7 +18,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
 
         bool AddFormula(string name, string formula);
 
-        Color GetBackgroundColour(string name);
+        Color GetBarColour(string name);
         Color GetTextColour(string name);
         Color GetOutlineColour(string name);
     }

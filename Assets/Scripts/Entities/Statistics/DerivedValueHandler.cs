@@ -18,7 +18,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         protected IDictionary<string, string> ItemStandardFormulas { get; set; }
         protected IDictionary<string, IDerivedValue> DerivedValues { get; set; }
         
-        protected IDictionary<string, Color> DerivedValueBackgroundColours { get; set; }
+        protected IDictionary<string, Color> DerivedValueBarColours { get; set; }
         protected IDictionary<string, Color> DerivedValueTextColours { get; set; }
         protected IDictionary<string, Color> DerivedValueOutlineColours { get; set; }
 
@@ -51,7 +51,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
                              "ItemDerivedValues.json";
 
             this.DerivedValueOutlineColours = new System.Collections.Generic.Dictionary<string, Color>();
-            this.DerivedValueBackgroundColours = new System.Collections.Generic.Dictionary<string, Color>();
+            this.DerivedValueBarColours = new System.Collections.Generic.Dictionary<string, Color>();
             this.DerivedValueTextColours = new System.Collections.Generic.Dictionary<string, Color>();
             this.Load();
             this.Formulas = new System.Collections.Generic.Dictionary<string, string>(this.EntityStandardFormulas);
@@ -149,15 +149,15 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
                 string colourCode = dv.Contains("BackgroundColour")
                     ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "BackgroundColour")
                     : "#888888";
-                this.DerivedValueBackgroundColours.Add(name, new Color(colourCode));
+                this.DerivedValueBarColours.Add(name, new Color(colourCode));
 
                 colourCode = dv.Contains("TextColour")
-                    ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "BackgroundColour")
+                    ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "TextColour")
                     : "#ffffff";
                 this.DerivedValueTextColours.Add(name, new Color(colourCode));
 
                 colourCode = dv.Contains("OutlineColour")
-                    ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "BackgroundColour")
+                    ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "OutlineColour")
                     : "#000000";
                 this.DerivedValueOutlineColours.Add(name, new Color(colourCode));
             }
@@ -224,11 +224,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             return false;
         }
 
-        public Color GetBackgroundColour(string name)
+        public Color GetBarColour(string name)
         {
-            if (this.DerivedValueBackgroundColours.ContainsKey(name))
+            if (this.DerivedValueBarColours.ContainsKey(name))
             {
-                return this.DerivedValueBackgroundColours[name];
+                return this.DerivedValueBarColours[name];
             }
             return Colors.Gray;
         }
@@ -266,7 +266,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         public void Dispose()
         {
             this.DerivedValues = null;
-            this.DerivedValueBackgroundColours = null;
+            this.DerivedValueBarColours = null;
             this.DerivedValueOutlineColours = null;
             this.DerivedValueTextColours = null;
             this.EntityStandardFormulas = null;
