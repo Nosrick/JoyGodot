@@ -39,8 +39,6 @@ namespace JoyGodot.Assets.Scripts
         
         string LoadingMessage { get; }
         
-        //CheatInterface Cheats { get; set; }
-        
         ActionLog ActionLog { get; }
         ICombatEngine CombatEngine { get; }
         IQuestTracker QuestTracker { get; }
@@ -99,6 +97,8 @@ namespace JoyGodot.Assets.Scripts
         Node2D ItemHolder { get; }
         
         void SetNextState(IGameState nextState = null);
+
+        void RetireAll();
 
         void Reset();
     }

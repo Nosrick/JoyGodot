@@ -218,6 +218,15 @@ namespace JoyGodot.Assets.Scripts
             this.m_StateManager.ChangeState(this.NextState);
         }
 
+        public void RetireAll()
+        {
+            this.EntityPool.RetireAll();
+            this.FogPool.RetireAll();
+            this.ItemPool.RetireAll();
+            this.FloorTileMap.Clear();
+            this.WallTileMap.Clear();
+        }
+
         public void Reset()
         {
             this.m_StateManager.Stop();
@@ -225,8 +234,6 @@ namespace JoyGodot.Assets.Scripts
             this.EntityPool.RetireAll();
             this.FogPool.RetireAll();
             this.ItemPool.RetireAll();
-
-            this.Dispose();
 
             this.Load();
         }
@@ -272,7 +279,6 @@ namespace JoyGodot.Assets.Scripts
 
         public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
         public RNG Roller { get; protected set; }
-        //public SettingsManager SettingsManager { get; protected set; }
         public IEntityFactory EntityFactory { get; protected set; }
         public IItemFactory ItemFactory { get; protected set; }
         
@@ -293,94 +299,5 @@ namespace JoyGodot.Assets.Scripts
         public Node2D WorldHolder { get; protected set; }
         public Node2D EntityHolder { get; protected set; }
         public Node2D ItemHolder { get; protected set; }
-
-        //public CheatInterface Cheats { get; set; }
-
-        public void Dispose()
-        {
-            this.GUIManager?.Dispose();
-            this.GUIManager = null;
-            
-            this.EntityHandler?.Dispose();
-            this.EntityHandler = null;
-            
-            this.ItemHandler?.Dispose();
-            this.ItemHandler = null;
-            
-            this.RelationshipHandler?.Dispose();
-            this.RelationshipHandler = null;
-            
-            this.MaterialHandler?.Dispose();
-            this.MaterialHandler = null;
-            
-            this.CultureHandler?.Dispose();
-            this.CultureHandler = null;
-            
-            this.StatisticHandler?.Dispose();
-            this.StatisticHandler = null;
-            
-            this.EntityTemplateHandler?.Dispose();
-            this.EntityTemplateHandler = null;
-            
-            this.BioSexHandler?.Dispose();
-            this.BioSexHandler = null;
-            
-            this.SexualityHandler?.Dispose();
-            this.SexualityHandler = null;
-            
-            this.JobHandler?.Dispose();
-            this.JobHandler = null;
-            
-            this.RomanceHandler?.Dispose();
-            this.RomanceHandler = null;
-            
-            this.GenderHandler?.Dispose();
-            this.GenderHandler = null;
-            
-            this.ItemDatabase?.Dispose();
-            this.ItemDatabase = null;
-            
-            this.NeedHandler?.Dispose();
-            this.NeedHandler = null;
-            
-            this.SkillHandler?.Dispose();
-            this.SkillHandler = null;
-            
-            this.WorldInfoHandler?.Dispose();
-            this.WorldInfoHandler = null;
-            
-            this.DerivedValueHandler?.Dispose();
-            this.DerivedValueHandler = null;
-            
-            this.VisionProviderHandler?.Dispose();
-            this.VisionProviderHandler = null;
-            
-            this.AbilityHandler?.Dispose();
-            this.AbilityHandler = null;
-
-            this.ConversationEngine = null;
-            this.PhysicsManager = null;
-
-            this.ParameterProcessorHandler = null;
-
-            this.QuestProvider = null;
-            this.QuestTracker = null;
-            this.CombatEngine = null;
-            
-            this.RumourMill?.Dispose();
-            this.RumourMill = null;
-            
-            this.ActionLog?.Dispose();
-            this.ActionLog = null;
-            
-            this.GUIDManager?.Dispose();
-            this.GUIDManager = null;
-
-            this.EntityFactory = null;
-            this.ItemFactory = null;
-            this.NaturalWeaponHelper = null;
-
-            GC.Collect();
-        }
     }
 }
