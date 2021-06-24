@@ -254,31 +254,6 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             return this.m_States.Remove(name);
         }
 
-        public new void SetTheme(Theme theme)
-        {
-            foreach (ISpriteState state in this.States)
-            {
-                foreach (SpritePart part in state.SpriteData.Parts)
-                {
-                    Texture icon = theme.GetIcon(part.m_Name, nameof(this.GetType));
-                    if (icon is null == false)
-                    {
-                        part.m_FrameSprite = new List<Texture>
-                        {
-                            icon
-                        };
-                    }
-
-                    Color colour = theme.GetColor(part.m_Name, nameof(this.GetType));
-                    part.m_PossibleColours = new List<Color>
-                    {
-                        colour
-                    };
-                    part.m_SelectedColour = 0;
-                }
-            }
-        }
-
         public virtual ISpriteState GetState(string name)
         {
             return this.m_States.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
@@ -544,7 +519,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                         MarginLeft = 0,
                         MarginRight = 0,
                         MarginTop = 0,
-                        UseParentMaterial = true
+                        Material = GlobalConstants.GameManager.ObjectIconHandler.UiMaterial
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);

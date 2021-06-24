@@ -255,7 +255,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
             if (ChildMaterial is null)
             {
-                ChildMaterial = GlobalConstants.GameManager.ObjectIconHandler.JoyMaterial;
+                ChildMaterial = GlobalConstants.GameManager.ObjectIconHandler.UiMaterial;
             }
 
             if (this.Theme is null)

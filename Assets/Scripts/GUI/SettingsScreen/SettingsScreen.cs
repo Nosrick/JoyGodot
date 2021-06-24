@@ -38,17 +38,16 @@ namespace JoyGodot.Assets.Scripts.GUI.SettingsScreen
             {
                 part.Hide();
             }
-            
+
+            bool newItems = false;
             var settings = this.SettingsManager.Values.ToArray();
-            if (this.Parts.Count < settings.Length)
+            for (int i = this.Parts.Count; i < settings.Length; i++)
             {
-                for (int i = this.Parts.Count; i < settings.Length; i++)
-                {
-                    var instance = this.ItemPrefab.Instance() as StringValueItem;
-                    instance?.Hide();
-                    this.ChildParent.AddChild(instance);
-                    this.Parts.Add(instance);
-                }
+                var instance = this.ItemPrefab.Instance() as StringValueItem;
+                instance?.Hide();
+                this.ChildParent.AddChild(instance);
+                this.Parts.Add(instance);
+                newItems = true;
             }
 
             for (int i = 0; i < settings.Length; i++)
@@ -62,6 +61,11 @@ namespace JoyGodot.Assets.Scripts.GUI.SettingsScreen
                 item.ValueName = setting.Name;
                 item.Name = setting.Name;
                 item.Show();
+            }
+
+            if (newItems)
+            {
+                this.GUIManager.SetupManagedComponents(this);
             }
         }
 

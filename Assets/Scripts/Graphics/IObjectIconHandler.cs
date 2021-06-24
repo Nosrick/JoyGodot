@@ -16,5 +16,6 @@ namespace JoyGodot.Assets.Scripts.Graphics
         SpriteData GetStaticSpriteData(string tileSet);
         ShaderMaterial TileSetMaterial { get; }
         ShaderMaterial JoyMaterial { get; }
+        ShaderMaterial UiMaterial { get; }
     }
 }

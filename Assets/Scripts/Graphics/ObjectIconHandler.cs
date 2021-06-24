@@ -30,6 +30,8 @@ namespace JoyGodot.Assets.Scripts.Graphics
         
         public ShaderMaterial TileSetMaterial { get; protected set; }
         public ShaderMaterial JoyMaterial { get; protected set; }
+        
+        public ShaderMaterial UiMaterial { get; protected set; }
 
         public ObjectIconHandler(RNG roller)
         {
@@ -55,6 +57,10 @@ namespace JoyGodot.Assets.Scripts.Graphics
             this.JoyMaterial = GD.Load<ShaderMaterial>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 "Materials/Default Sprite Material.tres");
+
+            this.UiMaterial = GD.Load<ShaderMaterial>(
+                GlobalConstants.GODOT_ASSETS_FOLDER +
+                "Materials/Default UI Material.tres");
 
             this.Icons = new System.Collections.Generic.Dictionary<string, List<Tuple<string, SpriteData>>>();
 
