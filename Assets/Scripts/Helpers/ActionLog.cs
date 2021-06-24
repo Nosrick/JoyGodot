@@ -8,19 +8,20 @@ using File = System.IO.File;
 
 namespace JoyGodot.Assets.Scripts.Helpers
 {
-    public class ActionLog : IDisposable
+    public class ActionLog
     {
         public List<string> History { get; protected set; }
 
-        private Queue<LogEntry> m_Queue = new Queue<LogEntry>();
+        protected Queue<LogEntry> m_Queue = new Queue<LogEntry>();
 
         public const int LINES_TO_KEEP = 10;
 
-        private const string FILENAME = "player.log";
+        protected const string FILENAME = "player.log";
 
-        private readonly bool IsEditor = Engine.EditorHint;
+        protected readonly bool IsEditor = Engine.EditorHint;
+        protected StreamWriter Writer { get; set; }
 
-        private StreamWriter Writer { get; set; }
+        public event LogEntryHandler TextAdded;
 
         public ActionLog()
         {
@@ -163,25 +164,6 @@ namespace JoyGodot.Assets.Scripts.Helpers
 
             return builder.ToString();
         }
-
-        ~ActionLog()
-        {
-            this.Dispose(true);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                //this.Writer?.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
 
     public enum LogLevel
@@ -203,4 +185,6 @@ namespace JoyGodot.Assets.Scripts.Helpers
             return "[" + this.m_LogLevel + "]: " + this.m_Data;
         }
     }
+
+    public delegate void LogEntryHandler(string textAdded, LogLevel logLevel);
 }

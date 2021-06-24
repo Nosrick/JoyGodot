@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -17,10 +17,11 @@
 [ext_resource path="res://Assets/Scripts/GUI/GUIData.cs" type="Script" id=15]
 [ext_resource path="res://Assets/Scenes/Windows/NeedsPanel.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Assets/Scenes/Windows/DerivedValuePanel.tscn" type="PackedScene" id=17]
+[ext_resource path="res://Assets/Scenes/Windows/ActionLogPanel.tscn" type="PackedScene" id=18]
 
 [sub_resource type="Theme" id=1]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=8]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -40,7 +41,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=9]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -60,7 +61,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=10]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -80,7 +81,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=11]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -90,7 +91,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=12]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -134,10 +135,15 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+OutlineThickness = 1
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 8 )
 Text = "Fill Needs"
-CustomFont = SubResource( 2 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -145,11 +151,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-TitleCase = true
-FontSize = 24
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Fill Needs"]
 anchor_right = 1.0
@@ -175,10 +176,15 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+OutlineThickness = 1
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 9 )
 Text = "Empty Needs"
-CustomFont = SubResource( 4 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -186,11 +192,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-TitleCase = true
-FontSize = 24
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Empty Needs"]
 anchor_right = 1.0
@@ -216,10 +217,15 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+OutlineThickness = 1
+OutlineColour = Color( 0, 0, 0, 1 )
+CustomFont = SubResource( 10 )
 Text = "Empty One Need"
-CustomFont = SubResource( 6 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -227,11 +233,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-TitleCase = true
-FontSize = 24
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Empty One Need"]
 anchor_right = 1.0
@@ -257,10 +258,19 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+OverrideSize = true
+OverrideColour = true
+TitleCase = true
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+OutlineThickness = 1
+OutlineColour = Color( 0, 0, 0, 1 )
+CacheFont = true
+CustomFont = SubResource( 11 )
 Text = "Add Quest"
-CustomFont = SubResource( 8 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -268,20 +278,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-TitleCase = true
-OverrideSize = true
-OverrideColour = true
-OverrideOutline = true
-CacheFont = true
-FontSize = 24
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Add Quest"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 11 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Add Quest"
 align = 1
@@ -299,10 +300,18 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
+HAlign = 1
+OverrideSize = true
+TitleCase = true
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+OutlineThickness = 1
+OutlineColour = Color( 0, 0, 0, 1 )
+CacheFont = true
+CustomFont = SubResource( 12 )
 Text = "Complete Quest"
-CustomFont = SubResource( 9 )
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -310,19 +319,11 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-TitleCase = true
-OverrideSize = true
-OverrideOutline = true
-CacheFont = true
-FontSize = 24
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
-OutlineColour = Color( 0, 0, 0, 1 )
 
 [node name="Text" type="Label" parent="Cheats/Complete Quest"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 12 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Complete Quest"
 align = 1
@@ -330,6 +331,10 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ActionLog" parent="." instance=ExtResource( 18 )]
+anchor_right = 0.5
+anchor_bottom = 0.3
 
 [node name="Quickbar" parent="." instance=ExtResource( 10 )]
 anchor_bottom = 0.65
