@@ -14,7 +14,9 @@ namespace JoyGodot.Assets.Scripts.Helpers
 
         public static bool IsInRange(Vector2Int left, Vector2Int right, int range)
         {
-            return range >= Math.Abs((left.x - right.x) + (left.y - right.y));
+            Rect2 rangeRect = new Rect2(left.ToVec2(), new Vector2(1, 1));
+            rangeRect = rangeRect.Grow(range);
+            return rangeRect.HasPoint(right.ToVec2());
         }
     }
 }
