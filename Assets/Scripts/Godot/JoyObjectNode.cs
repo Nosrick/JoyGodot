@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Godot;
 using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.GUI.WorldState;
 using JoyGodot.Assets.Scripts.Helpers;
@@ -166,7 +167,14 @@ namespace JoyGodot.Assets.Scripts.Godot
                                 GlobalConstants.GameManager.GUIManager.OpenGUI(this, conversationWindow?.Name);
                             });
                         contextMenu.AddItem(
-                            "Attack", delegate { GD.Print("ATTACK!"); });
+                            "Attack", delegate
+                            {
+                                if (this.Attack(player, entity)
+                                    && entity.Conscious)
+                                {
+                                    this.Attack(entity, player);
+                                }
+                            });
                     }
                     else
                     {
@@ -186,6 +194,101 @@ namespace JoyGodot.Assets.Scripts.Godot
             }
 
             this.GuiManager.OpenGUI(this, GUINames.CONTEXT_MENU);
+        }
+
+        protected bool Attack(IEntity aggressor, IEntity defender)
+        {
+            bool adjacent = AdjacencyHelper.IsAdjacent(aggressor.WorldPosition, defender.WorldPosition);
+
+            var aggressorEquipment = aggressor.Equipment.GetSlotsAndContents(false).ToArray();
+            var defenderEquipment = defender.Equipment.GetSlotsAndContents(false).ToArray();
+
+            int aggressorRange = 1;
+            int defenderRange = 1;
+
+            if (aggressorEquipment.IsNullOrEmpty() == false)
+            {
+                aggressorRange = aggressorEquipment.Max(tuple => tuple.Item2.ItemType.Range);
+            }
+
+            if (defenderEquipment.IsNullOrEmpty() == false)
+            {
+                defenderRange = defenderEquipment.Max(tuple => tuple.Item2.ItemType.Range);
+            }
+
+            bool aggressorInRange = AdjacencyHelper.IsInRange(
+                aggressor.WorldPosition,
+                defender.WorldPosition,
+                aggressorRange);
+
+            bool defenderInRange = AdjacencyHelper.IsInRange(
+                aggressor.WorldPosition,
+                defender.WorldPosition,
+                defenderRange);
+
+            List<string> attackerTags = aggressor.Equipment.Contents
+                .Where(item => item.HasTag("weapon"))
+                .SelectMany(item => item.Tags)
+                .ToList();
+            attackerTags.AddRange(new[]
+            {
+                "agility",
+                "strength",
+                "attack"
+            });
+            attackerTags.Add(adjacent == false || aggressorRange > 1 ? "ranged" : "adjacent");
+
+            List<string> defenderTags = defender.Equipment.Contents
+                .Where(item => item.HasTag("armour"))
+                .SelectMany(item => item.Tags)
+                .ToList();
+
+            defenderTags.AddRange(new[]
+            {
+                "evasion",
+                "agility",
+                "defend"
+            });
+            defenderTags.Add(adjacent == false || defenderRange > 1 ? "ranged" : "adjacent");
+
+            if (aggressorInRange)
+            {
+                int value = GlobalConstants.GameManager.CombatEngine.MakeAttack(
+                    aggressor,
+                            defender,
+                            attackerTags,
+                            defenderTags);
+                defender.ModifyValue(DerivedValueName.HITPOINTS, -value);
+
+                IRelationship[] relationships = GlobalConstants.GameManager.RelationshipHandler.Get(
+                        new[]
+                        {
+                            defender.Guid,
+                            aggressor.Guid
+                        })
+                    .ToArray();
+
+                foreach (IRelationship relationship in relationships)
+                {
+                    relationship.ModifyValueOfParticipant(defender.Guid, aggressor.Guid, -50);
+                }
+                
+                if (defender.Alive == false)
+                {
+                    GlobalConstants.ActionLog.Log(
+                        aggressor.JoyName + " has killed " + defender.JoyName + "!",
+                        LogLevel.Gameplay);
+                    defender.MyWorld.RemoveEntity(defender.WorldPosition, true);
+                }
+                else if (defender.Conscious == false)
+                {
+                    GlobalConstants.ActionLog.Log(
+                        aggressor.JoyName + " has knocked " + defender.JoyName + " unconscious!",
+                        LogLevel.Gameplay);
+                }
+            }
+
+            return defenderInRange;
         }
     }
 }

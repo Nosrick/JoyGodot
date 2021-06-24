@@ -16,7 +16,7 @@ namespace JoyGodot.Assets.Scripts.Combat
 
         public CombatEngine(IRollable roller = null)
         {
-            this.Roller = roller is null ? new RNG() : roller;
+            this.Roller = roller ?? new RNG();
         }
 
         public int MakeAttack(IEntity attacker,
@@ -149,9 +149,19 @@ namespace JoyGodot.Assets.Scripts.Combat
                 result = Math.Max(0, result);
             }
 
-            GlobalConstants.ActionLog.Log(
+            if(result > 0)
+            {
+                GlobalConstants.ActionLog.Log(
                 attacker.JoyName + " attacks " + defender.JoyName + " for " + result + " damage.",
                 LogLevel.Gameplay);
+                
+            }
+            else
+            {
+                GlobalConstants.ActionLog.Log(
+                    attacker.JoyName + " missed " + defender.JoyName + ".",
+                    LogLevel.Gameplay);
+            }
             return result;
         }
     }
