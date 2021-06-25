@@ -160,17 +160,17 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
 
                 int time = this.Roller.Roll(5, 30);
 
-                if (actor.FulfillmentData is null
-                    || partner.FulfillmentData is null)
+                if (actor.NeedFulfillmentData.IsEmpty()
+                    || partner.NeedFulfillmentData.IsEmpty() == false)
                 {
                     return false;
                 }
                 
-                if (actor.FulfillmentData.Name.Equals(this.Name) && 
-                    partner.FulfillmentData.Name.Equals(this.Name))
+                if (actor.NeedFulfillmentData.Name.Equals(this.Name) && 
+                    partner.NeedFulfillmentData.Name.Equals(this.Name))
                 {
                     HashSet<IJoyObject> userParticipants =
-                        new HashSet<IJoyObject>(actor.FulfillmentData.Targets) {actor, partner};
+                        new HashSet<IJoyObject>(actor.NeedFulfillmentData.Targets) {actor, partner};
                     this.m_CachedActions["fulfillneedaction"].Execute(
                         userParticipants.ToArray(),
                         new[] { "sex", "need", "fulfill" },
@@ -182,7 +182,7 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                         });
 
                     HashSet<IJoyObject> partnerParticipants =
-                        new HashSet<IJoyObject>(partner.FulfillmentData.Targets) {partner, actor};
+                        new HashSet<IJoyObject>(partner.NeedFulfillmentData.Targets) {partner, actor};
                     this.m_CachedActions["fulfillneedaction"].Execute(
                         partnerParticipants.ToArray(),
                         new string[] { "sex", "need", "fulfill" },

@@ -5,8 +5,6 @@ namespace JoyGodot.Assets.Scripts.Entities.AI
 {
     public interface IPathfinder
     {
-        void FindPathStop();
-
         Queue<Vector2Int> FindPath(Vector2Int fromPoint, Vector2Int toPoint, byte[,] grid, Rect2Int sizes);
 
         string DetermineSector(Vector2Int fromPoint, Vector2Int toPoint);

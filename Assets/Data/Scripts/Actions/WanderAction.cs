@@ -38,10 +38,10 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
 
             NeedAIData needAIData = new NeedAIData
             {
-                idle = false,
-                intent = Intent.Interact,
-                searching = true,
-                targetPoint = result
+                Idle = false,
+                Intent = Intent.Interact,
+                Searching = true,
+                TargetPoint = result
             };
             
             //GlobalConstants.ActionLog.AddText(actor.JoyName + " is wandering.");

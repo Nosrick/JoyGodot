@@ -7,25 +7,25 @@ using JoyGodot.Assets.Scripts.JoyObject;
 
 namespace JoyGodot.Assets.Scripts.Entities.AI
 {
-    public class NeedAIData : ISerialisationHandler
+    public struct NeedAIData : ISerialisationHandler
     {
-        public IJoyObject target;
-        public Vector2Int targetPoint;
-        public bool searching;
-        public Intent intent;
-        public bool idle;
-        public string need;
+        public IJoyObject Target { get; set; }
+        public Vector2Int TargetPoint { get; set; }
+        public bool Searching { get; set; }
+        public Intent Intent { get; set; }
+        public bool Idle { get; set; }
+        public string Need { get; set; }
 
         public static NeedAIData IdleState()
         {
             return new NeedAIData
             {
-                target = null,
-                targetPoint = GlobalConstants.NO_TARGET,
-                searching = false,
-                idle = true,
-                intent = Intent.Interact,
-                need = "none"
+                Target = null,
+                TargetPoint = GlobalConstants.NO_TARGET,
+                Searching = false,
+                Idle = true,
+                Intent = Intent.Interact,
+                Need = "none"
             };
         }
 
@@ -33,12 +33,12 @@ namespace JoyGodot.Assets.Scripts.Entities.AI
         {
             return new NeedAIData
             {
-                target = null,
-                targetPoint = GlobalConstants.NO_TARGET,
-                searching = true,
-                idle = false,
-                intent = Intent.Interact,
-                need = "none"
+                Target = null,
+                TargetPoint = GlobalConstants.NO_TARGET,
+                Searching = true,
+                Idle = false,
+                Intent = Intent.Interact,
+                Need = "none"
             };
         }
 
@@ -46,12 +46,12 @@ namespace JoyGodot.Assets.Scripts.Entities.AI
         {
             Dictionary saveDict = new Dictionary
             {
-                {"TargetPoint", this.targetPoint.Save()},
-                {"Target", this.target?.Guid.ToString()},
-                {"Searching", this.searching},
-                {"Intent", this.intent.ToString()},
-                {"Idle", this.idle},
-                {"Need", this.need}
+                {"TargetPoint", this.TargetPoint.Save()},
+                {"Target", this.Target?.Guid.ToString()},
+                {"Searching", this.Searching},
+                {"Intent", this.Intent.ToString()},
+                {"Idle", this.Idle},
+                {"Need", this.Need}
             };
 
             return saveDict;
@@ -60,24 +60,24 @@ namespace JoyGodot.Assets.Scripts.Entities.AI
         public void Load(Dictionary data)
         {
             var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
-            this.targetPoint = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "TargetPoint"));
+            this.TargetPoint = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "TargetPoint"));
             string target = valueExtractor.GetValueFromDictionary<string>(data, "Target");
             Guid guid = target.IsNullOrEmpty() ? Guid.Empty : new Guid(target);
 
             IJoyObject tempTarget = GlobalConstants.GameManager.EntityHandler.Get(guid) 
                                     ?? (IJoyObject) GlobalConstants.GameManager.ItemHandler.Get(guid);
 
-            this.target = tempTarget;
+            this.Target = tempTarget;
 
-            this.searching = valueExtractor.GetValueFromDictionary<bool>(data, "Searching");
-            this.intent = (Intent) Enum.Parse(
+            this.Searching = valueExtractor.GetValueFromDictionary<bool>(data, "Searching");
+            this.Intent = (Intent) Enum.Parse(
                 typeof(Intent),
                 valueExtractor.GetValueFromDictionary<string>(
                     data, 
                     "Intent"));
 
-            this.idle = valueExtractor.GetValueFromDictionary<bool>(data, "Idle");
-            this.need = valueExtractor.GetValueFromDictionary<string>(data, "Need");
+            this.Idle = valueExtractor.GetValueFromDictionary<bool>(data, "Idle");
+            this.Need = valueExtractor.GetValueFromDictionary<string>(data, "Need");
         }
     }
 }

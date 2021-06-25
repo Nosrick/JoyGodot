@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
 using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
-    public class FulfillmentData : ISerialisationHandler
+    public struct NeedFulfillmentData : ISerialisationHandler
     {
-        public FulfillmentData()
-        {
-        }
-        
-        public FulfillmentData(string name, int counter, IJoyObject[] targets)
+        public NeedFulfillmentData(string name, int counter, IEnumerable<IJoyObject> targets)
         {
             this.Name = name;
             this.Counter = counter;
             this.Targets = targets;
+        }
+
+        public bool IsEmpty()
+        {
+            return this.Name.IsNullOrEmpty() && this.Counter == 0 && this.Targets.IsNullOrEmpty();
         }
 
         public int DecrementCounter()
@@ -30,19 +32,19 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
         public string Name
         {
             get;
-            protected set;
+            set;
         }
 
         public int Counter
         {
             get;
-            protected set;
+            set;
         }
 
         public IEnumerable<IJoyObject> Targets
         {
             get;
-            protected set;
+            set;
         }
 
         public Dictionary Save()
@@ -51,7 +53,10 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
             {
                 {"Name", this.Name},
                 {"Counter", this.Counter},
-                {"Targets", new Array(this.Targets.Select(o => o.Guid.ToString()))}
+                {"Targets", new Array(
+                    this.Targets.IsNullOrEmpty()
+                    ? new string[0]
+                    : this.Targets.Select(o => o.Guid.ToString()))}
             };
 
             return saveDict;

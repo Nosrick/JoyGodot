@@ -142,15 +142,15 @@ namespace JoyGodot.Assets.Scripts.States
         {
             IEntity player = GlobalConstants.GameManager.Player;
 
-            if ((player.FulfillmentData is null || player.FulfillmentData.Counter <= 0)
+            if ((player.NeedFulfillmentData.IsEmpty() || player.NeedFulfillmentData.Counter <= 0)
                 && this.AutoTurn
                 && player.Conscious
                 && this.ManualAutoTurn == false)
             {
                 this.AutoTurn = false;
             }
-            else if (player.FulfillmentData is null == false
-                     && player.FulfillmentData.Counter > 0
+            else if (player.NeedFulfillmentData.IsEmpty() == false
+                     && player.NeedFulfillmentData.Counter > 0
                      && this.AutoTurn == false)
             {
                 this.AutoTurn = true;

@@ -56,15 +56,15 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
             IJoyObject[] fellowActors = participants.Where(p => p.Guid != actor.Guid).ToArray();
             
             actor.Needs[need].Fulfill(value);
-            actor.FulfillmentData = actor.FulfillmentData is null 
-                ? new FulfillmentData(need, counter, fellowActors) 
-                : new FulfillmentData(
+            actor.NeedFulfillmentData = actor.NeedFulfillmentData.IsEmpty()
+                ? new NeedFulfillmentData(need, counter, fellowActors) 
+                : new NeedFulfillmentData(
                     overwrite 
-                    || actor.FulfillmentData.Name.IsNullOrEmpty() 
-                    || actor.FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase)
+                    || actor.NeedFulfillmentData.Name.IsNullOrEmpty() 
+                    || actor.NeedFulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase)
                         ? need 
-                        : actor.FulfillmentData.Name, 
-                    overwrite ? counter : actor.FulfillmentData.Counter + counter,
+                        : actor.NeedFulfillmentData.Name, 
+                    overwrite ? counter : actor.NeedFulfillmentData.Counter + counter,
                     fellowActors);
 
             if (doAll)
@@ -78,11 +78,11 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
                     
                     IJoyObject[] others = participants.Where(p => p.Guid != entity.Guid).ToArray();
                     entity.Needs[need].Fulfill(value);
-                    entity.FulfillmentData = entity.FulfillmentData is null 
-                        ? new FulfillmentData(need, counter, others) 
-                        : new FulfillmentData(
-                            overwrite ? need : entity.FulfillmentData.Name, 
-                            overwrite ? counter : entity.FulfillmentData.Counter + counter,
+                    entity.NeedFulfillmentData = entity.NeedFulfillmentData.IsEmpty()
+                        ? new NeedFulfillmentData(need, counter, others) 
+                        : new NeedFulfillmentData(
+                            overwrite ? need : entity.NeedFulfillmentData.Name, 
+                            overwrite ? counter : entity.NeedFulfillmentData.Counter + counter,
                             others);
                 }
             }

@@ -134,12 +134,12 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 {
                     actor.CurrentTarget = new NeedAIData
                     {
-                        idle = true,
-                        intent = Intent.Interact,
-                        need = null,
-                        searching = false,
-                        target = null,
-                        targetPoint = GlobalConstants.NO_TARGET
+                        Idle = true,
+                        Intent = Intent.Interact,
+                        Need = null,
+                        Searching = false,
+                        Target = null,
+                        TargetPoint = GlobalConstants.NO_TARGET
                     };
                     return true;
                 }

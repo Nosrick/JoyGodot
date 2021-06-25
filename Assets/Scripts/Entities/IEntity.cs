@@ -43,7 +43,7 @@ namespace JoyGodot.Assets.Scripts.Entities
         int Size { get; }
         
         IVision VisionProvider { get; }
-        FulfillmentData FulfillmentData { get; set; }
+        NeedFulfillmentData NeedFulfillmentData { get; set; }
         NeedAIData CurrentTarget { get; set;  }
         IDriver Driver { get; }
         IPathfinder Pathfinder { get; }

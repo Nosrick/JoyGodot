@@ -13,21 +13,20 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
         public int H;
         public int X;
         public int Y;
-        public int PX; // Parent
+        //Parent
+        public int PX;
         public int PY;
     }
 
     public class CustomPathfinder : IPathfinder
     {
         public bool Stopped { get; set; }
-
         public bool Diagonals { get; set; }
         public bool HeavyDiagonals { get; set; }
         public int HeuristicEstimate { get; set; }
         public bool PunishChangeDirection { get; set; }
         public bool ReopenCloseNodes { get; set; }
         public bool TieBreaker { get; set; }
-        
         public int SearchLimit { get; set; }
         
         public double CompletedTime { get; set; }
@@ -35,9 +34,7 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
         public bool DebugProgress { get; set; }
         
         public bool DebugFoundPath { get; set; }
-
-        
-        protected int HorizontalPunishment { get; set; }
+        protected int PunishmentValue { get; set; }
 
         public CustomPathfinder()
         {
@@ -55,7 +52,7 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
             Queue<Vector2Int> path = new Queue<Vector2Int>();
 
             sbyte[,] direction;
-            if (this.Diagonals == true)
+            if (this.Diagonals)
             {
                 direction = new sbyte[8, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { 1, -1 }, { 1, 1 }, { -1, 1 }, { -1, -1 } };
             }
@@ -64,16 +61,18 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
                 direction = new sbyte[4, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
             }
 
-            PathFinderNode parentNode = new PathFinderNode();
-            parentNode.G = 0;
-            parentNode.H = this.HeuristicEstimate;
+            PathFinderNode parentNode = new PathFinderNode
+            {
+                G = 0, 
+                H = this.HeuristicEstimate
+            };
             parentNode.F = parentNode.G + parentNode.H;
             parentNode.X = fromPoint.x;
             parentNode.Y = fromPoint.y;
             parentNode.PX = parentNode.X;
             parentNode.PY = parentNode.Y;
 
-            PriorityQueue<PathFinderNode> openList = new PriorityQueue<PathFinderNode>(new ComparePFNode());
+            PriorityQueue<PathFinderNode> openList = new PriorityQueue<PathFinderNode>(new PathfinderNodeComparer());
             List<PathFinderNode> closedList = new List<PathFinderNode>();
 
             openList.Push(parentNode);
@@ -99,14 +98,16 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
 
                 if(this.PunishChangeDirection)
                 {
-                    this.HorizontalPunishment = parentNode.X - parentNode.PX;
+                    this.PunishmentValue = parentNode.X - parentNode.PX;
                 }
 
                 for(int i = 0; i < (this.Diagonals == true ? 8 : 4); i++)
                 {
-                    PathFinderNode newNode = new PathFinderNode();
-                    newNode.X = parentNode.X + direction[i, 0];
-                    newNode.Y = parentNode.Y + direction[i, 1];
+                    PathFinderNode newNode = new PathFinderNode
+                    {
+                        X = parentNode.X + direction[i, 0], 
+                        Y = parentNode.Y + direction[i, 1]
+                    };
 
                     if(newNode.X < 0 || newNode.Y < 0 || newNode.X >= sizes.xMax || newNode.Y >= sizes.yMax)
                     {
@@ -125,20 +126,20 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
                         newG += 2;
                     }
 
-                    if(this.PunishChangeDirection == true)
+                    if(this.PunishChangeDirection)
                     {
                         if ((newNode.X - parentNode.X) != 0)
                         {
-                            if (this.HorizontalPunishment == 0)
+                            if (this.PunishmentValue == 0)
                             {
-                                newG += 20;
+                                newG += this.PunishmentValue;
                             }
                         }
                         if ((newNode.Y - parentNode.Y) != 0)
                         {
-                            if (this.HorizontalPunishment != 0)
+                            if (this.PunishmentValue != 0)
                             {
-                                newG += 20;
+                                newG += this.PunishmentValue;
                             }
                         }
                     }
@@ -189,7 +190,7 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
                 loopBreak++;
             }
 
-            if(found == true)
+            if(found)
             {
                 PathFinderNode node = closedList[closedList.Count - 1];
 
@@ -262,20 +263,15 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.Pathfinding
             return "nearby";
         }
 
-        public void FindPathStop()
+        protected internal class PathfinderNodeComparer : IComparer<PathFinderNode>
         {
-            throw new NotImplementedException();
-        }
-
-        internal class ComparePFNode : IComparer<PathFinderNode>
-        {
-            public int Compare(PathFinderNode x, PathFinderNode y)
+            public int Compare(PathFinderNode left, PathFinderNode right)
             {
-                if (x.F > y.F)
+                if (left.F > right.F)
                 {
                     return 1;
                 }
-                else if (x.F < y.F)
+                if (left.F < right.F)
                 {
                     return -1;
                 }

@@ -74,7 +74,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         protected IVision m_VisionProvider;
 
-        protected FulfillmentData m_FulfillmentData;
+        protected NeedFulfillmentData m_NeedFulfillmentData;
 
         protected NeedAIData m_CurrentTarget;
 
@@ -201,24 +201,24 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public bool HasMoved { get; set; }
 
-        public FulfillmentData FulfillmentData
+        public NeedFulfillmentData NeedFulfillmentData
         {
-            get => this.m_FulfillmentData;
+            get => this.m_NeedFulfillmentData;
             set
             {
-                this.m_FulfillmentData = value;
+                this.m_NeedFulfillmentData = value;
 
-                if (value is null)
+                if (value.Name.IsNullOrEmpty())
                 {
                     this.MyNode?.SetSpeechBubble(false);
                     return;
                 }
 
-                if (this.m_FulfillmentData.Name.IsNullOrEmpty() == false
-                    && this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
+                if (this.m_NeedFulfillmentData.Name.IsNullOrEmpty() == false
+                    && this.m_NeedFulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
                 {
-                    this.MyNode?.SetSpeechBubble(this.m_FulfillmentData.Counter > 0,
-                        this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
+                    this.MyNode?.SetSpeechBubble(this.m_NeedFulfillmentData.Counter > 0,
+                        this.m_Needs[this.m_NeedFulfillmentData.Name].FulfillingSprite);
                 }
             }
         }
@@ -531,10 +531,7 @@ namespace JoyGodot.Assets.Scripts.Entities
             this.m_Pathfinder = (IPathfinder) GlobalConstants.ScriptingEngine.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();
 
-            this.m_FulfillmentData = new FulfillmentData(
-                "none",
-                0,
-                new IJoyObject[0]);
+            this.m_NeedFulfillmentData = new NeedFulfillmentData();
 
             this.RegenTicker = this.Roller.Roll(0, REGEN_TICK_TIME);
 
@@ -747,11 +744,10 @@ namespace JoyGodot.Assets.Scripts.Entities
         {
             this.HappinessIsDirty = false;
 
-            if (this.m_FulfillmentData is null == false
-                && this.m_FulfillmentData.Counter > 0
-                && this.m_FulfillmentData.DecrementCounter() == 0)
+            if (this.m_NeedFulfillmentData.Counter > 0
+                && this.m_NeedFulfillmentData.DecrementCounter() == 0)
             {
-                this.FulfillmentData = null;
+                this.NeedFulfillmentData = new NeedFulfillmentData();
             }
 
             this.RegenTicker += 1;
@@ -1360,8 +1356,8 @@ namespace JoyGodot.Assets.Scripts.Entities
             saveDict.Add("Cultures", new Array(this.CultureNames));
             saveDict.Add("Size", this.Size);
             saveDict.Add("VisionProvider", this.VisionProvider.Name);
-            saveDict.Add("FulfilmentData", this.FulfillmentData?.Save());
-            saveDict.Add("NeedData", this.CurrentTarget?.Save());
+            saveDict.Add("FulfilmentData", this.NeedFulfillmentData.Save());
+            saveDict.Add("NeedData", this.CurrentTarget.Save());
             saveDict.Add("PlayerControlled", this.PlayerControlled);
             saveDict.Add("RegenTicker", this.RegenTicker);
             saveDict.Add("PathfindingData", new Array(this.PathfindingData.Select(i => i.Save())));
@@ -1485,8 +1481,8 @@ namespace JoyGodot.Assets.Scripts.Entities
             this.m_CurrentTarget = new NeedAIData();
             this.m_CurrentTarget.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "NeedData"));
 
-            this.m_FulfillmentData = new FulfillmentData();
-            this.m_FulfillmentData.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "FulfilmentData"));
+            this.m_NeedFulfillmentData = new NeedFulfillmentData();
+            this.m_NeedFulfillmentData.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "FulfilmentData"));
 
             this.PlayerControlled = valueExtractor.GetValueFromDictionary<bool>(data, "PlayerControlled");
 

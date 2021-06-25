@@ -14,11 +14,18 @@
         public int Area => this.width * this.height;
 
         public Rect2Int(Vector2Int position, Vector2Int sizes)
+            : this(position.x, position.y,
+                sizes.x, sizes.y)
         {
-            this.x = position.x;
-            this.y = position.y;
-            this.width = sizes.x;
-            this.height = sizes.y;
+        }
+
+        public Rect2Int(int x, int y, int width, int height)
+        {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            
         }
 
         public bool Contains(Vector2Int point)

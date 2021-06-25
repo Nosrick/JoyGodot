@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Entities.AI;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.World;
@@ -89,10 +90,10 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
                 //TODO: Find a better way to reference AI targets
                 IEnumerable<IEntity> targeting =
                     GlobalConstants.GameManager.Player.MyWorld.Entities.Where(entity =>
-                        entity.CurrentTarget.target == item);
+                        entity.CurrentTarget.Target == item);
                 foreach (IEntity entity in targeting)
                 {
-                    entity.CurrentTarget.target = null;
+                    entity.CurrentTarget = new NeedAIData();
                 }
                 
                 //this.LiveItems[key].Dispose();

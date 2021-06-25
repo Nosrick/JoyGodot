@@ -41,12 +41,12 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
 
             NeedAIData needAIData = new NeedAIData
             {
-                idle = false,
-                intent = Intent.Interact,
-                searching = false,
-                target = participants[1],
-                targetPoint = GlobalConstants.NO_TARGET,
-                need = needName
+                Idle = false,
+                Intent = Intent.Interact,
+                Searching = false,
+                Target = participants[1],
+                TargetPoint = GlobalConstants.NO_TARGET,
+                Need = needName
             };
 
             actor.CurrentTarget = needAIData;

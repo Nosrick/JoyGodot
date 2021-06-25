@@ -48,6 +48,11 @@ namespace JoyGodot.Assets.Scripts.Helpers
 
         public T GetValueFromProperty<T>(object obj)
         {
+            if (obj is null)
+            {
+                return default;
+            }
+            
             return (T) Convert.ChangeType(obj, typeof(T));
         }
 

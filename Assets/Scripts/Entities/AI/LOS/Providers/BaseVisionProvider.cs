@@ -74,9 +74,9 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
             return this.CanSee(viewer, world, point) && lightLevel >= this.MinimumLightLevel && lightLevel <= this.MaximumLightLevel;
         }
 
-        public virtual Rect2 GetFullVisionRect(IEntity viewer)
+        public virtual Rect2Int GetFullVisionRect(IEntity viewer)
         {
-            Rect2 visionRect = new Rect2(0, 0, viewer.MyWorld.Dimensions.x, viewer.MyWorld.Dimensions.y);
+            Rect2Int visionRect = new Rect2Int(0, 0, viewer.MyWorld.Dimensions.x, viewer.MyWorld.Dimensions.y);
             return visionRect;
         }
 
@@ -88,9 +88,9 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
             return visibleWalls;
         }
 
-        public virtual Rect2 GetVisionRect(IEntity viewer)
+        public virtual Rect2Int GetVisionRect(IEntity viewer)
         {
-            Rect2 visionRect = new Rect2(viewer.WorldPosition.ToVec2(), new Vector2(viewer.VisionMod * 2 + 1, viewer.VisionMod * 2 + 1));
+            Rect2Int visionRect = new Rect2Int(viewer.WorldPosition, new Vector2Int(viewer.VisionMod * 2 + 1, viewer.VisionMod * 2 + 1));
             return visionRect;
         }
 

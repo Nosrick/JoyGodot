@@ -34,9 +34,9 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
         bool HasVisibility(IEntity viewer, IWorldInstance world, int x, int y);
         bool HasVisibility(IEntity viewer, IWorldInstance world, Vector2Int point);
 
-        Rect2 GetVisionRect(IEntity viewer);
+        Rect2Int GetVisionRect(IEntity viewer);
 
-        Rect2 GetFullVisionRect(IEntity viewer);
+        Rect2Int GetFullVisionRect(IEntity viewer);
 
         void Update(IEntity viewer, IWorldInstance world);
     }
