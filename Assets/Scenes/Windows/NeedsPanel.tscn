@@ -28,10 +28,9 @@ m_ElementName = "AccentBackground"
 anchor_right = 1.0
 anchor_bottom = 0.1
 script = ExtResource( 2 )
-Constraint = 1
 VerticalConstraint = true
-YMin = 240.0
-YMax = 456.0
+YMin = 0.5
+YMax = 0.95
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 anchor_top = 0.1

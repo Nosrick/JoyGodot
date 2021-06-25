@@ -57,30 +57,39 @@ namespace JoyGodot.Assets.Scripts.GUI
                     switch (this.Constraint)
                     {
                         case ConstraintType.Anchors:
-                            GD.PushWarning("Anchors mode not implemented yet!");
-                            /*
+                            Vector2 parentPosition = this.Parent.RectPosition;
+                            Vector2 grandparentSize = this.Parent.GetParentControl().RectSize;
+                            Vector2 proposedMove = parentPosition + mouseMotion.Relative;
+                            
+                            Vector2 localProposedPosition = proposedMove / grandparentSize;
+                            
+                            GD.Print("relative parent position " + localProposedPosition);
+                            
+                            Vector2 offset = Vector2.Zero;
+
                             if (this.HorizontalConstraint)
                             {
-                                if (this.Parent.AnchorLeft > mouseMotion.Position.x
-                                    || this.Parent.AnchorRight < mouseMotion.Position.x)
+                                if (this.XMin > localProposedPosition.x
+                                    || this.XMax < localProposedPosition.x)
                                 {
                                     return;
                                 }
 
-                                this.Parent.RectGlobalPosition += new Vector2(mouseMotion.Relative.x, 0);
+                                offset.x += mouseMotion.Relative.x;
                             }
 
                             if (this.VerticalConstraint)
                             {
-                                if (this.Parent.AnchorTop > mouseMotion.Position.y
-                                    || this.Parent.AnchorBottom < mouseMotion.Position.y)
+                                if (this.YMin > localProposedPosition.y
+                                    || this.YMax < localProposedPosition.y)
                                 {
                                     return;
                                 }
 
-                                this.Parent.RectGlobalPosition += new Vector2(0, mouseMotion.Relative.y);
+                                offset.y += mouseMotion.Relative.y;
                             }
-                            */
+
+                            this.Parent.RectPosition += offset;
                             break;
                         
                         case ConstraintType.Pixels:
@@ -106,14 +115,13 @@ namespace JoyGodot.Assets.Scripts.GUI
                                 this.Parent.RectGlobalPosition += new Vector2(0, mouseMotion.Relative.y);
                             }
                     
-                            Vector2 parentRect = this.Parent.RectGlobalPosition;
                             this.Parent.RectGlobalPosition = new Vector2(
                                 this.HorizontalConstraint
-                                    ? Mathf.Clamp(parentRect.x, this.XMin, this.XMax)
-                                    : parentRect.x,
+                                    ? Mathf.Clamp(this.Parent.RectGlobalPosition.x, this.XMin, this.XMax)
+                                    : this.Parent.RectGlobalPosition.x,
                                 this.VerticalConstraint
-                                    ? Mathf.Clamp(parentRect.y, this.YMin, this.YMax)
-                                    : parentRect.y);
+                                    ? Mathf.Clamp(this.Parent.RectGlobalPosition.y, this.YMin, this.YMax)
+                                    : this.Parent.RectGlobalPosition.y);
                             break;
                     }
                 }
