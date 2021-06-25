@@ -18,20 +18,23 @@ __meta__ = {
 
 [node name="MainContainer" type="HBoxContainer" parent="."]
 use_parent_material = true
-anchor_left = 0.6
-anchor_top = 0.866
+anchor_left = 0.764
+anchor_top = 0.94
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_bottom = 3.20001
 mouse_filter = 2
+alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CharacterSheet" type="Control" parent="MainContainer"]
 use_parent_material = true
-margin_right = 64.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+margin_left = 25.0
+margin_right = 57.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
 theme = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -50,10 +53,10 @@ ColourMultiplier = 1.0
 
 [node name="Inventory" type="Control" parent="MainContainer"]
 use_parent_material = true
-margin_left = 68.0
-margin_right = 132.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+margin_left = 61.0
+margin_right = 93.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
 theme = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -72,10 +75,10 @@ ColourMultiplier = 1.0
 
 [node name="Equipment" type="Control" parent="MainContainer"]
 use_parent_material = true
-margin_left = 136.0
-margin_right = 200.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+margin_left = 97.0
+margin_right = 129.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
 theme = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -94,10 +97,10 @@ ColourMultiplier = 1.0
 
 [node name="JobManagement" type="Control" parent="MainContainer"]
 use_parent_material = true
-margin_left = 204.0
-margin_right = 268.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+margin_left = 133.0
+margin_right = 165.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
 theme = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -116,10 +119,10 @@ ColourMultiplier = 1.0
 
 [node name="QuestJournal" type="Control" parent="MainContainer"]
 use_parent_material = true
-margin_left = 272.0
-margin_right = 336.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+margin_left = 169.0
+margin_right = 201.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
 theme = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {

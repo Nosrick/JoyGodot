@@ -12,6 +12,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         protected VBoxContainer LabelContainer { get; set; }
         
         protected List<RichTextLabel> Parts { get; set; }
+        
+        protected DynamicFont CachedFont { get; set; }
 
         public override void _Ready()
         {
@@ -19,6 +21,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
             this.Parts = new List<RichTextLabel>();
             this.LabelContainer = this.FindNode("TextContainer") as VBoxContainer;
+            this.CachedFont = GlobalConstants.GameManager.GUIManager.FontsInUse["Font"];
             this.SetNeeds();
             this.Player.NeedChange += this.OnNeedsChange;
         }
@@ -47,14 +50,15 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 var label = new RichTextLabel
                 {
                     OverrideSelectedFontColor = true,
-                    AnchorBottom = 1,
-                    AnchorLeft = 0,
-                    AnchorTop = 0,
-                    AnchorRight = 1,
                     BbcodeEnabled = true,
-                    FitContentHeight = true
+                    FitContentHeight = true,
+                    RectMinSize = new Vector2(0, 16)
                 };
-                label.AddFontOverride("font", GlobalConstants.GameManager.GUIManager.FontsInUse["Font"]);
+                label.Theme ??= new Theme();
+                DynamicFont dynamicFont = (DynamicFont) this.CachedFont.Duplicate();
+                dynamicFont.Size = 16;
+                dynamicFont.OutlineSize = 1;
+                label.Theme.DefaultFont = dynamicFont;
                 this.Parts.Add(label);
                 this.LabelContainer.AddChild(label);
                 label.Visible = false;
@@ -78,8 +82,6 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                     "[center][color=" + colourCode + "]" + 
                     CultureInfo.CurrentCulture.TextInfo.ToTitleCase(need.Name) + 
                     "[/color][/center]");
-                //part.PushAlign(RichTextLabel.Align.Center);
-                //part.PushColor(need.Value < need.HappinessThreshold / 2 ? Colors.Red : Colors.Yellow);
             }
         }
     }

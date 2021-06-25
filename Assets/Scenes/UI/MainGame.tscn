@@ -21,7 +21,7 @@
 
 [sub_resource type="Theme" id=1]
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=2]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -41,7 +41,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=4]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -61,7 +61,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=6]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -81,7 +81,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=8]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -91,7 +91,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=9]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -135,14 +135,14 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+VAlign = 1
 OutlineThickness = 1
+TitleCase = true
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
-CustomFont = SubResource( 8 )
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 2 )
 Text = "Fill Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -151,6 +151,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Cheats/Fill Needs"]
 anchor_right = 1.0
@@ -176,14 +177,14 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+VAlign = 1
 OutlineThickness = 1
+TitleCase = true
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
-CustomFont = SubResource( 9 )
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 4 )
 Text = "Empty Needs"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -192,6 +193,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Cheats/Empty Needs"]
 anchor_right = 1.0
@@ -217,14 +219,14 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+VAlign = 1
 OutlineThickness = 1
+TitleCase = true
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
-CustomFont = SubResource( 10 )
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 6 )
 Text = "Empty One Need"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -233,6 +235,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Cheats/Empty One Need"]
 anchor_right = 1.0
@@ -258,18 +261,18 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 OverrideSize = true
-OverrideColour = true
-TitleCase = true
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
 OutlineThickness = 1
+TitleCase = true
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
 CacheFont = true
-CustomFont = SubResource( 11 )
+OverrideColour = true
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 8 )
 Text = "Add Quest"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -278,11 +281,12 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Cheats/Add Quest"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Add Quest"
 align = 1
@@ -300,17 +304,17 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
+VAlign = 1
 OverrideSize = true
-TitleCase = true
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
 OutlineThickness = 1
+TitleCase = true
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
 CacheFont = true
-CustomFont = SubResource( 12 )
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+CustomFont = SubResource( 9 )
 Text = "Complete Quest"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -319,11 +323,12 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Cheats/Complete Quest"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 9 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Complete Quest"
 align = 1
@@ -334,14 +339,28 @@ __meta__ = {
 
 [node name="ActionLog" parent="." instance=ExtResource( 18 )]
 anchor_right = 0.5
-anchor_bottom = 0.3
+anchor_bottom = 0.2
+
+[node name="LabelContainer" parent="ActionLog/ScrollContainer" index="0"]
+margin_right = 407.0
+margin_bottom = 66.4
+
+[node name="DragHandle" parent="ActionLog" index="3"]
+YMin = -0.175
 
 [node name="Quickbar" parent="." instance=ExtResource( 10 )]
 anchor_bottom = 0.65
 AlwaysOpen = true
 
 [node name="NeedsPanel" parent="." instance=ExtResource( 16 )]
-visible = false
+anchor_top = 0.6
+margin_top = 0.0
+
+[node name="DragHandle" parent="NeedsPanel" index="2"]
+YMin = 0.6
+
+[node name="TextContainer" parent="NeedsPanel/ScrollContainer" index="0"]
+margin_bottom = 162.8
 
 [node name="DerivedValuePanel" parent="." instance=ExtResource( 17 )]
 anchor_left = 0.7
@@ -385,3 +404,6 @@ visible = false
 [connection signal="_Press" from="Cheats/Empty One Need" to="Cheats" method="EmptyOneNeed"]
 [connection signal="_Press" from="Cheats/Add Quest" to="Cheats" method="AddQuest"]
 [connection signal="_Press" from="Cheats/Complete Quest" to="Cheats" method="CompleteQuest"]
+
+[editable path="ActionLog"]
+[editable path="NeedsPanel"]
