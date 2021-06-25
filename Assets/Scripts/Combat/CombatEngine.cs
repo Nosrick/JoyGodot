@@ -149,17 +149,27 @@ namespace JoyGodot.Assets.Scripts.Combat
                 result = Math.Max(0, result);
             }
 
+            bool isAttackerPlayer = attacker == GlobalConstants.GameManager.Player;
+
+            string attackerName = isAttackerPlayer
+                ? "{You}"
+                : "{" + attacker.JoyName + "}";
+
+            string defenderName = defender == GlobalConstants.GameManager.Player
+                ? "{You}"
+                : "{" + defender.JoyName + "}";
+
             if(result > 0)
             {
                 GlobalConstants.ActionLog.Log(
-                attacker.JoyName + " attacks " + defender.JoyName + " for " + result + " damage.",
+                attackerName + (isAttackerPlayer ? " attack " : " attacks ") + defenderName + " for " + result + " damage.",
                 LogLevel.Gameplay);
                 
             }
             else
             {
                 GlobalConstants.ActionLog.Log(
-                    attacker.JoyName + " missed " + defender.JoyName + ".",
+                    attackerName + " missed " + defenderName + ".",
                     LogLevel.Gameplay);
             }
             return result;

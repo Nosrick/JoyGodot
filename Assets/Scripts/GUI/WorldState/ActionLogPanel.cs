@@ -7,25 +7,28 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
     public class ActionLogPanel : GUIData
     {
         protected Control LabelContainer { get; set; }
-        protected List<Label> Text { get; set; }
+        protected List<RichTextLabel> Text { get; set; }
         
         protected DynamicFont CachedFont { get; set; }
 
         [Export] protected int LinesToKeep { get; set; }
+
+        protected const int MINIMUM_LINES = 10;
 
         public override void _Ready()
         {
             base._Ready();
 
             this.LabelContainer = this.FindNode("LabelContainer") as Control;
-            this.Text = new List<Label>();
+            this.Text = new List<RichTextLabel>();
             
             this.CachedFont = (DynamicFont) GlobalConstants.GameManager.GUIManager.FontsInUse["Font"].Duplicate();
-            this.CachedFont.Size = 12;
+            this.CachedFont.Size = 14;
+            this.CachedFont.OutlineSize = 1;
 
             if (this.LinesToKeep == 0)
             {
-                this.LinesToKeep = ActionLog.LINES_TO_KEEP;
+                this.LinesToKeep = MINIMUM_LINES;
             }
 
             GlobalConstants.ActionLog.TextAdded += this.AppendLine;
@@ -46,19 +49,36 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             }
             else
             {
-                var label = new Label
+                var label = new RichTextLabel
                 {
                     MouseFilter = MouseFilterEnum.Ignore,
-                    Text = textAdded,
-                    Align = Label.AlignEnum.Left,
-                    SizeFlagsHorizontal = (int) SizeFlags.ExpandFill,
-                    SizeFlagsVertical = (int) SizeFlags.ExpandFill
+                    SizeFlagsHorizontal = (int) SizeFlags.Fill,
+                    SizeFlagsVertical = (int) SizeFlags.Fill,
+                    FitContentHeight = true,
+                    BbcodeEnabled = true,
+                    RectMinSize = new Vector2(0, 14)
                 };
+                label.AppendBbcode(this.FormatText(textAdded));
                 this.LabelContainer.AddChild(label);
                 this.Text.Add(label);
                 label.Theme ??= new Theme();
-                label.Theme.SetFont("font", nameof(Label), this.CachedFont);
+                label.Theme.DefaultFont = this.CachedFont;
             }
+        }
+
+        protected string FormatText(string text)
+        {
+            text = text.Replace("{You}", "[color=green]You[/color]");
+            int leftIndex = text.Find("{");
+            int rightIndex = text.Find("}");
+            if (leftIndex >= 0 && rightIndex >= 1)
+            {
+                string sub = text.Substring(leftIndex, rightIndex - leftIndex + 1);
+                string name = sub.Substring(1, sub.Length - 2);
+                text = text.Replace(sub, "[color=red]" + name + "[/color]");
+            }
+
+            return text;
         }
 
         public override void _ExitTree()

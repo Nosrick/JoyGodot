@@ -10,11 +10,7 @@ namespace JoyGodot.Assets.Scripts.Helpers
 {
     public class ActionLog
     {
-        public List<string> History { get; protected set; }
-
         protected Queue<LogEntry> m_Queue = new Queue<LogEntry>();
-
-        public const int LINES_TO_KEEP = 10;
 
         protected const string FILENAME = "player.log";
 
@@ -44,7 +40,6 @@ namespace JoyGodot.Assets.Scripts.Helpers
                 File.Delete(FILENAME);
                 this.Writer = new StreamWriter(FILENAME);
                 this.m_Queue = new Queue<LogEntry>();
-                this.History = new List<string>();
                 return true;
             }
             catch (Exception ex)
@@ -60,14 +55,11 @@ namespace JoyGodot.Assets.Scripts.Helpers
         {
             while (this.m_Queue.Count > 0)
             {
-                this.Writer.WriteLine(this.m_Queue.Dequeue());
+                LogEntry logEntry = this.m_Queue.Dequeue();
+                this.TextAdded?.Invoke(logEntry.m_Data, logEntry.m_LogLevel);
+                this.Writer?.WriteLine(logEntry);
             }
-            this.Writer.Flush();
-
-            while (this.History.Count > LINES_TO_KEEP)
-            {
-                this.History.RemoveAt(0);
-            }
+            this.Writer?.Flush();
         }
 
         public void Flush()
@@ -77,7 +69,7 @@ namespace JoyGodot.Assets.Scripts.Helpers
 
         public void Log(object objectToPrint, LogLevel logLevel = LogLevel.Information)
         {
-            string toPrint = "[" + logLevel + "] ";
+            string toPrint = "";
             if (objectToPrint is ICollection collection)
             {
                 toPrint += this.CollectionWalk(collection);
@@ -90,29 +82,25 @@ namespace JoyGodot.Assets.Scripts.Helpers
             {
                 toPrint += objectToPrint;
             }
-             
-            GD.Print(toPrint);
-            switch (logLevel)
-            {
-                case LogLevel.Warning:
-                    GD.PushWarning(toPrint);
-                    break;
-
-                case LogLevel.Error:
-                    GD.PushError(toPrint);
-                    break;
-            }
 
             LogEntry entry = new LogEntry
             {
                 m_Data = toPrint,
                 m_LogLevel = logLevel
             };
-            this.m_Queue.Enqueue(entry);
-            if (logLevel == LogLevel.Gameplay)
+             
+            GD.Print(entry);
+            switch (logLevel)
             {
-                this.History.Add(toPrint);
+                case LogLevel.Warning:
+                    GD.PushWarning(entry.ToString());
+                    break;
+
+                case LogLevel.Error:
+                    GD.PushError(entry.ToString());
+                    break;
             }
+            this.m_Queue.Enqueue(entry);
         }
 
         public void StackTrace(Exception exception)
