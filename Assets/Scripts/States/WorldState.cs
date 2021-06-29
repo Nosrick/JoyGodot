@@ -67,7 +67,7 @@ namespace JoyGodot.Assets.Scripts.States
 
             this.FogHolder = this.GameManager.FogHolder;
             
-            GlobalConstants.GameManager?.Player?.MyNode?.AddChild(this.m_Camera);
+            GlobalConstants.GameManager?.Player.MyNode?.AddChild(this.m_Camera);
 
             GlobalConstants.GameManager.Player.AliveChange -= this.OnPlayerDeath;
             GlobalConstants.GameManager.Player.AliveChange += this.OnPlayerDeath;
@@ -132,6 +132,9 @@ namespace JoyGodot.Assets.Scripts.States
         public override void Stop()
         {
             base.Stop();
+            
+            GlobalConstants.GameManager?.Player?.MyNode?.RemoveChild(this.m_Camera);
+            this.m_Camera.QueueFree();
             
             this.GameManager.RetireAll();
 
