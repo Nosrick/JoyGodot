@@ -31,23 +31,18 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         public ConcreteDerivedIntValue()
         {}
 
-        public ConcreteDerivedIntValue(string name, int value, int maximum)
-        {
-            this.Name = name;
-            this.Base = value;
-            this.Value = value;
-        }
-
         public ConcreteDerivedIntValue(
             string name,
             int baseValue,
             int enhancement,
-            int value)
+            int value,
+            ICollection<string> tooltip)
         {
             this.Name = name;
             this.Base = baseValue;
             this.Enhancement = enhancement;
-            this.Value = Mathf.Clamp(value, -this.Maximum, this.Maximum); 
+            this.Value = Mathf.Clamp(value, -this.Maximum, this.Maximum);
+            this.Tooltip = tooltip;
         }
 
         public int SetValue(int data)

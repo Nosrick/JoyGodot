@@ -5,7 +5,6 @@ using System.Linq;
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Helpers;
-using JoyGodot.Assets.Scripts.Scripting;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
@@ -13,9 +12,9 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public class DerivedValueHandler : IDerivedValueHandler
     {
-        protected IDictionary<string, string> Formulas { get; set; }
-        protected IDictionary<string, string> EntityStandardFormulas { get; set; }
-        protected IDictionary<string, string> ItemStandardFormulas { get; set; }
+        protected IDictionary<string, DerivedValueData> Formulas { get; set; }
+        protected IDictionary<string, DerivedValueData> EntityStandardFormulas { get; set; }
+        protected IDictionary<string, DerivedValueData> ItemStandardFormulas { get; set; }
         protected IDictionary<string, IDerivedValue> DerivedValues { get; set; }
         
         protected IDictionary<string, Color> DerivedValueBarColours { get; set; }
@@ -54,8 +53,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             this.DerivedValueBarColours = new System.Collections.Generic.Dictionary<string, Color>();
             this.DerivedValueTextColours = new System.Collections.Generic.Dictionary<string, Color>();
             this.Load();
-            this.Formulas = new System.Collections.Generic.Dictionary<string, string>(this.EntityStandardFormulas);
-            foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
+            this.Formulas = new System.Collections.Generic.Dictionary<string, DerivedValueData>(this.EntityStandardFormulas);
+            foreach (KeyValuePair<string, DerivedValueData> pair in this.ItemStandardFormulas)
             {
                 this.Formulas.Add(pair.Key, pair.Value);
             }
@@ -112,9 +111,10 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             return this.DerivedValues.Values;
         }
 
-        public System.Collections.Generic.Dictionary<string, string> LoadFormulasFromFile(string file)
+        public IDictionary<string, DerivedValueData> LoadFormulasFromFile(string file)
         {
-            System.Collections.Generic.Dictionary<string, string> formulas = new System.Collections.Generic.Dictionary<string, string>();
+            System.Collections.Generic.Dictionary<string, DerivedValueData> formulas =
+                new System.Collections.Generic.Dictionary<string, DerivedValueData>();
 
             JSONParseResult result = JSON.Parse(File.ReadAllText(file));
             
@@ -141,10 +141,18 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
                 {
                     continue;
                 }
+
+                string formula = this.ValueExtractor.GetValueFromDictionary<string>(dv, "Formula");
+                string tooltip = this.ValueExtractor.GetValueFromDictionary<string>(dv, "Tooltip");
                                 
                 formulas.Add(
                     name,
-                    this.ValueExtractor.GetValueFromDictionary<string>(dv, "Formula"));
+                    new DerivedValueData
+                    {
+                        Formula = formula,
+                        Name = name,
+                        Tooltip = tooltip
+                    });
 
                 string colourCode = dv.Contains("BackgroundColour")
                     ? this.ValueExtractor.GetValueFromDictionary<string>(dv, "BackgroundColour")
@@ -170,11 +178,17 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         {
             if (this.Formulas.Any(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                string formula = this.Formulas.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase))
+                DerivedValueData formula = this.Formulas.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase))
                     .Value;
 
-                int value = this.Calculate(components, formula);
-                return new ConcreteDerivedIntValue(name, value, value);
+                int value = this.Calculate(components, formula.Formula);
+                return new ConcreteDerivedIntValue(
+                    name,
+                    value,
+                    0,
+                    value,
+                    new List<string> {formula.Tooltip});
+
             }
             
             throw new InvalidOperationException("Could not find formula for name of value " + name);
@@ -183,15 +197,17 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         public System.Collections.Generic.Dictionary<string, IDerivedValue> GetEntityStandardBlock(IEnumerable<IBasicValue<int>> components)
         {
             System.Collections.Generic.Dictionary<string, IDerivedValue> values = new System.Collections.Generic.Dictionary<string, IDerivedValue>();
-            foreach (KeyValuePair<string, string> pair in this.EntityStandardFormulas)
+            foreach (KeyValuePair<string, DerivedValueData> pair in this.EntityStandardFormulas)
             {
-                int result = Math.Max(1, this.Calculate<int>(components, pair.Value)); 
+                int result = Math.Max(1, this.Calculate(components, pair.Value.Formula)); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
                         pair.Key,
                         result,
-                        result));
+                        0,
+                        result,
+                        new List<string> {pair.Value.Tooltip}));
             }
 
             return values;
@@ -200,28 +216,20 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         public System.Collections.Generic.Dictionary<string, IDerivedValue> GetItemStandardBlock(IEnumerable<IBasicValue<float>> components)
         {
             System.Collections.Generic.Dictionary<string, IDerivedValue> values = new System.Collections.Generic.Dictionary<string, IDerivedValue>();
-            foreach (KeyValuePair<string, string> pair in this.ItemStandardFormulas)
+            foreach (KeyValuePair<string, DerivedValueData> pair in this.ItemStandardFormulas)
             {
-                int result = Math.Max(1, this.Calculate(components, pair.Value)); 
+                int result = Math.Max(1, this.Calculate(components, pair.Value.Formula)); 
                 values.Add(
                     pair.Key,
                     new ConcreteDerivedIntValue(
                         pair.Key,
                         result,
-                        result));
+                        0,
+                        result,
+                        new List<string> {pair.Value.Tooltip}));
             }
 
             return values;
-        }
-
-        public bool AddFormula(string name, string formula)
-        {
-            if (this.Formulas.Any(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)) == false)
-            {
-                this.Formulas.Add(name, formula);
-            }
-
-            return false;
         }
 
         public Color GetBarColour(string name)
@@ -276,6 +284,13 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         ~DerivedValueHandler()
         {
             this.Dispose();
+        }
+
+        public struct DerivedValueData
+        {
+            public string Name { get; set; }
+            public string Formula { get; set; }
+            public string Tooltip { get; set; }
         }
     }
 }

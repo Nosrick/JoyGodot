@@ -16,8 +16,6 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
 
         Dictionary<string, IDerivedValue> GetItemStandardBlock(IEnumerable<IBasicValue<float>> components);
 
-        bool AddFormula(string name, string formula);
-
         Color GetBarColour(string name);
         Color GetTextColour(string name);
         Color GetOutlineColour(string name);

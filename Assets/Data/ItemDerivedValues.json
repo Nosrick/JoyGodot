@@ -2,7 +2,8 @@
   "DerivedValues": [
     {
       "Name": "durability",
-      "Formula": "(size * hardness) + bonus"
+      "Formula": "(size * hardness) + bonus",
+      "Tooltip": "A measure of an object's physical integrity."
     }
   ]
 }

@@ -5,28 +5,32 @@
       "Formula": "endurance * 3",
       "BackgroundColour": "#f01f5a",
       "OutlineColour": "#0d000d",
-      "TextColour": "#fffed9"
+      "TextColour": "#fffed9",
+      "Tooltip": "A measure of physical wellbeing."
     },
     {
       "Name": "concentration",
       "Formula": "focus * 3",
       "BackgroundColour": "#2e994a",
       "OutlineColour": "#0d000d",
-      "TextColour": "#fffed9"
+      "TextColour": "#fffed9",
+      "Tooltip": "A measure of mental wellbeing."
     },
     {
       "Name": "composure",
       "Formula": "wit * 3",
       "BackgroundColour": "#386aba",
       "OutlineColour": "#0d000d",
-      "TextColour": "#fffed9"
+      "TextColour": "#fffed9",
+      "Tooltip": "A measure of social wellbeing."
     },
     {
       "Name": "mana",
       "Formula": "endurance + focus + wit",
       "BackgroundColour": "#30f5df",
       "OutlineColour": "#0d000d",
-      "TextColour": "#fffed9"
+      "TextColour": "#fffed9",
+      "Tooltip": "A measure of magical essence."
     }
   ]
 }
