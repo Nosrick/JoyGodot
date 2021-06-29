@@ -24,6 +24,7 @@ namespace JoyGodot.Assets.Scripts.Godot
         protected ManagedSprite SpeechBubble { get; set; }
         protected Sprite Background { get; set; }
         protected Particles2D ParticleSystem { get; set; }
+        protected static Texture AttackParticle { get; set; }
         
         protected Area2D Collider { get; set; }
 
@@ -46,6 +47,13 @@ namespace JoyGodot.Assets.Scripts.Godot
             this.ParticleSystem = this.GetNode<Particles2D>("ParticleSystem");
             this.Background.Visible = false;
             this.SpeechBubble.Visible = false;
+            AttackParticle ??= GlobalConstants.GameManager.ObjectIconHandler
+                .GetManagedSprites(
+                    "Particles",
+                    "AttackParticle")
+                .FirstOrDefault()
+                ?.Parts.First()
+                .m_FrameSprite.First();
         }
 
         public void AttachJoyObject(IJoyObject joyObject)
@@ -85,13 +93,18 @@ namespace JoyGodot.Assets.Scripts.Godot
                 this.SpeechBubble.AddSpriteState(need);
                 float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.SpeechBubble.CurrentSpriteState.SpriteData.Size;
                 this.SpeechBubble.Scale = new Vector2(scale, scale);
-                this.ParticleSystem.Texture = need.SpriteData.Parts.First().m_FrameSprite.First();
-                this.ParticleSystem.Emitting = true;
+                this.SetParticleTexture(need.SpriteData.Parts.First().m_FrameSprite.First());
             }
             else
             {
                 this.SpeechBubble.Clear();
             }
+        }
+
+        public void SetParticleTexture(Texture texture)
+        {
+            this.ParticleSystem.Texture = texture;
+            this.ParticleSystem.Emitting = true;
         }
 
         public void OnPointerEnter()
@@ -152,10 +165,10 @@ namespace JoyGodot.Assets.Scripts.Godot
         protected void SetUpContextMenu()
         {
             var contextMenu = GlobalConstants.GameManager.GUIManager.ContextMenu;
-            contextMenu.Clear();
 
             if (this.MyJoyObject is IEntity entity)
             {
+                contextMenu.Clear();
                 if (entity.PlayerControlled)
                 {
                     contextMenu.AddItem(
@@ -201,9 +214,12 @@ namespace JoyGodot.Assets.Scripts.Godot
                             });
                     }
                 }
-            }
 
-            this.GuiManager.OpenGUI(this, GUINames.CONTEXT_MENU);
+                if (contextMenu.IsEmpty() == false)
+                {
+                    this.GuiManager.OpenGUI(this, GUINames.CONTEXT_MENU);
+                }
+            }
         }
 
         protected bool Attack(IEntity aggressor, IEntity defender)
@@ -277,6 +293,8 @@ namespace JoyGodot.Assets.Scripts.Godot
                             aggressor.Guid
                         })
                     .ToArray();
+
+                defender.MyNode.SetParticleTexture(AttackParticle);
 
                 foreach (IRelationship relationship in relationships)
                 {

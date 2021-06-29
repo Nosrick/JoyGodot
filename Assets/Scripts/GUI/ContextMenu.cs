@@ -97,6 +97,11 @@ namespace JoyGodot.Assets.Scripts.GUI
             });
         }
 
+        public bool IsEmpty()
+        {
+            return this.ListItems.Count(item => item.Visible) == 0;
+        }
+
         protected void DeferredItemSetup(ManagedTextButton button)
         {
             this.GUIManager.SetupManagedComponents(button);
