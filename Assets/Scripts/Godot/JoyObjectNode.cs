@@ -23,7 +23,8 @@ namespace JoyGodot.Assets.Scripts.Godot
 
         protected ManagedSprite SpeechBubble { get; set; }
         protected Sprite Background { get; set; }
-
+        protected Particles2D ParticleSystem { get; set; }
+        
         protected Area2D Collider { get; set; }
 
         public ICollection<string> Tooltip
@@ -42,6 +43,7 @@ namespace JoyGodot.Assets.Scripts.Godot
             this.Collider = this.GetNode<Area2D>("Mouse Collision");
             this.SpeechBubble = this.GetNode<ManagedSprite>("SpeechBubble");
             this.Background = this.GetNode<Sprite>("Background");
+            this.ParticleSystem = this.GetNode<Particles2D>("ParticleSystem");
             this.Background.Visible = false;
             this.SpeechBubble.Visible = false;
         }
@@ -83,9 +85,8 @@ namespace JoyGodot.Assets.Scripts.Godot
                 this.SpeechBubble.AddSpriteState(need);
                 float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.SpeechBubble.CurrentSpriteState.SpriteData.Size;
                 this.SpeechBubble.Scale = new Vector2(scale, scale);
-                //this.SetParticleSystem(needSprite, Color.white);
-
-                //this.ParticleSystem.Play();
+                this.ParticleSystem.Texture = need.SpriteData.Parts.First().m_FrameSprite.First();
+                this.ParticleSystem.Emitting = true;
             }
             else
             {

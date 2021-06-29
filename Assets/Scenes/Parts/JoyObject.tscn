@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Scripts/Godot/JoyObjectNode.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Materials/Default Sprite Material.tres" type="Material" id=2]
 [ext_resource path="res://Assets/Scenes/Parts/JoyObjectCollisionShape.tres" type="Shape2D" id=3]
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedSprite.cs" type="Script" id=4]
 [ext_resource path="res://Assets/Sprites/Needs32.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Materials/DefaultParticleMaterial.tres" type="Material" id=6]
+[ext_resource path="res://Assets/Sprites/attack-particle.png" type="Texture" id=7]
 
 [node name="JoyObject" type="Node2D"]
 material = ExtResource( 2 )
@@ -32,6 +34,16 @@ script = ExtResource( 4 )
 ElementName = "None"
 
 [node name="Tween" type="Tween" parent="SpeechBubble"]
+
+[node name="ParticleSystem" type="Particles2D" parent="."]
+emitting = false
+amount = 16
+lifetime = 1.5
+one_shot = true
+preprocess = 0.3
+explosiveness = 1.0
+process_material = ExtResource( 6 )
+texture = ExtResource( 7 )
 
 [connection signal="mouse_entered" from="Mouse Collision" to="." method="OnPointerEnter"]
 [connection signal="mouse_exited" from="Mouse Collision" to="." method="OnPointerExit"]
