@@ -15,11 +15,11 @@ expression = "if(light > maximumLight || light < minimumLight)
 }
 else if(light > maximumComfort)
 {
-	alpha = smoothstep(maximumComfort, maximumLight, light);
+	alpha = smoothstep(maximumComfort, maximumLight + 1f, light);
 }
 else if(light < minimumComfort)
 {
-	alpha = smoothstep(minimumComfort, minimumLight, light);
+	alpha = smoothstep(minimumComfort, minimumLight - 1f, light);
 }
 else
 {
@@ -126,11 +126,11 @@ void fragment() {
 		}
 		else if(n_out4p0 > n_out7p0)
 		{
-			n_out15p0 = smoothstep(n_out7p0, n_out9p0, n_out4p0);
+			n_out15p0 = smoothstep(n_out7p0, n_out9p0 + 1f, n_out4p0);
 		}
 		else if(n_out4p0 < n_out6p0)
 		{
-			n_out15p0 = smoothstep(n_out6p0, n_out8p0, n_out4p0);
+			n_out15p0 = smoothstep(n_out6p0, n_out8p0 - 1f, n_out4p0);
 		}
 		else
 		{
@@ -167,7 +167,7 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -1305.44, -94.75 )
+graph_offset = Vector2( -1404, -186 )
 mode = 1
 flags/light_only = false
 nodes/fragment/2/node = SubResource( 8 )
@@ -201,11 +201,11 @@ nodes/fragment/15/expression = "if(light > maximumLight || light < minimumLight)
 }
 else if(light > maximumComfort)
 {
-	alpha = smoothstep(maximumComfort, maximumLight, light);
+	alpha = smoothstep(maximumComfort, maximumLight + 1f, light);
 }
 else if(light < minimumComfort)
 {
-	alpha = smoothstep(minimumComfort, minimumLight, light);
+	alpha = smoothstep(minimumComfort, minimumLight - 1f, light);
 }
 else
 {
