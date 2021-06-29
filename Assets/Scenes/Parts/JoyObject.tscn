@@ -36,6 +36,7 @@ ElementName = "None"
 [node name="Tween" type="Tween" parent="SpeechBubble"]
 
 [node name="ParticleSystem" type="Particles2D" parent="."]
+material = ExtResource( 2 )
 emitting = false
 amount = 16
 lifetime = 1.5
