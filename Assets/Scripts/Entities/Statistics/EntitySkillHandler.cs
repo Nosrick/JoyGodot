@@ -81,11 +81,21 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
                 return skills;
             }
 
-            ICollection<string> skillNames =
-                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(dictionary, "Skills");
+            ICollection<Dictionary> skillDicts =
+                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Skills");
 
-            skills.AddRange(skillNames.Select(statName => new EntitySkill(statName, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)));
-
+            foreach (Dictionary skillDict in skillDicts)
+            {
+                string name = this.ValueExtractor.GetValueFromDictionary<string>(skillDict, "Name");
+                string tooltip = this.ValueExtractor.GetValueFromDictionary<string>(skillDict, "Tooltip");
+                skills.Add(
+                    new EntitySkill(
+                        name,
+                        0,
+                        GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                        new List<string> { tooltip }));
+            }
+            
             this.DefaultSkills = skills.ToDictionary(skill => skill.Name, skill => skill);
             
             return skills;

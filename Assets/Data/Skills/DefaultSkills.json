@@ -1,34 +1,116 @@
 {
   "Skills": [
-    "light blades",
-    "heavy blades",
-    "axes",
-    "polearms",
-    "bows",
-    "crossbows",
-    "martial arts",
-    "throwing",
-    "evasion",
-    "poise",
-    "grit",
-    "willpower",
-    "life magic",
-    "death magic",
-    "law magic",
-    "chaos magic",
-    "nature magic",
-    "sorcery magic",
-    "the verse",
-    "mercantile",
-    "persuasion",
-    "intimidate",
-    "deception",
-    "stealth",
-    "lockpicking",
-    "sleight of hand",
-    "farming",
-    "mining",
-    "cooking",
-    "performance"
+    {
+      "Name": "light blades",
+      "Tooltip": "Prowess with light bladed weapons, such as daggers and hand axes."
+    },
+    {
+      "Name": "heavy blades",
+      "Tooltip": "Prowess with heavy bladed weapons, such as greatswords and war axes."
+    },
+    {
+      "Name": "polearms",
+      "Tooltip": "Prowess with long weapons, such as spears and tridents."
+    },
+    {
+      "Name": "archery",
+      "Tooltip": "Prowess with strung ranged weapons, such as shortbows and longbows."
+    },
+    {
+      "Name": "martial arts",
+      "Tooltip": "Prowess in unarmed combat."
+    },
+    {
+      "Name": "throwing",
+      "Tooltip": "Prowess in throwing items and weapons."
+    },
+    {
+      "Name": "evasion",
+      "Tooltip": "Prowess in avoiding physical attacks."
+    },
+    {
+      "Name": "poise",
+      "Tooltip": "Prowess in mitigating social attacks."
+    },
+    {
+      "Name": "grit",
+      "Tooltip": "Prowess in mitigating physical ailments."
+    },
+    {
+      "Name": "willpower",
+      "Tooltip": "Prowess in mitigating mental attacks."
+    },
+    {
+      "Name": "life magic",
+      "Tooltip": "Prowess in casting spells from the Life school of magic."
+    },
+    {
+      "Name": "death magic",
+      "Tooltip": "Prowess in casting spells from the Death school of magic."
+    },
+    {
+      "Name": "law magic",
+      "Tooltip": "Prowess in casting spells from the Law school of magic."
+    },
+    {
+      "Name": "chaos magic",
+      "Tooltip": "Prowess in casting spells from the Chaos school of magic."
+    },
+    {
+      "Name": "nature magic",
+      "Tooltip": "Prowess in casting spells from the Nature school of magic."
+    },
+    {
+      "Name": "sorcery magic",
+      "Tooltip": "Prowess in casting spells from the Sorcery school of magic."
+    },
+    {
+      "Name": "verse",
+      "Tooltip": "Prowess in utilising the Verse, the magic of patterns."
+    },
+    {
+      "Name": "mercantile",
+      "Tooltip": "Prowess in obtaining a good deal when trading."
+    },
+    {
+      "Name": "persuasion",
+      "Tooltip": "Prowess in moving people to your point of view using words."
+    },
+    {
+      "Name": "intimidate",
+      "Tooltip": "Prowess in moving people to your point of view using threats or coercion."
+    },
+    {
+      "Name": "deception",
+      "Tooltip": "Prowess in deceiving or other social subterfuge."
+    },
+    {
+      "Name": "stealth",
+      "Tooltip": "A measure of your ability to move unheard and unseen."
+    },
+    {
+      "Name": "lockpicking",
+      "Tooltip": "Prowess in gaining access to locked things, using finesse and tools."
+    },
+    {
+      "Name": "sleight of hand",
+      "Tooltip": "A measure of your ability to physically deceive others."
+    },
+    {
+      "Name": "farming",
+      "Tooltip": "A measure of your knowledge and prowess in various farming techniques."
+    },
+    {
+      "Name": "mining",
+      "Tooltip": "A measure of your ability to extract minerals from the earth."
+    },
+    {
+      "Name": "cooking",
+      "Tooltip": "A measure of your culinary knowledge and abilities."
+    },
+    {
+      "Name": "performance",
+      "Tooltip": "Prowess in putting on a show, whether through dance, song, or playing an instrument."
+    }
   ]
 }

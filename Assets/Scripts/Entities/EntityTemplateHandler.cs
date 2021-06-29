@@ -125,12 +125,13 @@ namespace JoyGodot.Assets.Scripts.Entities
                             int threshold = innerDict.Contains("Threshold")
                                 ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Threshold")
                                 : GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
+
+                            IEntitySkill skill = GlobalConstants.GameManager.SkillHandler.Get(skillName);
+                            skill.SetValue(skillValue);
+                            skill.SetThreshold(threshold);
                             skills.Add(
                                 skillName,
-                                new EntitySkill(
-                                    skillName,
-                                    skillValue,
-                                    threshold));
+                                skill);
                         }
                     }
 

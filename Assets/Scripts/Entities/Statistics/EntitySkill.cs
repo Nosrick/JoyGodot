@@ -17,11 +17,13 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         public EntitySkill(
             string name, 
             int value, 
-            int successThreshold)
+            int successThreshold,
+            ICollection<string> tooltip)
         {
             this.Name = name;
             this.Value = value;
             this.SuccessThreshold = successThreshold;
+            this.Tooltip = tooltip;
         }
 
         public int ModifyValue(int value)
