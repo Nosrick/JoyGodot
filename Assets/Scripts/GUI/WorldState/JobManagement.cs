@@ -221,10 +221,6 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 child.UseRestriction = true;
                 child.IncreaseCost = 10;
                 child.DecreaseCost = -10;
-                child.Tooltip = new[]
-                {
-                    "Cost: " + child.IncreaseCost
-                };
                 if (child.IsConnected("ValueChanged", this, nameof(this.OnDerivedValueChange)))
                 {
                     child.Disconnect("ValueChanged", this, nameof(this.OnDerivedValueChange));
@@ -241,6 +237,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 child.Minimum = statistic.Value;
                 child.Maximum = 10;
                 child.UseRestriction = true;
+                child.Tooltip = new List<string>(statistic.Tooltip)
+                {
+                    "Cost: " + child.IncreaseCost
+                };
                 if (child.IsConnected("ValueChanged", this, nameof(this.OnStatisticChange)))
                 {
                     child.Disconnect("ValueChanged", this, nameof(this.OnStatisticChange));
@@ -257,6 +257,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 child.Minimum = skill.Value;
                 child.Maximum = 10;
                 child.UseRestriction = true;
+                child.Tooltip = new List<string>(skill.Tooltip)
+                {
+                    "Cost: " + child.IncreaseCost
+                };
                 if (child.IsConnected("ValueChanged", this, nameof(this.OnSkillChange)))
                 {
                     child.Disconnect("ValueChanged", this, nameof(this.OnSkillChange));
@@ -273,6 +277,11 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 child.IncreaseCost = abilities[i].Item2;
                 child.DecreaseCost = -abilities[i].Item2;
                 child.UseRestriction = true;
+                child.Tooltip = new List<string>
+                {
+                    ability.Description,
+                    "Cost: " + child.IncreaseCost
+                };
                 if (child.IsConnected("ValuePress", this, nameof(this.OnAbilityChange)))
                 {
                     child.Disconnect("ValuePress", this, nameof(this.OnAbilityChange));
@@ -414,6 +423,14 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
         protected void SetChildPoints()
         {
+            var derivedValues = this.Player.DerivedValues.Values.ToList();
+            var statistics = this.Player.Statistics.Values.ToList();
+            var skills = this.Player.Skills.Values.ToList();
+            var abilities = this.CurrentJob.Abilities.Where(pair =>
+                    this.Player.Abilities.Contains(pair.Key) == false)
+                .Select(pair => new Tuple<IAbility, int>(pair.Key, pair.Value))
+                .ToList();
+            
             for (int i = 0; i < this.StatisticList.GetChildCount(); i++)
             {
                 var child = this.StatisticList.GetChild(i) as IntValueItem;
@@ -427,7 +444,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 int delta = (child.Value * 10) - this.CurrentJob.GetStatisticDiscount(child.ValueName);
                 child.IncreaseCost = delta + 10;
                 child.DecreaseCost = -delta;
-                child.Tooltip = new[]
+                child.Tooltip = new List<string>(statistics[i].Tooltip)
                 {
                     "Cost: " + (delta + 10)
                 };
@@ -445,7 +462,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 int delta = (child.Value * 10) - this.CurrentJob.GetSkillDiscount(child.ValueName);
                 child.IncreaseCost = delta + 10;
                 child.DecreaseCost = -delta;
-                child.Tooltip = new[]
+                child.Tooltip = new List<string>(skills[i].Tooltip)
                 {
                     "Cost: " + (delta + 10)
                 };
@@ -457,6 +474,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 {
                     continue;
                 }
+                child.Tooltip = new List<string>(derivedValues[i].Tooltip)
+                {
+                    "Cost: " + child.IncreaseCost
+                };
 
                 child.PointRestriction = this.JobPoints;
             }
@@ -471,6 +492,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 child.PointRestriction = this.JobPoints;
                 child.Tooltip = new[]
                 {
+                    abilities[i].Item1.Description,
                     "Cost: " + child.IncreaseCost
                 };
             }

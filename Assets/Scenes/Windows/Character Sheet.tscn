@@ -10,7 +10,7 @@
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=14]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -21,9 +21,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=3]
-default_font = SubResource( 2 )
+default_font = SubResource( 14 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=15]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -34,7 +34,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=5]
-default_font = SubResource( 4 )
+default_font = SubResource( 15 )
 
 [sub_resource type="Theme" id=6]
 
@@ -58,7 +58,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=16]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -69,7 +69,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=10]
-default_font = SubResource( 9 )
+default_font = SubResource( 16 )
 
 [sub_resource type="Theme" id=11]
 
@@ -97,6 +97,7 @@ font_data = ExtResource( 2 )
 material = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 script = ExtResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -106,6 +107,7 @@ __meta__ = {
 use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -388,6 +390,7 @@ FontColour = Color( 1, 1, 1, 1 )
 OutlineColour = Color( 0, 0, 0, 1 )
 FontSize = 24
 CustomFont = SubResource( 7 )
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -395,7 +398,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "Next"
 
 [node name="Text" type="Label" parent="Page 1/Next Button"]
@@ -414,6 +416,7 @@ __meta__ = {
 use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 
 [node name="Background" type="Control" parent="Page 2"]
 use_parent_material = true
@@ -655,6 +658,7 @@ FontColour = Color( 1, 1, 1, 1 )
 OutlineColour = Color( 0, 0, 0, 1 )
 FontSize = 24
 CustomFont = SubResource( 12 )
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -662,7 +666,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 Text = "Back"
 
 [node name="Text" type="Label" parent="Page 2/Back Button"]

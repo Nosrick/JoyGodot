@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.Entities;
@@ -184,6 +185,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 IDerivedValue derivedValue = derivedValues[i];
                 child.ValueName = derivedValue.Name;
                 child.Value = derivedValue.Value + "/" + derivedValue.Maximum;
+                child.Tooltip = derivedValue.Tooltip;
             }
 
             for (int i = 0; i < statistics.Count; i++)
@@ -192,6 +194,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 IEntityStatistic statistic = statistics[i];
                 child.ValueName = statistic.Name;
                 child.Value = statistic.Value.ToString();
+                child.Tooltip = statistic.Tooltip;
             }
 
             for (int i = 0; i < skills.Count; i++)
@@ -200,6 +203,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 IEntitySkill skill = skills[i];
                 child.ValueName = skill.Name;
                 child.Value = skill.Value.ToString();
+                child.Tooltip = skill.Tooltip;
             }
 
             for (int i = 0; i < abilities.Count; i++)
@@ -208,6 +212,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 IAbility ability = abilities[i];
                 child.Name = ability.Name;
                 child.Text = ability.Name;
+                child.Tooltip = new List<string> {ability.Description};
             }
 
             for (int i = 0; i < data.Count; i++)
