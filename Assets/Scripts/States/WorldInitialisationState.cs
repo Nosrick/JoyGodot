@@ -108,37 +108,45 @@ namespace JoyGodot.Assets.Scripts.States
                     surroundWallIndex);
             }
 
-            this.CreateItems(this.m_ActiveWorld.Items);
+            int index = 0;
+            index = this.CreateItems(index, this.m_ActiveWorld.Items);
 
+            GlobalConstants.GameManager.EntityHolder.ZIndex = index + 10;
             //Create the entities
             foreach (IEntity entity in this.m_ActiveWorld.Entities)
             {
                 JoyObjectNode gameObject = gameManager.EntityPool.Get();
                 gameObject.Show();
                 gameObject.AttachJoyObject(entity);
-                this.CreateItems(entity.Contents, false);
-                this.CreateItems(entity.Equipment.Contents, false);
+                gameObject.ZIndex = index;
+                index += gameObject.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_SortingOrder) + 1;
+                index = this.CreateItems(index, entity.Contents, false);
+                index = this.CreateItems(index, entity.Equipment.Contents, false);
             }
 
             this.Done = true;
         }
 
-        protected void CreateItems(IEnumerable<IItemInstance> items, bool active = true)
+        protected int CreateItems(int index, IEnumerable<IItemInstance> items, bool active = true)
         {
             if (items.Any() == false)
             {
-                return;
+                return index;
             }
 
             IGameManager gameManager = GlobalConstants.GameManager;
             foreach (IItemInstance itemInstance in items)
             {
                 itemInstance.Instantiate(true, gameManager.ItemPool.Get(), active);
+                itemInstance.MyNode.ZIndex = index;
+                index += itemInstance.MyNode.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_SortingOrder) + 1;
                 if (itemInstance.Contents.IsNullOrEmpty() == false)
                 {
-                    this.CreateItems(itemInstance.Contents, false);
+                    index = this.CreateItems(index, itemInstance.Contents, false);
                 }
             }
+
+            return index;
         }
 
         public override GameState GetNextState()

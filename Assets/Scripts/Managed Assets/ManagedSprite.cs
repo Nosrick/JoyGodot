@@ -333,7 +333,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                     AnimatedSprite newSprite = new AnimatedSprite
                     {
                         Centered = true,
-                        UseParentMaterial = true
+                        UseParentMaterial = true,
+                        ZAsRelative = true
                     };
                     this.Parts.Add(newSprite);
                     this.AddChild(newSprite);

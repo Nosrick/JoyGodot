@@ -37,6 +37,7 @@ ElementName = "None"
 
 [node name="ParticleSystem" type="Particles2D" parent="."]
 material = ExtResource( 2 )
+z_index = 128
 emitting = false
 amount = 16
 lifetime = 1.5
