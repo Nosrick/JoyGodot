@@ -120,7 +120,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 for (int i = this.DerivedValueList.GetChildCount(); i < derivedValues.Count; i++)
                 {
-                    var instance = this.ValueItemPrefab.Instance();
+                    var instance = this.ValueItemPrefab.Instance() as StaticValueItem;
+                    instance.TitleCase = true;
                     this.DerivedValueList.AddChild(instance);
                 }
 
@@ -131,7 +132,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 for (int i = this.StatisticList.GetChildCount(); i < statistics.Count; i++)
                 {
-                    var instance = this.ValueItemPrefab.Instance();
+                    var instance = this.ValueItemPrefab.Instance() as StaticValueItem;
+                    instance.TitleCase = true;
                     this.StatisticList.AddChild(instance);
                 }
 
@@ -142,7 +144,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 for (int i = this.SkillList.GetChildCount(); i < skills.Count; i++)
                 {
-                    var instance = this.ValueItemPrefab.Instance();
+                    var instance = this.ValueItemPrefab.Instance() as StaticValueItem;
+                    instance.TitleCase = true;
                     this.SkillList.AddChild(instance);
                 }
 
@@ -156,6 +159,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                     var instance = this.AbilityItemPrefab.Instance() as ManagedLabel;
                     instance.ElementName = "AccentBackground";
                     instance.RectMinSize = new Vector2(0, 24);
+                    instance.TitleCase = true;
                     this.AbilityList.AddChild(instance);
                 }
 
@@ -169,6 +173,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                     var instance = this.AbilityItemPrefab.Instance() as ManagedLabel;
                     instance.ElementName = "AccentBackground";
                     instance.RectMinSize = new Vector2(0, 24);
+                    instance.TitleCase = true;
                     this.MiscStatisticList.AddChild(instance);
                 }
             }

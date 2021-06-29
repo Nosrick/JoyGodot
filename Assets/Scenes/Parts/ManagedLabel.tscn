@@ -17,7 +17,6 @@ font_data = ExtResource( 1 )
 default_font = SubResource( 3 )
 
 [node name="Managed Label" type="Label"]
-use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )
@@ -29,9 +28,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-CacheFont = true
-OverrideColour = true
 OverrideSize = true
-FontSize = 24
+OverrideColour = true
 OutlineThickness = 1
 OverrideOutline = true
+CacheFont = true
+FontSize = 24

@@ -23,12 +23,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
             get => this.m_TitleCase;
             set
             {
+                this.m_TitleCase = value;
+                
                 if (value && this.ValueName is null == false)
                 {
-                    this.ValueName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.ValueName);
+                    this.ValueName = this.ValueName;
                 }
-
-                this.m_TitleCase = value;
             }
         }
 
@@ -53,7 +53,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
                 }
                 
                 this.NameLabel.Text = this.TitleCase 
-                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value) 
                     : value;
             }
         }
@@ -63,16 +63,18 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
             get => this.CachedValue;
             set
             {
+                this.CachedValue = this.TitleCase 
+                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value) 
+                    : value;
+                
                 if (this.ValueLabel is null)
                 {
                     GD.PushWarning(this.GetType().Name + " ValueLabel is null!");
                 }
                 else
                 {
-                    this.ValueLabel.Text = value;
+                    this.ValueLabel.Text = this.CachedValue;
                 }
-
-                this.CachedValue = value;
             }
         }
         
