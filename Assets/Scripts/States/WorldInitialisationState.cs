@@ -113,16 +113,20 @@ namespace JoyGodot.Assets.Scripts.States
 
             GlobalConstants.GameManager.EntityHolder.ZIndex = index + 10;
             //Create the entities
+            int innerIndex = 0;
+            int itemIndex = 0;
             foreach (IEntity entity in this.m_ActiveWorld.Entities)
             {
                 JoyObjectNode gameObject = gameManager.EntityPool.Get();
                 gameObject.Show();
                 gameObject.AttachJoyObject(entity);
                 gameObject.ZIndex = index;
-                index += gameObject.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_SortingOrder) + 1;
-                index = this.CreateItems(index, entity.Contents, false);
-                index = this.CreateItems(index, entity.Equipment.Contents, false);
+                innerIndex += gameObject.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_SortingOrder) + 1;
+                itemIndex = this.CreateItems(itemIndex, entity.Contents, false);
+                itemIndex = this.CreateItems(itemIndex, entity.Equipment.Contents, false);
             }
+
+            GlobalConstants.GameManager.FogHolder.ZIndex = index + innerIndex + 10;
 
             this.Done = true;
         }
