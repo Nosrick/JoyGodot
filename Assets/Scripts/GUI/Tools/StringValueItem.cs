@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Godot;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyGodot.Assets.Scripts.GUI.Tools
@@ -17,7 +18,23 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
         protected ManagedLabel NameLabel { get; set; }
         protected ManagedLabel ValueLabel { get; set; }
 
-        public ICollection<string> Tooltip { get; set; }
+        public ICollection<string> Tooltip
+        {
+            get => this.m_Tooltip;
+            set
+            {
+                this.m_Tooltip = value;
+                foreach (Node child in this.GetChildren())
+                {
+                    if (child is ITooltipHolder tooltipHolder)
+                    {
+                        tooltipHolder.Tooltip = value;
+                    }
+                }
+            }
+        }
+
+        protected ICollection<string> m_Tooltip;
 
         public ICollection<string> Values
         {
@@ -149,8 +166,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
             {
                 GD.PushError("ValueLabel of " + this.GetType().Name + " is null!");
             }
-
-            this.Tooltip = new List<string> {"Example tooltip"};
             
             foreach (var child in this.GetChildren())
             {
@@ -225,7 +240,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
             
             GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
                 this, 
-                this.Name,
+                this.ValueName,
                 null,
                 this.Tooltip);
         }

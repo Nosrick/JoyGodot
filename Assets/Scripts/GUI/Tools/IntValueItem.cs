@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Godot;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyGodot.Assets.Scripts.GUI.Tools
@@ -27,7 +28,23 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
         public int IncreaseCost { get; set; }
         public int DecreaseCost { get; set; }
 
-        public ICollection<string> Tooltip { get; set; }
+        public ICollection<string> Tooltip
+        {
+            get => this.m_Tooltip;
+            set
+            {
+                this.m_Tooltip = value;
+                foreach (Node child in this.GetChildren())
+                {
+                    if (child is ITooltipHolder tooltipHolder)
+                    {
+                        tooltipHolder.Tooltip = value;
+                    }
+                }
+            }
+        }
+
+        protected ICollection<string> m_Tooltip;
 
         public bool MouseOver { get; protected set; }
 
@@ -112,8 +129,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
                 this.ValueLabel.Text = this.CachedValue.ToString();
             }
 
-            this.Tooltip = new List<string> {"Example tooltip"};
-
             foreach (var child in this.GetChildren())
             {
                 if (!(child is Control control))
@@ -189,7 +204,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Tools
 
             GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
                 this,
-                this.Name,
+                this.ValueName,
                 null,
                 this.Tooltip);
         }

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 
 using Godot;
+using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.Helpers;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
@@ -14,8 +15,12 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
     public class ManagedLabel :
         Label,
         ISpriteStateElement,
-        IColourableElement
+        IColourableElement,
+        ITooltipComponent
     {
+        public ICollection<string> Tooltip { get; set; }
+        public bool MouseOver { get; protected set; }
+        
         public string ElementName
         {
             get => this.m_ElementName;
@@ -709,6 +714,25 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
                 this.TweenNode.Start();
             }
+        }
+        
+        public void OnPointerEnter()
+        {
+            this.MouseOver = true;
+
+            GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
+                this,
+                this.Name,
+                null,
+                this.Tooltip);
+        }
+
+        public void OnPointerExit()
+        {
+            this.MouseOver = false;
+
+            GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
+            GlobalConstants.GameManager.GUIManager.Tooltip.Close(this);
         }
     }
 }

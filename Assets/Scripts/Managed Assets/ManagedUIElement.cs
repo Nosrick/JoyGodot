@@ -5,6 +5,7 @@ using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Settings;
 
@@ -13,8 +14,11 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
     public class ManagedUIElement :
         Control,
         IColourableElement,
-        ISpriteStateElement
+        ISpriteStateElement,
+        ITooltipComponent
     {
+        public ICollection<string> Tooltip { get; set; }
+        public bool MouseOver { get; protected set; }
         public string ElementName
         {
             get => this.m_ElementName;
@@ -161,6 +165,36 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             }
 
             this.GrabPlayer();
+
+            if (this.IsConnected(
+                "mouse_entered",
+                this,
+                nameof(this.OnPointerEnter)))
+            {
+                this.Disconnect(
+                    "mouse_entered",
+                    this,
+                    nameof(this.OnPointerEnter));
+            }
+            this.Connect(
+                "mouse_entered",
+                this,
+                nameof(this.OnPointerEnter));
+            
+            if(this.IsConnected(
+                "mouse_exited",
+                this,
+                nameof(this.OnPointerExit)))
+            {
+                this.Disconnect(
+                    "mouse_exited",
+                    this,
+                    nameof(this.OnPointerExit));
+            }
+            this.Connect(
+                "mouse_exited",
+                this,
+                nameof(this.OnPointerExit));
 
             this.Initialised = true;
         }
@@ -633,6 +667,25 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
 
             base._ExitTree();
+        }
+
+        public void OnPointerEnter()
+        {
+            this.MouseOver = true;
+
+            GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
+                this,
+                this.Name,
+                null,
+                this.Tooltip);
+        }
+
+        public void OnPointerExit()
+        {
+            this.MouseOver = false;
+
+            GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
+            GlobalConstants.GameManager.GUIManager.Tooltip.Close(this);
         }
     }
 }
