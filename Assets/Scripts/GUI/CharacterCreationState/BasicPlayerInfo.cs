@@ -98,6 +98,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 nameof(this.OnTemplateChange));
 
             this.CurrentTemplate = this.EntityTemplateHandler.Get(item.Value);
+            item.Tooltip = new List<string>
+            {
+                "What species you belong to."
+            };
 
             item = this.AddItem(
                 "Culture",
@@ -107,6 +111,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 nameof(this.OnCultureChange));
 
             this.CurrentCulture = this.CultureHandler.GetByCultureName(item.Value);
+            item.Tooltip = new List<string>
+            {
+                "The culture you hail from."
+            };
 
             if (this.CurrentCulture is null)
             {
@@ -119,6 +127,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 nameof(this.OnValueChange));
 
             this.CurrentJob = item.Value;
+            item.Tooltip = new List<string>
+            {
+               GlobalConstants.GameManager.JobHandler.Get(this.CurrentJob).Description
+            };
 
             item = this.AddItem(
                 "Sex",
@@ -126,6 +138,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 nameof(this.OnValueChange));
 
             this.CurrentSex = item.Value;
+            item.Tooltip = new List<string>
+            {
+                "Your biological sex."
+            };
 
             item = this.AddItem(
                 "Gender",
@@ -133,6 +149,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 nameof(this.OnValueChange));
 
             this.CurrentGender = item.Value;
+            item.Tooltip = new List<string>
+            {
+                "Your gender presentation."
+            };
 
             item = this.AddItem(
                 "Romance",
@@ -140,6 +160,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 nameof(this.OnValueChange));
 
             this.CurrentRomance = item.Value;
+            item.Tooltip = new List<string>
+            {
+                "Your romantic preference."
+            };
 
             item = this.AddItem(
                 "Sexuality",
@@ -147,6 +171,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 nameof(this.OnValueChange));
 
             this.CurrentSexuality = item.Value;
+            item.Tooltip = new List<string>
+            {
+                "Your sexual preference."
+            };
         }
 
         protected void OnChange(bool randomCulture = false)
@@ -181,6 +209,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             tempPart = this.GetItem("job");
 
             this.CurrentJob = tempPart.Value;
+            tempPart.Tooltip = new List<string>
+            {
+                GlobalConstants.GameManager.JobHandler.Get(this.CurrentJob).Description
+            };
 
             var bioSexPart = this.GetItem("sex");
 

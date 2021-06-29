@@ -120,6 +120,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 part.Value = derivedValue.Value;
                 part.Visible = true;
                 part.UseRestriction = true;
+                part.Tooltip = derivedValue.Tooltip;
                 if (!part.IsConnected(
                     "ValueChanged",
                     this,

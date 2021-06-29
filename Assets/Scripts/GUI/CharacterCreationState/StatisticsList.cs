@@ -119,6 +119,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 part.UseRestriction = true;
                 part.IncreaseCost = 1;
                 part.DecreaseCost = -1;
+                part.Tooltip = stat.Tooltip;
                 if (!part.IsConnected(
                     "ValueChanged",
                     this,
