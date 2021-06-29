@@ -109,7 +109,7 @@ namespace JoyGodot.Assets.Scripts.Godot
 
         public void OnPointerEnter()
         {
-            GlobalConstants.ActionLog.Log("MOUSE ON " + this.MyJoyObject.JoyName);
+            GlobalConstants.ActionLog.Log("MOUSE ON " + this.MyJoyObject.JoyName, LogLevel.Debug);
 
             var player = GlobalConstants.GameManager.Player;
 
@@ -122,23 +122,18 @@ namespace JoyGodot.Assets.Scripts.Godot
 
             this.MouseOver = true;
 
-            var tooltip = new List<string>(this.MyJoyObject.Tooltip)
-            {
-                "World: " + this.MyJoyObject.MyWorld.Name
-            };
-
             this.GuiManager.Tooltip?.Show(
                 this,
                 this.MyJoyObject.JoyName,
                 this.MyJoyObject.States.FirstOrDefault(),
-                tooltip);
+                this.MyJoyObject.Tooltip);
         }
 
         public void OnPointerExit()
         {
             this.MouseOver = false;
 
-            GlobalConstants.ActionLog.Log("MOUSE OFF " + this.MyJoyObject.JoyName);
+            GlobalConstants.ActionLog.Log("MOUSE OFF " + this.MyJoyObject.JoyName, LogLevel.Debug);
             this.GuiManager.CloseGUI(this, GUINames.TOOLTIP);
         }
 

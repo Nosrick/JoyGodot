@@ -88,8 +88,17 @@ namespace JoyGodot.Assets.Scripts.Helpers
                 m_Data = toPrint,
                 m_LogLevel = logLevel
             };
-             
-            GD.Print(entry);
+
+            if (logLevel == LogLevel.Debug
+                && this.IsEditor)
+            {
+                GD.Print(entry);
+            }
+            else if(logLevel != LogLevel.Debug)
+            {
+                GD.Print(entry);
+            }
+            
             switch (logLevel)
             {
                 case LogLevel.Warning:
