@@ -97,6 +97,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
             this.Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
             this.SuccessThreshold = valueExtractor.GetValueFromDictionary<int>(data, "SuccessThreshold");
+            this.Tooltip = GlobalConstants.GameManager.StatisticHandler.Get(this.Name).Tooltip;
         }
     }
 }

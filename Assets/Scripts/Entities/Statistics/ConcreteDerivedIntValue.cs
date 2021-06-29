@@ -94,6 +94,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             this.Base = valueExtractor.GetValueFromDictionary<int>(data, "Base");
             this.Enhancement = valueExtractor.GetValueFromDictionary<int>(data, "Enhancement");
             this.Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
+            this.Tooltip = GlobalConstants.GameManager.DerivedValueHandler.Get(this.Name).Tooltip;
         }
     }
 

@@ -98,14 +98,24 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             {
                 this.DerivedValues.Add(
                     pair.Key,
-                    new ConcreteDerivedIntValue());
+                    new ConcreteDerivedIntValue(
+                        pair.Value.Name,
+                        0,
+                        0,
+                        0,
+                        new List<string>{pair.Value.Tooltip}));
             }
 
             foreach (var pair in this.ItemStandardFormulas)
             {
                 this.DerivedValues.Add(
                     pair.Key,
-                    new ConcreteDerivedIntValue());
+                    new ConcreteDerivedIntValue(
+                        pair.Value.Name,
+                        0,
+                        0,
+                        0,
+                        new List<string>{pair.Value.Tooltip}));
             }
 
             return this.DerivedValues.Values;
