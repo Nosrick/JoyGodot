@@ -27,6 +27,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
         protected bool Initialised { get; set; }
 
+        public ICollection<string> Tooltip { get; set; }
+
         public float PercentageFull => this.HappinessThreshold == 0
             ? 1f
             : Mathf.Min(1f, this.Value / (float) this.HappinessThreshold);
