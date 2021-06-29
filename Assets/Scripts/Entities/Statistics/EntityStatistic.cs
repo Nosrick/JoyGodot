@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Godot;
 using Godot.Collections;
 
 namespace JoyGodot.Assets.Scripts.Entities.Statistics
@@ -22,15 +24,22 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
                                                     INTELLECT, CUNNING, FOCUS,
                                                     PERSONALITY, SUAVITY, WIT };
 
+        public ICollection<string> Tooltip { get; set; }
+
         public EntityStatistic()
         {
         }
         
-        public EntityStatistic(string name, int value, int successThreshold)
+        public EntityStatistic(
+            string name, 
+            int value, 
+            int successThreshold,
+            ICollection<string> tooltip)
         {
             this.Name = name;
             this.Value = value;
             this.SuccessThreshold = successThreshold;
+            this.Tooltip = tooltip;
         }
 
         public int ModifyValue(int value)
@@ -43,6 +52,12 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         {
             this.Value = Math.Max(1, value);
             return this.Value;
+        }
+
+        public int SetThreshold(int value)
+        {
+            this.SuccessThreshold = Mathf.Clamp(value, 1, 10);
+            return this.SuccessThreshold;
         }
 
         public string Name

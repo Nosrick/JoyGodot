@@ -6,5 +6,7 @@
         {
             get;
         }
+
+        int SetThreshold(int value);
     }
 }

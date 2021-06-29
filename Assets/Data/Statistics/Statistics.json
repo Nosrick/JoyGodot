@@ -1,13 +1,40 @@
 {
   "Statistics": [
-      "strength",
-      "agility",
-      "endurance",
-      "intellect",
-      "cunning",
-      "focus",
-      "personality",
-      "suavity",
-      "wit"
+      {
+          "Name": "strength",
+          "Tooltip": "A measure of your physical power."
+      },
+      {
+          "Name": "agility",
+          "Tooltip": "A measure of your physical finesse."
+      },
+      {
+          "Name": "endurance",
+          "Tooltip": "A measure of your physical resilience."
+      },
+      {
+          "Name": "intellect",
+          "Tooltip": "A measure of your mental power."
+      },
+      {
+          "Name": "cunning",
+          "Tooltip": "A measure of your mental finesse."
+      },
+      {
+          "Name": "focus",
+          "Tooltip": "A measure of your mental resilience."
+      },
+      {
+          "Name": "personality",
+          "Tooltip": "A measure of your social power."
+      },
+      {
+          "Name": "suavity",
+          "Tooltip": "A measure of your social finesse."
+      },
+      {
+          "Name": "wit",
+          "Tooltip": "A measure of your social resilience."
+      }
     ]
 }

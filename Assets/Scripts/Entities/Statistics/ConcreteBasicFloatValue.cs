@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Godot.Collections;
 
 namespace JoyGodot.Assets.Scripts.Entities.Statistics
@@ -6,6 +7,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
     [Serializable]
     public class ConcreteBasicFloatValue : IBasicValue<float>
     {
+        public ICollection<string> Tooltip { get; set; }
+
         public string Name { get; protected set; }
         public float Value { get; protected set; }
 

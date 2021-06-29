@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Godot;
 using Godot.Collections;
 
 namespace JoyGodot.Assets.Scripts.Entities.Statistics
@@ -6,6 +8,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
     [Serializable]
     public class EntitySkill : IEntitySkill
     {
+        public ICollection<string> Tooltip { get; set; }
+        
         public EntitySkill()
         {
         }
@@ -30,6 +34,12 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
         {
             this.Value = Math.Max(0, value);
             return this.Value;
+        }
+
+        public int SetThreshold(int value)
+        {
+            this.SuccessThreshold = Mathf.Clamp(value, 1, 10);
+            return this.SuccessThreshold;
         }
 
         public string Name

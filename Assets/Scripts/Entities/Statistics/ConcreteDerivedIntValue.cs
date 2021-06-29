@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 
@@ -7,6 +8,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
     [Serializable]
     public class ConcreteDerivedIntValue : IDerivedValue
     {
+        public ICollection<string> Tooltip { get; set; }
+        
         public string Name
         {
             get;
