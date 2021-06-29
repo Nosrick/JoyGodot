@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using Godot;
@@ -35,6 +36,19 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         }
 
         protected bool m_TitleCase;
+
+        public new string Text
+        {
+            get => this.GetText();
+            set
+            {
+                string temp = this.TitleCase
+                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value)
+                    : value;
+                
+                this.SetText(temp);
+            }
+        }
 
         [Export] public bool AutoSize { get; set; }
         [Export] public bool OverrideSize { get; set; }
