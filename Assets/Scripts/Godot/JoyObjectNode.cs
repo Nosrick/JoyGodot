@@ -22,6 +22,7 @@ namespace JoyGodot.Assets.Scripts.Godot
         protected IGUIManager GuiManager { get; set; }
 
         protected ManagedSprite SpeechBubble { get; set; }
+        protected Sprite Background { get; set; }
 
         protected Area2D Collider { get; set; }
 
@@ -39,6 +40,10 @@ namespace JoyGodot.Assets.Scripts.Godot
 
             this.GuiManager = GlobalConstants.GameManager.GUIManager;
             this.Collider = this.GetNode<Area2D>("Mouse Collision");
+            this.SpeechBubble = this.GetNode<ManagedSprite>("SpeechBubble");
+            this.Background = this.GetNode<Sprite>("Background");
+            this.Background.Visible = false;
+            this.SpeechBubble.Visible = false;
         }
 
         public void AttachJoyObject(IJoyObject joyObject)
@@ -46,7 +51,6 @@ namespace JoyGodot.Assets.Scripts.Godot
             this.MyJoyObject = joyObject;
             this.MyJoyObject.MyNode = this;
             this.Name = joyObject.ToString();
-            this.SpeechBubble = this.GetNodeOrNull<ManagedSprite>("Speech Bubble");
             this.Clear();
             ISpriteState state = this.MyJoyObject.States.FirstOrDefault();
             this.Move(joyObject.WorldPosition);
@@ -60,6 +64,8 @@ namespace JoyGodot.Assets.Scripts.Godot
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
             this.Scale = new Vector2(scale, scale);
             this.MoveChild(this.Collider, this.GetChildCount() - 1);
+            this.Background.Visible = false;
+            this.SpeechBubble.Visible = false;
         }
 
         public void SetSpeechBubble(bool on, ISpriteState need = null)
@@ -69,18 +75,21 @@ namespace JoyGodot.Assets.Scripts.Godot
                 return;
             }
 
-            this.SpeechBubble.Visible = true;
+            this.SpeechBubble.Visible = on;
+            this.Background.Visible = on;
             if (on && need is null == false)
             {
                 this.SpeechBubble.Clear();
                 this.SpeechBubble.AddSpriteState(need);
-                Texture needSprite = need.SpriteData.Parts.First(
-                        part =>
-                            part.m_Data.Any(data => data.Equals("need", StringComparison.OrdinalIgnoreCase)))
-                    .m_FrameSprite.FirstOrDefault();
+                float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.SpeechBubble.CurrentSpriteState.SpriteData.Size;
+                this.SpeechBubble.Scale = new Vector2(scale, scale);
                 //this.SetParticleSystem(needSprite, Color.white);
 
                 //this.ParticleSystem.Play();
+            }
+            else
+            {
+                this.SpeechBubble.Clear();
             }
         }
 

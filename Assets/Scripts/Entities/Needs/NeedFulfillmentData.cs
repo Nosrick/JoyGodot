@@ -20,7 +20,10 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
         public bool IsEmpty()
         {
-            return this.Name.IsNullOrEmpty() && this.Counter == 0 && this.Targets.IsNullOrEmpty();
+            return (this.Name.IsNullOrEmpty() 
+                    || this.Name?.Equals("none", StringComparison.OrdinalIgnoreCase) == true) 
+                   && this.Counter == 0 
+                   && this.Targets.IsNullOrEmpty();
         }
 
         public int DecrementCounter()

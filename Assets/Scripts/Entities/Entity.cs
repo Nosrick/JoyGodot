@@ -208,13 +208,13 @@ namespace JoyGodot.Assets.Scripts.Entities
             {
                 this.m_NeedFulfillmentData = value;
 
-                if (value.Name.IsNullOrEmpty())
+                if (value.IsEmpty())
                 {
                     this.MyNode?.SetSpeechBubble(false);
                     return;
                 }
 
-                if (this.m_NeedFulfillmentData.Name.IsNullOrEmpty() == false
+                if (this.m_NeedFulfillmentData.IsEmpty() == false
                     && this.m_NeedFulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
                 {
                     this.MyNode?.SetSpeechBubble(this.m_NeedFulfillmentData.Counter > 0,
