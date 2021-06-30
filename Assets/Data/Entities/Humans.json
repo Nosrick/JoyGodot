@@ -2,6 +2,7 @@
   "Entities": [
     {
       "CreatureType": "human",
+      "Description": "Notoriously hardy, Humans are bipedal creatures that can adapt and overcome most survival situations.",
       "Type": "humanoid",
       "VisionType": "diurnal vision",
       "Statistics": [
