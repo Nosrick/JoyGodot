@@ -2,7 +2,7 @@
   "Jobs": [
     {
       "Name": "Hedge Wizard",
-      "Description": "The most basic of the wizards. Has basic training in Crossbows and Nature Magic, as well as specialisation in Sorcery, Law and Chaos Magics.",
+      "Description": "The most basic of the wizards. Has a specialisation in Sorcery, Law and Chaos Magics.",
       "Statistics": [
         {
           "Name": "Intellect",
@@ -14,10 +14,6 @@
         }
       ],
       "Skills": [
-        {
-          "Name": "Crossbows",
-          "Discount": 1
-        },
         {
           "Name": "Sorcery Magic",
           "Discount": 2
