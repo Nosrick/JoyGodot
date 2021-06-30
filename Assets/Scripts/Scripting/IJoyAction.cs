@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Scripting
+namespace JoyGodot.Assets.Scripts.Scripting
 {
     public interface IJoyAction
     {
@@ -44,5 +46,7 @@ namespace JoyLib.Code.Scripting
         {
             get;
         }
+        
+        IQuestTracker QuestTracker { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Physics
+﻿namespace JoyGodot.Assets.Scripts.Physics
 {
     public enum PhysicsResult
     {

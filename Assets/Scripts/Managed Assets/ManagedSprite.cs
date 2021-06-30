@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Graphics;
-using Thread = System.Threading.Thread;
-using Timer = Godot.Timer;
-using Array = Godot.Collections.Array;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Settings;
 
-namespace JoyLib.Code.Unity
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public class ManagedSprite :
         Node2D,
         IColourableElement,
-        ISpriteStateElement
+        ISpriteStateElement,
+        IPosition
     {
         [Export] 
         public string ElementName
@@ -28,6 +29,8 @@ namespace JoyLib.Code.Unity
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
 
+        protected Tween TweenNode { get; set; }
+
         public ISpriteState CurrentSpriteState
         {
             get
@@ -35,7 +38,7 @@ namespace JoyLib.Code.Unity
                 if (this.IsDirty)
                 {
                     if (this.m_States.ContainsKey(this.ChosenSprite)
-                        && this.m_States[this.ChosenSprite].SpriteData.m_State
+                        && this.m_States[this.ChosenSprite].SpriteData.State
                             .Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
                     {
                         this.CachedState = this.m_States[this.ChosenSprite];
@@ -89,9 +92,69 @@ namespace JoyLib.Code.Unity
 
         protected List<Node2D> Parts { get; set; }
 
+        public Vector2Int WorldPosition { get; protected set; }
+
+        protected bool EnableHappiness { get; set; }
+        
+        protected static IEntity Player { get; set; }
+
         public override void _Ready()
         {
             this.Initialise();
+        }
+
+        protected void GrabPlayer()
+        {
+            if (Player is null)
+            {
+                Player = GlobalConstants.GameManager?.Player;
+
+                if (Player is null)
+                {
+                    return;
+                }
+                
+                Player.HappinessChange -= this.SetHappiness;
+                Player.HappinessChange += this.SetHappiness;
+
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
+                
+                this.EnableHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                    .Get(SettingsManager.HAPPINESS_WORLD)
+                    .ObjectValue;
+            
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_WORLD))
+            {
+                this.EnableHappiness = (bool) args.NewValue;
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
+        {
+            float happiness = this.EnableHappiness ? args.NewValue : 1f;
+
+            if (this.Material is ShaderMaterial shaderMaterial)
+            {
+                shaderMaterial.SetShaderParam("happiness", happiness);
+                foreach (ShaderMaterial childMaterial in this.Parts.Select(part => part.Material as ShaderMaterial))
+                {
+                    childMaterial?.SetShaderParam("happiness", happiness);
+                }
+            }
         }
 
         public virtual void Initialise()
@@ -102,13 +165,24 @@ namespace JoyLib.Code.Unity
             }
 
             this.Parts = new List<Node2D>();
-            this.m_States = new System.Collections.Generic.Dictionary<string, ISpriteState>();
+            this.m_States = new Dictionary<string, ISpriteState>();
+            this.TweenNode = this.GetNodeOrNull<Tween>("Tween");
+
+            if (this.TweenNode is null)
+            {
+                this.TweenNode = new Tween();
+                this.AddChild(this.TweenNode);
+            }
+            
+            this.GrabPlayer();
 
             this.Initialised = true;
         }
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
+            this.GrabPlayer();
+            
             this.Initialise();
             this.m_States.Add(state.Name, state);
             this.IsDirty = true;
@@ -122,31 +196,6 @@ namespace JoyLib.Code.Unity
         public virtual bool RemoveStatesByName(string name)
         {
             return this.m_States.Remove(name);
-        }
-
-        public void SetTheme(Theme theme)
-        {
-            foreach (ISpriteState state in this.States)
-            {
-                foreach (SpritePart part in state.SpriteData.m_Parts)
-                {
-                    Texture icon = theme.GetIcon(part.m_Name, "SpritePart");
-                    if (icon is null == false)
-                    {
-                        part.m_FrameSprite = new List<Texture>
-                        {
-                            icon
-                        };
-                    }
-
-                    Color colour = theme.GetColor(part.m_Name, "SpritePart");
-                    part.m_PossibleColours = new List<Color>
-                    {
-                        colour
-                    };
-                    part.m_SelectedColour = 0;
-                }
-            }
         }
 
         public virtual ISpriteState GetState(string name)
@@ -170,9 +219,9 @@ namespace JoyLib.Code.Unity
             }
 
             this.ChosenSprite = name;
-            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
+            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.State;
 
-            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_Frames);
 
             this.FrameIndex = 0;
             this.Finished = false;
@@ -199,8 +248,7 @@ namespace JoyLib.Code.Unity
         }
 
         public virtual void OverrideAllColours(
-            IDictionary<string,
-                Color> colours,
+            IDictionary<string, Color> colours,
             bool crossFade = false,
             float duration = 0.1f,
             bool modulateChildren = false)
@@ -214,12 +262,13 @@ namespace JoyLib.Code.Unity
 
             if (crossFade)
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
                     if (colours.TryGetValue(this.Parts[i].Name, out Color colour))
                     {
                         this.ColourLerp(
                             this.Parts[i],
+                            this.Modulate,
                             colour,
                             duration);
                     }
@@ -227,9 +276,9 @@ namespace JoyLib.Code.Unity
             }
             else
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour;
+                    this.Parts[i].Modulate = this.CurrentSpriteState.SpriteData.Parts[i].SelectedColour;
                 }
             }
 
@@ -248,19 +297,23 @@ namespace JoyLib.Code.Unity
 
             if (crossFade)
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
-                    this.ColourLerp(this.Parts[i], colour, duration);
+                    this.ColourLerp(
+                        this.Parts[i], 
+                        this.Modulate, 
+                        colour, 
+                        duration,
+                        "modulate");
                 }
             }
             else
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
-                    this.Parts[i].SelfModulate = this.CurrentSpriteState.SpriteData.m_Parts[i].SelectedColour;
+                    this.Parts[i].Modulate = this.CurrentSpriteState.SpriteData.Parts[i].SelectedColour;
                 }
             }
-
             this.IsDirty = true;
         }
 
@@ -273,77 +326,116 @@ namespace JoyLib.Code.Unity
                 part.Visible = false;
             }
 
-            if (this.Parts.Count < this.CurrentSpriteState.SpriteData.m_Parts.Count)
+            if (this.Parts.Count < this.CurrentSpriteState.SpriteData.Parts.Count)
             {
-                for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = this.Parts.Count; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
                     AnimatedSprite newSprite = new AnimatedSprite
                     {
-                        Centered = true
+                        Centered = true,
+                        UseParentMaterial = true,
+                        ZAsRelative = true
                     };
                     this.Parts.Add(newSprite);
                     this.AddChild(newSprite);
-#if TOOLS
-                    newSprite.Owner = this.GetTree()?.EditedSceneRoot;
-#endif
                 }
             }
 
-            for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+            int minSortingOrder = this.CurrentSpriteState.SpriteData.Parts.Min(part => part.m_SortingOrder);
+            for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
             {
                 AnimatedSprite animatedSprite = (AnimatedSprite) this.Parts[i];
-                SpritePart spriteDataPart = this.CurrentSpriteState.SpriteData.m_Parts[i];
+                SpritePart spriteDataPart = this.CurrentSpriteState.SpriteData.Parts[i];
                 animatedSprite.Name = spriteDataPart.m_Name;
                 animatedSprite.Visible = true;
-                animatedSprite.Frames = new SpriteFrames
+                SpriteFrames frames = new SpriteFrames();
+                if(frames.HasAnimation(this.CurrentSpriteState.SpriteData.State) == false)
                 {
-                    Frames = new Array(spriteDataPart.m_FrameSprite)
-                };
+                    frames.AddAnimation(this.CurrentSpriteState.SpriteData.State);
+                }
+                foreach (var texture in spriteDataPart.m_FrameSprite)
+                {
+                    frames.AddFrame(this.CurrentSpriteState.SpriteData.State, texture);
+                }
+                
+                animatedSprite.Frames = frames;
+                int normaliseSortOrder = spriteDataPart.m_SortingOrder - minSortingOrder;
+                this.MoveChild(animatedSprite, normaliseSortOrder);
                 animatedSprite.ZIndex = spriteDataPart.m_SortingOrder;
-                animatedSprite.Play(this.CurrentSpriteState.SpriteData.m_State);
+                animatedSprite.Play(this.CurrentSpriteState.SpriteData.State);
                 animatedSprite.Frame = 0;
+                animatedSprite.Modulate = spriteDataPart.SelectedColour;
             }
         }
 
         protected virtual void ColourLerp(
             Node2D sprite,
+            Color originalColour,
             Color newColour,
-            float duration)
+            float duration,
+            string property = "modulate",
+            bool modulateChildren = false)
         {
-            Thread lerpThread = new Thread(this.ColourLerpForThread);
-            lerpThread.Start(new ThreadLerpParams
+            if (this.IsInsideTree() == false)
             {
-                m_Duration = duration,
-                m_NewColour = newColour,
-                m_Sprite = sprite
-            });
-        }
+                return;
+            }
 
-        protected void ColourLerpForThread(object param)
-        {
-            if (param is ThreadLerpParams lerpParams)
+            if (modulateChildren)
             {
-                Timer timer = new Timer
+                this.TweenNode.InterpolateProperty(
+                    sprite,
+                    property,
+                    originalColour,
+                    newColour,
+                    duration);
+                this.TweenNode.Start();
+
+                var children = this.GetAllChildren();
+                foreach (var child in children)
                 {
-                    OneShot = true
-                };
-                timer.Start(lerpParams.m_Duration);
-                float lerp = 0f;
-                while (lerp < 1f)
-                {
-                    lerpParams.m_Sprite.SelfModulate.LinearInterpolate(lerpParams.m_NewColour, lerp);
-                    lerp = timer.WaitTime / lerpParams.m_Duration;
+                    if (child is Node2D node)
+                    {
+                        this.TweenNode.InterpolateProperty(
+                            node,
+                            property,
+                            originalColour,
+                            newColour,
+                            duration);
+
+                        this.TweenNode.Start();
+                    }
                 }
+            }
+            else
+            {
+                this.TweenNode.InterpolateProperty(
+                    sprite,
+                    property,
+                    originalColour,
+                    newColour,
+                    duration);
 
-                timer.Stop();
+                this.TweenNode.Start();
             }
         }
-
-        public struct ThreadLerpParams
+        
+        public virtual void Move(Vector2Int position)
         {
-            public Node2D m_Sprite;
-            public Color m_NewColour;
-            public float m_Duration;
+            this.WorldPosition = position;
+            this.Position = (this.WorldPosition * GlobalConstants.SPRITE_WORLD_SIZE).ToVec2();
+        }
+
+        public override void _ExitTree()
+        {
+            if (Player is null == false)
+            {
+                Player.HappinessChange -= this.SetHappiness;
+            }
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+
+            base._ExitTree();
         }
     }
 }

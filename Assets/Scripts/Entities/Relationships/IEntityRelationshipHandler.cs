@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
-using JoyLib.Code.Collections;
+﻿using System;
+using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.Relationships
+namespace JoyGodot.Assets.Scripts.Entities.Relationships
 {
-    public interface IEntityRelationshipHandler : IHandler<IRelationship, long>
+    public interface IEntityRelationshipHandler : 
+        IHandler<IRelationship, long>,
+        ISerialisationHandler
     {
-        bool Add(IRelationship relationship);
-        bool Destroy(long ID);
-        
-        IRelationship CreateRelationship(IEnumerable<IJoyObject> participants, IEnumerable<string> tags);
-        IRelationship CreateRelationshipWithValue(IEnumerable<IJoyObject> participants, IEnumerable<string> tags, int value);
-        IEnumerable<IRelationship> Get(IEnumerable<IJoyObject> participants, IEnumerable<string> tags = null, bool createNewIfNone = false);
-        int GetHighestRelationshipValue(IJoyObject speaker, IJoyObject listener, IEnumerable<string> tags = null);
-        IRelationship GetBestRelationship(IJoyObject speaker, IJoyObject listener, IEnumerable<string> tags = null);
-        IEnumerable<IRelationship> GetAllForObject(IJoyObject actor);
-        bool IsFamily(IJoyObject speaker, IJoyObject listener);
-        
+        IRelationship CreateRelationship(IEnumerable<Guid> participants, IEnumerable<string> tags);
+        IRelationship CreateRelationshipWithValue(IEnumerable<Guid> participants, IEnumerable<string> tags, int value);
+        IEnumerable<IRelationship> Get(IEnumerable<Guid> participants, IEnumerable<string> tags = null,
+            bool createNewIfNone = false);
+        int GetHighestRelationshipValue(Guid speaker, Guid listener, IEnumerable<string> tags = null);
+        IRelationship GetBestRelationship(Guid speaker, Guid listener, IEnumerable<string> tags = null);
+        IEnumerable<IRelationship> GetAllForObject(Guid actor);
+        bool IsFamily(Guid speaker, Guid listener);
         List<IRelationship> RelationshipTypes { get; }
     }
 }

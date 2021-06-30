@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ConstrainedManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=3]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
@@ -28,6 +29,8 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [node name="Managed Text Button" type="Control"]
+material = ExtResource( 4 )
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 0, 24 )
@@ -38,16 +41,17 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
+Text = "Text"
+OverrideSize = true
 FontColour = Color( 1, 1, 1, 1 )
 OverrideColour = true
-OverrideOutline = true
-OverrideSize = true
 FontSize = 24
-CustomFont = SubResource( 3 )
-TitleCase = true
-OutlineThickness = 1
 OutlineColour = Color( 0, 0, 0, 1 )
-Text = "Text"
+OutlineThickness = 1
+TitleCase = true
+OverrideOutline = true
+CustomFont = SubResource( 3 )
+m_ElementName = "AccentBackground"
 ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
@@ -57,8 +61,17 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 
-[node name="Element" parent="." instance=ExtResource( 3 )]
+[node name="Element" type="Control" parent="."]
+use_parent_material = true
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="Element"]
 
 [node name="Text" type="Label" parent="."]
 anchor_right = 1.0
@@ -69,5 +82,3 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Text"
 align = 1
 valign = 1
-
-[editable path="Element"]

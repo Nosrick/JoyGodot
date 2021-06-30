@@ -1,7 +1,8 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.World.Generators.Overworld
+namespace JoyGodot.Assets.Scripts.World.Generators.Overworld
 {
     public class OverworldGenerator : IWorldSpaceGenerator
     {
@@ -34,9 +35,9 @@ namespace JoyLib.Code.World.Generators.Overworld
         {
         }
 
-        public List<JoyObject> GenerateWalls(WorldTile[,] worldTiles)
+        public HashSet<Vector2Int> GenerateWalls(WorldTile[,] worldTiles)
         {
-            return new List<JoyObject>();
+            return new HashSet<Vector2Int>();
         }
     }
 }

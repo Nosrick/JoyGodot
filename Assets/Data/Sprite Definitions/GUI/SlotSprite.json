@@ -16,15 +16,15 @@
             "SortOrder": 1,
             "FillType": "tile",
             "PatchMargins": [
-              9,
-              9,
-              9,
-              9
+              4,
+              4,
+              4,
+              4
             ]
           },
           {
             "Name": "border",
-            "Filename": "UI/background-border.png",
+            "Filename": "UI/background-border-smooth.png",
             "Data": [
               "default"
             ],
@@ -33,10 +33,10 @@
             "SortOrder": 2,
             "FillType": "tile",
             "PatchMargins": [
-              9,
-              9,
-              9,
-              9
+              4,
+              4,
+              4,
+              4
             ]
           }
         ]

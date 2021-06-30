@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.World.Generators.Interiors
+namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 {
     public class DungeonGenerator
     {
@@ -40,17 +41,16 @@ namespace JoyLib.Code.World.Generators.Interiors
             for (int i = 1; i <= levels; i++)
             {
                 WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size, worldInfo.name);
+                HashSet<Vector2Int> walls = interiorGenerator.GenerateWalls(tiles);
                 WorldInstance worldInstance = new WorldInstance(
                     tiles, 
                     worldInfo.tags, 
                     worldInfo.name + " " + i, 
                     gameManager.EntityHandler, 
                     roller);
-
-                List<JoyObject> walls = interiorGenerator.GenerateWalls(tiles);
-                foreach(JoyObject wall in walls)
+                foreach(Vector2Int wall in walls)
                 {
-                    worldInstance.AddObject(wall);
+                    worldInstance.AddWall(wall);
                 }
 
                 List<IItemInstance> items = itemPlacer.PlaceItems(worldInstance);

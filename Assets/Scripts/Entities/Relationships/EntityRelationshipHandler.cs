@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Castle.Core.Internal;
+
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Relationships
+namespace JoyGodot.Assets.Scripts.Entities.Relationships
 {
     public class EntityRelationshipHandler : IEntityRelationshipHandler
     {
@@ -93,7 +96,7 @@ namespace JoyLib.Code.Entities.Relationships
                 }
             }
 
-            relationships.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IRelationship>());
+            relationships.AddRange(GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IRelationship>());
 
             return relationships;
         }
@@ -109,9 +112,9 @@ namespace JoyLib.Code.Entities.Relationships
             return this.m_Relationships.RemoveByKey(ID) > 0;
         }
 
-        public IRelationship CreateRelationship(IEnumerable<IJoyObject> participants, IEnumerable<string> tags)
+        public IRelationship CreateRelationship(IEnumerable<Guid> participants, IEnumerable<string> tags)
         {
-            long hash = BaseRelationship.GenerateHash(participants.Select(o => o.Guid));
+            long hash = BaseRelationship.GenerateHash(participants);
             if (this.m_Relationships.ContainsKey(hash))
             {
                 List<IRelationship> relationships = this.m_Relationships[hash];
@@ -165,7 +168,9 @@ namespace JoyLib.Code.Entities.Relationships
             throw new InvalidOperationException("Relationship type " + tags.Print() + " not found.");
         }
 
-        public IRelationship CreateRelationshipWithValue(IEnumerable<IJoyObject> participants, IEnumerable<string> tags,
+        public IRelationship CreateRelationshipWithValue(
+            IEnumerable<Guid> participants, 
+            IEnumerable<string> tags,
             int value)
         {
             IRelationship relationship = this.CreateRelationship(participants, tags);
@@ -174,11 +179,12 @@ namespace JoyLib.Code.Entities.Relationships
             return relationship;
         }
 
-        public IEnumerable<IRelationship> Get(IEnumerable<IJoyObject> participants, IEnumerable<string> tags = null,
+        public IEnumerable<IRelationship> Get(
+            IEnumerable<Guid> participants, 
+            IEnumerable<string> tags = null,
             bool createNewIfNone = false)
         {
-            IEnumerable<Guid> GUIDs = participants.Select(p => p.Guid);
-            long hash = BaseRelationship.GenerateHash(GUIDs);
+            long hash = BaseRelationship.GenerateHash(participants);
 
             List<IRelationship> relationships = new List<IRelationship>();
             
@@ -212,12 +218,12 @@ namespace JoyLib.Code.Entities.Relationships
             return relationships.ToArray();
         }
 
-        public int GetHighestRelationshipValue(IJoyObject speaker, IJoyObject listener, IEnumerable<string> tags = null)
+        public int GetHighestRelationshipValue(Guid speaker, Guid listener, IEnumerable<string> tags = null)
         {
             try
             {
                 return this.GetBestRelationship(speaker, listener, tags)
-                    .GetRelationshipValue(speaker.Guid, listener.Guid);
+                    .GetRelationshipValue(speaker, listener);
             }
             catch (Exception e)
             {
@@ -226,17 +232,19 @@ namespace JoyLib.Code.Entities.Relationships
             }
         }
 
-        public IRelationship GetBestRelationship(IJoyObject speaker, IJoyObject listener,
+        public IRelationship GetBestRelationship(
+            Guid speaker, 
+            Guid listener,
             IEnumerable<string> tags = null)
         {
-            IJoyObject[] participants = {speaker, listener};
+            Guid[] participants = {speaker, listener};
             IEnumerable<IRelationship> relationships = this.Get(participants, tags, false);
 
             int highestValue = int.MinValue;
             IRelationship bestMatch = null;
             foreach (IRelationship relationship in relationships)
             {
-                int value = relationship.GetRelationshipValue(speaker.Guid, listener.Guid);
+                int value = relationship.GetRelationshipValue(speaker, listener);
                 if (value > highestValue)
                 {
                     highestValue = value;
@@ -246,22 +254,22 @@ namespace JoyLib.Code.Entities.Relationships
 
             if (bestMatch is null)
             {
-                throw new InvalidOperationException("No relationship between " + speaker.JoyName + " and " + listener.JoyName + ".");
+                throw new InvalidOperationException("No relationship between " + speaker + " and " + listener + ".");
             }
 
             return bestMatch;
         }
 
-        public IEnumerable<IRelationship> GetAllForObject(IJoyObject actor)
+        public IEnumerable<IRelationship> GetAllForObject(Guid actor)
         {
-            return this.m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor.Guid) is null == false)
+            return this.m_Relationships.Where(tuple => tuple.Item2.GetParticipant(actor) is null == false)
                 .Select(tuple => tuple.Item2)
                 .ToArray();
         }
 
-        public bool IsFamily(IJoyObject speaker, IJoyObject listener)
+        public bool IsFamily(Guid speaker, Guid listener)
         {
-            IJoyObject[] participants = { speaker, listener };
+            Guid[] participants = { speaker, listener };
             IEnumerable<IRelationship> relationships = this.Get(participants, new[] {"family"});
 
             return relationships.Any();
@@ -277,6 +285,46 @@ namespace JoyLib.Code.Entities.Relationships
         ~EntityRelationshipHandler()
         {
             this.Dispose();
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+
+            Dictionary valueDict = new Dictionary();
+            foreach (long key in this.m_Relationships.Keys)
+            {
+                Array relationships = new Array(this.m_Relationships[key].Select(r => r.Save()));
+                valueDict.Add(key, relationships);
+            }
+            
+            saveDict.Add("Relationships", valueDict);
+
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            Dictionary tempDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(data, "Relationships");
+            foreach (DictionaryEntry entry in tempDict)
+            {
+                ICollection<Dictionary> relationshipDicts = this.ValueExtractor.GetCollectionFromArray<Dictionary>(entry.Value as Array);
+                foreach (Dictionary relationshipDict in relationshipDicts)
+                {
+                    var name = this.ValueExtractor.GetValueFromDictionary<string>(relationshipDict, "Name");
+                    IRelationship relationship =
+                        this.RelationshipTypes
+                            .FirstOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    relationship?.Load(relationshipDict);
+
+                    if (relationship is null)
+                    {
+                        continue;
+                    }
+                
+                    this.m_Relationships.Add(long.Parse(entry.Key.ToString()), relationship);
+                }
+            }
         }
     }
 }

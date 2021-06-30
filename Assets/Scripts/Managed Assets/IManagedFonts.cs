@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using Godot;
-using Godot.Collections;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+﻿using Godot;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public interface IManagedFonts : IColourableElement
     {
@@ -14,7 +11,6 @@ namespace JoyLib.Code.Unity.GUI
         bool OverrideOutline { get; set; }
         bool HasFont { get; }
         bool HasFontColours { get; }
-        DynamicFont CustomFont { get; set; }
         Color FontColour { get; set; }
         int FontSize { get; set; }
         Color OutlineColour { get; set; }

@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using JoyLib.Code.World;
-using Tanis.Collections;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Entities.AI
+namespace JoyGodot.Assets.Scripts.Entities.AI
 {
     public class Pathfinder
     {
@@ -13,14 +13,7 @@ namespace JoyLib.Code.Entities.AI
         {
             IWorldInstance world = worldRef;
 
-            List<Vector2Int> walls = new List<Vector2Int>();
-            lock (world.Objects)
-            {
-                List<IJoyObject> tempList = world.Objects.ToList();
-                Dictionary<Vector2Int, IJoyObject> wallsDictionary = tempList.Where(x => x.IsWall).ToDictionary(x => x.WorldPosition, x => x);
-
-                walls.AddRange(wallsDictionary.Keys);
-            }
+            HashSet<Vector2Int> walls = world.Walls;
 
             AStar pathfinder = new AStar();
 
@@ -100,7 +93,7 @@ namespace JoyLib.Code.Entities.AI
             set;
         }
 
-        public static List<Vector2Int> walls
+        public static HashSet<Vector2Int> walls
         {
             protected get;
             set;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JoyLib.Code.Collections
+namespace JoyGodot.Assets.Scripts.Collections
 {
     public class BucketCollection<K, T> : IEnumerable<KeyValuePair<K, List<T>>>
     {

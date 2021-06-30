@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Entities.Statistics
+﻿namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public interface IRollableValue<T> : IBasicValue<T> where T : struct
     {
@@ -6,5 +6,7 @@
         {
             get;
         }
+
+        int SetThreshold(int value);
     }
 }

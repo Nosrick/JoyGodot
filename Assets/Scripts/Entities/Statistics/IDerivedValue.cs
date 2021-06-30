@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Entities.Statistics
+﻿namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public interface IDerivedValue : IBasicValue<int>
     {
@@ -17,6 +17,6 @@
             get;
         }
         int SetBase(int data);
-        int SetEnhancement(int data);
+        int SetEnhancement(int data, bool changeToMatch = true);
     }
 }

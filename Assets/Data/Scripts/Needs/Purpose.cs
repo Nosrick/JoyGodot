@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Quests;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Quests;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Purpose : AbstractNeed
     {
@@ -96,7 +100,9 @@ namespace JoyLib.Code.Entities.Needs
                 List<IJoyObject> participants = new List<IJoyObject> {actor, possible};
 
                 string[] relationshipTags = new[] {"friendship"};
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(participants, relationshipTags);
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(
+                    participants.Select(o => o.Guid), 
+                    relationshipTags);
 
                 if (relationships is null)
                 {
@@ -153,7 +159,7 @@ namespace JoyLib.Code.Entities.Needs
                     {"doAll", true}
                 });
 
-            if (this.RelationshipHandler.IsFamily(actor, listener))
+            if (this.RelationshipHandler.IsFamily(actor.Guid, listener.Guid))
             {
                 this.m_CachedActions["fulfillneedaction"].Execute(
                     new IJoyObject[] {actor, listener},

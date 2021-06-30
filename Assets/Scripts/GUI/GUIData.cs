@@ -1,14 +1,33 @@
-﻿using Godot;
-using Godot.Collections;
-using JoyLib.Code.Events;
+﻿using System;
+using Godot;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Settings;
+using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public class GUIData : Control
     {
         protected IGUIManager m_GUIManager;
 
         public int DefaultSortingOrder { get; protected set; }
+
+        [Export] public bool RemovesControl { get; protected set; }
+
+        [Export] public bool ClosesOthers { get; protected set; }
+
+        [Export] public bool AlwaysOpen { get; protected set; }
+
+        [Export] public bool AlwaysOnTop { get; protected set; }
+
+        protected IEntity Player { get; set; }
+
+        protected bool EnableHappiness { get; set; }
+
+        public virtual event GUIClosedEventHandler OnGUIClose;
+        public virtual event GUIOpenedEventHandler OnGUIOpen;
 
         public IGUIManager GUIManager
         {
@@ -29,68 +48,170 @@ namespace JoyLib.Code.Unity.GUI
 
         public override void _Input(InputEvent @event)
         {
+            if (this.Visible == false)
+            {
+                return;
+            }
+
             base._Input(@event);
+
             if (@event.IsAction("ui_accept"))
             {
                 this.GUIManager?.BringToFront(this.Name);
             }
         }
 
+        protected void GrabPlayer()
+        {
+            if (this.Player is null)
+            {
+                this.Player = GlobalConstants.GameManager?.Player;
+
+                if (this.Player is null)
+                {
+                    return;
+                }
+
+                this.Player.HappinessChange -= this.SetHappiness;
+                this.Player.HappinessChange += this.SetHappiness;
+
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
+                
+                this.EnableHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                    .Get(SettingsManager.HAPPINESS_UI)
+                    .ObjectValue;
+                
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_UI))
+            {
+                this.EnableHappiness = (bool) args.NewValue;
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
+        {
+            float happiness = this.EnableHappiness ? args.NewValue : 1f;
+
+            try
+            {
+                if (this.Material is ShaderMaterial shaderMaterial)
+                {
+                    shaderMaterial.SetShaderParam("happiness", happiness);
+                }
+
+                foreach (var child in this.GetAllChildren())
+                {
+                    if (child is CanvasItem canvasItem)
+                    {
+                        var material = canvasItem.Material as ShaderMaterial;
+                        material?.SetShaderParam("happiness", happiness);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                GlobalConstants.ActionLog.StackTrace(e);
+            }
+        }
+
         public virtual void Display()
         {
-            this.Visible = true;
-            Array children = this.GetChildren();
+            this.GrabPlayer();
+            this.Show();
+            Array children = this.GetAllChildren();
             foreach (var child in children)
             {
+                if (child is Node node)
+                {
+                    node.SetProcess(true);
+                    node.SetProcessInput(true);
+                    node.SetPhysicsProcess(true);
+                }
+
                 if (child is GUIData data)
                 {
-                    data.Show();
+                    data.Display();
                 }
             }
 
             this.OnGUIOpen?.Invoke(this);
         }
 
-        public virtual void Close()
+        public virtual bool Close(object sender)
         {
-            if (this.m_AlwaysOpen)
+            if (this.AlwaysOpen)
             {
-                return;
+                return false;
             }
-            
-            this.Visible = false;
-            Array children = this.GetChildren();
+
+            this.Hide();
+            Array children = this.GetAllChildren();
             foreach (var child in children)
             {
+                if (child is Node node)
+                {
+                    node.SetProcess(false);
+                    node.SetProcessInput(false);
+                    node.SetPhysicsProcess(false);
+                }
+
                 if (child is GUIData data)
                 {
-                    data.Close();
+                    data.Close(sender);
                 }
             }
 
             this.OnGUIClose?.Invoke(this);
+            return true;
         }
 
         public override void _Ready()
         {
             this.GUIManager = GlobalConstants.GameManager.GUIManager;
-            //this.GUIManager.Add(this);
+            
+            this.GrabPlayer();
         }
 
         public virtual void ButtonClose()
         {
-            this.GUIManager.CloseGUI(this.Name);
+            this.GUIManager.CloseGUI(this, this.Name);
         }
 
-        public bool m_RemovesControl;
+        public virtual void DisconnectEvents()
+        {
+            if (this.Player is null == false)
+            {
+                this.Player.HappinessChange -= this.SetHappiness;
+            }
+            else
+            {
+                GD.PushWarning("Player is null in " + this.Name);
+            }
 
-        public bool m_ClosesOthers;
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
 
-        public bool m_AlwaysOpen;
+            var guiChildren = this.GetAllChildren();
 
-        public bool m_AlwaysOnTop;
-
-        public virtual event GUIClosedEventHandler OnGUIClose;
-        public virtual event GUIOpenedEventHandler OnGUIOpen;
+            foreach (var guiChild in guiChildren)
+            {
+                if (guiChild is GUIData data)
+                {
+                    data.DisconnectEvents();
+                }
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@
       "TileSet": 
         {
           "Name": "Naga Pits",
+          "UseTileMap": true,
           "SpriteData": [
             {
               "Name": "SurroundFloor",
@@ -22,7 +23,7 @@
                   ],
                   "Filename": "environments/naga-pits32.png",
                   "Frames": 1,
-                  "Colour": ["#4d9be6ff"]
+                  "Colour": ["#4d9be6"]
                 }
               ]
             },
@@ -38,7 +39,7 @@
                   ],
                   "Filename": "environments/naga-pits32.png",
                   "Frames": 1,
-                  "Colour": ["#4d65b4ff"]
+                  "Colour": ["#4d65b4"]
                 }
               ]
             }

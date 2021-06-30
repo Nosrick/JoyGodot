@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Scripts.Quests.Actions
 {
-    public interface IQuestAction
+    public interface IQuestAction : ISerialisationHandler
     {
         string[] Tags { get; }
         string Description { get; }
@@ -17,8 +17,6 @@ namespace JoyLib.Code.Quests
         List<Guid> Areas { get; }
         
         RNG Roller { get; }
-
-        IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags);
         bool ExecutedSuccessfully(IJoyAction action);
 
         string AssembleDescription();
@@ -26,10 +24,9 @@ namespace JoyLib.Code.Quests
         void ExecutePrerequisites(IEntity questor);
 
         IQuestAction Create(
-            IEnumerable<string> tags,
-            IEnumerable<IItemInstance> items,
-            IEnumerable<IJoyObject> actors,
-            IEnumerable<IWorldInstance> areas,
-            IItemFactory itemFactory = null);
+            IEntity questor, 
+            IEntity provider, 
+            IWorldInstance overworld, 
+            IEnumerable<string> tags);
     }
 }

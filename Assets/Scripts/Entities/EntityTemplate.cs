@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities
 {
     [Serializable]
     public class EntityTemplate : IEntityTemplate
@@ -25,6 +25,59 @@ namespace JoyLib.Code.Entities
 
         protected bool m_Sentient;
 
+        public IEnumerable<string> Slots => this.m_Slots;
+
+        public IDictionary<string, IEntityStatistic> Statistics
+        {
+            get
+            {
+                IDictionary<string, IEntityStatistic> stats = new Dictionary<string, IEntityStatistic>();
+                foreach (KeyValuePair<string, IEntityStatistic> stat in this.m_Statistics)
+                {
+                    stats.Add(new KeyValuePair<string, IEntityStatistic>(
+                        ObjectExtensions.Copy(stat.Key), 
+                        ObjectExtensions.Copy(stat.Value)));
+                }
+
+                return stats;
+            }
+        }
+
+        public IDictionary<string, IEntitySkill> Skills
+        {
+            get
+            {
+                IDictionary<string, IEntitySkill> skills = new Dictionary<string, IEntitySkill>();
+                foreach (KeyValuePair<string, IEntitySkill> skill in this.m_Skills)
+                {
+                    skills.Add(new KeyValuePair<string, IEntitySkill>(
+                        ObjectExtensions.Copy(skill.Key),
+                        ObjectExtensions.Copy(skill.Value)));
+                }
+                return skills;
+            }
+        }
+
+        public IEnumerable<string> Needs => this.m_Needs;
+
+        public IEnumerable<IAbility> Abilities => this.m_Abilities;
+
+        public int Size => this.m_Size;
+
+        public bool Sentient => this.m_Sentient;
+
+        public IVision VisionType
+        {
+            get;
+            protected set;
+        }
+
+        public string CreatureType => this.m_CreatureType;
+
+        public string JoyType => this.m_Type;
+        
+        public string Description { get; protected set; }
+
         public EntityTemplate(
             IDictionary<string, IEntityStatistic> statistics, 
             IDictionary<string, IEntitySkill> skills, 
@@ -34,7 +87,8 @@ namespace JoyLib.Code.Entities
             int size, 
             IVision visionType, 
             string creatureType, 
-            string type, 
+            string type,
+            string description,
             string[] tags)
         {
             this.m_Statistics = statistics;
@@ -42,6 +96,7 @@ namespace JoyLib.Code.Entities
             this.m_Abilities = abilities;
             this.m_Slots = slots;
             this.m_Needs = needs;
+            this.Description = description;
 
             this.m_Size = size;
 
@@ -80,99 +135,6 @@ namespace JoyLib.Code.Entities
         public bool RemoveTag(string tag)
         {
             return this.m_Tags.Remove(tag);
-        }
-
-        public IEnumerable<string> Slots
-        {
-            get
-            {
-                return this.m_Slots;
-            }
-        }
-
-        public IDictionary<string, IEntityStatistic> Statistics
-        {
-            get
-            {
-                IDictionary<string, IEntityStatistic> stats = new Dictionary<string, IEntityStatistic>();
-                foreach (KeyValuePair<string, IEntityStatistic> stat in this.m_Statistics)
-                {
-                    stats.Add(new KeyValuePair<string, IEntityStatistic>(
-                        ObjectExtensions.Copy(stat.Key), 
-                        ObjectExtensions.Copy(stat.Value)));
-                }
-
-                return stats;
-            }
-        }
-
-        public IDictionary<string, IEntitySkill> Skills
-        {
-            get
-            {
-                IDictionary<string, IEntitySkill> skills = new Dictionary<string, IEntitySkill>();
-                foreach (KeyValuePair<string, IEntitySkill> skill in this.m_Skills)
-                {
-                    skills.Add(new KeyValuePair<string, IEntitySkill>(
-                        ObjectExtensions.Copy(skill.Key),
-                        ObjectExtensions.Copy(skill.Value)));
-                }
-                return skills;
-            }
-        }
-
-        public IEnumerable<string> Needs
-        {
-            get
-            {
-                return this.m_Needs;
-            }
-        }
-
-        public IEnumerable<IAbility> Abilities
-        {
-            get
-            {
-                return this.m_Abilities;
-            }
-        }
-
-        public int Size
-        {
-            get
-            {
-                return this.m_Size;
-            }
-        }
-
-        public bool Sentient
-        {
-            get
-            {
-                return this.m_Sentient;
-            }
-        }
-
-        public IVision VisionType
-        {
-            get;
-            protected set;
-        }
-
-        public string CreatureType
-        {
-            get
-            {
-                return this.m_CreatureType;
-            }
-        }
-
-        public string JoyType
-        {
-            get
-            {
-                return this.m_Type;
-            }
         }
     }
 }

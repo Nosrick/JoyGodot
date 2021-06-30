@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     [Serializable]
     public class ItemMaterial : IItemMaterial

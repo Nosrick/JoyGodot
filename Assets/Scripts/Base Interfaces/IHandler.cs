@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts.Base_Interfaces
 {
     public interface IHandler<TData, TKey> : IDisposable
     {

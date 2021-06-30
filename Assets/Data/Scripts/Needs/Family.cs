@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Family : AbstractNeed
     {
@@ -94,8 +98,10 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(actor);
                 participants.Add(possible);
 
-                string[] relationshipTags = new[] {"family"};
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants.ToArray(), relationshipTags);
+                string[] relationshipTags = {"family"};
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(
+                    participants.Select(o => o.Guid), 
+                    relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -116,8 +122,10 @@ namespace JoyLib.Code.Entities.Needs
                     participants.Add(actor);
                     participants.Add(possible);
 
-                    string[] relationshipTags = new[] {"friendship"};
-                    IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants, relationshipTags);
+                    string[] relationshipTags = {"friendship"};
+                    IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(
+                        participants.Select(o => o.Guid), 
+                        relationshipTags);
 
                     foreach (IRelationship relationship in relationships)
                     {

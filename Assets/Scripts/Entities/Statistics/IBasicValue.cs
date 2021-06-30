@@ -1,6 +1,10 @@
-﻿namespace JoyLib.Code.Entities.Statistics
+﻿using JoyGodot.Assets.Scripts.Base_Interfaces;
+
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
-    public interface IBasicValue<T> where T : struct 
+    public interface IBasicValue<T> : 
+        ITooltipHolder, 
+        ISerialisationHandler where T : struct
     {
         string Name
         {

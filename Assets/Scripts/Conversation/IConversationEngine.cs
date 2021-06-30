@@ -1,14 +1,15 @@
-﻿using System;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities;
+﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
 
-namespace JoyLib.Code.Conversation
+namespace JoyGodot.Assets.Scripts.Conversation
 {
     public interface IConversationEngine : IGuidHolder
     {
         void SetActors(IEntity instigator, IEntity listener);
-        ITopic[] Converse(string topic, int index = 0);
-        ITopic[] Converse(int index = 0);
+        ICollection<ITopic> Converse(ITopic selectedTopic = null);
         
         ITopic[] CurrentTopics { get; }
         ITopic[] AllTopics { get; }
@@ -18,8 +19,8 @@ namespace JoyLib.Code.Conversation
         string ListenerInfo { get; }
         string LastSaidWords { get; }
 
-        event EventHandler OnConverse;
-        event EventHandler OnOpen;
-        event EventHandler OnClose;
+        event ConversationEventHandler OnConverse;
+        event ConversationEventHandler OnOpen;
+        event EmptyEventHandler OnClose;
     }
 }

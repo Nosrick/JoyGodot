@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Scripting;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class SexProposalProcessor : TopicData
     {
@@ -29,13 +32,19 @@ namespace JoyLib.Code.Entities.Conversation.Processors
 
             IJoyObject[] participants = {instigator, listener};
             
-            List<IRelationship> relationships = this.RelationshipHandler.Get(participants, new[] {"sexual"}, false).ToList();
+            List<IRelationship> relationships = this.RelationshipHandler.Get(
+                participants.Select(o => o.Guid), 
+                new[] {"sexual"}, 
+                false)
+                .ToList();
 
             if (relationships.IsNullOrEmpty()
                 && listener.Sexuality.Compatible(listener, instigator)
                 && instigator.Sexuality.Compatible(instigator, listener))
             {
-                relationships.Add(this.RelationshipHandler.CreateRelationship(participants, new string[] {"sexual"}));
+                relationships.Add(this.RelationshipHandler.CreateRelationship(
+                    participants.Select(o => o.Guid), 
+                    new[] {"sexual"}));
             }
             
             if (listener.Sexuality.WillMateWith(listener, instigator, relationships) == false

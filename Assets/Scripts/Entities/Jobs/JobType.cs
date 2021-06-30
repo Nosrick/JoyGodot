@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code.Entities.Jobs
+namespace JoyGodot.Assets.Scripts.Entities.Jobs
 {
     [Serializable]
     public class JobType : IJob
@@ -40,19 +41,27 @@ namespace JoyLib.Code.Entities.Jobs
 
         public int GetSkillDiscount(string skillName)
         {
-            if(this.m_SkillDiscounts.ContainsKey(skillName))
+            if (this.m_SkillDiscounts.Any(p =>
+                p.Key.Equals(skillName, StringComparison.OrdinalIgnoreCase)))
             {
-                return this.m_SkillDiscounts[skillName];
+                return this.m_SkillDiscounts.First(
+                        pair => pair.Key.Equals(skillName, StringComparison.OrdinalIgnoreCase))
+                    .Value;
             }
+
             return 0;
         }
 
         public int GetStatisticDiscount(string statisticName)
         {
-            if(this.m_StatisticDiscounts.ContainsKey(statisticName))
+            if (this.m_StatisticDiscounts.Any(p =>
+                p.Key.Equals(statisticName, StringComparison.OrdinalIgnoreCase)))
             {
-                return this.m_StatisticDiscounts[statisticName];
+                return this.m_StatisticDiscounts.First(
+                        pair => pair.Key.Equals(statisticName, StringComparison.OrdinalIgnoreCase))
+                    .Value;
             }
+
             return 0;
         }
 

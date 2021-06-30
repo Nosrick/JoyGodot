@@ -1,17 +1,30 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Events;
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Events;
+using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     [Serializable]
-    public class EquipmentStorage : JoyObject, IItemContainer
+    public class EquipmentStorage : IItemContainer, ISerialisationHandler
     {
         protected List<Tuple<string, Guid>> m_Slots;
 
-        public override int HitPointsRemaining => 1;
-        public override int HitPoints => 1;
+        public virtual string ContentString { get; }
+
+        public string JoyName => "Equipment";
+
+        public Guid Guid
+        {
+            get; 
+            protected set;
+        }
+        public virtual event ItemRemovedEventHandler ItemRemoved;
+        public virtual event ItemAddedEventHandler ItemAdded;
 
         public IEnumerable<IItemInstance> Contents =>
             this.GetSlotsAndContents(false)
@@ -21,17 +34,16 @@ namespace JoyLib.Code.Entities.Items
         public EquipmentStorage()
         {
             this.m_Slots = new List<Tuple<string, Guid>>();
-            this.JoyName = "Equipment";
+            this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
         }
 
         public EquipmentStorage(IEnumerable<string> slots)
+            : this()
         {
-            this.m_Slots = new List<Tuple<string, Guid>>();
             foreach (string slot in slots)
             {
                 this.m_Slots.Add(new Tuple<string, Guid>(slot, Guid.Empty));
             }
-            this.JoyName = "Equipment";
         }
         
         protected virtual IEnumerable<string> GetRequiredSlots(IItemInstance item)
@@ -42,7 +54,7 @@ namespace JoyLib.Code.Entities.Items
                 return slots;
             }
 
-            Dictionary<string, int> requiredSlots = new Dictionary<string, int>();
+            System.Collections.Generic.Dictionary<string, int> requiredSlots = new System.Collections.Generic.Dictionary<string, int>();
 
             foreach (string slot in item.ItemType.Slots)
             {
@@ -56,7 +68,7 @@ namespace JoyLib.Code.Entities.Items
                 }
             }
 
-            Dictionary<string, int> copySlots = new Dictionary<string, int>(requiredSlots);
+            System.Collections.Generic.Dictionary<string, int> copySlots = new System.Collections.Generic.Dictionary<string, int>(requiredSlots);
 
             foreach (Tuple<string, Guid> tuple in this.m_Slots)
             {
@@ -94,7 +106,6 @@ namespace JoyLib.Code.Entities.Items
 
         public virtual IEnumerable<Tuple<string, IItemInstance>> GetSlotsAndContents(bool getEmpty = true)
         {
-            /*
             if (getEmpty == false)
             {
                 return this.m_Slots
@@ -108,8 +119,6 @@ namespace JoyLib.Code.Entities.Items
                 .Select(tuple => new Tuple<string, IItemInstance>(
                     tuple.Item1,
                     tuple.Item2 != Guid.Empty ? GlobalConstants.GameManager.ItemHandler.Get(tuple.Item2) : null));
-                    */
-            return new List<Tuple<string, IItemInstance>>();
         }
 
         public virtual bool CanAddContents(IItemInstance actor)
@@ -223,9 +232,43 @@ namespace JoyLib.Code.Entities.Items
 
             return this.m_Slots.Count(s => s.Item1.Equals(slot, StringComparison.OrdinalIgnoreCase));
         }
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
 
-        public virtual string ContentString { get; }
-        public virtual event ItemRemovedEventHandler ItemRemoved;
-        public virtual event ItemAddedEventHandler ItemAdded;
+            Array slotArray = new Array();
+
+            foreach ((string slot, Guid item) in this.m_Slots)
+            {
+                slotArray.Add(new Dictionary
+                {
+                    {slot, item.ToString()}
+                });
+            }
+
+            saveDict.Add("Slots", slotArray);
+
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.m_Slots = new List<Tuple<string, Guid>>();
+
+            Array slots = valueExtractor.GetValueFromDictionary<Array>(data, "Slots");
+            foreach (Dictionary dictionary in slots)
+            {
+                foreach(DictionaryEntry entry in dictionary)
+                {
+                    this.m_Slots.Add(
+                    new Tuple<string, Guid>(
+                        entry.Key.ToString(),
+                        new Guid(entry.Value.ToString())));
+                    
+                }
+            }
+        }
     }
 }

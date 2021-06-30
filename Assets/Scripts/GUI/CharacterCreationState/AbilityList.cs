@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Entities.Abilities;
 
 namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {
@@ -120,8 +118,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 part.Name = ability.Name;
                 part.Visible = true;
                 part.Pressed = false;
+                part.UseRestriction = true;
                 part.PointRestriction = this.Points;
-                part.Value = 1;
+                part.IncreaseCost = 1;
+                part.DecreaseCost = -1;
                 part.Tooltip = new List<string> {ability.Description};
                 if (!part.IsConnected(
                     "ValueToggle",

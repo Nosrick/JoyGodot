@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Friendship : AbstractNeed
     {
@@ -85,8 +89,10 @@ namespace JoyLib.Code.Entities.Needs
                 participants.Add(actor);
                 participants.Add(possible);
 
-                string[] relationshipTags = new[] {"friendship"};
-                IEnumerable<IRelationship> relationships = this.EntityRelationshipHandler.Get(participants, relationshipTags);
+                string[] relationshipTags = {"friendship"};
+                IEnumerable<IRelationship> relationships = this.EntityRelationshipHandler.Get(
+                    participants.Select(o => o.Guid), 
+                    relationshipTags);
                 
                 foreach (IRelationship relationship in relationships)
                 {

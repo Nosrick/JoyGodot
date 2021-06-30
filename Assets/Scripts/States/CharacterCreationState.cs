@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using Godot;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.Unity.GUI.CharacterCreationState;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.GUI.CharacterCreationState;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class CharacterCreationState : GameState
     {
@@ -22,10 +20,6 @@ namespace JoyLib.Code.States
         {
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void LoadContent()
         {
         }
@@ -36,14 +30,15 @@ namespace JoyLib.Code.States
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 "Scenes/UI/Character Creation.tscn");
             
-            GlobalConstants.GameManager.GUIManager.InstantiateUIScene(scene);
-            base.SetUpUi();
+            this.GUIManager.InstantiateUIScene(scene);
+            
+            this.GUIManager.FindGUIs();
             
             this.CharacterCreationHandler = this.GUIManager.Get("Character Creation") as CharacterCreationHandler;
 
             if (this.CharacterCreationHandler is null)
             {
-                GD.Print("CHARACTER CREATION NOT FOUND");
+                GD.PushError("CHARACTER CREATION NOT FOUND");
                 return;
             }
             

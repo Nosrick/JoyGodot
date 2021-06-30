@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.GUI.Tools;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Unity.GUI.CharacterCreationState
+namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {
     public class StatisticsList : Control
     {
@@ -112,10 +113,13 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 var part = this.Parts[i];
                 part.ValueName = stat.Name;
                 part.Minimum = 1;
-                part.Maximum = 10;
+                part.Maximum = 7;
                 part.Value = stat.Value;
                 part.Visible = true;
                 part.UseRestriction = true;
+                part.IncreaseCost = 1;
+                part.DecreaseCost = -1;
+                part.Tooltip = stat.Tooltip;
                 if (!part.IsConnected(
                     "ValueChanged",
                     this,
@@ -139,8 +143,6 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         public void ChangeValue(string name, int delta, int newValue)
         {
-            GD.Print(name + " : " + delta + " : " + newValue);
-
             var stat = this.m_Statistics.FirstOrDefault(statistic =>
                 statistic.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             

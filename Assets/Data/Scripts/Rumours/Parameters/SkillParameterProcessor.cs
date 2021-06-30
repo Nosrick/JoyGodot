@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Statistics;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours.Parameters;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Conversation.Subengines.Rumours
+namespace JoyGodot.Assets.Data.Scripts.Rumours.Parameters
 {
     public class SkillParameterProcessor : IParameterProcessor
     {
@@ -53,7 +56,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             if (parameter.Equals("skills", StringComparison.OrdinalIgnoreCase)
                 || entity.Skills.ContainsKey(parameter))
             {
-                IEnumerable<Tuple<string, int>> values = entity.GetData(new string[] {parameter});
+                IEnumerable<Tuple<string, object>> values = entity.GetData(new string[] {parameter});
 
                 return values.OrderByDescending(tuple => tuple.Item2)
                     .First()

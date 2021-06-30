@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using Castle.Core.Internal;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code.Rollers
+
+namespace JoyGodot.Assets.Scripts.Rollers
 {
     public class RNG : IRollable
     {

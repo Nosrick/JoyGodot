@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Graphics;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Respect : AbstractNeed
     {
@@ -141,7 +145,7 @@ namespace JoyLib.Code.Entities.Needs
             bool result = base.Tick(actor);
             if (this.m_DecayCounter == 0 && this.m_DoesDecay)
             {
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler.GetAllForObject(actor);
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.GetAllForObject(actor.Guid);
 
                 if (relationships.Any() == false)
                 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JoyLib.Code.Managers
+namespace JoyGodot.Assets.Scripts.Managers
 {
     [Serializable]
     public class GUIDManager : IDisposable

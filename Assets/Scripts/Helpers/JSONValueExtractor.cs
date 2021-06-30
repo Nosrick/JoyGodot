@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Castle.Core.Internal;
 using Godot;
-using Godot.Collections;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public class JSONValueExtractor
     {
@@ -50,6 +48,11 @@ namespace JoyLib.Code.Helpers
 
         public T GetValueFromProperty<T>(object obj)
         {
+            if (obj is null)
+            {
+                return default;
+            }
+            
             return (T) Convert.ChangeType(obj, typeof(T));
         }
 

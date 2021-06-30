@@ -1,22 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyGodot.addons.Managed_Assets
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
-    [Serializable]
     public class SpriteData
     {
-        public string m_Name;
-        public string m_State;
-        public List<SpritePart> m_Parts;
+        public string Name { get; set; }
+        public string State { get; set; }
+        public List<SpritePart> Parts { get; set; }
+
+        public int Size { get; set; }
+
+        public SpriteData()
+        {
+            this.Parts = new List<SpritePart>();
+        }
 
         public IDictionary<string, Color> GetRandomPartColours()
         {
             IDictionary<string, Color> colours = new System.Collections.Generic.Dictionary<string, Color>();
 
-            foreach (SpritePart part in this.m_Parts)
+            foreach (SpritePart part in this.Parts)
             {
                 colours.Add(
                     part.m_Name,
@@ -24,6 +30,44 @@ namespace JoyGodot.addons.Managed_Assets
             }
 
             return colours;
+        }
+
+        public IDictionary<string, Color> GetCurrentPartColours()
+        {
+            return this.Parts.ToDictionary(part => part.m_Name, part => part.SelectedColour);
+        }
+
+        public void SetColourIndices(List<int> indices)
+        {
+            if (indices.Count != this.Parts.Count)
+            {
+                GlobalConstants.ActionLog.Log("Index count mismatch for SpriteData!", LogLevel.Warning);
+                return;
+            }
+
+            for (int i = 0; i < indices.Count; i++)
+            {
+                SpritePart part = this.Parts[i];
+                part.m_SelectedColour = indices[i];
+                this.Parts[i] = part;
+            }
+        }
+
+        public List<int> RandomiseIndices()
+        {
+            List<int> indices = new List<int>();
+            foreach (SpritePart part in this.Parts)
+            {
+                part.m_SelectedColour = GlobalConstants.GameManager.Roller.Roll(0, part.m_PossibleColours.Count);
+                indices.Add(part.m_SelectedColour);
+            }
+
+            return indices;
+        }
+
+        public List<int> GetIndices()
+        {
+            return this.Parts.Select(part => part.m_SelectedColour).ToList();
         }
 
         /*
@@ -50,12 +94,13 @@ namespace JoyGodot.addons.Managed_Assets
         */
     }
 
-    [Serializable]
     public class SpritePart
     {
         public string m_Name;
         public int m_Frames;
+
         public string[] m_Data;
+
         //public SpriteFrames m_FrameSprite;
         public List<Texture> m_FrameSprite;
         public string m_Filename;

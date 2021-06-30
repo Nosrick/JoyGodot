@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities
 {
-    public interface ILiveEntityHandler : IHandler<IEntity, Guid>
+    public interface ILiveEntityHandler : IHandler<IEntity, Guid>, ISerialisationHandler
     {
         IEntity GetPlayer();
 

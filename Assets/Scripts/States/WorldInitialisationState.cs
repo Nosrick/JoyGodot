@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Unity;
-using JoyLib.Code.World;
 
-namespace JoyLib.Code.States
+using Godot;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.World;
+
+namespace JoyGodot.Assets.Scripts.States
 {
     public class WorldInitialisationState : GameState
     {
@@ -27,25 +28,18 @@ namespace JoyLib.Code.States
         }
 
         public override void LoadContent()
-        {
-        }
+        { }
 
         public override void Start()
         {
             this.InstantiateWorld();
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void Update()
-        {
-        }
+        { }
 
         public override void HandleInput(InputEvent @event)
-        {
-        }
+        { }
 
         protected void InstantiateWorld()
         {
@@ -58,124 +52,105 @@ namespace JoyLib.Code.States
                 new ConcreteBasicFloatValue("hardness", 1),
                 new ConcreteBasicFloatValue("density", 1)
             };
-            
+
             this.m_ActiveWorld.Initialise();
-            //int terrainLayer = LayerMask.NameToLayer("Terrain");
+
+            ISpriteState state = null;
+            float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
+
+            var floorTileMap = gameManager.FloorTileMap;
+            floorTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet, true);
+            int surroundFloorIndex = floorTileMap.TileSet.FindTileByName("SurroundFloor");
+
+            var wallTileMap = gameManager.WallTileMap;
+            wallTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet);
+            int surroundWallIndex = wallTileMap.TileSet.FindTileByName("SurroundWall");
+            
+            for (int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
+            {
+                for (int j = 0; j < this.m_ActiveWorld.Tiles.GetLength(1); j++)
+                {
+                    Vector2Int intPos = new Vector2Int(i, j);
+
+                    //Make the fog of war
+                    PositionableSprite fog = gameManager.FogPool.Get();
+                    fog.Name = "Fog of War " + intPos;
+                    fog.Show();
+                    fog.Scale = new Vector2(scale, scale);
+                    fog.Move(intPos);
+
+                    //Make the floor
+                    floorTileMap.SetCell(i, j, surroundFloorIndex);
+                }
+            }
+
             //Make the upstairs
             if (this.m_ActiveWorld.Guid != this.m_Overworld.Guid)
             {
-                Node2D child = gameManager.FloorPool.Get();
-                child.Position = new Vector2(this.m_ActiveWorld.SpawnPoint.x, this.m_ActiveWorld.SpawnPoint.y);
-                child.Name = this.m_ActiveWorld.Parent.Name + " stairs";
-                //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
-                //tooltip.WorldPosition = this.m_ActiveWorld.SpawnPoint;
-                //tooltip.RefreshTooltip = WorldState.GetTooltipData;
-
-                ManagedSprite sprite = (ManagedSprite) child;
-                sprite.Clear();
-                sprite.AddSpriteState(new SpriteState(
-                        child.Name,
-                    this.m_ObjectIcons.GetSprites("Stairs", "Upstairs").First()));
-                child.Visible = true;
+                floorTileMap.SetCellv(
+                    this.m_ActiveWorld.SpawnPoint.ToVec2(), 
+                    floorTileMap.TileSet.FindTileByName("upstairs"));
             }
 
             //Make each downstairs
-            foreach(KeyValuePair<Vector2Int, IWorldInstance> pair in this.m_ActiveWorld.Areas)
+            foreach (KeyValuePair<Vector2Int, IWorldInstance> pair in this.m_ActiveWorld.Areas)
             {
-                ManagedSprite child = gameManager.FloorPool.Get();
-                child.Name = pair.Value.Name + " stairs";
-                child.Position = new Vector2(pair.Key.x, pair.Key.y);
-                //TooltipComponent tooltip = child.GetComponent<TooltipComponent>();
-                //tooltip.WorldPosition = pair.Key;
-                child.Clear();
-                child.AddSpriteState(new SpriteState(
-                        child.Name,
-                    this.m_ObjectIcons.GetSprites("Stairs", "Downstairs").First()), 
-                    true);
-                child.Visible = true;
+                floorTileMap.SetCellv(
+                    pair.Key.ToVec2(), 
+                    floorTileMap.TileSet.FindTileByName("downstairs"));
             }
 
-            ISpriteState state = null;
-            for(int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
-            {
-                for(int j = 0; j < this.m_ActiveWorld.Tiles.GetLength(1); j++)
-                {
-                    Vector2Int intPos = new Vector2Int(i, j);
-                    
-                    //Make the fog of war
-                    Sprite fog = gameManager.FogPool.Get();
-                    fog.Name = "Fog of War";
-                    fog.Visible = true;
-                    
-                    
-                    //Make the floor
-                    ManagedSprite floor = gameManager.FloorPool.Get();
-                    floor.Name = this.m_ActiveWorld.Name + " floor";
-                    //TooltipComponent tooltip = floor.GetComponent<TooltipComponent>();
-                    //tooltip.Move(intPos);
-                    //tooltip.RefreshTooltip = WorldState.GetTooltipData;
-                    if (state is null
-                        || state.SpriteData.m_Name.Equals(this.m_ActiveWorld.Tiles[i, j].TileSet,
-                            StringComparison.OrdinalIgnoreCase) == false)
-                    {
-                        state = new SpriteState(
-                            "Floor",
-                            this.m_ObjectIcons.GetSprites(this.m_ActiveWorld.Tiles[i, j].TileSet, "surroundfloor").First());
-                    }
-                    floor.Clear();
-                    floor.AddSpriteState(state);
-                    floor.Visible = true;
-                }
-            }
-            
             //Create the walls
-            foreach(IJoyObject wall in this.m_ActiveWorld.Walls.Values)
+            foreach (Vector2Int position in this.m_ActiveWorld.Walls)
             {
-                wall.MyWorld = this.m_ActiveWorld;
-                JoyObjectNode gameObject = gameManager.WallPool.Get();
-                gameObject.AttachJoyObject(wall);
-                gameObject.Clear();
-                gameObject.AddSpriteState(wall.States.First(), true);
-                gameObject.Visible = true;
+                wallTileMap.SetCellv(
+                    position.ToVec2(),
+                    surroundWallIndex);
             }
-            
-            this.CreateItems(this.m_ActiveWorld.Objects);
 
+            int index = 0;
+            index = this.CreateItems(index, this.m_ActiveWorld.Items);
+
+            GlobalConstants.GameManager.EntityHolder.ZIndex = index + 10;
             //Create the entities
-            foreach(IEntity entity in this.m_ActiveWorld.Entities)
+            int innerIndex = 0;
+            int itemIndex = 0;
+            foreach (IEntity entity in this.m_ActiveWorld.Entities)
             {
                 JoyObjectNode gameObject = gameManager.EntityPool.Get();
-                gameObject.Visible = true;
+                gameObject.Show();
                 gameObject.AttachJoyObject(entity);
-
-                gameObject.Clear();
-                gameObject.AddSpriteState(entity.States.First(), true);
-                this.CreateItems(entity.Contents, false);
-                this.CreateItems(entity.Equipment.Contents, false);
+                gameObject.ZIndex = index;
+                innerIndex += gameObject.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_SortingOrder) + 1;
+                itemIndex = this.CreateItems(itemIndex, entity.Contents, false);
+                itemIndex = this.CreateItems(itemIndex, entity.Equipment.Contents, false);
             }
+
+            GlobalConstants.GameManager.FogHolder.ZIndex = index + innerIndex + 10;
 
             this.Done = true;
         }
 
-        protected void CreateItems(IEnumerable<IJoyObject> items, bool active = true)
+        protected int CreateItems(int index, IEnumerable<IItemInstance> items, bool active = true)
         {
             if (items.Any() == false)
             {
-                return;
+                return index;
             }
-            
+
             IGameManager gameManager = GlobalConstants.GameManager;
-            foreach (IJoyObject item in items)
+            foreach (IItemInstance itemInstance in items)
             {
-                if (item is ItemInstance itemInstance)
+                itemInstance.Instantiate(true, gameManager.ItemPool.Get(), active);
+                itemInstance.MyNode.ZIndex = index;
+                index += itemInstance.MyNode.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_SortingOrder) + 1;
+                if (itemInstance.Contents.IsNullOrEmpty() == false)
                 {
-                    itemInstance.Instantiate(true, gameManager.ItemPool.Get(), active);
-                    if (itemInstance.Contents.IsNullOrEmpty() == false)
-                    {
-                        this.CreateItems(itemInstance.Contents, false);
-                    }
+                    index = this.CreateItems(index, itemInstance.Contents, false);
                 }
             }
+
+            return index;
         }
 
         public override GameState GetNextState()

@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using JoyGodot.Assets.Scripts.Base_Interfaces;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
-    public interface ITooltipComponent
+    public interface ITooltipComponent : ITooltipHolder
     {
-        ICollection<string> Tooltip { get; set; }
-
+        bool MouseOver { get; }
         void OnPointerEnter();
         void OnPointerExit();
     }

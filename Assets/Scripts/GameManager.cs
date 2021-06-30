@@ -1,40 +1,38 @@
 ﻿using System;
-using Code.Collections;
 using Godot;
-using Joy.Code.Managers;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Combat;
+using JoyGodot.Assets.Scripts.Conversation;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours.Parameters;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexes;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.GUI;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Managers;
+using JoyGodot.Assets.Scripts.Physics;
+using JoyGodot.Assets.Scripts.Quests;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.Settings;
 using JoyGodot.Assets.Scripts.States;
-using JoyLib.Code.Combat;
-using JoyLib.Code.Conversation;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Conversation.Subengines.Rumours.Parameters;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Managers;
-using JoyLib.Code.Physics;
-using JoyLib.Code.Quests;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.States;
-using JoyLib.Code.Unity;
-using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.World;
 using Thread = System.Threading.Thread;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts
 {
     public class GameManager : Node, IGameManager
     {
@@ -63,21 +61,20 @@ namespace JoyLib.Code
             Input.SetMouseMode(Input.MouseMode.Hidden);
 
             this.LoadingMessage = "Initialising object pools";
-            Node2D worldHolder = this.GetNode<Node2D>("WorldHolder");
-            Node2D floorHolder = (Node2D) worldHolder.FindNode("WorldFloors");
-            Node2D wallHolder = (Node2D) worldHolder.FindNode("WorldWalls");
-            Node2D objectHolder = (Node2D) worldHolder.FindNode("WorldObjects");
-            Node2D entityHolder = (Node2D) worldHolder.FindNode("WorldEntities");
-            Node2D fogHolder = (Node2D) worldHolder.FindNode("WorldFog");
+            this.WorldHolder = this.GetNode<Node2D>("WorldHolder");
+            this.FloorTileMap = this.WorldHolder.FindNode("WorldFloors") as TileMap;
+            this.WallTileMap = this.WorldHolder.FindNode("WorldWalls") as TileMap;
+            this.ItemHolder = (Node2D) this.WorldHolder.FindNode("WorldObjects");
+            this.EntityHolder = (Node2D) this.WorldHolder.FindNode("WorldEntities");
+            this.FogHolder = (Node2D) this.WorldHolder.FindNode("WorldFog");
 
-            JoyObjectNode prefab = (JoyObjectNode) GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn").Instance();
-            ManagedSprite positionableSprite = (ManagedSprite) GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn").Instance();
-            Sprite fog = new Sprite();
-            this.FloorPool = new GameObjectPool<ManagedSprite>(positionableSprite, floorHolder);
-            this.WallPool = new GameObjectPool<JoyObjectNode>(prefab, wallHolder);
-            this.EntityPool = new GameObjectPool<JoyObjectNode>(prefab, entityHolder);
-            this.ItemPool = new GameObjectPool<JoyObjectNode>(prefab, objectHolder);
-            this.FogPool = new GameObjectPool<Sprite>(fog, fogHolder);
+            PackedScene prefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyObject.tscn");
+            PackedScene positionableSprite = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/ManagedSprite.tscn");
+            PackedScene fog =
+                GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/Fog of War.tscn");
+            this.EntityPool = new GameObjectPool<JoyObjectNode>(prefab, this.EntityHolder);
+            this.ItemPool = new GameObjectPool<JoyObjectNode>(prefab, this.ItemHolder);
+            this.FogPool = new GameObjectPool<PositionableSprite>(fog, this.FogHolder);
 
             this.MyNode = this;
 
@@ -89,19 +86,41 @@ namespace JoyLib.Code
         public override void _Process(float delta)
         {
             this.m_StateManager?.Update();
-            this.ActionLog.Update();
+            this.ActionLog?.Update();
+        }
+
+        public override void _Notification(int what)
+        {
+            base._Notification(what);
+
+            if (what == MainLoop.NotificationCrash
+                || what == MainLoop.NotificationWmQuitRequest)
+            {
+                this.ActionLog.Flush();
+            }
+        }
+
+        public override void _Input(InputEvent @event)
+        {
+            base._Input(@event);
+            this.m_StateManager?.Process(@event);
         }
 
         protected void Load()
         {
             this.LoadingMessage = "Initialising action log";
             this.ActionLog = new ActionLog();
+            GlobalConstants.ActionLog = this.ActionLog;
+            
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
             
             this.LoadingMessage = "Revving up engines";
 
+            this.SettingsManager = new SettingsManager();
+
             this.GUIDManager = new GUIDManager();
 
-            GlobalConstants.ActionLog = this.ActionLog;
+            this.WorldHandler = new WorldHandler();
             
             this.Roller = new RNG();
 
@@ -199,17 +218,22 @@ namespace JoyLib.Code
             this.m_StateManager.ChangeState(this.NextState);
         }
 
+        public void RetireAll()
+        {
+            this.EntityPool.RetireAll();
+            this.FogPool.RetireAll();
+            this.ItemPool.RetireAll();
+            this.FloorTileMap.Clear();
+            this.WallTileMap.Clear();
+        }
+
         public void Reset()
         {
             this.m_StateManager.Stop();
             
             this.EntityPool.RetireAll();
-            this.FloorPool.RetireAll();
             this.FogPool.RetireAll();
             this.ItemPool.RetireAll();
-            this.WallPool.RetireAll();
-
-            this.Dispose();
 
             this.Load();
         }
@@ -249,113 +273,31 @@ namespace JoyLib.Code
         public IAbilityHandler AbilityHandler { get; protected set; }
         public IDerivedValueHandler DerivedValueHandler { get; protected set; }
         public IVisionProviderHandler VisionProviderHandler { get; protected set; }
+        public IWorldHandler WorldHandler { get; protected set; }
         
         public IRumourMill RumourMill { get; protected set; }
 
         public NaturalWeaponHelper NaturalWeaponHelper { get; protected set; }
         public RNG Roller { get; protected set; }
-        //public SettingsManager SettingsManager { get; protected set; }
         public IEntityFactory EntityFactory { get; protected set; }
         public IItemFactory ItemFactory { get; protected set; }
+        
+        public SettingsManager SettingsManager { get; protected set; }
+        
         public Node MyNode { get; protected set; }
 
         public GUIDManager GUIDManager { get; protected set; }
         
-        public IEntity Player => this.EntityHandler.GetPlayer();
+        public IEntity Player => this.EntityHandler?.GetPlayer();
 
-        public GameObjectPool<ManagedSprite> FloorPool { get; protected set; }
-        public GameObjectPool<JoyObjectNode> WallPool { get; protected set; }
+        public TileMap FloorTileMap { get; protected set; }
+        public TileMap WallTileMap { get; protected set; }
         public GameObjectPool<JoyObjectNode> EntityPool { get; protected set; }
         public GameObjectPool<JoyObjectNode> ItemPool { get; protected set; }
-        public GameObjectPool<Sprite> FogPool { get; protected set; }
-        
-        //public CheatInterface Cheats { get; set; }
-
-        public void Dispose()
-        {
-            this.GUIManager?.Dispose();
-            this.GUIManager = null;
-            
-            this.EntityHandler?.Dispose();
-            this.EntityHandler = null;
-            
-            this.ItemHandler?.Dispose();
-            this.ItemHandler = null;
-            
-            this.RelationshipHandler?.Dispose();
-            this.RelationshipHandler = null;
-            
-            this.MaterialHandler?.Dispose();
-            this.MaterialHandler = null;
-            
-            this.CultureHandler?.Dispose();
-            this.CultureHandler = null;
-            
-            this.StatisticHandler?.Dispose();
-            this.StatisticHandler = null;
-            
-            this.EntityTemplateHandler?.Dispose();
-            this.EntityTemplateHandler = null;
-            
-            this.BioSexHandler?.Dispose();
-            this.BioSexHandler = null;
-            
-            this.SexualityHandler?.Dispose();
-            this.SexualityHandler = null;
-            
-            this.JobHandler?.Dispose();
-            this.JobHandler = null;
-            
-            this.RomanceHandler?.Dispose();
-            this.RomanceHandler = null;
-            
-            this.GenderHandler?.Dispose();
-            this.GenderHandler = null;
-            
-            this.ItemDatabase?.Dispose();
-            this.ItemDatabase = null;
-            
-            this.NeedHandler?.Dispose();
-            this.NeedHandler = null;
-            
-            this.SkillHandler?.Dispose();
-            this.SkillHandler = null;
-            
-            this.WorldInfoHandler?.Dispose();
-            this.WorldInfoHandler = null;
-            
-            this.DerivedValueHandler?.Dispose();
-            this.DerivedValueHandler = null;
-            
-            this.VisionProviderHandler?.Dispose();
-            this.VisionProviderHandler = null;
-            
-            this.AbilityHandler?.Dispose();
-            this.AbilityHandler = null;
-
-            this.ConversationEngine = null;
-            this.PhysicsManager = null;
-
-            this.ParameterProcessorHandler = null;
-
-            this.QuestProvider = null;
-            this.QuestTracker = null;
-            this.CombatEngine = null;
-            
-            this.RumourMill?.Dispose();
-            this.RumourMill = null;
-            
-            this.ActionLog?.Dispose();
-            this.ActionLog = null;
-            
-            this.GUIDManager?.Dispose();
-            this.GUIDManager = null;
-
-            this.EntityFactory = null;
-            this.ItemFactory = null;
-            this.NaturalWeaponHelper = null;
-
-            GC.Collect();
-        }
+        public GameObjectPool<PositionableSprite> FogPool { get; protected set; }
+        public Node2D FogHolder { get; protected set; }
+        public Node2D WorldHolder { get; protected set; }
+        public Node2D EntityHolder { get; protected set; }
+        public Node2D ItemHolder { get; protected set; }
     }
 }

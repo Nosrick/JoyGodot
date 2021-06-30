@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Scripting;
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Scripting;
+using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Scripts.Quests
 {
     public class QuestTracker : IQuestTracker
     {
-        protected Dictionary<Guid, List<IQuest>> EntityQuests { get; set; }
+        protected System.Collections.Generic.Dictionary<Guid, List<IQuest>> EntityQuests { get; set; }
         
         protected ILiveItemHandler ItemHandler { get; set; }
 
@@ -25,7 +27,7 @@ namespace JoyLib.Code.Quests
         {
             if (this.EntityQuests is null)
             {
-                this.EntityQuests = new Dictionary<Guid, List<IQuest>>();
+                this.EntityQuests = new System.Collections.Generic.Dictionary<Guid, List<IQuest>>();
             }
         }
 
@@ -64,10 +66,14 @@ namespace JoyLib.Code.Quests
             GlobalConstants.ActionLog.Log(quest);
         }
 
-        public void CompleteQuest(IEntity questor, IQuest quest)
+        public void CompleteQuest(IEntity questor, IQuest quest, bool force = false)
         {
+            if (!quest.CompleteQuest(questor, force))
+            {
+                return;
+            }
+            
             GlobalConstants.ActionLog.Log(questor + " completed " + quest.ID);
-            quest.CompleteQuest(questor);
             this.EntityQuests[questor.Guid].Remove(quest);
             GlobalConstants.GameManager.ItemHandler.CleanUpRewards();
         }
@@ -96,6 +102,39 @@ namespace JoyLib.Code.Quests
             foreach (IQuest quest in copy)
             {
                 this.PerformQuestAction(questor, quest, completedAction);
+            }
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Quests", new Array(this.AllQuests.Select(quest => quest.Save()))}
+            };
+            
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            this.EntityQuests = new System.Collections.Generic.Dictionary<Guid, List<IQuest>>();
+            
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            var questsCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Quests");
+
+            foreach (Dictionary questDict in questsCollection)
+            {
+                IQuest quest = new Quest();
+                quest.Load(questDict);
+                if (this.EntityQuests.ContainsKey(quest.Questor))
+                {
+                    this.EntityQuests[quest.Questor].Add(quest);
+                }
+                else
+                {
+                    this.EntityQuests.Add(quest.Questor, new List<IQuest> { quest });
+                }
             }
         }
     }

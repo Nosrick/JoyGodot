@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Godot;
 using Object = System.Object;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class ObjectExtensions
     {
@@ -16,6 +17,11 @@ namespace JoyLib.Code.Helpers
             typeof(Object).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private static readonly Random ROLLER = new Random();
+
+        public static string CombineToString<T, K>(this Tuple<T, K> tuple)
+        {
+            return tuple.Item1 + " : " + tuple.Item2;
+        }
 
         public static T GetRandom<T>(this ICollection<T> collection)
         {
@@ -42,6 +48,11 @@ namespace JoyLib.Code.Helpers
             }
 
             return (type.IsValueType & type.IsPrimitive);
+        }
+
+        public static bool IsNullOrEmpty(this IEnumerable enumerable)
+        {
+            return enumerable == null || enumerable.GetEnumerator().MoveNext() == false;
         }
 
         public static Object Copy(this Object originalObject)

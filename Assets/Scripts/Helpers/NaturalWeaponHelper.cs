@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public class NaturalWeaponHelper
     {

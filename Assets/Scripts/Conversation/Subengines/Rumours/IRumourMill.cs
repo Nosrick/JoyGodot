@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Conversation.Subengines.Rumours
+namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
 {
     public interface IRumourMill : IDisposable
     {

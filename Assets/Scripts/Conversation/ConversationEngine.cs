@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Castle.Core.Internal;
+
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Conversation
+namespace JoyGodot.Assets.Scripts.Conversation
 {
     public class ConversationEngine : IConversationEngine
     {
@@ -34,9 +36,9 @@ namespace JoyLib.Code.Conversation
 
         public string ListenerInfo { get; protected set; }
 
-        public event EventHandler OnConverse;
-        public event EventHandler OnOpen;
-        public event EventHandler OnClose;
+        public event ConversationEventHandler OnConverse;
+        public event ConversationEventHandler OnOpen;
+        public event EmptyEventHandler OnClose;
 
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
@@ -126,9 +128,9 @@ namespace JoyLib.Code.Conversation
                         ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(line, "Actions").ToArray()
                         : new string[0];
 
-                    IEnumerable<IJoyAction> actions = ScriptingEngine.Instance.FetchActions(actionStrings);
+                    IEnumerable<IJoyAction> actions = GlobalConstants.ScriptingEngine.FetchActions(actionStrings);
 
-                    var processorBase = processorName.IsNullOrEmpty() ? null : ScriptingEngine.Instance.FetchAndInitialise(processorName);
+                    var processorBase = processorName.IsNullOrEmpty() ? null : GlobalConstants.ScriptingEngine.FetchAndInitialise(processorName);
                     if (processorBase is ITopic topicProcessor)
                     {
                         topicProcessor.Initialise(
@@ -205,11 +207,18 @@ namespace JoyLib.Code.Conversation
         {
             this.Instigator = instigator;
             this.Listener = listener;
+            
+            this.CalculateListenerInfo();
 
+            //this.OnOpen?.Invoke();
+        }
+
+        protected void CalculateListenerInfo()
+        {
             try
             {
                 IEnumerable<IRelationship> relationships =
-                    this.RelationshipHandler.Get(new IJoyObject[] {this.Instigator, this.Listener});
+                    this.RelationshipHandler.Get(new[] {this.Instigator.Guid, this.Listener.Guid});
 
                 IRelationship chosenRelationship = null;
                 int best = Int32.MinValue;
@@ -229,53 +238,62 @@ namespace JoyLib.Code.Conversation
                     }
                 }
 
-                this.ListenerInfo = this.Listener.JoyName + ", " + chosenRelationship.DisplayName;
+                this.ListenerInfo = this.Listener.JoyName + ", " + chosenRelationship?.DisplayName;
             }
             catch (Exception e)
             {
                 this.ListenerInfo = this.Listener.JoyName + ", acquaintance.";
             }
-
-            this.OnOpen?.Invoke(this, EventArgs.Empty);
         }
 
-        public ITopic[] Converse(string topic, int index = 0)
+        public ICollection<ITopic> Converse(ITopic selectedTopic = null)
         {
-            if (this.CurrentTopics.Length == 0)
+            if (selectedTopic is null)
             {
-                this.CurrentTopics = this.m_Topics.Where(t => t.ID.Equals(topic, StringComparison.OrdinalIgnoreCase))
+                this.CurrentTopics = this.m_Topics
+                    .Where(t => t.ID.Equals("greeting", StringComparison.OrdinalIgnoreCase))
                     .ToArray();
 
                 this.CurrentTopics = this.SanitiseTopics(this.CurrentTopics);
+                var greeting = this.CurrentTopics.FirstOrDefault();
+                this.DoInteractions(greeting);
+                this.OnOpen?.Invoke(greeting, this.CurrentTopics);
+            }
+            else
+            {
+                this.DoInteractions(selectedTopic);
             }
 
-            ITopic currentTopic = this.CurrentTopics[index];
-
-            this.DoInteractions(currentTopic);
-
-            if (this.Instigator is null == false && this.Listener is null == false)
+            if (this.CurrentTopics.Length == 0)
             {
-                this.SetActors(this.Instigator, this.Listener);
-                this.OnConverse?.Invoke(this, EventArgs.Empty);
+                this.OnClose?.Invoke();
+            }
+            else
+            {
+                this.CalculateListenerInfo();
             }
 
             return this.CurrentTopics;
         }
 
-        public ITopic[] Converse(int index = 0)
-        {
-            return this.Converse("greeting", index);
-        }
-
         protected void DoInteractions(ITopic currentTopic)
         {
+            if (currentTopic is null)
+            {
+                this.OnClose?.Invoke();
+                this.CurrentTopics = new ITopic[0];
+                this.Listener = null;
+                this.Instigator = null;
+                return;
+            }
+            
             ITopic[] next = currentTopic.Interact(this.Instigator, this.Listener);
 
             next = this.SanitiseTopics(next);
 
             if (next.Length == 0)
             {
-                this.OnClose?.Invoke(this, EventArgs.Empty);
+                this.OnClose?.Invoke();
                 this.CurrentTopics = next;
                 this.Listener = null;
                 this.Instigator = null;
@@ -309,7 +327,7 @@ namespace JoyLib.Code.Conversation
 
             if (next.Length == 0)
             {
-                this.OnClose?.Invoke(this, EventArgs.Empty);
+                this.OnClose?.Invoke();
                 this.CurrentTopics = next;
                 this.Listener = null;
                 this.Instigator = null;
@@ -332,7 +350,7 @@ namespace JoyLib.Code.Conversation
             foreach (ITopic topic in topics)
             {
                 ITopicCondition[] conditions = topic.Conditions;
-                List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
+                List<Tuple<string, object>> tuples = new List<Tuple<string, object>>();
 
                 foreach (ITopicCondition condition in conditions)
                 {
@@ -341,7 +359,7 @@ namespace JoyLib.Code.Conversation
                         this.Listener));
                 }
 
-                if (topic.FulfilsConditions(tuples.ToArray()))
+                if (topic.FulfilsConditions(tuples))
                 {
                     validTopics.Add(topic);
                 }

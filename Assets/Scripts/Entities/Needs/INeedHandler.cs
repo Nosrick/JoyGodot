@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
     public interface INeedHandler : IHandler<INeed, string>
     {

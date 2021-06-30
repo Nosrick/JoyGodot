@@ -12,7 +12,7 @@
 
 using System.Collections.Generic;
 
-namespace Algorithms
+namespace JoyGodot.Assets.Scripts.Collections
 {
     public interface IPriorityQueue<T>
     {

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using Castle.Core.Internal;
-using JoyLib.Code.World;
 
-namespace JoyLib.Code.Helpers
+using JoyGodot.Assets.Scripts.World;
+
+namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class WorldConversationDataHelper
     {

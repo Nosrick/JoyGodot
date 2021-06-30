@@ -1,14 +1,16 @@
-﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Unity.GUI;
+﻿using Godot;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.GUI;
+using JoyGodot.Assets.Scripts.GUI.Inventory_System;
+using JoyGodot.Assets.Scripts.GUI.SettingsScreen;
+using JoyGodot.Assets.Scripts.GUI.WorldState;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class TradeProcessor : TopicData
     {
-        //protected TradeWindow TradeWindow { get; set; }
-        protected IGUIManager GUIManager { get; set; }
-
         public TradeProcessor()
             : base(
                 new ITopicCondition[0],
@@ -19,33 +21,15 @@ namespace JoyLib.Code.Entities.Conversation.Processors
                 null,
                 Speaker.INSTIGATOR)
         {
-            this.Initialise();
-        }
-
-        protected void Initialise()
-        {
-            /*
-            if (this.TradeWindow == null || this.GUIManager is null)
-            {
-                try
-                {
-                    this.GUIManager = GlobalConstants.GameManager.GUIManager;
-                    this.TradeWindow = this.GUIManager.Get(GUINames.TRADE).GetComponent<TradeWindow>();
-                }
-                catch
-                {
-                    GlobalConstants.ActionLog.AddText("Could not load TradeProcessor bits. Trying again later.", LogLevel.Warning);
-                }
-            }
-            */
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            this.Initialise();
-            //this.TradeWindow.SetActors(instigator, listener);
-            
-            this.GUIManager.OpenGUI("Trade");
+            //this.TradeWindow?.SetActors(instigator, listener);
+
+            var tradeWindow = GlobalConstants.GameManager.GUIManager.Get<TradeWindow>(GUINames.TRADE);
+            tradeWindow.SetActors(instigator, listener);
+            GlobalConstants.GameManager.GUIManager.OpenGUI(this, GUINames.TRADE);
             
             return base.Interact(instigator, listener);
         }

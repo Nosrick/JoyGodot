@@ -1,6 +1,8 @@
 ﻿using Godot;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Boards;
 
-namespace JoyLib.Code.Entities.AI.LOS.Providers
+namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
 {
     public interface IVisionProviderHandler : IHandler<IVision, string>
     {

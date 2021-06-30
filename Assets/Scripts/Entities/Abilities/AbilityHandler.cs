@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Entities.Abilities
+namespace JoyGodot.Assets.Scripts.Entities.Abilities
 {
     public class AbilityHandler : IAbilityHandler
     {
@@ -35,7 +35,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         public IEnumerable<IAbility> Load()
         {
-            return ScriptingEngine.Instance.FetchAndInitialiseChildren<IAbility>();
+            return GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IAbility>();
         }
 
         public IAbility Get(string nameRef)

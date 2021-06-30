@@ -1,41 +1,37 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
-    public class JoyItemSlot : Control, IManagedElement
+    public class JoyItemSlot : 
+        Control, 
+        IManagedElement,
+        ITooltipComponent
     {
-        protected TextureProgress m_CooldownOverlay;
-        
-        [Export]
-        public string ElementName { get; protected set; }
-        
+        protected TextureProgress CooldownOverlay { get; set; }
+
+        [Export] public string ElementName { get; protected set; }
+
         public bool Initialised { get; protected set; }
 
-        [Export]
-        public string m_Slot;
+        [Export] protected bool UseRarityColor { get; set; }
 
-        [Export]
-        protected bool m_UseRarityColor = false;
-        
-        protected ManagedUIElement m_Icon;
-        
-        protected Label m_Stack;
-        
+        protected ManagedUIElement Icon { get; set; }
+
+        protected Label StackLabel { get; set; }
+
         public ItemContainer Container { get; set; }
 
         protected IItemInstance m_Item;
 
         public IItemInstance Item
         {
-            get
-            {
-                return this.m_Item;
-            }
+            get { return this.m_Item; }
             set
             {
                 this.m_Item = value;
@@ -44,39 +40,48 @@ namespace JoyLib.Code.Unity.GUI
         }
 
         public bool IsEmpty => this.Item is null;
-        
+
         protected static Array UnstackActions { get; set; }
-        
+
         //public IConversationEngine ConversationEngine { get; set; }
 
-        public IGUIManager GUIManager { get; set; }
+        public IGUIManager GuiManager { get; set; }
 
         public ILiveEntityHandler EntityHandler { get; set; }
 
-        protected IEntity Player { get; set; }
-        
-        protected static DragObject DragObject { get; set; }
+        public bool MouseOver { get; protected set; }
 
-        public void OnEnable()
+        public ICollection<string> Tooltip
         {
-            this.GetBits();
-            this.m_CooldownOverlay.Visible = false;
-
-            this.m_Icon._Ready();
+            get => this.Item?.Tooltip;
+            set
+            {
+            }
         }
-        
+
+        protected static DragObject DragData { get; set; }
+
+        public override void _Ready()
+        {
+            base._Ready();
+            this.GetBits();
+            this.CooldownOverlay.Visible = false;
+
+            this.Icon._Ready();
+        }
+
         public void Initialise()
         {
-            GD.Print(this.GetType().Name + " initialised!");
             this.Initialised = true;
         }
 
-        protected void GetBits()
+        protected virtual void GetBits()
         {
             if (this.Initialised)
             {
                 return;
             }
+
             /*
             if (GlobalConstants.GameManager is null || this.GUIManager is null == false)
             {
@@ -84,56 +89,73 @@ namespace JoyLib.Code.Unity.GUI
             }
             */
             UnstackActions = InputMap.GetActionList("unstack");
-            this.m_Stack = (Label) this.FindNode("Stack");
-            this.m_Icon = new ManagedUIElement
-            {
-                AnchorTop = 0.1f, 
-                AnchorBottom = 0.9f, 
-                AnchorRight = 0.9f, 
-                AnchorLeft = 0.1f,
-                MarginTop = 0,
-                MarginBottom = 0,
-                MarginLeft = 0,
-                MarginRight = 0
-            };
-            this.m_Icon._Ready();
+            this.CooldownOverlay = this.FindNode("Cooldown Overlay") as TextureProgress;
+            this.StackLabel = this.FindNode("Stack") as Label;
+            this.Icon = this.FindNode("Icon") as ManagedUIElement;
+
+            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
+            this.GuiManager = GlobalConstants.GameManager.GUIManager;
             this.Initialised = true;
-            /*this.ConversationEngine = GlobalConstants.GameManager.ConversationEngine;
-            this.GUIManager = GlobalConstants.GameManager.GUIManager;
-            this.EntityHandler = GlobalConstants.GameManager.EntityHandler;*/
         }
 
         public virtual void Repaint()
         {
-            if (this.m_Icon is null == false)
+            if (this.Icon is null == false)
             {
                 if (!this.IsEmpty)
                 {
-                    this.m_Icon.Clear();
-                    this.m_Icon.AddSpriteState(this.Item.States[0]);
-                    this.m_Icon.Visible = true;
+                    this.Icon.Clear();
+                    this.Icon.AddSpriteState(this.Item.States.FirstOrDefault());
+                    this.Icon.OverrideAllColours(this.Item.States.FirstOrDefault()?.SpriteData.GetCurrentPartColours());
+                    this.Icon.Visible = true;
                 }
                 else
                 {
-                    this.m_Icon.Clear();
-                    this.m_Icon.Visible = false;
+                    this.Icon.Clear();
+                    this.Icon.Visible = false;
                 }
             }
         }
 
+        public override bool CanDropData(Vector2 position, object data)
+        {
+            return data is DragObject;
+        }
+
         public override void DropData(Vector2 position, object data)
         {
-            base.DropData(position, data);
+            if (!(data is DragObject dragObject))
+            {
+                return;
+            }
+            var cursor = this.GuiManager.Cursor;
+            cursor.DragSprite = null;
+
+            if(this.Container.CanAddItem(dragObject.Item, dragObject.SourceContainer.Name) 
+               && this.Container.StackOrAdd(dragObject.Item))
+            {
+                dragObject.SourceContainer.RemoveItem(dragObject.Item);
+            }
         }
 
         public override object GetDragData(Vector2 position)
         {
-            return base.GetDragData(position);
+            var cursor = this.GuiManager.Cursor;
+            cursor.DragSprite = this.Item.States.FirstOrDefault();
+
+            DragData = new DragObject
+            {
+                Item = this.Item,
+                SourceContainer = this.Container,
+                SourceSlot = this
+            };
+
+            return DragData;
         }
 
         public override void _Input(InputEvent @event)
         {
-            if (!(@event is InputEventAction action))
+            if (!(@event is InputEventMouseButton action))
             {
                 return;
             }
@@ -147,77 +169,64 @@ namespace JoyLib.Code.Unity.GUI
                 this.OnPointerUp(action);
             }
         }
-        
-        public virtual void OnPointerDown(InputEventAction action)
-        {
-            if (action.Pressed == false)
-            {
-                return;
-            }
 
-            if (action.Action.Equals("begin drag", StringComparison.OrdinalIgnoreCase))
-            {
-                this.OnBeginDrag();
-            }
+        public virtual void OnPointerDown(InputEventMouseButton action)
+        {
         }
 
-        public virtual void OnPointerUp(InputEventAction action)
+        public virtual void OnPointerUp(InputEventMouseButton action)
         {
             if (action.Pressed)
             {
                 return;
             }
-            if (action.Action.Equals("begin drag", StringComparison.OrdinalIgnoreCase))
+
+            if (action.ButtonIndex == (int) ButtonList.Left)
             {
                 this.OnEndDrag();
             }
-            else if (action.Action.Equals("open context menu", StringComparison.OrdinalIgnoreCase))
+            else if (
+                this.GetGlobalRect().HasPoint(action.GlobalPosition)
+                && action.ButtonIndex == (int) ButtonList.Right
+                && this.Item is null == false)
             {
                 if (this.Container.UseContextMenu)
-                { }
-                else if(this.Container.MoveUsedItem)
+                {
+                    var contextMenu = this.GuiManager.ContextMenu;
+                    contextMenu.Clear();
+                    if (this.Container.CanDropItems)
+                    {
+                        contextMenu.AddItem("Drop", this.DropItem);
+                    }
+
+                    if (this.Container.CanUseItems)
+                    {
+                        foreach (var ability in this.Item.AllAbilities)
+                        {
+                            if (ability.HasTag("active"))
+                            {
+                                contextMenu.AddItem(ability.Name, () =>
+                                {
+                                    this.UseItem(ability.Name);
+                                });
+                            }
+                        }
+                    }
+
+                    if (this.Item.HasTag("container"))
+                    {
+                        contextMenu.AddItem("Open", this.OpenContainer);
+                    }
+                    
+                    this.GuiManager.OpenGUI(this, GUINames.CONTEXT_MENU);
+                }
+                else if (this.Container.MoveUsedItem)
                 {
                     this.Container.MoveItem(this.Item);
                 }
             }
         }
-        /*
 
-        //ContextMenu menu = this.GUIManager.Get(GUINames.CONTEXT_MENU).GetComponent<ContextMenu>();
-        if (menu is null || this.Container.UseContextMenu == false)
-        {
-            return;
-        }
-
-        this.GetBits();
-
-            if (this.Item is null == false)
-            {
-                menu.Clear();
-                if (this.Item.HasTag("container"))
-                {
-                    menu.AddMenuItem("Open", this.OpenContainer);
-                }
-
-                List<IAbility> abilities = this.Item.AllAbilities.Where(ability => 
-                        ability.Tags.Any(tag => tag.Equals("active", StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
-                if (this.Container.CanUseItems && abilities.Any())
-                {
-                    foreach (IAbility ability in abilities)
-                    {
-                        //menu.AddMenuItem(ability.Name, this.OnUse);
-                    }
-                    //menu.AddMenuItem("Use", this.OnUse);
-                }
-
-                this.GUIManager.OpenGUI(GUINames.CONTEXT_MENU);
-                this.GUIManager.CloseGUI(GUINames.TOOLTIP);
-                //menu.Show();
-            }
-        }
-*/
-        
         public virtual void OnBeginDrag()
         {
             //Check if we can start dragging
@@ -231,83 +240,35 @@ namespace JoyLib.Code.Unity.GUI
                 else
                 */
                 {
-                    DragObject = new DragObject
-                    {
-                        Item = this.Item,
-                        SourceContainer = this.Container,
-                        SourceSlot = this
-                    };
-                    Cursor cursor = (Cursor)this.GUIManager.OpenGUI(GUINames.CURSOR);
-                    cursor.DragObject?.Clear();
-                    cursor.DragObject?.AddSpriteState(this.Item.States[0]);
+                    var cursor = this.GuiManager.Cursor;
+                    cursor.DragSprite = this.Item.States.FirstOrDefault();
                 }
             }
         }
-        
+
         public virtual void OnEndDrag()
         {
-            //GlobalConstants.ActionLog.AddText(eventData.pointerCurrentRaycast.gameObject.name);
-
-            /*
-            GameObject goResult = eventData.pointerCurrentRaycast.gameObject;
-
-            if (goResult is null)
+            if (DragData is null
+                || DragData.SourceSlot != this)
             {
-                if (this.Container.CanDrag
-                    && this.Container.CanDropItems)
-                {
-                    this.DropItem();
-                }
+                return;
             }
-            else
-            {
-                JoyItemSlot resultSlot = goResult.GetComponentInParent<JoyItemSlot>();
-                if (resultSlot is null == false)
-                {
-                    if (resultSlot.Container is null == false
-                        && resultSlot.Container != this.Container
-                        && this.Container.CanDrag
-                        && resultSlot.Container.CanDrag)
-                    {
-                        this.Container.StackOrSwap(resultSlot.Container, this.Item);
-                    }
-                }
-                else
-                {
-                    ItemContainer container = goResult.GetComponentInParent<ItemContainer>();
-                    if (container is null == false)
-                    {
-                        if (container != this.Container
-                            && this.Container.CanDrag
-                            && container.CanDrag)
-                        {
-                            this.Container.StackOrSwap(container, this.Item);
-                        }
-                    }
-                    else
-                    {
-                        if (this.Container.CanDropItems)
-                        {
-                            this.DropItem();
-                        }
-                    }
-                }
-            }
-            */
+            
+            var cursor = this.GuiManager.Cursor;
+            cursor.DragSprite = null;
 
-            Cursor cursor = this.GUIManager.Get(GUINames.CURSOR) as Cursor;
-            cursor?.DragObject?.Clear();
-            this.EndDrag();
+            if (this.Container.GetGlobalRect().HasPoint(this.GetGlobalMousePosition()) == false)
+            {
+                //DragData = null;
+                //this.DropItem();
+            }
         }
 
-        protected virtual void EndDrag()
-        {
-            this.Repaint();
-        }
-        
         public virtual void OnPointerEnter()
         {
-            if (this.GUIManager.IsActive(GUINames.CONTEXT_MENU) == false)
+            this.MouseOver = true;
+            
+            if (this.GuiManager.IsActive(GUINames.CONTEXT_MENU) == false)
             {
                 this.ShowTooltip();
             }
@@ -315,106 +276,67 @@ namespace JoyLib.Code.Unity.GUI
 
         public virtual void OnPointerExit()
         {
+            this.MouseOver = false;
+            
             this.CloseTooltip();
         }
-        
-        protected virtual void ShowTooltip() 
+
+        protected virtual void ShowTooltip()
         {
             if (this.Container.ShowTooltips && this.Item is null == false)
             {
-                ((Tooltip) this.GUIManager.OpenGUI(GUINames.TOOLTIP))
+                this.GuiManager.Tooltip
                     .Show(
+                        this, 
                         this.Item.DisplayName,
-                        this.Item.States[0],
+                        this.Item.States.FirstOrDefault(),
                         this.Item.Tooltip);
             }
         }
 
-        protected virtual void CloseTooltip() 
+        protected virtual void CloseTooltip()
         {
             if (this.Container.ShowTooltips)
             {
-                this.GUIManager.CloseGUI(GUINames.TOOLTIP);
+                this.GuiManager.CloseGUI(this, GUINames.TOOLTIP);
             }
         }
-
-        //TODO: Add item stacking
-            /*
-            if (this.m_Stack != null) 
-            {
-                if (!IsEmpty && ObservedItem.MaxStack > 1 )
-                {
-                    //Updates the stack and enables it.
-                    this.m_Stack.text = ObservedItem.Stack.ToString();
-                    this.m_Stack.enabled = true;
-                }
-                else
-                {
-                    //If there is no item in this slot, disable stack field
-                    this.m_Stack.enabled = false;
-                }
-            }
-        }
-
-        protected virtual void OpenContainer()
-        {
-            if (this.Item.HasTag("container"))
-            {
-                this.GUIManager?.OpenGUI(GUINames.INVENTORY_CONTAINER);
-                ItemContainer container = this.GUIManager?.Get(GUINames.INVENTORY_CONTAINER)
-                    .GetComponent<ItemContainer>();
-                container.Owner = this.Item;
-                container.OnEnable();
-            }
-        }
-
+        
         protected virtual void DropItem()
         {
-            this.GetBits();
-
             //Check if the item is droppable
-            if (this.Item is null == false && this.Container.CanDropItems)
-            {
-                if (this.Item.MonoBehaviourHandler is ItemBehaviourHandler itemBehaviourHandler)
-                {
-                    itemBehaviourHandler.DropItem();
-                }
-
-                this.Container.RemoveItem(this.Item);
-                this.Item.InWorld = true;
-                this.Item = null;
-            }
-        }
-
-        public virtual void Unstack()
-        {
-            
-        }
-
-        public virtual void OnUse()
-        {
-            if (this.Item is null)
+            if (this.Item is null || !this.Container.CanDropItems)
             {
                 return;
             }
-
-            if (this.Container.CanUseItems && this.Container.Owner is IEntity entity)
-            {
-                this.Item.Interact(entity);
-                this.Container.OnEnable();
-            }
-            else if (this.Container.MoveUsedItem)
-            {
-                this.Container.MoveItem(this.Item);
-            }
+            
+            GlobalConstants.GameManager.Player.MyWorld.AddItem(this.Item);
+            this.Item.MyNode.Visible = true;
+            this.Container.RemoveItem(this.Item);
+            this.Item = null;
         }
-        */
-    }
+        
+        protected virtual void OpenContainer()
+        {
+            if (!(this.GuiManager?.OpenGUI(this, GUINames.INVENTORY_CONTAINER) is ItemContainer container))
+            {
+                return;
+            }
+            
+            container.ContainerOwner = this.Item;
+            container.OnEnable();
+        }
 
-    public struct DragObject
-    {
-        public IItemInstance Item { get; set; }
-        public JoyItemSlot SourceSlot { get; set; }
-        public ItemContainer SourceContainer { get; set; }
+        protected virtual void UseItem(string abilityName)
+        {
+            this.Item?.Interact(GlobalConstants.GameManager.Player, abilityName);
+        }
+
+        protected class DragObject : Resource
+        {
+            public IItemInstance Item { get; set; }
+            public JoyItemSlot SourceSlot { get; set; }
+            public ItemContainer SourceContainer { get; set; }
+        }
     }
 }

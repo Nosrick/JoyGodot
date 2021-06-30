@@ -1,13 +1,16 @@
 using System;
-using JoyLib.Code.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Items;
 
-public class ItemCreationException : Exception
+namespace JoyGodot.Assets.Scripts.Exceptions
 {
-    public BaseItemType ItemType;
-
-    public ItemCreationException(BaseItemType itemType, string message) :
-        base(message)
+    public class ItemCreationException : Exception
     {
-        this.ItemType = itemType;
+        public BaseItemType ItemType;
+
+        public ItemCreationException(BaseItemType itemType, string message) :
+            base(message)
+        {
+            this.ItemType = itemType;
+        }
     }
 }

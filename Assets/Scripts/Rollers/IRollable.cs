@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace JoyLib.Code.Rollers
+namespace JoyGodot.Assets.Scripts.Rollers
 {
     public interface IRollable
     {

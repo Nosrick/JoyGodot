@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Castle.Core.Internal;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Cultures
+namespace JoyGodot.Assets.Scripts.Cultures
 {
     public class CultureHandler : ICultureHandler
     {
@@ -98,6 +96,8 @@ namespace JoyLib.Code.Cultures
                 foreach (Dictionary culture in cultureArray)
                 {
                     string cultureName = this.ValueExtractor.GetValueFromDictionary<string>(culture, "CultureName");
+
+                    string description = this.ValueExtractor.GetValueFromDictionary<string>(culture, "Description");
 
                     int nonconformingGenderChance =
                         this.ValueExtractor.GetValueFromDictionary<int>(culture, "NonConformingGenderChance");
@@ -231,6 +231,7 @@ namespace JoyLib.Code.Cultures
                         new CultureType(
                             cultureName,
                             tileSetName,
+                            description,
                             rulers,
                             crimes,
                             nameDatas,
@@ -349,7 +350,7 @@ namespace JoyLib.Code.Cultures
             }
             catch (Exception e)
             {
-                GD.PrintErr("Could not find a culture for creature type " + type);
+                GD.PushError("Could not find a culture for creature type " + type);
                 throw new InvalidOperationException("Could not find a culture for creature type " + type, e);
             }
         }

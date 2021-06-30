@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities.Gender
+namespace JoyGodot.Assets.Scripts.Entities.Gender
 {
     public interface IGenderHandler : IHandler<IGender, string>
     {

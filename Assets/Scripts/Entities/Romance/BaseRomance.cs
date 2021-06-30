@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance.Processors;
 
-namespace JoyLib.Code.Entities.Romance
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Romance.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
+using Array = Godot.Collections.Array;
+
+namespace JoyGodot.Assets.Scripts.Entities.Romance
 {
     [Serializable]
     public class BaseRomance : IRomance
@@ -94,6 +98,36 @@ namespace JoyLib.Code.Entities.Romance
         public bool Compatible(IEntity me, IEntity them)
         {
             return this.Processor.Compatible(me, them);
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"Tags", new Array(this.Tags)},
+                {"DecaysNeed", this.DecaysNeed},
+                {"BondingThreshold", this.BondingThreshold},
+                {"RomanceThreshold", this.RomanceThreshold},
+                {"Processor", this.Processor?.Name}
+            };
+
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+            this.DecaysNeed = valueExtractor.GetValueFromDictionary<bool>(data, "DecaysNeed");
+            this.BondingThreshold = valueExtractor.GetValueFromDictionary<int>(data, "BondingThreshold");
+            this.RomanceThreshold = valueExtractor.GetValueFromDictionary<int>(data, "RomanceThreshold");
+            string processorName = valueExtractor.GetValueFromDictionary<string>(data, "Processor");
+            this.Processor = processorName.IsNullOrEmpty() == false 
+                ? GlobalConstants.GameManager.RomanceHandler.GetProcessor(processorName) 
+                : new AromanticProcessor();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public interface IItemDatabase : IHandler<BaseItemType, string>
     {

@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using Godot;
+using Godot.Collections;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     [Serializable]
     public class ConcreteDerivedIntValue : IDerivedValue
     {
+        public ICollection<string> Tooltip { get; set; }
+        
         public string Name
         {
             get;
@@ -27,23 +31,18 @@ namespace JoyLib.Code.Entities.Statistics
         public ConcreteDerivedIntValue()
         {}
 
-        public ConcreteDerivedIntValue(string name, int value, int maximum)
-        {
-            this.Name = name;
-            this.Base = value;
-            this.Value = value;
-        }
-
         public ConcreteDerivedIntValue(
             string name,
             int baseValue,
             int enhancement,
-            int value)
+            int value,
+            ICollection<string> tooltip)
         {
             this.Name = name;
             this.Base = baseValue;
             this.Enhancement = enhancement;
-            this.Value = Mathf.Clamp(value, -this.Maximum, this.Maximum); 
+            this.Value = Mathf.Clamp(value, -this.Maximum, this.Maximum);
+            this.Tooltip = tooltip;
         }
 
         public int SetValue(int data)
@@ -64,10 +63,38 @@ namespace JoyLib.Code.Entities.Statistics
             return this.Base;
         }
 
-        public int SetEnhancement(int data)
+        public int SetEnhancement(int data, bool changeToMatch = true)
         {
             this.Enhancement = Math.Max(0, data);
+            if (changeToMatch)
+            {
+                this.ModifyValue(data);
+            }
             return this.Enhancement;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name}, 
+                {"Base", this.Base}, 
+                {"Enhancement", this.Enhancement}, 
+                {"Value", this.Value}
+            };
+            
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.DerivedValueHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Base = valueExtractor.GetValueFromDictionary<int>(data, "Base");
+            this.Enhancement = valueExtractor.GetValueFromDictionary<int>(data, "Enhancement");
+            this.Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
+            this.Tooltip = GlobalConstants.GameManager.DerivedValueHandler.Get(this.Name).Tooltip;
         }
     }
 

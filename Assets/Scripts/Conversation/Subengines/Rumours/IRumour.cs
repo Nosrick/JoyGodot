@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Conversation.Subengines.Rumours
+namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
 {
     public interface IRumour
     {
@@ -56,7 +57,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours
             get;
         }
 
-        bool FulfilsConditions(IEnumerable<Tuple<string, int>> values);
+        bool FulfilsConditions(IEnumerable<Tuple<string, object>> values);
         bool FulfilsConditions(IEnumerable<IJoyObject> participants);
 
         int Tick();

@@ -2,9 +2,11 @@
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=3]
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="Theme" id=1]
+
+[sub_resource type="DynamicFont" id=2]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -13,9 +15,6 @@ use_mipmaps = true
 extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 2 )
-
-[sub_resource type="Theme" id=2]
-default_font = SubResource( 4 )
 
 [sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
@@ -28,27 +27,26 @@ extra_spacing_char = 1
 font_data = ExtResource( 2 )
 
 [node name="Managed Text Button" type="Control"]
+material = ExtResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 2 )
+theme = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-ActionMode = 1
-ElementName = "SlotSprite"
-TitleCase = true
+VAlign = 1
 Text = "Text"
-OverrideColour = true
 FontColour = Color( 1, 1, 1, 1 )
 FontSize = 24
-OutlineThickness = 1
-CustomFont = SubResource( 3 )
-OverrideOutline = true
 OutlineColour = Color( 0, 0, 0, 1 )
-OverrideSize = true
+OutlineThickness = 1
+TitleCase = true
+CustomFont = SubResource( 2 )
+m_ElementName = "AccentBackground"
+AutoWrap = true
+ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -56,18 +54,30 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-ColourMultiplier = 1.0
 
-[node name="Element" parent="." instance=ExtResource( 3 )]
-mouse_filter = 2
-
-[node name="Text" type="Label" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = SubResource( 2 )
+mouse_filter = 2
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Text" type="Label" parent="MarginContainer"]
+margin_left = 4.0
+margin_top = 231.0
+margin_right = 850.0
+margin_bottom = 249.0
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Text"
 align = 1
 valign = 1
-
-[editable path="Element"]
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

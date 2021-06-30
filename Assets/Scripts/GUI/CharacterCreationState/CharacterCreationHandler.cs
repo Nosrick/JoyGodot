@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.CharacterCreationState;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI.Drivers;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Unity.GUI.CharacterCreationState
+namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {
     public class CharacterCreationHandler : GUIData
     {
@@ -70,10 +70,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 this,
                 nameof(this.BasicPlayerInfoChanged));
 
-            if (this.StatisticsList is null == false)
-            {
-                this.StatisticsList.Points = STATISTIC_POINTS_MAX;
-            }
+            this.StatisticsList.Connect(
+                "StatisticChanged",
+                this,
+                nameof(this.OnStatisticChange));
+
+            this.StatisticsList.Points = STATISTIC_POINTS_MAX;
 
             if (this.DerivedValuesList is null == false)
             {
@@ -129,7 +131,8 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 1f);
             ISpriteState state = new SpriteState(
                 "player",
-                this.IconHandler.GetSprites(
+                culture.Tileset,
+                this.IconHandler.GetManagedSprites(
                     culture.Tileset,
                     template.CreatureType,
                     "idle").First());
@@ -143,7 +146,7 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 true);
 
             this.SetUpStatistics(template);
-            this.SetUpDerivedValues(template);
+            this.SetUpDerivedValues();
             this.SetUpSkills(template);
             this.SetUpAbilities(
                 template,
@@ -158,12 +161,12 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
             this.StatisticsList.Statistics = template.Statistics.Values;
         }
 
-        protected void SetUpDerivedValues(IEntityTemplate template)
+        protected void SetUpDerivedValues()
         {
             this.DerivedValuesList.Points = DERIVED_VALUE_POINTS_MAX;
             this.DerivedValuesList.DerivedValues =
                 GlobalConstants.GameManager.DerivedValueHandler
-                    .GetEntityStandardBlock(template.Statistics.Values)
+                    .GetEntityStandardBlock(this.StatisticsList.Statistics)
                     .Values;
         }
 
@@ -207,12 +210,15 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
 
         public void BasicPlayerInfoChanged(string name, string newValue)
         {
-            GD.Print(name + " : " + newValue);
-
             if (name.Equals("Template") || name.Equals("Culture"))
             {
                 this.OnCultureChange(this.BasicPlayerInfo.CurrentTemplate);
             }
+        }
+
+        public void OnStatisticChange(string name, int delta, int newValue)
+        {
+            this.SetUpDerivedValues();
         }
 
         public void NextScreen()
@@ -253,8 +259,6 @@ namespace JoyLib.Code.Unity.GUI.CharacterCreationState
                 null,
                 new PlayerDriver());
             
-            GD.Print("PLAYER CREATED");
-            GD.Print(this.Player);
             this.PlayerCreated?.Invoke(this.Player);
         }
     }

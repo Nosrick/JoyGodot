@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Conversation.Conversations
+namespace JoyGodot.Assets.Scripts.Conversation.Conversations
 {
     public class TopicData : ITopic
     {
@@ -62,7 +63,7 @@ namespace JoyLib.Code.Conversation.Conversations
             return this.Conditions.Select(c => c.Criteria).ToArray();
         }
 
-        public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
+        public bool FulfilsConditions(IEnumerable<Tuple<string, object>> values)
         {
             bool any = values.Any();
 
@@ -90,8 +91,10 @@ namespace JoyLib.Code.Conversation.Conversations
                         else
                         {
                             int value = values.Where(pair =>
-                                    pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
-                                .Max(tuple => tuple.Item2);
+                                    pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase)
+                                    && pair.Item2 is int)
+                                .Select(pair => (int) pair.Item2)
+                                .Max();
 
                             if (condition.FulfillsCondition(value) == false)
                             {
@@ -110,11 +113,11 @@ namespace JoyLib.Code.Conversation.Conversations
             return true;
         }
 
-        public bool FulfilsConditions(IEnumerable<JoyObject> participants)
+        public bool FulfilsConditions(IEnumerable<JoyObject.JoyObject> participants)
         {
             string[] criteria = this.Conditions.Select(c => c.Criteria).ToArray();
 
-            List<Tuple<string, int>> values = new List<Tuple<string, int>>();
+            List<Tuple<string, object>> values = new List<Tuple<string, object>>();
             foreach (IJoyObject participant in participants)
             {
                 if (participant is IEntity entity)
@@ -160,7 +163,7 @@ namespace JoyLib.Code.Conversation.Conversations
         protected IJoyAction[] GetStandardActions()
         {
             string[] standardActions = {"fulfillneedaction", "modifyrelationshippointsaction"};
-            IJoyAction[] actions = (ScriptingEngine.Instance.FetchActions(standardActions)).ToArray();
+            IJoyAction[] actions = (GlobalConstants.ScriptingEngine.FetchActions(standardActions)).ToArray();
 
             return actions;
         }
@@ -201,7 +204,8 @@ namespace JoyLib.Code.Conversation.Conversations
             string[] tags = this.RelationshipHandler is null
                 ? new string[0]
                 : this.RelationshipHandler.Get(
-                    new IJoyObject[] {instigator, listener}).SelectMany(relationship => relationship.Tags).ToArray();
+                    new[] {instigator.Guid, listener.Guid})
+                    .SelectMany(relationship => relationship.Tags).ToArray();
 
             influence.Execute(
                 new IJoyObject[] {instigator, listener},
@@ -219,7 +223,7 @@ namespace JoyLib.Code.Conversation.Conversations
                     {"value", listener.Statistics[EntityStatistic.PERSONALITY].Value}
                 });
 
-            bool? isFamily = this.RelationshipHandler?.IsFamily(instigator, listener);
+            bool? isFamily = this.RelationshipHandler?.IsFamily(instigator.Guid, listener.Guid);
 
             if (isFamily is null == false && isFamily == true)
             {

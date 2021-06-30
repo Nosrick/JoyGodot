@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyLib.Code;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexes;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.GUI.Tools;
+using JoyGodot.Assets.Scripts.Helpers;
 
 namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {
@@ -96,58 +95,86 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 this.EntityTemplateHandler.Values
                     .Select(template => template.CreatureType)
                     .ToArray(),
-                "OnTemplateChange");
+                nameof(this.OnTemplateChange));
 
             this.CurrentTemplate = this.EntityTemplateHandler.Get(item.Value);
+            item.Tooltip = new List<string>
+            {
+                this.CurrentTemplate.Description
+            };
 
             item = this.AddItem(
                 "Culture",
                 this.CultureHandler.GetByCreatureType(item.Value)
                     .Select(c => c.CultureName)
                     .ToArray(),
-                "OnCultureChange");
+                nameof(this.OnCultureChange));
 
             this.CurrentCulture = this.CultureHandler.GetByCultureName(item.Value);
-
             if (this.CurrentCulture is null)
             {
                 return;
             }
+            
+            item.Tooltip = new List<string>
+            {
+                this.CurrentCulture.Description
+            };
 
             item = this.AddItem(
                 "Job",
                 this.CurrentCulture.Jobs,
-                "OnJobChange");
+                nameof(this.OnValueChange));
 
             this.CurrentJob = item.Value;
+            item.Tooltip = new List<string>
+            {
+               GlobalConstants.GameManager.JobHandler.Get(this.CurrentJob).Description
+            };
 
             item = this.AddItem(
                 "Sex",
                 this.CurrentCulture.Sexes,
-                "OnValueChange");
+                nameof(this.OnValueChange));
 
             this.CurrentSex = item.Value;
+            item.Tooltip = new List<string>
+            {
+                "Your biological sex."
+            };
 
             item = this.AddItem(
                 "Gender",
                 this.CurrentCulture.Genders,
-                "OnValueChange");
+                nameof(this.OnValueChange));
 
             this.CurrentGender = item.Value;
+            item.Tooltip = new List<string>
+            {
+                "Your gender presentation."
+            };
 
             item = this.AddItem(
                 "Romance",
                 this.CurrentCulture.RomanceTypes,
-                "OnValueChange");
+                nameof(this.OnValueChange));
 
             this.CurrentRomance = item.Value;
+            item.Tooltip = new List<string>
+            {
+                "Your romantic preference."
+            };
 
             item = this.AddItem(
                 "Sexuality",
                 this.CurrentCulture.Sexualities,
-                "OnValueChange");
+                nameof(this.OnValueChange));
 
             this.CurrentSexuality = item.Value;
+            item.Tooltip = new List<string>
+            {
+                "Your sexual preference."
+            };
         }
 
         protected void OnChange(bool randomCulture = false)
@@ -182,6 +209,10 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             tempPart = this.GetItem("job");
 
             this.CurrentJob = tempPart.Value;
+            tempPart.Tooltip = new List<string>
+            {
+                GlobalConstants.GameManager.JobHandler.Get(this.CurrentJob).Description
+            };
 
             var bioSexPart = this.GetItem("sex");
 
@@ -275,32 +306,81 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             return item;
         }
 
+        protected void UpdateValues()
+        {
+            var tempPart = this.GetItem("species");
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Species selector!");
+                return;
+            }
+            this.CurrentTemplate = this.EntityTemplateHandler.Get(tempPart.Value);
+
+            tempPart = this.GetItem("culture");
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Culture selector!");
+                return;
+            }
+            this.CurrentCulture = this.CultureHandler.GetByCultureName(tempPart.Value);
+
+            tempPart = this.GetItem("job");
+            this.CurrentJob = tempPart.Value;
+
+            var bioSexPart = this.GetItem("sex");
+            if (bioSexPart is null)
+            {
+                GD.PushError("Could not find Sex selector!");
+                return;
+            }
+            this.CurrentSex = bioSexPart.Value;
+
+            var genderPart = this.GetItem("gender");
+            if (genderPart is null)
+            {
+                GD.PushError("Could not find Gender selector!");
+                return;
+            }
+            this.CurrentGender = genderPart.Value;
+
+            tempPart = this.GetItem("romance");
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Romance selector!");
+                return;
+            }
+            this.CurrentRomance = tempPart.Value;
+
+            tempPart = this.GetItem("sexuality");
+            if (tempPart is null)
+            {
+                GD.PushError("Could not find Sexuality selector!");
+                return;
+            }
+            this.CurrentSexuality = tempPart.Value;
+        }
+
         protected StringValueItem GetItem(string name)
         {
             return this.Parts.FirstOrDefault(part => part.ValueName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        public void OnValueChange(string name, int delta, int newIndex)
+        public void OnValueChange(string name, int delta, string newValue)
         {
-            GD.Print(nameof(this.OnValueChange));
-            GD.Print(name + " : " + delta + " : " + newIndex);
+            this.UpdateValues();
+            this.EmitSignal("ValueChanged", name, newValue);
         }
 
-        public void OnCultureChange(string name, int delta, int newIndex)
+        public void OnCultureChange(string name, int delta, string newValue)
         {
             this.OnChange();
-            this.EmitSignal("ValueChanged", "Culture", this.CurrentCulture.CultureName);
+            this.EmitSignal("ValueChanged", "Culture", newValue);
         }
 
-        public void OnTemplateChange(string name, int delta, int newIndex)
+        public void OnTemplateChange(string name, int delta, string newValue)
         {
             this.OnChange(true);
-            this.EmitSignal("ValueChanged", "Template", this.CurrentTemplate.CreatureType);
-        }
-
-        public void OnJobChange(string name, int delta, int newIndex)
-        {
-            this.CurrentJob = this.GetItem("job").Value;
+            this.EmitSignal("ValueChanged", "Template", newValue);
         }
     }
 }

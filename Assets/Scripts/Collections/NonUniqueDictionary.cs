@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code.Collections
+namespace JoyGodot.Assets.Scripts.Collections
 {
     [Serializable]
     public class NonUniqueDictionary<K, T> : IEnumerable<Tuple<K, T>>

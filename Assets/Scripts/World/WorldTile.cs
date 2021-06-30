@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Helpers;
+using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.World
+namespace JoyGodot.Assets.Scripts.World
 {
     [Serializable]
-    public class WorldTile
+    public class WorldTile : ISerialisationHandler
     {
         protected HashSet<string> m_Tags;
 
+        public WorldTile()
+        {
+            this.m_Tags = new HashSet<string>();
+        }
+        
         public WorldTile(string tileName, string tileSet, IEnumerable<string> tags)
         {
             this.TileName = tileName;
@@ -43,6 +52,42 @@ namespace JoyLib.Code.World
         {
             get;
             protected set;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"TileName", this.TileName}, 
+                {"TileSet", this.TileSet}
+            };
+
+            Array tagArray = new Array();
+            foreach (string tag in this.Tags)
+            {
+                tagArray.Add(tag);
+            }
+            saveDict.Add("Tags", tagArray);
+
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            JSONValueExtractor valueExtractor = GlobalConstants.GameManager.SettingsManager.ValueExtractor;
+
+            this.m_Tags = new HashSet<string>(
+                valueExtractor.GetArrayValuesCollectionFromDictionary<string>(
+                    data, 
+                    "Tags"));
+
+            this.TileName = valueExtractor.GetValueFromDictionary<string>(
+                data,
+                "TileName");
+
+            this.TileSet = valueExtractor.GetValueFromDictionary<string>(
+                data,
+                "TileSet");
         }
     }
 }

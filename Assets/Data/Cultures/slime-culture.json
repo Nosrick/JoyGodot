@@ -2,6 +2,7 @@
   "Cultures": [
     {
       "CultureName": "slime conglomerate",
+      "Description": "The Slime Conglomerate is a loosely organised nation, mainly comprised of slime.",
       "Inhabitants": [
         "slime"
       ],
@@ -183,6 +184,18 @@
         "BackgroundColours": [
           {
             "Name": "DefaultWindow",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#4d65b4"
+              },
+              {
+                "Name": "border",
+                "Value": "#8fd3ff"
+              }
+            ]
+          },{
+            "Name": "DefaultWindowSmooth",
             "Colour": [
               {
                 "Name": "background",

@@ -2,83 +2,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Quests.Actions;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.Quests
+namespace JoyGodot.Assets.Data.Scripts.Quests.Actions
 {
-    [Serializable]
-    public class ExploreQuestAction : IQuestAction
+    public class ExploreQuestAction : AbstractQuestAction
     {
-        
-        public string[] Tags { get; protected set; }
-        
-        public string Description { get; protected set; }
-        
-        
-        public List<Guid> Items { get; protected set; }
-        
-        
-        public List<Guid> Areas { get; protected set; }
-        
-        
-        public List<Guid> Actors { get; protected set; }
-
-        
-        public RNG Roller { get; protected set; }
-
         public ExploreQuestAction()
-        {}
-        
+        {
+            this.Roller = new RNG();
+            this.Items = new List<Guid>();
+            this.Actors = new List<Guid>();
+            this.Areas = new List<Guid>();
+            this.Tags = new string[0];
+            this.Description = string.Empty;
+        }
+
         public ExploreQuestAction(
-            IEnumerable<IItemInstance> items,
-            IEnumerable<IJoyObject> actors,
-            IEnumerable<IWorldInstance> areas,
+            IEnumerable<Guid> items,
+            IEnumerable<Guid> actors,
+            IEnumerable<Guid> areas,
             IEnumerable<string> tags,
             RNG roller = null)
         {
-            this.Roller = roller is null ? new RNG() : roller; 
+            this.Roller = roller ?? new RNG(); 
             List<string> tempTags = new List<string>();
             tempTags.Add("exploration");
             tempTags.AddRange(tags);
-            this.Items = items.Select(instance => instance.Guid).ToList();
-            this.Actors = actors.Select(instance => instance.Guid).ToList();
-            this.Areas = areas.Select(instance => instance.Guid).ToList();
+            this.Items = items.ToList();
+            this.Actors = actors.ToList();
+            this.Areas = areas.ToList();
             this.Tags = tempTags.ToArray();
             this.Description = this.AssembleDescription();
         }
-        
-        public IQuestStep Make(IEntity questor, IEntity provider, IWorldInstance overworld, IEnumerable<string> tags)
-        {
-            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
 
-            worlds = worlds.Where(instance => questor.HasDataKey(instance.Name) == false).ToList();
-            if (worlds.Any() == false)
-            {
-                GlobalConstants.ActionLog.Log(questor + " has explored the whole world!", LogLevel.Warning);
-                worlds = overworld.GetWorlds(overworld);
-            }
-            
-            int result = this.Roller.Roll(0, worlds.Count);
-
-            this.Items = new List<Guid>();
-            this.Actors = new List<Guid>();
-            this.Areas = new List<Guid> { worlds[result].Guid };
-
-            IQuestStep step = new ConcreteQuestStep(
-                this, 
-                this.Items, 
-                this.Actors, 
-                this.Areas,
-                this.Tags);
-            return step;
-        }
-
-        public bool ExecutedSuccessfully(IJoyAction action)
+        public override bool ExecutedSuccessfully(IJoyAction action)
         {
             if (action.Name.Equals("enterworldaction", StringComparison.OrdinalIgnoreCase) == false)
             {
@@ -103,7 +67,7 @@ namespace JoyLib.Code.Quests
             return worlds.All(world => action.LastParticipants.First().HasDataKey(world.Name)) && action.Successful;
         }
 
-        public string AssembleDescription()
+        public override string AssembleDescription()
         {
             StringBuilder builder = new StringBuilder();
 
@@ -128,21 +92,34 @@ namespace JoyLib.Code.Quests
             return "Go to " + builder + ".";
         }
 
-        public void ExecutePrerequisites(IEntity questor)
+        public override void ExecutePrerequisites(IEntity questor)
         {
         }
 
-        public IQuestAction Create(IEnumerable<string> tags,
-            IEnumerable<IItemInstance> items,
-            IEnumerable<IJoyObject> actors,
-            IEnumerable<IWorldInstance> areas,
-            IItemFactory itemFactory = null)
+        public override IQuestAction Create(
+            IEntity questor, 
+            IEntity provider, 
+            IWorldInstance overworld,
+            IEnumerable<string> tags)
         {
+            List<IWorldInstance> worlds = overworld.GetWorlds(overworld);
+
+            List<string> myTags = new List<string>(tags);
+
+            worlds = worlds.Where(instance => questor.HasDataKey(instance.Name) == false).ToList();
+            if (worlds.Any() == false)
+            {
+                GlobalConstants.ActionLog.Log(questor + " has explored the whole world!", LogLevel.Warning);
+                worlds = overworld.GetWorlds(overworld);
+            }
+            
+            int result = this.Roller.Roll(0, worlds.Count);
+
             return new ExploreQuestAction(
-                items,
-                actors,
-                areas,
-                tags);
+                new List<Guid>(),
+                new List<Guid>(),
+                new List<Guid> { worlds[result].Guid },
+                myTags);
         }
     }
 }

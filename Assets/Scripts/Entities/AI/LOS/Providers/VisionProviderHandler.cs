@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Boards;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.AI.LOS.Providers
+namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
 {
     public class VisionProviderHandler : IVisionProviderHandler
     {
@@ -70,7 +71,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                     ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MinimumLight")
                     : 0;
                     int minimumComfort = innerDict.Contains("MinimumComfort") 
-                    ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MinimumLight")
+                    ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MinimumComfort")
                     : minimumLight;
                     int maximumLight = innerDict.Contains("MaximumLight") 
                     ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "MaximumLight")
@@ -83,7 +84,7 @@ namespace JoyLib.Code.Entities.AI.LOS.Providers
                         ? this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Algorithm")
                         : nameof(FOVShadowCasting);
 
-                    IFOVHandler handler = (IFOVHandler) ScriptingEngine.Instance.FetchAndInitialise(visionProvider);
+                    IFOVHandler handler = (IFOVHandler) GlobalConstants.ScriptingEngine.FetchAndInitialise(visionProvider);
                     
                     visionTypes.Add(
                         new BaseVisionProvider(

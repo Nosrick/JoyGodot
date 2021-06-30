@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts.Base_Interfaces
 {
     public interface IDerivedValueContainer
     {

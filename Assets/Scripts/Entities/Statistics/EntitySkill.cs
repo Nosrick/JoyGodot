@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using Godot;
+using Godot.Collections;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     [Serializable]
     public class EntitySkill : IEntitySkill
     {
+        public ICollection<string> Tooltip { get; set; }
+        
         public EntitySkill()
         {
         }
@@ -12,11 +17,13 @@ namespace JoyLib.Code.Entities.Statistics
         public EntitySkill(
             string name, 
             int value, 
-            int successThreshold)
+            int successThreshold,
+            ICollection<string> tooltip)
         {
             this.Name = name;
             this.Value = value;
             this.SuccessThreshold = successThreshold;
+            this.Tooltip = tooltip;
         }
 
         public int ModifyValue(int value)
@@ -29,6 +36,12 @@ namespace JoyLib.Code.Entities.Statistics
         {
             this.Value = Math.Max(0, value);
             return this.Value;
+        }
+
+        public int SetThreshold(int value)
+        {
+            this.SuccessThreshold = Mathf.Clamp(value, 1, 10);
+            return this.SuccessThreshold;
         }
 
         public string Name
@@ -47,6 +60,28 @@ namespace JoyLib.Code.Entities.Statistics
         {
             get;
             protected set;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name}, 
+                {"Value", this.Value}, 
+                {"SuccessThreshold", this.SuccessThreshold}
+            };
+            
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
+            this.SuccessThreshold = valueExtractor.GetValueFromDictionary<int>(data, "SuccessThreshold");
+            this.Tooltip = GlobalConstants.GameManager.SkillHandler.Get(this.Name).Tooltip;
         }
     }
 }

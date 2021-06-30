@@ -4,25 +4,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Helpers
+namespace JoyGodot.Assets.Scripts.Helpers
 {
-    public class ActionLog : IDisposable
+    public class ActionLog
     {
-        public List<string> History { get; protected set; }
+        protected Queue<LogEntry> m_Queue = new Queue<LogEntry>();
 
-        private Queue<LogEntry> m_Queue = new Queue<LogEntry>();
+        protected const string FILENAME = "player.log";
 
-        public const int LINES_TO_KEEP = 10;
+        protected readonly bool IsEditor = Engine.EditorHint;
+        protected StreamWriter Writer { get; set; }
 
-        private const string FILENAME = "player.log";
-
-        private readonly bool IsEditor = Engine.EditorHint;
-
-        private StreamWriter Writer { get; set; }
+        public event LogEntryHandler TextAdded;
 
         public ActionLog()
         {
@@ -45,7 +40,6 @@ namespace JoyLib.Code.Helpers
                 File.Delete(FILENAME);
                 this.Writer = new StreamWriter(FILENAME);
                 this.m_Queue = new Queue<LogEntry>();
-                this.History = new List<string>();
                 return true;
             }
             catch (Exception ex)
@@ -57,34 +51,25 @@ namespace JoyLib.Code.Helpers
             }
         }
 
-        public void LogAction(Entity actor, string actionString)
-        {
-            this.Log(actor.JoyName + " is " + actionString, LogLevel.Gameplay);
-        }
-
         protected void ServiceQueue()
         {
-            bool written = false;
             while (this.m_Queue.Count > 0)
             {
-                this.Writer.WriteLine(this.m_Queue.Dequeue());
-                written = true;
+                LogEntry logEntry = this.m_Queue.Dequeue();
+                this.TextAdded?.Invoke(logEntry.m_Data, logEntry.m_LogLevel);
+                this.Writer?.WriteLine(logEntry);
             }
+            this.Writer?.Flush();
+        }
 
-            if (written)
-            {
-                this.Writer.Flush();
-            }
-
-            while (this.History.Count > LINES_TO_KEEP)
-            {
-                this.History.RemoveAt(0);
-            }
+        public void Flush()
+        {
+            this.ServiceQueue();
         }
 
         public void Log(object objectToPrint, LogLevel logLevel = LogLevel.Information)
         {
-            string toPrint = "[" + logLevel + "] ";
+            string toPrint = "";
             if (objectToPrint is ICollection collection)
             {
                 toPrint += this.CollectionWalk(collection);
@@ -97,40 +82,51 @@ namespace JoyLib.Code.Helpers
             {
                 toPrint += objectToPrint;
             }
-             
-            GD.Print(toPrint);
-            switch (logLevel)
-            {
-                case LogLevel.Warning:
-                    GD.PushWarning(toPrint);
-                    break;
-
-                case LogLevel.Error:
-                    GD.PushError(toPrint);
-                    break;
-            }
 
             LogEntry entry = new LogEntry
             {
                 m_Data = toPrint,
                 m_LogLevel = logLevel
             };
-            this.m_Queue.Enqueue(entry);
-            if (logLevel == LogLevel.Gameplay)
+
+            if (logLevel == LogLevel.Debug
+                && this.IsEditor)
             {
-                this.History.Add(toPrint);
+                GD.Print(entry);
             }
+            else if(logLevel != LogLevel.Debug)
+            {
+                GD.Print(entry);
+            }
+            
+            switch (logLevel)
+            {
+                case LogLevel.Warning:
+                    GD.PushWarning(entry.ToString());
+                    break;
+
+                case LogLevel.Error:
+                    GD.PushError(entry.ToString());
+                    break;
+            }
+            this.m_Queue.Enqueue(entry);
         }
 
         public void StackTrace(Exception exception)
         {
-            this.Log(exception.Message, LogLevel.Error);
-            this.Log(exception.StackTrace, LogLevel.Error);
-
-            Exception innerException = exception.InnerException;
-            if (innerException is null == false)
+            while (true)
             {
-                this.StackTrace(innerException);
+                this.Log(exception.Message, LogLevel.Error);
+                this.Log(exception.StackTrace, LogLevel.Error);
+
+                Exception innerException = exception.InnerException;
+                if (innerException is null == false)
+                {
+                    exception = innerException;
+                    continue;
+                }
+
+                break;
             }
         }
 
@@ -165,25 +161,6 @@ namespace JoyLib.Code.Helpers
 
             return builder.ToString();
         }
-
-        ~ActionLog()
-        {
-            this.Dispose(true);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                //this.Writer?.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
 
     public enum LogLevel
@@ -205,4 +182,6 @@ namespace JoyLib.Code.Helpers
             return "[" + this.m_LogLevel + "]: " + this.m_Data;
         }
     }
+
+    public delegate void LogEntryHandler(string textAdded, LogLevel logLevel);
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JoyLib.Code.World.Generators.Interiors
+namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 {
     [Flags]
     public enum GeneratorTileType

@@ -1,8 +1,10 @@
 ﻿using System;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Gender;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours.Parameters;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Conversation.Subengines.Rumours
+namespace JoyGodot.Assets.Data.Scripts.Rumours.Parameters
 {
     public class GenderParameterProcessor : IParameterProcessor
     {

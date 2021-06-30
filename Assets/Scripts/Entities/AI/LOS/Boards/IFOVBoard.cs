@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.AI.LOS
+namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Boards
 {
     public interface IFOVBoard
     {

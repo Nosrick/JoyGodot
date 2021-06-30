@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using Godot.Collections;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     [Serializable]
     public class ConcreteBasicIntValue : IBasicValue<int>
     {
+        public ICollection<string> Tooltip { get; set; }
+        
         public string Name
         {
             get;
@@ -36,6 +40,21 @@ namespace JoyLib.Code.Entities.Statistics
         {
             this.Value = value;
             return this.Value;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary();
+
+            saveDict.Add("Name", this.Name);
+            saveDict.Add("Value", this.Value);
+
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Graphics;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Settings;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
@@ -12,6 +12,12 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         protected ManagedUIElement DragObject { get; set; }
         
         protected ManagedUIElement CursorObject { get; set; }
+        
+        public int CursorSize { get; protected set; }
+
+        protected bool EnableHappiness { get; set; }
+
+        protected IEntity Player { get; set; }
 
         public ISpriteState DragSprite
         {
@@ -21,10 +27,13 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 this.DragObject.Clear();
                 if (value is null)
                 {
+                    this.DragObject.Visible = false;
                     return;
                 }
                 
                 this.DragObject.AddSpriteState(value);
+                this.DragObject.OverrideAllColours(value.SpriteData.GetCurrentPartColours());
+                this.DragObject.Visible = true;
             }
         }
 
@@ -32,6 +41,9 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         {
             this.CursorObject.Clear();
             this.CursorObject.AddSpriteState(state);
+            this.CursorSize = GlobalConstants.SPRITE_WORLD_SIZE;
+            this.CursorObject.RectSize = new Vector2(this.CursorSize, this.CursorSize);
+            this.DragObject.RectSize = new Vector2(this.CursorSize, this.CursorSize);
         }
 
         public void OverrideAllColours(IDictionary<string, Color> colours, bool crossfade = false,
@@ -47,6 +59,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             this.CursorObject = this.GetNode<ManagedUIElement>("Cursor Object");
             this.DragObject = this.GetNode<ManagedUIElement>("Drag Object");
             this.DragObject.Visible = false;
+
+            this.GrabPlayer();
         }
 
         public override void _Input(InputEvent @event)
@@ -55,9 +69,87 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
             if (@event is InputEventMouseMotion motion)
             {
-                this.CursorObject.SetPosition(motion.Position);
-                this.DragObject.SetPosition(motion.Position);
+                this.CursorObject.RectPosition = motion.Position;
+                this.DragObject.RectPosition = motion.Position;
             }
+        }
+
+        public override void _PhysicsProcess(float delta)
+        {
+            base._PhysicsProcess(delta);
+            
+            this.GrabPlayer();
+        }
+
+        
+
+        protected void GrabPlayer()
+        {
+            if (this.Player is null)
+            {
+                this.Player = GlobalConstants.GameManager?.Player;
+
+                if (this.Player is null)
+                {
+                    return;
+                }
+                
+                this.Player.HappinessChange -= this.SetHappiness;
+                this.Player.HappinessChange += this.SetHappiness;
+
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
+                
+                this.EnableHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                    .Get(SettingsManager.HAPPINESS_CURSOR)
+                    .ObjectValue;
+            
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_CURSOR))
+            {
+                this.EnableHappiness = (bool) args.NewValue;
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
+        {
+            float happiness = this.EnableHappiness ? args.NewValue : 1f;
+
+            try
+            {
+                if (this.Material is ShaderMaterial shaderMaterial)
+                {
+                    shaderMaterial.SetShaderParam("happiness", happiness);
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PushError("Object has been disposed!");
+            }
+        }
+
+        public override void _ExitTree()
+        {
+            if (this.Player is null == false)
+            {
+                this.Player.HappinessChange -= this.SetHappiness;
+            }
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+
+            base._ExitTree();
         }
     }
 }

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Graphics;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Property : AbstractNeed
     {
@@ -130,12 +134,12 @@ namespace JoyLib.Code.Entities.Needs
                 {
                     actor.CurrentTarget = new NeedAIData
                     {
-                        idle = true,
-                        intent = Intent.Interact,
-                        need = null,
-                        searching = false,
-                        target = null,
-                        targetPoint = GlobalConstants.NO_TARGET
+                        Idle = true,
+                        Intent = Intent.Interact,
+                        Need = null,
+                        Searching = false,
+                        Target = null,
+                        TargetPoint = GlobalConstants.NO_TARGET
                     };
                     return true;
                 }

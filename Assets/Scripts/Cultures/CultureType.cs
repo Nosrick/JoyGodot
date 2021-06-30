@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using Godot;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Rollers;
 
-namespace JoyLib.Code.Cultures
+using Godot;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexes;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
+
+namespace JoyGodot.Assets.Scripts.Cultures
 {
     public class CultureType : ICulture
     {
@@ -28,6 +29,8 @@ namespace JoyLib.Code.Cultures
         protected List<string> m_RelationshipTypes;
         protected IDictionary<string, int> m_JobPrevalence;
         List<string> m_Inhabitants;
+        
+        public string Description { get; protected set; }
 
         public int LastGroup { get; protected set; }
 
@@ -71,6 +74,7 @@ namespace JoyLib.Code.Cultures
         public CultureType(
             string nameRef,
             string tileset,
+            string description,
             IEnumerable<string> rulersRef,
             IEnumerable<string> crimesRef,
             IEnumerable<NameData> namesRef,
@@ -91,6 +95,7 @@ namespace JoyLib.Code.Cultures
             this.Roller = roller ?? new RNG();
             this.Tileset = tileset;
             this.CultureName = nameRef;
+            this.Description = description;
             this.m_RulerTypes = rulersRef.ToList();
             this.m_Crimes = crimesRef.ToList();
             this.m_NameData = namesRef.ToList();

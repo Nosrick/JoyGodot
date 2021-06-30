@@ -28,7 +28,7 @@
 using System;
 using System.Collections;
 
-namespace Tanis.Collections
+namespace JoyGodot.Assets.Scripts.Collections
 {
     /// <summary>
     /// The Heap allows to maintain a list sorted as long as needed.

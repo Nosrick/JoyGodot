@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Castle.Core.Internal;
-using Code.Unity.GUI.Managed_Assets;
+
 using Godot;
 using Godot.Collections;
-using JoyGodot.addons.Managed_Assets;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public class GUIManager : IGUIManager
     {
@@ -23,12 +19,14 @@ namespace JoyLib.Code.Unity.GUI
         protected HashSet<GUIData> ActiveGUIs { get; set; }
 
         protected Node RootUI { get; set; }
-        
+
         protected Node PersistentRoot { get; set; }
-        
+
         public ManagedCursor Cursor { get; protected set; }
-        
+
         public Tooltip Tooltip { get; protected set; }
+
+        public ContextMenu ContextMenu { get; protected set; }
 
         public IDictionary<string, Theme> Themes { get; protected set; }
 
@@ -69,6 +67,11 @@ namespace JoyLib.Code.Unity.GUI
             return this.GUIs.FirstOrDefault(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
+        public T Get<T>(string name) where T : GUIData
+        {
+            return (T) this.GUIs.FirstOrDefault(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
         public IEnumerable<GUIData> Load()
         {
             return new GUIData[0];
@@ -86,11 +89,19 @@ namespace JoyLib.Code.Unity.GUI
                 this.ActiveGUIs = new HashSet<GUIData>();
 
                 this.UISprites = new System.Collections.Generic.Dictionary<string, ISpriteState>();
-
-                this.Cursors = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet("Cursors")
-                    .Select(data => new SpriteState(data.m_Name, data))
-                    .Cast<ISpriteState>()
-                    .ToDictionary(state => state.Name, state => state);
+                
+                this.Cursors = new System.Collections.Generic.Dictionary<string, ISpriteState>();
+                var cursors = GlobalConstants.GameManager.ObjectIconHandler.GetSpritesForManagedAssets("Cursors");
+                foreach (SpriteData data in cursors)
+                {
+                    this.Cursors.Add(
+                        data.Name,
+                        new SpriteState(
+                            data.Name,
+                            "Cursors",
+                            data));
+                }
+                
                 this.CursorColours = new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
                 this.UISpriteColours = new System.Collections.Generic.Dictionary<string, IDictionary<string, Color>>();
                 this.LoadedFonts = new System.Collections.Generic.Dictionary<string, DynamicFont>
@@ -250,22 +261,15 @@ namespace JoyLib.Code.Unity.GUI
                     this.ValueExtractor.GetValueFromDictionary<Dictionary>(dictionary, "TileSet"),
                     "Name");
 
-                var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetTileSet(tileSetName);
-                foreach (SpriteData data in spriteData)
+                var spriteData = GlobalConstants.GameManager.ObjectIconHandler.GetSpritesForManagedAssets(tileSetName);
+                foreach (var data in spriteData)
                 {
-                    if (this.Themes.ContainsKey(data.m_Name) == false)
-                    {
-                        Theme theme = new Theme();
-                        theme.SetIcon(data.m_Name, "ManagedUIElement", data.m_Parts.First().m_FrameSprite.FirstOrDefault());
-                        this.Themes.Add(data.m_Name, theme);
-                    }
-                    
-                    if (this.UISprites.ContainsKey(data.m_Name))
+                    if (this.UISprites.ContainsKey(data.Name))
                     {
                         continue;
                     }
 
-                    this.UISprites.Add(data.m_Name, new SpriteState(data.m_Name, data));
+                    this.UISprites.Add(data.Name, new SpriteState(data.Name, tileSetName, data));
                 }
             }
         }
@@ -290,6 +294,22 @@ namespace JoyLib.Code.Unity.GUI
 
         public void Clear()
         {
+            Array children = this.RootUI.GetChildren();
+            if (children.IsNullOrEmpty() == false)
+            {
+                for (int i = 0; i < children.Count; i++)
+                {
+                    Node child = this.RootUI.GetChild(0);
+                    if (child is GUIData data)
+                    {
+                        data.DisconnectEvents();
+                    }
+                    
+                    this.RootUI.RemoveChild(child);
+                    child.QueueFree();
+                }
+            }
+            
             this.ActiveGUIs.Clear();
             this.GUIs.Clear();
         }
@@ -297,7 +317,6 @@ namespace JoyLib.Code.Unity.GUI
         public void FindGUIs()
         {
             Array guiData = this.RootUI.GetAllChildren();
-            GlobalConstants.ActionLog.Log(guiData);
             foreach (var child in guiData)
             {
                 if (child is GUIData data)
@@ -316,26 +335,26 @@ namespace JoyLib.Code.Unity.GUI
                 this.Tooltip = this.PersistentRoot.GetNode<Tooltip>("Tooltip");
                 this.SetupManagedComponents(this.Tooltip);
             }
+
+            this.Add(this.Tooltip);
+
+            if (this.ContextMenu is null)
+            {
+                this.ContextMenu = this.PersistentRoot.GetNode<ContextMenu>("Context Menu");
+                this.SetupManagedComponents(this.ContextMenu);
+            }
+
+            this.Add(this.ContextMenu);
         }
 
         public void InstantiateUIScene(PackedScene ui)
         {
-            Array children = this.RootUI.GetChildren();
-            if (children.IsNullOrEmpty() == false)
-            {
-                for(int i = 0; i < children.Count; i++)
-                {
-                    Node child = this.RootUI.GetChild(0);
-                    this.RootUI.RemoveChild(child);
-                    child.QueueFree();
-                }
-            }
+            this.Clear();
+
             Control newUI = (Control) ui.Instance();
             newUI.AnchorBottom = 1;
             newUI.AnchorRight = 1;
             this.RootUI.AddChild(newUI);
-            children = newUI.GetChildren();
-            GlobalConstants.ActionLog.Log(children);
         }
 
         public bool Add(GUIData gui)
@@ -352,6 +371,12 @@ namespace JoyLib.Code.Unity.GUI
             this.SetupManagedComponents(gui);
 
             this.GUIs.Add(gui);
+
+            if (gui.Visible)
+            {
+                this.ActiveGUIs.Add(gui);
+            }
+
             return true;
         }
 
@@ -367,7 +392,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.SetupManagedComponents(gui, crossFade, duration);
             }
-            
+
             this.Cursor.AddSpriteState(this.Cursors["DefaultCursor"]);
             this.Cursor.OverrideAllColours(this.CursorColours["DefaultCursor"], crossFade, duration);
             this.SetupManagedComponents(this.Tooltip);
@@ -379,7 +404,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.SetUpManagedComponent(guiElement);
             }
-            
+
             Array managedComponents = gui.GetAllChildren();
             foreach (var component in managedComponents)
             {
@@ -401,7 +426,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 element.Initialise();
             }
-                
+
             if (element is ISpriteStateElement spriteStateElement)
             {
                 if (this.UISprites.TryGetValue(spriteStateElement.ElementName, out ISpriteState value))
@@ -415,9 +440,11 @@ namespace JoyLib.Code.Unity.GUI
                         LogLevel.Warning);
                 }
             }
+
             if (element is IColourableElement colourfulElement)
             {
-                if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName, out IDictionary<string, Color> value))
+                if (this.UISpriteColours.TryGetValue(colourfulElement.ElementName,
+                    out IDictionary<string, Color> value))
                 {
                     colourfulElement.OverrideAllColours(value, crossFade, duration, true);
                 }
@@ -429,7 +456,7 @@ namespace JoyLib.Code.Unity.GUI
             }
         }
 
-        public void ToggleGUI(string name)
+        public void ToggleGUI(object sender, string name)
         {
             if (this.ActiveGUIs.Any(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -438,16 +465,16 @@ namespace JoyLib.Code.Unity.GUI
                     .ToArray();
                 foreach (GUIData data in toToggle)
                 {
-                    this.CloseGUI(data.Name);
+                    this.CloseGUI(sender, data.Name);
                 }
             }
             else
             {
-                this.OpenGUI(name);
+                this.OpenGUI(sender, name);
             }
         }
 
-        public GUIData OpenGUI(string name, bool bringToFront = false)
+        public GUIData OpenGUI(object sender, string name, bool bringToFront = false)
         {
             if (this.ActiveGUIs.Any(widget => widget.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
@@ -468,17 +495,17 @@ namespace JoyLib.Code.Unity.GUI
                 return null;
             }
 
-            if (toOpen.m_ClosesOthers)
+            if (toOpen.ClosesOthers)
             {
                 List<GUIData> activeCopy = new List<GUIData>(this.ActiveGUIs);
                 foreach (GUIData widget in activeCopy)
                 {
-                    this.CloseGUI(widget.Name);
+                    this.CloseGUI(sender, widget.Name);
                 }
             }
 
-            toOpen.Show();
-
+            toOpen.Display();
+            toOpen.SetProcess(true);
             this.ActiveGUIs.Add(toOpen);
 
             if (bringToFront)
@@ -489,7 +516,7 @@ namespace JoyLib.Code.Unity.GUI
             return toOpen;
         }
 
-        public void CloseGUI(string activeName)
+        public void CloseGUI(object sender, string activeName)
         {
             if (this.ActiveGUIs.Any(data => data.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase)) == false)
             {
@@ -499,16 +526,19 @@ namespace JoyLib.Code.Unity.GUI
             GUIData toClose = this.ActiveGUIs
                 .First(gui => gui.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase));
 
-            if (toClose.m_AlwaysOpen)
+            if (toClose.AlwaysOpen)
             {
                 return;
             }
 
-            toClose.Close();
-            this.ActiveGUIs.Remove(toClose);
+            if (toClose.Close(sender))
+            {
+                toClose.SetProcess(false);
+                this.ActiveGUIs.Remove(toClose);
+            }
         }
 
-        public bool RemoveActiveGUI(string name)
+        public bool RemoveActiveGUI(string name, bool close = false, bool disable = false)
         {
             if (this.ActiveGUIs.Any(data => data.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) == false)
             {
@@ -517,12 +547,20 @@ namespace JoyLib.Code.Unity.GUI
 
             GUIData toClose = this.ActiveGUIs.First(data => data.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-            if (toClose.m_AlwaysOpen)
+            if (toClose.AlwaysOpen)
             {
                 return false;
             }
 
-            toClose.Close();
+            if (close)
+            {
+                toClose.Close(this);
+            }
+            
+            if (disable)
+            {
+                toClose.SetProcess(false);
+            }
             return this.ActiveGUIs.Remove(toClose);
         }
 
@@ -536,7 +574,7 @@ namespace JoyLib.Code.Unity.GUI
             GUIData toFront = this.ActiveGUIs.First(g => g.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             foreach (GUIData gui in this.ActiveGUIs)
             {
-                if (toFront.Equals(gui) || gui.m_AlwaysOnTop)
+                if (toFront.Equals(gui) || gui.AlwaysOnTop)
                 {
                     continue;
                 }
@@ -545,7 +583,7 @@ namespace JoyLib.Code.Unity.GUI
             }
 
             GUIData[] found = this.ActiveGUIs
-                .Where(data => data.m_AlwaysOpen == false)
+                .Where(data => data.AlwaysOpen == false)
                 .ToArray();
             if (found.Any())
             {
@@ -557,33 +595,32 @@ namespace JoyLib.Code.Unity.GUI
         {
             GUIData[] toClose = this.ActiveGUIs
                 .Where(gui => gui.Name.Equals(activeName, StringComparison.OrdinalIgnoreCase) == false
-                              && gui.m_AlwaysOpen == false)
+                              && gui.AlwaysOpen == false)
                 .ToArray();
 
             foreach (GUIData data in toClose)
             {
-                this.ActiveGUIs.Remove(data);
-                data.Close();
+                this.CloseGUI(data, data.Name);
             }
         }
 
         public void CloseAllGUIs()
         {
             GUIData[] toClose = this.ActiveGUIs
-                .Where(gui => gui.m_AlwaysOpen == false)
+                .Where(gui => gui.AlwaysOpen == false)
                 .ToArray();
 
             foreach (GUIData data in toClose)
             {
-                data.Close();
+                data.Close(this);
             }
 
-            this.ActiveGUIs.RemoveWhere(guiData => guiData.m_AlwaysOpen == false);
+            this.ActiveGUIs.RemoveWhere(guiData => guiData.AlwaysOpen == false);
         }
 
         public bool RemovesControl()
         {
-            return this.ActiveGUIs.Any(gui => gui.m_RemovesControl);
+            return this.ActiveGUIs.Any(gui => gui.RemovesControl);
         }
 
         public bool IsActive(string name)
@@ -598,7 +635,7 @@ namespace JoyLib.Code.Unity.GUI
                 return this.ActiveGUIs.Count > 0;
             }
 
-            return this.ActiveGUIs.Count(data => data.m_AlwaysOpen == false) > 0;
+            return this.ActiveGUIs.Count(data => data.AlwaysOpen == false) > 0;
         }
 
         public void Dispose()

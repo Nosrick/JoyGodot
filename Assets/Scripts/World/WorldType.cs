@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.World
+﻿namespace JoyGodot.Assets.Scripts.World
 {
     public enum WorldType
     {

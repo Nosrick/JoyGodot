@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using JoyLib.Code;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class SkillHandlerTest
     {
@@ -20,9 +18,9 @@ namespace Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            ScriptingEngine = new ScriptingEngine();
+            this.ScriptingEngine = new ScriptingEngine();
             
-            target = new EntitySkillHandler();
+            this.target = new EntitySkillHandler();
         }
     
         [Test]

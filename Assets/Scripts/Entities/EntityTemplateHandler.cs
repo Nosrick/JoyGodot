@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities
+namespace JoyGodot.Assets.Scripts.Entities
 {
     public class EntityTemplateHandler : IEntityTemplateHandler
     {
@@ -89,6 +89,9 @@ namespace JoyLib.Code.Entities
                     string visionType = this.ValueExtractor.GetValueFromDictionary<string>(templateDict, "VisionType") ?? "diurnal vision";
                     IVision vision = this.VisionProviderHandler.Get(visionType);
 
+                    string description =
+                        this.ValueExtractor.GetValueFromDictionary<string>(templateDict, "Description");
+
                     IDictionary<string, IEntityStatistic> statistics =
                         new System.Collections.Generic.Dictionary<string, IEntityStatistic>();
                     ICollection<Dictionary> statisticsCollection =
@@ -101,12 +104,14 @@ namespace JoyLib.Code.Entities
                         int threshold = innerDict.Contains("Threshold") 
                         ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Threshold")
                         : GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
+
+                        IEntityStatistic statistic = GlobalConstants.GameManager.StatisticHandler.Get(statName);
+                        statistic.SetValue(statValue);
+                        statistic.SetThreshold(threshold);
+                        
                         statistics.Add(
                             statName,
-                            new EntityStatistic(
-                                statName,
-                                statValue,
-                                threshold));
+                            statistic);
                     }
 
                     IDictionary<string, IEntitySkill> skills =
@@ -123,12 +128,13 @@ namespace JoyLib.Code.Entities
                             int threshold = innerDict.Contains("Threshold")
                                 ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Threshold")
                                 : GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
+
+                            IEntitySkill skill = GlobalConstants.GameManager.SkillHandler.Get(skillName);
+                            skill.SetValue(skillValue);
+                            skill.SetThreshold(threshold);
                             skills.Add(
                                 skillName,
-                                new EntitySkill(
-                                    skillName,
-                                    skillValue,
-                                    threshold));
+                                skill);
                         }
                     }
 
@@ -165,7 +171,8 @@ namespace JoyLib.Code.Entities
                             size,
                             vision,
                             creatureType,
-                            type,
+                            type, 
+                            description,
                             tags.ToArray()));
                 }
             }

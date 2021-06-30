@@ -2,11 +2,11 @@
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public class EntityStatisticHandler : IEntityStatisticHandler
     {
@@ -48,10 +48,20 @@ namespace JoyLib.Code.Entities.Statistics
                 return statistics;
             }
 
-            ICollection<string> statNames =
-                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(dictionary, "Statistics");
+            ICollection<Dictionary> statDicts =
+                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Statistics");
 
-            statistics.AddRange(statNames.Select(statName => new EntityStatistic(statName, 0, GlobalConstants.DEFAULT_SUCCESS_THRESHOLD)));
+            foreach (Dictionary statDict in statDicts)
+            {
+                string name = this.ValueExtractor.GetValueFromDictionary<string>(statDict, "Name");
+                string tooltip = this.ValueExtractor.GetValueFromDictionary<string>(statDict, "Tooltip");
+                statistics.Add(
+                    new EntityStatistic(
+                        name,
+                        0,
+                        GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                        new List<string> { tooltip }));
+            }
 
             this.DefaultStatistics = statistics.ToDictionary(statistic => statistic.Name, statistic => statistic);
             

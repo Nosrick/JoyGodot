@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities.Items;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.Abilities
+namespace JoyGodot.Assets.Data.Scripts.Abilities
 {
     public class FoodItem : AbstractAbility
     {
@@ -21,7 +25,7 @@ namespace JoyLib.Code.Entities.Abilities
             AbilityTarget.Self,
             0,
             GetSprite("fooditem"),
-            "active", "ingestion")
+            "active", "ingestion", "food")
         { }
 
         protected static Dictionary<string, int> GetPrerequisites()

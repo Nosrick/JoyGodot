@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Conversation.Subengines.Rumours.Parameters
+namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours.Parameters
 {
     public class ParameterProcessorHandler : IParameterProcessorHandler
     {
@@ -15,7 +15,7 @@ namespace JoyLib.Code.Conversation.Subengines.Rumours.Parameters
 
         protected List<IParameterProcessor> LoadProcessors()
         {
-            return new List<IParameterProcessor>(ScriptingEngine.Instance.FetchAndInitialiseChildren<IParameterProcessor>());
+            return new List<IParameterProcessor>(GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IParameterProcessor>());
         }
 
         public IParameterProcessor Get(string parameter)

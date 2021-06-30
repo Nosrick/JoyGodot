@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Sex : AbstractNeed
     {
@@ -98,8 +102,10 @@ namespace JoyLib.Code.Entities.Needs
                 List<IJoyObject> participants = new List<IJoyObject>();
                 participants.Add(actor);
                 participants.Add(mate);
-                string[] relationshipTags = new string[] { "sexual" };
-                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants, relationshipTags);
+                string[] relationshipTags = { "sexual" };
+                IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(
+                    participants.Select(o => o.Guid), 
+                    relationshipTags);
 
                 foreach (IRelationship relationship in relationships)
                 {
@@ -142,7 +148,7 @@ namespace JoyLib.Code.Entities.Needs
             this.GetBits();
 
             if (actor.Sexuality.WillMateWith(actor, partner, this.RelationshipHandler.Get(
-                    new IJoyObject[] { actor, partner },
+                    new Guid[] { actor.Guid, partner.Guid },
                     new string[] { "sexual" })))
             {
                 int satisfaction = this.CalculateSatisfaction(
@@ -154,17 +160,17 @@ namespace JoyLib.Code.Entities.Needs
 
                 int time = this.Roller.Roll(5, 30);
 
-                if (actor.FulfillmentData is null
-                    || partner.FulfillmentData is null)
+                if (actor.NeedFulfillmentData.IsEmpty()
+                    || partner.NeedFulfillmentData.IsEmpty() == false)
                 {
                     return false;
                 }
                 
-                if (actor.FulfillmentData.Name.Equals(this.Name) && 
-                    partner.FulfillmentData.Name.Equals(this.Name))
+                if (actor.NeedFulfillmentData.Name.Equals(this.Name) && 
+                    partner.NeedFulfillmentData.Name.Equals(this.Name))
                 {
                     HashSet<IJoyObject> userParticipants =
-                        new HashSet<IJoyObject>(actor.FulfillmentData.Targets) {actor, partner};
+                        new HashSet<IJoyObject>(actor.NeedFulfillmentData.Targets) {actor, partner};
                     this.m_CachedActions["fulfillneedaction"].Execute(
                         userParticipants.ToArray(),
                         new[] { "sex", "need", "fulfill" },
@@ -176,7 +182,7 @@ namespace JoyLib.Code.Entities.Needs
                         });
 
                     HashSet<IJoyObject> partnerParticipants =
-                        new HashSet<IJoyObject>(partner.FulfillmentData.Targets) {partner, actor};
+                        new HashSet<IJoyObject>(partner.NeedFulfillmentData.Targets) {partner, actor};
                     this.m_CachedActions["fulfillneedaction"].Execute(
                         partnerParticipants.ToArray(),
                         new string[] { "sex", "need", "fulfill" },
@@ -198,11 +204,14 @@ namespace JoyLib.Code.Entities.Needs
             int total = 0;
             foreach (IEntity participant in participants)
             {
-                IEnumerable<Tuple<string, int>> data = participant.GetData(tags.ToArray());
+                IEnumerable<Tuple<string, object>> data = participant.GetData(tags.ToArray());
                 int subTotal = 0;
-                foreach (Tuple<string, int> tuple in data)
+                foreach (Tuple<string, object> tuple in data)
                 {
-                    subTotal += tuple.Item2;
+                    if (tuple.Item2 is int value)
+                    {
+                        subTotal += value;
+                    }
                 }
                 subTotal /= data.Count();
                 total += subTotal;

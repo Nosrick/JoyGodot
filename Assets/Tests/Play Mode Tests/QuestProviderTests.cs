@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Managers;
-using JoyLib.Code.Quests;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managers;
+using JoyGodot.Assets.Scripts.Quests;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class QuestProviderTests
     {
@@ -129,7 +129,7 @@ namespace Tests
             foreach (IQuest quest in quests)
             {
                 Assert.That(quest.Rewards, Is.Not.Empty);
-                Assert.That(quest.Steps, Is.Not.Empty);
+                Assert.That(quest.Actions, Is.Not.Empty);
             }
         }
 

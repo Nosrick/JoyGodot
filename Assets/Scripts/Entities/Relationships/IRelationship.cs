@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.Relationships
+namespace JoyGodot.Assets.Scripts.Entities.Relationships
 {
-    public interface IRelationship : ITagged
+    public interface IRelationship : 
+        ITagged,
+        ISerialisationHandler
     {
         IDictionary<Guid, int> GetValuesOfParticipant(Guid GUID);
 
@@ -27,9 +31,9 @@ namespace JoyLib.Code.Entities.Relationships
 
         long GenerateHashFromInstance();
 
-        IRelationship Create(IEnumerable<IJoyObject> participants);
+        IRelationship Create(IEnumerable<Guid> participants);
         
-        IRelationship CreateWithValue(IEnumerable<IJoyObject> participants, int value);
+        IRelationship CreateWithValue(IEnumerable<Guid> participants, int value);
 
         string Name { get; }
 

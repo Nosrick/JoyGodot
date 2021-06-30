@@ -1,7 +1,7 @@
 using Godot;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.GUI;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public abstract class GameState : IGameState
     {
@@ -14,19 +14,16 @@ namespace JoyLib.Code.States
 
         public virtual void SetUpUi()
         {
-            //Thread.Sleep(200);
-
-            this.GUIManager.Clear();
             this.GUIManager.FindGUIs();
-
-            this.GUIManager.CloseAllOtherGUIs(GUINames.CURSOR);
         }
 
         public abstract void Start();
 
-        public abstract void Stop();
+        public virtual void Stop()
+        {
+            this.GUIManager.Clear();
+        }
 
-        //ALWAYS call base.Update() from derived classes
         public abstract void Update();
 
         public abstract void HandleInput(InputEvent @event);

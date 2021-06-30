@@ -1,6 +1,8 @@
 ﻿using System;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours.Parameters;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Conversation.Subengines.Rumours
+namespace JoyGodot.Assets.Data.Scripts.Rumours.Parameters
 {
     public class ParticipantParameterProcessor : IParameterProcessor
     {

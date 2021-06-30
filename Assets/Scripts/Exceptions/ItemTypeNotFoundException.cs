@@ -1,12 +1,15 @@
 using System;
 
-public class ItemTypeNotFoundException : Exception
+namespace JoyGodot.Assets.Scripts.Exceptions
 {
-    public string m_ItemType;
-
-    public ItemTypeNotFoundException(string itemType, string message) :
-        base(message)
+    public class ItemTypeNotFoundException : Exception
     {
-        this.m_ItemType = itemType;
+        public string m_ItemType;
+
+        public ItemTypeNotFoundException(string itemType, string message) :
+            base(message)
+        {
+            this.m_ItemType = itemType;
+        }
     }
 }

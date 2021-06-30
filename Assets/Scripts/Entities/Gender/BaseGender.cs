@@ -1,6 +1,7 @@
 ﻿using System;
+using Godot.Collections;
 
-namespace JoyLib.Code.Entities.Gender
+namespace JoyGodot.Assets.Scripts.Entities.Gender
 {
     [Serializable]
     public class BaseGender : IGender
@@ -46,6 +47,37 @@ namespace JoyLib.Code.Entities.Gender
             this.Reflexive = reflexive;
             this.ReflexivePlural = reflexivePlural;
             this.IsOrAre = isOrAre;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name},
+                {"Possessive", this.Possessive},
+                {"PossessivePlural", this.PossessivePlural},
+                {"PersonalSubject", this.PersonalSubject},
+                {"PersonalObject", this.PersonalObject},
+                {"Reflexive", this.Reflexive},
+                {"ReflexivePlural", this.ReflexivePlural},
+                {"IsOrAre", this.IsOrAre}
+            };
+            
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.GenderHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Possessive = valueExtractor.GetValueFromDictionary<string>(data, "Possessive");
+            this.PossessivePlural = valueExtractor.GetValueFromDictionary<string>(data, "PossessivePlural");
+            this.PersonalSubject = valueExtractor.GetValueFromDictionary<string>(data, "PersonalSubject");
+            this.PersonalObject = valueExtractor.GetValueFromDictionary<string>(data, "PersonalObject");
+            this.Reflexive = valueExtractor.GetValueFromDictionary<string>(data, "Reflexive");
+            this.ReflexivePlural = valueExtractor.GetValueFromDictionary<string>(data, "ReflexivePlural");
+            this.IsOrAre = valueExtractor.GetValueFromDictionary<string>(data, "IsOrAre");
         }
     }
 }

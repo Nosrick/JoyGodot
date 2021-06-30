@@ -1,12 +1,14 @@
-﻿using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
+﻿using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
     public interface INeed : IBasicValue<int>
     {
-
+        event ValueChangedEventHandler<int> ValueChanged; 
         bool FindFulfilmentObject(IEntity actor);
 
         bool Interact(IEntity actor, IJoyObject obj);

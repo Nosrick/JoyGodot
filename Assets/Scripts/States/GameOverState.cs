@@ -1,9 +1,7 @@
 ﻿using Godot;
-using JoyLib.Code;
-using JoyLib.Code.States;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.World;
 
-namespace Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class GameOverState : GameState
     {
@@ -24,14 +22,8 @@ namespace Code.States
             gameManager.EntityPool.RetireAll();
             gameManager.ItemPool.RetireAll();
             gameManager.FogPool.RetireAll();
-            gameManager.FloorPool.RetireAll();
-            gameManager.WallPool.RetireAll();
-            
-            
-        }
-
-        public override void Stop()
-        {
+            gameManager.FloorTileMap.Clear();
+            gameManager.WallTileMap.Clear();
         }
 
         public override void Update()

@@ -1,7 +1,9 @@
-﻿using Godot;
-using JoyLib.Code.Helpers;
+﻿using System.Diagnostics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts
 {
     public static class GlobalConstants
     {
@@ -12,11 +14,13 @@ namespace JoyLib.Code
         public const string SCRIPTS_FOLDER = DATA_FOLDER + "Scripts/";
         public const string SETTINGS_FOLDER = DATA_FOLDER + "Settings/";
 
-        public static readonly bool IS_EDITOR = Engine.EditorHint;
+        public static readonly bool DEBUG_MODE = Debugger.IsAttached;
         
         public const int MAX_LIGHT = 32;
 
-        public const int SPRITE_SIZE = 16;
+        public const int SPRITE_TEXTURE_SIZE = 32;
+        public const int SPRITE_WORLD_SIZE = 32;
+        
         public const int DEFAULT_SUCCESS_THRESHOLD = 7;
         public const int MINIMUM_SUCCESS_THRESHOLD = 4;
         public const int MAXIMUM_SUCCESS_THRESHOLD = 9;
@@ -30,5 +34,7 @@ namespace JoyLib.Code
         public static IGameManager GameManager { get; set; }
 
         public static ActionLog ActionLog { get; set; }
+        
+        public static ScriptingEngine ScriptingEngine { get; set; }
     }
 }

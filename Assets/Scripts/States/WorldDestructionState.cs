@@ -1,7 +1,7 @@
 ﻿using Godot;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class WorldDestructionState : GameState
     {
@@ -23,14 +23,6 @@ namespace JoyLib.Code.States
             this.DestroyWorld();
         }
 
-        public override void SetUpUi()
-        {
-        }
-
-        public override void Stop()
-        {
-        }
-
         public override void Update()
         {
         }
@@ -45,8 +37,8 @@ namespace JoyLib.Code.States
             gameManager.EntityPool.RetireAll();
             gameManager.ItemPool.RetireAll();
             gameManager.FogPool.RetireAll();
-            gameManager.FloorPool.RetireAll();
-            gameManager.WallPool.RetireAll();
+            gameManager.FloorTileMap.Clear();
+            gameManager.WallTileMap.Clear();
 
             this.Done = true;
         }

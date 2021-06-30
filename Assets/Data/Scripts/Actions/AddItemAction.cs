@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
 
-namespace JoyLib.Code.Scripting.Actions
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+
+namespace JoyGodot.Assets.Data.Scripts.Actions
 {
     public class AddItemAction : AbstractAction
     {

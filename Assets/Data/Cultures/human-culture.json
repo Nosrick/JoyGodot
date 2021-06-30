@@ -2,6 +2,7 @@
   "Cultures": [
     {
       "CultureName": "human kingdom",
+      "Description": "A deeply paradoxical nation, the Human Kingdom is fondly nostalgic, but always pushing forward for progress.",
       "Inhabitants": [
         "human"
       ],
@@ -227,6 +228,18 @@
         "BackgroundColours": [
           {
             "Name": "DefaultWindow",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#7a3045"
+              },
+              {
+                "Name": "border",
+                "Value": "#9e4539"
+              }
+            ]
+          },{
+            "Name": "DefaultWindowSmooth",
             "Colour": [
               {
                 "Name": "background",

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Castle.Core.Internal;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI.Tools
 {
     #if TOOLS
     [Tool]
@@ -20,7 +18,23 @@ namespace JoyLib.Code.Unity.GUI
         protected ManagedLabel NameLabel { get; set; }
         protected ManagedLabel ValueLabel { get; set; }
 
-        public ICollection<string> Tooltip { get; set; }
+        public ICollection<string> Tooltip
+        {
+            get => this.m_Tooltip;
+            set
+            {
+                this.m_Tooltip = value;
+                foreach (Node child in this.GetChildren())
+                {
+                    if (child is ITooltipHolder tooltipHolder)
+                    {
+                        tooltipHolder.Tooltip = value;
+                    }
+                }
+            }
+        }
+
+        protected ICollection<string> m_Tooltip;
 
         public ICollection<string> Values
         {
@@ -35,11 +49,36 @@ namespace JoyLib.Code.Unity.GUI
         }
 
         protected ICollection<string> m_Values;
-        
+
+        public bool MouseOver { get; protected set; }
+
         public int Minimum { get; set; }
         public int Maximum { get; set; }
 
-        protected int Index { get; set; }
+        public string Selected
+        {
+            get
+            {
+                if (this.Index >= 0 && this.Index < this.Values.Count)
+                {
+                    return this.Values.ElementAt(this.Index);
+                }
+
+                return "INDEXING ERROR";
+            }
+        }
+
+        public int Index
+        {
+            get => this.m_Index;
+            set
+            {
+                this.m_Index = value;
+                this.Value = this.Selected;
+            }
+        }
+
+        protected int m_Index;
 
         [Export]
         public bool TitleCase
@@ -67,7 +106,7 @@ namespace JoyLib.Code.Unity.GUI
         protected bool m_TitleCase;
 
         [Signal]
-        public delegate void ValueChanged(string name, int delta, int newValue);
+        public delegate void ValueChanged(string name, int delta, string newValue);
 
         public string ValueName
         {
@@ -83,11 +122,7 @@ namespace JoyLib.Code.Unity.GUI
                 this.Name = value;
                 if (this.NameLabel is null)
                 {
-                    GD.Print(this.GetType().Name + " NameLabel is null!");
-                    if (this.IsInsideTree())
-                    {
-                        GD.Print(this.GetPath());
-                    }
+                    //GD.PushWarning(this.GetType().Name + " NameLabel is null!");
 
                     return;
                 }
@@ -105,12 +140,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 if (this.ValueLabel is null)
                 {
-                    GD.Print(this.GetType().Name + " ValueLabel is null!");
-                    if (this.IsInsideTree())
-                    {
-                        GD.Print(this.GetPath());
-                    }
-
+                    //GD.PushWarning(this.GetType().Name + " ValueLabel is null!");
                     return;
                 }
 
@@ -130,19 +160,12 @@ namespace JoyLib.Code.Unity.GUI
         public override void _Ready()
         {
             base._Ready();
-            GD.Print(this.GetType().Name + " initialising");
             this.Values = new List<string>();
             this.ValueLabel = this.GetNodeOrNull("Item Value") as ManagedLabel;
             if (this.ValueLabel is null)
             {
-                GD.Print("ValueLabel of " + this.GetType().Name + " is null!");
-                if (this.IsInsideTree())
-                {
-                    GD.Print(this.GetPath());
-                }
+                GD.PushError("ValueLabel of " + this.GetType().Name + " is null!");
             }
-
-            this.Tooltip = new List<string> {"Example tooltip"};
             
             foreach (var child in this.GetChildren())
             {
@@ -187,18 +210,12 @@ namespace JoyLib.Code.Unity.GUI
             this.NameLabel = this.GetNodeOrNull("Item Name") as ManagedLabel;
             if (this.NameLabel is null)
             {
-                GD.Print("NameLabel of " + this.GetType().Name + " is null!");
-                if (this.IsInsideTree())
-                {
-                    GD.Print(this.GetPath());
-                }
+                GD.PushError("NameLabel of " + this.GetType().Name + " is null!");
             }
-            GD.Print(this.GetType().Name + " finished initialising");
         }
 
         public void ChangeValue(int delta = 1)
         {
-            GD.Print("Calling " + nameof(this.ChangeValue));
             this.Index += delta;
             if (this.Index < 0)
             {
@@ -219,21 +236,21 @@ namespace JoyLib.Code.Unity.GUI
         
         public void OnPointerEnter()
         {
-            if (Input.IsActionPressed("tooltip_show") == false
-                || this.Tooltip.IsNullOrEmpty())
-            {
-                return;
-            }
+            this.MouseOver = true;
             
             GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
-                this.Name,
+                this, 
+                this.ValueName,
                 null,
                 this.Tooltip);
         }
 
         public void OnPointerExit()
         {
-            GlobalConstants.GameManager.GUIManager.Tooltip?.Hide();
+            this.MouseOver = false;
+            
+            GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
+            GlobalConstants.GameManager.GUIManager.Tooltip.Close(this);
         }
     }
 }

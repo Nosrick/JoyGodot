@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using JoyLib.Code.Entities.Abilities;
+﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public interface IItemInstance : IJoyObject, IItemContainer, IOwnable
     {
@@ -12,13 +13,13 @@ namespace JoyLib.Code.Entities.Items
 
         IItemInstance Copy(IItemInstance copy);
 
-        void Interact(IEntity user);
+        void Interact(IEntity user, string ability);
 
         void IdentifyMe();
 
         void Deserialise();
 
-        Guid TakeMyItem(int index);
+        void Instantiate(bool recursive = true, JoyObjectNode gameObject = null, bool active = false);
         
         bool Identified { get; }
         

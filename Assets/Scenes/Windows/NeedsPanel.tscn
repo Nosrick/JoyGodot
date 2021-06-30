@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Scripts/GUI/ConstrainedDragHandle.cs" type="Script" id=2]
+[ext_resource path="res://Assets/Scripts/GUI/WorldState/NeedsPanel.cs" type="Script" id=3]
+
+[node name="NeedsPanel" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 240.0
+margin_right = -614.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+AlwaysOpen = true
+
+[node name="Background" parent="." instance=ExtResource( 1 )]
+mouse_filter = 2
+m_ElementName = "DefaultWindowSmooth"
+
+[node name="DragHandleBackground" parent="." instance=ExtResource( 1 )]
+anchor_bottom = 0.1
+mouse_filter = 2
+m_ElementName = "AccentBackground"
+
+[node name="DragHandle" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 0.1
+script = ExtResource( 2 )
+VerticalConstraint = true
+YMin = 0.5
+YMax = 0.95
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_top = 0.1
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextContainer" type="VBoxContainer" parent="ScrollContainer"]
+margin_right = 230.0
+margin_bottom = 206.0
+size_flags_horizontal = 3
+size_flags_vertical = 3

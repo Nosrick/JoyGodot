@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Scripting;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class NeedHandlerTests
     {
@@ -22,12 +21,12 @@ namespace Tests
         public void SetUp()
         {
             GlobalConstants.ActionLog = new ActionLog();
-            ScriptingEngine = new ScriptingEngine();
+            this.ScriptingEngine = new ScriptingEngine();
 
             IGameManager gameManager = Mock.Of<IGameManager>(
                 manager => manager.RelationshipHandler == Mock.Of<IEntityRelationshipHandler>()
                 && manager.ObjectIconHandler == Mock.Of<IObjectIconHandler>(
-                    handler => handler.GetSprites(
+                    handler => handler.GetManagedSprites(
                         It.IsAny<string>(), 
                         It.IsAny<string>(),
                         It.IsAny<string>()) 
@@ -35,21 +34,21 @@ namespace Tests
                                {
                                    new SpriteData
                                    {
-                                       m_Name = "DEFAULT",
-                                       m_Parts = new List<SpritePart>
+                                       Name = "DEFAULT",
+                                       Parts = new List<SpritePart>
                                        {
                                            new SpritePart
                                            {
                                                m_Frames = 1
                                            }
                                        },
-                                       m_State = "DEFAULT"
+                                       State = "DEFAULT"
                                    }
                                }));
 
             GlobalConstants.GameManager = gameManager;
             
-            target = new NeedHandler();
+            this.target = new NeedHandler();
         }
     
         [Test]
@@ -60,8 +59,8 @@ namespace Tests
             //when
             
             //then
-            Assert.That(target.Values, Is.Not.Empty);
-            foreach (INeed need in target.Values)
+            Assert.That(this.target.Values, Is.Not.Empty);
+            foreach (INeed need in this.target.Values)
             {
                 Assert.That(need.Name, Is.Not.Empty);
                 Assert.That(need.Name, Is.Not.EqualTo("DEFAULT"));

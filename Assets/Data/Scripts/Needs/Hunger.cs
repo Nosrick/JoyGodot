@@ -1,8 +1,14 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Graphics;
+using System.Linq;
 
-namespace JoyLib.Code.Entities.Needs
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Hunger : AbstractNeed
     {
@@ -149,7 +155,19 @@ namespace JoyLib.Code.Entities.Needs
 
             actor.AddContents(item);
             actor.MyWorld.RemoveObject(item.WorldPosition, item);
-            item.Interact(actor);
+            
+            var name = item.AllAbilities.FirstOrDefault(a => 
+                a.HasTag("ingestion")
+                && a.HasTag("food")
+                && a.HasTag("active")
+                )?.Name;
+            
+            if (name.IsNullOrEmpty())
+            {
+                return false;
+            }
+            
+            item.Interact(actor, name);
 
             return true;
         }

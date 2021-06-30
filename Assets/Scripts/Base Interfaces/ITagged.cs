@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts.Base_Interfaces
 {
     public interface ITagged
     {

@@ -1,8 +1,9 @@
-﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Rollers;
+﻿using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class ChatterProcessor : TopicData
     {
@@ -44,7 +45,7 @@ namespace JoyLib.Code.Entities.Conversation.Processors
                     new ITopicCondition[0],
                     "ChatterTopic",
                     new string[] {"Thanks"},
-                    this.RumourMill.GetRandom(ConversationEngine.Listener.MyWorld.GetOverworld()).Words,
+                    this.RumourMill.GetRandom(this.ConversationEngine.Listener.MyWorld.GetOverworld()).Words,
                     0,
                     null,
                     Speaker.LISTENER,

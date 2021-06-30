@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Managed_Assets;
-using JoyLib.Code.Graphics;
 
-namespace JoyLib.Code.Unity.GUI
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public interface IGUIManager : IHandler<GUIData, string>
     {
@@ -13,11 +12,15 @@ namespace JoyLib.Code.Unity.GUI
         
         Tooltip Tooltip { get; }
         
+        ContextMenu ContextMenu { get; }
+        
         void Clear();
 
         void FindGUIs();
 
-        void ToggleGUI(string name);
+        void ToggleGUI(object sender, string name);
+
+        T Get<T>(string name) where T : GUIData;
 
         void SetupManagedComponents(Control gui, bool crossFade = false, float duration = 0.1F);
         void SetUpManagedComponent(IManagedElement element, bool crossFade = false, float duration = 0.1f);
@@ -31,9 +34,9 @@ namespace JoyLib.Code.Unity.GUI
 
         void RecolourGUIs(bool crossFade = false, float duration = 0.1f);
 
-        GUIData OpenGUI(string name, bool bringToFront = false);
+        GUIData OpenGUI(object sender, string name, bool bringToFront = false);
 
-        void CloseGUI(string activeName);
+        void CloseGUI(object sender, string activeName);
 
         void BringToFront(string name);
 
@@ -43,7 +46,7 @@ namespace JoyLib.Code.Unity.GUI
 
         bool RemovesControl();
 
-        bool RemoveActiveGUI(string name);
+        bool RemoveActiveGUI(string name, bool close = false, bool disable = false);
 
         bool IsActive(string name);
 

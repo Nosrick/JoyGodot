@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Scripting.Actions
+namespace JoyGodot.Assets.Data.Scripts.Actions
 {
     public class WanderAction : AbstractAction
     {
@@ -35,10 +38,10 @@ namespace JoyLib.Code.Scripting.Actions
 
             NeedAIData needAIData = new NeedAIData
             {
-                idle = false,
-                intent = Intent.Interact,
-                searching = true,
-                targetPoint = result
+                Idle = false,
+                Intent = Intent.Interact,
+                Searching = true,
+                TargetPoint = result
             };
             
             //GlobalConstants.ActionLog.AddText(actor.JoyName + " is wandering.");

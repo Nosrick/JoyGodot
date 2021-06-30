@@ -2,34 +2,37 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Castle.Core.Internal;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.AI.Drivers;
-using JoyLib.Code.Entities.AI.LOS.Providers;
-using JoyLib.Code.Entities.Gender;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Entities.Needs;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Entities.Romance;
-using JoyLib.Code.Entities.Sexes;
-using JoyLib.Code.Entities.Sexuality;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Quests;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
 
-namespace JoyLib.Code.Entities
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Entities.AI.Drivers;
+using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
+using JoyGodot.Assets.Scripts.Entities.AI.Pathfinding;
+using JoyGodot.Assets.Scripts.Entities.Gender;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexes;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Quests;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
+using Array = Godot.Collections.Array;
+
+namespace JoyGodot.Assets.Scripts.Entities
 {
-    [Serializable]
-    public class Entity : JoyObject, IEntity
+    public class Entity : JoyObject.JoyObject, IEntity
     {
         public event ValueChangedEventHandler<int> StatisticChange;
         public event ValueChangedEventHandler<int> SkillChange;
@@ -38,6 +41,8 @@ namespace JoyLib.Code.Entities
         public event BooleanChangedEventHandler ConsciousnessChange;
         public event BooleanChangedEventHandler AliveChange;
         public event ValueChangedEventHandler<float> HappinessChange;
+
+        public event ValueChangedEventHandler<int> NeedChange; 
 
         protected IDictionary<string, IEntityStatistic> m_Statistics;
 
@@ -69,11 +74,31 @@ namespace JoyLib.Code.Entities
 
         protected IVision m_VisionProvider;
 
-        protected FulfillmentData m_FulfillmentData;
+        protected NeedFulfillmentData m_NeedFulfillmentData;
 
         protected NeedAIData m_CurrentTarget;
 
-        public float OverallHappiness => this.m_CachedHappiness;
+        public float OverallHappiness
+        {
+            get
+            {
+                if (this.HappinessIsDirty)
+                {
+                    float oldHappiness = this.m_CachedHappiness;
+                    this.m_CachedHappiness = this.CalculateOverallHappiness();
+                    this.HappinessChange?.Invoke(this, new ValueChangedEventArgs<float>
+                    {
+                        Delta = this.m_CachedHappiness - oldHappiness,
+                        Name = "Happiness",
+                        NewValue = this.m_CachedHappiness
+                    });
+                    this.HappinessIsDirty = false;
+                }
+
+                return this.m_CachedHappiness;
+            }
+        }
+
         protected float m_CachedHappiness;
 
         public bool HappinessIsDirty
@@ -99,39 +124,262 @@ namespace JoyLib.Code.Entities
         protected bool m_HappinessIsDirty;
 
 
-        protected NeedDataSerialisable CurrentTargetSerialise
+        public string ContentString { get; }
+        public event ItemRemovedEventHandler ItemRemoved;
+        public event ItemAddedEventHandler ItemAdded;
+
+        public string CreatureType { get; protected set; }
+
+        public IBioSex Sex { get; protected set; }
+
+        public IGender Gender { get; protected set; }
+
+        public NeedAIData CurrentTarget
         {
-            get => new NeedDataSerialisable
+            get { return this.m_CurrentTarget; }
+            set { this.m_CurrentTarget = value; }
+        }
+
+        public IDriver Driver => this.m_Driver;
+
+        public List<IAbility> AllAbilities
+        {
+            get
             {
-                idle = this.CurrentTarget.idle,
-                intent = this.CurrentTarget.intent,
-                need = this.CurrentTarget.need,
-                searching = this.CurrentTarget.searching,
-                targetGuid = this.CurrentTarget.target?.Guid ?? Guid.Empty,
-                targetPoint = this.CurrentTarget.targetPoint,
-                targetType = this.CurrentTarget.target is null ? "none" : this.CurrentTarget.target.GetType().Name
-            };
+                List<IAbility> allAbilities = this.Abilities;
+                allAbilities.AddRange(this.Equipment.Contents.SelectMany(item => item.AllAbilities));
+                return allAbilities;
+            }
+        }
+
+        public EquipmentStorage Equipment => this.m_Equipment;
+
+        public IDictionary<string, IEntityStatistic> Statistics
+        {
+            get { return this.m_Statistics; }
+        }
+
+        public IDictionary<string, IEntitySkill> Skills
+        {
+            get { return this.m_Skills; }
+        }
+
+        public IDictionary<string, INeed> Needs
+        {
+            get { return this.m_Needs; }
+        }
+
+        public List<IAbility> Abilities => this.m_Abilities;
+
+        public string JobName
+        {
+            get { return this.m_CurrentJob.Name; }
+        }
+
+        public bool Sentient
+        {
+            get { return this.Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
+        }
+
+        public int Size
+        {
+            get { return this.m_Size; }
+        }
+
+        public IEnumerable<Vector2Int> Vision
+        {
+            get { return this.m_VisionProvider.Vision; }
+        }
+
+        public bool PlayerControlled { get; set; }
+
+        public IItemInstance NaturalWeapons => this.m_NaturalWeapons;
+
+        public List<string> IdentifiedItems => this.m_IdentifiedItems;
+
+        public IJob CurrentJob => this.m_CurrentJob;
+
+        public bool HasMoved { get; set; }
+
+        public NeedFulfillmentData NeedFulfillmentData
+        {
+            get => this.m_NeedFulfillmentData;
             set
             {
-                this.m_CurrentTarget = new NeedAIData
-                {
-                    idle = value.idle,
-                    intent = value.intent,
-                    need = value.need,
-                    searching = value.searching,
-                    targetPoint = value.targetPoint
-                };
+                this.m_NeedFulfillmentData = value;
 
-                if (value.targetType == typeof(IEntity).Name)
+                if (value.IsEmpty())
                 {
-                    this.m_CurrentTarget.target = GlobalConstants.GameManager.EntityHandler.Get(value.targetGuid);
+                    this.MyNode?.SetSpeechBubble(false);
+                    return;
                 }
-                else if (value.targetType == typeof(IItemInstance).Name)
+
+                if (this.m_NeedFulfillmentData.IsEmpty() == false
+                    && this.m_NeedFulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
                 {
-                    this.m_CurrentTarget.target = GlobalConstants.GameManager.ItemHandler.Get(value.targetGuid);
+                    this.MyNode?.SetSpeechBubble(this.m_NeedFulfillmentData.Counter > 0,
+                        this.m_Needs[this.m_NeedFulfillmentData.Name].FulfillingSprite);
                 }
             }
         }
+
+        public ISexuality Sexuality
+        {
+            get => this.m_Sexuality;
+            set => this.m_Sexuality = value;
+        }
+
+        public IRomance Romance
+        {
+            get => this.m_Romance;
+            set => this.m_Romance = value;
+        }
+
+        public IAbility TargetingAbility { get; set; }
+
+        public int Mana
+        {
+            get { return this.DerivedValues[DerivedValueName.MANA].Maximum; }
+        }
+
+        public int ManaRemaining
+        {
+            get { return this.DerivedValues[DerivedValueName.MANA].Value; }
+        }
+
+        public int ComposureRemaining
+        {
+            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Value; }
+        }
+
+        public int Composure
+        {
+            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Maximum; }
+        }
+
+        public int Concentration
+        {
+            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Maximum; }
+        }
+
+        public int ConcentrationRemaining
+        {
+            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Value; }
+        }
+
+        public Vector2Int TargetPoint { get; set; }
+
+        protected int RegenTicker { get; set; }
+
+        //public Quest QuestOffered { get; set; }
+
+        public List<ICulture> Cultures => this.m_Cultures;
+
+        public IVision VisionProvider => this.m_VisionProvider;
+
+        public List<string> Slots => this.m_Slots;
+
+        public int VisionMod => 7;
+
+        protected string ConditionString
+        {
+            get
+            {
+                float percentage = this.HitPointsRemaining / (float) this.HitPoints;
+                if (Math.Abs(this.LastPercentage - percentage) < 0.02f &&
+                    this.LastConditionString.IsNullOrEmpty() == false)
+                {
+                    return this.LastConditionString;
+                }
+
+                string condition = this.Equals(GlobalConstants.GameManager.Player)
+                    ? "You are "
+                    : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject)
+                      + " " + this.Gender.IsOrAre + " ";
+
+                if (this.Conscious == false)
+                {
+                    condition += "unconscious";
+                }
+                else if (percentage > 0.9f)
+                {
+                    condition += "uninjured";
+                }
+                else if (percentage > 0.7f)
+                {
+                    condition += "lightly injured";
+                }
+                else if (percentage > 0.5f)
+                {
+                    condition += "moderately injured";
+                }
+                else if (percentage > 0.3f)
+                {
+                    condition += "severely injured";
+                }
+                else if (percentage > 0.1f)
+                {
+                    condition += "gravely injured";
+                }
+                else
+                {
+                    condition += "barely conscious";
+                }
+
+                this.LastPercentage = percentage;
+                this.LastConditionString = condition;
+                return condition;
+            }
+        }
+
+        protected float LastPercentage { get; set; }
+        protected string LastConditionString { get; set; }
+
+        public Queue<Vector2Int> PathfindingData
+        {
+            get { return this.m_PathfindingData; }
+            set { this.m_PathfindingData = value; }
+        }
+
+        public IPathfinder Pathfinder
+        {
+            get { return this.m_Pathfinder; }
+        }
+
+        public override IWorldInstance MyWorld
+        {
+            get => this.m_MyWorld;
+            set
+            {
+                this.m_MyWorld = value;
+                foreach (IItemInstance item in this.Contents)
+                {
+                    item.MyWorld = value;
+                }
+            }
+        }
+
+        public bool Conscious => this.HitPointsRemaining > 0;
+
+        public List<IJob> Jobs { get; protected set; }
+
+        public override ICollection<string> Tooltip => this.ConstructDescription();
+
+        public List<string> CultureNames
+        {
+            get
+            {
+                if (this.m_CultureNames is null)
+                {
+                    this.m_CultureNames = this.Cultures.Select(culture => culture.CultureName).ToList();
+                }
+
+                return this.m_CultureNames;
+            }
+            protected set => this.m_CultureNames = value;
+        }
+
+        protected List<string> m_CultureNames;
 
         protected IDriver m_Driver;
 
@@ -139,11 +387,11 @@ namespace JoyLib.Code.Entities
 
         protected Queue<Vector2Int> m_PathfindingData;
 
-        [NonSerialized] protected IWorldInstance m_MyWorld;
+        protected IWorldInstance m_MyWorld;
 
-        [NonSerialized] protected const int REGEN_TICK_TIME = 10;
+        protected const int REGEN_TICK_TIME = 10;
 
-        [NonSerialized] protected const int ATTACK_THRESHOLD = -50;
+        protected const int ATTACK_THRESHOLD = -50;
 
         public IEnumerable<IItemInstance> Contents => GlobalConstants.GameManager.ItemHandler.GetItems(this.m_Backpack);
 
@@ -157,7 +405,7 @@ namespace JoyLib.Code.Entities
 
         public IDerivedValueHandler DerivedValueHandler { get; set; }
 
-        protected readonly static string[] STANDARD_ACTIONS = new string[]
+        protected static readonly string[] STANDARD_ACTIONS =
         {
             "giveitemaction",
             "fulfillneedaction",
@@ -170,7 +418,14 @@ namespace JoyLib.Code.Entities
         };
 
         public Entity()
-        { }
+        {
+            this.Data = new NonUniqueDictionary<object, object>(); 
+            foreach(string action in STANDARD_ACTIONS)
+            {
+                this.CachedActions.Add(GlobalConstants.ScriptingEngine.FetchAction(action));
+            }
+            this.Initialise();
+        }
 
         /// <summary>
         /// 
@@ -250,6 +505,12 @@ namespace JoyLib.Code.Entities
 
             this.m_Needs = needs;
 
+            foreach (INeed need in this.m_Needs.Values)
+            {
+                need.ValueChanged -= this.MarkHappinessDirty;
+                need.ValueChanged += this.MarkHappinessDirty;
+            }
+
             this.m_Skills = skills;
 
             this.m_Abilities = template.Abilities.ToList();
@@ -267,13 +528,10 @@ namespace JoyLib.Code.Entities
 
             this.m_Cultures = cultures.ToList();
 
-            this.m_Pathfinder = (IPathfinder) ScriptingEngine.Instance.FetchAndInitialise("custompathfinder");
+            this.m_Pathfinder = (IPathfinder) GlobalConstants.ScriptingEngine.FetchAndInitialise("custompathfinder");
             this.m_PathfindingData = new Queue<Vector2Int>();
 
-            this.m_FulfillmentData = new FulfillmentData(
-                "none",
-                0,
-                new IJoyObject[0]);
+            this.m_NeedFulfillmentData = new NeedFulfillmentData();
 
             this.RegenTicker = this.Roller.Roll(0, REGEN_TICK_TIME);
 
@@ -364,6 +622,12 @@ namespace JoyLib.Code.Entities
             this.HappinessIsDirty = true;
         }
 
+        protected void MarkHappinessDirty(object sender, ValueChangedEventArgs<int> args)
+        {
+            this.HappinessIsDirty = true;
+            this.NeedChange?.Invoke(this, args);
+        }
+
         protected ICollection<string> ConstructDescription()
         {
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
@@ -380,8 +644,8 @@ namespace JoyLib.Code.Entities
                 {
                     relationship = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
                         this.RelationshipHandler.GetBestRelationship(
-                                this,
-                                GlobalConstants.GameManager.Player)
+                                this.Guid,
+                                GlobalConstants.GameManager.Player.Guid)
                             .DisplayName);
                 }
                 catch (Exception e)
@@ -414,7 +678,7 @@ namespace JoyLib.Code.Entities
 
             foreach (string name in this.DerivedValues.Keys)
             {
-                IDerivedValue dv = DerivedValueHandler.Calculate(name, this.Statistics.Values);
+                IDerivedValue dv = this.DerivedValueHandler.Calculate(name, this.Statistics.Values);
                 if (this.DerivedValues[name].Base == dv.Base)
                 {
                     continue;
@@ -480,11 +744,10 @@ namespace JoyLib.Code.Entities
         {
             this.HappinessIsDirty = false;
 
-            if (this.m_FulfillmentData is null == false
-                && this.m_FulfillmentData.Counter > 0
-                && this.m_FulfillmentData.DecrementCounter() == 0)
+            if (this.m_NeedFulfillmentData.Counter > 0
+                && this.m_NeedFulfillmentData.DecrementCounter() == 0)
             {
-                this.FulfillmentData = null;
+                this.NeedFulfillmentData = new NeedFulfillmentData();
             }
 
             this.RegenTicker += 1;
@@ -509,7 +772,7 @@ namespace JoyLib.Code.Entities
         public void AddQuest(IQuest quest)
         {
             quest.StartQuest(this);
-            QuestTracker?.AddQuest(this.Guid, quest);
+            this.QuestTracker?.AddQuest(this.Guid, quest);
         }
 
         public bool AddJob(IJob job)
@@ -556,19 +819,19 @@ namespace JoyLib.Code.Entities
             return true;
         }
 
-        public IEnumerable<Tuple<string, int>> GetData(IEnumerable<string> tags, params object[] args)
+        public IEnumerable<Tuple<string, object>> GetData(IEnumerable<string> tags, params object[] args)
         {
             //Check statistics
-            IEnumerable<string> tagArray = tags as string[] ?? tags.ToArray();
-            List<Tuple<string, int>> data = (from tag in tagArray
+            IEnumerable<string> tagArray = tags is null ? new string[0] : tags.ToArray();
+            List<Tuple<string, object>> data = (from tag in tagArray
                 where this.m_Statistics.ContainsKey(tag)
-                select new Tuple<string, int>(tag, this.m_Statistics[tag].Value)).ToList();
+                select new Tuple<string, object>(tag, this.m_Statistics[tag].Value)).ToList();
 
             //Fetch all statistics
             if (tagArray.Any(tag => tag.Equals("statistics", StringComparison.OrdinalIgnoreCase)))
             {
                 data.AddRange(this.m_Statistics.Select(pair =>
-                    new Tuple<string, int>(pair.Key, pair.Value.Value)));
+                    new Tuple<string, object>(pair.Key, pair.Value.Value)));
             }
 
             //Check skills
@@ -576,7 +839,7 @@ namespace JoyLib.Code.Entities
             {
                 if (this.m_Skills.ContainsKey(tag))
                 {
-                    data.Add(new Tuple<string, int>(tag, this.m_Skills[tag].Value));
+                    data.Add(new Tuple<string, object>(tag, this.m_Skills[tag].Value));
                 }
             }
 
@@ -584,7 +847,7 @@ namespace JoyLib.Code.Entities
             if (tagArray.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
             {
                 data.AddRange(from IRollableValue<int> skill in this.m_Skills.Values
-                    select new Tuple<string, int>(skill.Name, skill.Value));
+                    select new Tuple<string, object>(skill.Name, skill.Value));
             }
 
             //Check needs
@@ -592,14 +855,14 @@ namespace JoyLib.Code.Entities
             {
                 if (this.m_Needs.ContainsKey(tag))
                 {
-                    data.Add(new Tuple<string, int>(tag, this.m_Needs[tag].Value));
+                    data.Add(new Tuple<string, object>(tag, this.m_Needs[tag].Value));
                 }
             }
 
             //Fetch all needs
             if (tagArray.Any(tag => tag.Equals("needs", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from INeed need in this.m_Needs select new Tuple<string, int>(need.Name, need.Value));
+                data.AddRange(from INeed need in this.m_Needs select new Tuple<string, object>(need.Name, need.Value));
             }
 
             //Check equipment
@@ -610,14 +873,14 @@ namespace JoyLib.Code.Entities
                 int result = this.m_Equipment.Contents.Count(item => item.HasTag(tag));
                 if (result > 0)
                 {
-                    data.Add(new Tuple<string, int>(tag, result));
+                    data.Add(new Tuple<string, object>(tag, result));
                 }
 
                 result = items.Count(item => item.HasTag(tag));
 
                 if (result > 0)
                 {
-                    data.Add(new Tuple<string, int>(tag, result));
+                    data.Add(new Tuple<string, object>(tag, result));
                 }
             }
 
@@ -633,12 +896,12 @@ namespace JoyLib.Code.Entities
 
                 if (identifiedNames > 0)
                 {
-                    data.Add(new Tuple<string, int>(tag, identifiedNames));
+                    data.Add(new Tuple<string, object>(tag, identifiedNames));
                 }
 
                 if (unidentifiedNames > 0)
                 {
-                    data.Add(new Tuple<string, int>(tag, unidentifiedNames));
+                    data.Add(new Tuple<string, object>(tag, unidentifiedNames));
                 }
             }
 
@@ -650,7 +913,7 @@ namespace JoyLib.Code.Entities
                     IJob job = this.Jobs.FirstOrDefault(j => j.Name.Equals(tag, StringComparison.OrdinalIgnoreCase));
                     if (job is null == false)
                     {
-                        data.Add(new Tuple<string, int>(job.Name, 1));
+                        data.Add(new Tuple<string, object>(job.Name, 1));
                     }
                 }
                 catch (Exception e)
@@ -662,40 +925,40 @@ namespace JoyLib.Code.Entities
             //Fetch all job levels
             if (tagArray.Any(tag => tag.Equals("jobs", StringComparison.OrdinalIgnoreCase)))
             {
-                data.AddRange(from job in this.Jobs select new Tuple<string, int>(job.Name, 1));
+                data.AddRange(from job in this.Jobs select new Tuple<string, object>(job.Name, job.Experience));
             }
 
             //Fetch gender data
             if (tagArray.Any(tag => tag.Equals(this.Gender.Name, StringComparison.OrdinalIgnoreCase))
                 || tagArray.Any(tag => tag.Equals("gender", StringComparison.OrdinalIgnoreCase)))
             {
-                data.Add(new Tuple<string, int>(this.Gender.Name, 1));
+                data.Add(new Tuple<string, object>("gender", this.Gender.Name));
             }
 
             //Fetch sex data
             if (tagArray.Any(tag => tag.Equals(this.Sex.Name, StringComparison.OrdinalIgnoreCase))
-                || tagArray.Any(tag => tag.Equals("sex")))
+                || tagArray.Any(tag => tag.Equals("biosex")))
             {
-                data.Add(new Tuple<string, int>(this.Sex.Name, 1));
+                data.Add(new Tuple<string, object>("sex", this.Sex.Name));
             }
 
             if (tagArray.Any(tag => tag.Equals("can birth", StringComparison.OrdinalIgnoreCase)))
             {
-                data.Add(new Tuple<string, int>("can birth", this.Sex.CanBirth == true ? 1 : 0));
+                data.Add(new Tuple<string, object>("can birth", this.Sex.CanBirth));
             }
 
             //Fetch sexuality data
             if (tagArray.Any(tag => tag.Equals(this.Sexuality.Name, StringComparison.OrdinalIgnoreCase))
                 || tagArray.Any(tag => tag.Equals("sexuality", StringComparison.OrdinalIgnoreCase)))
             {
-                data.Add(new Tuple<string, int>(this.Sexuality.Name, 1));
+                data.Add(new Tuple<string, object>("sexuality", this.Sexuality.Name));
             }
 
             //Fetch romance data
             if (tagArray.Any(tag => tag.Equals(this.Romance.Name, StringComparison.OrdinalIgnoreCase))
                 || tagArray.Any(tag => tag.Equals("romance", StringComparison.OrdinalIgnoreCase)))
             {
-                data.Add(new Tuple<string, int>(this.Romance.Name, 1));
+                data.Add(new Tuple<string, object>("romance", this.Romance.Name));
             }
 
             if (args is null || args.Length <= 0)
@@ -710,7 +973,7 @@ namespace JoyLib.Code.Entities
                     continue;
                 }
 
-                List<IRelationship> relationships = RelationshipHandler?.GetAllForObject(this).ToList();
+                List<IRelationship> relationships = this.RelationshipHandler?.GetAllForObject(this.Guid).ToList();
 
                 if (relationships.IsNullOrEmpty())
                 {
@@ -719,14 +982,14 @@ namespace JoyLib.Code.Entities
 
                 if (tagArray.Any(tag => tag.Equals("will mate", StringComparison.OrdinalIgnoreCase)))
                 {
-                    data.Add(new Tuple<string, int>(
+                    data.Add(new Tuple<string, object>(
                         other.JoyName,
                         this.Sexuality.WillMateWith(this, other, relationships) ? 1 : 0));
                 }
 
                 if (tagArray.Any(tag => tag.Equals("will romance", StringComparison.OrdinalIgnoreCase)))
                 {
-                    data.Add(new Tuple<string, int>(
+                    data.Add(new Tuple<string, object>(
                         other.JoyName,
                         this.Romance.WillRomance(this, other, relationships) ? 1 : 0));
                 }
@@ -739,8 +1002,8 @@ namespace JoyLib.Code.Entities
                         if (relationship.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase)))
                         {
                             int relationshipValue = relationship.GetRelationshipValue(this.Guid, other.Guid);
-                            data.Add(new Tuple<string, int>(tag, 1));
-                            data.Add(new Tuple<string, int>("relationship", relationshipValue));
+                            data.Add(new Tuple<string, object>(tag, 1));
+                            data.Add(new Tuple<string, object>("relationship", relationshipValue));
                         }
                     }
                 }
@@ -775,7 +1038,7 @@ namespace JoyLib.Code.Entities
         public new void Move(Vector2Int position)
         {
             base.Move(position);
-            foreach (IJoyObject joyObject in this.Contents)
+            foreach (IItemInstance joyObject in this.Contents)
             {
                 joyObject.Move(position);
             }
@@ -911,7 +1174,7 @@ namespace JoyLib.Code.Entities
 
         public virtual bool CanAddContents(IItemInstance actor)
         {
-            return true;
+            return actor.Guid != this.Guid && !this.Contains(actor);
         }
 
         public virtual bool Contains(IItemInstance actor)
@@ -1072,265 +1335,199 @@ namespace JoyLib.Code.Entities
             throw new InvalidOperationException("No value of " + name + " found on " + this.JoyName);
         }
 
-        public string ContentString { get; }
-        public event ItemRemovedEventHandler ItemRemoved;
-        public event ItemAddedEventHandler ItemAdded;
-
-        public string CreatureType { get; protected set; }
-
-        public IBioSex Sex { get; protected set; }
-
-        public IGender Gender { get; protected set; }
-
-        public NeedAIData CurrentTarget
+        public override Dictionary Save()
         {
-            get { return this.m_CurrentTarget; }
-            set { this.m_CurrentTarget = value; }
-        }
+            Dictionary saveDict = base.Save();
 
-        public IDriver Driver => this.m_Driver;
+            saveDict.Add("CreatureType", this.CreatureType);
+            saveDict.Add("Statistics", new Array(this.Statistics.Values.Select(statistic => statistic.Save())));
+            saveDict.Add("Skills", new Array(this.Skills.Values.Select(skill => skill.Save())));
+            saveDict.Add("Needs", new Array(this.Needs.Values.Select(need => need.Save())));
+            saveDict.Add("Abilities", new Array(this.Abilities.Select(ability => ability.Save())));
+            saveDict.Add("Equipment", this.Equipment.Save());
+            saveDict.Add("Backpack", new Array(this.m_Backpack.Select(guid => guid.ToString())));
+            saveDict.Add("Sexuality", this.Sexuality.Save());
+            saveDict.Add("Sex", this.Sex.Save());
+            saveDict.Add("Romance", this.Romance.Save());
+            saveDict.Add("Gender", this.Gender.Save());
+            saveDict.Add("IdentifiedItems", new Array(this.IdentifiedItems));
+            saveDict.Add("CurrentJob", this.CurrentJob.Name);
+            saveDict.Add("Slots", new Array(this.Slots));
+            saveDict.Add("Cultures", new Array(this.CultureNames));
+            saveDict.Add("Size", this.Size);
+            saveDict.Add("VisionProvider", this.VisionProvider.Name);
+            saveDict.Add("FulfilmentData", this.NeedFulfillmentData.Save());
+            saveDict.Add("NeedData", this.CurrentTarget.Save());
+            saveDict.Add("PlayerControlled", this.PlayerControlled);
+            saveDict.Add("RegenTicker", this.RegenTicker);
+            saveDict.Add("PathfindingData", new Array(this.PathfindingData.Select(i => i.Save())));
+            saveDict.Add("HasMoved", this.HasMoved);
 
-        public List<IAbility> AllAbilities
-        {
-            get
+            Array tempArray = new Array();
+            foreach (var job in this.Jobs)
             {
-                List<IAbility> allAbilities = this.Abilities;
-                allAbilities.AddRange(this.Equipment.Contents.SelectMany(item => item.AllAbilities));
-                return allAbilities;
+                Dictionary tempDict = new Dictionary
+                {
+                    {"Name", job.Name},
+                    {"Experience", job.Experience}
+                };
+                tempArray.Add(tempDict);
             }
+
+            saveDict.Add("Jobs", tempArray);
+
+            return saveDict;
         }
 
-        public EquipmentStorage Equipment => this.m_Equipment;
-
-        public IDictionary<string, IEntityStatistic> Statistics
+        public override void Load(Dictionary data)
         {
-            get { return this.m_Statistics; }
-        }
+            base.Load(data);
 
-        public IDictionary<string, IEntitySkill> Skills
-        {
-            get { return this.m_Skills; }
-        }
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
 
-        public IDictionary<string, INeed> Needs
-        {
-            get { return this.m_Needs; }
-        }
-
-        public List<IAbility> Abilities => this.m_Abilities;
-
-        public string JobName
-        {
-            get { return this.m_CurrentJob.Name; }
-        }
-
-        public bool Sentient
-        {
-            get { return this.Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
-        }
-
-        public int Size
-        {
-            get { return this.m_Size; }
-        }
-
-        public IEnumerable<Vector2Int> Vision
-        {
-            get { return this.m_VisionProvider.Vision; }
-        }
-
-        public bool PlayerControlled { get; set; }
-
-        public IItemInstance NaturalWeapons => this.m_NaturalWeapons;
-
-        public List<string> IdentifiedItems => this.m_IdentifiedItems;
-
-        public IJob CurrentJob => this.m_CurrentJob;
-
-        public bool HasMoved { get; set; }
-
-        public FulfillmentData FulfillmentData
-        {
-            get => this.m_FulfillmentData;
-            set
+            this.CreatureType = valueExtractor.GetValueFromDictionary<string>(data, "CreatureType");
+            this.m_Statistics = new System.Collections.Generic.Dictionary<string, IEntityStatistic>();
+            ICollection<Dictionary> tempDicts =
+                valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
+                    data,
+                    "Statistics");
+            foreach (Dictionary statDict in tempDicts)
             {
-                this.m_FulfillmentData = value;
-
-                if (value is null)
-                {
-                    this.MyNode.SetSpeechBubble(false);
-                    return;
-                }
-
-                if (this.m_FulfillmentData.Name.IsNullOrEmpty() == false
-                    && this.m_FulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
-                {
-                    this.MyNode.SetSpeechBubble(this.m_FulfillmentData.Counter > 0,
-                        this.m_Needs[this.m_FulfillmentData.Name].FulfillingSprite);
-                }
+                IEntityStatistic statistic = new EntityStatistic();
+                statistic.Load(statDict);
+                this.Statistics.Add(statistic.Name, statistic);
             }
-        }
 
-        public ISexuality Sexuality
-        {
-            get => this.m_Sexuality;
-            set => this.m_Sexuality = value;
-        }
-
-        public IRomance Romance
-        {
-            get => this.m_Romance;
-            set => this.m_Romance = value;
-        }
-
-        public IAbility TargetingAbility { get; set; }
-
-        public int Mana
-        {
-            get { return this.DerivedValues[DerivedValueName.MANA].Maximum; }
-        }
-
-        public int ManaRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.MANA].Value; }
-        }
-
-        public int ComposureRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Value; }
-        }
-
-        public int Composure
-        {
-            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Maximum; }
-        }
-
-        public int Concentration
-        {
-            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Maximum; }
-        }
-
-        public int ConcentrationRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Value; }
-        }
-
-        public Vector2Int TargetPoint { get; set; }
-
-        protected int RegenTicker { get; set; }
-
-        //public Quest QuestOffered { get; set; }
-
-        public List<ICulture> Cultures => this.m_Cultures;
-
-        public IVision VisionProvider => this.m_VisionProvider;
-
-        public List<string> Slots => this.m_Slots;
-
-        public int VisionMod => 7;
-
-        protected string ConditionString
-        {
-            get
+            this.m_Skills = new System.Collections.Generic.Dictionary<string, IEntitySkill>();
+            tempDicts = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
+                data,
+                "Skills");
+            foreach (Dictionary skillDict in tempDicts)
             {
-                float percentage = this.HitPointsRemaining / (float) this.HitPoints;
-                if (this.LastPercentage == percentage && this.LastConditionString.IsNullOrEmpty() == false)
-                {
-                    return this.LastConditionString;
-                }
-
-                /*
-                string condition = this.Equals(GlobalConstants.GameManager.Player)
-                    ? "You are "
-                    : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(this.Gender.PersonalSubject)
-                      + " " + this.Gender.IsOrAre + " ";
-                      */
-                string condition = "This is fine";
-                /*
-                if (this.Conscious == false)
-                {
-                    condition += "unconscious";
-                }
-                else if (percentage > 0.9f)
-                {
-                    condition += "uninjured";
-                }
-                else if (percentage > 0.7f)
-                {
-                    condition += "lightly injured";
-                }
-                else if (percentage > 0.5f)
-                {
-                    condition += "moderately injured";
-                }
-                else if (percentage > 0.3f)
-                {
-                    condition += "severely injured";
-                }
-                else if (percentage > 0.1f)
-                {
-                    condition += "gravely injured";
-                }
-                else
-                {
-                    condition += "barely conscious";
-                }
-                */
-
-                this.LastPercentage = percentage;
-                this.LastConditionString = condition;
-                return condition;
+                IEntitySkill skill = new EntitySkill();
+                skill.Load(skillDict);
+                this.Skills.Add(skill.Name, skill);
             }
-        }
 
-        protected float LastPercentage { get; set; }
-        protected string LastConditionString { get; set; }
-
-        public Queue<Vector2Int> PathfindingData
-        {
-            get { return this.m_PathfindingData; }
-            set { this.m_PathfindingData = value; }
-        }
-
-        public IPathfinder Pathfinder
-        {
-            get { return this.m_Pathfinder; }
-        }
-
-        public override IWorldInstance MyWorld
-        {
-            get => this.m_MyWorld;
-            set
+            this.m_Needs = new System.Collections.Generic.Dictionary<string, INeed>();
+            tempDicts = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
+                data,
+                "Needs");
+            foreach (Dictionary needDict in tempDicts)
             {
-                this.m_MyWorld = value;
-                foreach (IItemInstance item in this.Contents)
-                {
-                    item.MyWorld = value;
-                }
+                string name = valueExtractor.GetValueFromDictionary<string>(needDict, "Name");
+                INeed need = GlobalConstants.GameManager.NeedHandler.Get(name);
+                need.Load(needDict);
+                need.ValueChanged += this.MarkHappinessDirty;
+                this.m_Needs.Add(need.Name, need);
             }
-        }
 
-        public bool Conscious => this.HitPointsRemaining > 0;
-
-        public List<IJob> Jobs { get; protected set; }
-
-        public override ICollection<string> Tooltip => this.ConstructDescription();
-
-
-        public List<string> CultureNames
-        {
-            get
+            this.m_Abilities = new List<IAbility>();
+            tempDicts = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
+                data,
+                "Abilities");
+            foreach (Dictionary abilityDict in tempDicts)
             {
-                if (this.m_CultureNames is null)
+                string name = valueExtractor.GetValueFromDictionary<string>(abilityDict, "Name");
+                IAbility ability = GlobalConstants.GameManager.AbilityHandler.Get(name);
+                if (ability is null)
                 {
-                    this.m_CultureNames = this.Cultures.Select(culture => culture.CultureName).ToList();
+                    continue;
                 }
-
-                return this.m_CultureNames;
+                
+                ability.Load(abilityDict);
+                this.m_Abilities.Add(ability);
             }
-            protected set => this.m_CultureNames = value;
-        }
 
-        protected List<string> m_CultureNames;
+            this.m_Equipment = new EquipmentStorage();
+            this.m_Equipment.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Equipment"));
+
+            this.m_Backpack = valueExtractor
+                .GetArrayValuesCollectionFromDictionary<string>(data, "Backpack")
+                .Select(s => new Guid(s))
+                .ToList();
+
+            this.Gender = new BaseGender();
+            this.Gender.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Gender"));
+
+            this.m_Sexuality = new BaseSexuality();
+            this.Sexuality.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Sexuality"));
+
+            this.Sex = new BaseBioSex();
+            this.Sex.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Sex"));
+
+            this.Romance = new BaseRomance();
+            this.Romance.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Romance"));
+
+            this.m_IdentifiedItems = valueExtractor
+                .GetArrayValuesCollectionFromDictionary<string>(data, "IdentifiedItems")
+                .ToList();
+
+            this.m_CurrentJob = GlobalConstants.GameManager.JobHandler.Get(
+                valueExtractor.GetValueFromDictionary<string>(data, "CurrentJob"));
+
+            this.m_Slots = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Slots")
+                .ToList();
+
+            this.m_Cultures = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Cultures")
+                .Select(name => GlobalConstants.GameManager.CultureHandler.GetByCultureName(name))
+                .ToList();
+
+            this.m_Size = valueExtractor.GetValueFromDictionary<int>(data, "Size");
+
+            this.m_VisionProvider = GlobalConstants.GameManager.VisionProviderHandler.Get(
+                valueExtractor.GetValueFromDictionary<string>(data, "VisionProvider"));
+
+            this.m_CurrentTarget = new NeedAIData();
+            this.m_CurrentTarget.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "NeedData"));
+
+            this.m_NeedFulfillmentData = new NeedFulfillmentData();
+            this.m_NeedFulfillmentData.Load(valueExtractor.GetValueFromDictionary<Dictionary>(data, "FulfilmentData"));
+
+            this.PlayerControlled = valueExtractor.GetValueFromDictionary<bool>(data, "PlayerControlled");
+
+            if (this.PlayerControlled)
+            {
+                this.m_Driver = new PlayerDriver();
+            }
+            else
+            {
+                this.m_Driver = new StandardDriver();
+            }
+            
+            this.RegenTicker = valueExtractor.GetValueFromDictionary<int>(data, "RegenTicker");
+            var pathfindingData = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
+                data,
+                "PathfindingData");
+
+            this.m_Pathfinder = new CustomPathfinder();
+            this.m_PathfindingData = new Queue<Vector2Int>();
+
+            foreach (Dictionary dict in pathfindingData)
+            {
+                this.m_PathfindingData.Enqueue(new Vector2Int(dict));
+            }
+
+            this.HasMoved = valueExtractor.GetValueFromDictionary<bool>(data, "HasMoved");
+
+            this.Jobs = new List<IJob>();
+            var jobs = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Jobs");
+            foreach (Dictionary dict in jobs)
+            {
+                string name = valueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                int experience = valueExtractor.GetValueFromDictionary<int>(dict, "Experience");
+
+                var job = GlobalConstants.GameManager.JobHandler.Get(name);
+                if (job is null)
+                {
+                    continue;
+                }
+                job.AddExperience(experience);
+                this.Jobs.Add(job);
+            }
+
+            this.Tooltip = this.ConstructDescription();
+            this.HappinessIsDirty = true;
+        }
     }
 }

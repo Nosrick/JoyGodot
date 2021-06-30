@@ -2,6 +2,7 @@
   "Entities": [
       {
         "CreatureType": "Naga",
+        "Description": "With a sinewy, snake-like tail, lithe limbs and a venomous bite, the Naga are generally considered to be one of the more dangerous races.",
         "Type": "Naga",
         "VisionType": "nocturnal vision",
         "Statistics": [
@@ -81,6 +82,7 @@
       },
       {
         "CreatureType": "Slime",
+        "Description": "With a strange, rubbery and near-liquid body, the slime is able to survive in most conditions.",
         "Type": "Slime",
         "VisionType": "nocturnal vision",
         "TileSet": "slime",

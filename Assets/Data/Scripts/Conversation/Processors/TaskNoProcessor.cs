@@ -1,6 +1,6 @@
-﻿using JoyLib.Code.Conversation.Conversations;
+﻿using JoyGodot.Assets.Scripts.Conversation.Conversations;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class TaskNoProcessor : TopicData
     {

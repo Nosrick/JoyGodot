@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Castle.Core.Internal;
+
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Conversation.Conversations.Rumours;
-using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Conversation.Conversations
+namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
 {
     public class ConcreteRumourMill : IRumourMill
     {
@@ -110,7 +109,7 @@ namespace JoyLib.Code.Conversation.Conversations
                     List<ITopicCondition> conditions =
                         conditionStrings.Select(this.ParseCondition).ToList();
 
-                    var processorBase = processor.IsNullOrEmpty() ? null : ScriptingEngine.Instance.FetchAndInitialise(processor);
+                    var processorBase = processor.IsNullOrEmpty() ? null : GlobalConstants.ScriptingEngine.FetchAndInitialise(processor);
                     if (processorBase is null == false)
                     {
                         IRumour processorObject = (IRumour) processorBase;

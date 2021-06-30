@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code.Graphics;
 
-namespace JoyLib.Code.Unity.GUI
+using Godot;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public class Tooltip : GUIData
     {
@@ -41,10 +41,28 @@ namespace JoyLib.Code.Unity.GUI
         protected Control MainContainer { get; set; }
         protected BoxContainer ContentContainer { get; set; }
         protected List<Label> ItemCache { get; set; }
+        
+        protected bool ShouldShow { get; set; }
+        
+        protected bool Empty { get; set; }
+        
+        protected object LastInteraction { get; set; }
+        
+        protected Timer Timer { get; set; }
 
         public override void _Ready()
         {
             base._Ready();
+
+            this.Timer = this.GetNodeOrNull<Timer>("Timer");
+            if (this.Timer is null)
+            {
+                this.Timer = new Timer
+                {
+                    Name = "Timer"
+                };
+                this.AddChild(this.Timer);
+            }
             
             if (this.ItemCache.IsNullOrEmpty() == false)
             {
@@ -70,68 +88,101 @@ namespace JoyLib.Code.Unity.GUI
 
         public override void _Input(InputEvent @event)
         {
+            if (this.GUIManager is null)
+            {
+                this.GUIManager = GlobalConstants.GameManager?.GUIManager;
+                return;
+            }
+            
             if (@event is InputEventMouseMotion motion)
             {
-                this.UpdatePosition(motion);
+                this.UpdatePosition(motion.Position);
+            }
+
+            bool actionPressed = Input.IsActionPressed("tooltip_show");
+            
+            if (actionPressed && this.ShouldShow == false)
+            {
+                if (this.LastInteraction is ITooltipComponent node
+                    && node.MouseOver)
+                {
+                    this.ShouldShow = true;
+                }
+            }
+            else if (actionPressed == false && this.ShouldShow)
+            {
+                this.ShouldShow = false;
+            }
+
+            if (this.ShouldShow 
+                && this.Visible == false
+                && this.Empty == false)
+            {
+                this.ShowCurrent();
+            }
+            else if(this.ShouldShow == false 
+                    && this.Visible)
+            {
+                var node = this.LastInteraction as JoyObjectNode;
+                if (node?.MouseOver == false)
+                {
+                    this.GUIManager?.CloseGUI(this.LastInteraction, this.Name);
+                }
+                else
+                {
+                    this.Hide();
+                }
             }
         }
 
-        protected void UpdatePosition(InputEventMouseMotion motion)
+        protected void UpdatePosition(Vector2 position)
         {
-            Vector2 mousePosition = motion.Position;
+            if (this.GUIManager?.Cursor is null)
+            {
+                return;
+            }
 
+            Vector2 rectSize = this.MainContainer.RectSize;
             Vector2 offset = Vector2.Zero;
-            /*
-            if (mousePosition.x < Screen.width - this.RectTransform.sizeDelta.x)
+            Vector2 viewportSize = this.GetViewport().Size;
+            int cursorSize = this.GUIManager.Cursor.CursorSize;
+            if (position.x < viewportSize.x - rectSize.x)
             {
-                offset.x += this.CursorRect.width / 2;
+                offset.x += cursorSize / 2;
             }
             else
             {
-                offset.x -= this.CursorRect.width / 2 + this.RectTransform.rect.width;
+                offset.x -= rectSize.x;
             }
 
-            if (mousePosition.y > Screen.height - this.RectTransform.sizeDelta.y)
+            if (position.y > viewportSize.y - rectSize.y)
             {
-                offset.y -= this.CursorRect.height / 2;
+                offset.y -= rectSize.y;
             }
             else
             {
-                offset.y += this.CursorRect.height / 2 + this.RectTransform.rect.height;
+                offset.y += cursorSize / 2;
             }
-            
-            switch (this.Canvas.renderMode)
-            {
-                case RenderMode.ScreenSpaceOverlay:
-                    mousePosition += offset;
-                    break;
-                
-                case RenderMode.ScreenSpaceCamera:
-                    mousePosition = this.MainCamera.ScreenToWorldPoint(mousePosition + offset);
-                    break;
-                
-                case RenderMode.WorldSpace:
-                    mousePosition = this.MainCamera.ScreenToWorldPoint(mousePosition + offset);
-                    break;
-            }
-            */
 
-            //this.transform.position = this.Canvas.transform.TransformPoint(mousePosition + offset);
-            this.RectPosition = mousePosition + this.PositionOffset;
+            this.RectPosition = position + this.PositionOffset + offset;
         }
 
         public virtual void Show(
+            object sender,
             string title = null,  
             ISpriteState sprite = null, 
             ICollection<string> data = null, 
             bool showBackground = true)
         {
-            this.Display();
+            this.LastInteraction = sender;
+
+            bool allEmpty = true;
             
-            if (!string.IsNullOrEmpty(title))
+            if (!title.IsNullOrEmpty())
             {
                 this.Title.Visible = true;
                 this.Title.Text = title;
+                allEmpty = false;
             }
             else
             {
@@ -142,6 +193,7 @@ namespace JoyLib.Code.Unity.GUI
             {
                 this.IconSlot.Visible = true;
                 this.SetIcon(sprite);
+                allEmpty = false;
             }
             else
             {
@@ -150,6 +202,7 @@ namespace JoyLib.Code.Unity.GUI
 
             if (data.IsNullOrEmpty() == false)
             {
+                allEmpty = false;
                 if (this.ItemCache.Count < data.Count)
                 {
                     for (int i = this.ItemCache.Count; i < data.Count; i++)
@@ -190,12 +243,91 @@ namespace JoyLib.Code.Unity.GUI
             }
            
             this.Background.Visible = showBackground;
+
+            this.Empty = allEmpty;
+            
+            this.StartTimer();
+        }
+
+        protected virtual void ShowInternal()
+        {
+            this.ShouldShow = true;
+            this.Display();
+            this.GUIManager?.OpenGUI(this.LastInteraction, this.Name);
+        }
+
+        public virtual void ShowCurrent()
+        {
+            this.Show(
+                this, 
+                this.Title.Text,
+                this.Icon.CurrentSpriteState,
+                this.ItemCache.Select(item => item.Text).ToList());
+        }
+
+        public override void Display()
+        {
+            if (this.ShouldShow
+                && this.Empty == false)
+            {
+                base.Display();
+            }
+        }
+
+        public override bool Close(object sender)
+        {
+            this.StopTimer();
+            
+            if (this.LastInteraction != sender)
+            {
+                this.LastInteraction = sender;
+                return false;
+            }
+            
+            this.Icon.Clear();
+            this.IconSlot.Visible = false;
+            this.Title.Text = null;
+            foreach (var item in this.ItemCache)
+            {
+                item.Visible = false;
+                item.Text = null;
+            }
+
+            this.Empty = true;
+            
+            return base.Close(sender);
         }
 
         protected void SetIcon(ISpriteState state)
         {
             this.Icon.Clear();
-            this.Icon.AddSpriteState(state, true);
+            this.Icon.AddSpriteState(state);
+            this.Icon.OverrideAllColours(state.SpriteData.GetCurrentPartColours());
+        }
+
+        protected void StartTimer()
+        {
+            this.Timer.OneShot = true;
+            this.Timer.Start(0.8f);
+            this.Timer.Connect(
+                "timeout",
+                this,
+                nameof(this.ShowInternal));
+        }
+
+        protected void StopTimer()
+        {
+            this.Timer.Stop();
+            if (this.Timer.IsConnected(
+                "timeout",
+                this,
+                nameof(this.ShowInternal)))
+            {
+                this.Timer.Disconnect(
+                    "timeout",
+                    this,
+                    nameof(this.ShowInternal));
+            }
         }
     }
 }

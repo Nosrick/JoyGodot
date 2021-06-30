@@ -1,4 +1,6 @@
-﻿namespace JoyLib.Code
+﻿using JoyGodot.Assets.Scripts.JoyObject;
+
+namespace JoyGodot.Assets.Scripts.Base_Interfaces
 {
     public interface IPosition
     {

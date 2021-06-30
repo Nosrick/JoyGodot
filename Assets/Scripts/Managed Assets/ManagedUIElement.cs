@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
 
-namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
+using Godot;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.GUI;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Settings;
+
+namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
-#if TOOLS
-    [Tool]
-#endif
     public class ManagedUIElement :
         Control,
         IColourableElement,
-        ISpriteStateElement
+        ISpriteStateElement,
+        ITooltipComponent
     {
+        public ICollection<string> Tooltip { get; set; }
+        public bool MouseOver { get; protected set; }
         public string ElementName
         {
             get => this.m_ElementName;
             set => this.m_ElementName = value;
         }
 
-        [Export]
-        protected string m_ElementName = "SlotSprite";
-        
+        [Export] protected string m_ElementName = "SlotSprite";
+
         public bool Initialised { get; protected set; }
         protected Color Tint { get; set; }
         public bool Finished { get; protected set; }
@@ -37,8 +38,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 if (this.IsDirty)
                 {
+                    if (this.ChosenSprite.IsNullOrEmpty()
+                        || this.ChosenState.IsNullOrEmpty())
+                    {
+                        return this.States.FirstOrDefault();
+                    }
+
                     if (this.m_States.ContainsKey(this.ChosenSprite)
-                        && this.m_States[this.ChosenSprite].SpriteData.m_State
+                        && this.m_States[this.ChosenSprite].SpriteData.State
                             .Equals(this.ChosenState, StringComparison.OrdinalIgnoreCase))
                     {
                         this.CachedState = this.m_States[this.ChosenSprite];
@@ -55,6 +62,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected bool IsDirty { get; set; }
 
         protected ISpriteState CachedState { get; set; }
+
+        protected IDictionary<string, Color> CachedColours { get; set; }
 
         public int FrameIndex { get; protected set; }
 
@@ -98,6 +107,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         protected Tween TweenNode { get; set; }
 
         protected const float TIME_BETWEEN_FRAMES = 1f / GlobalConstants.FRAMES_PER_SECOND;
+        
+        protected bool EnableHappiness { get; set; }
+
+        protected static IEntity Player { get; set; }
 
         public override void _Ready()
         {
@@ -106,9 +119,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
         public virtual void Initialise()
         {
-            if (this.Initialised || this.IsInsideTree() == false)
+            if (this.Initialised)
             {
                 return;
+            }
+
+            if (this.IsInsideTree() == false)
+            {
+                this.CallDeferred("Initialise");
             }
 
             this.Parts = new List<NinePatchRect>();
@@ -128,32 +146,139 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
             if (this.TweenNode is null)
             {
-                //GD.Print("Tween needs to be created");
                 this.TweenNode = new Tween
                 {
                     Name = "Colour Lerper"
                 };
                 this.AddChild(this.TweenNode);
-#if TOOLS
-                this.TweenNode.Owner = this.GetTree()?.EditedSceneRoot;
-#endif
             }
 
             this.m_States = new Dictionary<string, ISpriteState>();
+            if (this.CachedState is null == false)
+            {
+                this.AddSpriteState(this.CachedState);
+            }
 
-            //GD.Print(this.Name + " initialised!");
+            if (this.CachedColours is null == false)
+            {
+                this.OverrideAllColours(this.CachedColours);
+            }
+
+            this.GrabPlayer();
+
+            if (this.IsConnected(
+                "mouse_entered",
+                this,
+                nameof(this.OnPointerEnter)))
+            {
+                this.Disconnect(
+                    "mouse_entered",
+                    this,
+                    nameof(this.OnPointerEnter));
+            }
+            this.Connect(
+                "mouse_entered",
+                this,
+                nameof(this.OnPointerEnter));
+            
+            if(this.IsConnected(
+                "mouse_exited",
+                this,
+                nameof(this.OnPointerExit)))
+            {
+                this.Disconnect(
+                    "mouse_exited",
+                    this,
+                    nameof(this.OnPointerExit));
+            }
+            this.Connect(
+                "mouse_exited",
+                this,
+                nameof(this.OnPointerExit));
+
             this.Initialised = true;
+        }
+
+        protected void GrabPlayer()
+        {
+            if (Player is null)
+            {
+                Player = GlobalConstants.GameManager?.Player;
+
+                if (Player is null)
+                {
+                    this.SetHappiness(this, new ValueChangedEventArgs<float>
+                    {
+                        NewValue = 1f
+                    });
+                    return;
+                }
+
+                Player.HappinessChange -= this.SetHappiness;
+                Player.HappinessChange += this.SetHappiness;
+
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+                GlobalConstants.GameManager.SettingsManager.ValueChanged += this.SettingChanged;
+                
+                this.EnableHappiness = (bool) GlobalConstants.GameManager.SettingsManager
+                    .Get(SettingsManager.HAPPINESS_UI)
+                    .ObjectValue;
+
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = this.EnableHappiness ? Player.OverallHappiness : 1f
+                });
+            }
+        }
+
+        protected void SettingChanged(object sender, ValueChangedEventArgs<object> args)
+        {
+            if (args.Name.Equals(SettingsManager.HAPPINESS_UI))
+            {
+                this.EnableHappiness = (bool) args.NewValue;
+                this.SetHappiness(this, new ValueChangedEventArgs<float>
+                {
+                    NewValue = Player.OverallHappiness
+                });
+            }
+        }
+
+        protected void SetHappiness(object sender, ValueChangedEventArgs<float> args)
+        {
+            float happiness = this.EnableHappiness ? args.NewValue : 1f;
+
+            try
+            {
+                if (this.Material is ShaderMaterial shaderMaterial)
+                {
+                    shaderMaterial.SetShaderParam("happiness", happiness);
+                    foreach (ShaderMaterial childMaterial in this.Parts.Select(part => part.Material as ShaderMaterial))
+                    {
+                        childMaterial?.SetShaderParam("happiness", happiness);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PushError("Object has been disposed!");
+            }
         }
 
         public virtual void AddSpriteState(ISpriteState state, bool changeToNew = true)
         {
             if (this.IsInsideTree() == false)
             {
+                this.CachedState = state;
                 return;
             }
-            
+
             this.Initialise();
-            this.m_States.Add(state.Name, state);
+            this.GrabPlayer();
+            if (this.m_States.ContainsKey(state.Name) == false)
+            {
+                this.m_States.Add(state.Name, state);
+            }
+
             this.IsDirty = true;
 
             if (changeToNew)
@@ -165,31 +290,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         public virtual bool RemoveStatesByName(string name)
         {
             return this.m_States.Remove(name);
-        }
-
-        public new void SetTheme(Theme theme)
-        {
-            foreach (ISpriteState state in this.States)
-            {
-                foreach (SpritePart part in state.SpriteData.m_Parts)
-                {
-                    Texture icon = theme.GetIcon(part.m_Name, nameof(this.GetType));
-                    if (icon is null == false)
-                    {
-                        part.m_FrameSprite = new List<Texture>
-                        {
-                            icon
-                        };
-                    }
-
-                    Color colour = theme.GetColor(part.m_Name, nameof(this.GetType));
-                    part.m_PossibleColours = new List<Color>
-                    {
-                        colour
-                    };
-                    part.m_SelectedColour = 0;
-                }
-            }
         }
 
         public virtual ISpriteState GetState(string name)
@@ -213,9 +313,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
 
             this.ChosenSprite = name;
-            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.m_State;
+            this.ChosenState = this.m_States[this.ChosenSprite].SpriteData.State;
 
-            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_Frames);
+            this.FramesInCurrentState = this.CurrentSpriteState.SpriteData.Parts.Max(part => part.m_Frames);
 
             this.FrameIndex = 0;
             this.Finished = false;
@@ -241,7 +341,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
         }
 
-        public override void _Process(float delta)
+        public override void _PhysicsProcess(float delta)
         {
             if (this.CurrentSpriteState is null)
             {
@@ -327,6 +427,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
         {
             this.Initialise();
 
+            if (colours.IsNullOrEmpty())
+            {
+                return;
+            }
+
             if (this.CurrentSpriteState is null)
             {
                 return;
@@ -337,9 +442,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 state.OverrideColours(colours);
             }
 
+            if (this.IsInsideTree() == false)
+            {
+                this.CachedColours = colours;
+                return;
+            }
+
             if (crossFade)
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
                     if (colours.TryGetValue(this.Parts[i].Name, out Color colour))
                     {
@@ -353,9 +464,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             }
             else
             {
-                for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                 {
-                    colours.TryGetValue(this.CurrentSpriteState.SpriteData.m_Parts[i].m_Name, out Color colour);
+                    colours.TryGetValue(this.CurrentSpriteState.SpriteData.Parts[i].m_Name, out Color colour);
                     this.Parts[i].SelfModulate = colour;
                 }
             }
@@ -382,7 +493,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 if (modulateChildren)
                 {
-                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                     {
                         this.ColourLerp(
                             this.Parts[i],
@@ -405,7 +516,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
             {
                 if (modulateChildren)
                 {
-                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.m_Parts.Count; i++)
+                    for (int i = 0; i < this.CurrentSpriteState.SpriteData.Parts.Count; i++)
                     {
                         this.Parts[i].SelfModulate = colour;
                     }
@@ -428,7 +539,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                 part.Visible = false;
             }
 
-            int partsCount = this.CurrentSpriteState.SpriteData.m_Parts.Count;
+            int partsCount = this.CurrentSpriteState.SpriteData.Parts.Count;
             if (this.Parts.Count < partsCount)
             {
                 for (int i = this.Parts.Count; i < partsCount; i++)
@@ -445,31 +556,33 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
                         MarginBottom = 0,
                         MarginLeft = 0,
                         MarginRight = 0,
-                        MarginTop = 0
+                        MarginTop = 0,
+                        UseParentMaterial = true
                     };
                     this.Parts.Add(patchRect);
                     this.AddChild(patchRect);
-#if TOOLS
-                    patchRect.Owner = this.GetTree()?.EditedSceneRoot;
-#endif
                 }
             }
 
-            int maxSortingOrder = this.CurrentSpriteState.SpriteData.m_Parts.Max(part => part.m_SortingOrder);
-            int minSortingOrder = this.CurrentSpriteState.SpriteData.m_Parts.Min(part => part.m_SortingOrder);
+            int minSortingOrder = this.CurrentSpriteState.SpriteData.Parts.Min(part => part.m_SortingOrder);
             for (int i = 0; i < partsCount; i++)
             {
-                var part = this.CurrentSpriteState.SpriteData.m_Parts[i];
+                var part = this.CurrentSpriteState.SpriteData.Parts[i];
                 NinePatchRect patchRect = this.Parts[i];
                 patchRect.Name = part.m_Name;
                 patchRect.Visible = true;
                 patchRect.Texture = part.m_FrameSprite[this.FrameIndex];
                 int normaliseSortOrder = part.m_SortingOrder - minSortingOrder;
                 this.MoveChild(patchRect, normaliseSortOrder);
-                patchRect.PatchMarginLeft = part.m_PatchMargins[0];
-                patchRect.PatchMarginTop = part.m_PatchMargins[1];
-                patchRect.PatchMarginRight = part.m_PatchMargins[2];
-                patchRect.PatchMarginBottom = part.m_PatchMargins[3];
+                if (part.m_PatchMargins.IsNullOrEmpty() == false
+                    && part.m_PatchMargins.Length == 4)
+                {
+                    patchRect.PatchMarginLeft = part.m_PatchMargins[0];
+                    patchRect.PatchMarginTop = part.m_PatchMargins[1];
+                    patchRect.PatchMarginRight = part.m_PatchMargins[2];
+                    patchRect.PatchMarginBottom = part.m_PatchMargins[3];
+                }
+
                 patchRect.DrawCenter = part.m_DrawCentre;
                 patchRect.AxisStretchHorizontal = part.m_StretchMode;
                 patchRect.AxisStretchVertical = part.m_StretchMode;
@@ -542,6 +655,37 @@ namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
 
                 this.TweenNode.Start();
             }
+        }
+
+        public override void _ExitTree()
+        {
+            if (Player is null == false)
+            {
+                Player.HappinessChange -= this.SetHappiness;
+            }
+
+            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+
+            base._ExitTree();
+        }
+
+        public void OnPointerEnter()
+        {
+            this.MouseOver = true;
+
+            GlobalConstants.GameManager.GUIManager.Tooltip?.Show(
+                this,
+                this.Name,
+                null,
+                this.Tooltip);
+        }
+
+        public void OnPointerExit()
+        {
+            this.MouseOver = false;
+
+            GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
+            GlobalConstants.GameManager.GUIManager.Tooltip.Close(this);
         }
     }
 }

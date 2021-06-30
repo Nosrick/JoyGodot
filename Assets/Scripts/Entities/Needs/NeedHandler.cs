@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Helpers;
+using JoyGodot.Assets.Scripts.Helpers;
 
-namespace JoyLib.Code.Entities.Needs
+namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
     public class NeedHandler : INeedHandler
     {
@@ -33,7 +33,7 @@ namespace JoyLib.Code.Entities.Needs
         {
             try
             {
-                return Scripting.ScriptingEngine.Instance.FetchAndInitialiseChildren<INeed>().ToList();
+                return GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<INeed>().ToList();
             }
             catch(Exception ex)
             {
@@ -48,7 +48,7 @@ namespace JoyLib.Code.Entities.Needs
             {
                 Dictionary<string, INeed> needs = new Dictionary<string, INeed>();
 
-                IEnumerable<INeed> needTypes = Scripting.ScriptingEngine.Instance.FetchAndInitialiseChildren<INeed>();
+                IEnumerable<INeed> needTypes = GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<INeed>();
 
                 foreach (INeed type in needTypes)
                 {

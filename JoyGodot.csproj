@@ -1,12 +1,12 @@
 <Project Sdk="Godot.NET.Sdk/3.3.0">
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CodingSeb.ExpressionEvaluator" Version="1.4.24" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
-    <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="NUnit" Version="3.13.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" />
+    <PackageReference Include="NCalc-Edge" Version="1.5.0" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit.Console" Version="3.12.0" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +75,19 @@
     <Content Include="Assets\Scenes\MainGame.tscn" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Scripts\Godot\EditorPlugins" />
+    <Compile Remove="Assets\Tests\**" />
+    <Compile Remove="JoyGodot.Generator\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Assets\Tests\**" />
+    <EmbeddedResource Remove="JoyGodot.Generator\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Data\Scripts\Conversation\Conditions" />
+    <Folder Include="Assets\Data\Scripts\Entities\Romances" />
+    <Folder Include="Assets\Data\Scripts\Entities\Sexes" />
+    <Folder Include="Assets\Data\Scripts\Entities\Sexuality" />
+    <Folder Include="Assets\Data\Scripts\Events" />
+    <Folder Include="Assets\Data\Scripts\Relationships" />
   </ItemGroup>
 </Project>

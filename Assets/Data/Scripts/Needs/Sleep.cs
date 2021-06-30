@@ -1,8 +1,14 @@
 using System.Collections.Generic;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Graphics;
+using System.Linq;
 
-namespace JoyLib.Code.Entities.Needs
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+
+namespace JoyGodot.Assets.Data.Scripts.Needs
 {
     public class Sleep : AbstractNeed
     {
@@ -88,8 +94,18 @@ namespace JoyLib.Code.Entities.Needs
             {
                 return false;
             }
+
+            var name = item.AllAbilities.FirstOrDefault(a =>
+                    a.HasTag("sleep")
+                    && a.HasTag("active"))
+                ?.Name;
+
+            if (name.IsNullOrEmpty())
+            {
+                return false;
+            }
             
-            item.Interact(actor);
+            item.Interact(actor, name);
 
             return true;
         }

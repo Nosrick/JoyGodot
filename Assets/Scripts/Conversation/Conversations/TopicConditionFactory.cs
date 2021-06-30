@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Conversation.Conversations.Conditions;
+using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyLib.Code.Conversation.Conversations
+namespace JoyGodot.Assets.Scripts.Conversation.Conversations
 {
     public class TopicConditionFactory
     {
@@ -13,7 +14,7 @@ namespace JoyLib.Code.Conversation.Conversations
         {
             if (s_ConditionTypes is null)
             {
-                s_ConditionTypes = ScriptingEngine.Instance.FetchTypeAndChildren(typeof(ITopicCondition)).ToList();
+                s_ConditionTypes = GlobalConstants.ScriptingEngine.FetchTypeAndChildren(typeof(ITopicCondition)).ToList();
             }
         }
         

@@ -1,39 +1,91 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using Godot;
-using JoyGodot.addons.Managed_Assets;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
 
-namespace JoyLib.Code.Entities.Abilities
+using Godot;
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Scripting;
+using Array = Godot.Collections.Array;
+
+namespace JoyGodot.Assets.Scripts.Entities.Abilities
 {
     public abstract class AbstractAbility : IAbility
     {
-        protected readonly Dictionary<string, IJoyAction> m_CachedActions;
-        
+        protected readonly System.Collections.Generic.Dictionary<string, IJoyAction> m_CachedActions;
+
         protected List<string> m_Tags;
 
-        public AbstractAbility()
+        public string Name { get; protected set; }
+
+        public string InternalName { get; protected set; }
+
+        public string Description { get; protected set; }
+
+        public bool Stacking { get; protected set; }
+
+        public int Counter { get; protected set; }
+
+        public int Magnitude { get; protected set; }
+
+        public int Priority { get; protected set; }
+
+        public bool ReadyForRemoval
         {
+            get
+            {
+                if (this.Permanent == true)
+                {
+                    return false;
+                }
+
+                if (this.Counter <= 0 || this.Magnitude <= 0)
+                {
+                    return true;
+                }
+
+                return false;
+            }
         }
 
+        public bool Permanent { get; protected set; }
+
+        public IEnumerable<Tuple<string, int>> Costs { get; protected set; }
+
+        public IDictionary<string, int> Prerequisites { get; protected set; }
+
+        public AbilityTarget TargetType { get; protected set; }
+
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
+
+        public int Range { get; protected set; }
+
+        public SpriteData SpriteData { get; protected set; }
+        public Texture UsingIcon { get; protected set; }
+
+        public AbstractAbility()
+        { }
+
         public AbstractAbility(
-            string name, 
-            string internalName, 
-            string description, 
-            bool stacking, 
-            int counter, 
+            string name,
+            string internalName,
+            string description,
+            bool stacking,
+            int counter,
             int magnitude,
-            int priority, 
-            bool permanent, 
+            int priority,
+            bool permanent,
             string[] actions,
-            Tuple<string, int>[] costs, 
-            Dictionary<string, int> prerequisites,
+            Tuple<string, int>[] costs, System.Collections.Generic.Dictionary<string, int> prerequisites,
             AbilityTarget target,
             int range = 0,
             SpriteData usingSprite = null,
@@ -53,15 +105,15 @@ namespace JoyLib.Code.Entities.Abilities
             this.Tags = tags;
             this.Range = range;
             this.SpriteData = usingSprite;
-            this.UsingIcon = this.SpriteData?.m_Parts
+            this.UsingIcon = this.SpriteData?.Parts
                 .FirstOrDefault(part => part.m_Name.Equals("icon", StringComparison.OrdinalIgnoreCase))?
                 .m_FrameSprite.FirstOrDefault();
 
-            this.m_CachedActions = new Dictionary<string, IJoyAction>(actions.Length);
+            this.m_CachedActions = new System.Collections.Generic.Dictionary<string, IJoyAction>(actions.Length);
 
-            foreach(string action in actions)
+            foreach (string action in actions)
             {
-                this.m_CachedActions.Add(action, ScriptingEngine.Instance.FetchAction(action));
+                this.m_CachedActions.Add(action, GlobalConstants.ScriptingEngine.FetchAction(action));
             }
         }
 
@@ -83,10 +135,10 @@ namespace JoyLib.Code.Entities.Abilities
         //Triggers even when no damage happens
         //Returns the damage by default
         public virtual int OnTakeHit(
-            IEntity attacker, 
-            IEntity defender, 
-            int damage, 
-            IEnumerable<string> attackerTags, 
+            IEntity attacker,
+            IEntity defender,
+            int damage,
+            IEnumerable<string> attackerTags,
             IEnumerable<string> defenderTags)
         {
             return damage;
@@ -226,7 +278,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         public void IncrementMagnitude(int value)
         {
-            if(this.Stacking == true)
+            if (this.Stacking == true)
             {
                 this.Magnitude += value;
             }
@@ -234,7 +286,7 @@ namespace JoyLib.Code.Entities.Abilities
 
         public void IncrementCounter(int value)
         {
-            if(this.Stacking == true)
+            if (this.Stacking == true)
             {
                 this.Counter += value;
             }
@@ -244,13 +296,16 @@ namespace JoyLib.Code.Entities.Abilities
         {
             bool canCast = false;
             IEnumerable<string> costs = this.Costs.Select(cost => cost.Item1);
-            IEnumerable<Tuple<string, int>> returnData = caster.GetData(costs);
+            IEnumerable<Tuple<string, int>> returnData = caster.GetData(costs)
+                .Where(tuple => tuple.Item2 is int)
+                .Select(tuple => new Tuple<string, int>(tuple.Item1, (int) tuple.Item2));
+
             canCast = returnData.All(x => this.Costs.Any(cost =>
                 cost.Item1.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= cost.Item2));
 
-            if(canCast)
+            if (canCast)
             {
-
+                //TODO: Enact toll
             }
 
             return canCast;
@@ -261,7 +316,10 @@ namespace JoyLib.Code.Entities.Abilities
             bool meetsPrereqs = false;
 
             IEnumerable<string> prereqs = this.Prerequisites.Select(pair => pair.Key);
-            IEnumerable<Tuple<string, int>> returnData = actor.GetData(prereqs);
+            IEnumerable<Tuple<string, int>> returnData = actor.GetData(prereqs)
+                .Where(tuple => tuple.Item2 is int)
+                .Select(tuple => new Tuple<string, int>(tuple.Item1, (int) tuple.Item2));
+
             meetsPrereqs = returnData.All(x => this.Prerequisites.Any(prereq =>
                 prereq.Key.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= prereq.Value));
 
@@ -292,108 +350,98 @@ namespace JoyLib.Code.Entities.Abilities
             {
                 case AbilityTarget.Adjacent:
                     return AdjacencyHelper.IsAdjacent(leftPos, rightPos) || leftPos == rightPos;
-                
+
                 case AbilityTarget.Ranged:
                     return AdjacencyHelper.IsInRange(leftPos, rightPos, this.Range);
-                
+
                 case AbilityTarget.WeaponRange:
                     return AdjacencyHelper.IsInRange(leftPos, rightPos, longestRange);
-                
+
                 case AbilityTarget.Self:
                     return leftPos == rightPos;
-                
+
                 default:
                     return false;
             }
         }
 
-        public string Name
+        public Dictionary Save()
         {
-            get;
-            protected set;
-        }
+            Dictionary saveDict = new Dictionary();
 
-        public string InternalName
-        {
-            get;
-            protected set;
-        }
+            saveDict.Add("Name", this.Name);
+            saveDict.Add("InternalName", this.InternalName);
+            saveDict.Add("Description", this.Description);
+            saveDict.Add("Stacking", this.Stacking);
+            saveDict.Add("Counter", this.Counter);
+            saveDict.Add("Magnitude", this.Magnitude);
+            saveDict.Add("Priority", this.Priority);
+            saveDict.Add("Permanent", this.Permanent);
 
-        public string Description
-        {
-            get;
-            protected set;
-        }
-
-        public bool Stacking
-        {
-            get;
-            protected set;
-        }
-
-        public int Counter
-        {
-            get;
-            protected set;
-        }
-
-        public int Magnitude
-        {
-            get;
-            protected set;
-        }
-
-        public int Priority
-        {
-            get;
-            protected set;
-        }
-
-        public bool ReadyForRemoval
-        {
-            get
+            Dictionary tempDict = new Dictionary();
+            foreach ((string key, int value) in this.Costs)
             {
-                if (this.Permanent == true)
-                {
-                    return false;
-                }
-                if (this.Counter <= 0 || this.Magnitude <= 0)
-                {
-                    return true;
-                }
-                return false;
+                tempDict.Add(key, value);
             }
+
+            saveDict.Add("Costs", tempDict);
+
+            tempDict = new Dictionary();
+            foreach (var pair in this.Prerequisites)
+            {
+                tempDict.Add(pair.Key, pair.Value);
+            }
+
+            saveDict.Add("Prerequisites", tempDict);
+
+            saveDict.Add("TargetType", this.TargetType.ToString());
+            saveDict.Add("Tags", new Array(this.Tags));
+            saveDict.Add("Range", this.Range);
+
+            return saveDict;
         }
 
-        public bool Permanent
+        public void Load(Dictionary data)
         {
-            get;
-            protected set;
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.InternalName = valueExtractor.GetValueFromDictionary<string>(data, "InternalName");
+            this.Description = valueExtractor.GetValueFromDictionary<string>(data, "Description");
+            this.Stacking = valueExtractor.GetValueFromDictionary<bool>(data, "Stacking");
+            this.Counter = valueExtractor.GetValueFromDictionary<int>(data, "Counter");
+            this.Magnitude = valueExtractor.GetValueFromDictionary<int>(data, "Magnitude");
+            this.Priority = valueExtractor.GetValueFromDictionary<int>(data, "Priority");
+            this.Permanent = valueExtractor.GetValueFromDictionary<bool>(data, "Permanent");
+
+            List<Tuple<string, int>> costs = new List<Tuple<string, int>>();
+            Dictionary tempDict = valueExtractor.GetValueFromDictionary<Dictionary>(data, "Costs");
+            foreach (DictionaryEntry cost in tempDict)
+            {
+                costs.Add(new Tuple<string, int>(
+                    cost.Key.ToString(),
+                    int.Parse(cost.Value.ToString())));
+            }
+
+            this.Costs = costs;
+
+            this.Prerequisites = new System.Collections.Generic.Dictionary<string, int>();
+            tempDict = valueExtractor.GetValueFromDictionary<Dictionary>(data, "Prerequisites");
+            foreach (DictionaryEntry prereq in tempDict)
+            {
+                this.Prerequisites.Add(
+                    prereq.Key.ToString(),
+                    int.Parse(prereq.Value.ToString()));
+            }
+
+            this.TargetType = (AbilityTarget) Enum.Parse(
+                typeof(AbilityTarget),
+                valueExtractor.GetValueFromDictionary<string>(
+                    data,
+                    "TargetType"));
+
+            this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+            this.Range = valueExtractor.GetValueFromDictionary<int>(data, "Range");
         }
-
-        public IEnumerable<Tuple<string, int>> Costs
-        {
-            get;
-            protected set;
-        }
-
-        public IDictionary<string, int> Prerequisites { get; protected set; }
-
-        public AbilityTarget TargetType
-        {
-            get;
-            protected set;
-        }
-
-        public IEnumerable<string> Tags
-        {
-            get => this.m_Tags;
-            protected set => this.m_Tags = new List<string>(value);
-        }
-
-        public int Range { get; protected set; }
-
-        public SpriteData SpriteData { get; protected set; }
-        public Texture UsingIcon { get; protected set; }
     }
 }

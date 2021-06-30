@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Godot;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts.JoyObject
 {
     public interface IJoyObject : 
         ITagged, 
@@ -15,14 +15,17 @@ namespace JoyLib.Code
         IDerivedValueContainer, 
         IDataContainer, 
         IGuidHolder,
-        ITickable
+        ITickable,
+        ISerialisationHandler,
+        IJoyNameHolder
     {
         List<ISpriteState> States { get; }
         bool IsDestructible { get; }
         bool IsWall { get; }
-        string JoyName { get; }
         
         string TileSet { get; }
+        
+        Guid WorldGuid { get; set; }
         
         IRollable Roller { get; }
         
@@ -30,7 +33,7 @@ namespace JoyLib.Code
         
         List<IJoyAction> CachedActions { get; }
         
-        JoyObjectNode MyNode { get; }
+        JoyObjectNode MyNode { get; set; }
         
         ICollection<string> Tooltip { get; }
         

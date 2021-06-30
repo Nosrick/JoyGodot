@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Castle.Core.Internal;
-using JoyLib.Code.Entities;
-using JoyLib.Code.World;
+﻿using System.Collections.Generic;
 
-namespace JoyLib.Code.Scripting.Actions
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
+
+namespace JoyGodot.Assets.Data.Scripts.Actions
 {
     public class EnterWorldAction : AbstractAction
     {

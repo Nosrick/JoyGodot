@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
 
-namespace JoyLib.Code.Entities.Romance.Processors
+namespace JoyGodot.Assets.Scripts.Entities.Romance.Processors
 {
     public class PanromanticProcessor : IRomanceProcessor
     {

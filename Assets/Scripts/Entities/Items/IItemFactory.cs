@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Entities.Items
+﻿namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public interface IItemFactory
     {

@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.World.Lighting;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Physics;
+using JoyGodot.Assets.Scripts.World.Lighting;
 
-namespace JoyLib.Code.World
+namespace JoyGodot.Assets.Scripts.World
 {
-    public interface IWorldInstance : ITagged, IDisposable, IGuidHolder, ITickable
+    public interface IWorldInstance : 
+        ITagged, 
+        IDisposable, 
+        IGuidHolder, 
+        ITickable,
+        ISerialisationHandler
     {
         HashSet<Guid> EntityGUIDs { get; }
         HashSet<Guid> ItemGUIDs { get; }
@@ -15,13 +24,12 @@ namespace JoyLib.Code.World
         byte[,] Costs { get; }
         LightCalculator LightCalculator { get; }
         Dictionary<Vector2Int, IWorldInstance> Areas { get; }
-        HashSet<IJoyObject> Objects { get; }
+        HashSet<IItemInstance> Items { get; }
         HashSet<IEntity> Entities { get; }
-        Dictionary<Vector2Int, IJoyObject> Walls { get; }
+        HashSet<Vector2Int> Walls { get; }
         Vector2Int SpawnPoint { get; set; }
         IWorldInstance Parent { get; set; }
         string Name { get; }
-        IEntity Player { get; }
         Vector2Int Dimensions { get; }
         bool IsDirty { get; }
         
@@ -30,11 +38,14 @@ namespace JoyLib.Code.World
         void Initialise();
         
         void SetDateTime(DateTime dateTime);
-        void AddObject(IJoyObject objectRef);
+        void AddItem(IItemInstance objectRef);
+        void AddWall(Vector2Int wall);
+        
         bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef);
         IJoyObject GetObject(Vector2Int WorldPosition);
+        PhysicsResult IsObjectAt(Vector2Int worldPosition);
         void Tick();
-        IEnumerable<IJoyObject> SearchForObjects(IEntity entityRef, IEnumerable<string> tags);
+        IEnumerable<IItemInstance> SearchForObjects(IEntity entityRef, IEnumerable<string> tags);
         IEnumerable<IEntity> SearchForEntities(IEntity actor, IEnumerable<string> searchCriteria);
         IEntity GetRandomSentient();
         IEntity GetRandomSentientWorldWide();
@@ -52,6 +63,6 @@ namespace JoyLib.Code.World
         Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags);
         void AddArea(Vector2Int key, IWorldInstance value);
 
-        event EventHandler OnTick;
+        event EmptyEventHandler OnTick;
     }
 }

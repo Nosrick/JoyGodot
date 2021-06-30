@@ -1,4 +1,4 @@
-﻿namespace JoyLib.Code.Entities.AI
+﻿namespace JoyGodot.Assets.Scripts.Entities.AI
 {
     public enum Sector
     {

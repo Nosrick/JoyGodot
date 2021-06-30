@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Entities.Sexes.Processors;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Sexes.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Sexes
+namespace JoyGodot.Assets.Scripts.Entities.Sexes
 {
     public class EntityBioSexHandler : IEntityBioSexHandler
     {
@@ -32,7 +32,7 @@ namespace JoyLib.Code.Entities.Sexes
         {
             List<IBioSex> sexes = new List<IBioSex>();
 
-            this.Processors = ScriptingEngine.Instance.FetchAndInitialiseChildren<IBioSexProcessor>()
+            this.Processors = GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IBioSexProcessor>()
                 .ToDictionary(processor => processor.Name, processor => processor);
             
             string[] files =
@@ -89,7 +89,7 @@ namespace JoyLib.Code.Entities.Sexes
                 }
             }
 
-            sexes.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IBioSex>());
+            sexes.AddRange(GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IBioSex>());
             return sexes;
         }
 
@@ -100,6 +100,13 @@ namespace JoyLib.Code.Entities.Sexes
                 return this.Sexes.First(sex => sex.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
             }
             return null;
+        }
+
+        public IBioSexProcessor GetProcessor(string name)
+        {
+            return this.Processors.TryGetValue(name, out IBioSexProcessor processor) 
+                ? processor 
+                : new NeutralProcessor();
         }
 
         public bool Add(IBioSex value)

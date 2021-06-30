@@ -2,6 +2,7 @@
   "Cultures": [
     {
       "CultureName": "naga imperium",
+      "Description": "Tradition and protocol mean everything to the Naga Imperium.",
       "Inhabitants": [
         "naga"
       ],
@@ -1203,6 +1204,18 @@
         "BackgroundColours": [
           {
             "Name": "DefaultWindow",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#e83b3b"
+              },
+              {
+                "Name": "border",
+                "Value": "#fb6b1d"
+              }
+            ]
+          },{
+            "Name": "DefaultWindowSmooth",
             "Colour": [
               {
                 "Name": "background",

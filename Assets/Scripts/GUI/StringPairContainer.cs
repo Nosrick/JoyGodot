@@ -1,8 +1,9 @@
 ﻿using System;
-using Castle.Core.Internal;
-using Godot;
 
-namespace JoyLib.Code.Unity.GUI
+using Godot;
+using JoyGodot.Assets.Scripts.Helpers;
+
+namespace JoyGodot.Assets.Scripts.GUI
 {
     public class StringPairContainer : Node2D
     {

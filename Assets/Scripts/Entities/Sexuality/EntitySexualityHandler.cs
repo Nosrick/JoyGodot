@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Sexuality.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Array = Godot.Collections.Array;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Sexuality
+namespace JoyGodot.Assets.Scripts.Entities.Sexuality
 {
     public class EntitySexualityHandler : IEntitySexualityHandler
     {
@@ -30,7 +31,7 @@ namespace JoyLib.Code.Entities.Sexuality
 
         public IEnumerable<ISexuality> Load()
         {
-            this.PreferenceProcessors = ScriptingEngine.Instance
+            this.PreferenceProcessors = GlobalConstants.ScriptingEngine
                 .FetchAndInitialiseChildren<ISexualityPreferenceProcessor>()
                 .ToDictionary(processor => processor.Name, processor => processor);
 
@@ -72,11 +73,10 @@ namespace JoyLib.Code.Entities.Sexuality
                         : 0;
                     string processorName = sexuality.Contains("Processor")
                         ? this.ValueExtractor.GetValueFromDictionary<string>(sexuality, "Processor")
-                        : "Asexual";
+                        : "asexual";
                     ICollection<string> tags =
                         this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(sexuality, "Tags");
-                    this.PreferenceProcessors.TryGetValue(processorName,
-                        out ISexualityPreferenceProcessor preferenceProcessor);
+                    var preferenceProcessor = this.GetProcessor(processorName);
                     
                     sexualities.Add(
                         new BaseSexuality(
@@ -89,10 +89,18 @@ namespace JoyLib.Code.Entities.Sexuality
             }
 
             IEnumerable<ISexuality> extraSexualities =
-                ScriptingEngine.Instance.FetchAndInitialiseChildren<ISexuality>();
+                GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<ISexuality>();
             sexualities.AddRange(extraSexualities);
 
             return sexualities;
+        }
+
+        public ISexualityPreferenceProcessor GetProcessor(string name)
+        {
+            return this.PreferenceProcessors
+                       .FirstOrDefault(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase))
+                       .Value
+                   ?? new AsexualProcessor();
         }
 
         public ISexuality Get(string sexuality)

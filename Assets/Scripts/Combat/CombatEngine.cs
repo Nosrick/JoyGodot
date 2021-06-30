@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Combat
+namespace JoyGodot.Assets.Scripts.Combat
 {
     public class CombatEngine : ICombatEngine
     {
@@ -16,7 +16,7 @@ namespace JoyLib.Code.Combat
 
         public CombatEngine(IRollable roller = null)
         {
-            this.Roller = roller is null ? new RNG() : roller;
+            this.Roller = roller ?? new RNG();
         }
 
         public int MakeAttack(IEntity attacker,
@@ -149,9 +149,29 @@ namespace JoyLib.Code.Combat
                 result = Math.Max(0, result);
             }
 
-            GlobalConstants.ActionLog.Log(
-                attacker.JoyName + " attacks " + defender.JoyName + " for " + result + " damage.",
+            bool isAttackerPlayer = attacker == GlobalConstants.GameManager.Player;
+
+            string attackerName = isAttackerPlayer
+                ? "{You}"
+                : "{" + attacker.JoyName + "}";
+
+            string defenderName = defender == GlobalConstants.GameManager.Player
+                ? "{You}"
+                : "{" + defender.JoyName + "}";
+
+            if(result > 0)
+            {
+                GlobalConstants.ActionLog.Log(
+                attackerName + (isAttackerPlayer ? " attack " : " attacks ") + defenderName + " for " + result + " damage.",
                 LogLevel.Gameplay);
+                
+            }
+            else
+            {
+                GlobalConstants.ActionLog.Log(
+                    attackerName + " missed " + defenderName + ".",
+                    LogLevel.Gameplay);
+            }
             return result;
         }
     }

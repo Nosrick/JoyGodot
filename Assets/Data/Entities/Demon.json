@@ -2,6 +2,7 @@
   "Entities": [
     {
       "CreatureType": "demon",
+      "Description": "Demons tend to be tall, wide, and muscular, with betentacled mouths and beady red eyes.",
       "Type": "demon",
       "VisionType": "nocturnal vision",
       "Statistics": [

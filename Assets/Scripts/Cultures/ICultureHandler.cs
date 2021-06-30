@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Cultures
+namespace JoyGodot.Assets.Scripts.Cultures
 {
     public interface ICultureHandler : IHandler<ICulture, string>
     {

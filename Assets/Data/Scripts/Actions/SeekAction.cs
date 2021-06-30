@@ -1,10 +1,13 @@
-using System;
 using System.Collections.Generic;
-using Castle.Core.Internal;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.AI;
 
-namespace JoyLib.Code.Scripting.Actions
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+
+namespace JoyGodot.Assets.Data.Scripts.Actions
 {
     public class SeekAction : AbstractAction
     {
@@ -38,12 +41,12 @@ namespace JoyLib.Code.Scripting.Actions
 
             NeedAIData needAIData = new NeedAIData
             {
-                idle = false,
-                intent = Intent.Interact,
-                searching = false,
-                target = participants[1],
-                targetPoint = GlobalConstants.NO_TARGET,
-                need = needName
+                Idle = false,
+                Intent = Intent.Interact,
+                Searching = false,
+                Target = participants[1],
+                TargetPoint = GlobalConstants.NO_TARGET,
+                Need = needName
             };
 
             actor.CurrentTarget = needAIData;

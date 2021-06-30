@@ -1,6 +1,4 @@
-﻿using JoyLib.Code.Entities.Items;
-
-namespace JoyLib.Code.Helpers
+﻿namespace JoyGodot.Assets.Scripts.Helpers
 {
     public static class TemporaryWeaponMaker
     {

@@ -1,8 +1,6 @@
 ﻿using Godot;
-using JoyLib.Code;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.States;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.Cultures;
+using JoyGodot.Assets.Scripts.GUI;
 
 namespace JoyGodot.Assets.Scripts.States
 {
@@ -17,10 +15,6 @@ namespace JoyGodot.Assets.Scripts.States
         {
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void SetUpUi()
         {
             GlobalConstants.GameManager.GUIManager.InstantiateUIScene(
@@ -29,7 +23,7 @@ namespace JoyGodot.Assets.Scripts.States
                     "Scenes/UI/LoadingScreen.tscn"));
             base.SetUpUi();
 
-            GlobalConstants.GameManager.GUIManager.OpenGUI(GUINames.LOADING_SCREEN);
+            GlobalConstants.GameManager.GUIManager.OpenGUI(this, GUINames.LOADING_SCREEN);
         }
 
         public override void Update()

@@ -1,6 +1,4 @@
-﻿using JoyLib.Code.Graphics;
-
-namespace JoyGodot.Assets.Scripts.GUI.Managed_Assets
+﻿namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
     public interface ISpriteStateElement : IManagedElement
     {

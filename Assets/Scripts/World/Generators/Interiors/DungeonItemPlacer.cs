@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.World.Generators.Interiors
+namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 {
     public class DungeonItemPlacer
     {
@@ -42,9 +43,9 @@ namespace JoyLib.Code.World.Generators.Interiors
                 for (int j = 0; j < worldRef.Tiles.GetLength(1); j++)
                 {
                     Vector2Int position = new Vector2Int(i, j);
-                    if (worldRef.Walls.ContainsKey(position) == false
-                    && position != worldRef.SpawnPoint
-                    && worldRef.Areas.ContainsKey(position) == false)
+                    if (worldRef.Walls.Contains(position) == false
+                        && position != worldRef.SpawnPoint
+                        && worldRef.Areas.ContainsKey(position) == false)
                     {
                         availablePoints.Add(position);
                     }
@@ -56,7 +57,7 @@ namespace JoyLib.Code.World.Generators.Interiors
                 Vector2Int point = availablePoints[this.Roller.Roll(0, availablePoints.Count)];
 
                 IItemInstance item = this.ItemFactory.CreateRandomWeightedItem();
-                worldRef.AddObject(item);
+                worldRef.AddItem(item);
                 item.Move(point);
                 placedItems.Add(item);
             }

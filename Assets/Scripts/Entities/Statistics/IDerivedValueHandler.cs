@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Godot;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public interface IDerivedValueHandler : IHandler<IDerivedValue, string>
     {
@@ -15,9 +16,7 @@ namespace JoyLib.Code.Entities.Statistics
 
         Dictionary<string, IDerivedValue> GetItemStandardBlock(IEnumerable<IBasicValue<float>> components);
 
-        bool AddFormula(string name, string formula);
-
-        Color GetBackgroundColour(string name);
+        Color GetBarColour(string name);
         Color GetTextColour(string name);
         Color GetOutlineColour(string name);
     }

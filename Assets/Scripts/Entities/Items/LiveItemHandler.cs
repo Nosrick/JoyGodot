@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.World;
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Entities.AI;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.World;
+using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code.Entities.Items
+namespace JoyGodot.Assets.Scripts.Entities.Items
 {
     public class LiveItemHandler : ILiveItemHandler
     {
-        protected Dictionary<Guid, IItemInstance> LiveItems { get; set; }
+        protected System.Collections.Generic.Dictionary<Guid, IItemInstance> LiveItems { get; set; }
         
         public JSONValueExtractor ValueExtractor { get; protected set; }
         
@@ -25,7 +28,7 @@ namespace JoyLib.Code.Entities.Items
 
         public IEnumerable<IItemInstance> Load()
         {
-            this.LiveItems = new Dictionary<Guid, IItemInstance>();
+            this.LiveItems = new System.Collections.Generic.Dictionary<Guid, IItemInstance>();
 
             this.QuestRewards = new NonUniqueDictionary<Guid, Guid>();
             return new IItemInstance[0];
@@ -41,9 +44,9 @@ namespace JoyLib.Code.Entities.Items
             this.LiveItems.Add(item.Guid, item);
             if (item.InWorld 
                 && item.MyWorld is null == false 
-                && item.MyWorld.Objects.Any(o => o.Guid == item.Guid) == false)
+                && item.MyWorld.Items.Any(o => o.Guid == item.Guid) == false)
             {
-                item.MyWorld.AddObject(item);
+                item.MyWorld.AddItem(item);
             }
             return true;
         }
@@ -62,7 +65,6 @@ namespace JoyLib.Code.Entities.Items
             
             IItemInstance item = this.Get(GUID);
             item.MyWorld?.RemoveObject(item.WorldPosition, item);
-            //LiveItems.Remove(GUID);
             return true;
 
         }
@@ -88,10 +90,10 @@ namespace JoyLib.Code.Entities.Items
                 //TODO: Find a better way to reference AI targets
                 IEnumerable<IEntity> targeting =
                     GlobalConstants.GameManager.Player.MyWorld.Entities.Where(entity =>
-                        entity.CurrentTarget.target == item);
+                        entity.CurrentTarget.Target == item);
                 foreach (IEntity entity in targeting)
                 {
-                    entity.CurrentTarget.target = null;
+                    entity.CurrentTarget = new NeedAIData();
                 }
                 
                 //this.LiveItems[key].Dispose();
@@ -114,17 +116,13 @@ namespace JoyLib.Code.Entities.Items
             
             IItemInstance item = this.Get(GUID);
             item.MyWorld = world;
-            world.AddObject(item);
+            world.AddItem(item);
             return true;
         }
 
         public IItemInstance Get(Guid guid)
         {
-            if (this.LiveItems.ContainsKey(guid))
-            {
-                return this.LiveItems[guid];
-            }
-            throw new InvalidOperationException("No item found with GUID " + guid);
+            return this.LiveItems.TryGetValue(guid, out IItemInstance item) ? item : null;
         }
 
         public IEnumerable<IItemInstance> GetQuestRewards(Guid questID)
@@ -136,7 +134,6 @@ namespace JoyLib.Code.Entities.Items
 
         public void CleanUpRewards()
         {
-            /*
             this.QuestRewards = new NonUniqueDictionary<Guid, Guid>(
                 this.QuestRewards
                     .Where(tuple =>
@@ -148,32 +145,17 @@ namespace JoyLib.Code.Entities.Items
                 .ToList();
             foreach (var guid in cleanup)
             {
-                IItemInstance item = this.Get(guid);
-                if (item.MonoBehaviourHandler is null)
-                {
-                    GlobalConstants.ActionLog.AddText("No MBH found on " + item);
-                }
-                item.Dispose();
-            }
-            */
-        }
-
-        public void AddQuestReward(Guid questID, Guid reward)
-        {
-            this.QuestRewards.Add(questID, reward);
-        }
-
-        public void AddQuestRewards(Guid questID, IEnumerable<Guid> rewards)
-        {
-            foreach (Guid reward in rewards)
-            {
-                this.QuestRewards.Add(questID, reward);
+                this.Destroy(guid);
             }
         }
 
         public void AddQuestRewards(Guid questID, IEnumerable<IItemInstance> rewards)
         {
-            this.AddQuestRewards(questID, rewards.Select(instance => instance.Guid));
+            this.AddItems(rewards);
+            foreach (Guid reward in rewards.Select(r => r.Guid))
+            {
+                this.QuestRewards.Add(questID, reward);
+            }
         }
 
         public IEnumerable<IItemInstance> GetItems(IEnumerable<Guid> guids)
@@ -193,7 +175,7 @@ namespace JoyLib.Code.Entities.Items
 
         public void ClearLiveItems()
         {
-            this.LiveItems = new Dictionary<Guid, IItemInstance>();
+            this.LiveItems = new System.Collections.Generic.Dictionary<Guid, IItemInstance>();
         }
 
         ~LiveItemHandler()
@@ -220,5 +202,30 @@ namespace JoyLib.Code.Entities.Items
         }
 
         public IEnumerable<IItemInstance> Values => this.LiveItems.Values.ToList();
+        
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Items", new Array(this.LiveItems.Select(pair => pair.Value.Save()))}
+            };
+            
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            this.LiveItems = new System.Collections.Generic.Dictionary<Guid, IItemInstance>();
+            this.QuestRewards = new NonUniqueDictionary<Guid, Guid>();
+            
+            var items = this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Items");
+
+            foreach (Dictionary itemDict in items)
+            {
+                IItemInstance item = new ItemInstance();
+                item.Load(itemDict);
+                this.Add(item);
+            }
+        }
     }
 }

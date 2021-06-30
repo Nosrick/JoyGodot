@@ -2,6 +2,7 @@
   "Cultures": [
     {
       "CultureName": "demon republic",
+      "Description": "The Demon Republic is a brutally efficient nation, relying on cheap labour and undercutting the competition to get ahead.",
       "Inhabitants": [
         "demon",
         "human"
@@ -276,6 +277,18 @@
         "BackgroundColours": [
           {
             "Name": "DefaultWindow",
+            "Colour": [
+              {
+                "Name": "background",
+                "Value": "#0b8a8f"
+              },
+              {
+                "Name": "border",
+                "Value": "#1ebc73"
+              }
+            ]
+          },{
+            "Name": "DefaultWindowSmooth",
             "Colour": [
               {
                 "Name": "background",

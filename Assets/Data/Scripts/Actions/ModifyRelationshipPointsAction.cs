@@ -1,10 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using JoyLib.Code.Entities.Relationships;
 
-namespace JoyLib.Code.Scripting.Actions
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+
+namespace JoyGodot.Assets.Data.Scripts.Actions
 {
     public class ModifyRelationshipPointsAction : AbstractAction
     {
@@ -44,7 +47,10 @@ namespace JoyLib.Code.Scripting.Actions
                 return false;
             }
 
-            IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(participants, tags, true);
+            IEnumerable<IRelationship> relationships = this.RelationshipHandler?.Get(
+                participants.Select(o => o.Guid), 
+                tags, 
+                true);
 
             bool doAll = args.TryGetValue("doAll", out arg) && (bool) arg;
 

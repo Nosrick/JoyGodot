@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using Godot;
+using Godot.Collections;
 
-namespace JoyLib.Code.Entities.Statistics
+namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     [Serializable]
     public class EntityStatistic : IEntityStatistic
@@ -21,15 +24,22 @@ namespace JoyLib.Code.Entities.Statistics
                                                     INTELLECT, CUNNING, FOCUS,
                                                     PERSONALITY, SUAVITY, WIT };
 
+        public ICollection<string> Tooltip { get; set; }
+
         public EntityStatistic()
         {
         }
         
-        public EntityStatistic(string name, int value, int successThreshold)
+        public EntityStatistic(
+            string name, 
+            int value, 
+            int successThreshold,
+            ICollection<string> tooltip)
         {
             this.Name = name;
             this.Value = value;
             this.SuccessThreshold = successThreshold;
+            this.Tooltip = tooltip;
         }
 
         public int ModifyValue(int value)
@@ -42,6 +52,12 @@ namespace JoyLib.Code.Entities.Statistics
         {
             this.Value = Math.Max(1, value);
             return this.Value;
+        }
+
+        public int SetThreshold(int value)
+        {
+            this.SuccessThreshold = Mathf.Clamp(value, 1, 10);
+            return this.SuccessThreshold;
         }
 
         public string Name
@@ -60,6 +76,28 @@ namespace JoyLib.Code.Entities.Statistics
         {
             get;
             set;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Name", this.Name}, 
+                {"Value", this.Value}, 
+                {"SuccessThreshold", this.SuccessThreshold}
+            };
+            
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
+            this.Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
+            this.SuccessThreshold = valueExtractor.GetValueFromDictionary<int>(data, "SuccessThreshold");
+            this.Tooltip = GlobalConstants.GameManager.StatisticHandler.Get(this.Name).Tooltip;
         }
     }
 }

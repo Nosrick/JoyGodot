@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Items;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
-using JoyLib.Code.World.Generators;
-using JoyLib.Code.World.Generators.Interiors;
-using JoyLib.Code.World.Generators.Overworld;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.IO;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
+using JoyGodot.Assets.Scripts.World.Generators;
+using JoyGodot.Assets.Scripts.World.Generators.Interiors;
+using JoyGodot.Assets.Scripts.World.Generators.Overworld;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     public class WorldCreationState : GameState
     {
@@ -35,10 +36,6 @@ namespace JoyLib.Code.States
             this.CreateWorld();
         }
 
-        public override void Stop()
-        {
-        }
-
         public override void LoadContent()
         {
         }
@@ -50,7 +47,7 @@ namespace JoyLib.Code.States
 
             //Generate the basic overworld
             this.m_World = new WorldInstance(
-                overworldGen.GenerateWorldSpace(WORLD_SIZE, "overworld"),
+                overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"),
                 new string[] {"overworld", "exterior"},
                 "Everse",
                 GlobalConstants.GameManager.EntityHandler,
@@ -97,9 +94,22 @@ namespace JoyLib.Code.States
             IItemInstance lightSource = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(
                 new string[] {"light source"},
                 true);
+
+            IItemInstance bag = GlobalConstants.GameManager.ItemFactory.CreateRandomItemOfType(
+                new[] {"container"},
+                true);
+            
             IJoyAction addItemAction = this.m_Player.FetchAction("additemaction");
             addItemAction.Execute(
                 new IJoyObject[] {this.m_Player, lightSource},
+                new[] {"pickup"},
+                new Dictionary<string, object>
+                {
+                    {"newOwner", true}
+                });
+
+            addItemAction.Execute(
+                new IJoyObject[] {this.m_Player, bag},
                 new[] {"pickup"},
                 new Dictionary<string, object>
                 {
@@ -124,12 +134,12 @@ namespace JoyLib.Code.States
                     });
             }
 
-            foreach (IItemInstance item in this.m_Player.Contents)
-            {
-                GlobalConstants.GameManager.ItemPool.Retire((JoyObjectNode) item.MyNode);
-            }
-
             this.m_World.Tick();
+
+            GlobalConstants.GameManager.WorldHandler.Add(this.m_World);
+
+            WorldSerialiser worldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
+            worldSerialiser.Serialise(this.m_World);
 
             this.Done = true;
         }

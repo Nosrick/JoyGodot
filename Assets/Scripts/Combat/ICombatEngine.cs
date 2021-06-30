@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using JoyLib.Code.Entities;
+using JoyGodot.Assets.Scripts.Entities;
 
-namespace JoyLib.Code.Combat
+namespace JoyGodot.Assets.Scripts.Combat
 {
     public interface ICombatEngine
     {

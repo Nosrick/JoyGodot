@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections;
-using JoyLib.Code;
-using JoyLib.Code.Entities;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Moq;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class EntityRelationshipHandlerTests
     {
@@ -23,28 +22,28 @@ namespace Tests
         public void SetUp()
         {
             GlobalConstants.ActionLog = new ActionLog();
-            scriptingEngine = new ScriptingEngine();
+            this.scriptingEngine = new ScriptingEngine();
 
             ILiveEntityHandler entityHandler = new LiveEntityHandler();
             IGameManager gameManager = Mock.Of<IGameManager>(
                 manager => manager.EntityHandler == entityHandler);
             GlobalConstants.GameManager = gameManager;
 
-            target = new EntityRelationshipHandler();
+            this.target = new EntityRelationshipHandler();
         }
 
         [SetUp]
         public void SetUpEntities()
         {
-            left = Mock.Of<IEntity>(entity => entity.Guid == Guid.NewGuid());
-            right = Mock.Of<IEntity>(entity => entity.Guid == Guid.NewGuid());
+            this.left = Mock.Of<IEntity>(entity => entity.Guid == Guid.NewGuid());
+            this.right = Mock.Of<IEntity>(entity => entity.Guid == Guid.NewGuid());
         }
 
         [Test]
         public void CreateRelationship_ShouldHave_ZeroValue()
         {
             //given
-            IRelationship relationship = target.CreateRelationship(new[] {left, right}, new []{"friendship"});
+            IRelationship relationship = this.target.CreateRelationship(new[] {this.left, this.right}, new []{"friendship"});
             
             //when
 
@@ -56,8 +55,8 @@ namespace Tests
         public void CreateRelationshipWithValue_ShouldHave_NonZeroValue()
         {
             //given
-            IRelationship relationship = target.CreateRelationshipWithValue(
-                new[] {left, right},
+            IRelationship relationship = this.target.CreateRelationshipWithValue(
+                new[] {this.left, this.right},
                 new [] {"friendship"},
                 50);
             

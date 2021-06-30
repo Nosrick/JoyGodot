@@ -1,13 +1,12 @@
-using System.Collections;
 using System.Linq;
-using JoyLib.Code;
-using JoyLib.Code.Entities.Abilities;
-using JoyLib.Code.Entities.Jobs;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Rollers;
+using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
+using JoyGodot.Assets.Scripts.Entities.Jobs;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Rollers;
 using NUnit.Framework;
 
-namespace Tests
+namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class JobHandlerTest
     {
@@ -30,7 +29,7 @@ namespace Tests
             //given
 
             //when
-            IJob[] jobs = target.Values.ToArray();
+            IJob[] jobs = this.target.Values.ToArray();
 
             //then
             Assert.That(jobs, Is.Not.Empty);

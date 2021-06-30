@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using JoyGodot.Assets.Scripts.GUI.Managed_Assets;
-using JoyLib.Code;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Unity.GUI;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.GUI.Tools;
+using JoyGodot.Assets.Scripts.Managed_Assets;
 
 namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 {
@@ -116,9 +115,12 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 part.ValueName = derivedValue.Name;
                 part.Minimum = derivedValue.Base;
                 part.Maximum = derivedValue.Base + 5;
+                part.IncreaseCost = 1;
+                part.DecreaseCost = -1;
                 part.Value = derivedValue.Value;
                 part.Visible = true;
                 part.UseRestriction = true;
+                part.Tooltip = derivedValue.Tooltip;
                 if (!part.IsConnected(
                     "ValueChanged",
                     this,
@@ -142,15 +144,13 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
         
         public void ChangeValue(string name, int delta, int newValue)
         {
-            GD.Print(name + " : " + delta + " : " + newValue);
-
             var derivedValue =
                 this.m_DerivedValues.FirstOrDefault(
                     value => value.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (derivedValue is null)
             {
-                GD.Print(name + " derived value not found!");
+                GD.PushError(name + " derived value not found!");
                 return;
             }
 

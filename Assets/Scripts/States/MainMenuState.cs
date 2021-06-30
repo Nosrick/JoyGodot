@@ -1,11 +1,9 @@
-﻿using System.Linq;
-using Godot;
-using JoyLib.Code.Cultures;
-using JoyLib.Code.IO;
-using JoyLib.Code.Unity.GUI;
-using JoyLib.Code.World;
+﻿using Godot;
+using JoyGodot.Assets.Scripts.GUI;
+using JoyGodot.Assets.Scripts.IO;
+using JoyGodot.Assets.Scripts.World;
 
-namespace JoyLib.Code.States
+namespace JoyGodot.Assets.Scripts.States
 {
     class MainMenuState : GameState
     {
@@ -24,19 +22,15 @@ namespace JoyLib.Code.States
 
         public override void SetUpUi()
         {
-            GlobalConstants.GameManager.GUIManager.InstantiateUIScene(
+            this.GUIManager.InstantiateUIScene(
                 GD.Load<PackedScene>(
                     GlobalConstants.GODOT_ASSETS_FOLDER +
                     "Scenes/UI/MainMenu.tscn"));
-            base.SetUpUi();
-            this.GUIManager.OpenGUI(GUINames.MAIN_MENU);
+            this.GUIManager.FindGUIs();
+            this.GUIManager.OpenGUI(this, GUINames.MAIN_MENU);
         }
 
         public override void Start()
-        {
-        }
-
-        public override void Stop()
         {
         }
 
@@ -59,8 +53,8 @@ namespace JoyLib.Code.States
             IWorldInstance overworld = this.m_WorldSerialiser.Deserialise("Everse");
             this.Done = true;
 
-            IWorldInstance playerWorld = overworld.Player.MyWorld;
-            this.m_NextState = new WorldState(overworld, playerWorld);
+            IWorldInstance playerWorld = GlobalConstants.GameManager.EntityHandler.GetPlayer().MyWorld;
+            this.m_NextState = new WorldInitialisationState(overworld, playerWorld);
         }
 
         public override GameState GetNextState()

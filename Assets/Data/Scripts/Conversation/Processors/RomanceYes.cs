@@ -1,8 +1,11 @@
-﻿using JoyLib.Code.Conversation.Conversations;
-using JoyLib.Code.Entities.Relationships;
-using JoyLib.Code.Rollers;
+﻿using System;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Rollers;
 
-namespace JoyLib.Code.Entities.Conversation.Processors
+namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class RomanceYes : TopicData
     {
@@ -24,7 +27,7 @@ namespace JoyLib.Code.Entities.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            var newRelationship = this.SelectedRelationship.Create(new IJoyObject[] {listener, instigator});
+            var newRelationship = this.SelectedRelationship.Create(new[] {listener.Guid, instigator.Guid});
             this.RelationshipHandler.Add(newRelationship);
             
             return base.Interact(instigator, listener);

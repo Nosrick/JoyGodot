@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyLib.Code.Entities.Romance.Processors;
-using JoyLib.Code.Helpers;
-using JoyLib.Code.Scripting;
+using JoyGodot.Assets.Scripts.Entities.Romance.Processors;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyLib.Code.Entities.Romance
+namespace JoyGodot.Assets.Scripts.Entities.Romance
 {
     public class EntityRomanceHandler : IEntityRomanceHandler
     {
@@ -32,7 +32,7 @@ namespace JoyLib.Code.Entities.Romance
         {
             List<IRomance> romances = new List<IRomance>();
 
-            this.Processors = ScriptingEngine.Instance.FetchAndInitialiseChildren<IRomanceProcessor>()
+            this.Processors = GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IRomanceProcessor>()
                 .ToDictionary(processor => processor.Name, processor => processor);
             
             string[] files =
@@ -98,7 +98,7 @@ namespace JoyLib.Code.Entities.Romance
                 }
             }
 
-            romances.AddRange(ScriptingEngine.Instance.FetchAndInitialiseChildren<IRomance>());
+            romances.AddRange(GlobalConstants.ScriptingEngine.FetchAndInitialiseChildren<IRomance>());
             return romances;
         }
         
@@ -114,6 +114,13 @@ namespace JoyLib.Code.Entities.Romance
                 return this.RomanceTypes.First(r => r.Key.Equals(romance, StringComparison.OrdinalIgnoreCase)).Value;
             }
             throw new InvalidOperationException("Sexuality of type " + romance + " not found.");
+        }
+
+        public IRomanceProcessor GetProcessor(string name)
+        {
+            return this.Processors.TryGetValue(name, out IRomanceProcessor processor)
+                ? processor
+                : new AromanticProcessor();
         }
 
         public bool Add(IRomance value)

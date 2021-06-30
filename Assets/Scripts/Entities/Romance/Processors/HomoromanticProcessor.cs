@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JoyLib.Code.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Relationships;
 
-namespace JoyLib.Code.Entities.Romance.Processors
+namespace JoyGodot.Assets.Scripts.Entities.Romance.Processors
 {
     public class HomoromanticProcessor : IRomanceProcessor
     {

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using JoyLib.Code.Conversation.Subengines.Rumours;
-using JoyLib.Code.Entities;
 
-namespace JoyLib.Code.Conversation.Conversations.Rumours
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours.Parameters;
+using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.JoyObject;
+
+namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
 {
     public class BaseRumour : IRumour
     {
@@ -86,7 +89,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             }
         }
 
-        public bool FulfilsConditions(IEnumerable<Tuple<string, int>> values)
+        public bool FulfilsConditions(IEnumerable<Tuple<string, object>> values)
         {
             if (this.Baseless)
             {
@@ -113,8 +116,10 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
                     }
                     
                     int value = values.Where(pair =>
-                            pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase))
-                        .Max(tuple => tuple.Item2);
+                            pair.Item1.Equals(condition.Criteria, StringComparison.OrdinalIgnoreCase)
+                            && pair.Item2 is int)
+                        .Select(pair => (int) pair.Item2)
+                        .Max();
 
                     if (condition.FulfillsCondition(value) == false)
                     {
@@ -135,7 +140,7 @@ namespace JoyLib.Code.Conversation.Conversations.Rumours
             
             string[] criteria = this.Conditions.Select(c => c.Criteria).ToArray();
 
-            List<Tuple<string, int>> values = new List<Tuple<string, int>>();
+            List<Tuple<string, object>> values = new List<Tuple<string, object>>();
             foreach (IJoyObject participant in participants)
             {
                 if (participant is Entity entity)

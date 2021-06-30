@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Godot;
-using JoyLib.Code.Collections;
-using JoyLib.Code.Entities.Statistics;
-using JoyLib.Code.Events;
-using JoyLib.Code.Godot;
-using JoyLib.Code.Graphics;
-using JoyLib.Code.Rollers;
-using JoyLib.Code.Scripting;
-using JoyLib.Code.World;
+using Godot.Collections;
+using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
+using JoyGodot.Assets.Scripts.Godot;
+using JoyGodot.Assets.Scripts.Managed_Assets;
+using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.World;
+using Array = Godot.Collections.Array;
 
-namespace JoyLib.Code
+namespace JoyGodot.Assets.Scripts.JoyObject
 {
-    [Serializable]
     public class JoyObject : IComparable, IJoyObject
     {
         public event ValueChangedEventHandler<int> OnDerivedValueChange;
@@ -36,6 +36,14 @@ namespace JoyLib.Code
         public bool IsDestructible { get; protected set; }
         
         public virtual IWorldInstance MyWorld { get; set; }
+
+        public Guid WorldGuid
+        {
+            get => this.MyWorld?.Guid ?? this.m_WorldGuid;
+            set => this.m_WorldGuid = value;
+        }
+
+        protected Guid m_WorldGuid;
 
         public Guid Guid { get; protected set; }
 
@@ -60,7 +68,18 @@ namespace JoyLib.Code
         protected List<ISpriteState> m_States;
 
         public List<IJoyAction> CachedActions { get; protected set; }
-        public JoyObjectNode MyNode { get; protected set; }
+
+        public JoyObjectNode MyNode
+        {
+            get => this.m_MyNode;
+            set
+            {
+                this.m_MyNode = value;
+                this.Move(this.WorldPosition);
+            }
+        }
+
+        protected JoyObjectNode m_MyNode;
 
         public IRollable Roller { get; protected set; }
 
@@ -75,6 +94,10 @@ namespace JoyLib.Code
         public JoyObject()
         {
             this.Guid = Guid.Empty;
+            this.Roller = new RNG();
+            this.m_States = new List<ISpriteState>();
+            this.DerivedValues = new System.Collections.Generic.Dictionary<string, IDerivedValue>();
+            this.CachedActions = new List<IJoyAction>();
         }
 
         /// <summary>
@@ -99,11 +122,11 @@ namespace JoyLib.Code
             params string[] tags)
         {
             this.TileSet = tileSet;
-            this.Roller = roller is null ? new RNG() : roller; 
+            this.Roller = roller ?? new RNG(); 
             List<IJoyAction> tempActions = new List<IJoyAction>(); 
             foreach(string action in actions)
             {
-                tempActions.Add(ScriptingEngine.Instance.FetchAction(action));
+                tempActions.Add(GlobalConstants.ScriptingEngine.FetchAction(action));
             }
 
             this.Initialise(
@@ -222,6 +245,8 @@ namespace JoyLib.Code
         public void Move(Vector2Int newPosition)
         {
             this.WorldPosition = newPosition;
+
+            this.MyNode?.Move(newPosition);
         }
 
         public int DamageValue(string name, int value)
@@ -391,6 +416,56 @@ namespace JoyLib.Code
         public void SetStates(IEnumerable<ISpriteState> states)
         {
             this.m_States = states.ToList();
+        }
+
+        public virtual Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"JoyName", this.JoyName},
+                {"WorldPosition", this.WorldPosition.Save()},
+                {"MyWorld", this.WorldGuid.ToString()},
+                {"TileSet", this.TileSet},
+                {"Guid", this.Guid.ToString()},
+                {"Tags", new Array(this.Tags)},
+                {"DerivedValues", new Array(this.DerivedValues.Values.Select(dv => dv.Save()))},
+                {"SpriteStates", new Array(this.States.Select(state => state.Save()))}
+            };
+
+            return saveDict;
+        }
+
+        public virtual void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.WorldHandler.ValueExtractor;
+
+            this.JoyName = valueExtractor.GetValueFromDictionary<string>(data, "JoyName");
+            this.WorldPosition = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "WorldPosition"));
+            string worldGuidString = valueExtractor.GetValueFromDictionary<string>(data, "MyWorld");
+            this.WorldGuid = worldGuidString is null ? Guid.Empty : new Guid(worldGuidString);
+            this.TileSet = valueExtractor.GetValueFromDictionary<string>(data, "TileSet");
+            this.Guid = new Guid(valueExtractor.GetValueFromDictionary<string>(data, "Guid"));
+            this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+
+            ICollection<Dictionary> dictCollection = valueExtractor
+                .GetArrayValuesCollectionFromDictionary<Dictionary>(
+                    data, 
+                    "DerivedValues");
+            foreach (Dictionary dvDict in dictCollection)
+            {
+                string name = valueExtractor.GetValueFromDictionary<string>(dvDict, "Name");
+                IDerivedValue derivedValue = GlobalConstants.GameManager.DerivedValueHandler.Get(name);
+                derivedValue.Load(dvDict);
+                this.DerivedValues.Add(derivedValue.Name, derivedValue);
+            }
+
+            dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "SpriteStates");
+            foreach (Dictionary dict in dictCollection)
+            {
+                ISpriteState state = new SpriteState();
+                state.Load(dict);
+                this.States.Add(state);
+            }
         }
     }    
 }
