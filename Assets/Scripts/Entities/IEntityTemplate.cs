@@ -18,5 +18,7 @@ namespace JoyGodot.Assets.Scripts.Entities
         IVision VisionType { get; }
         string CreatureType { get; }
         string JoyType { get; }
+        
+        string Description { get; }
     }
 }

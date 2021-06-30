@@ -89,6 +89,9 @@ namespace JoyGodot.Assets.Scripts.Entities
                     string visionType = this.ValueExtractor.GetValueFromDictionary<string>(templateDict, "VisionType") ?? "diurnal vision";
                     IVision vision = this.VisionProviderHandler.Get(visionType);
 
+                    string description =
+                        this.ValueExtractor.GetValueFromDictionary<string>(templateDict, "Description");
+
                     IDictionary<string, IEntityStatistic> statistics =
                         new System.Collections.Generic.Dictionary<string, IEntityStatistic>();
                     ICollection<Dictionary> statisticsCollection =
@@ -168,7 +171,8 @@ namespace JoyGodot.Assets.Scripts.Entities
                             size,
                             vision,
                             creatureType,
-                            type,
+                            type, 
+                            description,
                             tags.ToArray()));
                 }
             }
