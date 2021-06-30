@@ -2,6 +2,7 @@
   "Cultures": [
     {
       "CultureName": "demon republic",
+      "Description": "The Demon Republic is a brutally efficient nation, relying on cheap labour and undercutting the competition to get ahead.",
       "Inhabitants": [
         "demon",
         "human"

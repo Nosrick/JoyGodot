@@ -2,6 +2,7 @@
   "Cultures": [
     {
       "CultureName": "human kingdom",
+      "Description": "A deeply paradoxical nation, the Human Kingdom is fondly nostalgic, but always pushing forward for progress.",
       "Inhabitants": [
         "human"
       ],

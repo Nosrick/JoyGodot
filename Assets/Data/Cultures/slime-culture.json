@@ -2,6 +2,7 @@
   "Cultures": [
     {
       "CultureName": "slime conglomerate",
+      "Description": "The Slime Conglomerate is a loosely organised nation, mainly comprised of slime.",
       "Inhabitants": [
         "slime"
       ],

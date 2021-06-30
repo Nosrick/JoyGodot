@@ -2,6 +2,7 @@
   "Cultures": [
     {
       "CultureName": "naga imperium",
+      "Description": "Tradition and protocol mean everything to the Naga Imperium.",
       "Inhabitants": [
         "naga"
       ],
