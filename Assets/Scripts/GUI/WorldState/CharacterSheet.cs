@@ -77,11 +77,29 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
             this.PlayerNameOne.Text = this.Player.JoyName;
             this.SpeciesAndJobOne.Text = this.Player.CreatureType + " " + this.Player.CurrentJob.Name;
+            this.SpeciesAndJobOne.Tooltip = new List<string>
+            {
+                GlobalConstants.GameManager.EntityTemplateHandler.Get(this.Player.CreatureType).Description,
+                this.Player.CurrentJob.Description
+            };
             this.CultureNameOne.Text = this.Player.Cultures.First().CultureName;
+            this.CultureNameOne.Tooltip = new List<string>
+            {
+                this.Player.Cultures.First().Description
+            };
 
             this.PlayerNameTwo.Text = this.PlayerNameOne.Text;
             this.SpeciesAndJobTwo.Text = this.SpeciesAndJobOne.Text;
+            this.SpeciesAndJobTwo.Tooltip = new List<string>
+            {
+                GlobalConstants.GameManager.EntityTemplateHandler.Get(this.Player.CreatureType).Description,
+                this.Player.CurrentJob.Description
+            };
             this.CultureNameTwo.Text = this.CultureNameOne.Text;
+            this.CultureNameTwo.Tooltip = new List<string>
+            {
+                this.Player.Cultures.First().Description
+            };
 
             ISpriteState spriteState = this.Player.States.First();
 

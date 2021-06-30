@@ -35,10 +35,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
         protected Control PageOne { get; set; }
         protected Control PageTwo { get; set; }
-        
+
         protected int JobPoints { get; set; }
         protected IJob CurrentJob { get; set; }
-        
+
         protected IDictionary<string, int> NewSkillValues { get; set; }
         protected IDictionary<string, int> NewStatisticValues { get; set; }
         protected IDictionary<string, int> NewDerivedValues { get; set; }
@@ -84,11 +84,21 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.JobPoints = this.CurrentJob.Experience;
             this.SpeciesAndJobOne.ValueName = "Job";
             this.SpeciesAndJobOne.Values = this.Player.Jobs.Select(job => job.Name).ToArray();
+            this.SpeciesAndJobOne.Tooltip = new List<string>
+            {
+                GlobalConstants.GameManager.EntityTemplateHandler.Get(this.Player.CreatureType).Description,
+                this.Player.CurrentJob.Description
+            };
             this.PointsRemainingOne.Text = "Points Remaining: " + this.JobPoints;
 
             this.PlayerNameTwo.Text = this.PlayerNameOne.Text;
             this.SpeciesAndJobTwo.ValueName = "Job";
             this.SpeciesAndJobTwo.Values = this.SpeciesAndJobOne.Values;
+            this.SpeciesAndJobTwo.Tooltip = new List<string>
+            {
+                GlobalConstants.GameManager.EntityTemplateHandler.Get(this.Player.CreatureType).Description,
+                this.Player.CurrentJob.Description
+            };
             this.PointsRemainingTwo.Text = this.PointsRemainingOne.Text;
 
             if (this.SpeciesAndJobOne.IsConnected("ValueChanged", this, nameof(this.OnJobChange)))
@@ -125,7 +135,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         public void SetExperienceRemaining()
         {
             this.PointsRemainingOne.Text =
-                this.PointsRemainingTwo.Text = 
+                this.PointsRemainingTwo.Text =
                     "Points Remaining: " + this.JobPoints;
         }
 
@@ -135,14 +145,14 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 return;
             }
-            
+
             this.SetExperienceRemaining();
 
             var derivedValues = this.Player.DerivedValues.Values.ToList();
             var statistics = this.Player.Statistics.Values.ToList();
             var skills = this.Player.Skills.Values.ToList();
             var abilities = this.CurrentJob.Abilities.Where(pair =>
-                this.Player.Abilities.Contains(pair.Key) == false)
+                    this.Player.Abilities.Contains(pair.Key) == false)
                 .Select(pair => new Tuple<IAbility, int>(pair.Key, pair.Value))
                 .ToList();
 
@@ -225,6 +235,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 {
                     child.Disconnect("ValueChanged", this, nameof(this.OnDerivedValueChange));
                 }
+
                 child.Connect("ValueChanged", this, nameof(this.OnDerivedValueChange));
             }
 
@@ -245,6 +256,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 {
                     child.Disconnect("ValueChanged", this, nameof(this.OnStatisticChange));
                 }
+
                 child.Connect("ValueChanged", this, nameof(this.OnStatisticChange));
             }
 
@@ -265,6 +277,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 {
                     child.Disconnect("ValueChanged", this, nameof(this.OnSkillChange));
                 }
+
                 child.Connect("ValueChanged", this, nameof(this.OnSkillChange));
             }
 
@@ -286,6 +299,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 {
                     child.Disconnect("ValuePress", this, nameof(this.OnAbilityChange));
                 }
+
                 child.Connect("ValuePress", this, nameof(this.OnAbilityChange));
             }
 
@@ -295,7 +309,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             }
 
             this.SetChildPoints();
-            
+
             this.OpenPageOne();
         }
 
@@ -310,7 +324,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 this.NewStatisticValues.Add(name, newValue);
             }
-            
+
             this.SetChildPoints();
             this.SetExperienceRemaining();
         }
@@ -326,7 +340,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 this.NewSkillValues.Add(name, newValue);
             }
-            
+
             this.SetChildPoints();
             this.SetExperienceRemaining();
         }
@@ -342,7 +356,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 this.NewDerivedValues.Add(name, newValue);
             }
-            
+
             this.SetChildPoints();
             this.SetExperienceRemaining();
         }
@@ -360,7 +374,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 this.PurchasedAbilities.Remove(name);
             }
-            
+
             this.SetChildPoints();
             this.SetExperienceRemaining();
         }
@@ -375,12 +389,20 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 GD.PushWarning("Could not find job " + newValue + " on player!");
                 return;
             }
-            
+
             this.JobPoints = this.CurrentJob.Experience;
-            this.SpeciesAndJobOne.Index = 
-                this.SpeciesAndJobTwo.Index = 
+            this.SpeciesAndJobOne.Index =
+                this.SpeciesAndJobTwo.Index =
                     this.SpeciesAndJobOne.Values.ToList().IndexOf(newValue);
             
+            this.SpeciesAndJobOne.Tooltip =
+                this.SpeciesAndJobTwo.Tooltip =
+                    new List<string>
+                    {
+                        GlobalConstants.GameManager.EntityTemplateHandler.Get(this.Player.CreatureType).Description,
+                        this.Player.CurrentJob.Description
+                    };
+
             this.SetUpUi();
         }
 
@@ -392,7 +414,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 GD.PushWarning("Could not find current job on player!");
                 return;
             }
-            
+
             job.SpendExperience(job.Experience - this.JobPoints);
             List<IAbility> abilities = new List<IAbility>();
             foreach (string name in this.PurchasedAbilities)
@@ -417,7 +439,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 this.Player.SetValue(pair.Key, pair.Value);
             }
-            
+
             this.SetUpUi();
         }
 
@@ -430,7 +452,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                     this.Player.Abilities.Contains(pair.Key) == false)
                 .Select(pair => new Tuple<IAbility, int>(pair.Key, pair.Value))
                 .ToList();
-            
+
             for (int i = 0; i < this.StatisticList.GetChildCount(); i++)
             {
                 var child = this.StatisticList.GetChild(i) as IntValueItem;
@@ -449,6 +471,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                     "Cost: " + (delta + 10)
                 };
             }
+
             for (int i = 0; i < this.SkillList.GetChildCount(); i++)
             {
                 var child = this.SkillList.GetChild(i) as IntValueItem;
@@ -458,7 +481,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 }
 
                 child.PointRestriction = this.JobPoints;
-                
+
                 int delta = (child.Value * 10) - this.CurrentJob.GetSkillDiscount(child.ValueName);
                 child.IncreaseCost = delta + 10;
                 child.DecreaseCost = -delta;
@@ -467,6 +490,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                     "Cost: " + (delta + 10)
                 };
             }
+
             for (int i = 0; i < this.DerivedValueList.GetChildCount(); i++)
             {
                 var child = this.DerivedValueList.GetChild(i) as IntValueItem;
@@ -474,6 +498,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 {
                     continue;
                 }
+
                 child.Tooltip = new List<string>(derivedValues[i].Tooltip)
                 {
                     "Cost: " + child.IncreaseCost
@@ -481,6 +506,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
                 child.PointRestriction = this.JobPoints;
             }
+
             for (int i = 0; i < this.AbilityList.GetChildCount(); i++)
             {
                 var child = this.AbilityList.GetChild(i) as ConstrainedManagedTextButton;
