@@ -29,6 +29,8 @@ namespace JoyGodot.Assets.Scripts.Cultures
         protected List<string> m_RelationshipTypes;
         protected IDictionary<string, int> m_JobPrevalence;
         List<string> m_Inhabitants;
+        
+        public string Description { get; protected set; }
 
         public int LastGroup { get; protected set; }
 
@@ -72,6 +74,7 @@ namespace JoyGodot.Assets.Scripts.Cultures
         public CultureType(
             string nameRef,
             string tileset,
+            string description,
             IEnumerable<string> rulersRef,
             IEnumerable<string> crimesRef,
             IEnumerable<NameData> namesRef,
@@ -92,6 +95,7 @@ namespace JoyGodot.Assets.Scripts.Cultures
             this.Roller = roller ?? new RNG();
             this.Tileset = tileset;
             this.CultureName = nameRef;
+            this.Description = description;
             this.m_RulerTypes = rulersRef.ToList();
             this.m_Crimes = crimesRef.ToList();
             this.m_NameData = namesRef.ToList();

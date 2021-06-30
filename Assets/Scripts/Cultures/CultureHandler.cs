@@ -97,6 +97,8 @@ namespace JoyGodot.Assets.Scripts.Cultures
                 {
                     string cultureName = this.ValueExtractor.GetValueFromDictionary<string>(culture, "CultureName");
 
+                    string description = this.ValueExtractor.GetValueFromDictionary<string>(culture, "Description");
+
                     int nonconformingGenderChance =
                         this.ValueExtractor.GetValueFromDictionary<int>(culture, "NonConformingGenderChance");
 
@@ -229,6 +231,7 @@ namespace JoyGodot.Assets.Scripts.Cultures
                         new CultureType(
                             cultureName,
                             tileSetName,
+                            description,
                             rulers,
                             crimes,
                             nameDatas,

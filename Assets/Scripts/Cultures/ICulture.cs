@@ -37,6 +37,8 @@ namespace JoyGodot.Assets.Scripts.Cultures
         
         int LastGroup { get; }
         
+        string Description { get; }
+        
         string[] Inhabitants { get; }
         
         string CultureName { get; }
