@@ -47,10 +47,22 @@ namespace JoyGodot.Assets.Scripts.GUI
         protected bool Empty { get; set; }
         
         protected object LastInteraction { get; set; }
+        
+        protected Timer Timer { get; set; }
 
         public override void _Ready()
         {
             base._Ready();
+
+            this.Timer = this.GetNodeOrNull<Timer>("Timer");
+            if (this.Timer is null)
+            {
+                this.Timer = new Timer
+                {
+                    Name = "Timer"
+                };
+                this.AddChild(this.Timer);
+            }
             
             if (this.ItemCache.IsNullOrEmpty() == false)
             {
@@ -234,11 +246,14 @@ namespace JoyGodot.Assets.Scripts.GUI
 
             this.Empty = allEmpty;
             
-            if (this.ShouldShow)
-            {
-                this.Display();
-                this.GUIManager?.OpenGUI(sender, this.Name);
-            }
+            this.StartTimer();
+        }
+
+        protected virtual void ShowInternal()
+        {
+            this.ShouldShow = true;
+            this.Display();
+            this.GUIManager?.OpenGUI(this.LastInteraction, this.Name);
         }
 
         public virtual void ShowCurrent()
@@ -253,7 +268,7 @@ namespace JoyGodot.Assets.Scripts.GUI
         public override void Display()
         {
             if (this.ShouldShow
-                && this.Title.Text.IsNullOrEmpty() == false)
+                && this.Empty == false)
             {
                 base.Display();
             }
@@ -261,6 +276,8 @@ namespace JoyGodot.Assets.Scripts.GUI
 
         public override bool Close(object sender)
         {
+            this.StopTimer();
+            
             if (this.LastInteraction != sender)
             {
                 this.LastInteraction = sender;
@@ -286,6 +303,31 @@ namespace JoyGodot.Assets.Scripts.GUI
             this.Icon.Clear();
             this.Icon.AddSpriteState(state);
             this.Icon.OverrideAllColours(state.SpriteData.GetCurrentPartColours());
+        }
+
+        protected void StartTimer()
+        {
+            this.Timer.OneShot = true;
+            this.Timer.Start(0.8f);
+            this.Timer.Connect(
+                "timeout",
+                this,
+                nameof(this.ShowInternal));
+        }
+
+        protected void StopTimer()
+        {
+            this.Timer.Stop();
+            if (this.Timer.IsConnected(
+                "timeout",
+                this,
+                nameof(this.ShowInternal)))
+            {
+                this.Timer.Disconnect(
+                    "timeout",
+                    this,
+                    nameof(this.ShowInternal));
+            }
         }
     }
 }
