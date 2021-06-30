@@ -100,7 +100,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             this.CurrentTemplate = this.EntityTemplateHandler.Get(item.Value);
             item.Tooltip = new List<string>
             {
-                "What species you belong to."
+                this.CurrentTemplate.Description
             };
 
             item = this.AddItem(
@@ -111,15 +111,15 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 nameof(this.OnCultureChange));
 
             this.CurrentCulture = this.CultureHandler.GetByCultureName(item.Value);
-            item.Tooltip = new List<string>
-            {
-                "The culture you hail from."
-            };
-
             if (this.CurrentCulture is null)
             {
                 return;
             }
+            
+            item.Tooltip = new List<string>
+            {
+                this.CurrentCulture.Description
+            };
 
             item = this.AddItem(
                 "Job",
