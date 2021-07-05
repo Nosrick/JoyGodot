@@ -44,6 +44,20 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
          
         protected int m_Value;
 
+        public override IEnumerable<string> Tags
+        {
+            get
+            {
+                List<string> tags = new List<string>(this.m_Tags);
+                tags.AddRange(this.ItemType.Tags);
+                tags.AddRange(this.ItemType.Material.Tags);
+
+                return tags;
+            }
+
+            protected set => this.m_Tags = new List<string>(value);
+        }
+
         public override IWorldInstance MyWorld
         {
             get => this.m_World;
