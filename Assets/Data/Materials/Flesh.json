@@ -3,6 +3,9 @@
     "Name": "Flesh",
     "Hardness": 0.2,
     "Bonus": 0,
-    "Weight": 1
+    "Weight": 1,
+    "Tags": [
+      "flesh"
+    ]
   }]
 }

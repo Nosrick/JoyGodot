@@ -4,7 +4,11 @@
       "Name": "Leather",
       "Hardness": 1,
       "Bonus": 1,
-      "Weight": 2
+      "Weight": 2,
+      "Tags": [
+        "leather",
+        "skin"
+      ]
     }
   ]
 }
