@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace JoyGodot.Assets.Scripts.Entities.Items
 {
@@ -12,15 +14,23 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
             this.Bonus = 0;
             this.Density = 1.0f;
             this.ValueMod = 1.0f;
+            this.m_Tags = new List<string>();
         }
 
-        public ItemMaterial(string nameRef, float hardnessRef, int bonusRef, float weightRef, float valueMod)
+        public ItemMaterial(
+            string nameRef, 
+            float hardnessRef, 
+            int bonusRef, 
+            float weightRef, 
+            float valueMod,
+            IEnumerable<string> tags = null)
         {
             this.Name = nameRef;
             this.Hardness = hardnessRef;
             this.Bonus = bonusRef;
             this.Density = weightRef;
             this.ValueMod = valueMod;
+            this.m_Tags = tags?.ToList() ?? new List<string>();
         }
 
          
@@ -61,6 +71,30 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
         {
             get;
             protected set;
+        }
+
+        public IEnumerable<string> Tags => this.m_Tags;
+
+        protected List<string> m_Tags;
+        public bool HasTag(string tag)
+        {
+            return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool AddTag(string tag)
+        {
+            if (this.HasTag(tag))
+            {
+                return false;
+            }
+
+            this.m_Tags.Add(tag.ToLower());
+            return true;
+        }
+
+        public bool RemoveTag(string tag)
+        {
+            return !this.HasTag(tag) && this.m_Tags.Remove(tag.ToLower());
         }
     }
 }

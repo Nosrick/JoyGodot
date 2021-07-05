@@ -28,7 +28,14 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
         {
             this.m_Materials = this.Load().ToDictionary(material => material.Name, material => material);
 
-            this.m_Materials.Add("DEFAULT MATERIAL", new ItemMaterial("DEFAULT MATERIAL", 0.1f, 0, 1.0f, 0.0f));
+            this.m_Materials.Add("DEFAULT MATERIAL", 
+                new ItemMaterial(
+                    "DEFAULT MATERIAL", 
+                    0.1f, 
+                    0, 
+                    1.0f, 
+                    0.0f,
+                    new []{"DEFAULT"}));
         }
 
         public IItemMaterial Get(string name)
@@ -118,13 +125,18 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
                         ? this.ValueExtractor.GetValueFromDictionary<float>(material, "Value")
                         : 1f;
 
+                    ICollection<string> tags = material.Contains("Tags")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(material, "Tags")
+                        : new List<string>();
+
                     materials.Add(
                         new ItemMaterial(
                             name,
                             hardness,
                             bonus,
                             weight,
-                            value));
+                            value,
+                            tags));
                 }
             }
 
