@@ -205,6 +205,26 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 addedChildren = true;
             }
 
+            for (int i = derivedValues.Count; i < this.DerivedValueList.GetChildCount(); i++)
+            {
+                this.DerivedValueList.GetChild<Control>(i).Visible = false;
+            }
+
+            for (int i = skills.Count; i < this.SkillList.GetChildCount(); i++)
+            {
+                this.SkillList.GetChild<Control>(i).Visible = false;
+            }
+
+            for (int i = statistics.Count; i < this.StatisticList.GetChildCount(); i++)
+            {
+                this.StatisticList.GetChild<Control>(i).Visible = false;
+            }
+
+            for (int i = abilities.Count; i < this.AbilityList.GetChildCount(); i++)
+            {
+                this.AbilityList.GetChild<Control>(i).Visible = false;
+            }
+
             if (abilities.Count == 0)
             {
                 if (this.AbilityList.GetChildCount() == 0)
