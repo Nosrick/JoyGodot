@@ -7,6 +7,8 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
 {
     public class CraftingRecipe : IRecipe
     {
+        public Guid Guid { get; protected set; }
+        
         public NonUniqueDictionary<string, int> RequiredMaterials { get; protected set; }
         
         public BaseItemType CraftingResult { get; protected set; }
@@ -17,6 +19,7 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
         {
             this.RequiredMaterials = requiredMaterials;
             this.CraftingResult = craftingResult;
+            this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
         }
 
         public bool CanCraft(NonUniqueDictionary<string, int> materials)

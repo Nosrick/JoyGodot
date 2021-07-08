@@ -16,7 +16,7 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
         public IEnumerable<IRecipe> Values => this.Recipes.Values;
         public JSONValueExtractor ValueExtractor { get; protected set; }
         
-        protected NonUniqueDictionary<string, IRecipe> Recipes { get; set; }
+        protected NonUniqueDictionary<Guid, IRecipe> Recipes { get; set; }
         
         protected IItemDatabase ItemDatabase { get; set; }
 
@@ -24,11 +24,11 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
         {
             this.ItemDatabase = itemDatabase;
             this.ValueExtractor = new JSONValueExtractor();
-            this.Recipes = new NonUniqueDictionary<string, IRecipe>(
+            this.Recipes = new NonUniqueDictionary<Guid, IRecipe>(
                 this.Load()
                     .Select(recipe => 
-                        new Tuple<string, IRecipe>(
-                            recipe.CraftingResult.UnidentifiedName, 
+                        new Tuple<Guid, IRecipe>(
+                            recipe.Guid, 
                             recipe)));
         }
 
@@ -92,23 +92,25 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
             return recipes;
         }
         
-        public IRecipe Get(string name)
+        public IRecipe Get(Guid guid)
         {
-            return this.Recipes.First(tuple => tuple.Item1.Equals(name, StringComparison.OrdinalIgnoreCase)).Item2;
+            return this.Recipes.First(tuple => tuple.Item1.Equals(guid)).Item2;
         }
 
         public IEnumerable<IRecipe> GetAllForName(string name)
         {
-            return this.Recipes.FetchValuesForKey(name);
+            return this.Recipes.Values.Where(recipe => 
+                recipe.CraftingResult.UnidentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase) ||
+                recipe.CraftingResult.IdentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool Add(IRecipe value)
         {
-            this.Recipes.Add(value.CraftingResult.UnidentifiedName, value);
+            this.Recipes.Add(value.Guid, value);
             return true;
         }
 
-        public bool Destroy(string key)
+        public bool Destroy(Guid key)
         {
             return this.Recipes.RemoveByKey(key) > 0;
         }
