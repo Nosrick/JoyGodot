@@ -82,14 +82,14 @@ theme = SubResource( 2 )
 text = "Quest Journal"
 valign = 1
 script = ExtResource( 3 )
-m_ElementName = "AccentBackground"
-OverrideOutline = true
 OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+OverrideOutline = true
+CacheFont = true
 FontSize = 36
+m_ElementName = "AccentBackground"
 
 [node name="Close Button" type="Control" parent="."]
 use_parent_material = true
@@ -101,16 +101,8 @@ script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-HAlign = 1
 VAlign = 1
-m_ElementName = "AccentBackground"
-OutlineThickness = 1
-TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
-CustomFont = SubResource( 4 )
-ColourMultiplier = 1.0
+HAlign = 1
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -118,7 +110,16 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ClickSoundName = "FingerSnap"
+ColourMultiplier = 1.0
+OutlineThickness = 1
+CustomFont = SubResource( 4 )
 Text = "X"
+TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+m_ElementName = "AccentBackground"
 
 [node name="Text" type="Label" parent="Close Button"]
 anchor_right = 1.0
