@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Items;
 
 namespace JoyGodot.Assets.Scripts.Helpers
 {

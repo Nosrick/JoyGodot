@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
@@ -12,7 +11,7 @@ using JoyGodot.Assets.Scripts.Rollers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     public class ItemDatabase : IItemDatabase
     {

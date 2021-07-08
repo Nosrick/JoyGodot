@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Godot;
 using JoyGodot.Assets.Scripts.JoyObject;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     public interface IItemInstance : IJoyObject, IItemContainer, IOwnable
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Events;
@@ -16,7 +16,7 @@ using JoyGodot.Assets.Scripts.Scripting;
 using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     public class ItemInstance : JoyObject.JoyObject, IItemInstance
     {

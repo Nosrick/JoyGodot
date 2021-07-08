@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Quests.Actions;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.Scripting;

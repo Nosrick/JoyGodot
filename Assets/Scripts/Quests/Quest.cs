@@ -4,8 +4,8 @@ using System.Linq;
 
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Quests.Actions;
 using JoyGodot.Assets.Scripts.Scripting;
 using JoyGodot.Assets.Scripts.World;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyGodot.Assets.Scripts.Entities.AI.LOS.Boards;
-using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 
 namespace JoyGodot.Assets.Scripts.World.Lighting

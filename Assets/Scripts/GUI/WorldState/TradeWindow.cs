@@ -4,11 +4,11 @@ using System.Globalization;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
 using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 
 namespace JoyGodot.Assets.Scripts.GUI.WorldState

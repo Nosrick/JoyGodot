@@ -1,5 +1,5 @@
 using System;
-using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Items;
 
 namespace JoyGodot.Assets.Scripts.Exceptions
 {

@@ -2,7 +2,7 @@
 using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Events;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     public interface IItemContainer : IJoyNameHolder, IGuidHolder
     {

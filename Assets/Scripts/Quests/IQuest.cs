@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Quests.Actions;
 using JoyGodot.Assets.Scripts.Scripting;
 
