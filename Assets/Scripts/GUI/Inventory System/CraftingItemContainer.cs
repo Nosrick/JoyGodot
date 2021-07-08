@@ -17,9 +17,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         
         public override void _Ready()
         {
-            base._Ready();
-            
-            this.SlotParent = this.FindNode("Slot Container") as Container;
+            this.SlotParent = this.FindNode("CraftingInventory") as Container;
             this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyCraftingSlot.tscn");
             this.Title = this.FindNode("Title") as ManagedLabel;
             
@@ -78,6 +76,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         protected void SetSlots()
         {
+            if (this.CurrentRecipe is null)
+            {
+                foreach (JoyItemSlot slot in this.Slots)
+                {
+                    slot.Visible = false;
+                }
+                return;
+            }
+            
             for (int i = this.Slots.Count; i < this.CurrentRecipe.RequiredMaterials.Count(); i++)
             {
                 var instance = this.AddSlot(true);
