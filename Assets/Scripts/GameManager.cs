@@ -22,6 +22,7 @@ using JoyGodot.Assets.Scripts.Graphics;
 using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
+using JoyGodot.Assets.Scripts.Items.Crafting;
 using JoyGodot.Assets.Scripts.Managers;
 using JoyGodot.Assets.Scripts.Physics;
 using JoyGodot.Assets.Scripts.Quests;
@@ -169,6 +170,8 @@ namespace JoyGodot.Assets.Scripts
                 this.MaterialHandler,
                 this.AbilityHandler,
                 this.Roller);
+
+            this.CraftingRecipeHandler = new CraftingRecipeHandler(this.ItemDatabase);
             
             this.EntityHandler = new LiveEntityHandler();
             this.ItemHandler = new LiveItemHandler(this.Roller);
@@ -265,6 +268,7 @@ namespace JoyGodot.Assets.Scripts
         public ILiveEntityHandler EntityHandler { get; protected set; }
         public ILiveItemHandler ItemHandler { get; protected set; }
         public IItemDatabase ItemDatabase { get; protected set; }
+        public ICraftingRecipeHandler CraftingRecipeHandler { get; protected set; }
         public INeedHandler NeedHandler { get; protected set; }
         public IEntitySkillHandler SkillHandler { get; protected set; }
         public IWorldInfoHandler WorldInfoHandler { get; protected set; }

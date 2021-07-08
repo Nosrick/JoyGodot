@@ -1,0 +1,17 @@
+﻿{
+  "Recipes": [
+    {
+      "Result": "Dagger",
+      "Materials": [
+        {
+          "Name": "wood",
+          "Value": 10
+        },
+        {
+          "Name": "metal",
+          "Value": 50 
+        }
+      ]
+    }
+  ]
+}

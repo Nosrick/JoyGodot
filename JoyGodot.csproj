@@ -48,6 +48,7 @@
     <Content Include="Assets\Data\Materials\Leather.json" />
     <Content Include="Assets\Data\Materials\Metals.json" />
     <Content Include="Assets\Data\Materials\Woods.json" />
+    <Content Include="Assets\Data\Recipes\Weapons\Dagger.json" />
     <Content Include="Assets\Data\Relationships\DefaultRelationships.json" />
     <Content Include="Assets\Data\Romance\DefaultRomance.json" />
     <Content Include="Assets\Data\Rumours\BaseRumours.json" />

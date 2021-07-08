@@ -244,6 +244,13 @@ namespace JoyGodot.Assets.Scripts.Items
                 || type.UnidentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
+        public IEnumerable<BaseItemType> GetAllForName(string name)
+        {
+            return this.m_ItemDatabase.Where(type =>
+                type.IdentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase)
+                || type.UnidentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
         public bool Add(BaseItemType value)
         {
             if (this.m_ItemDatabase.Contains(value))

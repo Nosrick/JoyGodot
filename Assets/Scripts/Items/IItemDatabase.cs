@@ -8,5 +8,7 @@ namespace JoyGodot.Assets.Scripts.Items
         IDictionary<string, int> ItemWeights { get; }
         
         IEnumerable<BaseItemType> FindItemsOfType(string[] tags, int tolerance = 1);
+
+        IEnumerable<BaseItemType> GetAllForName(string name);
     }
 }

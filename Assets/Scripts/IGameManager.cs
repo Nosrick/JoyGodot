@@ -22,6 +22,7 @@ using JoyGodot.Assets.Scripts.Graphics;
 using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
+using JoyGodot.Assets.Scripts.Items.Crafting;
 using JoyGodot.Assets.Scripts.Managers;
 using JoyGodot.Assets.Scripts.Physics;
 using JoyGodot.Assets.Scripts.Quests;
@@ -59,6 +60,7 @@ namespace JoyGodot.Assets.Scripts
         ILiveEntityHandler EntityHandler { get; }
         ILiveItemHandler ItemHandler { get; }
         IItemDatabase ItemDatabase { get; }
+        ICraftingRecipeHandler CraftingRecipeHandler { get; }
         INeedHandler NeedHandler { get; }
         IEntitySkillHandler SkillHandler { get; }
         IWorldInfoHandler WorldInfoHandler { get; }
