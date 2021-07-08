@@ -446,6 +446,11 @@ namespace JoyGodot.Assets.Scripts.Items
             }
         }
 
+        public new bool HasTag(string tag)
+        {
+            return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
         public void Interact(IEntity user, string ability)
         {
             this.SetUser(user);
