@@ -1,5 +1,6 @@
 ﻿using System;
 using Godot;
+using JoyGodot.Assets.Scripts.Audio;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Combat;
 using JoyGodot.Assets.Scripts.Conversation;
@@ -61,6 +62,7 @@ namespace JoyGodot.Assets.Scripts
         ILiveItemHandler ItemHandler { get; }
         IItemDatabase ItemDatabase { get; }
         ICraftingRecipeHandler CraftingRecipeHandler { get; }
+        IAudioHandler AudioHandler { get; }
         INeedHandler NeedHandler { get; }
         IEntitySkillHandler SkillHandler { get; }
         IWorldInfoHandler WorldInfoHandler { get; }
