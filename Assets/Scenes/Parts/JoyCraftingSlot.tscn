@@ -1,0 +1,102 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/Scripts/GUI/Inventory System/JoyCraftingSlot.cs" type="Script" id=1]
+[ext_resource path="res://Assets/Sprites/draw.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Fonts/Silver - Tiny.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Assets/Scripts/Managed Assets/ManagedUIElement.cs" type="Script" id=4]
+[ext_resource path="res://Assets/Fonts/Silver - Small.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=6]
+
+[node name="Item Slot" type="Control"]
+material = ExtResource( 6 )
+use_parent_material = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -654.0
+margin_bottom = -440.0
+rect_min_size = Vector2( 40, 40 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+use_parent_material = true
+anchor_right = 0.2
+anchor_bottom = 1.0
+rect_min_size = Vector2( 40, 40 )
+mouse_filter = 2
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Control" parent="AspectRatioContainer"]
+use_parent_material = true
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="AspectRatioContainer/Background"]
+
+[node name="Icon" type="Control" parent="AspectRatioContainer/Background"]
+use_parent_material = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = -4.0
+mouse_filter = 2
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Colour Lerper" type="Tween" parent="AspectRatioContainer/Background/Icon"]
+
+[node name="Cooldown Overlay" type="TextureProgress" parent="AspectRatioContainer/Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+value = 33.0
+texture_progress = ExtResource( 2 )
+fill_mode = 5
+tint_progress = Color( 0, 0, 0, 0.231373 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Stack" type="Label" parent="AspectRatioContainer/Background"]
+anchor_top = 0.6
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_right = -5.0
+custom_fonts/font = ExtResource( 3 )
+text = "1"
+align = 2
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slot Name" type="Label" parent="."]
+anchor_left = 0.2
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 5 )
+text = "Slot Name"
+valign = 1
+clip_text = true
+
+[connection signal="mouse_entered" from="." to="." method="OnPointerEnter"]
+[connection signal="mouse_exited" from="." to="." method="OnPointerExit"]
