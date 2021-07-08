@@ -13,14 +13,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
     public class CraftingItemContainer : ItemContainer
     {
-        protected IRecipe CurrentRecipe { get; set; }
+        public IRecipe CurrentRecipe { get; protected set; }
         
         public override void _Ready()
         {
             base._Ready();
             
             this.SlotParent = this.FindNode("Slot Container") as Container;
-            this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyConstrainedSlot.tscn");
+            this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyCraftingSlot.tscn");
             this.Title = this.FindNode("Title") as ManagedLabel;
             
             this.OnEnable();
@@ -89,9 +89,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             for (int i = 0; i < materialCollection.Count; i++)
             {
                 var material = materialCollection[i];
-                var slot = this.Slots[i] as JoyConstrainedSlot;
+                var slot = this.Slots[i] as JoyCraftingSlot;
                 slot.Visible = true;
                 slot.Slot = material.Item1;
+                slot.AmountRequired = material.Item2;
                 slot.SlotLabel.Text = material.Item1 + ": " + material.Item2;
             }
         }
@@ -130,12 +131,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             for (int i = 0; i < this.Slots.Count; i++)
             {
-                if (this.Slots[i] is JoyConstrainedSlot constrainedSlot
-                    && constrainedSlot.Slot.IsNullOrEmpty() == false)
+                if (this.Slots[i] is JoyCraftingSlot craftingSlot
+                    && craftingSlot.Slot.IsNullOrEmpty() == false)
                 {
                     foreach (KeyValuePair<string, int> pair in requiredSlots)
                     {
-                        if (pair.Key.Equals(constrainedSlot.Slot, StringComparison.OrdinalIgnoreCase))
+                        if (pair.Key.Equals(craftingSlot.Slot, StringComparison.OrdinalIgnoreCase))
                         {
                             if (takeFilledSlots == false
                                 && this.Slots[i].IsEmpty
@@ -156,6 +157,25 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
 
             return slots;
+        }
+
+        public bool CanCraft()
+        {
+            bool canCraft = true;
+            
+            foreach (JoyItemSlot temp in this.Slots.Where(slot => slot.Visible))
+            {
+                if (temp is JoyCraftingSlot slot)
+                {
+                    if (slot.SufficientMaterial == false)
+                    {
+                        canCraft = false;
+                        break;
+                    }
+                }
+            }
+
+            return canCraft;
         }
     }
 }
