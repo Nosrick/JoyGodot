@@ -1,0 +1,71 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Scripts/GUI/Inventory System/ItemContainer.cs" type="Script" id=2]
+[ext_resource path="res://Assets/Scripts/GUI/Inventory System/CraftingItemContainer.cs" type="Script" id=3]
+
+[node name="CraftingScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" parent="." instance=ExtResource( 1 )]
+m_ElementName = "DefaultWindow"
+
+[node name="RecipeScrollContainer" type="ScrollContainer" parent="."]
+anchor_left = 0.01
+anchor_top = 0.02
+anchor_right = 0.3
+anchor_bottom = 0.98
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RecipeContainer" type="VBoxContainer" parent="RecipeScrollContainer"]
+margin_right = 247.66
+margin_bottom = 460.8
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlayerScrollContainer" type="ScrollContainer" parent="."]
+anchor_left = 0.31
+anchor_top = 0.02
+anchor_right = 0.6
+anchor_bottom = 0.98
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerInventory" type="GridContainer" parent="PlayerScrollContainer"]
+margin_right = 247.66
+margin_bottom = 460.8
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 4
+script = ExtResource( 2 )
+m_CanDrag = true
+m_ShowTooltips = true
+m_MoveUsedItem = true
+
+[node name="CraftingScrollContainer" type="ScrollContainer" parent="."]
+anchor_left = 0.61
+anchor_top = 0.02
+anchor_right = 0.99
+anchor_bottom = 0.98
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CraftingInventory" type="VBoxContainer" parent="CraftingScrollContainer"]
+margin_right = 324.52
+margin_bottom = 460.8
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 3 )
+m_CanDrag = true
+m_ShowTooltips = true
