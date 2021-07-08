@@ -1,12 +1,26 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Scenes/Parts/ManagedUIElement.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Scripts/GUI/Inventory System/ItemContainer.cs" type="Script" id=2]
 [ext_resource path="res://Assets/Scripts/GUI/Inventory System/CraftingItemContainer.cs" type="Script" id=3]
+[ext_resource path="res://Assets/Scripts/GUI/WorldState/CraftingScreen.cs" type="Script" id=4]
+[ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+resource_local_to_scene = true
+size = 24
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+extra_spacing_bottom = -10
+extra_spacing_char = 1
+font_data = ExtResource( 6 )
 
 [node name="CraftingScreen" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -18,7 +32,7 @@ m_ElementName = "DefaultWindow"
 anchor_left = 0.01
 anchor_top = 0.02
 anchor_right = 0.3
-anchor_bottom = 0.98
+anchor_bottom = 0.88
 scroll_horizontal_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -26,7 +40,7 @@ __meta__ = {
 
 [node name="RecipeContainer" type="VBoxContainer" parent="RecipeScrollContainer"]
 margin_right = 247.66
-margin_bottom = 460.8
+margin_bottom = 412.8
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -34,7 +48,7 @@ size_flags_vertical = 3
 anchor_left = 0.31
 anchor_top = 0.02
 anchor_right = 0.6
-anchor_bottom = 0.98
+anchor_bottom = 0.88
 scroll_horizontal_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -42,7 +56,7 @@ __meta__ = {
 
 [node name="PlayerInventory" type="GridContainer" parent="PlayerScrollContainer"]
 margin_right = 247.66
-margin_bottom = 460.8
+margin_bottom = 412.8
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
@@ -55,7 +69,7 @@ m_MoveUsedItem = true
 anchor_left = 0.61
 anchor_top = 0.02
 anchor_right = 0.99
-anchor_bottom = 0.98
+anchor_bottom = 0.88
 scroll_horizontal_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -63,9 +77,28 @@ __meta__ = {
 
 [node name="CraftingInventory" type="VBoxContainer" parent="CraftingScrollContainer"]
 margin_right = 324.52
-margin_bottom = 460.8
+margin_bottom = 412.8
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 3 )
 m_CanDrag = true
 m_ShowTooltips = true
+
+[node name="CraftButton" parent="." instance=ExtResource( 5 )]
+anchor_left = 0.8
+anchor_top = 0.89
+anchor_right = 0.99
+anchor_bottom = 0.99
+Text = "Craft"
+StateColours = {
+-1: Color( 0.18, 0.31, 0.31, 1 ),
+0: Color( 1, 1, 1, 1 ),
+1: Color( 0.83, 0.83, 0.83, 1 ),
+2: Color( 0.83, 0.83, 0.83, 1 ),
+3: Color( 0.66, 0.66, 0.66, 1 )
+}
+OverrideSize = true
+OverrideOutline = true
+CacheFont = true
+OverrideColour = true
+CustomFont = SubResource( 1 )
