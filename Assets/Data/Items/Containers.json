@@ -12,8 +12,7 @@
         "Size": 100,
         "TileSet": "Containers",
         "Tags": [
-          "container",
-          "leather"
+          "container"
         ]
       },
       {
@@ -26,8 +25,7 @@
         "Size": 100,
         "TileSet": "Containers",
         "Tags": [
-          "container",
-          "cloth"
+          "container"
         ]
       }
     ],

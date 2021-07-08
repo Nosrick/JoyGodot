@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     public struct IdentifiedItem
     {

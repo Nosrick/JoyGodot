@@ -7,7 +7,7 @@ using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Events;
 using Array = Godot.Collections.Array;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     [Serializable]
     public class EquipmentStorage : IItemContainer, ISerialisationHandler

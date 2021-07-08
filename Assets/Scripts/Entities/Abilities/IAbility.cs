@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Godot;
 using JoyGodot.Assets.Scripts.Base_Interfaces;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 

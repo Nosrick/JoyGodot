@@ -12,7 +12,7 @@ using JoyGodot.Assets.Scripts.Managers;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.Scripting;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     public class ItemFactory : IItemFactory
     {

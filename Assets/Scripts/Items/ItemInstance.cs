@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Collections;
+using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Events;
@@ -16,7 +16,7 @@ using JoyGodot.Assets.Scripts.Scripting;
 using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     public class ItemInstance : JoyObject.JoyObject, IItemInstance
     {
@@ -43,6 +43,20 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
 
          
         protected int m_Value;
+
+        public override IEnumerable<string> Tags
+        {
+            get
+            {
+                List<string> tags = new List<string>(this.m_Tags);
+                tags.AddRange(this.ItemType.Tags);
+                tags.AddRange(this.ItemType.Material.Tags);
+
+                return tags;
+            }
+
+            protected set => this.m_Tags = new List<string>(value);
+        }
 
         public override IWorldInstance MyWorld
         {
@@ -430,6 +444,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Items
                     item.SetOwner(newOwner, true);
                 }
             }
+        }
+
+        public new bool HasTag(string tag)
+        {
+            return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
         public void Interact(IEntity user, string ability)

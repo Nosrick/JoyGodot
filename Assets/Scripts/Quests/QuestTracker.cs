@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Scripting;
 using Array = Godot.Collections.Array;
 

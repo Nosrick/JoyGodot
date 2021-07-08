@@ -25,7 +25,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         
         public Vector2Int WorldPosition { get; protected set; }
 
-        public IEnumerable<string> Tags
+        public virtual IEnumerable<string> Tags
         {
             get => this.m_Tags;
             protected set => this.m_Tags = new List<string>(value);

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items;
 using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.GUI.Inventory_System

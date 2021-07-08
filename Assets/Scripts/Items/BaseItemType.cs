@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     [Serializable]
     public class BaseItemType

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Godot;
 using JoyGodot.Assets.Scripts.Conversation;
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
 using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.Godot;
 using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
 using JoyGodot.Assets.Scripts.IO;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Physics;
 using JoyGodot.Assets.Scripts.World;
@@ -295,6 +295,10 @@ namespace JoyGodot.Assets.Scripts.States
             else if (action.IsActionReleased("toggle character sheet"))
             {
                 this.ToggleWindow(GUINames.CHARACTER_SHEET);
+            }
+            else if (action.IsActionReleased("toggle_crafting"))
+            {
+                this.ToggleWindow(GUINames.CRAFTING_SCREEN);
             }
 
             if (this.GUIManager.AreAnyOpen() == false)

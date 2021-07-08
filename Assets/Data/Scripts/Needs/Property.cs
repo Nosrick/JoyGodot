@@ -4,8 +4,8 @@ using System.Linq;
 using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.AI;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Needs;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 

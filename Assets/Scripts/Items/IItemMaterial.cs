@@ -1,6 +1,8 @@
-﻿namespace JoyGodot.Assets.Scripts.Entities.Items
+﻿using JoyGodot.Assets.Scripts.Base_Interfaces;
+
+namespace JoyGodot.Assets.Scripts.Items
 {
-    public interface IItemMaterial
+    public interface IItemMaterial : ITagged
     {
         string Name { get; }
         

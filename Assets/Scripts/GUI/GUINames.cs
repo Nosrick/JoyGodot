@@ -20,5 +20,6 @@
         public const string ENTRY_BANNER = "EntryBanner";
         public const string LOADING_SCREEN = "Loading Screen";
         public const string MAIN_MENU = "Main Menu";
+        public const string CRAFTING_SCREEN = "CraftingScreen";
     }
 }

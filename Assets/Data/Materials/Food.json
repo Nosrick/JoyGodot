@@ -4,7 +4,11 @@
       "Name": "Food",
       "Bonus": 0,
       "Hardness": 0.01,
-      "Weight": 1
+      "Weight": 1,
+      "Tags": [
+        "edible",
+        "food"
+      ]
     }
   ]
 }

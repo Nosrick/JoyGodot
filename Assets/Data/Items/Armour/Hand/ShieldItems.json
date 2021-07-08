@@ -9,7 +9,8 @@
         "Materials": [
           "steel",
           "iron",
-          "bronze"
+          "bronze",
+          "leather"
         ],
         "Size": 300,
         "TileSet": "armour",
@@ -19,31 +20,8 @@
         ],
         "Tags": [
           "shield",
-          "one handed",
+          "one-handed",
           "armour",
-          "metal",
-          "physical",
-          "light armour"
-        ]
-      },
-      {
-        "Name": "Round Shield",
-        "Description": "A large, round shield. Good for stopping projectiles.",
-        "Value": 90,
-        "Materials": [
-          "leather"
-        ],
-        "Size": 300,
-        "TileSet": "armour",
-        "SpawnWeight": 4,
-        "Slots": [
-          "hand"
-        ],
-        "Tags": [
-          "shield",
-          "one handed",
-          "armour",
-          "leather",
           "weapon",
           "physical",
           "light armour"

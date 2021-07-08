@@ -4,7 +4,7 @@ using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.World;
 
-namespace JoyGodot.Assets.Scripts.Entities.Items
+namespace JoyGodot.Assets.Scripts.Items
 {
     public interface ILiveItemHandler : IHandler<IItemInstance, Guid>, ISerialisationHandler
     {

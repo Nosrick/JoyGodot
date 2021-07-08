@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
-using JoyGodot.Assets.Scripts.Entities.Items;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 
 namespace JoyGodot.Assets.Data.Scripts.Abilities

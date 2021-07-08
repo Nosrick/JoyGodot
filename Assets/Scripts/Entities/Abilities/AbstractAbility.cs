@@ -5,9 +5,9 @@ using System.Linq;
 
 using Godot;
 using Godot.Collections;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyGodot.Assets.Scripts.Scripting;

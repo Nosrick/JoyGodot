@@ -4,37 +4,57 @@
       "Name": "Iron",
       "Hardness": 4.5,
       "Bonus": 2,
-      "Weight": 7.874
+      "Weight": 7.874,
+      "Tags": [
+        "metal",
+        "magnetic"
+      ]
     },
     {
       "Name": "Steel",
       "Hardness": 4.5,
       "Bonus": 4,
-      "Weight": 7.8
+      "Weight": 7.8,
+      "Tags": [
+        "metal",
+        "magnetic"
+      ]
     },
     {
       "Name": "Bronze",
       "Hardness": 3,
       "Bonus": 2,
-      "Weight": 8.52
+      "Weight": 8.52,
+      "Tags": [
+        "metal"
+      ]
     },
     {
       "Name": "Copper",
       "Hardness": 3,
       "Bonus": 1,
-      "Weight": 8.96
+      "Weight": 8.96,
+      "Tags": [
+        "metal"
+      ]
     },
     {
       "Name": "Silver",
       "Hardness": 2.5,
       "Bonus": 0,
-      "Weight": 10.49
+      "Weight": 10.49,
+      "Tags": [
+        "metal"
+      ]
     },
     {
       "Name": "Gold",
       "Hardness": 2.5,
       "Bonus": 0,
-      "Weight": 19.3
+      "Weight": 19.3,
+      "Tags": [
+        "metal"
+      ]
     }
   ]
 }

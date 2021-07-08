@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Needs;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 
