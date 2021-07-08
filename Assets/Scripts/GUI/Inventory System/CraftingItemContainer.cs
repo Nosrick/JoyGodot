@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Items.Crafting;
@@ -164,6 +165,53 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
 
             return slots;
+        }
+
+        public override bool StackOrAdd(IItemInstance item)
+        {
+            List<JoyItemSlot> slots = null;
+
+            if (item.Tags.Any() == false)
+            {
+                return false;
+            }
+            slots = this.GetRequiredSlots(item);
+
+            return this.StackOrAdd(slots, item);
+        }
+
+        protected override bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
+        {
+            if (this.ContainerOwner is null)
+            {
+                return false;
+            }
+
+            if (item.Guid != this.ContainerOwner.Guid)
+            {
+                if (this.ContainerOwner.CanAddContents(item))
+                {
+                    this.ContainerOwner.AddContents(item);
+                    IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
+                    if (joyItemSlots.Any())
+                    {
+                        foreach (JoyItemSlot slot in joyItemSlots)
+                        {
+                            slot.Item = item;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
         }
 
         public bool CanCraft()
