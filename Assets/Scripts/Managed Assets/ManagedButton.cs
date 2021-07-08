@@ -164,6 +164,15 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         protected AudioStream MouseOverAudioStream { get; set; }
 
         [Export]
+        public string MouseOffSoundName
+        {
+            get;
+            protected set;
+        }
+        
+        protected AudioStream MouseOffAudioStream { get; set; }
+
+        [Export]
         public string ClickSoundName
         {
             get;
@@ -191,6 +200,11 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             if (this.MouseOverSoundName.IsNullOrEmpty() == false)
             {
                 this.MouseOverAudioStream = GlobalConstants.GameManager.AudioHandler.Get(this.MouseOverSoundName);
+            }
+
+            if (this.MouseOffSoundName.IsNullOrEmpty() == false)
+            {
+                this.MouseOffAudioStream = GlobalConstants.GameManager.AudioHandler.Get(this.MouseOffSoundName);
             }
 
             this.AudioPlayer = this.FindNode("AudioPlayer") as AudioStreamPlayer;
@@ -292,8 +306,22 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
         protected void PlayMouseOverSound()
         {
-            this.AudioPlayer.Stop();
+            if (this.AudioPlayer.Playing)
+            {
+                return;
+            }
             this.AudioPlayer.Stream = this.MouseOverAudioStream;
+            this.AudioPlayer.Play();
+        }
+
+        protected void PlayMouseOffSound()
+        {
+            if (this.AudioPlayer.Playing)
+            {
+                return;
+            }
+
+            this.AudioPlayer.Stream = this.MouseOffAudioStream;
             this.AudioPlayer.Play();
         }
 
@@ -333,6 +361,34 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             this.EvaluateAndTransitionToSelectionState();
         }
 
+        public override void _Input(InputEvent @event)
+        {
+            base._Input(@event);
+
+            if (this.IsVisibleInTree() == false)
+            {
+                return;
+            }
+            
+            if (@event is InputEventMouseMotion motion)
+            {
+                bool last = this.MouseInside;
+                this.MouseInside = this.GetGlobalRect().HasPoint(motion.GlobalPosition);
+                if (last != this.MouseInside)
+                {
+                    if (this.MouseInside)
+                    {
+                        this.PlayMouseOverSound();
+                    }
+                    else
+                    {
+                        this.PlayMouseOffSound();
+                    }
+                    this.EmitSignal(this.MouseInside ? "mouse_entered" : "mouse_exited");
+                }
+            }
+        }
+
         public override void _GuiInput(InputEvent @event)
         {
             base._GuiInput(@event);
@@ -340,17 +396,6 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             if (this.Visible == false)
             {
                 return;
-            }
-
-            if (@event is InputEventMouseMotion motion)
-            {
-                bool last = this.MouseInside;
-                this.MouseInside = this.GetGlobalRect().HasPoint(motion.GlobalPosition);
-                if (last != this.MouseInside)
-                {
-                    this.PlayMouseOverSound();
-                    this.EmitSignal(this.MouseInside ? "mouse_entered" : "mouse_exited");
-                }
             }
 
             if (this.MouseInside)
