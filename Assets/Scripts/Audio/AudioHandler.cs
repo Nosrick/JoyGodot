@@ -8,10 +8,10 @@ namespace JoyGodot.Assets.Scripts.Audio
 {
     public class AudioHandler : IAudioHandler
     {
-        public IEnumerable<AudioStream> Values { get; }
+        public IEnumerable<AudioStreamRandomPitch> Values { get; }
         public JSONValueExtractor ValueExtractor { get; }
 
-        protected IDictionary<string, AudioStream> AudioStreams { get; set; }
+        protected IDictionary<string, AudioStreamRandomPitch> AudioStreams { get; set; }
 
         public AudioHandler()
         {
@@ -22,9 +22,9 @@ namespace JoyGodot.Assets.Scripts.Audio
                     stream => stream);
         }
 
-        public IEnumerable<AudioStream> Load()
+        public IEnumerable<AudioStreamRandomPitch> Load()
         {
-            List<AudioStream> audioStreams = new List<AudioStream>();
+            List<AudioStreamRandomPitch> audioStreams = new List<AudioStreamRandomPitch>();
             
             List<string> files = new List<string>(
                 Directory.GetFiles(
@@ -47,18 +47,24 @@ namespace JoyGodot.Assets.Scripts.Audio
 
                 string name = file.Substring(lastSlash + 1, lastDot - lastSlash - 1);
                 audioStream.ResourceName = name;
-                audioStreams.Add(audioStream);
+                AudioStreamRandomPitch streamRandomPitch = new AudioStreamRandomPitch
+                {
+                    AudioStream = audioStream,
+                    ResourceName = name,
+                    RandomPitch = 1.2f
+                };
+                audioStreams.Add(streamRandomPitch);
             }
 
             return audioStreams;
         }
 
-        public AudioStream Get(string name)
+        public AudioStreamRandomPitch Get(string name)
         {
-            return this.AudioStreams.TryGetValue(name, out AudioStream audioStream) ? audioStream : null;
+            return this.AudioStreams.TryGetValue(name, out AudioStreamRandomPitch audioStream) ? audioStream : null;
         }
 
-        public bool Add(AudioStream value)
+        public bool Add(AudioStreamRandomPitch value)
         {
             if (this.AudioStreams.ContainsKey(value.ResourceName))
             {
