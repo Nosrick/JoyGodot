@@ -99,3 +99,5 @@ OverrideSize = true
 CacheFont = true
 CustomFont = SubResource( 1 )
 m_ElementName = "SlotSprite"
+
+[connection signal="_Press" from="CraftButton" to="." method="CraftButton"]

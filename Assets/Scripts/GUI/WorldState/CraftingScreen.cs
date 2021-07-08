@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Godot;
 using System;
-using Godot.Collections;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Items.Crafting;
@@ -41,6 +40,14 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.CraftingItemContainer = this.FindNode("CraftingScrollContainer") as CraftingItemContainer;
             
             this.SetUpRecipeList();
+        }
+
+        public override bool Close(object sender)
+        {
+            this.Player.AddContents(this.CraftingItemContainer.Contents);
+            this.CraftingItemContainer.RemoveAllItems();
+            
+            return base.Close(sender);
         }
 
         protected void SetUpRecipeList()
@@ -85,10 +92,19 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         {
             if (this.CraftingItemContainer.CanCraft())
             {
+                this.Player.RemoveContents(this.CraftingItemContainer.Contents);
+
+                IItemInstance newItem = this.ItemFactory.CreateFromTemplate(
+                    this.CraftingItemContainer.CurrentRecipe.CraftingResult, 
+                    true);
+                GlobalConstants.GameManager.ItemHandler.Add(newItem);
+                
                 this.Player.AddContents(
-                    this.ItemFactory.CreateFromTemplate(
-                        this.CraftingItemContainer.CurrentRecipe.CraftingResult, 
-                        true));
+                    newItem);
+                
+                this.PlayerInventory.Display();
+                
+                this.CraftingItemContainer.RemoveAllItems();
             }
         }
     }
