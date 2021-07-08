@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using Godot;
+using System;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Items.Crafting;
 using JoyGodot.Assets.Scripts.Managed_Assets;
+using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.GUI.WorldState
 {
@@ -34,8 +36,11 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             
             this.ButtonContainer = this.FindNode("RecipeContainer") as Container;
             this.Buttons = new List<ManagedTextButton>();
-            this.PlayerInventory = this.FindNode("PlayerInventory") as ItemContainer;
-            this.CraftingItemContainer = this.FindNode("CraftingInventory") as CraftingItemContainer;
+            this.PlayerInventory = this.FindNode("PlayerScrollContainer") as ItemContainer;
+            this.PlayerInventory.ContainerOwner = this.Player;
+            this.CraftingItemContainer = this.FindNode("CraftingScrollContainer") as CraftingItemContainer;
+            
+            this.SetUpRecipeList();
         }
 
         protected void SetUpRecipeList()
@@ -45,6 +50,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 var instance = this.ButtonPrefab.Instance() as ManagedTextButton;
                 instance.Visible = true;
                 instance.Text = recipe.CraftingResult.IdentifiedName;
+                instance.RectMinSize = new Vector2(0, 24);
                 if (instance.IsConnected(
                     "_Press",
                     this,
@@ -61,15 +67,17 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                     nameof(this.SetRecipe),
                     new Array
                     {
-                        recipe
+                        recipe.Guid.ToString()
                     });
                 
                 this.ButtonContainer.AddChild(instance);
             }
         }
 
-        public void SetRecipe(IRecipe recipe)
+        public void SetRecipe(string guid)
         {
+            var recipe = this.RecipeHandler.Get(new Guid(guid));
+            
             this.CraftingItemContainer.SetRecipe(recipe);
         }
 

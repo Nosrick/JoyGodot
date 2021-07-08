@@ -296,6 +296,10 @@ namespace JoyGodot.Assets.Scripts.States
             {
                 this.ToggleWindow(GUINames.CHARACTER_SHEET);
             }
+            else if (action.IsActionReleased("toggle_crafting"))
+            {
+                this.ToggleWindow(GUINames.CRAFTING_SCREEN);
+            }
 
             if (this.GUIManager.AreAnyOpen() == false)
             {
