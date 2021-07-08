@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Godot;
+using JoyGodot.Assets.Scripts.Helpers;
 
 namespace JoyGodot.Assets.Scripts.Managed_Assets
 {
@@ -152,10 +153,53 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 return SelectionState.Normal;
             }
         }
+        
+        [Export]
+        public string MouseOverSoundName
+        {
+            get;
+            protected set;
+        }
+        
+        protected AudioStream MouseOverAudioStream { get; set; }
+
+        [Export]
+        public string ClickSoundName
+        {
+            get;
+            protected set;
+        }
+        
+        protected AudioStream ClickAudioStream { get; set; }
+        
+        protected AudioStreamPlayer AudioPlayer { get; set; }
 
         public override void _Ready()
         {
             this.Initialise();
+        }
+
+        public override void Initialise()
+        {
+            base.Initialise();
+
+            if (this.ClickSoundName.IsNullOrEmpty() == false)
+            {
+                this.ClickAudioStream = GlobalConstants.GameManager.AudioHandler.Get(this.ClickSoundName);
+            }
+
+            if (this.MouseOverSoundName.IsNullOrEmpty() == false)
+            {
+                this.MouseOverAudioStream = GlobalConstants.GameManager.AudioHandler.Get(this.MouseOverSoundName);
+            }
+
+            this.AudioPlayer = this.FindNode("AudioPlayer") as AudioStreamPlayer;
+            if (this.AudioPlayer is null)
+            {
+                var player = new AudioStreamPlayer();
+                this.AudioPlayer = player;
+                this.AddChild(player);
+            }
         }
 
         public override void _EnterTree()
@@ -175,16 +219,6 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
             this.Disconnect("mouse_entered", this, "OnPointerEnter");
             this.Disconnect("mouse_exited", this, "OnPointerExit");
-
-            /*
-            foreach (var obj in this.GetChildren())
-            {
-                if (obj is Node node)
-                {
-                    node.QueueFree();
-                }
-            }
-            */
         }
 
         protected void DefaultStateColours()
@@ -256,6 +290,20 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             this.DoStateTransition(this.CurrentSelectionState, true);
         }
 
+        protected void PlayMouseOverSound()
+        {
+            this.AudioPlayer.Stop();
+            this.AudioPlayer.Stream = this.MouseOverAudioStream;
+            this.AudioPlayer.Play();
+        }
+
+        protected void PlayClickSound()
+        {
+            this.AudioPlayer.Stop();
+            this.AudioPlayer.Stream = this.ClickAudioStream;
+            this.AudioPlayer.Play();
+        }
+
         protected override void UpdateSprites()
         {
             base.UpdateSprites();
@@ -275,6 +323,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             }
 
             this.EmitSignal("_Press");
+            this.PlayClickSound();
 
             if (this.ToggleMode)
             {
@@ -299,6 +348,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 this.MouseInside = this.GetGlobalRect().HasPoint(motion.GlobalPosition);
                 if (last != this.MouseInside)
                 {
+                    this.PlayMouseOverSound();
                     this.EmitSignal(this.MouseInside ? "mouse_entered" : "mouse_exited");
                 }
             }

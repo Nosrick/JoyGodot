@@ -11,7 +11,7 @@
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=27]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -22,9 +22,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=3]
-default_font = SubResource( 2 )
+default_font = SubResource( 27 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=28]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -35,7 +35,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=5]
-default_font = SubResource( 4 )
+default_font = SubResource( 28 )
 
 [sub_resource type="DynamicFont" id=6]
 resource_local_to_scene = true
@@ -60,7 +60,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=29]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -71,7 +71,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=10]
-default_font = SubResource( 9 )
+default_font = SubResource( 29 )
 
 [sub_resource type="DynamicFont" id=11]
 resource_local_to_scene = true
@@ -130,7 +130,7 @@ extra_spacing_bottom = -10
 extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=19]
+[sub_resource type="DynamicFont" id=30]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -141,7 +141,7 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=20]
-default_font = SubResource( 19 )
+default_font = SubResource( 30 )
 
 [sub_resource type="DynamicFont" id=21]
 resource_local_to_scene = true
@@ -321,13 +321,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Derived Value Container/Derived Value Label"]
 
@@ -380,13 +380,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Item Name"]
 
@@ -400,17 +400,18 @@ script = ExtResource( 4 )
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
+Text = "<"
 OverrideSize = true
 OverrideColour = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 8 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -418,7 +419,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "<"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Decrease Value"]
 anchor_right = 1.0
@@ -439,13 +440,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Item Value"]
 
@@ -462,17 +463,18 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
+Text = ">"
 OverrideSize = true
 OverrideColour = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 13 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -480,7 +482,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = ">"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 1/Main Container/Player Info Container/Statistic Container/Job Selector/Increase Value"]
 anchor_right = 1.0
@@ -502,13 +504,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Statistic Container/Statistics Label"]
 
@@ -545,13 +547,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Skill Container/Points Remaining Label"]
 
@@ -566,13 +568,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 1/Main Container/Player Info Container/Skill Container/Skills Label"]
 
@@ -605,13 +607,14 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
-OutlineThickness = 1
 TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+Text = "Next"
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 15 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -619,7 +622,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Next"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 1/Next Button"]
 anchor_right = 1.0
@@ -647,17 +650,18 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
+Text = "Buy"
 OverrideSize = true
 OverrideColour = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 18 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -665,7 +669,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Buy"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 1/Buy Button"]
 anchor_right = 1.0
@@ -794,13 +798,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Ability Container/Ability Label"]
 
@@ -854,13 +858,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Item Name"]
 
@@ -874,17 +878,18 @@ script = ExtResource( 4 )
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
+Text = "<"
 OverrideSize = true
 OverrideColour = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 21 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -892,7 +897,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "<"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Decrease Value"]
 anchor_right = 1.0
@@ -922,13 +927,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Item Value"]
 
@@ -945,17 +950,18 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
+Text = ">"
 OverrideSize = true
 OverrideColour = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 22 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -963,7 +969,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = ">"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Job Selector/Increase Value"]
 anchor_right = 1.0
@@ -986,13 +992,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Misc Statistics/Misc Statistics Label"]
 
@@ -1030,13 +1036,13 @@ align = 1
 valign = 1
 script = ExtResource( 6 )
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
 OverrideSize = true
 OverrideColour = true
+CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Page 2/Main Container/Player Info Container/Blank Container/Points Remaining Label"]
 
@@ -1054,13 +1060,14 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
-OutlineThickness = 1
 TitleCase = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+Text = "Back"
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 24 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -1068,7 +1075,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Back"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 2/Back Button"]
 anchor_right = 1.0
@@ -1096,17 +1103,18 @@ __meta__ = {
 HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
-OverrideOutline = true
-OutlineThickness = 1
-CacheFont = true
 TitleCase = true
+Text = "Buy"
 OverrideSize = true
 OverrideColour = true
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
+CacheFont = true
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 26 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -1114,7 +1122,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "Buy"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Page 2/Buy Button"]
 anchor_right = 1.0

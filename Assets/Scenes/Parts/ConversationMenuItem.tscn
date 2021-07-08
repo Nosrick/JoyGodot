@@ -22,17 +22,19 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
+VAlign = 1
+Text = "Conversation Item"
+OverrideSize = true
 OverrideColour = true
 CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
-FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
+FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 1 )
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -41,7 +43,6 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-Text = "Conversation Item"
 AutoWrap = true
 
 [node name="Text" type="Label" parent="."]

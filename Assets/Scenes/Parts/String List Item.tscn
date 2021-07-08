@@ -110,10 +110,10 @@ __meta__ = {
 m_ElementName = "AccentBackground"
 OverrideSize = true
 OverrideColour = true
-OutlineThickness = 1
-OverrideOutline = true
 CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Item Name"]
 
@@ -128,16 +128,17 @@ HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
 TitleCase = true
+Text = "<"
 OverrideSize = true
 OverrideColour = true
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
-OverrideOutline = true
-OutlineColour = Color( 0, 0, 0, 1 )
 CacheFont = true
+OutlineColour = Color( 0, 0, 0, 1 )
 FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 5 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -145,7 +146,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "<"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Decrease Value"]
 anchor_right = 1.0
@@ -175,10 +176,10 @@ script = ExtResource( 3 )
 m_ElementName = "AccentBackground"
 OverrideSize = true
 OverrideColour = true
-OutlineThickness = 1
-OverrideOutline = true
 CacheFont = true
 FontSize = 24
+OverrideOutline = true
+OutlineThickness = 1
 
 [node name="Colour Lerper" type="Tween" parent="Item Value"]
 
@@ -196,16 +197,17 @@ HAlign = 1
 VAlign = 1
 m_ElementName = "AccentBackground"
 TitleCase = true
+Text = ">"
 OverrideSize = true
 OverrideColour = true
-OutlineThickness = 1
-FontColour = Color( 1, 1, 1, 1 )
-OverrideOutline = true
-OutlineColour = Color( 0, 0, 0, 1 )
 CacheFont = true
+OutlineColour = Color( 0, 0, 0, 1 )
 FontSize = 24
+OverrideOutline = true
+FontColour = Color( 1, 1, 1, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 10 )
-ColourMultiplier = 1.0
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -213,7 +215,7 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = ">"
+ColourMultiplier = 1.0
 
 [node name="Text" type="Label" parent="Increase Value"]
 anchor_right = 1.0

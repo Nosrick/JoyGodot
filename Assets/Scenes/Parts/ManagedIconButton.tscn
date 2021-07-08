@@ -16,7 +16,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 ActionMode = 1
-ColourMultiplier = 1.0
+m_ElementName = "AccentBackground"
+ClickSoundName = "FingerSnap"
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -24,3 +25,4 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
