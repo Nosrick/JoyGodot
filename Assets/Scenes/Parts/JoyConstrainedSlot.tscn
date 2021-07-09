@@ -19,6 +19,8 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+DragBeginSoundName = "MouseOver"
+DragEndSoundName = "MouseOff"
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
 use_parent_material = true
@@ -56,6 +58,7 @@ script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+m_ElementName = ""
 
 [node name="Colour Lerper" type="Tween" parent="AspectRatioContainer/Background/Icon"]
 

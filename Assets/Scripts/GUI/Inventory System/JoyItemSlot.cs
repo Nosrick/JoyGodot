@@ -2,6 +2,7 @@
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 using Array = Godot.Collections.Array;
@@ -43,8 +44,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         protected static Array UnstackActions { get; set; }
 
-        //public IConversationEngine ConversationEngine { get; set; }
-
         public IGUIManager GuiManager { get; set; }
 
         public ILiveEntityHandler EntityHandler { get; set; }
@@ -60,6 +59,26 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         }
 
         protected static DragObject DragData { get; set; }
+        
+        [Export]
+        public string DragBeginSoundName
+        {
+            get;
+            protected set;
+        }
+        
+        protected AudioStream DragBeginAudioStream { get; set; }
+
+        [Export]
+        public string DragEndSoundName
+        {
+            get;
+            protected set;
+        }
+        
+        protected AudioStream DragEndAudioStream { get; set; }
+        
+        protected AudioStreamPlayer AudioPlayer { get; set; }
 
         public override void _Ready()
         {
@@ -81,17 +100,29 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 return;
             }
-
-            /*
-            if (GlobalConstants.GameManager is null || this.GUIManager is null == false)
-            {
-                return;
-            }
-            */
+            
             UnstackActions = InputMap.GetActionList("unstack");
             this.CooldownOverlay = this.FindNode("Cooldown Overlay") as TextureProgress;
             this.StackLabel = this.FindNode("Stack") as Label;
             this.Icon = this.FindNode("Icon") as ManagedUIElement;
+
+            if (this.DragBeginSoundName.IsNullOrEmpty() == false)
+            {
+                this.DragBeginAudioStream = GlobalConstants.GameManager.AudioHandler.Get(this.DragBeginSoundName);
+            }
+
+            if (this.DragEndSoundName.IsNullOrEmpty() == false)
+            {
+                this.DragEndAudioStream = GlobalConstants.GameManager.AudioHandler.Get(this.DragEndSoundName);
+            }
+
+            this.AudioPlayer = this.FindNode("AudioPlayer") as AudioStreamPlayer;
+            if (this.AudioPlayer is null)
+            {
+                var player = new AudioStreamPlayer();
+                this.AudioPlayer = player;
+                this.AddChild(player);
+            }
 
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
             this.GuiManager = GlobalConstants.GameManager.GUIManager;
@@ -134,6 +165,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             if(this.Container.CanAddItem(dragObject.Item, dragObject.SourceContainer.Name) 
                && this.Container.StackOrAdd(dragObject.Item))
             {
+                this.PlayEndDragSound();
                 dragObject.SourceContainer.RemoveItem(dragObject.Item);
             }
         }
@@ -149,6 +181,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 SourceContainer = this.Container,
                 SourceSlot = this
             };
+            
+            this.PlayBeginDragSound();
 
             return DragData;
         }
@@ -172,6 +206,27 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual void OnPointerDown(InputEventMouseButton action)
         {
+        }
+
+        protected void PlayBeginDragSound()
+        {
+            if (this.AudioPlayer.Playing)
+            {
+                return;
+            }
+            this.AudioPlayer.Stream = this.DragBeginAudioStream;
+            this.AudioPlayer.Play();
+        }
+
+        protected void PlayEndDragSound()
+        {
+            if (this.AudioPlayer.Playing)
+            {
+                return;
+            }
+
+            this.AudioPlayer.Stream = this.DragEndAudioStream;
+            this.AudioPlayer.Play();
         }
 
         public virtual void OnPointerUp(InputEventMouseButton action)
