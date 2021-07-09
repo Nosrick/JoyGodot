@@ -1,5 +1,5 @@
 ﻿{
-  "Items:": {
+  "Items": {
     "Category": "Components",
     "IdentifiedItems": [
       {
@@ -13,6 +13,26 @@
           },
           {
             "Name": "leather",
+            "Value": "15"
+          }
+        ],
+        "Size": 45,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Short pommel",
+        "Description": "The handle for a one-handed weapon.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "wood",
+            "Value": "30"
+          },
+          {
+            "Name": "cloth",
             "Value": "15"
           }
         ],
@@ -39,12 +59,44 @@
         ]
       },
       {
+        "Name": "Short blade",
+        "Description": "The blade for a one-handed weapon.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "bone",
+            "Value": "100"
+          }
+        ],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
         "Name": "Small crossguard",
         "Description": "The crossguard for a one-handed weapon.",
         "Value": 5,
         "Materials": [
           {
             "Name": "metal",
+            "Value": "20"
+          }
+        ],
+        "Size": 20,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Small crossguard",
+        "Description": "The crossguard for a one-handed weapon.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "bone",
             "Value": "20"
           }
         ],

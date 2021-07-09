@@ -11,7 +11,10 @@
         ],
         "SpawnWeight": 30,
         "Materials": [
-          "Food"
+          {
+            "Name": "food",
+            "Value": "36"
+          }
         ],
         "Size": 36,
         "Tags": [
