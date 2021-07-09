@@ -361,9 +361,9 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             this.EvaluateAndTransitionToSelectionState();
         }
 
-        public override void _Input(InputEvent @event)
+        public override void _GuiInput(InputEvent @event)
         {
-            base._Input(@event);
+            base._GuiInput(@event);
 
             if (this.IsVisibleInTree() == false)
             {
@@ -376,26 +376,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 this.MouseInside = this.GetGlobalRect().HasPoint(motion.GlobalPosition);
                 if (last != this.MouseInside)
                 {
-                    if (this.MouseInside)
-                    {
-                        this.PlayMouseOverSound();
-                    }
-                    else
-                    {
-                        this.PlayMouseOffSound();
-                    }
                     this.EmitSignal(this.MouseInside ? "mouse_entered" : "mouse_exited");
                 }
-            }
-        }
-
-        public override void _GuiInput(InputEvent @event)
-        {
-            base._GuiInput(@event);
-
-            if (this.Visible == false)
-            {
-                return;
             }
 
             if (this.MouseInside)
@@ -463,12 +445,14 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         public virtual void OnPointerEnter()
         {
             this.MouseInside = true;
+            this.PlayMouseOverSound();
             this.EvaluateAndTransitionToSelectionState();
         }
 
         public virtual void OnPointerExit()
         {
             this.MouseInside = false;
+            this.PlayMouseOffSound();
             this.EvaluateAndTransitionToSelectionState();
         }
 
