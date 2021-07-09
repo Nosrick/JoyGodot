@@ -6,8 +6,9 @@
         "Name": "Healing Potion",
         "Description": "Knits wounds back together",
         "Value": 300,
-        "Materials": [
-          "glass"
+        "Materials": [],
+        "Components": [
+          "small vial"
         ],
         "Size": 30,
         "TileSet": "potions",

@@ -1,0 +1,52 @@
+﻿{
+  "Items": {
+    "Category": "Components",
+    "IdentifiedItems": [
+      {
+        "Name": "Glass sheet",
+        "Description": "A flat piece of glass.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "glass",
+            "Value": 100
+          }
+        ],
+        "Size": 100,
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Small vial",
+        "Description": "A very small glass container.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "glass",
+            "Value": 30
+          }
+        ],
+        "Size": 30,
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Small bottle",
+        "Description": "A small glass container.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "glass",
+            "Value": 100
+          }
+        ],
+        "Size": 100,
+        "Tags": [
+          "component"
+        ]
+      }
+    ]
+  }
+}
