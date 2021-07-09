@@ -10,12 +10,11 @@
           "light blades"
         ],
         "SpawnWeight": 10,
-        "Materials": [
-          "Iron",
-          "Steel",
-          "Bronze",
-          "Glass",
-          "Bone"
+        "Materials": [],
+        "Components": [
+          "short pommel",
+          "short blade",
+          "small crossguard"
         ],
         "Size": 60,
         "Slots": [

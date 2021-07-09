@@ -6,9 +6,7 @@
         "Name": "Leather Bag",
         "Description": "A simple leather bag, used to store things.",
         "Value": 5,
-        "Materials": [
-          "leather"
-        ],
+        "Materials": [],
         "Size": 100,
         "TileSet": "Containers",
         "Tags": [
