@@ -10,12 +10,11 @@
           "heavy blades"
         ],
         "SpawnWeight": 10,
-        "Materials": [
-          "Iron",
-          "Steel",
-          "Bronze",
-          "Glass",
-          "Bone"
+        "Materials": [],
+        "Components":[
+          "long pommel",
+          "large crossguard",
+          "long blade"
         ],
         "Size": 500,
         "Slots": [
