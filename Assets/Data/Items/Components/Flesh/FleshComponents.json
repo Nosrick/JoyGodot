@@ -14,7 +14,8 @@
         "Size": 100,
         "TileSet": "Components",
         "Tags": [
-          "component"
+          "component",
+          "flesh"
         ]
       }
     ]
