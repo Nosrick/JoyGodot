@@ -18,7 +18,8 @@
         ],
         "Size": 36,
         "Tags": [
-          "fruit"
+          "fruit",
+          "uncraftable"
         ],
         "TileSet": "Food"
       }
