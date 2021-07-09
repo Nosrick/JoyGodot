@@ -6,11 +6,12 @@
         "Name": "Round Shield",
         "Description": "A large, round shield. Good for stopping projectiles.",
         "Value": 90,
-        "Materials": [
-          "steel",
-          "iron",
-          "bronze",
-          "leather"
+        "Materials": [ ],
+        "Components": [
+          "leather",
+          "metal sheet",
+          "metal sheet",
+          "metal sheet"
         ],
         "Size": 300,
         "TileSet": "armour",
