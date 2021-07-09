@@ -1,0 +1,37 @@
+﻿{
+  "Items": {
+    "Category": "Components",
+    "IdentifiedItems": [
+      {
+        "Name": "Cloth",
+        "Description": "A square of cloth.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "canvas" ,
+            "Value": 100
+          }],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Cloth",
+        "Description": "A square of cloth.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "cotton" ,
+            "Value": 100
+          }],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      }
+    ]
+  }
+}

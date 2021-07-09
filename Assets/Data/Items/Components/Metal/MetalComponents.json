@@ -1,0 +1,36 @@
+﻿{
+  "Items": {
+    "IdentifiedItems": [
+      {
+        "Name": "Metal sheet",
+        "Description": "A piece of metal hammered flat.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "metal",
+            "Value": 100
+          }
+        ],
+        "Size": 100,
+        "Tags": [
+          "component"
+        ] 
+      },
+      {
+        "Name": "Metal rod",
+        "Description": "A cylinder of metal.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "metal",
+            "Value": 15
+          }
+        ],
+        "Size": 15,
+        "Tags": [
+          "component"
+        ]
+      }
+    ]
+  }
+}

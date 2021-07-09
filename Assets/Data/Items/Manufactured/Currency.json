@@ -6,9 +6,12 @@
         "Description": "A coin made from copper, from a local mint.",
         "Value": 1,
         "Materials": [
-          "Copper"
+          {
+            "Name": "copper",
+            "Value": 5
+          }
         ],
-        "Size": 1,
+        "Size": 5,
         "SpawnWeight": 50,
         "Tags": [
           "currency"
@@ -20,9 +23,12 @@
         "Description": "A coin made from shiny silver, from a local mint.",
         "Value": 10,
         "Materials": [
-          "Silver"
+          {
+            "Name": "silver",
+            "Value": 5
+          }
         ],
-        "Size": 1,
+        "Size": 5,
         "SpawnWeight": 30,
         "Tags": [
           "currency"
@@ -34,9 +40,12 @@
         "Description": "A valuable gold coin, from a local mint.",
         "Value": 100,
         "Materials": [
-          "Gold"
+          {
+            "Name": "gold",
+            "Value": 5
+          }
         ],
-        "Size": 1,
+        "Size": 5,
         "SpawnWeight": 5,
         "Tags": [
           "currency"

@@ -1,0 +1,22 @@
+﻿{
+  "Items": {
+    "Category": "Components",
+    "IdentifiedItems": [
+      {
+        "Name": "Leather",
+        "Description": "A square of leather.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "leather" ,
+            "Value": 100
+          }],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      }
+    ]
+  }
+}

@@ -7,7 +7,10 @@
         "Description": "A simple leather bag, used to store things.",
         "Value": 5,
         "Materials": [],
-        "Size": 100,
+        "Components": [
+          "leather"
+        ],
+        "Size": 300,
         "TileSet": "Containers",
         "Tags": [
           "container"
@@ -17,10 +20,11 @@
         "Name": "Canvas Bag",
         "Description": "A simple canvas bag, used to store things.",
         "Value": 5,
-        "Materials": [
-          "canvas"
+        "Materials": [],
+        "Components": [
+          "cloth"
         ],
-        "Size": 100,
+        "Size": 300,
         "TileSet": "Containers",
         "Tags": [
           "container"
