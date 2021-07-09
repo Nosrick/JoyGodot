@@ -18,6 +18,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 ElementName = "SlotSprite"
+DragBeginSoundName = "MouseOver"
+DragEndSoundName = "MouseOff"
 
 [node name="Background" parent="." instance=ExtResource( 4 )]
 use_parent_material = true
@@ -30,6 +32,7 @@ margin_top = 4.0
 margin_right = -4.0
 margin_bottom = -4.0
 mouse_filter = 2
+m_ElementName = ""
 
 [node name="Cooldown Overlay" type="TextureProgress" parent="Background"]
 anchor_right = 1.0

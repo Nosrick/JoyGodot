@@ -1,5 +1,6 @@
 ﻿using System;
 using Godot;
+using JoyGodot.Assets.Scripts.Audio;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Combat;
 using JoyGodot.Assets.Scripts.Conversation;
@@ -118,6 +119,8 @@ namespace JoyGodot.Assets.Scripts
             this.LoadingMessage = "Revving up engines";
 
             this.SettingsManager = new SettingsManager();
+
+            this.AudioHandler = new AudioHandler();
 
             this.GUIDManager = new GUIDManager();
 
@@ -264,6 +267,7 @@ namespace JoyGodot.Assets.Scripts
         public IEntityRomanceHandler RomanceHandler { get; protected set; }
         public IGenderHandler GenderHandler { get; protected set; }
         public IGUIManager GUIManager { get; protected set; }
+        public IAudioHandler AudioHandler { get; protected set; }
         public IParameterProcessorHandler ParameterProcessorHandler { get; protected set; }
         public ILiveEntityHandler EntityHandler { get; protected set; }
         public ILiveItemHandler ItemHandler { get; protected set; }

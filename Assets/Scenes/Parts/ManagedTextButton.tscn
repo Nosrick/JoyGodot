@@ -37,16 +37,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Text"
-FontColour = Color( 1, 1, 1, 1 )
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
-OutlineThickness = 1
-TitleCase = true
-CustomFont = SubResource( 2 )
-m_ElementName = "AccentBackground"
-AutoWrap = true
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -54,6 +44,23 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+AutoWrap = true
+ColourMultiplier = 1.0
+MouseOverSoundName = "MouseOver"
+ClickSoundName = "FingerSnap"
+MouseOffSoundName = "MouseOff"
+m_ElementName = "AccentBackground"
+Text = "Text"
+OverrideSize = true
+OverrideColour = true
+TitleCase = true
+OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
+OverrideOutline = true
+FontSize = 24
+CacheFont = true
+OutlineThickness = 1
+CustomFont = SubResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0

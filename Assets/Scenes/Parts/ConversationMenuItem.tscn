@@ -4,7 +4,7 @@
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=3]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -22,17 +22,8 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-VAlign = 1
 HAlign = 1
-OverrideOutline = true
-FontColour = Color( 1, 1, 1, 1 )
-OverrideColour = true
-CacheFont = true
-OverrideSize = true
-OutlineThickness = 1
-FontSize = 24
-OutlineColour = Color( 0, 0, 0, 1 )
-CustomFont = SubResource( 1 )
+VAlign = 1
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -41,16 +32,24 @@ StateColours = {
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
 ColourMultiplier = 1.0
-Text = "Conversation Item"
-AutoWrap = true
+MouseOverSoundName = "MouseOver"
+ClickSoundName = "FingerSnap"
+MouseOffSoundName = "MouseOff"
+Text = "Text"
+OverrideSize = true
+OverrideColour = true
+OutlineColour = Color( 0, 0, 0, 1 )
+FontColour = Color( 1, 1, 1, 1 )
+OverrideOutline = true
+FontSize = 24
+CacheFont = true
 
 [node name="Text" type="Label" parent="."]
 margin_right = 854.0
 margin_bottom = 480.0
 size_flags_vertical = 7
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "Conversation Item"
+text = "Text"
 align = 1
 valign = 1
-autowrap = true
