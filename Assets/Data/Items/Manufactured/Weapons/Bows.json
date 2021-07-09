@@ -14,7 +14,10 @@
         ],
         "SpawnWeight": 7,
         "Materials": [
-          "Maple"
+          {
+            "Name": "wood",
+            "Value": 300
+          }
         ],
         "Size": 300,
         "Range": 4,
