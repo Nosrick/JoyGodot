@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
@@ -27,6 +28,7 @@ namespace JoyGodot.Assets.Scripts.Helpers
             var m = GlobalConstants.GameManager.MaterialHandler.Get(material);
             
             BaseItemType baseItem = new BaseItemType(
+                Guid.Empty,
                 tags, 
                 "A claw, fist or psuedopod.", 
                 "A claw, fist or psuedopod.", 

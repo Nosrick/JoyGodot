@@ -7,5 +7,7 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
     public interface ICraftingRecipeHandler : IHandler<IRecipe, Guid>
     {
         IEnumerable<IRecipe> GetAllForName(string name);
+
+        IEnumerable<IRecipe> GetAllForItemTypeGuid(Guid key);
     }
 }

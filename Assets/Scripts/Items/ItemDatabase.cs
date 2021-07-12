@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,8 +8,8 @@ using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Graphics;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items.Crafting;
 using JoyGodot.Assets.Scripts.Rollers;
-using NUnit.Framework;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
@@ -25,6 +24,8 @@ namespace JoyGodot.Assets.Scripts.Items
         protected IMaterialHandler MaterialHandler { get; set; }
 
         protected IAbilityHandler AbilityHandler { get; set; }
+
+        protected ICraftingRecipeHandler CraftingRecipeHandler { get; set; }
 
         public IEnumerable<BaseItemType> Values => this.m_ItemDatabase;
 
@@ -62,22 +63,22 @@ namespace JoyGodot.Assets.Scripts.Items
             IObjectIconHandler objectIconHandler,
             IMaterialHandler materialHandler,
             IAbilityHandler abilityHandler,
+            ICraftingRecipeHandler craftingRecipeHandler,
             IRollable roller = null)
         {
             this.ValueExtractor = new JSONValueExtractor();
             this.ObjectIcons = objectIconHandler;
             this.MaterialHandler = materialHandler;
             this.AbilityHandler = abilityHandler;
+            this.CraftingRecipeHandler = craftingRecipeHandler;
             this.Roller = roller ?? new RNG();
 
-            this.m_ItemDatabase = this.LoadComponents();
+            this.m_ItemDatabase = new List<BaseItemType>(this.LoadComponents());
             this.m_ItemDatabase.AddRange(this.Load());
         }
 
-        protected List<BaseItemType> LoadComponents()
+        protected IEnumerable<BaseItemType> LoadComponents()
         {
-            List<BaseItemType> items = new List<BaseItemType>();
-
             string[] files = Directory.GetFiles(
                 Directory.GetCurrentDirectory() +
                 GlobalConstants.ASSETS_FOLDER +
@@ -86,181 +87,11 @@ namespace JoyGodot.Assets.Scripts.Items
                 "*.json",
                 SearchOption.AllDirectories);
 
-            foreach (string file in files)
-            {
-                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
-
-                if (result.Error != Error.Ok)
-                {
-                    this.ValueExtractor.PrintFileParsingError(result, file);
-                    continue;
-                }
-
-                if (!(result.Result is Dictionary dictionary))
-                {
-                    GlobalConstants.ActionLog.Log("Failed to parse JSON from " + file + " into a Dictionary.",
-                        LogLevel.Warning);
-                    continue;
-                }
-
-                Dictionary itemData =
-                    this.ValueExtractor.GetValueFromDictionary<Dictionary>(dictionary, "Items");
-
-                List<IdentifiedItem> identifiedItems = new List<IdentifiedItem>();
-                ICollection<Dictionary> identifiedItemsDicts =
-                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(itemData, "IdentifiedItems");
-
-                foreach (Dictionary identifiedToken in identifiedItemsDicts)
-                {
-                    string name = this.ValueExtractor.GetValueFromDictionary<string>(identifiedToken, "Name");
-                    string description = identifiedToken.Contains("Description")
-                        ? this.ValueExtractor.GetValueFromDictionary<string>(identifiedToken, "Description")
-                        : "";
-                    int value = this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Value");
-
-                    IEnumerable<Dictionary> materialsDict =
-                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
-                            identifiedToken,
-                            "Materials");
-
-                    IDictionary<string, int> materials = new System.Collections.Generic.Dictionary<string, int>();
-                    foreach (Dictionary material in materialsDict)
-                    {
-                        materials.Add(
-                            this.ValueExtractor.GetValueFromDictionary<string>(material, "Name"),
-                            this.ValueExtractor.GetValueFromDictionary<int>(material, "Value"));
-                    }
-
-                    int size = this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Size");
-                    int lightLevel = identifiedToken.Contains("LightLevel")
-                        ? this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "LightLevel")
-                        : 0;
-                    int spawnWeight = identifiedToken.Contains("SpawnWeight")
-                        ? this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "SpawnWeight")
-                        : 1;
-                    int range = identifiedToken.Contains("Range")
-                        ? this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Range")
-                        : 1;
-                    IEnumerable<string> tags =
-                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken, "Tags");
-                    string tileSet = this.ValueExtractor.GetValueFromDictionary<string>(identifiedToken, "TileSet");
-                    IEnumerable<string> abilityNames = identifiedToken.Contains("Effects")
-                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken, "Effects")
-                        : new List<string>();
-                    IEnumerable<IAbility> abilities =
-                        abilityNames.Select(abilityName => this.AbilityHandler.Get(abilityName));
-                    IEnumerable<string> slots = identifiedToken.Contains("Slots")
-                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken, "Slots")
-                        : new List<string>();
-                    IEnumerable<string> skills = identifiedToken.Contains("Skill")
-                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken,
-                            "Skill")
-                        : new[] {"none"};
-
-                    identifiedItems.Add(new IdentifiedItem(
-                        name,
-                        tags.ToArray(),
-                        description,
-                        value,
-                        abilities.ToArray(),
-                        spawnWeight,
-                        skills,
-                        materials,
-                        size,
-                        slots.ToArray(),
-                        tileSet,
-                        range,
-                        new BaseItemType[0],
-                        lightLevel));
-                }
-
-                List<UnidentifiedItem> unidentifiedItems = new List<UnidentifiedItem>();
-
-                if (itemData.Contains("UnidentifiedItems"))
-                {
-                    ICollection<Dictionary> unidentifiedItemDicts =
-                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
-                            itemData,
-                            "UnidentifiedItems");
-                    foreach (Dictionary unidentifiedToken in unidentifiedItemDicts)
-                    {
-                        string name = this.ValueExtractor.GetValueFromDictionary<string>(unidentifiedToken, "Name");
-                        string description = unidentifiedToken.Contains("Description")
-                            ? this.ValueExtractor.GetValueFromDictionary<string>(unidentifiedToken, "Description")
-                            : "";
-                        string identifiedName =
-                            this.ValueExtractor.GetValueFromDictionary<string>(unidentifiedToken, "IdentifiedName");
-
-                        unidentifiedItems.Add(new UnidentifiedItem(name, description, identifiedName));
-                    }
-                }
-
-                Dictionary tileSetDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(itemData, "TileSet");
-
-                string tileSetName = tileSetDict.IsNullOrEmpty()
-                    ? "DEFAULT"
-                    : this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
-
-                string actionWord = itemData.Contains("ActionWord")
-                    ? this.ValueExtractor.GetValueFromDictionary<string>(itemData, "ActionWord")
-                    : "strikes";
-
-                this.ObjectIcons.AddSpriteDataFromJson(itemData);
-
-                foreach (IdentifiedItem identifiedItem in identifiedItems)
-                {
-                    var materialCombinations = this.GetPermutations(identifiedItem.materials);
-
-                    foreach (var enumerable in materialCombinations)
-                    {
-                        UnidentifiedItem[] possibilities = unidentifiedItems.Where(unidentifiedItem =>
-                                unidentifiedItem.identifiedName.Equals(identifiedItem.name,
-                                    StringComparison.OrdinalIgnoreCase))
-                            .ToArray();
-                        UnidentifiedItem selectedItem;
-
-                        var materialDict = new NonUniqueDictionary<IItemMaterial, int>(enumerable);
-                        
-                        if (possibilities.IsNullOrEmpty())
-                        {
-                            selectedItem = new UnidentifiedItem(
-                                identifiedItem.name,
-                                identifiedItem.description,
-                                identifiedItem.name);
-                        }
-                        else
-                        {
-                            selectedItem = this.Roller.SelectFromCollection(possibilities);
-                        }
-
-                        items.Add(new BaseItemType(
-                            identifiedItem.tags,
-                            identifiedItem.description,
-                            selectedItem.description,
-                            selectedItem.name,
-                            identifiedItem.name,
-                            identifiedItem.slots,
-                            identifiedItem.size,
-                            materialDict,
-                            identifiedItem.skills,
-                            actionWord,
-                            identifiedItem.weighting,
-                            identifiedItem.spriteSheet,
-                            identifiedItem.range,
-                            identifiedItem.lightLevel,
-                            identifiedItem.components,
-                            identifiedItem.abilities));
-                    }
-                }
-            }
-
-            return items;
+            return this.GetTypesFromJson(files);
         }
 
         public IEnumerable<BaseItemType> Load()
         {
-            List<BaseItemType> items = new List<BaseItemType>();
-
             string[] files = Directory.GetFiles(
                 Directory.GetCurrentDirectory() +
                 GlobalConstants.ASSETS_FOLDER +
@@ -268,6 +99,13 @@ namespace JoyGodot.Assets.Scripts.Items
                 "Items/Manufactured",
                 "*.json",
                 SearchOption.AllDirectories);
+
+            return this.GetTypesFromJson(files);
+        }
+
+        protected IEnumerable<BaseItemType> GetTypesFromJson(IEnumerable<string> files)
+        {
+            List<BaseItemType> items = new List<BaseItemType>();
 
             foreach (string file in files)
             {
@@ -384,20 +222,22 @@ namespace JoyGodot.Assets.Scripts.Items
                     }
                 }
 
-                string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(
-                    this.ValueExtractor.GetValueFromDictionary<Dictionary>(itemData, "TileSet"),
-                    "Name");
-
                 string actionWord = itemData.Contains("ActionWord")
                     ? this.ValueExtractor.GetValueFromDictionary<string>(itemData, "ActionWord")
                     : "strikes";
 
                 this.ObjectIcons.AddSpriteDataFromJson(itemData);
-                
+
                 foreach (IdentifiedItem identifiedItem in identifiedItems)
                 {
                     var materialCombinations = this.GetPermutations(identifiedItem.materials);
 
+                    NonUniqueDictionary<string, int> craftingMaterials = new NonUniqueDictionary<string, int>(
+                        identifiedItem.materials.Select(pair =>
+                            new Tuple<string, int>(pair.Key, pair.Value)));
+
+                    Guid itemGuid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
+                    
                     foreach (var enumerable in materialCombinations)
                     {
                         UnidentifiedItem[] possibilities = unidentifiedItems
@@ -422,7 +262,8 @@ namespace JoyGodot.Assets.Scripts.Items
 
                         var materialDict = new NonUniqueDictionary<IItemMaterial, int>(enumerable);
 
-                        items.Add(new BaseItemType(
+                        var createdItem = new BaseItemType(
+                            itemGuid, 
                             identifiedItem.tags,
                             identifiedItem.description,
                             selectedItem.description,
@@ -438,7 +279,15 @@ namespace JoyGodot.Assets.Scripts.Items
                             range: identifiedItem.range,
                             lightLevel: identifiedItem.lightLevel,
                             components: identifiedItem.components,
-                            abilities: identifiedItem.abilities));
+                            abilities: identifiedItem.abilities);
+
+                        items.Add(createdItem);
+
+                        this.CraftingRecipeHandler.Add(
+                            new CraftingRecipe(
+                                craftingMaterials,
+                                identifiedItem.components,
+                                new[] {createdItem}));
                     }
                 }
             }
@@ -446,7 +295,8 @@ namespace JoyGodot.Assets.Scripts.Items
             return items;
         }
 
-        protected IEnumerable<IEnumerable<Tuple<IItemMaterial, int>>> GetPermutations(IDictionary<string, int> materialNames)
+        protected IEnumerable<IEnumerable<Tuple<IItemMaterial, int>>> GetPermutations(
+            IDictionary<string, int> materialNames)
         {
             IDictionary<string, List<Tuple<IItemMaterial, int>>> replacements =
                 new System.Collections.Generic.Dictionary<string, List<Tuple<IItemMaterial, int>>>();
@@ -457,7 +307,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
                 List<Tuple<IItemMaterial, int>> materials = GlobalConstants.GameManager.MaterialHandler
                     .GetPossibilities(name)
-                    .Select(material => 
+                    .Select(material =>
                         new Tuple<IItemMaterial, int>(
                             material,
                             materialNames[name]))
@@ -465,7 +315,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
                 replacements[name] = materials;
             }
-            
+
             return replacements.Values.CartesianProduct();
         }
 

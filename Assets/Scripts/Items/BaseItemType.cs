@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Helpers;
 
 namespace JoyGodot.Assets.Scripts.Items
 {
-    public class BaseItemType
+    public class BaseItemType : IGuidHolder
     {
+        public Guid Guid { get; protected set; }
+        
         protected List<string> m_Tags;
         
         public IEnumerable<BaseItemType> Components { get; protected set; }
@@ -123,6 +126,7 @@ namespace JoyGodot.Assets.Scripts.Items
         {}
 
         public BaseItemType(
+            Guid guid,
             IEnumerable<string> tags, 
             string description, 
             string unidentifiedDescriptionRef, 
@@ -140,6 +144,7 @@ namespace JoyGodot.Assets.Scripts.Items
             IEnumerable<BaseItemType> components = null,
             IEnumerable<IAbility> abilities = null)
         {
+            this.Guid = guid;
             this.m_Tags = tags.ToList();
             
             this.SpawnWeighting = spawnRef;

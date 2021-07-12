@@ -9,33 +9,46 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
     {
         public Guid Guid { get; protected set; }
         
-        public NonUniqueDictionary<IItemMaterial, int> RequiredMaterials { get; protected set; }
+        public NonUniqueDictionary<string, int> RequiredMaterials { get; protected set; }
         
         public List<BaseItemType> RequiredComponents { get; protected set; }
         
-        public BaseItemType CraftingResult { get; protected set; }
+        public IEnumerable<BaseItemType> CraftingResults { get; protected set; }
+        
+        public IEnumerable<BaseItemType> ReturnResults { get; protected set; }
 
         public CraftingRecipe(
-            NonUniqueDictionary<IItemMaterial, int> requiredMaterials,
+            NonUniqueDictionary<string, int> requiredMaterials,
             IEnumerable<BaseItemType> components,
-            BaseItemType craftingResult)
+            IEnumerable<BaseItemType> craftingResults,
+            IEnumerable<BaseItemType> returnResults = null)
         {
             this.RequiredMaterials = requiredMaterials;
             this.RequiredComponents = new List<BaseItemType>(components);
-            this.CraftingResult = craftingResult;
+            this.CraftingResults = craftingResults;
+            this.ReturnResults = returnResults ?? new List<BaseItemType>();
             this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
         }
 
-        public bool CanCraft(
-            NonUniqueDictionary<IItemMaterial, int> materials, 
-            List<BaseItemType> components)
+        public bool CanCraft(NonUniqueDictionary<IItemMaterial, int> materials,
+            IEnumerable<BaseItemType> components)
         {
             bool result = true;
             
-            foreach (Tuple<IItemMaterial, int> tuple in this.RequiredMaterials)
+            foreach (Tuple<string, int> tuple in this.RequiredMaterials)
             {
-                var recipeMaterials = this.RequiredMaterials.FetchValuesForKey(tuple.Item1);
-                List<int> resultsList = materials.FetchValuesForKey(tuple.Item1);
+                var recipeMaterials = this.RequiredMaterials
+                    .Where(t => 
+                        t.Item1.Equals(
+                            tuple.Item1, 
+                            StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                var resultsList = materials
+                    .Where(t =>
+                        t.Item1.Name.Equals(
+                            tuple.Item1,
+                            StringComparison.OrdinalIgnoreCase))
+                    .ToList();
                 resultsList = resultsList
                     .OrderByDescending(i => i)
                     .ToList();
@@ -44,37 +57,37 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
                     result = false;
                     break;
                 }
-
-                for (int i = 0; i < recipeMaterials.Count; i++)
-                {
-                    int resultsMin = resultsList.Min();
-                    int recipeMin = recipeMaterials.Min();
+                
+                int resultsSum = resultsList.Select(t => t.Item2).Sum();
+                int recipeSum = recipeMaterials.Select(t => t.Item2).Sum();
                     
-                    if (resultsMin < recipeMin)
-                    {
-                        result = false;
-                        break;
-                    }
-
-                    resultsList.Remove(resultsMin);
-                }
-
-                if (!result)
+                if (resultsSum < recipeSum)
                 {
+                    result = false;
                     break;
                 }
             }
 
+            if (!result)
+            {
+                return result;
+            }
+            
             var copyComponents = new List<BaseItemType>(components);
+            int leftToFill = this.RequiredComponents.Count;
             foreach (BaseItemType component in this.RequiredComponents)
             {
                 if (copyComponents.Contains(component))
                 {
                     copyComponents.Remove(component);
+                    leftToFill--;
                 }
             }
 
-            result &= copyComponents.Count == 0;
+            if (leftToFill != 0)
+            {
+                result = false;
+            }
             
             return result;
         }
