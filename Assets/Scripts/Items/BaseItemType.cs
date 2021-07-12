@@ -62,6 +62,8 @@ namespace JoyGodot.Assets.Scripts.Items
             protected set => this.m_Materials = new NonUniqueDictionary<IItemMaterial, int>(value);
         }
 
+        public NonUniqueDictionary<IItemMaterial, int> MyMaterials => this.m_Materials;
+
         protected NonUniqueDictionary<IItemMaterial, int> m_Materials;
 
         public IEnumerable<string> Slots { get; protected set; }

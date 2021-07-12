@@ -77,12 +77,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         protected void SetSlots()
         {
+            foreach (JoyItemSlot slot in this.Slots)
+            {
+                slot.Visible = false;
+            }
+            
             if (this.CurrentRecipe is null)
             {
-                foreach (JoyItemSlot slot in this.Slots)
-                {
-                    slot.Visible = false;
-                }
                 return;
             }
             
@@ -102,14 +103,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 slot.IngredientType = "material";
                 slot.Slot = material.Item1.Name;
                 slot.AmountRequired = material.Item2;
-                slot.SlotLabel.Text = material.Item1 + ": " + material.Item2;
+                slot.SlotLabel.Text = material.Item1.Name + ": " + material.Item2;
             }
 
             var componentCollection = this.CurrentRecipe.RequiredComponents;
             for (int i = 0; i < componentCollection.Count; i++)
             {
                 var component = componentCollection[i];
-                var slot = this.Slots[i] as JoyCraftingSlot;
+                var slot = this.Slots[i + materialCollection.Count] as JoyCraftingSlot;
                 slot.Visible = true;
                 slot.IngredientType = "component";
                 slot.Slot = component.UnidentifiedName;

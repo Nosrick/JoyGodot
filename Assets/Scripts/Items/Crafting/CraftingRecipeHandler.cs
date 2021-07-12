@@ -37,7 +37,7 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
             return this.ItemDatabase.Values
                 .Select(itemType => 
                     new CraftingRecipe(
-                        itemType.Materials, 
+                        itemType.MyMaterials, 
                         itemType.Components, 
                         itemType))
                 .ToList();
