@@ -29,8 +29,10 @@
     <Content Include="Assets\Data\Items\Components\Cloth\ClothComponents.json" />
     <Content Include="Assets\Data\Items\Components\Flesh\FleshComponents.json" />
     <Content Include="Assets\Data\Items\Components\Food\Food.json" />
+    <Content Include="Assets\Data\Items\Components\Glass\GlassComponents.json" />
     <Content Include="Assets\Data\Items\Components\Metal\MetalComponents.json" />
     <Content Include="Assets\Data\Items\Components\Weapons\WeaponComponents.json" />
+    <Content Include="Assets\Data\Items\Components\Wood\WoodenComponents.json" />
     <Content Include="Assets\Data\Items\Manufactured\Armour\Hand\ShieldItems.json" />
     <Content Include="Assets\Data\Items\Manufactured\Armour\Torso\TorsoItems.json" />
     <Content Include="Assets\Data\Items\Manufactured\Containers.json" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Items;
 
@@ -20,6 +21,10 @@ namespace JoyGodot.Assets.Scripts.Helpers
 
         public IItemInstance MakeNaturalWeapon(int wielderSize, string material = "flesh", params string[] tags)
         {
+            float size = (wielderSize + 1) * 40.0f;
+
+            var m = GlobalConstants.GameManager.MaterialHandler.Get(material);
+            
             BaseItemType baseItem = new BaseItemType(
                 tags, 
                 "A claw, fist or psuedopod.", 
@@ -27,11 +32,13 @@ namespace JoyGodot.Assets.Scripts.Helpers
                 "Natural Weapon", 
                 "Natural Weapon", 
                 new string[] { "Hand" }, 
-                (wielderSize + 1) * 40.0f, 
-                material, 
+                size, 
+                new Dictionary<IItemMaterial, int>
+                {
+                    {m, (int) size}
+                }, 
                 new [] {"Martial Arts"}, 
                 "strikes", 
-                0, 
                 0, 
                 "None");
 
@@ -39,9 +46,9 @@ namespace JoyGodot.Assets.Scripts.Helpers
             {
                 new ConcreteBasicFloatValue("weight", baseItem.Weight),
                 new ConcreteBasicFloatValue("size", baseItem.Size),
-                new ConcreteBasicFloatValue("hardness", baseItem.Material.Hardness),
-                new ConcreteBasicFloatValue("bonus", baseItem.Material.Bonus),
-                new ConcreteBasicFloatValue("density", baseItem.Material.Density)
+                new ConcreteBasicFloatValue("hardness", baseItem.Materials.First().Key.Hardness),
+                new ConcreteBasicFloatValue("bonus", baseItem.BaseEfficiency),
+                new ConcreteBasicFloatValue("density", baseItem.Materials.First().Key.Density)
             };
 
             IItemInstance naturalWeapon = this.ItemFactory.CreateFromTemplate(baseItem, true);

@@ -1,7 +1,7 @@
 ﻿{
   "Materials": [
     {
-      "Name": "White Pine",
+      "Name": "white pine",
       "Hardness": 0.4,
       "Bonus": 0,
       "Weight": 0.5,
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Name": "Maple",
+      "Name": "maple",
       "Hardness": 0.6,
       "Bonus": 1,
       "Weight": 0.6,

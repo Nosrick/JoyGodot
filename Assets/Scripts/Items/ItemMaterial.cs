@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 
 namespace JoyGodot.Assets.Scripts.Items
 {
@@ -15,6 +16,7 @@ namespace JoyGodot.Assets.Scripts.Items
             this.Density = 1.0f;
             this.ValueMod = 1.0f;
             this.m_Tags = new List<string>();
+            this.Colours = new[] {Colors.White};
         }
 
         public ItemMaterial(
@@ -23,7 +25,8 @@ namespace JoyGodot.Assets.Scripts.Items
             int bonusRef, 
             float weightRef, 
             float valueMod,
-            IEnumerable<string> tags = null)
+            IEnumerable<string> tags = null,
+            IEnumerable<Color> colours = null)
         {
             this.Name = nameRef;
             this.Hardness = hardnessRef;
@@ -31,9 +34,11 @@ namespace JoyGodot.Assets.Scripts.Items
             this.Density = weightRef;
             this.ValueMod = valueMod;
             this.m_Tags = tags?.ToList() ?? new List<string>();
+            this.Colours = colours?.ToArray() ?? new[] {Colors.White};
         }
 
-         
+        public Color[] Colours { get; protected set; } 
+        
         public string Name
         {
             get;

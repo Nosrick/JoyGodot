@@ -50,7 +50,7 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 List<string> tags = new List<string>(this.m_Tags);
                 tags.AddRange(this.ItemType.Tags);
-                tags.AddRange(this.ItemType.Material.Tags);
+                tags.AddRange(this.ItemType.Materials.SelectMany(pair => pair.Key.Tags));
 
                 return tags;
             }
@@ -101,7 +101,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public override ICollection<string> Tooltip => this.ConstructDescription();
 
-        public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
+        public int Efficiency => (int)(this.m_Type.BaseEfficiency * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
 
         public string ConditionString
         {
@@ -582,7 +582,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
         protected void CalculateValue()
         {
-            this.m_Value = (int)(this.m_Type.Value * this.m_Type.Material.ValueMod);
+            this.m_Value = this.m_Type.Value;
             foreach (IItemInstance item in this.Contents)
             {
                 this.m_Value += item.Value;

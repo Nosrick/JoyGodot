@@ -28,14 +28,14 @@ namespace JoyGodot.Assets.Scripts.Items
         {
             this.m_Materials = this.Load().ToDictionary(material => material.Name, material => material);
 
-            this.m_Materials.Add("DEFAULT MATERIAL", 
+            this.m_Materials.Add("DEFAULT MATERIAL",
                 new ItemMaterial(
-                    "DEFAULT MATERIAL", 
-                    0.1f, 
-                    0, 
-                    1.0f, 
+                    "DEFAULT MATERIAL",
+                    0.1f,
+                    0,
+                    1.0f,
                     0.0f,
-                    new []{"DEFAULT"}));
+                    new[] {"DEFAULT"}));
         }
 
         public IItemMaterial Get(string name)
@@ -45,13 +45,34 @@ namespace JoyGodot.Assets.Scripts.Items
                 this.Initialise();
             }
 
-            if (this.m_Materials.Any(pair => pair.Value.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
-            {
-                return this.m_Materials.First(pair => pair.Value.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                    .Value;
-            }
+            return this.m_Materials
+                       .FirstOrDefault(pair => pair.Value.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                       .Value
+                   ?? this.m_Materials["DEFAULT MATERIAL"];
+        }
 
-            return this.m_Materials["DEFAULT MATERIAL"];
+        public IEnumerable<IItemMaterial> GetMany(IEnumerable<string> names, bool fuzzy = false)
+        {
+            return fuzzy ? names.SelectMany(this.GetPossibilities) : names.Select(this.Get);
+        }
+
+        public IEnumerable<IItemMaterial> GetPossibilities(string type)
+        {
+            var materials = this.m_Materials.Where(pair =>
+                    pair.Value.HasTag(type) || pair.Value.Name.Equals(type, StringComparison.OrdinalIgnoreCase))
+                .Select(pair => pair.Value);
+
+            return materials.IsNullOrEmpty()
+                ? new[] {this.m_Materials["DEFAULT MATERIAL"]}
+                : materials;
+        }
+
+        public IItemMaterial GetRandomType(string type)
+        {
+            var possibilities = this.GetPossibilities(type).ToList();
+            return possibilities.IsNullOrEmpty()
+                ? this.m_Materials["DEFAULT MATERIAL"]
+                : possibilities.GetRandom();
         }
 
         public bool Add(IItemMaterial value)
@@ -129,6 +150,10 @@ namespace JoyGodot.Assets.Scripts.Items
                         ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(material, "Tags")
                         : new List<string>();
 
+                    ICollection<string> partColours =
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(material, "Colours");
+                    ICollection<Color> colours = partColours.Select(code => new Color(code)).ToList();
+
                     materials.Add(
                         new ItemMaterial(
                             name,
@@ -136,7 +161,8 @@ namespace JoyGodot.Assets.Scripts.Items
                             bonus,
                             weight,
                             value,
-                            tags));
+                            tags,
+                            colours));
                 }
             }
 

@@ -3,7 +3,7 @@
     "Category": "Components",
     "IdentifiedItems": [
       {
-        "Name": "Cloth",
+        "Name": "cloth",
         "Description": "A square of cloth.",
         "Value": 5,
         "Materials": [
@@ -18,7 +18,7 @@
         ]
       },
       {
-        "Name": "Cloth",
+        "Name": "cloth",
         "Description": "A square of cloth.",
         "Value": 5,
         "Materials": [

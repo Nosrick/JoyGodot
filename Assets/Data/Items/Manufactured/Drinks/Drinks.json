@@ -8,9 +8,9 @@
         "SpawnWeight": 10,
         "Materials": [ ],
         "Components": [
-          "small vial"
+          "small bottle"
         ],
-        "Size": 50,
+        "Size": 200,
         "Tags": [
           "drink",
           "alcohol"
@@ -42,9 +42,9 @@
         "SpawnWeight": 10,
         "Materials": [ ],
         "Components": [
-          "glass bottle"
+          "small bottle"
         ],
-        "Size": 100,
+        "Size": 200,
         "Tags": [
           "drink",
           "alcohol"

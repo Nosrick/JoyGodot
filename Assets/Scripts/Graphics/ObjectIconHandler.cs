@@ -202,6 +202,12 @@ namespace JoyGodot.Assets.Scripts.Graphics
         {
             List<SpriteData> spriteData = new List<SpriteData>();
             Dictionary tileSetDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(spriteDict, "TileSet");
+
+            if (tileSetDict.IsNullOrEmpty())
+            {
+                return false;
+            }
+            
             string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
             ICollection<Dictionary> tileSetArray =
                 this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");

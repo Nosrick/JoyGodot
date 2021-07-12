@@ -1,7 +1,7 @@
 ﻿{
   "Materials": [
     {
-      "Name": "Cotton",
+      "Name": "cotton",
       "Hardness": 0.8,
       "Bonus": 0,
       "Weight": 2,
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Name": "Canvas",
+      "Name": "canvas",
       "Hardness": 1,
       "Bonus": 0,
       "Weight": 2,
