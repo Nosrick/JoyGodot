@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Helpers;
 
@@ -32,7 +33,7 @@ namespace JoyGodot.Assets.Scripts.Items
                 {
                     foreach (var pair in this.Materials)
                     {
-                        total += pair.Key.Density * pair.Value;
+                        total += pair.Item1.Density * pair.Item2;
                     }
                 }
                 else
@@ -46,35 +47,28 @@ namespace JoyGodot.Assets.Scripts.Items
         
         public float Size { get; protected set; }
 
-        public IDictionary<IItemMaterial, int> Materials
+        public NonUniqueDictionary<IItemMaterial, int> Materials
         {
             get
             {
-                IDictionary<IItemMaterial, int> materials = new Dictionary<IItemMaterial, int>(this.m_Materials);
+                NonUniqueDictionary<IItemMaterial, int> materials = new NonUniqueDictionary<IItemMaterial, int>(this.m_Materials);
                 foreach (var pair in this.Components.SelectMany(type => type.Materials))
                 {
-                    if (materials.ContainsKey(pair.Key))
-                    {
-                        materials[pair.Key] += pair.Value;
-                    }
-                    else
-                    {
-                        materials.Add(pair);
-                    }
+                    materials.Add(pair.Item1, pair.Item2);
                 }
 
                 return materials;
             }
-            protected set => this.m_Materials = new Dictionary<IItemMaterial, int>(value);
+            protected set => this.m_Materials = new NonUniqueDictionary<IItemMaterial, int>(value);
         }
 
-        protected IDictionary<IItemMaterial, int> m_Materials;
+        protected NonUniqueDictionary<IItemMaterial, int> m_Materials;
 
         public IEnumerable<string> Slots { get; protected set; }
 
-        public int BaseProtection => (int) this.Materials.Average(material => material.Key.Bonus);
+        public int BaseProtection => (int) this.Materials.Average(material => material.Item1.Bonus);
 
-        public int BaseEfficiency => (int) this.Materials.Average(material => material.Key.Bonus);
+        public int BaseEfficiency => (int) this.Materials.Average(material => material.Item1.Bonus);
 
         public IEnumerable<string> GoverningSkills { get; protected set; }
 
@@ -84,7 +78,7 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 StringBuilder builder = new StringBuilder("Made of ");
                 List<string> materials = this.Materials
-                    .Select(material => material.Key.Name)
+                    .Select(material => material.Item1.Name)
                     .Distinct()
                     .ToList();
                 for(int i = 0; i < materials.Count; i++)
@@ -106,7 +100,7 @@ namespace JoyGodot.Assets.Scripts.Items
         {
             get
             {
-                return this.Materials.Select(pair => (int) (pair.Key.ValueMod * pair.Value)).Sum();
+                return this.Materials.Select(pair => (int) (pair.Item1.ValueMod * pair.Item2)).Sum();
             }
         }
         
@@ -134,7 +128,7 @@ namespace JoyGodot.Assets.Scripts.Items
             string identifiedNameRef, 
             IEnumerable<string> slotsRef, 
             float size, 
-            IDictionary<IItemMaterial, int> materials, 
+            NonUniqueDictionary<IItemMaterial, int> materials, 
             IEnumerable<string> governingSkills, 
             string actionStringRef, 
             int spawnRef, 
@@ -154,7 +148,7 @@ namespace JoyGodot.Assets.Scripts.Items
             this.UnidentifiedDescription = unidentifiedDescriptionRef;
             this.UnidentifiedName = unidentifiedNameRef;
             this.Size = size;
-            this.Materials = new Dictionary<IItemMaterial, int>(materials);
+            this.Materials = new NonUniqueDictionary<IItemMaterial, int>(materials);
             this.Slots = slotsRef;
             this.GoverningSkills = governingSkills;
             this.ActionString = actionStringRef;
@@ -208,7 +202,7 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 foreach (var pair in this.Materials)
                 {
-                    total += (int) Math.Max(1, pair.Key.Hardness * pair.Value);
+                    total += (int) Math.Max(1, pair.Item1.Hardness * pair.Item2);
                 }
             }
 

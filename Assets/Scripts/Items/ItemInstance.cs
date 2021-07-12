@@ -50,7 +50,7 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 List<string> tags = new List<string>(this.m_Tags);
                 tags.AddRange(this.ItemType.Tags);
-                tags.AddRange(this.ItemType.Materials.SelectMany(pair => pair.Key.Tags));
+                tags.AddRange(this.ItemType.Materials.SelectMany(pair => pair.Item1.Tags));
 
                 return tags;
             }

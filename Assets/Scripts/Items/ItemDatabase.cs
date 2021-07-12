@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Graphics;
 using JoyGodot.Assets.Scripts.Helpers;
@@ -218,9 +219,7 @@ namespace JoyGodot.Assets.Scripts.Items
                             .ToArray();
                         UnidentifiedItem selectedItem;
 
-                        var materialDict = enumerable.ToDictionary(
-                            tuple => tuple.Item1,
-                            tuple => tuple.Item2);
+                        var materialDict = new NonUniqueDictionary<IItemMaterial, int>(enumerable);
                         
                         if (possibilities.IsNullOrEmpty())
                         {
@@ -420,10 +419,8 @@ namespace JoyGodot.Assets.Scripts.Items
                         {
                             selectedItem = possibilities.GetRandom();
                         }
-                        
-                        var materialDict = enumerable.ToDictionary(
-                            tuple => tuple.Item1,
-                            tuple => tuple.Item2);
+
+                        var materialDict = new NonUniqueDictionary<IItemMaterial, int>(enumerable);
 
                         items.Add(new BaseItemType(
                             identifiedItem.tags,

@@ -6,10 +6,14 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
 {
     public interface IRecipe : IGuidHolder
     {
-        NonUniqueDictionary<string, int> RequiredMaterials { get; }
+        NonUniqueDictionary<IItemMaterial, int> RequiredMaterials { get; }
+        
+        List<BaseItemType> RequiredComponents { get; }
 
         BaseItemType CraftingResult { get; }
 
-        bool CanCraft(NonUniqueDictionary<string, int> materials);
+        bool CanCraft(
+            NonUniqueDictionary<IItemMaterial, int> materials,
+            List<BaseItemType> components);
     }
 }

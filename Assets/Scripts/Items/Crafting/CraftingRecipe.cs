@@ -9,24 +9,30 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
     {
         public Guid Guid { get; protected set; }
         
-        public NonUniqueDictionary<string, int> RequiredMaterials { get; protected set; }
+        public NonUniqueDictionary<IItemMaterial, int> RequiredMaterials { get; protected set; }
+        
+        public List<BaseItemType> RequiredComponents { get; protected set; }
         
         public BaseItemType CraftingResult { get; protected set; }
 
         public CraftingRecipe(
-            NonUniqueDictionary<string, int> requiredMaterials,
+            NonUniqueDictionary<IItemMaterial, int> requiredMaterials,
+            IEnumerable<BaseItemType> components,
             BaseItemType craftingResult)
         {
             this.RequiredMaterials = requiredMaterials;
+            this.RequiredComponents = new List<BaseItemType>(components);
             this.CraftingResult = craftingResult;
             this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
         }
 
-        public bool CanCraft(NonUniqueDictionary<string, int> materials)
+        public bool CanCraft(
+            NonUniqueDictionary<IItemMaterial, int> materials, 
+            List<BaseItemType> components)
         {
             bool result = true;
             
-            foreach (Tuple<string, int> tuple in this.RequiredMaterials)
+            foreach (Tuple<IItemMaterial, int> tuple in this.RequiredMaterials)
             {
                 var recipeMaterials = this.RequiredMaterials.FetchValuesForKey(tuple.Item1);
                 List<int> resultsList = materials.FetchValuesForKey(tuple.Item1);
@@ -58,6 +64,17 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
                     break;
                 }
             }
+
+            var copyComponents = new List<BaseItemType>(components);
+            foreach (BaseItemType component in this.RequiredComponents)
+            {
+                if (copyComponents.Contains(component))
+                {
+                    copyComponents.Remove(component);
+                }
+            }
+
+            result &= copyComponents.Count == 0;
             
             return result;
         }

@@ -1,7 +1,11 @@
-﻿namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
+﻿using System;
+
+namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
     public class JoyCraftingSlot : JoyConstrainedSlot
     {
+        public string IngredientType { get; set; }
+
         public int AmountRequired { get; set; }
 
         public float AmountInSlot
@@ -13,9 +17,19 @@
                     return 0;
                 }
 
-                if (this.m_Item.HasTag(this.Slot))
+                if (this.IngredientType.Equals("component", StringComparison.OrdinalIgnoreCase))
                 {
-                    return this.m_Item.ItemType.Size;
+                    if (this.m_Item.ItemType.UnidentifiedName.Equals(this.Slot, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return 1f;
+                    }
+                }
+                else if (this.IngredientType.Equals("material", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (this.m_Item.HasTag(this.Slot))
+                    {
+                        return this.m_Item.ItemType.Size;
+                    }
                 }
 
                 return 0;

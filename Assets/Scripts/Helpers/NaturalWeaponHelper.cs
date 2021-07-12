@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Items;
 
@@ -33,7 +34,7 @@ namespace JoyGodot.Assets.Scripts.Helpers
                 "Natural Weapon", 
                 new string[] { "Hand" }, 
                 size, 
-                new Dictionary<IItemMaterial, int>
+                new NonUniqueDictionary<IItemMaterial, int>()
                 {
                     {m, (int) size}
                 }, 
@@ -46,9 +47,9 @@ namespace JoyGodot.Assets.Scripts.Helpers
             {
                 new ConcreteBasicFloatValue("weight", baseItem.Weight),
                 new ConcreteBasicFloatValue("size", baseItem.Size),
-                new ConcreteBasicFloatValue("hardness", baseItem.Materials.First().Key.Hardness),
+                new ConcreteBasicFloatValue("hardness", baseItem.Materials.First().Item1.Hardness),
                 new ConcreteBasicFloatValue("bonus", baseItem.BaseEfficiency),
-                new ConcreteBasicFloatValue("density", baseItem.Materials.First().Key.Density)
+                new ConcreteBasicFloatValue("density", baseItem.Materials.First().Item1.Density)
             };
 
             IItemInstance naturalWeapon = this.ItemFactory.CreateFromTemplate(baseItem, true);

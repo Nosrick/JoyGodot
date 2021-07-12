@@ -34,62 +34,13 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
 
         public IEnumerable<IRecipe> Load()
         {
-            List<IRecipe> recipes = new List<IRecipe>();
-            
-            string[] files =
-                Directory.GetFiles(
-                    Directory.GetCurrentDirectory() +
-                    GlobalConstants.ASSETS_FOLDER + 
-                    GlobalConstants.DATA_FOLDER + 
-                    "Recipes", 
-                    "*.json",
-                    SearchOption.AllDirectories);
-
-            foreach (string file in files)
-            {
-                JSONParseResult result = JSON.Parse(File.ReadAllText(file));
-
-                if (result.Error != Error.Ok)
-                {
-                    GlobalConstants.ActionLog.Log("Could not load entity templates from " + file, LogLevel.Warning);
-                    GlobalConstants.ActionLog.Log(result.ErrorString, LogLevel.Warning);
-                    GlobalConstants.ActionLog.Log("On line: " + result.ErrorLine, LogLevel.Warning);
-                    continue;
-                }
-
-                if (!(result.Result is Dictionary dictionary))
-                {
-                    GlobalConstants.ActionLog.Log("Could not parse JSON to Dictionary from " + file, LogLevel.Warning);
-                    continue;
-                }
-
-                ICollection<Dictionary> recipeCollection =
-                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(dictionary, "Recipes");
-
-                foreach (Dictionary recipeDict in recipeCollection)
-                {
-                    NonUniqueDictionary<string, int> materials = new NonUniqueDictionary<string, int>();
-
-                    string resultName = this.ValueExtractor.GetValueFromDictionary<string>(recipeDict, "Result");
-                    ICollection<Dictionary> materialsDicts =
-                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(recipeDict,
-                            "Materials");
-
-                    foreach (Dictionary materialsDict in materialsDicts)
-                    {
-                        string name = this.ValueExtractor.GetValueFromDictionary<string>(materialsDict, "Name");
-                        int value = this.ValueExtractor.GetValueFromDictionary<int>(materialsDict, "Value");
-                        
-                        materials.Add(name, value);
-                    }
-
-                    var itemTypes = this.ItemDatabase.GetAllForName(resultName);
-
-                    recipes.AddRange(itemTypes.Select(itemType => new CraftingRecipe(materials, itemType)));
-                }
-            }
-            
-            return recipes;
+            return this.ItemDatabase.Values
+                .Select(itemType => 
+                    new CraftingRecipe(
+                        itemType.Materials, 
+                        itemType.Components, 
+                        itemType))
+                .ToList();
         }
         
         public IRecipe Get(Guid guid)
