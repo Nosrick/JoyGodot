@@ -172,6 +172,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public override object GetDragData(Vector2 position)
         {
+            if (this.Item is null)
+            {
+                return null;
+            }
+            
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = this.Item.States.FirstOrDefault();
 
