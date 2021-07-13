@@ -47,7 +47,8 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
                     .Where(t =>
                         t.Item1.Name.Equals(
                             tuple.Item1,
-                            StringComparison.OrdinalIgnoreCase))
+                            StringComparison.OrdinalIgnoreCase)
+                        || t.Item1.HasTag(tuple.Item1))
                     .ToList();
                 resultsList = resultsList
                     .OrderByDescending(i => i)
@@ -90,6 +91,12 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
             }
             
             return result;
+        }
+
+        public bool OutputMaterialsMatch(NonUniqueDictionary<IItemMaterial, int> materials)
+        {
+            IEnumerable<string> materialNames = materials.Keys.Select(material => material.Name);
+            return this.CraftingResults.All(type => type.MaterialNames.Intersect(materialNames).Count() == type.MaterialNames.Count());
         }
     }
 }

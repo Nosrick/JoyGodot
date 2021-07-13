@@ -18,5 +18,7 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
         bool CanCraft(
             NonUniqueDictionary<IItemMaterial, int> materials,
             IEnumerable<BaseItemType> components);
+
+        bool OutputMaterialsMatch(NonUniqueDictionary<IItemMaterial, int> materials);
     }
 }

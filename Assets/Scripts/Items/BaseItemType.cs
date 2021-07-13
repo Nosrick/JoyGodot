@@ -69,6 +69,8 @@ namespace JoyGodot.Assets.Scripts.Items
 
         protected NonUniqueDictionary<IItemMaterial, int> m_Materials;
 
+        public IEnumerable<string> MaterialNames => this.Materials.Keys.Select(material => material.Name);
+
         public IEnumerable<string> Slots { get; protected set; }
 
         public int BaseProtection => (int) this.Materials.Average(material => material.Item1.Bonus);

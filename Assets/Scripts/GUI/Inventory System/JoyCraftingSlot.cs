@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
@@ -26,7 +27,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 }
                 else if (this.IngredientType.Equals("material", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (this.m_Item.HasTag(this.Slot))
+                    if (this.m_Item.HasTag(this.Slot) 
+                        || this.m_Item.ItemType.MaterialNames.Any(
+                            name => name.Equals(this.Slot, StringComparison.OrdinalIgnoreCase)))
                     {
                         return this.m_Item.ItemType.Size;
                     }

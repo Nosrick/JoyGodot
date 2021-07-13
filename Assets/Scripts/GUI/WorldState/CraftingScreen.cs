@@ -101,9 +101,18 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
         public void SetRecipe(string guid)
         {
+            this.ReturnItemsToPlayer();
+            
             var recipes = this.RecipeHandler.GetAllForItemTypeGuid(new Guid(guid));
             
             this.CraftingItemContainer.SetRecipe(recipes);
+        }
+
+        public void ReturnItemsToPlayer()
+        {
+            this.Player.AddContents(this.CraftingItemContainer.Contents);
+            this.CraftingItemContainer.RemoveAllItems();
+            this.PlayerInventory.Display();
         }
 
         public void CraftButton()
@@ -113,7 +122,13 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 this.Player.RemoveContents(this.CraftingItemContainer.Contents);
 
                 List<IItemInstance> newItems = new List<IItemInstance>();
-                foreach (BaseItemType itemType in this.CraftingItemContainer.InferRecipeFromIngredients().CraftingResults)
+                IRecipe recipe = this.CraftingItemContainer.InferRecipeFromIngredients();
+                if (recipe is null)
+                {
+                    return;
+                }
+                
+                foreach (BaseItemType itemType in recipe.CraftingResults)
                 {
                     IItemInstance item = this.ItemFactory.CreateFromTemplate(
                         itemType,
