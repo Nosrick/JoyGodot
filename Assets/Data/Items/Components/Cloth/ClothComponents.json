@@ -32,6 +32,25 @@
           "component"
         ]
       }
-    ]
+    ],
+    "TileSet": {
+      "Name": "Components",
+      "SpriteData": [
+        {
+          "Name": "cloth",
+          "Part": [
+            {
+              "Name": "cloth",
+              "Frames": 1,
+              "Filename": "items/soft-sheet.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        }
+      ]
+    }
   }
 }

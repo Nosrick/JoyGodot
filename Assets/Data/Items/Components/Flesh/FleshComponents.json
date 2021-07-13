@@ -18,6 +18,25 @@
           "flesh"
         ]
       }
-    ]
+    ],
+    "TileSet": {
+      "Name": "Components",
+      "SpriteData": [
+        {
+          "Name": "leather",
+          "Part": [
+            {
+              "Name": "leather",
+              "Frames": 1,
+              "Filename": "items/soft-sheet.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        }
+      ]
+    }
   }
 }
