@@ -78,7 +78,7 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
             int leftToFill = this.RequiredComponents.Count;
             foreach (BaseItemType component in this.RequiredComponents)
             {
-                if (copyComponents.Contains(component))
+                if (copyComponents.Any(c => c.Equals(component)))
                 {
                     copyComponents.Remove(component);
                     leftToFill--;
@@ -95,8 +95,17 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
 
         public bool OutputMaterialsMatch(NonUniqueDictionary<IItemMaterial, int> materials)
         {
-            IEnumerable<string> materialNames = materials.Keys.Select(material => material.Name);
-            return this.CraftingResults.All(type => type.MaterialNames.Intersect(materialNames).Count() == type.MaterialNames.Count());
+            IEnumerable<string> materialNames = materials.Keys.Select(material => material.Name).Distinct();
+            foreach (var result in this.CraftingResults)
+            {
+                var intersect = result.MaterialNames.Intersect(materialNames).Count();
+                if (intersect < result.MaterialNames.Count())
+                {
+                    return false;
+                }
+            }
+            
+            return true;
         }
     }
 }
