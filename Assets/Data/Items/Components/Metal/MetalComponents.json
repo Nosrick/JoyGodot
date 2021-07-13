@@ -1,0 +1,72 @@
+﻿{
+  "Items": {
+    "Category": "Components",
+    "IdentifiedItems": [
+      {
+        "Name": "Metal sheet",
+        "Description": "A piece of metal hammered flat.",
+        "TileSet": "Components",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "metal",
+            "Value": 100
+          }
+        ],
+        "Size": 100,
+        "Tags": [
+          "component"
+        ] 
+      },
+      {
+        "Name": "Metal rod",
+        "Description": "A cylinder of metal.",
+        "TileSet": "Components",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "metal",
+            "Value": 15
+          }
+        ],
+        "Size": 15,
+        "Tags": [
+          "component"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "Components",
+      "SpriteData": [
+        {
+          "Name": "metal sheet",
+          "Part": [
+            {
+              "Name": "metal sheet",
+              "Frames": 1,
+              "Filename": "items/metal-sheet.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        },
+        {
+          "Name": "metal rod",
+          "Part": [
+            {
+              "Name": "metal rod",
+              "Frames": 1,
+              "Filename": "items/metal-rod.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

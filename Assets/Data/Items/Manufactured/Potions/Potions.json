@@ -1,0 +1,108 @@
+﻿{
+  "Items": {
+    "Category": "Potions",
+    "IdentifiedItems": [
+      {
+        "Name": "Healing Potion",
+        "Description": "Knits wounds back together",
+        "Value": 300,
+        "Materials": [],
+        "Components": [
+          "small vial"
+        ],
+        "Size": 30,
+        "TileSet": "potions",
+        "SpawnWeight": 2,
+        "Tags": [
+          "potion",
+          "healing"
+        ],
+        "Effects": [
+          "healingpotion"
+        ]
+      }
+    ],
+    "UnidentifiedItems": [
+      {
+        "Name": "Mysterious Potion",
+        "Description": "Contains a mysterious, viscous liquid",
+        "IdentifiedName": "Healing Potion"
+      }
+    ],
+    "TileSet": {
+      "Name": "potions",
+      "SpriteData": [
+        {
+          "Name": "mysterious potion",
+          "Part": [
+            {
+              "Name": "potion-body",
+              "Frames": 1,
+              "Filename": "items/potion-body.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 1,
+              "Colour": [
+                "#ea7d10",
+                "#ee113d",
+                "#25e4c4",
+                "#f8be49"
+              ]
+            },
+            {
+              "Name": "small vial",
+              "Frames": 1,
+              "Filename": "items/potion-glass.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 2
+            },
+            {
+              "Name": "potion-top",
+              "Frames": 1,
+              "Filename": "items/potion-tops.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 3,
+              "Colour": [
+                "#f8be49"
+              ]
+            },
+            {
+              "Name": "potion-highlight",
+              "Frames": 1,
+              "Filename": "items/potion-highlight.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 4,
+              "Colour": [
+                "#f2f2f2"
+              ]
+            },
+            {
+              "Name": "potion-outline",
+              "Frames": 1,
+              "Filename": "items/potion-outline.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0,
+              "SortOrder": 5,
+              "Colour": [
+                "#020a55"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

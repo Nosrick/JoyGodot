@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Graphics;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items.Crafting;
 using JoyGodot.Assets.Scripts.Rollers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
@@ -22,6 +24,8 @@ namespace JoyGodot.Assets.Scripts.Items
         protected IMaterialHandler MaterialHandler { get; set; }
 
         protected IAbilityHandler AbilityHandler { get; set; }
+
+        protected ICraftingRecipeHandler CraftingRecipeHandler { get; set; }
 
         public IEnumerable<BaseItemType> Values => this.m_ItemDatabase;
 
@@ -59,28 +63,49 @@ namespace JoyGodot.Assets.Scripts.Items
             IObjectIconHandler objectIconHandler,
             IMaterialHandler materialHandler,
             IAbilityHandler abilityHandler,
+            ICraftingRecipeHandler craftingRecipeHandler,
             IRollable roller = null)
         {
             this.ValueExtractor = new JSONValueExtractor();
             this.ObjectIcons = objectIconHandler;
             this.MaterialHandler = materialHandler;
             this.AbilityHandler = abilityHandler;
+            this.CraftingRecipeHandler = craftingRecipeHandler;
             this.Roller = roller ?? new RNG();
 
-            this.m_ItemDatabase = this.Load().ToList();
+            this.m_ItemDatabase = new List<BaseItemType>(this.LoadComponents());
+            this.m_ItemDatabase.AddRange(this.Load());
         }
 
-        public IEnumerable<BaseItemType> Load()
+        protected IEnumerable<BaseItemType> LoadComponents()
         {
-            List<BaseItemType> items = new List<BaseItemType>();
-
             string[] files = Directory.GetFiles(
                 Directory.GetCurrentDirectory() +
                 GlobalConstants.ASSETS_FOLDER +
                 GlobalConstants.DATA_FOLDER +
-                "Items",
+                "Items/Components",
                 "*.json",
                 SearchOption.AllDirectories);
+
+            return this.GetTypesFromJson(files);
+        }
+
+        public IEnumerable<BaseItemType> Load()
+        {
+            string[] files = Directory.GetFiles(
+                Directory.GetCurrentDirectory() +
+                GlobalConstants.ASSETS_FOLDER +
+                GlobalConstants.DATA_FOLDER +
+                "Items/Manufactured",
+                "*.json",
+                SearchOption.AllDirectories);
+
+            return this.GetTypesFromJson(files);
+        }
+
+        protected IEnumerable<BaseItemType> GetTypesFromJson(IEnumerable<string> files)
+        {
+            List<BaseItemType> items = new List<BaseItemType>();
 
             foreach (string file in files)
             {
@@ -113,9 +138,25 @@ namespace JoyGodot.Assets.Scripts.Items
                         ? this.ValueExtractor.GetValueFromDictionary<string>(identifiedToken, "Description")
                         : "";
                     int value = this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Value");
-                    IEnumerable<string> materials =
-                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(identifiedToken,
+                    IEnumerable<Dictionary> materialsDict =
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
+                            identifiedToken,
                             "Materials");
+
+                    IDictionary<string, int> materials = new System.Collections.Generic.Dictionary<string, int>();
+                    foreach (Dictionary material in materialsDict)
+                    {
+                        materials.Add(
+                            this.ValueExtractor.GetValueFromDictionary<string>(material, "Name"),
+                            this.ValueExtractor.GetValueFromDictionary<int>(material, "Value"));
+                    }
+
+                    IEnumerable<string> componentNames =
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(
+                            identifiedToken,
+                            "Components");
+
+                    IEnumerable<BaseItemType> components = componentNames.Select(this.Get);
 
                     int size = this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Size");
                     int lightLevel = identifiedToken.Contains("LightLevel")
@@ -151,11 +192,12 @@ namespace JoyGodot.Assets.Scripts.Items
                         abilities.ToArray(),
                         spawnWeight,
                         skills,
-                        materials.ToArray(),
+                        materials,
                         size,
                         slots.ToArray(),
                         tileSet,
                         range,
+                        components,
                         lightLevel));
                 }
 
@@ -180,10 +222,6 @@ namespace JoyGodot.Assets.Scripts.Items
                     }
                 }
 
-                string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(
-                    this.ValueExtractor.GetValueFromDictionary<Dictionary>(itemData, "TileSet"),
-                    "Name");
-
                 string actionWord = itemData.Contains("ActionWord")
                     ? this.ValueExtractor.GetValueFromDictionary<string>(itemData, "ActionWord")
                     : "strikes";
@@ -192,14 +230,23 @@ namespace JoyGodot.Assets.Scripts.Items
 
                 foreach (IdentifiedItem identifiedItem in identifiedItems)
                 {
-                    string[] materials = identifiedItem.materials.ToArray();
-                    for (int i = 0; i < materials.Length; i++)
+                    var materialCombinations = this.GetPermutations(identifiedItem.materials);
+
+                    NonUniqueDictionary<string, int> craftingMaterials = new NonUniqueDictionary<string, int>(
+                        identifiedItem.materials.Select(pair =>
+                            new Tuple<string, int>(pair.Key, pair.Value)));
+
+                    Guid itemGuid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
+                    
+                    foreach (var enumerable in materialCombinations)
                     {
-                        UnidentifiedItem[] possibilities = unidentifiedItems.Where(unidentifiedItem =>
-                                unidentifiedItem.identifiedName.Equals(identifiedItem.name,
+                        UnidentifiedItem[] possibilities = unidentifiedItems
+                            .Where(unidentifiedItem =>
+                                unidentifiedItem.identifiedName.Equals(
+                                    identifiedItem.name,
                                     StringComparison.OrdinalIgnoreCase))
                             .ToArray();
-                        string materialName = materials[i];
+
                         UnidentifiedItem selectedItem;
                         if (possibilities.IsNullOrEmpty())
                         {
@@ -210,10 +257,13 @@ namespace JoyGodot.Assets.Scripts.Items
                         }
                         else
                         {
-                            selectedItem = this.Roller.SelectFromCollection(possibilities);
+                            selectedItem = possibilities.GetRandom();
                         }
 
-                        items.Add(new BaseItemType(
+                        var materialDict = new NonUniqueDictionary<IItemMaterial, int>(enumerable);
+
+                        var createdItem = new BaseItemType(
+                            itemGuid, 
                             identifiedItem.tags,
                             identifiedItem.description,
                             selectedItem.description,
@@ -221,20 +271,52 @@ namespace JoyGodot.Assets.Scripts.Items
                             identifiedItem.name,
                             identifiedItem.slots,
                             identifiedItem.size,
-                            this.MaterialHandler.Get(materialName),
+                            materialDict,
                             identifiedItem.skills,
                             actionWord,
-                            identifiedItem.value,
                             identifiedItem.weighting,
                             identifiedItem.spriteSheet,
-                            identifiedItem.range,
-                            identifiedItem.lightLevel,
-                            identifiedItem.abilities));
+                            range: identifiedItem.range,
+                            lightLevel: identifiedItem.lightLevel,
+                            components: identifiedItem.components,
+                            abilities: identifiedItem.abilities);
+
+                        items.Add(createdItem);
+
+                        this.CraftingRecipeHandler.Add(
+                            new CraftingRecipe(
+                                craftingMaterials,
+                                identifiedItem.components,
+                                new[] {createdItem}));
                     }
                 }
             }
 
             return items;
+        }
+
+        protected IEnumerable<IEnumerable<Tuple<IItemMaterial, int>>> GetPermutations(
+            IDictionary<string, int> materialNames)
+        {
+            IDictionary<string, List<Tuple<IItemMaterial, int>>> replacements =
+                new System.Collections.Generic.Dictionary<string, List<Tuple<IItemMaterial, int>>>();
+
+            foreach (string name in materialNames.Keys)
+            {
+                replacements.Add(name, new List<Tuple<IItemMaterial, int>>());
+
+                List<Tuple<IItemMaterial, int>> materials = GlobalConstants.GameManager.MaterialHandler
+                    .GetPossibilities(name)
+                    .Select(material =>
+                        new Tuple<IItemMaterial, int>(
+                            material,
+                            materialNames[name]))
+                    .ToList();
+
+                replacements[name] = materials;
+            }
+
+            return replacements.Values.CartesianProduct();
         }
 
         public BaseItemType Get(string name)

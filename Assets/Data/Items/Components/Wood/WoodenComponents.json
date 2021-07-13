@@ -1,0 +1,39 @@
+﻿{
+  "Items": {
+    "Category": "Components",
+    "IdentifiedItems": [
+      {
+        "Name": "Wooden rod",
+        "Description": "A cylinder of wood. Possibly a dowel.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "wood",
+            "Value": "15"
+          }
+        ],
+        "Size": 15,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Wooden plank",
+        "Description": "A long rectangle of wood. Useful for all sorts of things!",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "wood",
+            "Value": 100
+          }
+        ],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags":[
+          "component"
+        ]
+      }
+    ]
+  }
+}

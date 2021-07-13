@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using Godot;
 using System;
+using System.Collections;
+using System.Linq;
+using System.Text;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Items.Crafting;
@@ -21,6 +24,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         
         protected ICraftingRecipeHandler RecipeHandler { get; set; }
         protected IItemFactory ItemFactory { get; set; }
+        
+        protected IItemDatabase ItemDatabase { get; set; }
+        
+        protected Label Title { get; set; }
 
         public override void _Ready()
         {
@@ -28,6 +35,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
             this.RecipeHandler = GlobalConstants.GameManager.CraftingRecipeHandler;
             this.ItemFactory = GlobalConstants.GameManager.ItemFactory;
+            this.ItemDatabase = GlobalConstants.GameManager.ItemDatabase;
 
             this.ButtonPrefab = GD.Load<PackedScene>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
@@ -38,6 +46,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.PlayerInventory = this.FindNode("PlayerScrollContainer") as ItemContainer;
             this.PlayerInventory.ContainerOwner = this.Player;
             this.CraftingItemContainer = this.FindNode("CraftingScrollContainer") as CraftingItemContainer;
+            this.Title = this.FindNode("Title") as Label;
             
             this.SetUpRecipeList();
         }
@@ -52,11 +61,23 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
         protected void SetUpRecipeList()
         {
-            foreach (IRecipe recipe in this.RecipeHandler.Values)
+            foreach (var guid in this.ItemDatabase.Values.Select(type => type.Guid).Distinct())
             {
+                var recipes = this.RecipeHandler.GetAllForItemTypeGuid(guid);
+                var results = recipes.First().CraftingResults.Select(type => type.IdentifiedName).ToArray();
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < results.Length; i++)
+                {
+                    builder.Append(results[i]);
+                    if (i < results.Length - 1)
+                    {
+                        builder.Append(", ");
+                    }
+                }
+                
                 var instance = this.ButtonPrefab.Instance() as ManagedTextButton;
                 instance.Visible = true;
-                instance.Text = recipe.CraftingResult.IdentifiedName;
+                instance.Text = builder.ToString();
                 instance.RectMinSize = new Vector2(0, 24);
                 if (instance.IsConnected(
                     "_Press",
@@ -74,7 +95,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                     nameof(this.SetRecipe),
                     new Array
                     {
-                        recipe.Guid.ToString()
+                        guid.ToString()
                     });
                 
                 this.ButtonContainer.AddChild(instance);
@@ -83,9 +104,25 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
         public void SetRecipe(string guid)
         {
-            var recipe = this.RecipeHandler.Get(new Guid(guid));
+            this.ReturnItemsToPlayer();
             
-            this.CraftingItemContainer.SetRecipe(recipe);
+            var recipes = this.RecipeHandler.GetAllForItemTypeGuid(new Guid(guid)).ToArray();
+
+            IEnumerable<string> resultNames =
+                recipes.FirstOrDefault()?.CraftingResults.Select(
+                        type => type.IdentifiedName) 
+                ?? new string[0];
+            
+            this.Title.Text = string.Join(", ", resultNames);
+            
+            this.CraftingItemContainer.SetRecipe(recipes);
+        }
+
+        public void ReturnItemsToPlayer()
+        {
+            this.Player.AddContents(this.CraftingItemContainer.Contents);
+            this.CraftingItemContainer.RemoveAllItems();
+            this.PlayerInventory.Display();
         }
 
         public void CraftButton()
@@ -94,13 +131,23 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             {
                 this.Player.RemoveContents(this.CraftingItemContainer.Contents);
 
-                IItemInstance newItem = this.ItemFactory.CreateFromTemplate(
-                    this.CraftingItemContainer.CurrentRecipe.CraftingResult, 
-                    true);
-                GlobalConstants.GameManager.ItemHandler.Add(newItem);
+                List<IItemInstance> newItems = new List<IItemInstance>();
+                IRecipe recipe = this.CraftingItemContainer.InferRecipeFromIngredients();
+                if (recipe is null)
+                {
+                    return;
+                }
                 
-                this.Player.AddContents(
-                    newItem);
+                foreach (BaseItemType itemType in recipe.CraftingResults)
+                {
+                    IItemInstance item = this.ItemFactory.CreateFromTemplate(
+                        itemType,
+                        true);
+                    newItems.Add(item);
+                    GlobalConstants.GameManager.ItemHandler.Add(item);
+                }
+                
+                this.Player.AddContents(newItems);
                 
                 this.PlayerInventory.Display();
                 

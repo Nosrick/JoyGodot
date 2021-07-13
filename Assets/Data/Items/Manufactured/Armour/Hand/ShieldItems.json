@@ -6,11 +6,12 @@
         "Name": "Round Shield",
         "Description": "A large, round shield. Good for stopping projectiles.",
         "Value": 90,
-        "Materials": [
-          "steel",
-          "iron",
-          "bronze",
-          "leather"
+        "Materials": [ ],
+        "Components": [
+          "leather",
+          "metal sheet",
+          "metal sheet",
+          "metal sheet"
         ],
         "Size": 300,
         "TileSet": "armour",
@@ -35,17 +36,14 @@
           "Name": "round shield",
           "Part": [
             {
-              "Name": "round-shield-body",
+              "Name": "metal sheet",
               "Frames": 1,
               "Filename": "items/shields-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "SortOrder": 1,
-              "Colour": [
-                "#a65805"
-              ]
+              "SortOrder": 1
             },
             {
               "Name": "round-shield-detail",

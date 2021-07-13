@@ -6,9 +6,12 @@
         "Description": "A coin made from copper, from a local mint.",
         "Value": 1,
         "Materials": [
-          "Copper"
+          {
+            "Name": "copper",
+            "Value": 5
+          }
         ],
-        "Size": 1,
+        "Size": 5,
         "SpawnWeight": 50,
         "Tags": [
           "currency"
@@ -20,9 +23,12 @@
         "Description": "A coin made from shiny silver, from a local mint.",
         "Value": 10,
         "Materials": [
-          "Silver"
+          {
+            "Name": "silver",
+            "Value": 5
+          }
         ],
-        "Size": 1,
+        "Size": 5,
         "SpawnWeight": 30,
         "Tags": [
           "currency"
@@ -34,9 +40,12 @@
         "Description": "A valuable gold coin, from a local mint.",
         "Value": 100,
         "Materials": [
-          "Gold"
+          {
+            "Name": "gold",
+            "Value": 5
+          }
         ],
-        "Size": 1,
+        "Size": 5,
         "SpawnWeight": 5,
         "Tags": [
           "currency"
@@ -52,15 +61,12 @@
           "Name": "copper coin",
           "Part": [
             {
-              "Name": "copper coin",
+              "Name": "copper",
               "Filename": "items/Money32.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#ff851b"
-              ]
+              "Position": 0
             }
           ]
         },
@@ -68,15 +74,12 @@
           "Name": "silver coin",
           "Part": [
             {
-              "Name": "silver coin",
+              "Name": "silver",
               "Filename": "items/Money32.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#d9d9d9"
-              ]
+              "Position": 0
             }
           ]
         },
@@ -84,15 +87,12 @@
           "Name": "gold coin",
           "Part": [
             {
-              "Name": "gold coin",
+              "Name": "gold",
               "Filename": "items/Money32.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#ffc80a"
-              ]
+              "Position": 0
             }
           ]
         }

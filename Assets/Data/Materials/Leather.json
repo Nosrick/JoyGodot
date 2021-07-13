@@ -1,13 +1,16 @@
 ﻿{
   "Materials": [
     {
-      "Name": "Leather",
+      "Name": "leather",
       "Hardness": 1,
       "Bonus": 1,
       "Weight": 2,
       "Tags": [
         "leather",
         "skin"
+      ],
+      "Colour": [
+        "#a65805"
       ]
     }
   ]

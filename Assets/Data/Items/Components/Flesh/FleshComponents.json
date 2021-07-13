@@ -1,0 +1,42 @@
+﻿{
+  "Items": {
+    "Category": "Components",
+    "IdentifiedItems": [
+      {
+        "Name": "Leather",
+        "Description": "A square of leather.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "leather" ,
+            "Value": 100
+          }],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component",
+          "flesh"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "Components",
+      "SpriteData": [
+        {
+          "Name": "leather",
+          "Part": [
+            {
+              "Name": "leather",
+              "Frames": 1,
+              "Filename": "items/soft-sheet.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

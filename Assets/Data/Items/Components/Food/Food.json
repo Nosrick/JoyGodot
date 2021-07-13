@@ -1,105 +1,98 @@
-﻿{
+{
   "Items": {
-    "Category": "Potions",
+    "Category": "Food",
     "IdentifiedItems": [
       {
-        "Name": "Healing Potion",
-        "Description": "Knits wounds back together",
-        "Value": 300,
-        "Materials": [
-          "glass"
-        ],
-        "Size": 30,
-        "TileSet": "potions",
-        "SpawnWeight": 2,
-        "Tags": [
-          "potion",
-          "healing"
-        ],
+        "Name": "Apple",
+        "Description": "Said to keep the doctor away. Juicy and fresh!",
+        "Value": 5,
         "Effects": [
-          "healingpotion"
-        ]
-      }
-    ],
-    "UnidentifiedItems": [
-      {
-        "Name": "Mysterious Potion",
-        "Description": "Contains a mysterious, viscous liquid",
-        "IdentifiedName": "Healing Potion"
+          "FoodItem"
+        ],
+        "SpawnWeight": 30,
+        "Materials": [
+          {
+            "Name": "food",
+            "Value": "36"
+          }
+        ],
+        "Size": 36,
+        "Tags": [
+          "fruit",
+          "uncraftable"
+        ],
+        "TileSet": "Food"
       }
     ],
     "TileSet": {
-      "Name": "potions",
+      "Name": "Food",
       "SpriteData": [
         {
-          "Name": "mysterious potion",
+          "Name": "apple",
           "Part": [
             {
-              "Name": "potion-body",
+              "Name": "apple-body",
               "Frames": 1,
-              "Filename": "items/potion-body.png",
+              "Filename": "items/food-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
               "SortOrder": 1,
               "Colour": [
-                "#ea7d10",
-                "#ee113d",
-                "#25e4c4",
-                "#f8be49"
+                "#ee113d"
               ]
             },
             {
-              "Name": "potion-glass",
+              "Name": "apple-detail1",
               "Frames": 1,
-              "Filename": "items/potion-glass.png",
+              "Filename": "items/food-detail1.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
               "SortOrder": 2,
               "Colour": [
-                "#12c2f8"
+                "#21b039"
               ]
             },
             {
-              "Name": "potion-top",
+              "Name": "apple-detail2",
               "Frames": 1,
-              "Filename": "items/potion-tops.png",
+              "Filename": "items/food-detail2.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
               "SortOrder": 3,
               "Colour": [
-                "#f8be49"
+                "#a65805"
               ]
             },
             {
-              "Name": "potion-highlight",
+              "Name": "apple-highlight",
               "Frames": 1,
-              "Filename": "items/potion-highlight.png",
+              "Filename": "items/food-highlight.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
               "SortOrder": 4,
               "Colour": [
-                "#f2f2f2"
+                "#faa3ab"
               ]
             },
             {
-              "Name": "potion-outline",
+              "Name": "apple-outline",
               "Frames": 1,
-              "Filename": "items/potion-outline.png",
+              "Filename": "items/food-outline.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
               "SortOrder": 5,
               "Colour": [
-                "#020a55"
+                "#3f0409"
               ]
             }
           ]

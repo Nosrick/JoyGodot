@@ -14,7 +14,10 @@
         ],
         "SpawnWeight": 7,
         "Materials": [
-          "Maple"
+          {
+            "Name": "wood",
+            "Value": 300
+          }
         ],
         "Size": 300,
         "Range": 4,
@@ -47,16 +50,13 @@
           "Name": "shortbow",
           "Part": [
             {
-              "Name": "shortbow-body",
+              "Name": "wood",
               "Filename": "items/bows-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "SortOrder": 1,
-              "Colour": [
-                "#980b1c"
-              ]
+              "SortOrder": 1
             },
             {
               "Name": "shortbow-string",
@@ -79,7 +79,7 @@
               "Position": 0,
               "SortOrder": 2,
               "Colour": [
-                "#ba5017"
+                "#f2f2f2"
               ]
             }
           ]

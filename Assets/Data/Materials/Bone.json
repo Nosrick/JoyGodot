@@ -1,12 +1,15 @@
 ﻿{
   "Materials": [
     {
-      "Name": "Bone",
+      "Name": "bone",
       "Hardness": 0.4,
       "Bonus": 0,
       "Weight": 1.75,
       "Tags": [
         "bone"
+      ],
+      "Colours": [
+        "#f2f2f2"
       ]
     }
   ]

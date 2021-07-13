@@ -147,13 +147,13 @@ namespace JoyGodot.Assets.Scripts.Items
                 new ConcreteBasicFloatValue(
                     "weight", itemType.Weight),
                 new ConcreteBasicFloatValue(
-                    "bonus", itemType.Material.Bonus),
+                    "bonus", itemType.BaseEfficiency),
                 new ConcreteBasicFloatValue(
                     "size", itemType.Size),
                 new ConcreteBasicFloatValue(
-                    "hardness", itemType.Material.Hardness),
+                    "hardness", itemType.Materials.Average(pair => pair.Item1.Hardness)),
                 new ConcreteBasicFloatValue(
-                    "density", itemType.Material.Density)
+                    "density", itemType.Materials.Average(pair => pair.Item1.Density))
             };
 
             List<SpriteState> states = (from sprite in this.ObjectIcons.GetManagedSprites(

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities;
@@ -14,6 +15,7 @@ using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.Scripting;
 using JoyGodot.Assets.Scripts.World;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.Items
@@ -50,8 +52,9 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 List<string> tags = new List<string>(this.m_Tags);
                 tags.AddRange(this.ItemType.Tags);
-                tags.AddRange(this.ItemType.Material.Tags);
-
+                tags.AddRange(this.ItemType.Materials.SelectMany(pair => pair.Item1.Tags));
+                tags = tags.Distinct().ToList();
+                
                 return tags;
             }
 
@@ -101,7 +104,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public override ICollection<string> Tooltip => this.ConstructDescription();
 
-        public int Efficiency => (int)(this.m_Type.Material.Bonus * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
+        public int Efficiency => (int)(this.m_Type.BaseEfficiency * (this.GetValue(DURABILITY) / (float)this.GetMaximum(DURABILITY)));
 
         public string ConditionString
         {
@@ -296,6 +299,8 @@ namespace JoyGodot.Assets.Scripts.Items
             this.ItemHandler = GlobalConstants.GameManager.ItemHandler;
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
 
+            this.SetMaterialColours();
+
             this.CalculateValue();
 
             if (this.States.Count > 1)
@@ -305,6 +310,75 @@ namespace JoyGodot.Assets.Scripts.Items
             else
             {
                 this.StateIndex = 0;
+            }
+        }
+
+        protected void SetMaterialColours()
+        {
+            IDictionary<string, Color> parts =
+                new System.Collections.Generic.Dictionary<string, Color>();
+            foreach (var component in this.ItemType.Components)
+            {
+                foreach (ISpriteState state in this.States)
+                {
+                    var part = state.SpriteData.Parts.FirstOrDefault(p => 
+                        p.m_Name.Equals(component.UnidentifiedName, StringComparison.OrdinalIgnoreCase));
+                    if (part is null)
+                    {
+                        continue;
+                    }
+
+                    if (component.Materials.Keys.Any(material => material.Colours.Any()) == false)
+                    {
+                        continue;
+                    }
+
+                    if (parts.ContainsKey(component.UnidentifiedName) == false)
+                    {
+                        part.m_PossibleColours = new List<Color>
+                        {
+                            component.Materials.Keys
+                                .SelectMany(material => material.Colours)
+                                .ToArray()
+                                .GetRandom()
+
+                        };
+                        part.m_SelectedColour = this.Roller.Roll(0, part.m_PossibleColours.Count);
+                        parts.Add(component.UnidentifiedName, part.SelectedColour);
+                    }
+                    else
+                    {
+                        part.m_PossibleColours = new List<Color> {parts[component.UnidentifiedName]};
+                        part.m_SelectedColour = 0;
+                    }
+                }
+            }
+
+            foreach (var material in this.ItemType.MyMaterials.Keys)
+            {
+                foreach (ISpriteState state in this.States)
+                {
+                    var part = state.SpriteData.Parts.FirstOrDefault(p =>
+                        material.HasTag(p.m_Name)
+                        || material.Name.Equals(p.m_Name, StringComparison.OrdinalIgnoreCase)
+                        || p.m_Name.Equals(this.ItemType.UnidentifiedName, StringComparison.OrdinalIgnoreCase));
+                    if (part is null)
+                    {
+                        continue;
+                    }
+
+                    if (parts.ContainsKey(material.Name))
+                    {
+                        part.m_PossibleColours = new List<Color>{parts[material.Name]};
+                        part.m_SelectedColour = 0;
+                    }
+                    else
+                    {
+                        part.m_PossibleColours = new List<Color>(material.Colours);
+                        part.m_SelectedColour = this.Roller.Roll(0, part.m_PossibleColours.Count);
+                        parts.Add(material.Name, part.SelectedColour);
+                    }
+                }
             }
         }
 
@@ -582,7 +656,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
         protected void CalculateValue()
         {
-            this.m_Value = (int)(this.m_Type.Value * this.m_Type.Material.ValueMod);
+            this.m_Value = this.m_Type.Value;
             foreach (IItemInstance item in this.Contents)
             {
                 this.m_Value += item.Value;
@@ -623,6 +697,8 @@ namespace JoyGodot.Assets.Scripts.Items
                     .Select(s => GlobalConstants.GameManager.AbilityHandler.Get(s)));
 
             this.ContentsDirty = true;
+
+            this.SetMaterialColours();
         }
     }
 }

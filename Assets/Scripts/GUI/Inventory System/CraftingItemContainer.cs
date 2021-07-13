@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
@@ -14,17 +16,18 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
     public class CraftingItemContainer : ItemContainer
     {
-        public IRecipe CurrentRecipe { get; protected set; }
-        
+        public IEnumerable<IRecipe> PossibleRecipes { get; protected set; }
+
         public override void _Ready()
         {
             this.SlotParent = this.FindNode("CraftingInventory") as Container;
-            this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyCraftingSlot.tscn");
+            this.SlotPrefab =
+                GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyCraftingSlot.tscn");
             this.Title = this.FindNode("Title") as ManagedLabel;
-            
+
             this.OnEnable();
         }
-        
+
         public override void OnEnable()
         {
             if (GlobalConstants.GameManager is null)
@@ -64,7 +67,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 slot.Visible = false;
             }
 
-            if (this.CurrentRecipe is null == false)
+            if (this.PossibleRecipes.IsNullOrEmpty() == false)
             {
                 this.SetSlots();
             }
@@ -77,40 +80,58 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         protected void SetSlots()
         {
-            if (this.CurrentRecipe is null)
+            foreach (JoyItemSlot slot in this.Slots)
             {
-                foreach (JoyItemSlot slot in this.Slots)
-                {
-                    slot.Visible = false;
-                }
+                slot.Visible = false;
+            }
+
+            if (this.PossibleRecipes.IsNullOrEmpty())
+            {
                 return;
             }
-            
-            for (int i = this.Slots.Count; i < this.CurrentRecipe.RequiredMaterials.Count(); i++)
+
+            var exampleRecipe = this.PossibleRecipes.First();
+
+            for (int i = this.Slots.Count;
+                i < exampleRecipe.RequiredMaterials.Count() + exampleRecipe.RequiredComponents.Count;
+                i++)
             {
-                var instance = this.AddSlot(true);
+                var instance = this.AddSlot(false);
                 this.GUIManager.SetupManagedComponents(instance);
                 instance.Container = this;
             }
 
-            var materialCollection = this.CurrentRecipe.RequiredMaterials.Collection;
+            var materialCollection = exampleRecipe.RequiredMaterials.Collection;
             for (int i = 0; i < materialCollection.Count; i++)
             {
                 var material = materialCollection[i];
                 var slot = this.Slots[i] as JoyCraftingSlot;
                 slot.Visible = true;
+                slot.IngredientType = "material";
                 slot.Slot = material.Item1;
                 slot.AmountRequired = material.Item2;
                 slot.SlotLabel.Text = material.Item1 + ": " + material.Item2;
             }
+
+            var componentCollection = exampleRecipe.RequiredComponents;
+            for (int i = 0; i < componentCollection.Count; i++)
+            {
+                var component = componentCollection[i];
+                var slot = this.Slots[i + materialCollection.Count] as JoyCraftingSlot;
+                slot.Visible = true;
+                slot.IngredientType = "component";
+                slot.Slot = component.UnidentifiedName;
+                slot.AmountRequired = 1;
+                slot.SlotLabel.Text = component.UnidentifiedName;
+            }
         }
 
-        public void SetRecipe(IRecipe recipe)
+        public void SetRecipe(IEnumerable<IRecipe> possibilities)
         {
-            this.CurrentRecipe = recipe;
+            this.PossibleRecipes = possibilities;
             this.SetSlots();
         }
-        
+
         public override List<JoyItemSlot> GetRequiredSlots(IItemInstance item, bool takeFilledSlots = false)
         {
             List<JoyItemSlot> slots = new List<JoyItemSlot>();
@@ -122,7 +143,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             IDictionary<string, int> requiredSlots =
                 new System.Collections.Generic.Dictionary<string, int>();
 
-            foreach (string slot in item.Tags)
+            List<string> itemInfo = new List<string>(item.Tags);
+            itemInfo.AddRange(item.ItemType.Materials.Keys.Select(material => material.Name).Distinct());
+            itemInfo.Add(item.ItemType.UnidentifiedName);
+
+            foreach (string slot in itemInfo)
             {
                 if (requiredSlots.ContainsKey(slot))
                 {
@@ -137,9 +162,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             System.Collections.Generic.Dictionary<string, int> copySlots =
                 new System.Collections.Generic.Dictionary<string, int>(requiredSlots);
 
-            for (int i = 0; i < this.Slots.Count; i++)
+            List<JoyItemSlot> emptySlots = this.EmptySlots;
+            for (int i = 0; i < emptySlots.Count; i++)
             {
-                if (this.Slots[i] is JoyCraftingSlot craftingSlot
+                if (emptySlots[i] is JoyCraftingSlot craftingSlot
                     && craftingSlot.Slot.IsNullOrEmpty() == false)
                 {
                     foreach (KeyValuePair<string, int> pair in requiredSlots)
@@ -147,17 +173,16 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                         if (pair.Key.Equals(craftingSlot.Slot, StringComparison.OrdinalIgnoreCase))
                         {
                             if (takeFilledSlots == false
-                                && this.Slots[i].IsEmpty
                                 && copySlots[pair.Key] > 0)
                             {
                                 copySlots[pair.Key] -= 1;
-                                slots.Add(this.Slots[i]);
+                                slots.Add(emptySlots[i]);
                             }
                             else if (takeFilledSlots
                                      && copySlots[pair.Key] > 0)
                             {
                                 copySlots[pair.Key] -= 1;
-                                slots.Add(this.Slots[i]);
+                                slots.Add(emptySlots[i]);
                             }
                         }
                     }
@@ -169,13 +194,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public override bool StackOrAdd(IItemInstance item)
         {
-            List<JoyItemSlot> slots = null;
-
-            if (item.Tags.Any() == false)
-            {
-                return false;
-            }
-            slots = this.GetRequiredSlots(item);
+            List<JoyItemSlot> slots = this.GetRequiredSlots(item);
 
             return this.StackOrAdd(slots, item);
         }
@@ -191,10 +210,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 if (this.ContainerOwner.CanAddContents(item))
                 {
-                    this.ContainerOwner.AddContents(item);
                     IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
                     if (joyItemSlots.Any())
                     {
+                        this.ContainerOwner.AddContents(item);
                         foreach (JoyItemSlot slot in joyItemSlots)
                         {
                             slot.Item = item;
@@ -217,8 +236,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         public bool CanCraft()
         {
             bool canCraft = true;
-            
-            foreach (JoyItemSlot temp in this.Slots.Where(slot => slot.Visible))
+
+            foreach (JoyItemSlot temp in this.FilledSlots)
             {
                 if (temp is JoyCraftingSlot slot)
                 {
@@ -231,6 +250,30 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
 
             return canCraft;
+        }
+
+        protected NonUniqueDictionary<IItemMaterial, int> GetMaterialsFromSlots()
+        {
+            NonUniqueDictionary<IItemMaterial, int> returnMaterials = new NonUniqueDictionary<IItemMaterial, int>();
+            foreach (JoyItemSlot temp in this.FilledSlots)
+            {
+                if (temp is JoyCraftingSlot slot)
+                {
+                    returnMaterials.AddRange(slot.Item.ItemType.Materials);
+                }
+            }
+
+            return returnMaterials;
+        }
+
+        public IRecipe InferRecipeFromIngredients()
+        {
+            NonUniqueDictionary<IItemMaterial, int> materials = this.GetMaterialsFromSlots();
+            IEnumerable<BaseItemType> components = this.FilledSlots.Select(slot => slot.Item.ItemType);
+            IEnumerable<IRecipe> recipes = this.PossibleRecipes.Where(recipe => 
+                recipe.CanCraft(materials, components)
+                && recipe.OutputMaterialsMatch(materials));
+            return recipes.FirstOrDefault();
         }
     }
 }

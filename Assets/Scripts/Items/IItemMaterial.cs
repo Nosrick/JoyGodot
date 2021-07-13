@@ -1,4 +1,6 @@
-﻿using JoyGodot.Assets.Scripts.Base_Interfaces;
+﻿using System.Collections.Generic;
+using Godot;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 
 namespace JoyGodot.Assets.Scripts.Items
 {
@@ -13,5 +15,7 @@ namespace JoyGodot.Assets.Scripts.Items
         float Density { get; }
         
         float ValueMod { get; }
+        
+        Color[] Colours { get; }
     }
 }

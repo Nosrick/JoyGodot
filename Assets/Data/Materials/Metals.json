@@ -1,59 +1,79 @@
 ﻿{
   "Materials": [
     {
-      "Name": "Iron",
+      "Name": "iron",
       "Hardness": 4.5,
       "Bonus": 2,
       "Weight": 7.874,
       "Tags": [
         "metal",
         "magnetic"
+      ],
+      "Colour": [
+        "#93a5be",
+        "#424e66"
       ]
     },
     {
-      "Name": "Steel",
+      "Name": "steel",
       "Hardness": 4.5,
       "Bonus": 4,
       "Weight": 7.8,
       "Tags": [
         "metal",
         "magnetic"
+      ],
+      "Colour": [
+        "#93a5be",
+        "#e5fbf3"
       ]
     },
     {
-      "Name": "Bronze",
+      "Name": "bronze",
       "Hardness": 3,
       "Bonus": 2,
       "Weight": 8.52,
       "Tags": [
         "metal"
+      ],
+      "Colour": [
+        "#f8be49"
       ]
     },
     {
-      "Name": "Copper",
+      "Name": "copper",
       "Hardness": 3,
       "Bonus": 1,
       "Weight": 8.96,
       "Tags": [
         "metal"
+      ],
+      "Colour": [
+        "#ea7d10"
       ]
     },
     {
-      "Name": "Silver",
+      "Name": "silver",
       "Hardness": 2.5,
       "Bonus": 0,
       "Weight": 10.49,
       "Tags": [
         "metal"
+      ],
+      "Colour": [
+        "#f2f2f2"
       ]
     },
     {
-      "Name": "Gold",
+      "Name": "gold",
       "Hardness": 2.5,
       "Bonus": 0,
       "Weight": 19.3,
       "Tags": [
         "metal"
+      ],
+      "Colour": [
+        "#f4d01a"
       ]
     }
   ]

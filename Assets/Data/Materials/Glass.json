@@ -1,12 +1,15 @@
 ﻿{
   "Materials": [
     {
-      "Name": "Glass",
+      "Name": "glass",
       "Bonus": 0,
       "Hardness": 0.01,
       "Weight": 2.7,
       "Tags": [
         "glass"
+      ],
+      "Colour": [
+        "#e5fbf3"
       ]
     }
   ]

@@ -1,0 +1,56 @@
+﻿{
+  "Items": {
+    "Category": "Components",
+    "IdentifiedItems": [
+      {
+        "Name": "cloth",
+        "Description": "A square of cloth.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "canvas" ,
+            "Value": 100
+          }],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "cloth",
+        "Description": "A square of cloth.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "cotton" ,
+            "Value": 100
+          }],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "Components",
+      "SpriteData": [
+        {
+          "Name": "cloth",
+          "Part": [
+            {
+              "Name": "cloth",
+              "Frames": 1,
+              "Filename": "items/soft-sheet.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

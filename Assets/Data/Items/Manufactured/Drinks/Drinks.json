@@ -6,10 +6,11 @@
         "Description": "Crisp, delicious cider. Made from the finest apples.",
         "Value": 15,
         "SpawnWeight": 10,
-        "Materials": [
-          "Glass"
+        "Materials": [ ],
+        "Components": [
+          "small bottle"
         ],
-        "Size": 50,
+        "Size": 200,
         "Tags": [
           "drink",
           "alcohol"
@@ -24,8 +25,9 @@
           "GenericNonAlcoholicDrink"
         ],
         "SpawnWeight": 30,
-        "Materials": [
-          "Leather"
+        "Materials": [ ],
+        "Components": [
+          "leather"
         ],
         "Size": 50,
         "Tags": [
@@ -38,10 +40,11 @@
         "Description": "Red wine, made from grapes.",
         "Value": 50,
         "SpawnWeight": 10,
-        "Materials": [
-          "Glass"
+        "Materials": [ ],
+        "Components": [
+          "small bottle"
         ],
-        "Size": 100,
+        "Size": 200,
         "Tags": [
           "drink",
           "alcohol"

@@ -6,10 +6,11 @@
         "Name": "Leather Bag",
         "Description": "A simple leather bag, used to store things.",
         "Value": 5,
-        "Materials": [
+        "Materials": [],
+        "Components": [
           "leather"
         ],
-        "Size": 100,
+        "Size": 300,
         "TileSet": "Containers",
         "Tags": [
           "container"
@@ -19,10 +20,11 @@
         "Name": "Canvas Bag",
         "Description": "A simple canvas bag, used to store things.",
         "Value": 5,
-        "Materials": [
-          "canvas"
+        "Materials": [],
+        "Components": [
+          "cloth"
         ],
-        "Size": 100,
+        "Size": 300,
         "TileSet": "Containers",
         "Tags": [
           "container"
@@ -76,16 +78,13 @@
               "SortOrder": 2
             },
             {
-              "Name": "bag-body",
+              "Name": "cloth",
               "Frames": 1,
               "Filename": "items/bags-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "Colour": [
-                "#fecc81"
-              ],
               "SortOrder": 1
             }
           ]
@@ -129,21 +128,18 @@
               ],
               "Position": 0,
               "Colour": [
-                "#ea7d10"
+                "#f2f2f2"
               ],
               "SortOrder": 2
             },
             {
-              "Name": "bag-body",
+              "Name": "leather",
               "Frames": 1,
               "Filename": "items/bags-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "Colour": [
-                "#a65805"
-              ],
               "SortOrder": 1
             }
           ]

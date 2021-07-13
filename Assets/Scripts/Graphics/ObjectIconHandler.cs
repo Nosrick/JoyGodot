@@ -93,7 +93,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                         m_Frames = 1,
                         m_Name = "default",
                         m_Position = 0,
-                        m_FrameSprite = new List<Texture>()
+                        m_FrameSprite = new List<Texture>
                         {
                             defaultImageTexture
                         },
@@ -202,6 +202,12 @@ namespace JoyGodot.Assets.Scripts.Graphics
         {
             List<SpriteData> spriteData = new List<SpriteData>();
             Dictionary tileSetDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(spriteDict, "TileSet");
+
+            if (tileSetDict.IsNullOrEmpty())
+            {
+                return false;
+            }
+            
             string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
             ICollection<Dictionary> tileSetArray =
                 this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
@@ -256,7 +262,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                         ICollection<string> colourCodes = partColourArray.IsNullOrEmpty()
                             ? new List<string>
                             {
-                                "#ffffff"
+                                Colors.Magenta.ToHtml(false)
                             }
                             : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
                         foreach (string code in colourCodes)

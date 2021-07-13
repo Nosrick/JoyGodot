@@ -1,0 +1,262 @@
+﻿{
+  "Items": {
+    "Category": "Components",
+    "IdentifiedItems": [
+      {
+        "Name": "Short pommel",
+        "Description": "The handle for a one-handed weapon.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "wood",
+            "Value": "30"
+          },
+          {
+            "Name": "leather",
+            "Value": "15"
+          }
+        ],
+        "Size": 45,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Short pommel",
+        "Description": "The handle for a one-handed weapon.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "wood",
+            "Value": "30"
+          },
+          {
+            "Name": "cloth",
+            "Value": "15"
+          }
+        ],
+        "Size": 45,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Long pommel",
+        "Description": "The handle for a two-handed weapon.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "wood",
+            "Value": "60"
+          },
+          {
+            "Name": "cloth",
+            "Value": "30"
+          }
+        ],
+        "Size": 45,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Long pommel",
+        "Description": "The handle for a two-handed weapon.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "wood",
+            "Value": "60"
+          },
+          {
+            "Name": "leather",
+            "Value": "30"
+          }
+        ],
+        "Size": 45,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Short blade",
+        "Description": "The blade for a one-handed weapon.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "metal",
+            "Value": "100"
+          }
+        ],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Short blade",
+        "Description": "The blade for a one-handed weapon.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "bone",
+            "Value": "100"
+          }
+        ],
+        "Size": 100,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Long blade",
+        "Description": "The blade for a two-handed weapon.",
+        "Value": 20,
+        "Materials": [
+          {
+            "Name": "metal",
+            "Value": "300"
+          }
+        ],
+        "Size": 300,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Long blade",
+        "Description": "The blade for a two-handed weapon.",
+        "Value": 20,
+        "Materials": [
+          {
+            "Name": "bone",
+            "Value": "300"
+          }
+        ],
+        "Size": 300,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Small crossguard",
+        "Description": "The crossguard for a one-handed weapon.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "metal",
+            "Value": "20"
+          }
+        ],
+        "Size": 20,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Small crossguard",
+        "Description": "The crossguard for a one-handed weapon.",
+        "Value": 5,
+        "Materials": [
+          {
+            "Name": "bone",
+            "Value": "20"
+          }
+        ],
+        "Size": 20,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Large crossguard",
+        "Description": "The crossguard for a two-handed weapon.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "metal",
+            "Value": "40"
+          }
+        ],
+        "Size": 20,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      },
+      {
+        "Name": "Large crossguard",
+        "Description": "The crossguard for a two-handed weapon.",
+        "Value": 10,
+        "Materials": [
+          {
+            "Name": "bone",
+            "Value": "40"
+          }
+        ],
+        "Size": 20,
+        "TileSet": "Components",
+        "Tags": [
+          "component"
+        ]
+      }
+    ],
+    "TileSet": {
+      "Name": "Components",
+      "SpriteData": [
+        {
+          "Name": "short blade",
+          "Part": [
+            {
+              "Name": "short blade",
+              "Frames": 1,
+              "Filename": "items/dagger-blades.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        },
+        {
+          "Name": "small crossguard",
+          "Part": [
+            {
+              "Name": "small crossguard",
+              "Frames": 1,
+              "Filename": "items/dagger-crossguards.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        },
+        {
+          "Name": "short pommel",
+          "Part": [
+            {
+              "Name": "short pommel",
+              "Frames": 1,
+              "Filename": "items/dagger-pommels.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

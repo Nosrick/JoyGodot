@@ -168,13 +168,14 @@ namespace JoyGodot.Assets.Scripts
 
             this.ParameterProcessorHandler = new ParameterProcessorHandler();
 
+            this.CraftingRecipeHandler = new CraftingRecipeHandler();
+
             this.ItemDatabase = new ItemDatabase(
                 this.ObjectIconHandler,
                 this.MaterialHandler,
                 this.AbilityHandler,
+                this.CraftingRecipeHandler,
                 this.Roller);
-
-            this.CraftingRecipeHandler = new CraftingRecipeHandler(this.ItemDatabase);
             
             this.EntityHandler = new LiveEntityHandler();
             this.ItemHandler = new LiveItemHandler(this.Roller);
