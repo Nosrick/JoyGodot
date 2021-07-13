@@ -151,7 +151,7 @@ namespace JoyGodot.Assets.Scripts.Items
                         : new List<string>();
 
                     ICollection<string> partColours =
-                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(material, "Colours");
+                        this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(material, "Colour");
                     ICollection<Color> colours = partColours.Select(code => new Color(code)).ToList();
 
                     materials.Add(
