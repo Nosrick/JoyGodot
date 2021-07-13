@@ -1179,23 +1179,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public virtual bool Contains(IItemInstance actor)
         {
-            bool result = false;
-            result |= this.m_Backpack.Contains(actor.Guid);
-            if (result)
-            {
-                return true;
-            }
-
-            foreach (IItemInstance item in this.Contents)
-            {
-                result |= item.Contains(actor);
-                if (result)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return this.m_Backpack.Contains(actor.Guid);
         }
 
         public virtual bool AddContents(IEnumerable<IItemInstance> actors)
