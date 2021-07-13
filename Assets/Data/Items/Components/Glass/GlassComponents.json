@@ -5,6 +5,7 @@
       {
         "Name": "Glass sheet",
         "Description": "A flat piece of glass.",
+        "TileSet": "Components",
         "Value": 5,
         "Materials": [
           {
@@ -20,6 +21,7 @@
       {
         "Name": "Small vial",
         "Description": "A very small glass container.",
+        "TileSet": "Components",
         "Value": 5,
         "Materials": [
           {
@@ -35,6 +37,7 @@
       {
         "Name": "Small bottle",
         "Description": "A small glass container.",
+        "TileSet": "Components",
         "Value": 10,
         "Materials": [
           {
@@ -47,6 +50,53 @@
           "component"
         ]
       }
-    ]
+    ],
+    "TileSet": {
+      "Name": "Components",
+      "SpriteData": [
+        {
+          "Name": "glass sheet",
+          "Part": [
+            {
+              "Name": "glass sheet",
+              "Frames": 1,
+              "Filename": "items/metal-sheet.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        },
+        {
+          "Name": "small vial",
+          "Part": [
+            {
+              "Name": "small vial",
+              "Frames": 1,
+              "Filename": "items/potion-glass.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        },
+        {
+          "Name": "small bottle",
+          "Part": [
+            {
+              "Name": "small bottle",
+              "Frames": 1,
+              "Filename": "items/small-bottle.png",
+              "Data": [
+                "default"
+              ],
+              "Position": 0
+            }
+          ]
+        }
+      ]
+    }
   }
 }
