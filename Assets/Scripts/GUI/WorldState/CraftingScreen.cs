@@ -26,6 +26,8 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         protected IItemFactory ItemFactory { get; set; }
         
         protected IItemDatabase ItemDatabase { get; set; }
+        
+        protected Label Title { get; set; }
 
         public override void _Ready()
         {
@@ -44,6 +46,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.PlayerInventory = this.FindNode("PlayerScrollContainer") as ItemContainer;
             this.PlayerInventory.ContainerOwner = this.Player;
             this.CraftingItemContainer = this.FindNode("CraftingScrollContainer") as CraftingItemContainer;
+            this.Title = this.FindNode("Title") as Label;
             
             this.SetUpRecipeList();
         }
@@ -103,7 +106,14 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         {
             this.ReturnItemsToPlayer();
             
-            var recipes = this.RecipeHandler.GetAllForItemTypeGuid(new Guid(guid));
+            var recipes = this.RecipeHandler.GetAllForItemTypeGuid(new Guid(guid)).ToArray();
+
+            IEnumerable<string> resultNames =
+                recipes.FirstOrDefault()?.CraftingResults.Select(
+                        type => type.IdentifiedName) 
+                ?? new string[0];
+            
+            this.Title.Text = string.Join(", ", resultNames);
             
             this.CraftingItemContainer.SetRecipe(recipes);
         }
