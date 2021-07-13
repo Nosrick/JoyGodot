@@ -7,6 +7,9 @@
       "Weight": 2,
       "Tags": [
         "cloth"
+      ],
+      "Colour": [
+        "#e5fbf3"
       ]
     },
     {
@@ -16,6 +19,9 @@
       "Weight": 2,
       "Tags": [
         "cloth"
+      ],
+      "Colour": [
+        "#f2f2f2"
       ]
     }
   ]

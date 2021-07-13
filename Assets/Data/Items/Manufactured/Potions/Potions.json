@@ -52,17 +52,14 @@
               ]
             },
             {
-              "Name": "potion-glass",
+              "Name": "small vial",
               "Frames": 1,
               "Filename": "items/potion-glass.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "SortOrder": 2,
-              "Colour": [
-                "#12c2f8"
-              ]
+              "SortOrder": 2
             },
             {
               "Name": "potion-top",

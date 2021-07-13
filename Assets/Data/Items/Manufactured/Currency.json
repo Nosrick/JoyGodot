@@ -61,15 +61,12 @@
           "Name": "copper coin",
           "Part": [
             {
-              "Name": "copper coin",
+              "Name": "copper",
               "Filename": "items/Money32.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#ff851b"
-              ]
+              "Position": 0
             }
           ]
         },
@@ -77,15 +74,12 @@
           "Name": "silver coin",
           "Part": [
             {
-              "Name": "silver coin",
+              "Name": "silver",
               "Filename": "items/Money32.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#d9d9d9"
-              ]
+              "Position": 0
             }
           ]
         },
@@ -93,15 +87,12 @@
           "Name": "gold coin",
           "Part": [
             {
-              "Name": "gold coin",
+              "Name": "gold",
               "Filename": "items/Money32.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#ffc80a"
-              ]
+              "Position": 0
             }
           ]
         }

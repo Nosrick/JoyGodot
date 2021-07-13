@@ -78,16 +78,13 @@
               "SortOrder": 2
             },
             {
-              "Name": "bag-body",
+              "Name": "cloth",
               "Frames": 1,
               "Filename": "items/bags-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "Colour": [
-                "#fecc81"
-              ],
               "SortOrder": 1
             }
           ]
@@ -131,21 +128,18 @@
               ],
               "Position": 0,
               "Colour": [
-                "#ea7d10"
+                "#f2f2f2"
               ],
               "SortOrder": 2
             },
             {
-              "Name": "bag-body",
+              "Name": "leather",
               "Frames": 1,
               "Filename": "items/bags-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "Colour": [
-                "#a65805"
-              ],
               "SortOrder": 1
             }
           ]

@@ -46,44 +46,31 @@
           "Name": "dagger",
           "Part": [
             {
-              "Name": "dagger-blade",
+              "Name": "short blade",
               "Frames": 1,
               "Filename": "items/dagger-blades.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#ffffff",
-                "#99e7f4"
-              ]
+              "Position": 0
             },
             {
-              "Name": "dagger-crossguard",
+              "Name": "small crossguard",
               "Frames" : 1,
               "Filename": "items/dagger-crossguards.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#93a5be",
-                "#424e66"
-              ]
+              "Position": 0
             },
             {
-              "Name": "dagger-pommel",
+              "Name": "short pommel",
               "Frames" : 1,
               "Filename": "items/dagger-pommels.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#980b1c",
-                "#a65805",
-                "#9d2c07"
-              ]
+              "Position": 0
             },
             {
               "Name": "dagger-outline",

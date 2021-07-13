@@ -56,16 +56,13 @@
               ]
             },
             {
-              "Name": "lantern-body",
+              "Name": "metal sheet",
               "Frames": 1,
               "Filename": "items/lights-body.png",
               "Data": [
                 "default"
               ],
-              "Position": 1,
-              "Colour": [
-                "#f8be49"
-              ]
+              "Position": 1
             },
             {
               "Name": "lantern-highlight",
@@ -109,16 +106,13 @@
               ]
             },
             {
-              "Name": "torch-body",
+              "Name": "wood",
               "Frames": 1,
               "Filename": "items/lights-body.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#ba5017"
-              ]
+              "Position": 0
             },
             {
               "Name": "torch-highlight",

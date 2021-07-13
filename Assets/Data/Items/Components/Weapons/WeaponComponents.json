@@ -218,7 +218,7 @@
           "Name": "short blade",
           "Part": [
             {
-              "Name": "short-blade",
+              "Name": "short blade",
               "Frames": 1,
               "Filename": "items/dagger-blades.png",
               "Data": [
@@ -232,7 +232,7 @@
           "Name": "small crossguard",
           "Part": [
             {
-              "Name": "small-crossguard",
+              "Name": "small crossguard",
               "Frames": 1,
               "Filename": "items/dagger-crossguards.png",
               "Data": [
@@ -246,7 +246,7 @@
           "Name": "short pommel",
           "Part": [
             {
-              "Name": "short-pommel",
+              "Name": "short pommel",
               "Frames": 1,
               "Filename": "items/dagger-pommels.png",
               "Data": [

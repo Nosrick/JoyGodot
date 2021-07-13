@@ -46,44 +46,31 @@
           "Name": "greatsword",
           "Part": [
             {
-              "Name": "falchion-blade",
+              "Name": "long blade",
               "Frames": 1,
               "Filename": "items/greatsword-blades.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#ffffff",
-                "#99e7f4"
-              ] 
+              "Position": 0
             },
             {
-              "Name": "falchion-crossguard",
+              "Name": "large crossguard",
               "Frames" : 1,
               "Filename": "items/greatsword-crossguards.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#99e7f4",
-                "#424e66"
-              ]
+              "Position": 0
             },
             {
-              "Name": "falchion-pommel",
+              "Name": "long pommel",
               "Frames" : 1,
               "Filename": "items/greatsword-pommels.png",
               "Data": [
                 "default"
               ],
-              "Position": 0,
-              "Colour": [
-                "#980b1c",
-                "#a65805",
-                "#9d2c07"
-              ]
+              "Position": 0
             },
             {
               "Name": "falchion-outline",

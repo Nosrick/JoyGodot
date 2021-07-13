@@ -36,17 +36,14 @@
           "Name": "round shield",
           "Part": [
             {
-              "Name": "round-shield-body",
+              "Name": "metal sheet",
               "Frames": 1,
               "Filename": "items/shields-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "SortOrder": 1,
-              "Colour": [
-                "#a65805"
-              ]
+              "SortOrder": 1
             },
             {
               "Name": "round-shield-detail",

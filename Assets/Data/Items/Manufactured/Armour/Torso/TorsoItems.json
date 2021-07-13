@@ -59,17 +59,14 @@
           "Name": "breastplate",
           "Part": [
             {
-              "Name": "breastplate-body",
+              "Name": "metal sheet",
               "Frames": 1,
               "Filename": "items/armour-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "SortOrder": 1,
-              "Colour": [
-                "#99e7f4"
-              ]
+              "SortOrder": 1
             },
             {
               "Name": "breastplate-highlight",
@@ -81,7 +78,7 @@
               "Position": 0,
               "SortOrder": 2,
               "Colour": [
-                "#e5fbf3"
+                "#f2f2f2"
               ]
             },
             {
@@ -103,17 +100,14 @@
           "Name": "leather armour",
           "Part": [
             {
-              "Name": "leather-armour-body",
+              "Name": "leather",
               "Frames": 1,
               "Filename": "items/armour-body.png",
               "Data": [
                 "default"
               ],
               "Position": 0,
-              "SortOrder": 1,
-              "Colour": [
-                "#a65805"
-              ]
+              "SortOrder": 1
             },
             {
               "Name": "leather-armour-highlight",

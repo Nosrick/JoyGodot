@@ -7,6 +7,9 @@
       "Weight": 0.5,
       "Tags": [
         "wood"
+      ],
+      "Colour": [
+        "#fecc81"
       ]
     },
     {
@@ -16,6 +19,9 @@
       "Weight": 0.6,
       "Tags": [
         "wood"
+      ],
+      "Colour": [
+        "#ffff99"
       ]
     }
   ]

@@ -8,6 +8,10 @@
       "Tags": [
         "metal",
         "magnetic"
+      ],
+      "Colour": [
+        "#93a5be",
+        "#424e66"
       ]
     },
     {
@@ -18,6 +22,10 @@
       "Tags": [
         "metal",
         "magnetic"
+      ],
+      "Colour": [
+        "#93a5be",
+        "#e5fbf3"
       ]
     },
     {
@@ -27,6 +35,9 @@
       "Weight": 8.52,
       "Tags": [
         "metal"
+      ],
+      "Colour": [
+        "#f8be49"
       ]
     },
     {
@@ -36,6 +47,9 @@
       "Weight": 8.96,
       "Tags": [
         "metal"
+      ],
+      "Colour": [
+        "#ea7d10"
       ]
     },
     {
@@ -45,6 +59,9 @@
       "Weight": 10.49,
       "Tags": [
         "metal"
+      ],
+      "Colour": [
+        "#f2f2f2"
       ]
     },
     {
@@ -54,6 +71,9 @@
       "Weight": 19.3,
       "Tags": [
         "metal"
+      ],
+      "Colour": [
+        "#f4d01a"
       ]
     }
   ]
