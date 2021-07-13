@@ -132,7 +132,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             this.SetSlots();
         }
 
-        public override List<JoyItemSlot> GetRequiredSlots(IItemInstance item, bool takeFilledSlots = false)
+        public override List<JoyItemSlot> GetRequiredSlots(
+            IItemInstance item, 
+            bool takeFilledSlots = false,
+            IEnumerable<JoyItemSlot> includedSlots = null)
         {
             List<JoyItemSlot> slots = new List<JoyItemSlot>();
             if (item is null)
@@ -161,6 +164,41 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             System.Collections.Generic.Dictionary<string, int> copySlots =
                 new System.Collections.Generic.Dictionary<string, int>(requiredSlots);
+            
+            if (includedSlots.IsNullOrEmpty() == false)
+            {
+                JoyItemSlot[] included = includedSlots.ToArray();
+                foreach (JoyItemSlot slot in included)
+                {
+                    if (slot is JoyConstrainedSlot constrainedSlot
+                        && constrainedSlot.Slot.IsNullOrEmpty() == false)
+                    {
+                        foreach (KeyValuePair<string, int> pair in requiredSlots)
+                        {
+                            if (pair.Key.Equals(constrainedSlot.Slot, StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (takeFilledSlots == false
+                                    && copySlots[pair.Key] > 0)
+                                {
+                                    copySlots[pair.Key] -= 1;
+                                    slots.Add(slot);
+                                }
+                                else if (takeFilledSlots
+                                         && copySlots[pair.Key] > 0)
+                                {
+                                    copySlots[pair.Key] -= 1;
+                                    slots.Add(slot);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (requiredSlots.Values.Sum() == 0)
+            {
+                return slots;
+            }
 
             List<JoyItemSlot> emptySlots = this.EmptySlots;
             for (int i = 0; i < emptySlots.Count; i++)
@@ -199,7 +237,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return this.StackOrAdd(slots, item);
         }
 
-        protected override bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
+        public override bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
         {
             if (this.ContainerOwner is null)
             {

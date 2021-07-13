@@ -162,11 +162,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = null;
 
-            if(this.Container.CanAddItem(dragObject.Item, dragObject.SourceContainer.Name) 
-               && this.Container.StackOrAdd(dragObject.Item))
+            if(this.Container.StackOrSwap(dragObject.SourceContainer, this, dragObject.Item))
             {
                 this.PlayEndDragSound();
-                dragObject.SourceContainer.RemoveItem(dragObject.Item);
             }
         }
 
@@ -190,6 +188,29 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             this.PlayBeginDragSound();
 
             return DragData;
+        }
+
+        public bool SwapWithSlot(JoyItemSlot slot)
+        {
+            var leftItem = this.Item;
+            var rightItem = slot.Item;
+
+            if (this.Container != slot.Container)
+            {
+                if (slot.Container.RemoveItem(rightItem) && slot.Container.StackOrAdd(new[] {slot}, leftItem))
+                {
+                    return this.Container.RemoveItem(leftItem) && this.Container.StackOrAdd(new[] {this}, rightItem);
+                }
+            }
+            else
+            {
+                this.Container.RemoveItem(leftItem);
+                this.Container.RemoveItem(rightItem);
+                this.Container.StackOrAdd(new[] {slot}, leftItem);
+                this.Container.StackOrAdd(new[] {this}, rightItem);
+            }
+
+            return false;
         }
 
         public override void _Input(InputEvent @event)
