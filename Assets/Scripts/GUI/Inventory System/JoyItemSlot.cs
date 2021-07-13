@@ -391,12 +391,5 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         {
             this.Item?.Interact(GlobalConstants.GameManager.Player, abilityName);
         }
-
-        protected class DragObject : Resource
-        {
-            public IItemInstance Item { get; set; }
-            public JoyItemSlot SourceSlot { get; set; }
-            public ItemContainer SourceContainer { get; set; }
-        }
     }
 }

@@ -8,7 +8,7 @@
 [ext_resource path="res://Assets/Materials/Default UI Material.tres" type="Material" id=7]
 [ext_resource path="res://Assets/Scenes/Parts/ManagedTextButton.tscn" type="PackedScene" id=8]
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=4]
 resource_local_to_scene = true
 size = 36
 outline_size = 1
@@ -19,9 +19,9 @@ extra_spacing_char = 1
 font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=2]
-default_font = SubResource( 7 )
+default_font = SubResource( 4 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=3]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -72,17 +72,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 m_ElementName = "AccentBackground"
+OverrideOutline = true
 OverrideSize = true
 OverrideColour = true
-TitleCase = true
-OverrideOutline = true
-FontSize = 36
-CacheFont = true
 OutlineThickness = 1
+TitleCase = true
+CacheFont = true
+FontSize = 36
 
 [node name="CloseButton" parent="." instance=ExtResource( 8 )]
 anchor_left = 0.922
 anchor_bottom = 0.1
+m_ElementName = "SlotSprite"
+Text = "X"
+CustomFont = SubResource( 3 )
+ColourMultiplier = 0.0
+MouseOffSoundName = null
+ClickSoundName = null
+MouseOverSoundName = null
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -90,8 +97,6 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
-Text = "X"
-CustomFont = SubResource( 6 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 use_parent_material = true

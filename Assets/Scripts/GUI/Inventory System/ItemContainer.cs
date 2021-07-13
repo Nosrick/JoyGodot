@@ -482,6 +482,26 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return result;
         }
 
+        public override bool CanDropData(Vector2 position, object data)
+        {
+            return data is DragObject;
+        }
+
+        public override void DropData(Vector2 position, object data)
+        {
+            if (data is DragObject dragObject)
+            {
+                var cursor = this.GUIManager.Cursor;
+                cursor.DragSprite = null;
+
+                if(this.CanAddItem(dragObject.Item, dragObject.SourceContainer.Name) 
+                   && this.StackOrAdd(dragObject.Item))
+                {
+                    dragObject.SourceContainer.RemoveItem(dragObject.Item);
+                }
+            }
+        }
+
         public virtual bool RemoveItem(IItemInstance item)
         {
             if (this.ContainerOwner is null)
