@@ -11,21 +11,21 @@ namespace JoyGodot.Assets.Scripts.Items
 {
     public class BaseItemType : IGuidHolder
     {
-        public Guid Guid { get; protected set; }
+        public Guid Guid { get; }
         
         protected List<string> m_Tags;
         
-        public IEnumerable<BaseItemType> Components { get; protected set; }
+        public IEnumerable<BaseItemType> Components { get; }
         
-        public string Description { get; protected set; }
+        public string Description { get; }
         
-        public string IdentifiedName { get; protected set; }
+        public string IdentifiedName { get; }
         
-        public string UnidentifiedDescription { get; protected set; }
+        public string UnidentifiedDescription { get; }
         
-        public string UnidentifiedName { get; protected set; }
+        public string UnidentifiedName { get; }
         
-        public IEnumerable<IAbility> Abilities { get; protected set; }
+        public IEnumerable<IAbility> Abilities { get; }
 
         public float Weight
         {
@@ -48,7 +48,7 @@ namespace JoyGodot.Assets.Scripts.Items
             }
         }
         
-        public float Size { get; protected set; }
+        public float Size { get; }
 
         public NonUniqueDictionary<IItemMaterial, int> Materials
         {
@@ -69,15 +69,15 @@ namespace JoyGodot.Assets.Scripts.Items
 
         protected NonUniqueDictionary<IItemMaterial, int> m_Materials;
 
-        public IEnumerable<string> MaterialNames => this.Materials.Keys.Select(material => material.Name);
+        public IEnumerable<string> MaterialNames => this.Materials.Keys.Select(material => material.Name).Distinct();
 
-        public IEnumerable<string> Slots { get; protected set; }
+        public IEnumerable<string> Slots { get; }
 
         public int BaseProtection => (int) this.Materials.Average(material => material.Item1.Bonus);
 
         public int BaseEfficiency => (int) this.Materials.Average(material => material.Item1.Bonus);
 
-        public IEnumerable<string> GoverningSkills { get; protected set; }
+        public IEnumerable<string> GoverningSkills { get; }
 
         public string MaterialDescription
         {
@@ -101,7 +101,7 @@ namespace JoyGodot.Assets.Scripts.Items
             }
         }
 
-        public string ActionString { get; protected set; }
+        public string ActionString { get; }
 
         public int Value
         {
@@ -111,18 +111,17 @@ namespace JoyGodot.Assets.Scripts.Items
             }
         }
         
-        public int SpawnWeighting { get; protected set; }
+        public int SpawnWeighting { get; }
 
          
-        public int LightLevel { get; protected set; }
+        public int LightLevel { get; }
 
         public string[] Tags => this.m_Tags.ToArray();
         
-        public string SpriteSheet
-        { get; protected set; }
+        public string SpriteSheet { get; }
         
          
-        public int Range { get; protected set; }
+        public int Range { get; }
         
         public BaseItemType()
         {}
@@ -216,6 +215,57 @@ namespace JoyGodot.Assets.Scripts.Items
             }
 
             return total;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is BaseItemType other)
+            {
+                if (this.Guid != other.Guid)
+                {
+                    return false;
+                }
+                
+                if (this.UnidentifiedName.Equals(other.UnidentifiedName) == false)
+                {
+                    return false;
+                }
+
+                if (this.Components.Equals(other.Components) == false)
+                {
+                    return false;
+                }
+
+                if (this.MyMaterials.Equals(other.MyMaterials) == false)
+                {
+                    return false;
+                }
+
+                if (this.Abilities.Equals(other.Abilities) == false)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 0;
+            foreach (var material in this.MyMaterials)
+            {
+                hashCode += material.Item1.GetHashCode() * material.Item2;
+            }
+
+            foreach (var component in this.Components)
+            {
+                hashCode += component.GetHashCode() * 397;
+            }
+
+            return hashCode;
         }
     }
 }
