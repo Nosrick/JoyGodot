@@ -184,6 +184,7 @@ namespace JoyGodot.Assets.Scripts.Godot
                                 ability.Name,
                                 delegate
                                 {
+                                    ability.EnactToll(player);
                                     ability.OnUse(player, entity);
                                 });
                         }

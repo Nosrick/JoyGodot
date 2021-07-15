@@ -299,7 +299,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
                 .Where(tuple => tuple.Item2 is int)
                 .Select(tuple => new Tuple<string, int>(tuple.Item1, (int) tuple.Item2));
 
-            return returnData.All(x => 
+            return returnData.Count() >= this.Costs.Count()
+                && returnData.All(x => 
                 this.Costs.Any(cost => 
                     cost.Item1.Equals(
                         x.Item1, StringComparison.OrdinalIgnoreCase) 
@@ -308,7 +309,10 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
 
         public bool EnactToll(IEntity caster)
         {
-            //TODO: Enact toll
+            foreach (var pair in this.Costs)
+            {
+                caster.ModifyValue(pair.Item1, -pair.Item2);
+            }
             return true;
         }
 
