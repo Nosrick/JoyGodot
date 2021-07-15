@@ -19,7 +19,7 @@ namespace JoyGodot.Assets.Scripts.Items
         public IEnumerable<string> slots;
         public string spriteSheet;
         public int range;
-        public IEnumerable<BaseItemType> components;
+        public IEnumerable<IEnumerable<BaseItemType>> components;
 
         public IdentifiedItem(
             string nameRef, 
@@ -34,12 +34,12 @@ namespace JoyGodot.Assets.Scripts.Items
             IEnumerable<string> slotsRef, 
             string spriteSheetRef, 
             int range = 1,
-            IEnumerable<BaseItemType> componentsRef = null,
+            IEnumerable<IEnumerable<BaseItemType>> componentsRef = null,
             int lightLevelRef = 0)
         {
             this.name = nameRef;
             this.tags = tagsRef;
-            this.components = componentsRef.IsNullOrEmpty() ? new BaseItemType[0] : componentsRef;
+            this.components = componentsRef ?? new List<IEnumerable<BaseItemType>>();
             this.description = descriptionRef;
             this.value = valueRef;
             this.abilities = abilitiesRef;

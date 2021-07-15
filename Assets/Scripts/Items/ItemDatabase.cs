@@ -156,7 +156,7 @@ namespace JoyGodot.Assets.Scripts.Items
                             identifiedToken,
                             "Components");
 
-                    IEnumerable<BaseItemType> components = componentNames.Select(this.Get);
+                    IEnumerable<IEnumerable<BaseItemType>> components = componentNames.Select(this.GetAllForName);
 
                     int size = this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Size");
                     int lightLevel = identifiedToken.Contains("LightLevel")
@@ -230,7 +230,9 @@ namespace JoyGodot.Assets.Scripts.Items
 
                 foreach (IdentifiedItem identifiedItem in identifiedItems)
                 {
-                    var materialCombinations = this.GetPermutations(identifiedItem.materials);
+                    var materialCombinations = this.GetMaterialPermutations(identifiedItem.materials);
+
+                    var componentCombinations = identifiedItem.components.CartesianProduct();
 
                     NonUniqueDictionary<string, int> craftingMaterials = new NonUniqueDictionary<string, int>(
                         identifiedItem.materials.Select(pair =>
@@ -238,9 +240,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
                     Guid itemGuid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
                     
-                    foreach (var enumerable in materialCombinations)
+                    foreach (var materials in materialCombinations)
                     {
-                        UnidentifiedItem[] possibilities = unidentifiedItems
+                        foreach (var components in componentCombinations)
+                        {
+                            UnidentifiedItem[] possibilities = unidentifiedItems
                             .Where(unidentifiedItem =>
                                 unidentifiedItem.identifiedName.Equals(
                                     identifiedItem.name,
@@ -260,7 +264,7 @@ namespace JoyGodot.Assets.Scripts.Items
                             selectedItem = possibilities.GetRandom();
                         }
 
-                        var materialDict = new NonUniqueDictionary<IItemMaterial, int>(enumerable);
+                        var materialDict = new NonUniqueDictionary<IItemMaterial, int>(materials);
 
                         var createdItem = new BaseItemType(
                             itemGuid, 
@@ -278,7 +282,7 @@ namespace JoyGodot.Assets.Scripts.Items
                             identifiedItem.spriteSheet,
                             range: identifiedItem.range,
                             lightLevel: identifiedItem.lightLevel,
-                            components: identifiedItem.components,
+                            components,
                             abilities: identifiedItem.abilities);
 
                         items.Add(createdItem);
@@ -286,8 +290,9 @@ namespace JoyGodot.Assets.Scripts.Items
                         this.CraftingRecipeHandler.Add(
                             new CraftingRecipe(
                                 craftingMaterials,
-                                identifiedItem.components,
+                                components,
                                 new[] {createdItem}));
+                        }
                     }
                 }
             }
@@ -295,7 +300,7 @@ namespace JoyGodot.Assets.Scripts.Items
             return items;
         }
 
-        protected IEnumerable<IEnumerable<Tuple<IItemMaterial, int>>> GetPermutations(
+        protected IEnumerable<IEnumerable<Tuple<IItemMaterial, int>>> GetMaterialPermutations(
             IDictionary<string, int> materialNames)
         {
             IDictionary<string, List<Tuple<IItemMaterial, int>>> replacements =
