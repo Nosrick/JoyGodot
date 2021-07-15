@@ -832,13 +832,9 @@ namespace JoyGodot.Assets.Scripts.Entities
             }
 
             //Check skills
-            foreach (string tag in tagArray)
-            {
-                if (this.m_Skills.ContainsKey(tag))
-                {
-                    data.Add(new Tuple<string, object>(tag, this.m_Skills[tag].Value));
-                }
-            }
+            data.AddRange(from tag in tagArray
+                where this.m_Skills.ContainsKey(tag)
+                select new Tuple<string, object>(tag, this.m_Skills[tag].Value));
 
             //Fetch all skills
             if (tagArray.Any(tag => tag.Equals("skills", StringComparison.OrdinalIgnoreCase)))
@@ -846,15 +842,16 @@ namespace JoyGodot.Assets.Scripts.Entities
                 data.AddRange(from IRollableValue<int> skill in this.m_Skills.Values
                     select new Tuple<string, object>(skill.Name, skill.Value));
             }
+            
+            //Fetch derived values
+            data.AddRange(from tag in tagArray
+                where this.DerivedValues.ContainsKey(tag)
+                    select new Tuple<string, object>(tag, this.DerivedValues[tag].Value));
 
             //Check needs
-            foreach (string tag in tagArray)
-            {
-                if (this.m_Needs.ContainsKey(tag))
-                {
-                    data.Add(new Tuple<string, object>(tag, this.m_Needs[tag].Value));
-                }
-            }
+            data.AddRange(from tag in tagArray
+                where this.m_Needs.ContainsKey(tag)
+                select new Tuple<string, object>(tag, this.m_Needs[tag].Value));
 
             //Fetch all needs
             if (tagArray.Any(tag => tag.Equals("needs", StringComparison.OrdinalIgnoreCase)))
