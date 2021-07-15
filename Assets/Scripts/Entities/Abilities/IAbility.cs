@@ -94,6 +94,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
 
         bool EnactToll(IEntity caster);
 
+        bool HasResourcesForUse(IEntity caster);
+
         bool MeetsPrerequisites(IEntity actor);
 
         bool MeetsPrerequisites(IEnumerable<IBasicValue<int>> data);

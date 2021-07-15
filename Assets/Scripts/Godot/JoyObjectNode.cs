@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.GUI;
@@ -173,6 +174,21 @@ namespace JoyGodot.Assets.Scripts.Godot
                 else
                 {
                     var player = GlobalConstants.GameManager.Player;
+
+                    foreach (IAbility ability in player.AllAbilities.Where(ability => ability.HasTag("active")))
+                    {
+                        if (AdjacencyHelper.IsInRange(player.WorldPosition, entity.WorldPosition, ability.Range)
+                            && ability.HasResourcesForUse(player))
+                        {
+                            contextMenu.AddItem(
+                                ability.Name,
+                                delegate
+                                {
+                                    ability.OnUse(player, entity);
+                                });
+                        }
+                    }
+                    
                     if (AdjacencyHelper.IsAdjacent(player.WorldPosition, entity.WorldPosition))
                     {
                         contextMenu.AddItem(

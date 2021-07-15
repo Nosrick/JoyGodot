@@ -292,23 +292,24 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
             }
         }
 
-        public bool EnactToll(IEntity caster)
+        public bool HasResourcesForUse(IEntity caster)
         {
-            bool canCast = false;
             IEnumerable<string> costs = this.Costs.Select(cost => cost.Item1);
             IEnumerable<Tuple<string, int>> returnData = caster.GetData(costs)
                 .Where(tuple => tuple.Item2 is int)
                 .Select(tuple => new Tuple<string, int>(tuple.Item1, (int) tuple.Item2));
 
-            canCast = returnData.All(x => this.Costs.Any(cost =>
-                cost.Item1.Equals(x.Item1, StringComparison.OrdinalIgnoreCase) && x.Item2 >= cost.Item2));
+            return returnData.All(x => 
+                this.Costs.Any(cost => 
+                    cost.Item1.Equals(
+                        x.Item1, StringComparison.OrdinalIgnoreCase) 
+                    && x.Item2 >= cost.Item2));
+        }
 
-            if (canCast)
-            {
-                //TODO: Enact toll
-            }
-
-            return canCast;
+        public bool EnactToll(IEntity caster)
+        {
+            //TODO: Enact toll
+            return true;
         }
 
         public bool MeetsPrerequisites(IEntity actor)
