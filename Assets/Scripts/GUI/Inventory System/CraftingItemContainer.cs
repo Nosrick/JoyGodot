@@ -244,6 +244,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return false;
             }
 
+            if (item is null)
+            {
+                return true;
+            }
+
             if (item.Guid != this.ContainerOwner.Guid)
             {
                 if (this.ContainerOwner.CanAddContents(item))
