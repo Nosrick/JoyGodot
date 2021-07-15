@@ -67,7 +67,23 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
             protected set => this.m_Tags = new List<string>(value);
         }
 
-        public int Range { get; protected set; }
+        public int Range
+        {
+            get
+            {
+                return this.TargetType switch
+                {
+                    AbilityTarget.Ranged => this.m_Range,
+                    AbilityTarget.Adjacent => 1,
+                    AbilityTarget.Self => 0,
+                    AbilityTarget.WeaponRange => 3,
+                    _ => 0
+                };
+            }
+            set => this.m_Range = value;
+        }
+
+        protected int m_Range;
 
         public SpriteData SpriteData { get; protected set; }
         public Texture UsingIcon { get; protected set; }
