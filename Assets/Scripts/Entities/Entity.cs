@@ -64,7 +64,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         protected List<string> m_IdentifiedItems;
 
-        protected IJob m_CurrentJob;
+        protected string m_CurrentJob;
 
         protected List<string> m_Slots;
 
@@ -171,10 +171,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public List<IAbility> Abilities => this.m_Abilities;
 
-        public string JobName
-        {
-            get { return this.m_CurrentJob.Name; }
-        }
+        public string JobName => this.m_CurrentJob;
 
         public bool Sentient
         {
@@ -197,7 +194,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public List<string> IdentifiedItems => this.m_IdentifiedItems;
 
-        public IJob CurrentJob => this.m_CurrentJob;
+        public IJob CurrentJob => this.Jobs.FirstOrDefault(job => job.Name.Equals(this.m_CurrentJob));
 
         public bool HasMoved { get; set; }
 
@@ -516,7 +513,7 @@ namespace JoyGodot.Assets.Scripts.Entities
             this.m_Abilities = template.Abilities.ToList();
             this.m_Abilities.AddRange(abilities);
 
-            this.m_CurrentJob = job;
+            this.m_CurrentJob = job.Name;
 
             this.Tags = template.Tags.ToList();
 
@@ -790,11 +787,11 @@ namespace JoyGodot.Assets.Scripts.Entities
         {
             if (this.Jobs.Any(j => j.Name.Equals(job, StringComparison.OrdinalIgnoreCase)))
             {
-                this.m_CurrentJob = this.Jobs.First(j => j.Name.Equals(job, StringComparison.OrdinalIgnoreCase));
+                this.m_CurrentJob = job;
                 this.JobChange?.Invoke(this, new JobChangedEventArgs()
                 {
                     GUID = this.Guid,
-                    NewJob = this.m_CurrentJob
+                    NewJob = this.CurrentJob
                 });
                 return true;
             }
@@ -809,11 +806,11 @@ namespace JoyGodot.Assets.Scripts.Entities
                 this.Jobs.Add(job);
             }
 
-            this.m_CurrentJob = job;
+            this.m_CurrentJob = job.Name;
             this.JobChange?.Invoke(this, new JobChangedEventArgs()
             {
                 GUID = this.Guid,
-                NewJob = this.m_CurrentJob
+                NewJob = this.CurrentJob
             });
 
             return true;
@@ -1447,8 +1444,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                 .GetArrayValuesCollectionFromDictionary<string>(data, "IdentifiedItems")
                 .ToList();
 
-            this.m_CurrentJob = GlobalConstants.GameManager.JobHandler.Get(
-                valueExtractor.GetValueFromDictionary<string>(data, "CurrentJob"));
+            this.m_CurrentJob = valueExtractor.GetValueFromDictionary<string>(data, "CurrentJob");
 
             this.m_Slots = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Slots")
                 .ToList();

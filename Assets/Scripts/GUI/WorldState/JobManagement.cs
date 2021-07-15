@@ -89,7 +89,6 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 GlobalConstants.GameManager.EntityTemplateHandler.Get(this.Player.CreatureType).Description,
                 this.Player.CurrentJob.Description
             };
-            this.PointsRemainingOne.Text = "Points Remaining: " + this.JobPoints;
 
             this.PlayerNameTwo.Text = this.PlayerNameOne.Text;
             this.SpeciesAndJobTwo.ValueName = "Job";
@@ -99,7 +98,6 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 GlobalConstants.GameManager.EntityTemplateHandler.Get(this.Player.CreatureType).Description,
                 this.Player.CurrentJob.Description
             };
-            this.PointsRemainingTwo.Text = this.PointsRemainingOne.Text;
 
             if (this.SpeciesAndJobOne.IsConnected("ValueChanged", this, nameof(this.OnJobChange)))
             {
@@ -124,6 +122,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             this.PlayerIconTwo.Clear();
             this.PlayerIconTwo.AddSpriteState(spriteState);
             this.PlayerIconTwo.OverrideAllColours(spriteState.SpriteData.GetCurrentPartColours());
+            this.SetExperienceRemaining();
         }
 
         public override void Display()
@@ -310,6 +309,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 child.IncreaseCost = abilities[i].Item2;
                 child.DecreaseCost = -abilities[i].Item2;
                 child.UseRestriction = true;
+                child.Visible = true;
                 child.Tooltip = new List<string>
                 {
                     ability.Description,
