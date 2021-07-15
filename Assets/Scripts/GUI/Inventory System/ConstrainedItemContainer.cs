@@ -77,7 +77,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 }
                 foreach (var tuple in contents)
                 {
-                    if (tuple.Item2 is null == false)
+                    if (tuple.Item2 is null == false
+                        && this.CanAddItem(tuple.Item2, this.Name))
                     {
                         this.StackOrAdd(tuple.Item2);
                     }

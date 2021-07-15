@@ -141,12 +141,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             this.m_ContainerNames ??= new Array<MoveContainerPriority>();
             this.ContainerOwner ??= new VirtualStorage();
 
-            foreach (JoyItemSlot slot in this.Slots)
-            {
-                slot.Container = this;
-                slot.Item = null;
-            }
-
             for (int i = this.Slots.Count; i < this.ContainerOwner.Contents.Count(); i++)
             {
                 var instance = this.AddSlot(true);
@@ -157,8 +151,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             List<IItemInstance> contents = this.ContainerOwner.Contents.ToList();
             foreach (IItemInstance item in contents)
             {
-                var emptySlot = this.EmptySlots.First();
-                emptySlot.Item = item;
+                if (this.CanAddItem(item, this.Name))
+                {
+                    this.StackOrAdd(item);
+                }
             }
 
             foreach (JoyItemSlot slot in this.ActiveSlots)
@@ -169,6 +165,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
         {
+            if (item is null)
+            {
+                return true;
+            }
+            
             if (this.ContainerOwner is null)
             {
                 return false;
@@ -208,7 +209,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     return true;
                 }
 
-                if (this.ContainerOwner.Contains(item))
+                int filledSlots = this.FilledSlots.Count(slot => slot.Item == item);
+                if (this.ContainerOwner.Contains(item)
+                    && filledSlots == 0)
                 {
                     IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
                     if (joyItemSlots.Any())
@@ -566,6 +569,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool RemoveItem(IItemInstance item)
         {
+            if (item is null)
+            {
+                return true;
+            }
+            
             if (this.ContainerOwner is null)
             {
                 return false;
@@ -630,9 +638,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 bool result = true;
                 foreach (JoyItemSlot slot in filledSlots)
                 {
-                    if (slot.Item is null == false && this.CanAddItem(slot.Item, sourceContainer.Name))
+                    if (slot.Item is null == false && sourceContainer.CanAddItem(slot.Item, this.Name))
                     {
-                        result &= this.StackOrAdd(slot.Item);
+                        result &= sourceContainer.StackOrAdd(slot.Item);
                         result &= slot.Container.RemoveItem(slot.Item);
                     }
 
@@ -642,30 +650,22 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     }
                 }
 
-                if (!result || !sourceContainer.CanAddItem(item, this.Name))
+                if (!result || !this.CanAddItem(item, sourceContainer.Name))
                 {
                     return false;
                 }
                 
-                if (this.RemoveItem(item) == false)
+                if (sourceContainer.RemoveItem(item) == false)
                 {
                     return false;
                 }
                 
-                sourceContainer.StackOrAdd(item);
+                this.StackOrAdd(item);
                 return true;
             }
 
             var slots = sourceContainer.GetSlotsForItem(item);
-            if (slots.Count() == 1)
-            {
-                return destinationSlot.SwapWithSlot(slots.First());
-            }
-            else
-            {
-                //TODO: Multi-slot swapping
-                return false;
-            }
+            return destinationSlot.SwapWithSlot(slots.First());
         }
         
         public virtual event ItemAddedEventHandler OnAddItem;
