@@ -412,5 +412,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         {
             this.Item?.Interact(GlobalConstants.GameManager.Player, abilityName);
         }
+
+        public override string ToString()
+        {
+            return this.Item?.ToString() ?? "Empty";
+        }
     }
 }

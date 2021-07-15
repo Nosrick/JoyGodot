@@ -28,5 +28,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             this.SlotLabel = this.GetNode<Label>("Slot Name");
             this.SlotLabel.Text = this.Slot;
         }
+
+        public override string ToString()
+        {
+            return this.Slot + ": " + base.ToString();
+        }
     }
 }
