@@ -90,6 +90,7 @@
     <EmbeddedResource Remove="JoyGodot.Generator\**" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="addons" />
     <Folder Include="Assets\Data\Scripts\Conversation\Conditions" />
     <Folder Include="Assets\Data\Scripts\Entities\Romances" />
     <Folder Include="Assets\Data\Scripts\Entities\Sexes" />
