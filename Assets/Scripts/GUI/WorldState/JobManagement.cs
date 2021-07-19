@@ -473,7 +473,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 .Select(pair => new Tuple<IAbility, int>(pair.Key, pair.Value))
                 .ToList();
 
-            for (int i = 0; i < this.StatisticList.GetChildCount(); i++)
+            for (int i = 0; i < statistics.Count; i++)
             {
                 var child = this.StatisticList.GetChild(i) as IntValueItem;
                 if (child?.Visible != true)
@@ -492,7 +492,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 };
             }
 
-            for (int i = 0; i < this.SkillList.GetChildCount(); i++)
+            for (int i = 0; i < skills.Count; i++)
             {
                 var child = this.SkillList.GetChild(i) as IntValueItem;
                 if (child?.Visible != true)
@@ -511,7 +511,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 };
             }
 
-            for (int i = 0; i < this.DerivedValueList.GetChildCount(); i++)
+            for (int i = 0; i < derivedValues.Count; i++)
             {
                 var child = this.DerivedValueList.GetChild(i) as IntValueItem;
                 if (child?.Visible != true)
@@ -527,7 +527,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 child.PointRestriction = this.JobPoints;
             }
 
-            for (int i = 0; i < this.AbilityList.GetChildCount(); i++)
+            for (int i = 0; i < abilities.Count; i++)
             {
                 var child = this.AbilityList.GetChild(i) as ConstrainedManagedTextButton;
                 if (child?.Visible != true)
