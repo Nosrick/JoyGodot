@@ -29,9 +29,6 @@ namespace JoyGodot.Assets.Scripts.States
 
         protected const int TICK_TIMER = 50;
         protected double m_TickTimer;
-
-        protected WorldSerialiser WorldSerialiser { get; set; }
-
         protected IGameManager GameManager { get; set; }
         protected IPhysicsManager PhysicsManager { get; set; }
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
@@ -45,8 +42,6 @@ namespace JoyGodot.Assets.Scripts.States
 
         public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef) : base()
         {
-            this.WorldSerialiser = new WorldSerialiser(GlobalConstants.GameManager.ObjectIconHandler);
-
             this.m_ActiveWorld = activeWorldRef;
             this.m_Overworld = overworldRef;
 
@@ -113,10 +108,9 @@ namespace JoyGodot.Assets.Scripts.States
             equipment.ContainerOwner = player;
             equipment.TitleText = player.JoyName + "'s Equipment";
 
-            /*
-            var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();
-            entryBanner.Activate(this.m_ActiveWorld.Name);
-            */
+            var entryBanner = this.GUIManager.Get<EntryBanner>(GUINames.ENTRY_BANNER);
+            entryBanner.TitleText = this.m_ActiveWorld.Name;
+            this.GUIManager.OpenGUI(this, GUINames.ENTRY_BANNER);
         }
 
         public override void Start()

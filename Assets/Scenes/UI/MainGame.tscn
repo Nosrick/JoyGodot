@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Assets/Scripts/Managed Assets/ManagedTextButton.cs" type="Script" id=1]
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://Assets/Scenes/Windows/DerivedValuePanel.tscn" type="PackedScene" id=17]
 [ext_resource path="res://Assets/Scenes/Windows/ActionLogPanel.tscn" type="PackedScene" id=18]
 [ext_resource path="res://Assets/Scenes/Windows/CraftingScreen.tscn" type="PackedScene" id=19]
+[ext_resource path="res://Assets/Scenes/Windows/EntryBanner.tscn" type="PackedScene" id=20]
 
 [sub_resource type="Theme" id=1]
 
@@ -138,8 +139,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Fill Needs"
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -147,11 +146,13 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Fill Needs"
 TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
 OutlineThickness = 1
-FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 2 )
 
 [node name="Text" type="Label" parent="Cheats/Fill Needs"]
@@ -180,8 +181,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Empty Needs"
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -189,11 +188,13 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Empty Needs"
 TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
 OutlineThickness = 1
-FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 4 )
 
 [node name="Text" type="Label" parent="Cheats/Empty Needs"]
@@ -222,8 +223,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Empty One Need"
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -231,11 +230,13 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Empty One Need"
 TitleCase = true
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
 OutlineColour = Color( 0, 0, 0, 1 )
 OutlineThickness = 1
-FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
 CustomFont = SubResource( 6 )
 
 [node name="Text" type="Label" parent="Cheats/Empty One Need"]
@@ -264,8 +265,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Add Quest"
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -273,15 +272,17 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Add Quest"
 TitleCase = true
 OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
 OverrideOutline = true
-OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
 CacheFont = true
 OverrideColour = true
 FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 8 )
 
 [node name="Text" type="Label" parent="Cheats/Add Quest"]
@@ -307,8 +308,6 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-Text = "Complete Quest"
-ColourMultiplier = 1.0
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -316,14 +315,16 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ColourMultiplier = 1.0
+Text = "Complete Quest"
 TitleCase = true
 OverrideSize = true
-OutlineColour = Color( 0, 0, 0, 1 )
 OverrideOutline = true
-OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
 CacheFont = true
 FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
+OutlineColour = Color( 0, 0, 0, 1 )
+OutlineThickness = 1
 CustomFont = SubResource( 9 )
 
 [node name="Text" type="Label" parent="Cheats/Complete Quest"]
@@ -396,6 +397,13 @@ visible = false
 
 [node name="CraftingScreen" parent="." instance=ExtResource( 19 )]
 visible = false
+
+[node name="EntryBanner" parent="." instance=ExtResource( 20 )]
+visible = false
+anchor_left = 0.2
+anchor_top = 0.1
+anchor_right = 0.8
+anchor_bottom = 0.4
 
 [node name="PauseScreen" parent="." instance=ExtResource( 13 )]
 visible = false

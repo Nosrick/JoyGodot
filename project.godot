@@ -748,7 +748,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/CustomResourceRegistry/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [input]
 
