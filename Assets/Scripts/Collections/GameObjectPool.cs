@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.Helpers;
 
 namespace JoyGodot.Assets.Scripts.Collections
 {
-    public class GameObjectPool<T> where T : Node2D
+    public class GameObjectPool<T> where T : Node2D, IDisposable
     {
         /// <summary>
         /// The active GameObjects
@@ -130,6 +131,20 @@ namespace JoyGodot.Assets.Scripts.Collections
                 var list = this.InactiveObjects.Where(obj => obj.Visible).ToList();
                 GD.PushWarning("Offenders:\n" + GlobalConstants.ActionLog.CollectionWalk(list));
             }
+        }
+
+        public void Dispose()
+        {
+            lock (this.Objects)
+            {
+                while (this.Objects.Count > 0)
+                {
+                    var obj = this.Objects[0];
+                    obj.Free();
+                }
+            }
+
+            this.Objects = null;
         }
     }
 }
