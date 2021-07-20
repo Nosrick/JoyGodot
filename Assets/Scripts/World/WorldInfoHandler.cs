@@ -187,6 +187,15 @@ namespace JoyGodot.Assets.Scripts.World
 
         public void Dispose()
         {
+            var keys = new List<string>(this.WorldTiles.Keys);
+            foreach (string key in keys)
+            {
+                this.WorldTiles.RemoveAll(key);
+            }
+
+            this.WorldTiles = null;
+            
+            GarbageMan.Dispose(this.WorldInfoDict);
             this.WorldInfoDict = null;
         }
     }

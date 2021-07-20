@@ -291,11 +291,6 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             this.ItemStandardFormulas = null;
         }
 
-        ~DerivedValueHandler()
-        {
-            this.Dispose();
-        }
-
         public struct DerivedValueData
         {
             public string Name { get; set; }

@@ -159,13 +159,10 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
         public void Dispose()
         {
-            string[] keys = this.m_NeedsMasters.Keys.ToArray();
-            foreach (string key in keys)
-            {
-                this.m_NeedsMasters[key] = null;
-            }
-
+            GarbageMan.Dispose(this.m_NeedsMasters);
             this.m_NeedsMasters = null;
+
+            this.ValueExtractor = null;
         }
 
         ~NeedHandler()

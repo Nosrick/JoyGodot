@@ -374,6 +374,7 @@ namespace JoyGodot.Assets.Scripts.Cultures
             }
 
             this.m_Cultures = null;
+            this.ValueExtractor = null;
         }
     }
 }

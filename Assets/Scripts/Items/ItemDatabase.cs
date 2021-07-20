@@ -380,6 +380,7 @@ namespace JoyGodot.Assets.Scripts.Items
             }
 
             this.m_ItemDatabase = null;
+            this.ValueExtractor = null;
         }
     }
 }

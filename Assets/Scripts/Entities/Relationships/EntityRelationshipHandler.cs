@@ -280,11 +280,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
         {
             this.m_RelationshipTypes = null;
             this.m_Relationships = null;
-        }
-
-        ~EntityRelationshipHandler()
-        {
-            this.Dispose();
+            this.ValueExtractor = null;
         }
 
         public Dictionary Save()

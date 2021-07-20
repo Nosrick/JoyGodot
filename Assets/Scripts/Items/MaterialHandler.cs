@@ -171,13 +171,10 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public void Dispose()
         {
-            string[] keys = this.m_Materials.Keys.ToArray();
-            foreach (string key in keys)
-            {
-                this.m_Materials[key] = null;
-            }
-
+            GarbageMan.Dispose(this.m_Materials);
             this.m_Materials = null;
+
+            this.ValueExtractor = null;
         }
     }
 }

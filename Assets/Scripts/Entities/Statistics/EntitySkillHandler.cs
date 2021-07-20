@@ -103,18 +103,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
 
         public void Dispose()
         {
-            string[] keys = this.Skills.Keys.ToArray();
-            foreach (string key in keys)
-            {
-                this.Skills[key] = null;
-            }
-
+            GarbageMan.Dispose(this.Skills);
             this.Skills = null;
-        }
-
-        ~EntitySkillHandler()
-        {
-            this.Dispose();
+            GarbageMan.Dispose(this.DefaultSkills);
+            this.DefaultSkills = null;
+            this.ValueExtractor = null;
         }
     }
 }

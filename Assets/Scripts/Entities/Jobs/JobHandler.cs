@@ -21,6 +21,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Jobs
         public JSONValueExtractor ValueExtractor { get; protected set; }
         
         protected IAbilityHandler AbilityHandler { get; set; }
+        
+        public IEnumerable<IJob> Values => this.m_Jobs ??= this.Load().ToList();
 
         public JobHandler(
             IAbilityHandler abilityHandler,
@@ -168,16 +170,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Jobs
             return jobTypes;
         }
 
-        public IEnumerable<IJob> Values => this.m_Jobs ?? (this.m_Jobs = this.Load().ToList());
-
         public void Dispose()
         {
             this.m_Jobs = null;
-        }
-
-        ~JobHandler()
-        {
-            this.Dispose();
+            this.ValueExtractor = null;
+            this.Roller = null;
         }
     }
 }

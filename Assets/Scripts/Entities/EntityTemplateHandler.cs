@@ -214,11 +214,7 @@ namespace JoyGodot.Assets.Scripts.Entities
         public void Dispose()
         {
             this.m_Templates = null;
-        }
-
-        ~EntityTemplateHandler()
-        {
-            this.Dispose();
+            this.ValueExtractor = null;
         }
     }
 }

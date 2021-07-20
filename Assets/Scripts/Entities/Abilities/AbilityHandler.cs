@@ -83,6 +83,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
         public void Dispose()
         {
             this.Abilities = null;
+            this.ValueExtractor = null;
         }
     }
 }

@@ -55,6 +55,14 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
 
         public void Dispose()
         {
+            List<Guid> recipesKeys = new List<Guid>(this.Recipes.Keys);
+            foreach (Guid key in recipesKeys)
+            {
+                this.Recipes.RemoveAll(key);
+            }
+
+            this.Recipes = null;
+            this.ValueExtractor = null;
         }
     }
 }

@@ -143,6 +143,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Romance
         {
             this.RomanceTypes = null;
             this.Processors = null;
+            this.ValueExtractor = null;
         }
     }
 }

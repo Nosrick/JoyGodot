@@ -50,6 +50,9 @@ namespace JoyGodot.Assets.Scripts.World
         
         public void Dispose()
         {
+            GarbageMan.Dispose(this.Worlds);
+            this.Worlds = null;
+            this.ValueExtractor = null;
         }
     }
 }

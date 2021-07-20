@@ -183,6 +183,7 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
 
         public void Dispose()
         {
+            GarbageMan.Dispose(this.VisionTypes);
             this.VisionTypes = null;
         }
     }

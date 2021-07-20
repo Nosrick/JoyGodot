@@ -148,13 +148,9 @@ namespace JoyGodot.Assets.Scripts.Settings
 
         public void Dispose()
         {
+            GarbageMan.Dispose(this.Settings);
             this.Settings = null;
             this.ValueExtractor = null;
-        }
-
-        ~SettingsManager()
-        {
-            this.Dispose();
         }
     }
 }

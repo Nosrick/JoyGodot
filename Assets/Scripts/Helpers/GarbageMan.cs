@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,10 +17,6 @@ namespace JoyGodot.Assets.Scripts.Helpers
             var keys = collection.Keys.ToArray();
             foreach (var key in keys)
             {
-                if (collection[key] is IDisposable disposeOfMe)
-                {
-                    disposeOfMe.Dispose();
-                }
                 collection[key] = default;
             }
         }

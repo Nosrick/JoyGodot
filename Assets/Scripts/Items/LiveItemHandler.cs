@@ -15,6 +15,8 @@ namespace JoyGodot.Assets.Scripts.Items
     public class LiveItemHandler : ILiveItemHandler
     {
         protected System.Collections.Generic.Dictionary<Guid, IItemInstance> LiveItems { get; set; }
+
+        public IEnumerable<IItemInstance> Values => this.LiveItems.Values.ToList();
         
         public JSONValueExtractor ValueExtractor { get; protected set; }
         
@@ -186,14 +188,10 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public void Dispose()
         {
-            Guid[] keys = this.LiveItems.Keys.ToArray();
-            foreach (Guid key in keys)
-            {
-                //this.LiveItems[key].Dispose();
-                this.LiveItems[key] = null;
-            }
-
+            GarbageMan.Dispose(this.LiveItems);
             this.LiveItems = null;
+
+            this.ValueExtractor = null;
         }
 
         public NonUniqueDictionary<Guid, Guid> QuestRewards
@@ -201,8 +199,6 @@ namespace JoyGodot.Assets.Scripts.Items
             get;
             protected set;
         }
-
-        public IEnumerable<IItemInstance> Values => this.LiveItems.Values.ToList();
         
         public Dictionary Save()
         {

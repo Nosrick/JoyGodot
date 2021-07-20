@@ -114,6 +114,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Gender
         public void Dispose()
         {
             this.Genders = null;
+            this.ValueExtractor = null;
         }
     }
 }

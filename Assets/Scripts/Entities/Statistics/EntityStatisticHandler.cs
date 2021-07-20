@@ -103,25 +103,12 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
 
         public void Dispose()
         {
-            string[] keys = this.StatisticNames.ToArray();
-            foreach (string key in keys)
-            {
-                this.Statistics[key] = null;
-            }
-
-            keys = this.DefaultStatistics.Keys.ToArray();
-            foreach (string key in keys)
-            {
-                this.DefaultStatistics[key] = null;
-            }
+            GarbageMan.Dispose(this.Statistics);
+            GarbageMan.Dispose(this.DefaultStatistics);
 
             this.Statistics = null;
             this.DefaultStatistics = null;
-        }
-
-        ~EntityStatisticHandler()
-        {
-            this.Dispose();
+            this.ValueExtractor = null;
         }
     }
 }

@@ -146,11 +146,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Sexuality
         {
             this.Sexualities = null;
             this.PreferenceProcessors = null;
-        }
-
-        ~EntitySexualityHandler()
-        {
-            this.Dispose();
+            this.ValueExtractor = null;
         }
     }
 }

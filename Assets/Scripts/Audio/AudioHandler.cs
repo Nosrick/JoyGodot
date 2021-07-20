@@ -8,8 +8,8 @@ namespace JoyGodot.Assets.Scripts.Audio
 {
     public class AudioHandler : IAudioHandler
     {
-        public IEnumerable<AudioStreamRandomPitch> Values { get; }
-        public JSONValueExtractor ValueExtractor { get; }
+        public IEnumerable<AudioStreamRandomPitch> Values { get; protected set; }
+        public JSONValueExtractor ValueExtractor { get; protected set; }
 
         protected IDictionary<string, AudioStreamRandomPitch> AudioStreams { get; set; }
 
@@ -85,6 +85,9 @@ namespace JoyGodot.Assets.Scripts.Audio
         }
 
         public void Dispose()
-        { }
+        {
+            this.ValueExtractor = null;
+            this.Values = null;
+        }
     }
 }

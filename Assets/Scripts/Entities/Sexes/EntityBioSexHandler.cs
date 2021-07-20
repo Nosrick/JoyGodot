@@ -136,11 +136,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Sexes
         {
             this.Sexes = null;
             this.Processors = null;
-        }
-
-        ~EntityBioSexHandler()
-        {
-            this.Dispose();
+            this.ValueExtractor = null;
         }
     }
 }
