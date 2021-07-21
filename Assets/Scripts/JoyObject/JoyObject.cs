@@ -242,7 +242,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
-        public void Move(Vector2Int newPosition)
+        public virtual void Move(Vector2Int newPosition)
         {
             this.WorldPosition = newPosition;
 

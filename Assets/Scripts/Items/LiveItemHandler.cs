@@ -163,6 +163,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public IEnumerable<IItemInstance> GetItems(IEnumerable<Guid> guids)
         {
+            if (guids.IsNullOrEmpty())
+            {
+                return new IItemInstance[0];
+            }
+            
             List<IItemInstance> items = new List<IItemInstance>();
 
             foreach (Guid guid in guids)

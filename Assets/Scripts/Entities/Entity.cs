@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Cultures;
@@ -42,7 +41,7 @@ namespace JoyGodot.Assets.Scripts.Entities
         public event BooleanChangedEventHandler AliveChange;
         public event ValueChangedEventHandler<float> HappinessChange;
 
-        public event ValueChangedEventHandler<int> NeedChange; 
+        public event ValueChangedEventHandler<int> NeedChange;
 
         protected IDictionary<string, IEntityStatistic> m_Statistics;
 
@@ -390,7 +389,9 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         protected const int ATTACK_THRESHOLD = -50;
 
-        public IEnumerable<IItemInstance> Contents => GlobalConstants.GameManager.ItemHandler.GetItems(this.m_Backpack);
+        public IEnumerable<IItemInstance> Contents =>
+            GlobalConstants.GameManager.ItemHandler?.GetItems(this.m_Backpack)
+            ?? new IItemInstance[0];
 
         public IEntityRelationshipHandler RelationshipHandler { get; set; }
 
@@ -416,11 +417,12 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public Entity()
         {
-            this.Data = new NonUniqueDictionary<object, object>(); 
-            foreach(string action in STANDARD_ACTIONS)
+            this.Data = new NonUniqueDictionary<object, object>();
+            foreach (string action in STANDARD_ACTIONS)
             {
                 this.CachedActions.Add(GlobalConstants.ScriptingEngine.FetchAction(action));
             }
+
             this.Initialise();
         }
 
@@ -842,11 +844,11 @@ namespace JoyGodot.Assets.Scripts.Entities
                 data.AddRange(from IRollableValue<int> skill in this.m_Skills.Values
                     select new Tuple<string, object>(skill.Name, skill.Value));
             }
-            
+
             //Fetch derived values
             data.AddRange(from tag in tagArray
                 where this.DerivedValues.ContainsKey(tag)
-                    select new Tuple<string, object>(tag, this.DerivedValues[tag].Value));
+                select new Tuple<string, object>(tag, this.DerivedValues[tag].Value));
 
             //Check needs
             data.AddRange(from tag in tagArray
@@ -1029,12 +1031,22 @@ namespace JoyGodot.Assets.Scripts.Entities
             this.m_IdentifiedItems.Add(nameRef);
         }
 
-        public new void Move(Vector2Int position)
+        public override void Move(Vector2Int position)
         {
             base.Move(position);
             foreach (IItemInstance joyObject in this.Contents)
             {
                 joyObject.Move(position);
+            }
+
+            if (this.Equipment is null)
+            {
+                return;
+            }
+            
+            foreach (IItemInstance equipment in this.Equipment.Contents)
+            {
+                equipment.Move(position);
             }
         }
 
@@ -1412,7 +1424,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                 {
                     continue;
                 }
-                
+
                 ability.Load(abilityDict);
                 this.m_Abilities.Add(ability);
             }
@@ -1471,7 +1483,7 @@ namespace JoyGodot.Assets.Scripts.Entities
             {
                 this.m_Driver = new StandardDriver();
             }
-            
+
             this.RegenTicker = valueExtractor.GetValueFromDictionary<int>(data, "RegenTicker");
             var pathfindingData = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
                 data,
@@ -1499,6 +1511,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                 {
                     continue;
                 }
+
                 job.AddExperience(experience);
                 this.Jobs.Add(job);
             }

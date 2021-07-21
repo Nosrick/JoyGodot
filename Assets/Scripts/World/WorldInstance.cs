@@ -21,71 +21,70 @@ namespace JoyGodot.Assets.Scripts.World
     public class WorldInstance : IWorldInstance
     {
         public event EmptyEventHandler OnTick;
-        
+
         protected WorldTile[,] m_Tiles;
         protected byte[,] m_Costs;
 
-         
+
         protected Vector2Int m_Dimensions;
 
-         
+
         //Worlds and where to access them
         protected System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance> m_Areas;
-        
+
         protected IWorldInstance m_Parent;
 
-          
+
         public HashSet<Guid> EntityGUIDs
         {
             get => new HashSet<Guid>(this.Entities.Select(entity => entity.Guid));
         }
-        
+
         protected HashSet<IEntity> m_Entities;
 
         public HashSet<IEntity> Entities => this.m_Entities;
 
-          
+
         public HashSet<Guid> ItemGUIDs
         {
             get => new HashSet<Guid>(this.Items.Select(item => item.Guid));
         }
 
         protected HashSet<IItemInstance> m_Items;
-        
-         
+
+
         protected HashSet<Vector2Int> m_Walls;
 
-         
+
         protected Vector2Int m_SpawnPoint;
 
         protected static DateTime s_DateTime;
 
-         
+
         protected string m_Name;
-        
-         
+
+
         protected Guid m_GUID;
-        
-         
+
+
         public LightCalculator LightCalculator { get; protected set; }
 
         public bool Initialised { get; protected set; }
 
         protected static Node2D FogOfWarHolder { get; set; }
-        
+
         protected static Node2D WallHolder { get; set; }
-        
+
         protected static Node2D ObjectHolder { get; set; }
-        
+
         protected static Node2D EntityHolder { get; set; }
-        
-        [NonSerialized]
-        protected ILiveEntityHandler EntityHandler;
-        
-         
+
+        [NonSerialized] protected ILiveEntityHandler EntityHandler;
+
+
         protected RNG Roller;
-        
-         
+
+
         protected List<string> m_Tags;
 
         public WorldInstance()
@@ -104,9 +103,9 @@ namespace JoyGodot.Assets.Scripts.World
         /// <param name="entityHandler"></param>
         /// <param name="roller"></param>
         public WorldInstance(
-            WorldTile[,] tiles, 
-            IEnumerable<string> tags, 
-            string name, 
+            WorldTile[,] tiles,
+            IEnumerable<string> tags,
+            string name,
             ILiveEntityHandler entityHandler,
             RNG roller = null)
         {
@@ -145,23 +144,14 @@ namespace JoyGodot.Assets.Scripts.World
                 return;
             }
 
-            //this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
-
-            //FogOfWarHolder = FogOfWarHolder ?? ("WorldFog");
-            //WallHolder = WallHolder ? WallHolder : GameObject.Find("WorldWalls");
-            //ObjectHolder = ObjectHolder ? ObjectHolder : GameObject.Find("WorldObjects");
-            //EntityHolder = EntityHolder ? EntityHolder : GameObject.Find("WorldEntities");
-            
             this.m_Items = new HashSet<IItemInstance>();
             this.m_Entities = new HashSet<IEntity>();
-            //this.m_EntityGUIDs = new List<long>();
-            //this.m_ItemGUIDs = new List<long>();
 
             foreach (IWorldInstance child in this.m_Areas.Values)
             {
                 child.Initialise();
             }
-            
+
             this.Initialised = true;
         }
 
@@ -173,12 +163,12 @@ namespace JoyGodot.Assets.Scripts.World
         protected void CalculateLightLevels()
         {
             //Do objects first
-            List<IItemInstance> objects = this.m_Items.Where(o => o is IItemInstance item && item.ItemType.LightLevel > 0)
-                .Cast<IItemInstance>()
+            List<IItemInstance> objects = this.m_Items.Where(o => o.ItemType.LightLevel > 0)
                 .ToList();
 
-            objects.AddRange(this.m_Entities.SelectMany(entity =>
-                entity.Contents.Where(instance => instance.ItemType.LightLevel > 0)));
+            objects.AddRange(
+                this.m_Entities.SelectMany(entity =>
+                    entity.Equipment.Contents.Where(instance => instance.ItemType.LightLevel > 0)));
 
             this.LightCalculator.Do(objects, this, this.Dimensions, this.Walls);
         }
@@ -578,7 +568,8 @@ namespace JoyGodot.Assets.Scripts.World
 
         public System.Collections.Generic.Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
         {
-            System.Collections.Generic.Dictionary<Vector2Int, IJoyObject> objects = new System.Collections.Generic.Dictionary<Vector2Int, IJoyObject>();
+            System.Collections.Generic.Dictionary<Vector2Int, IJoyObject> objects =
+                new System.Collections.Generic.Dictionary<Vector2Int, IJoyObject>();
             foreach (IJoyObject joyObject in this.m_Items)
             {
                 int matches = 0;
@@ -648,6 +639,7 @@ namespace JoyGodot.Assets.Scripts.World
             {
                 array.Add(s.Save());
             }
+
             saveDict.Add("Tiles", array);
 
             Array areaArray = new Array();
@@ -655,17 +647,18 @@ namespace JoyGodot.Assets.Scripts.World
             {
                 Dictionary tempDict = new Dictionary
                 {
-                    {"EntryPoint", pair.Key.Save()}, 
+                    {"EntryPoint", pair.Key.Save()},
                     {"World", pair.Value.Save()}
                 };
                 areaArray.Add(tempDict);
             }
+
             saveDict.Add("Areas", areaArray);
-            
+
             saveDict.Add("Guid", this.Guid.ToString());
-            
+
             saveDict.Add("Tags", new Array(this.Tags));
-            
+
             saveDict.Add("SpawnPoint", this.SpawnPoint.Save());
 
             return saveDict;
@@ -679,7 +672,8 @@ namespace JoyGodot.Assets.Scripts.World
 
             this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
 
-            Vector2Int dimensions = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Dimensions"));
+            Vector2Int dimensions =
+                new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Dimensions"));
             this.m_Dimensions = dimensions;
 
             this.m_Costs = new byte[dimensions.x, dimensions.y];
@@ -698,7 +692,7 @@ namespace JoyGodot.Assets.Scripts.World
             }
 
             this.SpawnPoint = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "SpawnPoint"));
-            
+
             dictCollection = valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Walls");
             this.m_Walls = new HashSet<Vector2Int>();
             foreach (Dictionary dict in dictCollection)
@@ -728,7 +722,8 @@ namespace JoyGodot.Assets.Scripts.World
             this.m_Areas = new System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance>();
             foreach (Dictionary dict in dictCollection)
             {
-                Vector2Int entry = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(dict, "EntryPoint"));
+                Vector2Int entry =
+                    new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(dict, "EntryPoint"));
                 IWorldInstance world = new WorldInstance();
                 world.Load(valueExtractor.GetValueFromDictionary<Dictionary>(dict, "World"));
                 this.AddArea(entry, world);
@@ -784,13 +779,10 @@ namespace JoyGodot.Assets.Scripts.World
 
         public Vector2Int Dimensions
         {
-            get
-            {
-                return this.m_Dimensions;
-            }
+            get { return this.m_Dimensions; }
         }
 
-         
+
         public bool IsDirty { get; protected set; }
 
         public byte[,] Costs

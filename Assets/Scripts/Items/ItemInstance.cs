@@ -176,7 +176,7 @@ namespace JoyGodot.Assets.Scripts.Items
             }
         }
 
-        public IEnumerable<IItemInstance> Contents => this.ItemHandler?.GetItems(this.m_Contents);
+        public IEnumerable<IItemInstance> Contents => this.ItemHandler?.GetItems(this.m_Contents) ?? new IItemInstance[0];
 
         public string ContentString
         {
@@ -521,6 +521,16 @@ namespace JoyGodot.Assets.Scripts.Items
         public new bool HasTag(string tag)
         {
             return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public override void Move(Vector2Int newPosition)
+        {
+            base.Move(newPosition);
+
+            foreach (IItemInstance item in this.Contents)
+            {
+                item.Move(newPosition);
+            }
         }
 
         public void Interact(IEntity user, string ability)
