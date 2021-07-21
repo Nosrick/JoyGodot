@@ -160,7 +160,7 @@ namespace JoyGodot.Assets.Scripts.Items
                         : 0;
                     int spawnWeight = identifiedToken.Contains("SpawnWeight")
                         ? this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "SpawnWeight")
-                        : 1;
+                        : 0;
                     int range = identifiedToken.Contains("Range")
                         ? this.ValueExtractor.GetValueFromDictionary<int>(identifiedToken, "Range")
                         : 1;
