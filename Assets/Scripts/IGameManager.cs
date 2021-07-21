@@ -31,6 +31,7 @@ using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.Settings;
 using JoyGodot.Assets.Scripts.States;
 using JoyGodot.Assets.Scripts.World;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 
 namespace JoyGodot.Assets.Scripts
 {

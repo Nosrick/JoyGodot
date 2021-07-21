@@ -155,6 +155,11 @@ namespace JoyGodot.Assets.Scripts.Quests
             return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
+        public bool HasTags(IEnumerable<string> tags)
+        {
+            return tags.All(this.HasTag);
+        }
+
         public override string ToString()
         {
             string fullString = "";

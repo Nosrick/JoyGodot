@@ -258,6 +258,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
             return this.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
         }
 
+        public bool HasTags(IEnumerable<string> tags)
+        {
+            return tags.All(this.HasTag);
+        }
+
         public bool AddTag(string tag)
         {
             if (this.HasTag(tag))

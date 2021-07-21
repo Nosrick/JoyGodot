@@ -3,13 +3,14 @@ using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 
 namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 {
     public class DungeonGenerator
     {
         public WorldInstance GenerateDungeon(
-            WorldInfo worldInfo, 
+            WorldInfo.WorldInfo worldInfo, 
             int size, 
             int levels, 
             IGameManager gameManager,

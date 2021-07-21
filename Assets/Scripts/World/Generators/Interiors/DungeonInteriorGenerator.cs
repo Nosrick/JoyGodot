@@ -5,6 +5,7 @@ using JoyGodot.Assets.Scripts.Graphics;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managers;
 using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 
 namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 {

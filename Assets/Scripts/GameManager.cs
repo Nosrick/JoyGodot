@@ -32,6 +32,7 @@ using JoyGodot.Assets.Scripts.Scripting;
 using JoyGodot.Assets.Scripts.Settings;
 using JoyGodot.Assets.Scripts.States;
 using JoyGodot.Assets.Scripts.World;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 using Thread = System.Threading.Thread;
 
 namespace JoyGodot.Assets.Scripts

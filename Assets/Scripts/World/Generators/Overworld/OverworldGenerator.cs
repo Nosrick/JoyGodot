@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 
 namespace JoyGodot.Assets.Scripts.World.Generators.Overworld
 {

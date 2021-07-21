@@ -8,6 +8,7 @@ using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Physics;
 using JoyGodot.Assets.Scripts.World.Lighting;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 
 namespace JoyGodot.Assets.Scripts.World
 {

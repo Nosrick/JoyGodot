@@ -10,6 +10,7 @@ using JoyGodot.Assets.Scripts.World;
 using JoyGodot.Assets.Scripts.World.Generators;
 using JoyGodot.Assets.Scripts.World.Generators.Interiors;
 using JoyGodot.Assets.Scripts.World.Generators.Overworld;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 
 namespace JoyGodot.Assets.Scripts.States
 {

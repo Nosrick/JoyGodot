@@ -13,6 +13,7 @@ using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Physics;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.World.Lighting;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.World
@@ -598,7 +599,12 @@ namespace JoyGodot.Assets.Scripts.World
 
         public bool HasTag(string tag)
         {
-            return this.m_Tags.Contains(tag.ToLower());
+            return this.m_Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool HasTags(IEnumerable<string> tags)
+        {
+            return tags.All(this.HasTag);
         }
 
         public bool AddTag(string tag)

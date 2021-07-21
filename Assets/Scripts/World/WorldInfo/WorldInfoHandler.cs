@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Base_Interfaces;
@@ -12,7 +11,7 @@ using JoyGodot.Assets.Scripts.Helpers;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
 
-namespace JoyGodot.Assets.Scripts.World
+namespace JoyGodot.Assets.Scripts.World.WorldInfo
 {
     public interface IWorldInfoHandler : IHandler<WorldInfo, string>
     {

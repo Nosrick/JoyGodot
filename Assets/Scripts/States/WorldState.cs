@@ -8,6 +8,7 @@ using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.Godot;
 using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
+using JoyGodot.Assets.Scripts.GUI.WorldState;
 using JoyGodot.Assets.Scripts.IO;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.JoyObject;

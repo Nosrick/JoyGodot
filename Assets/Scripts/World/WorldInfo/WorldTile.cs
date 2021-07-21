@@ -5,7 +5,7 @@ using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Helpers;
 using Array = Godot.Collections.Array;
 
-namespace JoyGodot.Assets.Scripts.World
+namespace JoyGodot.Assets.Scripts.World.WorldInfo
 {
     [Serializable]
     public class WorldTile : ISerialisationHandler
