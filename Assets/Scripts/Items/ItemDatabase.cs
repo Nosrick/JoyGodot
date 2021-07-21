@@ -40,11 +40,7 @@ namespace JoyGodot.Assets.Scripts.Items
                     this.m_ItemWeights = new System.Collections.Generic.Dictionary<string, int>();
                     foreach (BaseItemType type in this.m_ItemDatabase)
                     {
-                        if (this.m_ItemWeights.ContainsKey(type.IdentifiedName))
-                        {
-                            this.m_ItemWeights[type.IdentifiedName] += type.SpawnWeighting;
-                        }
-                        else
+                        if (this.m_ItemWeights.ContainsKey(type.IdentifiedName) == false)
                         {
                             this.m_ItemWeights.Add(type.IdentifiedName, type.SpawnWeighting);
                         }
