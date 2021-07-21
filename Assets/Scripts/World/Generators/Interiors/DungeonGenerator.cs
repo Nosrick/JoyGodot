@@ -29,12 +29,13 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
             
             DungeonEntityPlacer entityPlacer = new DungeonEntityPlacer(
                 gameManager.EntityHandler, 
+                gameManager.CultureHandler,
                 gameManager.EntityTemplateHandler, 
                 gameManager.PhysicsManager, 
                 gameManager.EntityFactory);
 
-            List<string> entitiesToPlace = new List<string>();
-            entitiesToPlace.AddRange(worldInfo.inhabitants);
+            List<string> entitiesToPlace = new List<string>(worldInfo.inhabitants);
+            List<string> cultures = new List<string>(worldInfo.cultures);
 
             WorldInstance root = null;
             WorldInstance current = null;
@@ -55,7 +56,12 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 
                 List<IItemInstance> items = itemPlacer.PlaceItems(worldInstance);
 
-                IEnumerable<IEntity> entities = entityPlacer.PlaceEntities(worldInstance, entitiesToPlace, roller);
+                IEnumerable<IEntity> entities = entityPlacer.PlaceEntities(
+                    worldInstance, 
+                    cultures, 
+                    entitiesToPlace, 
+                    roller);
+                
                 foreach(IEntity entity in entities)
                 {
                     worldInstance.AddEntity(entity);

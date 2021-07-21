@@ -116,6 +116,10 @@ namespace JoyGodot.Assets.Scripts.World
                         ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(worldInfo, "Inhabitants")
                         : new string[0];
 
+                    IEnumerable<string> cultures = worldInfo.Contains("Cultures")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(worldInfo, "Cultures")
+                        : new string[0];
+
                     IEnumerable<string> tags = worldInfo.Contains("Tags")
                         ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(worldInfo, "Tags")
                         : new string[0];
@@ -129,7 +133,8 @@ namespace JoyGodot.Assets.Scripts.World
                     {
                         inhabitants = inhabitants,
                         name = name,
-                        tags = tags
+                        tags = tags,
+                        cultures = cultures
                     });
 
                     this.WorldTiles.Add(
@@ -203,6 +208,7 @@ namespace JoyGodot.Assets.Scripts.World
     public struct WorldInfo
     {
         public string name;
+        public IEnumerable<string> cultures;
         public IEnumerable<string> inhabitants;
         public IEnumerable<string> tags;
     }

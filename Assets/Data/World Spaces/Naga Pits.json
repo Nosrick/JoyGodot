@@ -1,9 +1,8 @@
 ﻿{
   "WorldInfo": [{
       "Name": "Naga Pits",
-      "Inhabitants": [
-        "Naga",
-        "Slime"
+      "Cultures": [
+        "naga imperium"
       ],
       "Tags": ["Interior"],
       "TileSet": 

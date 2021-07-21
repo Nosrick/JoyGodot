@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JoyGodot.Assets.Scripts.Cultures;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Physics;
@@ -15,26 +16,42 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
         protected IEntityTemplateHandler EntityTemplateHandler { get; set; }
         protected IPhysicsManager PhysicsManager { get; set; }
         protected IEntityFactory EntityFactory { get; set; }
+        
+        protected ICultureHandler CultureHandler { get; set; }
 
         public DungeonEntityPlacer(
             ILiveEntityHandler entityHandler,
+            ICultureHandler cultureHandler,
             IEntityTemplateHandler templateHandler,
             IPhysicsManager physicsManager,
             IEntityFactory entityFactory)
         {
             this.EntityFactory = entityFactory;
+            this.CultureHandler = cultureHandler;
             this.EntityTemplateHandler = templateHandler;
             this.PhysicsManager = physicsManager;
             this.EntityHandler = entityHandler;
         }
 
-        public IEnumerable<IEntity> PlaceEntities(IWorldInstance worldRef, IEnumerable<string> entityTypes, RNG roller)
+        public IEnumerable<IEntity> PlaceEntities(
+            IWorldInstance worldRef, 
+            IEnumerable<string> cultures,
+            IEnumerable<string> entityTypes, 
+            RNG roller)
         {
             this.Roller = roller;
             List<IEntity> entities = new List<IEntity>();
 
-            List<IEntityTemplate> templates = this.EntityTemplateHandler.Values
-                .Where(x => entityTypes.Contains(x.CreatureType, StringComparer.OrdinalIgnoreCase)).ToList();
+            List<IEntityTemplate> templates = new List<IEntityTemplate>(
+                entityTypes.Select(this.EntityTemplateHandler.Get));
+            
+            templates.AddRange(
+                cultures.Select(this.CultureHandler.GetByCultureName)
+                    .SelectMany(culture => 
+                        culture.Inhabitants.Select(
+                            this.EntityTemplateHandler.Get)));
+
+            templates = templates.Distinct().ToList();
 
             int numberToPlace = (worldRef.Tiles.GetLength(0) * worldRef.Tiles.GetLength(1)) / 50;
             //int numberToPlace = 1;

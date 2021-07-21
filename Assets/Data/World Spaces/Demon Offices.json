@@ -1,9 +1,8 @@
 ﻿{
   "WorldInfo": [{
     "Name": "Demon Offices",
-    "Inhabitants": [
-      "Demon",
-      "Human"
+    "Cultures": [
+      "demon republic"
     ],
     "Tags": ["Interior"],
     "TileSet":
