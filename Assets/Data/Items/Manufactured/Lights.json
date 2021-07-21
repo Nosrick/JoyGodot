@@ -16,6 +16,9 @@
         "Tags": [
           "light source"
         ],
+        "Slots": [
+          "hand"
+        ],
         "TileSet": "Light Source"
       },
       {
@@ -27,6 +30,9 @@
             "Name": "wood",
             "Value": 150
           }
+        ],
+        "Slots": [
+          "hand"
         ],
         "Size": 150,
         "LightLevel": 16,
