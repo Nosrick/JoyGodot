@@ -11,6 +11,7 @@
           "leather"
         ],
         "Size": 300,
+        "SpawnWeight": 10,
         "TileSet": "Containers",
         "Tags": [
           "container"
@@ -25,6 +26,7 @@
           "cloth"
         ],
         "Size": 300,
+        "SpawnWeight": 10,
         "TileSet": "Containers",
         "Tags": [
           "container"
