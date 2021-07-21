@@ -17,7 +17,7 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Overworld
         {
             WorldTile[,] tiles = new WorldTile[sizeRef, sizeRef];
 
-            WorldTile template = this.WorldInfoHandler.GetByTileSet(tileSet).ToArray()[0];
+            WorldTile template = this.WorldInfoHandler.GetByTileSet(tileSet).FirstOrDefault();
 
             for (int i = 0; i < tiles.GetLength(0); i++)
             {
