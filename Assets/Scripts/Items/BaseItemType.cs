@@ -31,18 +31,8 @@ namespace JoyGodot.Assets.Scripts.Items
         {
             get
             {
-                float total = 0;
-                if (this.Components.IsNullOrEmpty())
-                {
-                    foreach (var pair in this.Materials)
-                    {
-                        total += pair.Item1.Density * pair.Item2;
-                    }
-                }
-                else
-                {
-                    total += this.Components.Select(type => type.Weight).Aggregate((run, tot) => tot + run);
-                }
+                float total = this.Materials.Sum(pair => pair.Item1.Density * pair.Item2);
+                total += this.Components.Select(type => type.Weight).Sum();
 
                 return total;
             }
@@ -112,15 +102,9 @@ namespace JoyGodot.Assets.Scripts.Items
         }
         
         public int SpawnWeighting { get; }
-
-         
         public int LightLevel { get; }
-
         public string[] Tags => this.m_Tags.ToArray();
-        
         public string SpriteSheet { get; }
-        
-         
         public int Range { get; }
         
         public BaseItemType()

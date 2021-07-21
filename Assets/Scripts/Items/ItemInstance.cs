@@ -15,7 +15,6 @@ using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.Scripting;
 using JoyGodot.Assets.Scripts.World;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.Items
@@ -36,15 +35,12 @@ namespace JoyGodot.Assets.Scripts.Items
         protected BaseItemType m_Type;
 
          
-        protected Guid m_OwnerGUID;
+        protected Guid m_OwnerGuid;
         
          
         protected string m_OwnerString;
         
         protected int StateIndex { get; set; }
-
-         
-        protected int m_Value;
 
         public override IEnumerable<string> Tags
         {
@@ -80,12 +76,12 @@ namespace JoyGodot.Assets.Scripts.Items
         {
             get
             {
-                return this.m_OwnerGUID;
+                return this.m_OwnerGuid;
             }
             protected set
             {
-                this.m_OwnerGUID = value;
-                this.m_OwnerString = this.EntityHandler?.Get(this.m_OwnerGUID)?.JoyName;
+                this.m_OwnerGuid = value;
+                this.m_OwnerString = this.EntityHandler?.Get(this.m_OwnerGuid)?.JoyName;
             }
         }
 
@@ -180,10 +176,7 @@ namespace JoyGodot.Assets.Scripts.Items
             }
         }
 
-        public IEnumerable<IItemInstance> Contents
-        {
-            get => this.ItemHandler?.GetItems(this.m_Contents);
-        }
+        public IEnumerable<IItemInstance> Contents => this.ItemHandler?.GetItems(this.m_Contents);
 
         public string ContentString
         {
@@ -245,12 +238,21 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public BaseItemType ItemType => this.m_Type;
 
-        public int Value => this.m_Value;
+        public int Value
+        {
+            get
+            {
+                if (this.ContentsDirty)
+                {
+                    this.m_CachedValue = this.ItemType.Value + this.Contents.Sum(item => item.Value);
+                }
 
-         
+                return this.m_CachedValue;
+            }
+        }
+        protected int m_CachedValue;
+        
         public IEnumerable<IAbility> UniqueAbilities { get; protected set; }
-
-        public IEnumerable<ISpriteState> Sprites => this.States;
         
         public ILiveItemHandler ItemHandler { get; set; }
         
@@ -300,8 +302,6 @@ namespace JoyGodot.Assets.Scripts.Items
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler;
 
             this.SetMaterialColours();
-
-            this.CalculateValue();
 
             if (this.States.Count > 1)
             {
@@ -490,8 +490,6 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 userAbility.OnUse(this.User, this);
             }
-            
-            this.CalculateValue();
         }
 
         protected void Initialise()
@@ -594,8 +592,6 @@ namespace JoyGodot.Assets.Scripts.Items
 
                 this.ContentsDirty = true;
 
-                this.CalculateValue();
-
                 actor.InWorld = false;
                 
                 this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
@@ -613,8 +609,6 @@ namespace JoyGodot.Assets.Scripts.Items
                 .Select(instance => instance.Guid));
 
             this.ContentsDirty = true;
-            
-            this.CalculateValue();
             foreach (IItemInstance actor in itemInstances)
             {
                 this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
@@ -631,8 +625,6 @@ namespace JoyGodot.Assets.Scripts.Items
             }
 
             this.ContentsDirty = true;
-
-            this.CalculateValue();
             this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs { Item = actor });
 
             return true;
@@ -650,17 +642,6 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 this.RemoveContents(item);
             }
-
-            this.CalculateValue();
-        }
-
-        protected void CalculateValue()
-        {
-            this.m_Value = this.m_Type.Value;
-            foreach (IItemInstance item in this.Contents)
-            {
-                this.m_Value += item.Value;
-            }
         }
 
         public override Dictionary Save()
@@ -670,7 +651,6 @@ namespace JoyGodot.Assets.Scripts.Items
             saveDict.Add("ItemType", this.ItemType.IdentifiedName);
             saveDict.Add("Contents", new Array(this.m_Contents.Select(guid => guid.ToString())));
             saveDict.Add("Owner", this.OwnerGUID.ToString());
-            saveDict.Add("Value", this.Value);
             saveDict.Add("InWorld", this.InWorld);
             saveDict.Add("UniqueAbilities", new Array(this.UniqueAbilities.Select(ability => ability.Save())));
 
@@ -690,7 +670,6 @@ namespace JoyGodot.Assets.Scripts.Items
                     .Select(s => new Guid(s)));
             string owner = valueExtractor.GetValueFromDictionary<string>(data, "Owner");
             this.OwnerGUID = owner is null ? Guid.Empty : new Guid(owner);
-            this.m_Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
             this.InWorld = valueExtractor.GetValueFromDictionary<bool>(data, "InWorld");
             this.UniqueAbilities = new List<IAbility>(
                 valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "UniqueAbilities")
