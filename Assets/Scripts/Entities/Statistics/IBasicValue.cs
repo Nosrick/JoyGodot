@@ -4,7 +4,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
 {
     public interface IBasicValue<T> : 
         ITooltipHolder, 
-        ISerialisationHandler where T : struct
+        ISerialisationHandler
     {
         string Name
         {

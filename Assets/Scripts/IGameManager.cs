@@ -46,6 +46,7 @@ namespace JoyGodot.Assets.Scripts
         ICombatEngine CombatEngine { get; }
         IQuestTracker QuestTracker { get; }
         IQuestProvider QuestProvider { get; }
+        ILocalAreaInfoHandler LocalAreaInfoHandler { get; }
         IEntityRelationshipHandler RelationshipHandler { get; }
         IEntityStatisticHandler StatisticHandler { get; }
         IMaterialHandler MaterialHandler { get; }

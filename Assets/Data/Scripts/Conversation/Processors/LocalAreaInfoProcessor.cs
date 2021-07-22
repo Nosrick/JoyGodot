@@ -1,8 +1,10 @@
-﻿using JoyGodot.Assets.Scripts.Conversation.Conversations;
+﻿using JoyGodot.Assets.Scripts;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.World;
+using JoyGodot.Assets.Scripts.World.WorldInfo;
 
 namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
@@ -14,17 +16,19 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
             set;
         }
         
+        protected static ILocalAreaInfoHandler InfoHandler { get; set; }
+        
         public LocalAreaInfoProcessor() 
             : base(
                 new ITopicCondition[0], 
-                "LocalAreaInfo",
-                new []{ "Thanks" },
-                "",
-                0,
-                null, 
-                Speaker.LISTENER,
-                new RNG())
+                "BaseTopics", 
+                new [] { "Thanks" }, 
+                "Can you tell me anything about this place?", 
+                0, 
+                null,
+                Speaker.INSTIGATOR)
         {
+            InfoHandler ??= GlobalConstants.GameManager.LocalAreaInfoHandler;
         }
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
@@ -40,57 +44,18 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                 new TopicData(
                     new ITopicCondition[0], 
                     "LocalAreaInfo",
-                    new []{ "Thanks" }, this.GetAreaInfo(this.Listener),
+                    new []{ "Thanks" }, 
+                    this.GetAreaInfo(this.Listener),
                     0,
                     null, 
                     Speaker.LISTENER,
-                    new RNG()) 
+                    this.Roller) 
             };
         }
 
         protected string GetAreaInfo(IEntity listener)
         {
-            string message = "";
-
-            IWorldInstance listenerWorld = listener.MyWorld;
-            if (listenerWorld.HasTag("interior"))
-            {
-                int result = this.Roller.Roll(0, 100);
-                if (result <= 50)
-                {
-                    int numberOfLevels = 1;
-                    numberOfLevels = WorldConversationDataHelper.GetNumberOfFloors(numberOfLevels, listenerWorld);
-
-                    string plural = numberOfLevels > 1 ? "floors" : "floor";
-                    message = "This place has " + numberOfLevels + plural + " to it.";
-                }
-                if (result > 50)
-                {
-                    int exactNumber = WorldConversationDataHelper.GetNumberOfCreatures(listener.CreatureType, listenerWorld);
-                    int roughNumber = 0;
-                    if (exactNumber < 10)
-                    {
-                        roughNumber = exactNumber;
-                    }
-                    else if (exactNumber % 10 < 6)
-                    {
-                        roughNumber = exactNumber - (exactNumber % 10);
-                    }
-                    else
-                    {
-                        roughNumber = exactNumber + (exactNumber % 10);
-                    }
-
-                    string plural = roughNumber > 1 ? "s" : "";
-                    message = "There are around " + roughNumber + " " + listener.CreatureType + plural + " here.";
-                }
-            }
-            else
-            {
-                message = "I don't know much about this place, sorry.";
-            }
-
-            return message;
+            return InfoHandler.GetRandomLocalAreaInfo(listener.MyWorld);
         }
     }
 }

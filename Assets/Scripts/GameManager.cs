@@ -146,6 +146,8 @@ namespace JoyGodot.Assets.Scripts
 
             this.VisionProviderHandler = new VisionProviderHandler();
 
+            this.LocalAreaInfoHandler = new LocalAreaInfoHandler();
+
             this.LoadingMessage = "Initialising entity gubbinz";
             this.StatisticHandler = new EntityStatisticHandler();
             this.NeedHandler = new NeedHandler();
@@ -261,6 +263,7 @@ namespace JoyGodot.Assets.Scripts
         public IObjectIconHandler ObjectIconHandler { get; protected set; }
         public IMaterialHandler MaterialHandler { get; protected set; }
         public ICultureHandler CultureHandler { get; protected set; }
+        public ILocalAreaInfoHandler LocalAreaInfoHandler { get; protected set; }
         public IEntityStatisticHandler StatisticHandler { get; protected set; }
         public IEntityTemplateHandler EntityTemplateHandler { get; protected set; }
         public IEntityBioSexHandler BioSexHandler { get; protected set; }
