@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -25,7 +26,9 @@ namespace JoyGodot.Assets.Scripts.Helpers
 
         public static T GetRandom<T>(this ICollection<T> collection)
         {
-            return collection.ElementAt(ROLLER.Next(collection.Count));
+            return collection.Count == 0 
+                ? default 
+                : collection.ElementAt(ROLLER.Next(collection.Count));
         }
 
         public static string Print(this IEnumerable collection)
@@ -48,6 +51,11 @@ namespace JoyGodot.Assets.Scripts.Helpers
             }
 
             return (type.IsValueType & type.IsPrimitive);
+        }
+
+        public static string ToTitleCase(this string data)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(data);
         }
 
         public static bool IsNullOrEmpty(this IEnumerable enumerable)
