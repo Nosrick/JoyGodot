@@ -43,6 +43,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         public bool MoveUsedItem => this.m_MoveUsedItem;
         protected List<JoyItemSlot> Slots { get; set; }
 
+        public int NumberOfSlots => this.ActiveSlots.Count;
+
         protected List<JoyItemSlot> ActiveSlots => this.Slots
             .Where(slot => slot.Visible)
             .ToList();

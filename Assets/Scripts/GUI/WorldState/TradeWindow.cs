@@ -108,10 +108,20 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         {
             this.LeftInventory.ContainerOwner = this.Left;
             this.LeftOffering.ContainerOwner = new VirtualStorage();
+
+            for (int i = 0; i < 8 - this.LeftOffering.NumberOfSlots; i++)
+            {
+                this.LeftOffering.AddSlot(true);
+            }
             this.LeftOffering.TitleText = "You are offering";
 
             this.RightInventory.ContainerOwner = this.Right;
             this.RightOffering.ContainerOwner = new VirtualStorage();
+
+            for (int i = 0; i < 8 - this.RightOffering.NumberOfSlots; i++)
+            {
+                this.RightOffering.AddSlot(true);
+            }
 
             if (this.Right is IEntity right)
             {

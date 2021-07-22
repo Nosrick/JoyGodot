@@ -139,14 +139,15 @@ __meta__ = {
 }
 
 [node name="LeftInventory" type="VBoxContainer" parent="MainContainer"]
-margin_right = 34.0
+margin_right = 206.0
 margin_bottom = 417.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 4 )
 m_ContainerNames = [ SubResource( 1 ) ]
 
 [node name="Title" type="Label" parent="MainContainer/LeftInventory"]
-margin_right = 34.0
+margin_right = 206.0
 margin_bottom = 18.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -158,7 +159,7 @@ clip_text = true
 
 [node name="MarginContainer" type="MarginContainer" parent="MainContainer/LeftInventory"]
 margin_top = 22.0
-margin_right = 34.0
+margin_right = 206.0
 margin_bottom = 417.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -167,28 +168,30 @@ custom_constants/margin_left = 17
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/LeftInventory/MarginContainer"]
 margin_left = 17.0
-margin_right = 17.0
+margin_right = 189.0
 margin_bottom = 395.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Slot Grid" type="GridContainer" parent="MainContainer/LeftInventory/MarginContainer/ScrollContainer"]
+margin_right = 172.0
 margin_bottom = 395.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 
 [node name="LeftOffering" type="VBoxContainer" parent="MainContainer"]
-margin_left = 38.0
-margin_right = 72.0
+margin_left = 210.0
+margin_right = 416.0
 margin_bottom = 417.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 4 )
 m_ContainerNames = [ SubResource( 2 ) ]
 
 [node name="Title" type="Label" parent="MainContainer/LeftOffering"]
-margin_right = 34.0
+margin_right = 206.0
 margin_bottom = 18.0
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 3 )
@@ -199,8 +202,8 @@ clip_text = true
 
 [node name="MarginContainer" type="MarginContainer" parent="MainContainer/LeftOffering"]
 margin_top = 22.0
-margin_right = 34.0
-margin_bottom = 353.0
+margin_right = 206.0
+margin_bottom = 395.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 17
@@ -208,21 +211,22 @@ custom_constants/margin_left = 17
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/LeftOffering/MarginContainer"]
 margin_left = 17.0
-margin_right = 17.0
-margin_bottom = 331.0
+margin_right = 189.0
+margin_bottom = 373.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Slot Grid" type="GridContainer" parent="MainContainer/LeftOffering/MarginContainer/ScrollContainer"]
-margin_bottom = 331.0
+margin_right = 172.0
+margin_bottom = 373.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 
 [node name="LeftValue" type="Label" parent="MainContainer/LeftOffering"]
-margin_top = 357.0
-margin_right = 34.0
+margin_top = 399.0
+margin_right = 206.0
 margin_bottom = 417.0
 custom_fonts/font = ExtResource( 3 )
 text = "Your value"
@@ -231,15 +235,16 @@ valign = 1
 autowrap = true
 
 [node name="RightOffering" type="VBoxContainer" parent="MainContainer"]
-margin_left = 76.0
-margin_right = 110.0
+margin_left = 420.0
+margin_right = 626.0
 margin_bottom = 417.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 4 )
 m_ContainerNames = [ SubResource( 3 ) ]
 
 [node name="Title" type="Label" parent="MainContainer/RightOffering"]
-margin_right = 34.0
+margin_right = 206.0
 margin_bottom = 18.0
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 3 )
@@ -250,8 +255,8 @@ clip_text = true
 
 [node name="MarginContainer" type="MarginContainer" parent="MainContainer/RightOffering"]
 margin_top = 22.0
-margin_right = 34.0
-margin_bottom = 332.0
+margin_right = 206.0
+margin_bottom = 395.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 17
@@ -259,21 +264,22 @@ custom_constants/margin_left = 17
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/RightOffering/MarginContainer"]
 margin_left = 17.0
-margin_right = 17.0
-margin_bottom = 310.0
+margin_right = 189.0
+margin_bottom = 373.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Slot Grid" type="GridContainer" parent="MainContainer/RightOffering/MarginContainer/ScrollContainer"]
-margin_bottom = 310.0
+margin_right = 172.0
+margin_bottom = 373.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 
 [node name="RightValue" type="Label" parent="MainContainer/RightOffering"]
-margin_top = 336.0
-margin_right = 34.0
+margin_top = 399.0
+margin_right = 206.0
 margin_bottom = 417.0
 custom_fonts/font = ExtResource( 3 )
 text = "Their value"
@@ -282,15 +288,16 @@ valign = 1
 autowrap = true
 
 [node name="RightInventory" type="VBoxContainer" parent="MainContainer"]
-margin_left = 114.0
-margin_right = 148.0
+margin_left = 630.0
+margin_right = 836.0
 margin_bottom = 417.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 4 )
 m_ContainerNames = [ SubResource( 4 ) ]
 
 [node name="Title" type="Label" parent="MainContainer/RightInventory"]
-margin_right = 34.0
+margin_right = 206.0
 margin_bottom = 18.0
 size_flags_vertical = 0
 custom_fonts/font = ExtResource( 3 )
@@ -301,7 +308,7 @@ clip_text = true
 
 [node name="MarginContainer" type="MarginContainer" parent="MainContainer/RightInventory"]
 margin_top = 22.0
-margin_right = 34.0
+margin_right = 206.0
 margin_bottom = 417.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -310,13 +317,14 @@ custom_constants/margin_left = 17
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/RightInventory/MarginContainer"]
 margin_left = 17.0
-margin_right = 17.0
+margin_right = 189.0
 margin_bottom = 395.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Slot Grid" type="GridContainer" parent="MainContainer/RightInventory/MarginContainer/ScrollContainer"]
+margin_right = 172.0
 margin_bottom = 395.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -335,15 +343,8 @@ __meta__ = {
 }
 HAlign = 1
 VAlign = 1
-TitleCase = true
 Text = "Trade"
-CacheFont = true
-OutlineColour = Color( 0, 0, 0, 1 )
-FontSize = 24
-FontColour = Color( 1, 1, 1, 1 )
-OutlineThickness = 1
-CustomFont = SubResource( 6 )
-ClickSoundName = "FingerSnap"
+AutoWrap = true
 StateColours = {
 -1: Color( 0.18, 0.31, 0.31, 1 ),
 0: Color( 1, 1, 1, 1 ),
@@ -351,8 +352,15 @@ StateColours = {
 2: Color( 0.83, 0.83, 0.83, 1 ),
 3: Color( 0.66, 0.66, 0.66, 1 )
 }
+ClickSoundName = "FingerSnap"
 ColourMultiplier = 1.0
-AutoWrap = true
+OutlineThickness = 1
+FontColour = Color( 1, 1, 1, 1 )
+FontSize = 24
+CacheFont = true
+OutlineColour = Color( 0, 0, 0, 1 )
+TitleCase = true
+CustomFont = SubResource( 6 )
 
 [node name="MarginContainer" type="MarginContainer" parent="TradeButton"]
 anchor_right = 1.0
