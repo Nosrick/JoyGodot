@@ -17,6 +17,8 @@ namespace JoyGodot.Assets.Scripts.Conversation.Conversations
         public string[] NextTopics { get; protected set; }
         public string Words { get; protected set; }
         public int Priority { get; protected set; }
+        
+        public IEnumerable<string> Tags { get; protected set; }
 
         public Speaker Speaker { get; protected set; }
 
@@ -35,6 +37,7 @@ namespace JoyGodot.Assets.Scripts.Conversation.Conversations
             string ID,
             string[] nextTopics,
             string words,
+            IEnumerable<string> tags,
             int priority,
             IEnumerable<IJoyAction> cachedActions,
             Speaker speaker,

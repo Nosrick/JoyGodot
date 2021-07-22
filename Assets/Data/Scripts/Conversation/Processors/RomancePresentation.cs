@@ -17,7 +17,8 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                 "RomanceYes",
                 "RomanceNo"
             },
-            "Is a <1> relationship okay?",
+            "Is a <1> relationship okay?", 
+            new []{"relationship", "query", "romance"},
             0,
             null,
             Speaker.LISTENER,

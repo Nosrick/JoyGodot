@@ -19,6 +19,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                     "BondingDecision"
                 },
                 "words",
+                new []{"relationship", "bonding", "query"},
                 0,
                 null,
                 Speaker.INSTIGATOR,
@@ -47,10 +48,12 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
             }
 
             string decision = "";
+            bool bonded = false;
             if (highestValue > listener.Romance.BondingThreshold && chosenRelationship is null == false)
             {
                 decision = "Yes, I will!";
                 chosenRelationship.AddTag("bonded");
+                bonded = true;
             }
             else
             {
@@ -59,7 +62,9 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 
             return new ITopic[]
             {
-                new BondingDecision(decision)
+                new BondingDecision(
+                    decision,
+                    new[] { "relationship", "bonding", (bonded ? "positive" : "negative")})
             };
         }
     }

@@ -20,12 +20,14 @@ namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
         
         RNG Roller { get; }
 
-        IRumour GenerateRandomRumour(IJoyObject[] participants);
+        IRumour GenerateRandomRumour(IEnumerable<IJoyObject> participants);
 
-        IRumour GenerateRumourFromTags(IJoyObject[] participants, string[] tags);
+        IRumour GenerateRumourFromTags(IEnumerable<IJoyObject> participants, IEnumerable<string> tags, bool includeBaseless = false);
 
         IRumour[] GenerateOneRumourOfEachType(IJoyObject[] participants);
 
         IRumour GetRandom(IWorldInstance overworldRef);
+
+        bool PropagateRumour(IEnumerable<IJoyObject> participants, IEnumerable<string> tags, bool force = false);
     }
 }

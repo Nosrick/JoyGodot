@@ -20,6 +20,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                     "RomancePresentation"
                 }, 
                 "words", 
+                new []{"relationship", "query", "romance"}, 
                 0, 
                 null,
                 Speaker.INSTIGATOR)
@@ -68,7 +69,8 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                     new ITopicCondition[0],
                     "RomanceTurnDown",
                     new[] {"BaseTopics"},
-                    "Uh, no thanks.",
+                    "Uh, no thanks.", 
+                    new []{"relationship", "negative", "romance"},
                     0,
                     null,
                     Speaker.LISTENER)

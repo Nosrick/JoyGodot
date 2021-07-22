@@ -20,7 +20,8 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                 new ITopicCondition[0],
                 "SexProposal",
                 new string[0],
-                "words",
+                "words", 
+                new[] { "relationship", "query", "sexual"},
                 0,
                 null,
                 Speaker.INSTIGATOR)
@@ -103,8 +104,9 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                     new TopicData(
                         new ITopicCondition[0],
                         "SexRejection",
-                        new string[] {"BaseTopics"},
+                        new[] {"BaseTopics"},
                         "No thank you.",
+                        new []{"relationship", "negative", "sexual"},
                         0,
                         null,
                         Speaker.LISTENER)
@@ -117,6 +119,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                     "SexAcceptance",
                     new string[0],
                     "words",
+                    new []{"relationship", "positive", "sexual"},
                     0,
                     null,
                     Speaker.LISTENER)

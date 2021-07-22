@@ -17,6 +17,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                     "TaskNo"
                 }, 
                 offeredQuest.ToString(), 
+                new[] { "relationship", "query", "task"}, 
                 0,
                 null,
                 Speaker.LISTENER)

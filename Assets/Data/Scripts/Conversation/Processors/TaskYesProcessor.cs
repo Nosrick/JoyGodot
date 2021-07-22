@@ -20,6 +20,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                 "TaskYes", 
                 new []{ "ListenerThanks" }, 
                 "I can do that.", 
+                new []{"relationship", "task", "positive"}, 
                 0, 
                 null, 
                 Speaker.INSTIGATOR)

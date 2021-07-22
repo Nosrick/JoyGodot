@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Conversation.Conversations;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
@@ -16,7 +17,8 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                 new ITopicCondition[0],
                 "SexDecision",
                 new string[0],
-                decision,
+                decision, 
+                new []{"relationship", "query", "sexual"},
                 0,
                 null,
                 Speaker.LISTENER)
@@ -81,7 +83,8 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                         new ITopicCondition[0],
                         "SexReject",
                         new string[0],
-                        this.Words,
+                        this.Words, 
+                        new []{"relationship", "negative", "sexual"},
                         0,
                         null,
                         Speaker.LISTENER)

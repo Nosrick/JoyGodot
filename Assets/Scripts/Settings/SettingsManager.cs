@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -27,6 +28,7 @@ namespace JoyGodot.Assets.Scripts.Settings
         public const string HAPPINESS_WORLD = "Happiness Affects World";
         public const string HAPPINESS_UI = "Happiness Affects UI";
         public const string HAPPINESS_CURSOR = "Happiness Affects Cursor";
+        public const string RUMOUR_CHANCE = "Rumour Chance";
 
         public event ValueChangedEventHandler<object> ValueChanged;  
         
@@ -45,6 +47,7 @@ namespace JoyGodot.Assets.Scripts.Settings
             this.Add(new Setting<bool>(HAPPINESS_WORLD, new List<bool> { true, false }));
             this.Add(new Setting<bool>(HAPPINESS_UI, new List<bool> { true, false }));
             this.Add(new Setting<bool>(HAPPINESS_CURSOR, new List<bool> { true, false }));
+            this.Add(SettingsFactory.Create(RUMOUR_CHANCE, Enumerable.Range(1, 5).Select(x => x * 5).ToArray()));
         }
 
         public ISetting Get(string name)
@@ -120,7 +123,9 @@ namespace JoyGodot.Assets.Scripts.Settings
                 foreach (Dictionary settingsDict in settingsArray)
                 {
                     string name = this.ValueExtractor.GetValueFromDictionary<string>(settingsDict, "Name");
-                    ICollection<object> values = this.ValueExtractor.GetArrayValuesCollectionFromDictionary<object>(settingsDict, "ValuesRange");
+                    ICollection values = this.ValueExtractor
+                        .GetArrayValuesCollectionFromDictionary<object>(settingsDict, "ValuesRange")
+                        .ToArray();
                     int index = this.ValueExtractor.GetValueFromDictionary<int>(settingsDict, "Index");
                     ISetting setting = SettingsFactory.Create(name, values);
                     setting.Index = index;

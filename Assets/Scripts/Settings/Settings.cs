@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +35,7 @@ namespace JoyGodot.Assets.Scripts.Settings
             throw new InvalidOperationException("Values do not constrain to one type.");
         }
         
-        public static ISetting Create(string name, ICollection<object> values)
+        public static ISetting Create(string name, ICollection values)
         {
             if (values.Count == 0)
             {
@@ -44,15 +45,21 @@ namespace JoyGodot.Assets.Scripts.Settings
             }
 
             try
-            { 
-                MethodInfo methodInfo = typeof(SettingsFactory).GetMethod(nameof(CastToSetting))?.MakeGenericMethod(values.FirstOrDefault()?.GetType());
-
-                if (methodInfo is null)
+            {
+                IEnumerator enumerator = values.GetEnumerator();
+                if (enumerator.MoveNext())
                 {
-                    throw new InvalidOperationException();
-                }
+                    var first = enumerator.Current;
+                 
+                    MethodInfo methodInfo = typeof(SettingsFactory).GetMethod(nameof(CastToSetting))?.MakeGenericMethod(first?.GetType() ?? typeof(bool));
+
+                    if (methodInfo is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
                 
-                return (ISetting) methodInfo.Invoke(null, new object[] { name, values });
+                    return (ISetting) methodInfo.Invoke(null, new object[] { name, values });
+                }
             }
             catch (Exception e)
             {

@@ -49,6 +49,8 @@ namespace JoyGodot.Assets.Scripts.Conversation.Conversations
             get;
         }
         
+        IEnumerable<string> Tags { get; }
+
         RNG Roller { get; }
 
         string[] GetConditionTags();

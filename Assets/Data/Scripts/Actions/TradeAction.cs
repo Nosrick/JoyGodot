@@ -74,8 +74,19 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
             {
                 myTags.Add("item");
             }
+
+            int rightValue = rightOffering.Sum(instance => instance.Value);
+            int leftValue = leftOffering.Sum(instance => instance.Value);
+            if (leftValue < rightValue - 50)
+            {
+                myTags.Add("negative");
+            }
+            else if (leftValue > rightValue + 50)
+            {
+                myTags.Add("positive");
+            }
             
-            this.SetLastParameters(participants, tags, args);
+            this.SetLastParameters(participants, myTags, args);
             return true;
         }
     }

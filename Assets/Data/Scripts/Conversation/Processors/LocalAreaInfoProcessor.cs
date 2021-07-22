@@ -24,6 +24,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                 "BaseTopics", 
                 new [] { "Thanks" }, 
                 "Can you tell me anything about this place?", 
+                new []{"relationship", "positive"}, 
                 0, 
                 null,
                 Speaker.INSTIGATOR)
@@ -45,7 +46,8 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                     new ITopicCondition[0], 
                     "LocalAreaInfo",
                     new []{ "Thanks" }, 
-                    this.GetAreaInfo(this.Listener),
+                    this.GetAreaInfo(this.Listener), 
+                    new []{"relationship", "positive"},
                     0,
                     null, 
                     Speaker.LISTENER,

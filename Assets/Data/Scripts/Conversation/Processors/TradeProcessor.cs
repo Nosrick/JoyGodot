@@ -16,7 +16,8 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
                 new ITopicCondition[0],
                 "TradeTopic",
                 new string[0],
-                "words",
+                "words", 
+                new []{"relationship", "trade", "query"},
                 0,
                 null,
                 Speaker.INSTIGATOR)
@@ -25,8 +26,6 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            //this.TradeWindow?.SetActors(instigator, listener);
-
             var tradeWindow = GlobalConstants.GameManager.GUIManager.Get<TradeWindow>(GUINames.TRADE);
             tradeWindow.SetActors(instigator, listener);
             GlobalConstants.GameManager.GUIManager.OpenGUI(this, GUINames.TRADE);

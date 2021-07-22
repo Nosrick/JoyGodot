@@ -1,16 +1,20 @@
-﻿using JoyGodot.Assets.Scripts.Conversation.Conversations;
+﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Conversation.Conversations;
 using JoyGodot.Assets.Scripts.Rollers;
 
 namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 {
     public class BondingDecision : TopicData
     {
-        public BondingDecision(string decision)
+        public BondingDecision(
+            string decision,
+            IEnumerable<string> tags)
             : base(
                 new ITopicCondition[0], 
                 "BondingDecision",
                 new []{ "BaseTopics" },
-                decision,
+                decision, 
+                tags,
                 0,
                 null, 
                 Speaker.LISTENER,

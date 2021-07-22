@@ -40,6 +40,28 @@
         "relationship",
         "negative"
       ]
+    },
+    {
+      "Text": "Apparently, <1> ripped off <2>!",
+      "Parameters": [
+        "participant",
+        "participant"
+      ],
+      "Tags": [
+        "trade",
+        "negative"
+      ]
+    },
+    {
+      "Text": "I heard that <1> gave <2> a really good deal.",
+      "Parameters": [
+        "participant",
+        "participant"
+      ],
+      "Tags": [
+        "trade",
+        "positive"
+      ]
     }
   ]
 }

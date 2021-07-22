@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Quests;
 
@@ -48,5 +49,7 @@ namespace JoyGodot.Assets.Scripts.Scripting
         }
         
         IQuestTracker QuestTracker { get; set; }
+        
+        IRumourMill RumourMill { get; set; }
     }
 }

@@ -128,6 +128,10 @@ namespace JoyGodot.Assets.Scripts.Conversation
                         ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(line, "Actions").ToArray()
                         : new string[0];
 
+                    ICollection<string> tags = line.Contains("Tags")
+                        ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(line, "Tags").ToArray()
+                        : new string[0];
+
                     IEnumerable<IJoyAction> actions = GlobalConstants.ScriptingEngine.FetchActions(actionStrings);
 
                     var processorBase = processorName.IsNullOrEmpty() ? null : GlobalConstants.ScriptingEngine.FetchAndInitialise(processorName);
@@ -152,7 +156,8 @@ namespace JoyGodot.Assets.Scripts.Conversation
                             conditions.ToArray(),
                             name,
                             next.ToArray(),
-                            text,
+                            text, 
+                            tags,
                             priority,
                             actions,
                             speakerEnum,

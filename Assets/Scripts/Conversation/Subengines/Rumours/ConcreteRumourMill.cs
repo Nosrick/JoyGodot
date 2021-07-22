@@ -10,6 +10,7 @@ using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.Scripting;
+using JoyGodot.Assets.Scripts.Settings;
 using JoyGodot.Assets.Scripts.World;
 using Directory = System.IO.Directory;
 using File = System.IO.File;
@@ -157,7 +158,7 @@ namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
             return this.Rumours[this.Roller.Roll(0, this.Rumours.Count)];
         }
 
-        public IRumour GenerateRandomRumour(IJoyObject[] participants)
+        public IRumour GenerateRandomRumour(IEnumerable<IJoyObject> participants)
         {
             if (this.RumourTypes is null)
             {
@@ -198,37 +199,55 @@ namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
             return rumour;
         }
 
-        public IRumour GenerateRumourFromTags(IJoyObject[] participants, string[] tags)
+        public bool PropagateRumour(IEnumerable<IJoyObject> participants,
+            IEnumerable<string> tags,
+            bool force = false)
+        {
+            int result = this.Roller.Roll(1, 101);
+            float chance = (float?) GlobalConstants.GameManager?.SettingsManager?.Get(SettingsManager.RUMOUR_CHANCE)?.ObjectValue ?? 0;
+            if (result < chance)
+            {
+                IRumour rumour = this.GenerateRumourFromTags(participants, tags);
+                if (rumour is null)
+                {
+                    return false;
+                }
+                this.Rumours.Add(rumour);
+                return true;
+            }
+
+            return false;
+        }
+
+        public IRumour GenerateRumourFromTags(IEnumerable<IJoyObject> participants, IEnumerable<string> tags, bool includeBaseless = false)
         {
             if (this.RumourTypes is null)
             {
                 this.Initialise();
             }
 
-            IRumour rumour = null;
+            IRumour selectedRumour = this.RumourTypes.Where(r =>
+                    r.Tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Count() == r.Tags.Length
+                    && r.FulfilsConditions(participants))
+                .ToArray()
+                .GetRandom();
 
-            IRumour[] possibilities = this.RumourTypes.Where(r =>
-                    r.Tags.Intersect(tags, StringComparer.OrdinalIgnoreCase).Any() && r.FulfilsConditions(participants))
-                .ToArray();
-
-            if (possibilities.Length > 0)
+            if (selectedRumour is null == false)
             {
-                IRumour resultingRumour = possibilities[this.Roller.Roll(0, possibilities.Length)];
-                rumour = resultingRumour.Create(
+                return selectedRumour.Create(
                     participants,
-                    resultingRumour.Tags,
-                    resultingRumour.ViralPotential,
-                    resultingRumour.Conditions,
-                    resultingRumour.Parameters,
-                    resultingRumour.Words,
-                    resultingRumour.LifetimeMultiplier,
-                    resultingRumour.Lifetime);
+                    selectedRumour.Tags,
+                    selectedRumour.ViralPotential,
+                    selectedRumour.Conditions,
+                    selectedRumour.Parameters,
+                    selectedRumour.Words,
+                    selectedRumour.LifetimeMultiplier,
+                    selectedRumour.Lifetime);
             }
-            else
+            if(includeBaseless)
             {
-                int result = this.Roller.Roll(0, this.RumourTypes.Count);
-                IRumour resultingRumour = this.RumourTypes[result];
-                rumour = resultingRumour.Create(
+                IRumour resultingRumour = this.RumourTypes.GetRandom();
+                return resultingRumour.Create(
                     participants,
                     resultingRumour.Tags,
                     resultingRumour.ViralPotential,
@@ -240,7 +259,7 @@ namespace JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours
                     true);
             }
 
-            return rumour;
+            return null;
         }
 
         public IRumour[] GenerateOneRumourOfEachType(IJoyObject[] participants)
