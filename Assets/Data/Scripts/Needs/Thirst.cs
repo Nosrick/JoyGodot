@@ -13,7 +13,9 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
     public class Thirst : AbstractNeed
     {
         public override string Name => "thirst";
-        
+
+        public override string DisplayName => "thirsty";
+
         protected const int DECAY = 200;
         protected const int PRIORITY = 12;
 

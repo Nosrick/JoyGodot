@@ -14,6 +14,8 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
     {
         public override string Name => "sleep";
 
+        public override string DisplayName => "sleepy";
+
         protected const int DECAY = 200;
         protected const int PRIORITY = 12;
 

@@ -25,6 +25,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
         //Name and Value come from IBasicValue
 
+        string DisplayName
+        {
+            get;
+        }
+
         int Priority
         {
             get;

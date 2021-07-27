@@ -14,6 +14,9 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
     {
         public override string Name => "respect";
 
+        //TODO: combine respect and confidence?
+        public override string DisplayName => "insecure";
+
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;
 

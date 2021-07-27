@@ -13,6 +13,9 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
     public class Family : AbstractNeed
     {
         public override string Name => "family";
+
+        //TODO: Combine friendship and family into companionship?
+        public override string DisplayName => "lonely";
         
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;

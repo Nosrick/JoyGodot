@@ -16,6 +16,8 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
     {
         public override string Name => "purpose";
 
+        public override string DisplayName => "unfulfilled";
+
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;
 

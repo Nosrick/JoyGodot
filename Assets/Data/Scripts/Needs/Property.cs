@@ -27,6 +27,8 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
         
         public override string Name => "property";
 
+        public override string DisplayName => "poor?";
+
         public Property()
         : base(
             1,

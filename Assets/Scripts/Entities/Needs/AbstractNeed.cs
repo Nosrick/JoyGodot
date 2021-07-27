@@ -21,6 +21,14 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
         protected string m_Name;
 
+        public virtual string DisplayName
+        {
+            get => this.m_DisplayName;
+            protected set => this.m_DisplayName = value;
+        }
+
+        protected string m_DisplayName;
+
         public ISpriteState FulfillingSprite { get; set; }
 
         public RNG Roller { get; protected set; }

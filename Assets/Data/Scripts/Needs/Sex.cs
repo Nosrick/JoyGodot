@@ -14,7 +14,9 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
     public class Sex : AbstractNeed
     {
         public override string Name => "sex";
-        
+
+        public override string DisplayName => "horny";
+
         protected IEntityRelationshipHandler RelationshipHandler { get; set; }
 
         protected const int DECAY_MIN = 200;

@@ -11,6 +11,9 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
     public class Confidence : AbstractNeed
     {
         public override string Name => "confidence";
+        
+        //TODO: combine respect and confidence?
+        public override string DisplayName => "insecure";
 
         protected const int DECAY_MIN = 4;
         protected const int DECAY_MAX = 128;

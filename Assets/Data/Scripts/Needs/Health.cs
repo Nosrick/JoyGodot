@@ -33,6 +33,8 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
 
         public override string Name => "health";
 
+        public override string DisplayName => "sick";
+
         protected INeed ActingNeed
         {
             get;

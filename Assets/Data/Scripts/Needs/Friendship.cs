@@ -14,6 +14,9 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
     {
         public override string Name => "friendship";
 
+        //TODO: Combine friendship and family into companionship?
+        public override string DisplayName => "lonely";
+
         protected IEntityRelationshipHandler EntityRelationshipHandler
         {
             get;
