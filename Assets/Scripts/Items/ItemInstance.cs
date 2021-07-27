@@ -260,7 +260,7 @@ namespace JoyGodot.Assets.Scripts.Items
         
         public ItemInstance()
         {
-            this.Data = new NonUniqueDictionary<object, object>();
+            this.Data = new NonUniqueDictionary<string, object>();
             this.ItemHandler = GlobalConstants.GameManager.ItemHandler;
             this.EntityHandler = GlobalConstants.GameManager.EntityHandler; 
         }

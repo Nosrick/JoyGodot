@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot.Collections;
+using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Events;
@@ -18,11 +20,11 @@ namespace JoyGodot.Assets.Scripts.JoyObject
     {
         public event ValueChangedEventHandler<int> OnDerivedValueChange;
         public event ValueChangedEventHandler<int> OnMaximumChange;
-        
+
         protected List<string> m_Tags;
-        
+
         public IDictionary<string, IDerivedValue> DerivedValues { get; protected set; }
-        
+
         public Vector2Int WorldPosition { get; protected set; }
 
         public virtual IEnumerable<string> Tags
@@ -34,7 +36,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         public bool IsWall { get; protected set; }
 
         public bool IsDestructible { get; protected set; }
-        
+
         public virtual IWorldInstance MyWorld { get; set; }
 
         public Guid WorldGuid
@@ -56,8 +58,8 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         public virtual int HitPoints => this.GetMaximum("hitpoints");
 
         public bool Alive => this.HitPointsRemaining > (this.HitPoints * (-1));
-        
-        protected NonUniqueDictionary<object, object> Data { get; set; }
+
+        protected NonUniqueDictionary<string, object> Data { get; set; }
 
         public List<ISpriteState> States
         {
@@ -88,7 +90,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             get => this.m_Tooltip;
             set => this.m_Tooltip = value.ToList();
         }
-        
+
         protected List<string> m_Tooltip;
 
         public JoyObject()
@@ -111,26 +113,26 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         /// <param name="isAnimated"></param>
         /// <param name="isWall"></param>
         public JoyObject(
-            string name, 
+            string name,
             Guid guid,
-            IDictionary<string, IDerivedValue> derivedValues, 
-            Vector2Int position, 
+            IDictionary<string, IDerivedValue> derivedValues,
+            Vector2Int position,
             IEnumerable<string> actions,
-            IEnumerable<ISpriteState> sprites, 
+            IEnumerable<ISpriteState> sprites,
             string tileSet,
             RNG roller = null,
             params string[] tags)
         {
             this.TileSet = tileSet;
-            this.Roller = roller ?? new RNG(); 
-            List<IJoyAction> tempActions = new List<IJoyAction>(); 
-            foreach(string action in actions)
+            this.Roller = roller ?? new RNG();
+            List<IJoyAction> tempActions = new List<IJoyAction>();
+            foreach (string action in actions)
             {
                 tempActions.Add(GlobalConstants.ScriptingEngine.FetchAction(action));
             }
 
             this.Initialise(
-                name, 
+                name,
                 guid,
                 derivedValues,
                 position,
@@ -140,9 +142,9 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         }
 
         public JoyObject(
-            string name, 
+            string name,
             Guid guid,
-            IDictionary<string, IDerivedValue> derivedValues, 
+            IDictionary<string, IDerivedValue> derivedValues,
             Vector2Int position,
             IEnumerable<IJoyAction> actions,
             IEnumerable<ISpriteState> sprites,
@@ -151,7 +153,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             params string[] tags)
         {
             this.TileSet = tileSet;
-            this.Roller = roller is null ? new RNG() : roller; 
+            this.Roller = roller is null ? new RNG() : roller;
             this.Initialise(
                 name,
                 guid,
@@ -163,16 +165,16 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         }
 
         public void Initialise(
-            string name, 
+            string name,
             Guid guid,
-            IDictionary<string, IDerivedValue> derivedValues, 
-            Vector2Int position, 
+            IDictionary<string, IDerivedValue> derivedValues,
+            Vector2Int position,
             IEnumerable<IJoyAction> actions,
-            IEnumerable<ISpriteState> sprites, 
+            IEnumerable<ISpriteState> sprites,
             params string[] tags)
         {
-            this.Data = new NonUniqueDictionary<object, object>();
-            
+            this.Data = new NonUniqueDictionary<string, object>();
+
             this.JoyName = name;
             this.Guid = guid;
 
@@ -221,7 +223,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             {
                 return false;
             }
-            
+
             this.m_Tags.Add(tag);
             return true;
         }
@@ -232,7 +234,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             {
                 return false;
             }
-            
+
             this.m_Tags.Remove(tag);
             return true;
         }
@@ -268,20 +270,24 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         {
             if (this.DerivedValues.Keys.Any(key => key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return this.DerivedValues.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value.Value;
+                return this.DerivedValues.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value
+                    .Value;
             }
-            
-            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
+
+            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " +
+                                                this.ToString());
         }
 
         public virtual int GetMaximum(string name)
         {
             if (this.DerivedValues.Keys.Any(key => key.Equals(name, StringComparison.OrdinalIgnoreCase)))
             {
-                return this.DerivedValues.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value.Maximum;
+                return this.DerivedValues.First(pair => pair.Key.Equals(name, StringComparison.OrdinalIgnoreCase)).Value
+                    .Maximum;
             }
-            
-            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this.ToString());
+
+            throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " +
+                                                this.ToString());
         }
 
         public int SetBase(string name, int value)
@@ -301,7 +307,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             });
             return this.DerivedValues[name].Base;
         }
-        
+
         public int SetEnhancement(string name, int value)
         {
             if (!this.DerivedValues.ContainsKey(name))
@@ -326,6 +332,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             {
                 throw new InvalidOperationException("Derived value of " + name + " not found on JoyObject " + this);
             }
+
             this.DerivedValues[name].ModifyValue(value);
             this.OnDerivedValueChange?.Invoke(this, new ValueChangedEventArgs<int>
             {
@@ -355,9 +362,8 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         }
 
         // Update is called once per frame
-        public virtual void Update ()
-        {
-        }
+        public virtual void Update()
+        { }
 
         public int CompareTo(object obj)
         {
@@ -365,10 +371,10 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             {
                 case null:
                     return 1;
-                
+
                 case JoyObject joyObject:
                     return this.Guid.CompareTo(joyObject.Guid);
-                
+
                 default:
                     throw new ArgumentException("Object is not a JoyObject");
             }
@@ -380,21 +386,20 @@ namespace JoyGodot.Assets.Scripts.JoyObject
         }
 
         public virtual void Tick()
-        {
-        }
+        { }
 
-        public bool AddData(object key, object value)
+        public bool AddData(string key, object value)
         {
             this.Data.Add(key, value);
             return true;
         }
 
-        public bool RemoveData(object key)
+        public bool RemoveData(string key)
         {
             return this.Data.RemoveByKey(key) > 0;
         }
 
-        public bool HasDataKey(object search)
+        public bool HasDataKey(string search)
         {
             return this.Data.ContainsKey(search);
         }
@@ -404,7 +409,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             return this.Data.ContainsValue(search);
         }
 
-        public object[] GetDataValues(object key)
+        public object[] GetDataValues(string key)
         {
             return this.Data.Where(tuple => tuple.Item1.Equals(key))
                 .Select(tuple => tuple.Item2)
@@ -437,6 +442,27 @@ namespace JoyGodot.Assets.Scripts.JoyObject
                 {"SpriteStates", new Array(this.States.Select(state => state.Save()))}
             };
 
+            Dictionary data = new Dictionary();
+            foreach (string key in this.Data.Keys)
+            {
+                List<object> values = this.Data[key];
+                Array innerArray = new Array();
+                foreach (object value in values)
+                {
+                    try
+                    {
+                        innerArray.Add(value);
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.Log("Could not serialise object of type " + value.GetType().Name);
+                    }
+                }
+                data.Add(key, innerArray);
+            }
+            
+            saveDict.Add("Data", data);
+
             return saveDict;
         }
 
@@ -445,7 +471,8 @@ namespace JoyGodot.Assets.Scripts.JoyObject
             var valueExtractor = GlobalConstants.GameManager.WorldHandler.ValueExtractor;
 
             this.JoyName = valueExtractor.GetValueFromDictionary<string>(data, "JoyName");
-            this.WorldPosition = new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "WorldPosition"));
+            this.WorldPosition =
+                new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "WorldPosition"));
             string worldGuidString = valueExtractor.GetValueFromDictionary<string>(data, "MyWorld");
             this.WorldGuid = worldGuidString is null ? Guid.Empty : new Guid(worldGuidString);
             this.TileSet = valueExtractor.GetValueFromDictionary<string>(data, "TileSet");
@@ -454,7 +481,7 @@ namespace JoyGodot.Assets.Scripts.JoyObject
 
             ICollection<Dictionary> dictCollection = valueExtractor
                 .GetArrayValuesCollectionFromDictionary<Dictionary>(
-                    data, 
+                    data,
                     "DerivedValues");
             foreach (Dictionary dvDict in dictCollection)
             {
@@ -471,6 +498,19 @@ namespace JoyGodot.Assets.Scripts.JoyObject
                 state.Load(dict);
                 this.States.Add(state);
             }
+
+            if (data.Contains("Data"))
+            {
+                this.Data = new NonUniqueDictionary<string, object>();
+                Dictionary tempDict = valueExtractor.GetValueFromDictionary<Dictionary>(data, "Data");
+                foreach (DictionaryEntry entry in tempDict)
+                {
+                    foreach (object o in (Array) entry.Value)
+                    {
+                        this.Data.Add(entry.Key.ToString(), o);
+                    }
+                }
+            }
         }
-    }    
+    }
 }

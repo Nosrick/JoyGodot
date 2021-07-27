@@ -2,13 +2,12 @@
 {
     public interface IDataContainer
     {
-        bool AddData(object key, object value);
-        bool RemoveData(object key);
+        bool AddData(string key, object value);
+        bool RemoveData(string key);
         
-        bool HasDataKey(object search);
+        bool HasDataKey(string search);
         bool HasDataValue(object search);
 
-        object[] GetDataValues(object key);
-        object[] GetDataKeysForValue(object value);
+        object[] GetDataValues(string key);
     }
 }

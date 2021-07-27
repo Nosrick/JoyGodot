@@ -120,14 +120,6 @@ namespace JoyGodot.Assets.Scripts.Collections
             }
         }
 
-        public List<K> this[T value]
-        {
-            get
-            {
-                return this.FetchKeysForValue(value);
-            }
-        }
-
         public List<T> FetchValuesForKey(K key)
         {
             List<T> values = new List<T>();

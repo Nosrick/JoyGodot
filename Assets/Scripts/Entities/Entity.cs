@@ -25,7 +25,6 @@ using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyGodot.Assets.Scripts.Quests;
 using JoyGodot.Assets.Scripts.Rollers;
-using JoyGodot.Assets.Scripts.Scripting;
 using JoyGodot.Assets.Scripts.World;
 using Array = Godot.Collections.Array;
 
@@ -417,7 +416,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public Entity()
         {
-            this.Data = new NonUniqueDictionary<object, object>();
+            this.Data = new NonUniqueDictionary<string, object>();
             foreach (string action in STANDARD_ACTIONS)
             {
                 this.CachedActions.Add(GlobalConstants.ScriptingEngine.FetchAction(action));
@@ -453,7 +452,6 @@ namespace JoyGodot.Assets.Scripts.Entities
         /// <param name="driver"></param>
         /// <param name="roller"></param>
         /// <param name="name"></param>
-        /// <param name="jobLevels"></param>
         public Entity(
             Guid guid,
             IEntityTemplate template,
@@ -539,7 +537,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
             this.m_Driver = driver;
             this.PlayerControlled = driver.PlayerControlled;
-            this.Data = new NonUniqueDictionary<object, object>();
+            this.Data = new NonUniqueDictionary<string, object>();
 
             this.HappinessIsDirty = true;
 
@@ -631,7 +629,7 @@ namespace JoyGodot.Assets.Scripts.Entities
         {
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
 
-            string relationship = null;
+            string relationship;
             if (this.PlayerControlled)
             {
                 relationship = "This is You";
@@ -648,7 +646,9 @@ namespace JoyGodot.Assets.Scripts.Entities
                             .DisplayName);
                 }
                 catch (Exception e)
-                { }
+                {
+                    // ignored
+                }
             }
 
             List<string> data = new List<string>
@@ -1156,18 +1156,6 @@ namespace JoyGodot.Assets.Scripts.Entities
 
             actor.MyWorld = this.MyWorld;
             actor.Move(this.WorldPosition);
-
-            if (actor is ItemInstance goItem)
-            {
-                /*
-                if (goItem.MonoBehaviourHandler is null)
-                {
-                    goItem.Instantiate();
-                }
-
-                goItem.MonoBehaviourHandler.gameObject.SetActive(false);
-                */
-            }
 
             if (this.m_Backpack.Contains(actor.Guid) == false)
             {
