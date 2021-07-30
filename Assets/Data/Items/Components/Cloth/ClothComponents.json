@@ -3,27 +3,12 @@
     "Category": "Components",
     "IdentifiedItems": [
       {
-        "Name": "cloth",
+        "Name": "cloth quarter",
         "Description": "A square of cloth.",
         "Value": 5,
         "Materials": [
           {
-            "Name": "canvas" ,
-            "Value": 100
-          }],
-        "Size": 100,
-        "TileSet": "Components",
-        "Tags": [
-          "component"
-        ]
-      },
-      {
-        "Name": "cloth",
-        "Description": "A square of cloth.",
-        "Value": 5,
-        "Materials": [
-          {
-            "Name": "cotton" ,
+            "Name": "cloth" ,
             "Value": 100
           }],
         "Size": 100,
