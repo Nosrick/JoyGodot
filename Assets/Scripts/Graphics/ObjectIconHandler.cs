@@ -384,6 +384,8 @@ namespace JoyGodot.Assets.Scripts.Graphics
                         continue;
                     }
 
+                    imageTexture.ResourceLocalToScene = true;
+
                     if (this.CachedTiles.ContainsKey(fileName))
                     {
                         if (this.CachedTiles[fileName].ContainsKey(p) == false)

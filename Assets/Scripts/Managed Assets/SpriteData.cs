@@ -65,33 +65,16 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             return indices;
         }
 
-        public List<int> GetIndices()
+        public SpriteData Duplicate()
         {
-            return this.Parts.Select(part => part.m_SelectedColour).ToList();
-        }
-
-        /*
-        public void Dispose()
-        {
-            if (this.m_Parts is null == false)
+            return new SpriteData
             {
-                for (int i = 0; i < this.m_Parts.Count; i++)
-                {
-                    this.m_Parts[i]?.Dispose();
-                    this.m_Parts[i] = null;
-                }
-            }
-
-            this.m_Parts = null;
-            this.m_Name = null;
-            this.m_State = null;
+                Name = this.Name,
+                Parts = this.Parts.Select(part => part.Duplicate()).ToList(),
+                Size = this.Size,
+                State = this.State
+            };
         }
-
-        ~SpriteData()
-        {
-            this.Dispose();
-        }
-        */
     }
 
     public class SpritePart
@@ -101,7 +84,6 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
         public string[] m_Data;
 
-        //public SpriteFrames m_FrameSprite;
         public List<Texture> m_FrameSprite;
         public string m_Filename;
         public int m_Position;
@@ -114,16 +96,23 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
 
         public Color SelectedColour => this.m_PossibleColours[this.m_SelectedColour];
 
-        /*
-        public void Dispose()
+        public SpritePart Duplicate()
         {
-            this.m_FrameSprite = null;
+            return new SpritePart
+            {
+                m_Data = this.m_Data.ToArray(),
+                m_Filename = this.m_Filename,
+                m_DrawCentre = this.m_DrawCentre,
+                m_Frames = this.m_Frames,
+                m_FrameSprite = this.m_FrameSprite.Select(texture => (Texture) texture.Duplicate()).ToList(),
+                m_Name = this.m_Name,
+                m_PatchMargins = this.m_PatchMargins,
+                m_Position = this.m_Position,
+                m_PossibleColours = this.m_PossibleColours.Select(colour => new Color(colour)).ToList(),
+                m_SelectedColour = this.m_SelectedColour,
+                m_SortingOrder = this.m_SortingOrder,
+                m_StretchMode = this.m_StretchMode
+            };
         }
-
-        ~SpritePart()
-        {
-            this.Dispose();
-        }
-        */
     }
 }

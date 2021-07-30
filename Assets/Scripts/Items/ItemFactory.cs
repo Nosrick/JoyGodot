@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
+using Godot;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Exceptions;
 using JoyGodot.Assets.Scripts.Godot;
 using JoyGodot.Assets.Scripts.Graphics;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyGodot.Assets.Scripts.Managers;
@@ -119,7 +122,10 @@ namespace JoyGodot.Assets.Scripts.Items
 
                 if (total > result)
                 {
-                    chosenType = this.ItemDatabase.Get(pair.Key);
+                    chosenType = this.ItemDatabase
+                        .GetAllForName(pair.Key)
+                        .ToArray()
+                        .GetRandom();
                     break;
                 }
             }
@@ -166,7 +172,20 @@ namespace JoyGodot.Assets.Scripts.Items
                 .ToList();
 
             ISpriteState chosenState = this.Roller.SelectFromCollection(states);
-            chosenState.RandomiseColours();
+            IDictionary<string, Color> colours = itemType.Materials
+                .Select(tuple => tuple.Item1)
+                .Distinct()
+                .ToDictionary(
+                itemMaterial => itemMaterial.Name, 
+                itemMaterial => itemMaterial.Colours.GetRandom());
+            foreach (var component in itemType.Components)
+            {
+                if (colours.ContainsKey(component.IdentifiedName) == false)
+                {
+                    colours.Add(component.IdentifiedName, component.Materials.Keys.GetRandom().Colours.GetRandom());
+                }
+            }
+            chosenState.OverrideColours(colours);
 
             ItemInstance itemInstance = new ItemInstance(
                 this.GuidManager.AssignGUID(),

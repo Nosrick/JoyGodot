@@ -51,7 +51,7 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
                         || t.Item1.HasTag(tuple.Item1))
                     .ToList();
                 resultsList = resultsList
-                    .OrderByDescending(i => i)
+                    .OrderByDescending(i => i.Item2)
                     .ToList();
                 if (resultsList.Count < recipeMaterials.Count)
                 {

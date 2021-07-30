@@ -38,7 +38,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
             bool looping = true,
             bool randomiseColours = false)
         {
-            this.SpriteData = spriteData;
+            this.SpriteData = spriteData.Duplicate();
 
             this.Name = name;
 
