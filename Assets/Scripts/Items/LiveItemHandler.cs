@@ -37,6 +37,11 @@ namespace JoyGodot.Assets.Scripts.Items
             return new IItemInstance[0];
         }
 
+        public IEnumerable<IItemInstance> GetMany(IEnumerable<Guid> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IItemInstance item)
         {
             if (this.LiveItems.ContainsKey(item.Guid))

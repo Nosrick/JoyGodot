@@ -21,6 +21,11 @@ namespace JoyGodot.Assets.Scripts.Entities
             this.m_Entities = new System.Collections.Generic.Dictionary<Guid, IEntity>();
         }
 
+        public IEnumerable<IEntity> GetMany(IEnumerable<Guid> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IEntity created)
         {
             try

@@ -73,6 +73,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             return this.Statistics.TryGetValue(name, out IEntityStatistic statistic) ? statistic.Copy() : null;
         }
 
+        public IEnumerable<IEntityStatistic> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IEntityStatistic value)
         {
             if (this.Statistics.ContainsKey(value.Name))

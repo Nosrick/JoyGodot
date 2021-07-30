@@ -99,6 +99,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Gender
             return this.Genders.First(gender => gender.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
+        public IEnumerable<IGender> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IGender value)
         {
             return !this.Genders.Contains(value) && this.Genders.Add(value);

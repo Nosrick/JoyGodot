@@ -158,6 +158,11 @@ namespace JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers
             throw new InvalidOperationException("Could not find vision type with name " + name);
         }
 
+        public IEnumerable<IVision> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IVision value)
         {
             if (this.VisionTypes.ContainsKey(value.Name))

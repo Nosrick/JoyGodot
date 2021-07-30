@@ -327,6 +327,11 @@ namespace JoyGodot.Assets.Scripts.Items
                 || type.UnidentifiedName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
+        public IEnumerable<BaseItemType> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public IEnumerable<BaseItemType> GetAllForName(string name)
         {
             return this.m_ItemDatabase.Where(type =>

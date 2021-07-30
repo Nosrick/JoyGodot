@@ -35,6 +35,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             return this.Skills.TryGetValue(name, out IEntitySkill skill) ? skill.Copy() : null;
         }
 
+        public IEnumerable<IEntitySkill> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IEntitySkill value)
         {
             if (this.Skills.ContainsKey(value.Name))

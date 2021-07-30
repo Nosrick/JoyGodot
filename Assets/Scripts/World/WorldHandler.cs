@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JoyGodot.Assets.Scripts.Helpers;
 
 namespace JoyGodot.Assets.Scripts.World
@@ -20,6 +21,11 @@ namespace JoyGodot.Assets.Scripts.World
         public IWorldInstance Get(Guid name)
         {
             return this.Worlds.TryGetValue(name, out IWorldInstance world) ? world : null;
+        }
+
+        public IEnumerable<IWorldInstance> GetMany(IEnumerable<Guid> keys)
+        {
+            return keys.Select(this.Get);
         }
 
         public bool Add(IWorldInstance value)

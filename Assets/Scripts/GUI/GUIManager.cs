@@ -67,6 +67,11 @@ namespace JoyGodot.Assets.Scripts.GUI
             return this.GUIs.FirstOrDefault(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
+        public IEnumerable<GUIData> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public T Get<T>(string name) where T : GUIData
         {
             return (T) this.GUIs.FirstOrDefault(gui => gui.Name.Equals(name, StringComparison.OrdinalIgnoreCase));

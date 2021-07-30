@@ -11,6 +11,7 @@ namespace JoyGodot.Assets.Scripts.Base_Interfaces
         JSONValueExtractor ValueExtractor { get; }
 
         TData Get(TKey name);
+        IEnumerable<TData> GetMany(IEnumerable<TKey> keys);
         bool Add(TData value);
         bool Destroy(TKey key);
         IEnumerable<TData> Load();

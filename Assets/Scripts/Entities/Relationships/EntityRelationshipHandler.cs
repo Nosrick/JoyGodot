@@ -38,6 +38,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Relationships
             return this.m_Relationships[name].First();
         }
 
+        public IEnumerable<IRelationship> GetMany(IEnumerable<long> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public IEnumerable<IRelationship> Load()
         {
             List<IRelationship> relationships = new List<IRelationship>();

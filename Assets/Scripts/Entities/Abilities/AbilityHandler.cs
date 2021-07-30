@@ -50,6 +50,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Abilities
             throw new InvalidOperationException("Could not find IAbility with name " + nameRef);
         }
 
+        public IEnumerable<IAbility> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IAbility value)
         {
             this.Abilities.Add(value);

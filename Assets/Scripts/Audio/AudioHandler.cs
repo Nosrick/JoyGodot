@@ -64,6 +64,11 @@ namespace JoyGodot.Assets.Scripts.Audio
             return this.AudioStreams.TryGetValue(name, out AudioStreamRandomPitch audioStream) ? audioStream : null;
         }
 
+        public IEnumerable<AudioStreamRandomPitch> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(AudioStreamRandomPitch value)
         {
             if (this.AudioStreams.ContainsKey(value.ResourceName))

@@ -42,6 +42,11 @@ namespace JoyGodot.Assets.Scripts.Cultures
             return this.GetByCultureName(name);
         }
 
+        public IEnumerable<ICulture> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(ICulture value)
         {
             if (this.m_Cultures.ContainsKey(value.CultureName))

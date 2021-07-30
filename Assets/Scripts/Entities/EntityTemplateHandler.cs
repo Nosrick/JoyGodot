@@ -192,6 +192,11 @@ namespace JoyGodot.Assets.Scripts.Entities
             return value;
         }
 
+        public IEnumerable<IEntityTemplate> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IEntityTemplate value)
         {
             this.m_Templates.Add(value);

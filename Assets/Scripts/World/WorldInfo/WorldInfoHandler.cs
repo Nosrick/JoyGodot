@@ -56,6 +56,11 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
                 };
         }
 
+        public IEnumerable<WorldInfo> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(WorldInfo value)
         {
             if (this.WorldInfoDict.ContainsKey(value.name))

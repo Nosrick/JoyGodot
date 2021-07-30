@@ -116,6 +116,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Romance
             throw new InvalidOperationException("Sexuality of type " + romance + " not found.");
         }
 
+        public IEnumerable<IRomance> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public IRomanceProcessor GetProcessor(string name)
         {
             return this.Processors.TryGetValue(name, out IRomanceProcessor processor)

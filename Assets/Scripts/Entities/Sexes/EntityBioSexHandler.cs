@@ -102,6 +102,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Sexes
             return null;
         }
 
+        public IEnumerable<IBioSex> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public IBioSexProcessor GetProcessor(string name)
         {
             return this.Processors.TryGetValue(name, out IBioSexProcessor processor) 

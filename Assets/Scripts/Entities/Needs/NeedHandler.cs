@@ -88,20 +88,9 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
             return true;
         }
 
-        public ICollection<INeed> GetMany(IEnumerable<string> names)
+        public IEnumerable<INeed> GetMany(IEnumerable<string> keys)
         {
-            if (this.m_NeedsMasters is null)
-            {
-                this.m_NeedsMasters = Initialise();
-            }
-
-            INeed[] needs = this.m_NeedsMasters
-                .Where(pair => names.Any(
-                    name => name.Equals(pair.Key, StringComparison.OrdinalIgnoreCase)))
-                .Select(pair => pair.Value)
-                .ToArray();
-
-            return needs;
+            return keys.Select(this.Get);
         }
 
         public ICollection<INeed> GetManyRandomised(IEnumerable<string> names)

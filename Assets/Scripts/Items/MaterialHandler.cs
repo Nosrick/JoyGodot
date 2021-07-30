@@ -51,6 +51,11 @@ namespace JoyGodot.Assets.Scripts.Items
                    ?? this.m_Materials["DEFAULT MATERIAL"];
         }
 
+        public IEnumerable<IItemMaterial> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public IEnumerable<IItemMaterial> GetMany(IEnumerable<string> names, bool fuzzy = false)
         {
             return fuzzy ? names.SelectMany(this.GetPossibilities) : names.Select(this.Get);

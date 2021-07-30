@@ -45,6 +45,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Jobs
             return null;
         }
 
+        public IEnumerable<IJob> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IJob value)
         {
             if (this.m_Jobs.Any(job => job.Name.Equals(value.Name, StringComparison.OrdinalIgnoreCase)))

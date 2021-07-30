@@ -29,6 +29,11 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
             return this.Recipes.FirstOrDefault(tuple => tuple.Item1.Equals(key))?.Item2;
         }
 
+        public IEnumerable<IRecipe> GetMany(IEnumerable<Guid> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public IEnumerable<IRecipe> GetAllForName(string name)
         {
             return this.Recipes.Values.Where(recipe => 

@@ -119,6 +119,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Sexuality
             throw new InvalidOperationException("Sexuality of type " + sexuality + " not found.");
         }
 
+        public IEnumerable<ISexuality> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(ISexuality value)
         {
             if (this.Sexualities.ContainsKey(value.Name))

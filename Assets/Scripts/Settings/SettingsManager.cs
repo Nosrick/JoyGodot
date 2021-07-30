@@ -55,6 +55,11 @@ namespace JoyGodot.Assets.Scripts.Settings
             return this.Settings.TryGetValue(name, out ISetting setting) ? setting : null;
         }
 
+        public IEnumerable<ISetting> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool ChangeSetting(string name, int index)
         {
             if (!this.Settings.TryGetValue(name, out ISetting setting))

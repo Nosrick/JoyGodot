@@ -65,6 +65,11 @@ namespace JoyGodot.Assets.Scripts.Entities.Statistics
             return this.DerivedValues.TryGetValue(name, out IDerivedValue value) ? value.Copy() : null;
         }
 
+        public IEnumerable<IDerivedValue> GetMany(IEnumerable<string> keys)
+        {
+            return keys.Select(this.Get);
+        }
+
         public bool Add(IDerivedValue value)
         {
             if (this.DerivedValues.ContainsKey(value.Name))
