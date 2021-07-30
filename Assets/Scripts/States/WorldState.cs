@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using JoyGodot.Assets.Scripts.Calendar;
 using JoyGodot.Assets.Scripts.Conversation;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
@@ -25,8 +26,6 @@ namespace JoyGodot.Assets.Scripts.States
         protected IWorldInstance m_Overworld;
 
         protected Camera2D m_Camera;
-
-        protected DateTime m_DateTime;
 
         protected const int TICK_TIMER = 50;
         protected double m_TickTimer;
@@ -187,11 +186,6 @@ namespace JoyGodot.Assets.Scripts.States
 
             player.Move(spawnPoint);
             player.Tick();
-
-            /*
-            var entryBanner = this.GUIManager.OpenGUI(GUINames.ENTRY_BANNER).GetComponent<EntryBanner>();
-            entryBanner.Activate(this.m_ActiveWorld.Name);
-            */
 
             this.Tick();
         }

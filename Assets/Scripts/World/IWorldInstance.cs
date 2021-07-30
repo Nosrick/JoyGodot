@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Calendar;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.AI;
 using JoyGodot.Assets.Scripts.Events;
@@ -38,7 +39,7 @@ namespace JoyGodot.Assets.Scripts.World
 
         void Initialise();
         
-        void SetDateTime(DateTime dateTime);
+        void SetDateTime(JoyDateTime dateTime);
         void AddItem(IItemInstance objectRef);
         void AddWall(Vector2Int wall);
         

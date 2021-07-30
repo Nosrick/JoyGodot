@@ -4,6 +4,7 @@ using System.Linq;
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Base_Interfaces;
+using JoyGodot.Assets.Scripts.Calendar;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.AI;
 using JoyGodot.Assets.Scripts.Events;
@@ -59,8 +60,7 @@ namespace JoyGodot.Assets.Scripts.World
 
         protected Vector2Int m_SpawnPoint;
 
-        protected static DateTime s_DateTime;
-
+        protected static JoyDateTime s_DateTime;
 
         protected string m_Name;
 
@@ -156,7 +156,7 @@ namespace JoyGodot.Assets.Scripts.World
             this.Initialised = true;
         }
 
-        public void SetDateTime(DateTime dateTime)
+        public void SetDateTime(JoyDateTime dateTime)
         {
             s_DateTime = dateTime;
         }
@@ -220,15 +220,15 @@ namespace JoyGodot.Assets.Scripts.World
 
         public void Tick()
         {
-            DateTime oldTime = s_DateTime;
+            JoyDateTime oldTime = s_DateTime;
             this.CalculateLightLevels();
             if (this.HasTag("overworld"))
             {
-                s_DateTime = s_DateTime.AddHours(1.0);
+                s_DateTime = s_DateTime.ModifyHours(1);
             }
             else
             {
-                s_DateTime = s_DateTime.AddSeconds(6.0);
+                s_DateTime = s_DateTime.ModifySeconds(6);
             }
 
             this.OnTick?.Invoke();

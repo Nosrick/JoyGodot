@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using JoyGodot.Assets.Scripts.Calendar;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.IO;
 using JoyGodot.Assets.Scripts.Items;
@@ -55,7 +56,7 @@ namespace JoyGodot.Assets.Scripts.States
                 GlobalConstants.GameManager.Roller);
 
             //Set the date and time for 1/1/1555, 12:00pm
-            this.m_World.SetDateTime(new DateTime(1555, 1, 1, 12, 0, 0));
+            this.m_World.SetDateTime(new JoyDateTime(1555, 1, 1, 12));
 
             //Do the spawn point
             SpawnPointPlacer spawnPlacer = new SpawnPointPlacer(GlobalConstants.GameManager.Roller);
