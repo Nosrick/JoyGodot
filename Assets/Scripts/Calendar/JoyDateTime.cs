@@ -65,8 +65,7 @@ namespace JoyGodot.Assets.Scripts.Calendar
                                  this.TimeToTicks(hour, minute, second, millisecond);
         }
 
-        public JoyDateTime(
-            long ticks)
+        public JoyDateTime(long ticks)
         {
             this.InternalTicks = ticks;
         }

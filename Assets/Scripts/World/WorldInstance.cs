@@ -637,7 +637,8 @@ namespace JoyGodot.Assets.Scripts.World
                 {"Dimensions", this.Dimensions.Save()},
                 {"EntityGuids", new Array(this.EntityGUIDs.Select(guid => guid.ToString()))},
                 {"ItemGuids", new Array(this.ItemGUIDs.Select(guid => guid.ToString()))},
-                {"Walls", new Array(this.Walls.Select(wall => wall.Save()))}
+                {"Walls", new Array(this.Walls.Select(wall => wall.Save()))},
+                {"Date", s_DateTime.InternalTicks}
             };
 
             Array array = new Array();
@@ -681,6 +682,8 @@ namespace JoyGodot.Assets.Scripts.World
             Vector2Int dimensions =
                 new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Dimensions"));
             this.m_Dimensions = dimensions;
+
+            s_DateTime = new JoyDateTime(valueExtractor.GetValueFromDictionary<long>(data, "Date"));
 
             this.m_Costs = new byte[dimensions.x, dimensions.y];
             this.Guid = new Guid(valueExtractor.GetValueFromDictionary<string>(data, "Guid"));
