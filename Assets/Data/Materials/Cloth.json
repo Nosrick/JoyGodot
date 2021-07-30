@@ -23,6 +23,18 @@
       "Colour": [
         "#f2f2f2"
       ]
+    },
+    {
+      "Name": "jute",
+      "Hardness": 1,
+      "Bonus": 0,
+      "Weight": 2,
+      "Tags": [
+        "cloth"
+      ],
+      "Colour": [
+        "#a65805"
+      ]
     }
   ]
 }
