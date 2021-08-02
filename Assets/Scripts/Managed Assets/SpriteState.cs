@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -17,7 +18,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
         protected SpriteData m_SpriteData;
 
         public string Name { get; protected set; }
-        
+
         public string TileSet { get; protected set; }
 
         public AnimationType AnimationType { get; protected set; }
@@ -101,7 +102,7 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                         part.m_SelectedColour = part.m_PossibleColours.Count - 1;
                     }
                 }
-                
+
                 this.SpriteData.Parts[i] = part;
             }
         }
@@ -149,6 +150,17 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 {"DataState", this.SpriteData?.State}
             };
 
+            Dictionary partColours = new Dictionary();
+            if (this.SpriteData is null == false)
+            {
+                foreach (SpritePart part in this.SpriteData.Parts)
+                {
+                    partColours.Add(part.m_Name, part.SelectedColour.ToHtml());
+                }
+            }
+
+            saveDict.Add("Colours", partColours);
+
             return saveDict;
         }
 
@@ -170,6 +182,26 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                     this.Name,
                     dataState)
                 .FirstOrDefault();
+
+            IDictionary<string, Color> partColours = new System.Collections.Generic.Dictionary<string, Color>();
+            foreach (DictionaryEntry entry in valueExtractor.GetValueFromDictionary<Dictionary>(data, "Colours"))
+            {
+                partColours.Add(entry.Key.ToString(), new Color(entry.Value.ToString()));
+            }
+
+            if (this.m_SpriteData is null == false)
+            {
+                foreach (SpritePart part in this.m_SpriteData.Parts)
+                {
+                    if (!partColours.TryGetValue(part.m_Name, out Color colour))
+                    {
+                        continue;
+                    }
+                    
+                    part.m_PossibleColours = new List<Color> {colour};
+                    part.m_SelectedColour = 0;
+                }
+            }
         }
     }
 }
