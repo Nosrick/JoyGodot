@@ -248,7 +248,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool StackOrAdd(IItemInstance item)
         {
-            List<JoyItemSlot> slots = null;
+            List<JoyItemSlot> slots;
 
             if (item.ItemType.Slots.Any() == false)
             {
@@ -258,7 +258,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 }
                 else
                 {
-                    return false;
+                    if (this.DynamicContainer)
+                    {
+                        slots = new List<JoyItemSlot>{this.AddSlot(true)};
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             else
