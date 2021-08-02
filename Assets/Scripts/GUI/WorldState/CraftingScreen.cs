@@ -129,6 +129,11 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         {
             if (this.CraftingItemContainer.CanCraft())
             {
+                foreach (IItemInstance item in this.CraftingItemContainer.Contents)
+                {
+                    this.Player.AddContents(item.Contents);
+                }
+                
                 this.Player.RemoveContents(this.CraftingItemContainer.Contents);
 
                 List<IItemInstance> newItems = new List<IItemInstance>();
