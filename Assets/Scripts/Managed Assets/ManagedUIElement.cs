@@ -603,6 +603,8 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 this.MoveChild(node, sortOrder);
                 index += 1;
             }
+            
+            this.OverrideAllColours(this.CurrentSpriteState.SpriteData.GetCurrentPartColours());
         }
 
         protected virtual void ColourLerp(

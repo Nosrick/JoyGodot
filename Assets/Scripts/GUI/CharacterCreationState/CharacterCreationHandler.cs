@@ -110,6 +110,17 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
             string name = culture.GetRandomName(this.BasicPlayerInfo.CurrentGender);
 
             this.PlayerName.Text = name;
+            ISpriteState state = new SpriteState(
+                "player",
+                culture.Tileset,
+                this.IconHandler.GetManagedSprites(
+                    culture.Tileset,
+                    this.BasicPlayerInfo.CurrentTemplate.CreatureType,
+                    "idle").First());
+            state.RandomiseColours();
+            
+            this.PlayerSprite.Clear();
+            this.PlayerSprite.AddSpriteState(state);
         }
 
         public void Initialise()
@@ -119,9 +130,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
 
         protected void OnCultureChange(IEntityTemplate template)
         {
-            this.RandomiseName();
             var culture = this.BasicPlayerInfo.CurrentCulture;
-
             this.GUIManager.SetUIColours(
                 culture.BackgroundColours,
                 culture.CursorColours,
@@ -129,21 +138,8 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 true,
                 true,
                 1f);
-            ISpriteState state = new SpriteState(
-                "player",
-                culture.Tileset,
-                this.IconHandler.GetManagedSprites(
-                    culture.Tileset,
-                    template.CreatureType,
-                    "idle").First());
-
-            this.PlayerSprite.Clear();
-            this.PlayerSprite.AddSpriteState(state);
-            this.PlayerSprite.OverrideAllColours(
-                state.SpriteData.GetRandomPartColours(),
-                false,
-                0f,
-                true);
+            
+            this.RandomiseName();
 
             this.SetUpStatistics(template);
             this.SetUpDerivedValues();
@@ -255,7 +251,7 @@ namespace JoyGodot.Assets.Scripts.GUI.CharacterCreationState
                 this.BasicPlayerInfo.SexualityHandler.Get(this.BasicPlayerInfo.CurrentSexuality),
                 this.BasicPlayerInfo.RomanceHandler.Get(this.BasicPlayerInfo.CurrentRomance),
                 GlobalConstants.GameManager.JobHandler.Get(this.BasicPlayerInfo.CurrentJob),
-                null,
+                this.PlayerSprite.States,
                 null,
                 new PlayerDriver());
             
