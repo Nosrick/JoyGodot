@@ -55,16 +55,16 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
 
             IJoyObject[] fellowActors = participants.Where(p => p.Guid != actor.Guid).ToArray();
             
-            actor.Needs[need].Fulfill(value);
             actor.NeedFulfillmentData = actor.NeedFulfillmentData.IsEmpty()
-                ? new NeedFulfillmentData(need, counter, fellowActors) 
+                ? new NeedFulfillmentData(need, counter, value, fellowActors) 
                 : new NeedFulfillmentData(
                     overwrite 
                     || actor.NeedFulfillmentData.Name.IsNullOrEmpty() 
                     || actor.NeedFulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase)
                         ? need 
                         : actor.NeedFulfillmentData.Name, 
-                    overwrite ? counter : actor.NeedFulfillmentData.Counter + counter,
+                    overwrite ? counter : actor.NeedFulfillmentData.Counter + counter, 
+                    value,
                     fellowActors);
 
             if (doAll)
@@ -77,12 +77,12 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
                     }
                     
                     IJoyObject[] others = participants.Where(p => p.Guid != entity.Guid).ToArray();
-                    entity.Needs[need].Fulfill(value);
                     entity.NeedFulfillmentData = entity.NeedFulfillmentData.IsEmpty()
-                        ? new NeedFulfillmentData(need, counter, others) 
+                        ? new NeedFulfillmentData(need, counter, value, others) 
                         : new NeedFulfillmentData(
                             overwrite ? need : entity.NeedFulfillmentData.Name, 
-                            overwrite ? counter : entity.NeedFulfillmentData.Counter + counter,
+                            overwrite ? counter : entity.NeedFulfillmentData.Counter + counter, 
+                            value,
                             others);
                 }
             }

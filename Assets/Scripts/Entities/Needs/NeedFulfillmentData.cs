@@ -9,13 +9,28 @@ using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
-    public struct NeedFulfillmentData : ISerialisationHandler
+    public class NeedFulfillmentData : ISerialisationHandler
     {
-        public NeedFulfillmentData(string name, int counter, IEnumerable<IJoyObject> targets)
+        public NeedFulfillmentData()
+        {
+            this.Name = "none";
+            this.Counter = 0;
+            this.Targets = new IJoyObject[0];
+            this.Value = 0;
+            this.InitialCounter = 0;
+        }
+        
+        public NeedFulfillmentData(
+            string name, 
+            int counter,
+            int value,
+            IEnumerable<IJoyObject> targets)
         {
             this.Name = name;
             this.Counter = counter;
             this.Targets = targets;
+            this.Value = value;
+            this.InitialCounter = counter;
         }
 
         public bool IsEmpty()
@@ -35,20 +50,26 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
         public string Name
         {
             get;
-            set;
+            private set;
         }
 
         public int Counter
         {
             get;
-            set;
+            private set;
         }
+        
+        public int Value { get; private set; }
+        
+        public int InitialCounter { get; private set; }
 
         public IEnumerable<IJoyObject> Targets
         {
             get;
             set;
         }
+
+        public int ValuePerTick => (int) Math.Max(1, (float) this.Value / this.InitialCounter);
 
         public Dictionary Save()
         {
@@ -59,7 +80,9 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
                 {"Targets", new Array(
                     this.Targets.IsNullOrEmpty()
                     ? new string[0]
-                    : this.Targets.Select(o => o.Guid.ToString()))}
+                    : this.Targets.Select(o => o.Guid.ToString()))},
+                {"InitialCounter", this.InitialCounter},
+                {"Value", this.Value}
             };
 
             return saveDict;
@@ -71,6 +94,8 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
             this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
             this.Counter = valueExtractor.GetValueFromDictionary<int>(data, "Counter");
+            this.InitialCounter = valueExtractor.GetValueFromDictionary<int>(data, "InitialCounter");
+            this.Value = valueExtractor.GetValueFromDictionary<int>(data, "Value");
             List<IJoyObject> targets = new List<IJoyObject>();
             Guid[] guids = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Targets")
                 .Select(s => new Guid(s))

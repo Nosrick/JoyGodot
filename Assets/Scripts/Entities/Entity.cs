@@ -171,20 +171,11 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public string JobName => this.m_CurrentJob;
 
-        public bool Sentient
-        {
-            get { return this.Tags.Any(tag => tag.Equals("sentient", StringComparison.OrdinalIgnoreCase)); }
-        }
+        public bool Sentient => this.HasTag("sentient");
 
-        public int Size
-        {
-            get { return this.m_Size; }
-        }
+        public int Size => this.m_Size;
 
-        public IEnumerable<Vector2Int> Vision
-        {
-            get { return this.m_VisionProvider.Vision; }
-        }
+        public IEnumerable<Vector2Int> Vision => this.m_VisionProvider.Vision;
 
         public bool PlayerControlled { get; set; }
 
@@ -209,8 +200,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                     return;
                 }
 
-                if (this.m_NeedFulfillmentData.IsEmpty() == false
-                    && this.m_NeedFulfillmentData.Name.Equals("none", StringComparison.OrdinalIgnoreCase) == false)
+                if (this.m_NeedFulfillmentData.IsEmpty() == false)
                 {
                     this.MyNode?.SetSpeechBubble(this.m_NeedFulfillmentData.Counter > 0,
                         this.m_Needs[this.m_NeedFulfillmentData.Name].FulfillingSprite);
@@ -221,52 +211,32 @@ namespace JoyGodot.Assets.Scripts.Entities
         public ISexuality Sexuality
         {
             get => this.m_Sexuality;
-            set => this.m_Sexuality = value;
+            protected set => this.m_Sexuality = value;
         }
 
         public IRomance Romance
         {
             get => this.m_Romance;
-            set => this.m_Romance = value;
+            protected set => this.m_Romance = value;
         }
 
         public IAbility TargetingAbility { get; set; }
 
-        public int Mana
-        {
-            get { return this.DerivedValues[DerivedValueName.MANA].Maximum; }
-        }
+        public int ManaMaximum => this.DerivedValues[DerivedValueName.MANA].Maximum;
 
-        public int ManaRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.MANA].Value; }
-        }
+        public int ManaRemaining => this.DerivedValues[DerivedValueName.MANA].Value;
 
-        public int ComposureRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Value; }
-        }
+        public int ComposureRemaining => this.DerivedValues[DerivedValueName.COMPOSURE].Value;
 
-        public int Composure
-        {
-            get { return this.DerivedValues[DerivedValueName.COMPOSURE].Maximum; }
-        }
+        public int ComposureMaximum => this.DerivedValues[DerivedValueName.COMPOSURE].Maximum;
 
-        public int Concentration
-        {
-            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Maximum; }
-        }
+        public int ConcentrationMaximum => this.DerivedValues[DerivedValueName.CONCENTRATION].Maximum;
 
-        public int ConcentrationRemaining
-        {
-            get { return this.DerivedValues[DerivedValueName.CONCENTRATION].Value; }
-        }
+        public int ConcentrationRemaining => this.DerivedValues[DerivedValueName.CONCENTRATION].Value;
 
         public Vector2Int TargetPoint { get; set; }
 
         protected int RegenTicker { get; set; }
-
-        //public Quest QuestOffered { get; set; }
 
         public List<ICulture> Cultures => this.m_Cultures;
 
@@ -743,10 +713,19 @@ namespace JoyGodot.Assets.Scripts.Entities
         {
             this.HappinessIsDirty = false;
 
+            if (this.Conscious == false)
+            {
+                return;
+            }
+
             if (this.m_NeedFulfillmentData.Counter > 0
                 && this.m_NeedFulfillmentData.DecrementCounter() == 0)
             {
                 this.NeedFulfillmentData = new NeedFulfillmentData();
+            }
+            else if (this.Needs.TryGetValue(this.m_NeedFulfillmentData.Name, out INeed need))
+            {
+                need.Fulfill(this.m_NeedFulfillmentData.ValuePerTick);
             }
 
             this.RegenTicker += 1;
@@ -765,7 +744,13 @@ namespace JoyGodot.Assets.Scripts.Entities
                 }
             }
 
-            this.UpdateMe();
+            this.HasMoved = false;
+
+            this.VisionProvider.Update(this, this.MyWorld);
+            if (this.m_NeedFulfillmentData.Counter == 0)
+            {
+                this.m_Driver.Locomotion(this);
+            }
         }
 
         public void AddQuest(IQuest quest)
@@ -1006,19 +991,6 @@ namespace JoyGodot.Assets.Scripts.Entities
             }
 
             return data.ToArray();
-        }
-
-        public void UpdateMe()
-        {
-            this.HasMoved = false;
-
-            if (this.Conscious == false)
-            {
-                return;
-            }
-
-            this.VisionProvider.Update(this, this.MyWorld);
-            this.m_Driver.Locomotion(this);
         }
 
         public void SetPath(Queue<Vector2Int> pointsRef)
