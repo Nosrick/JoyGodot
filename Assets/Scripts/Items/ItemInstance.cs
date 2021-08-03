@@ -275,8 +275,7 @@ namespace JoyGodot.Assets.Scripts.Items
             IRollable roller = null,
             IEnumerable<IAbility> uniqueAbilities = null,
             IEnumerable<IJoyAction> actions = null,
-            List<IItemInstance> contents = null,
-            bool active = false)
+            List<IItemInstance> contents = null)
             : base(
                 type.UnidentifiedName, 
                 guid,
@@ -286,7 +285,7 @@ namespace JoyGodot.Assets.Scripts.Items
                 sprites,
                 type.SpriteSheet,
                 roller,
-                type.Tags)
+                type.Tags.ToArray())
         {
             this.Initialise();
                 
@@ -658,7 +657,7 @@ namespace JoyGodot.Assets.Scripts.Items
         {
             Dictionary saveDict = base.Save();
             
-            saveDict.Add("ItemType", this.ItemType.IdentifiedName);
+            saveDict.Add("ItemType", this.ItemType.Save());
             saveDict.Add("Contents", new Array(this.m_Contents.Select(guid => guid.ToString())));
             saveDict.Add("Owner", this.OwnerGUID.ToString());
             saveDict.Add("InWorld", this.InWorld);
@@ -673,8 +672,10 @@ namespace JoyGodot.Assets.Scripts.Items
             
             base.Load(data);
             
-            string itemType = valueExtractor.GetValueFromDictionary<string>(data, "ItemType");
-            this.m_Type = GlobalConstants.GameManager.ItemDatabase.Get(itemType);
+            Dictionary itemType = valueExtractor.GetValueFromDictionary<Dictionary>(data, "ItemType");
+            this.m_Type = new BaseItemType();
+            this.m_Type.Load(itemType);
+            
             this.m_Contents = new List<Guid>(
                 valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Contents")
                     .Select(s => new Guid(s)));

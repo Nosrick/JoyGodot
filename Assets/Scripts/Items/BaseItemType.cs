@@ -1,31 +1,33 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Godot.Collections;
 using JoyGodot.Assets.Scripts.Base_Interfaces;
 using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
-using JoyGodot.Assets.Scripts.Helpers;
+using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.Items
 {
-    public class BaseItemType : IGuidHolder
+    public class BaseItemType : IGuidHolder, ISerialisationHandler
     {
-        public Guid Guid { get; }
-        
+        public Guid Guid { get; protected set; }
+
         protected List<string> m_Tags;
-        
-        public IEnumerable<BaseItemType> Components { get; }
-        
-        public string Description { get; }
-        
-        public string IdentifiedName { get; }
-        
-        public string UnidentifiedDescription { get; }
-        
-        public string UnidentifiedName { get; }
-        
-        public IEnumerable<IAbility> Abilities { get; }
+
+        public IEnumerable<BaseItemType> Components { get; protected set; }
+
+        public string Description { get; protected set; }
+
+        public string IdentifiedName { get; protected set; }
+
+        public string UnidentifiedDescription { get; protected set; }
+
+        public string UnidentifiedName { get; protected set; }
+
+        public IEnumerable<IAbility> Abilities { get; protected set; }
 
         public float Weight
         {
@@ -37,14 +39,15 @@ namespace JoyGodot.Assets.Scripts.Items
                 return total;
             }
         }
-        
-        public float Size { get; }
+
+        public float Size { get; protected set; }
 
         public NonUniqueDictionary<IItemMaterial, int> Materials
         {
             get
             {
-                NonUniqueDictionary<IItemMaterial, int> materials = new NonUniqueDictionary<IItemMaterial, int>(this.m_Materials);
+                NonUniqueDictionary<IItemMaterial, int> materials =
+                    new NonUniqueDictionary<IItemMaterial, int>(this.m_Materials);
                 foreach (var pair in this.Components.SelectMany(type => type.Materials))
                 {
                     materials.Add(pair.Item1, pair.Item2);
@@ -61,13 +64,13 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public IEnumerable<string> MaterialNames => this.Materials.Keys.Select(material => material.Name).Distinct();
 
-        public IEnumerable<string> Slots { get; }
+        public IEnumerable<string> Slots { get; protected set; }
 
         public int BaseProtection => (int) this.Materials.Average(material => material.Item1.Bonus);
 
         public int BaseEfficiency => (int) this.Materials.Average(material => material.Item1.Bonus);
 
-        public IEnumerable<string> GoverningSkills { get; }
+        public IEnumerable<string> GoverningSkills { get; protected set; }
 
         public string MaterialDescription
         {
@@ -78,7 +81,7 @@ namespace JoyGodot.Assets.Scripts.Items
                     .Select(material => material.Item1.Name)
                     .Distinct()
                     .ToList();
-                for(int i = 0; i < materials.Count; i++)
+                for (int i = 0; i < materials.Count; i++)
                 {
                     builder.Append(materials[i]);
                     if (i != materials.Count - 1)
@@ -91,38 +94,35 @@ namespace JoyGodot.Assets.Scripts.Items
             }
         }
 
-        public string ActionString { get; }
+        public string ActionString { get; protected set; }
 
         public int Value
         {
-            get
-            {
-                return this.Materials.Select(pair => (int) (pair.Item1.ValueMod * pair.Item2)).Sum();
-            }
+            get { return this.Materials.Select(pair => (int) (pair.Item1.ValueMod * pair.Item2)).Sum(); }
         }
-        
-        public int SpawnWeighting { get; }
-        public int LightLevel { get; }
-        public string[] Tags => this.m_Tags.ToArray();
-        public string SpriteSheet { get; }
-        public int Range { get; }
-        
+
+        public int SpawnWeighting { get; protected set; }
+        public int LightLevel { get; protected set; }
+        public IEnumerable<string> Tags => this.m_Tags;
+        public string SpriteSheet { get; protected set; }
+        public int Range { get; protected set; }
+
         public BaseItemType()
-        {}
+        { }
 
         public BaseItemType(
             Guid guid,
-            IEnumerable<string> tags, 
-            string description, 
-            string unidentifiedDescriptionRef, 
-            string unidentifiedNameRef, 
-            string identifiedNameRef, 
-            IEnumerable<string> slotsRef, 
-            float size, 
-            NonUniqueDictionary<IItemMaterial, int> materials, 
-            IEnumerable<string> governingSkills, 
-            string actionStringRef, 
-            int spawnRef, 
+            IEnumerable<string> tags,
+            string description,
+            string unidentifiedDescriptionRef,
+            string unidentifiedNameRef,
+            string identifiedNameRef,
+            IEnumerable<string> slotsRef,
+            float size,
+            NonUniqueDictionary<IItemMaterial, int> materials,
+            IEnumerable<string> governingSkills,
+            string actionStringRef,
+            int spawnRef,
             string spriteSheet,
             int range = 1,
             int lightLevel = 0,
@@ -131,7 +131,7 @@ namespace JoyGodot.Assets.Scripts.Items
         {
             this.Guid = guid;
             this.m_Tags = tags.ToList();
-            
+
             this.SpawnWeighting = spawnRef;
 
             this.Components = components;
@@ -152,21 +152,23 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool AddTag(string tag)
         {
-            if(this.m_Tags.Contains(tag) == false)
+            if (this.m_Tags.Contains(tag) == false)
             {
                 this.m_Tags.Add(tag);
                 return true;
             }
+
             return false;
         }
 
         public bool RemoveTag(string tag)
         {
-            if(this.m_Tags.Contains(tag))
+            if (this.m_Tags.Contains(tag))
             {
                 this.m_Tags.Remove(tag);
                 return true;
             }
+
             return false;
         }
 
@@ -209,7 +211,7 @@ namespace JoyGodot.Assets.Scripts.Items
                 {
                     return false;
                 }
-                
+
                 if (this.UnidentifiedName.Equals(other.UnidentifiedName) == false)
                 {
                     return false;
@@ -250,6 +252,95 @@ namespace JoyGodot.Assets.Scripts.Items
             }
 
             return hashCode;
+        }
+
+        public Dictionary Save()
+        {
+            Dictionary saveDict = new Dictionary
+            {
+                {"Guid", this.Guid.ToString()},
+                {"Tags", new Array(this.Tags)},
+                {"Description", this.Description},
+                {"IdentifiedName", this.IdentifiedName},
+                {"UnidentifiedName", this.UnidentifiedName},
+                {"UnidentifiedDescription", this.UnidentifiedDescription},
+                {"Abilities", this.Abilities.Select(ability => ability.InternalName).ToArray()},
+                {"Size", this.Size},
+                {"Slots", new Array(this.Slots)},
+                {"Skills", new Array(this.GoverningSkills)},
+                {"ActionString", this.ActionString},
+                {"SpawnWeight", this.SpawnWeighting},
+                {"LightLevel", this.LightLevel},
+                {"SpriteSheet", this.SpriteSheet},
+                {"Range", this.Range}
+            };
+
+            Array materialArray = new Array();
+            foreach (var tuple in this.MyMaterials.Collection)
+            {
+                materialArray.Add(new Dictionary
+                {
+                    {"Name", tuple.Item1.Name},
+                    {"Value", tuple.Item2}
+                });
+            }
+
+            saveDict.Add("Materials", materialArray);
+
+            Array componentArray = new Array();
+            foreach (BaseItemType itemType in this.Components)
+            {
+                componentArray.Add(itemType.Save());
+            }
+            
+            saveDict.Add("Components", componentArray);
+
+            return saveDict;
+        }
+
+        public void Load(Dictionary data)
+        {
+            var valueExtractor = GlobalConstants.GameManager.ItemHandler.ValueExtractor;
+
+            this.Guid = new Guid(valueExtractor.GetValueFromDictionary<string>(data, "Guid"));
+            this.m_Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags").ToList();
+
+            List<BaseItemType> components = new List<BaseItemType>();
+            foreach (Dictionary componentDict in
+                valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(data, "Components"))
+            {
+                BaseItemType component = new BaseItemType();
+                component.Load(componentDict);
+                components.Add(component);
+            }
+
+            this.Components = components;
+
+            this.m_Materials = new NonUniqueDictionary<IItemMaterial, int>();
+            foreach (Dictionary materialDict in valueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(
+                data, "Materials"))
+            {
+                this.m_Materials.Add(
+                    GlobalConstants.GameManager.MaterialHandler.Get(
+                        valueExtractor.GetValueFromDictionary<string>(materialDict, "Name")),
+                    valueExtractor.GetValueFromDictionary<int>(materialDict, "Value"));
+            }
+
+            this.Description = valueExtractor.GetValueFromDictionary<string>(data, "Description");
+            this.IdentifiedName = valueExtractor.GetValueFromDictionary<string>(data, "IdentifiedName");
+            this.UnidentifiedName = valueExtractor.GetValueFromDictionary<string>(data, "UnidentifiedName");
+            this.UnidentifiedDescription =
+                valueExtractor.GetValueFromDictionary<string>(data, "UnidentifiedDescription");
+            this.Abilities = GlobalConstants.GameManager.AbilityHandler.GetMany(
+                valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Abilities"));
+            this.Size = valueExtractor.GetValueFromDictionary<int>(data, "Size");
+            this.Slots = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Slots");
+            this.GoverningSkills = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Skills");
+            this.ActionString = valueExtractor.GetValueFromDictionary<string>(data, "ActionString");
+            this.SpawnWeighting = valueExtractor.GetValueFromDictionary<int>(data, "SpawnWeight");
+            this.LightLevel = valueExtractor.GetValueFromDictionary<int>(data, "LightLevel");
+            this.SpriteSheet = valueExtractor.GetValueFromDictionary<string>(data, "SpriteSheet");
+            this.Range = valueExtractor.GetValueFromDictionary<int>(data, "Range");
         }
     }
 }
