@@ -4,6 +4,7 @@ using Godot;
 using JoyGodot.Assets.Scripts.Calendar;
 using JoyGodot.Assets.Scripts.Conversation;
 using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Entities.Needs;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
 using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.Godot;
@@ -241,11 +242,6 @@ namespace JoyGodot.Assets.Scripts.States
                 this.AutoTurn = !this.AutoTurn;
                 this.ManualAutoTurn = this.AutoTurn;
             }
-            
-            if (this.AutoTurn)
-            {
-                return;
-            }
 
             Vector2Int newPlayerPoint = GlobalConstants.GameManager.Player.WorldPosition;
 
@@ -385,55 +381,19 @@ namespace JoyGodot.Assets.Scripts.States
 
             if (hasMoved)
             {
-                PhysicsResult physicsResult =
-                    this.PhysicsManager.IsCollision(player.WorldPosition, newPlayerPoint, this.m_ActiveWorld);
+                this.AutoTurn = false;
+                player.NeedFulfillmentData = new NeedFulfillmentData();
+                
+                PhysicsResult physicsResult = this.PhysicsManager.IsCollision(
+                    player.WorldPosition, 
+                    newPlayerPoint, 
+                    this.m_ActiveWorld);
 
                 if (physicsResult == PhysicsResult.EntityCollision)
                 {
                     IEntity tempEntity = this.m_ActiveWorld.GetEntity(newPlayerPoint);
                     this.PlayerWorld.SwapPosition(player, tempEntity);
                     this.Tick();
-
-                    /*
-                        if (m_GameplayFlags == GameplayFlags.Interacting)
-                        { }
-                        else if (m_GameplayFlags == GameplayFlags.Giving)
-                        { }
-                        else if (m_GameplayFlags == GameplayFlags.Moving)
-                        {
-                            
-                        }
-                        else if (m_GameplayFlags == GameplayFlags.Attacking)
-                        {
-                            if (tempEntity.GUID != player.GUID)
-                            {
-                                //CombatEngine.SwingWeapon(player, tempEntity);
-                                IEnumerable<IRelationship> relationships =
-                                    RelationshipHandler.Get(new IJoyObject[] {tempEntity, player});
-                                foreach (IRelationship relationship in relationships)
-                                {
-                                    relationship.ModifyValueOfParticipant(player.GUID, tempEntity.GUID, -50);
-                                }
-
-                                if (!tempEntity.Alive)
-                                {
-                                    m_ActiveWorld.RemoveEntity(newPlayerPoint);
-
-                                    //Find a way to remove the GameObject
-                                    for (int i = 0; i < m_EntitiesHolder.transform.childCount; i++)
-                                    {
-                                        if (m_EntitiesHolder.transform.GetChild(i).name
-                                            .Contains(tempEntity.GUID.ToString()))
-                                        {
-                                            this.GameManager.EntityPool.Retire(m_EntitiesHolder.transform.GetChild(i)
-                                                .gameObject);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        */
                 }
                 else if (physicsResult == PhysicsResult.WallCollision)
                 {
@@ -449,35 +409,6 @@ namespace JoyGodot.Assets.Scripts.States
                     }
                 }
             }
-
-            /*
-                else if (m_GameplayFlags == GameplayFlags.Targeting)
-                {
-                    if (player.TargetingAbility.TargetType == AbilityTarget.Adjacent)
-                    {
-                        if (AdjacencyHelper.IsAdjacent(player.WorldPosition, player.TargetPoint))
-                        {
-                            IEntity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
-                            if (tempEntity != null && Input.GetKeyDown(KeyCode.Return))
-                            {
-                                player.TargetingAbility.OnUse(player, tempEntity);
-                                Tick();
-                                m_GameplayFlags = GameplayFlags.Moving;
-                            }
-                        }
-                    }
-                    else if (player.TargetingAbility.TargetType == AbilityTarget.Ranged)
-                    {
-                        IEntity tempEntity = m_ActiveWorld.GetEntity(player.TargetPoint);
-                        if (tempEntity != null && Input.GetKeyDown(KeyCode.Return))
-                        {
-                            player.TargetingAbility.OnUse(player, tempEntity);
-                            Tick();
-                            m_GameplayFlags = GameplayFlags.Moving;
-                        }
-                    }
-                }
-                */
         }
 
         protected void ToggleWindow(string name)
