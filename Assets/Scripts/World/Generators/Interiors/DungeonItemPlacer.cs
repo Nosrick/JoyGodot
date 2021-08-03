@@ -56,9 +56,8 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
             for(int i = 0; i < itemsToPlace; i++)
             {
                 Vector2Int point = availablePoints[this.Roller.Roll(0, availablePoints.Count)];
-
-                IItemInstance item = this.ItemFactory.CreateRandomItemOfType(new[] {"weapon"});
-                //IItemInstance item = this.ItemFactory.CreateRandomWeightedItem();
+                
+                IItemInstance item = this.ItemFactory.CreateRandomWeightedItem();
                 worldRef.AddItem(item);
                 item.Move(point);
                 placedItems.Add(item);
