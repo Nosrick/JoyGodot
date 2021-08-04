@@ -287,8 +287,6 @@ namespace JoyGodot.Assets.Scripts.Items
                 roller,
                 type.Tags.ToArray())
         {
-            this.Initialise();
-                
             this.m_Type = type;
             
             this.Identified = identified;
@@ -320,7 +318,7 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 foreach (ISpriteState state in this.States)
                 {
-                    var part = state.SpriteData.Parts.FirstOrDefault(p => 
+                    var part = state.SpriteData.Parts.FirstOrDefault(p =>
                         p.m_Name.Equals(component.UnidentifiedName, StringComparison.OrdinalIgnoreCase));
                     if (part is null)
                     {
@@ -347,7 +345,7 @@ namespace JoyGodot.Assets.Scripts.Items
                     }
                     else
                     {
-                        part.m_PossibleColours = new List<Color> {parts[component.UnidentifiedName]};
+                        part.m_PossibleColours = new List<Color> { parts[component.UnidentifiedName] };
                         part.m_SelectedColour = 0;
                     }
                 }
@@ -368,7 +366,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
                     if (parts.ContainsKey(material.Name))
                     {
-                        part.m_PossibleColours = new List<Color>{parts[material.Name]};
+                        part.m_PossibleColours = new List<Color> { parts[material.Name] };
                         part.m_SelectedColour = 0;
                     }
                     else
@@ -379,14 +377,6 @@ namespace JoyGodot.Assets.Scripts.Items
                     }
                 }
             }
-        }
-
-        public void Deserialise()
-        {
-            /*
-            this.EntityHandler = GlobalConstants.GameManager?.EntityHandler;
-            this.ItemHandler = GlobalConstants.GameManager?.ItemHandler;
-            */
         }
 
         public void Instantiate(bool recursive = true, JoyObjectNode gameObject = null, bool active = false)
@@ -422,8 +412,6 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public IItemInstance Copy(IItemInstance copy)
         {
-            this.Initialise();
-
             ItemInstance newItem = new ItemInstance(
                 copy.Guid,
                 copy.ItemType,
@@ -489,19 +477,6 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 userAbility.OnUse(this.User, this);
             }
-        }
-
-        protected void Initialise()
-        {
-            /*
-            if (GlobalConstants.GameManager is null)
-            {
-                return;
-            }
-            this.Data = new NonUniqueDictionary<object, object>();
-            ItemHandler = GlobalConstants.GameManager.ItemHandler;
-            EntityHandler = GlobalConstants.GameManager.EntityHandler;
-            */
         }
         
         public void SetOwner(Guid newOwner, bool recursive = false)
@@ -595,35 +570,23 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool AddContents(IItemInstance actor)
         {
-            if(this.CanAddContents(actor))
+            if (!this.CanAddContents(actor))
             {
-                this.m_Contents.Add(actor.Guid);
-
-                this.ContentsDirty = true;
-
-                actor.InWorld = false;
-                
-                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
-                return true;
+                return false;
             }
+            this.m_Contents.Add(actor.Guid);
 
-            return false;
+            this.ContentsDirty = true;
+
+            actor.InWorld = false;
+                
+            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
+            return true;
         }
 
         public bool AddContents(IEnumerable<IItemInstance> actors)
         {
-            IEnumerable<IItemInstance> itemInstances = actors as IItemInstance[] ?? actors.ToArray();
-            this.m_Contents.AddRange(
-                itemInstances.Where(this.CanAddContents)
-                .Select(instance => instance.Guid));
-
-            this.ContentsDirty = true;
-            foreach (IItemInstance actor in itemInstances)
-            {
-                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
-            }
-
-            return true;
+            return actors.Aggregate(true, (current, actor) => current & this.AddContents(actor));
         }
 
         public bool RemoveContents(IItemInstance actor)

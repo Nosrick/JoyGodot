@@ -18,8 +18,6 @@ namespace JoyGodot.Assets.Scripts.Items
 
         void IdentifyMe();
 
-        void Deserialise();
-
         void Instantiate(bool recursive = true, JoyObjectNode gameObject = null, bool active = false);
         
         bool Identified { get; }
