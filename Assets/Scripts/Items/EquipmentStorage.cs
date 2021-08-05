@@ -89,6 +89,11 @@ namespace JoyGodot.Assets.Scripts.Items
         
         public virtual bool Contains(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return false;
+            }
+            
             return this.m_Slots.Any(tuple => actor.Guid.Equals(tuple.Item2));
         }
 
@@ -192,6 +197,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public virtual bool RemoveContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             if (this.m_Slots.All(s => actor.Guid.Equals(s.Item2) == false))
             {
                 return false;

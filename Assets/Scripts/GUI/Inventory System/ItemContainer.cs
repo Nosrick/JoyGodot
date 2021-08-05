@@ -301,7 +301,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             return this.StackOrSwap(
                 this.GetSlotsForItem(item).ToArray(),
-                target.EmptySlots.ToArray());
+                target.EmptySlots.ToArray(),
+                this,
+                target);
         }
 
         public virtual List<JoyItemSlot> GetRequiredSlots(
@@ -554,14 +556,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual bool StackOrSwap(
             ICollection<JoyItemSlot> sourceSlots,
-            ICollection<JoyItemSlot> destinationSlots)
+            ICollection<JoyItemSlot> destinationSlots,
+            ItemContainer sourceContainer,
+            ItemContainer destinationContainer)
         {
             var sourceItems = sourceSlots.Select(slot => slot.Item).Distinct().ToArray();
             var destinationItems = destinationSlots.Select(slot => slot.Item).Distinct().ToArray();
 
-            var sourceContainer = sourceSlots.FirstOrDefault()?.Container;
-            var destinationContainer = destinationSlots.FirstOrDefault()?.Container;
-            
             foreach (IItemInstance sourceItem in sourceItems)
             {
                 var requiredDestinationSlots = destinationContainer?.GetRequiredSlots(

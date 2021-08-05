@@ -162,12 +162,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = null;
 
-            if(this.Container.StackOrSwap(
-                dragObject.SourceContainer.GetSlotsForItem(dragObject.Item).ToArray(), 
-                new[] {this}))
+            if(this.SwapWithSlot(dragObject.SourceSlot))
             {
-                dragObject.SourceContainer.ContainerOwner.RemoveContents(dragObject.Item);
-                this.Container.ContainerOwner.AddContents(dragObject.Item);
                 this.PlayEndDragSound();
             }
         }
@@ -199,22 +195,27 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var leftItem = this.Item;
             var rightItem = slot.Item;
 
-            if (this.Container != slot.Container)
+            var sourceSlots = this.Container.GetSlotsForItem(leftItem).ToArray();
+            var destinationSlots = slot.Container.GetSlotsForItem(rightItem).ToArray();
+
+            if (this.Container == slot.Container)
             {
-                if (slot.Container.ContainerOwner.RemoveContents(rightItem) 
-                    && slot.Container.ContainerOwner.AddContents(leftItem))
-                {
-                    return this.Container.ContainerOwner.RemoveContents(leftItem)
-                           && this.Container.ContainerOwner.AddContents(rightItem)
-                           && this.Container.StackOrSwap(
-                               slot.Container.GetSlotsForItem(rightItem).ToArray(), 
-                               new[] { slot });
-                }
+                return this.Container.StackOrSwap(
+                    sourceSlots,
+                    destinationSlots,
+                    this.Container,
+                    slot.Container);
             }
-            else
+            if (this.Container.ContainerOwner.RemoveContents(leftItem)
+                && slot.Container.ContainerOwner.RemoveContents(rightItem)
+                && this.Container.ContainerOwner.AddContents(rightItem)
+                && slot.Container.ContainerOwner.AddContents(leftItem))
             {
-                this.Item = rightItem;
-                slot.Item = leftItem;
+                return this.Container.StackOrSwap(
+                    sourceSlots,
+                    destinationSlots,
+                    this.Container,
+                    slot.Container);
             }
 
             return false;

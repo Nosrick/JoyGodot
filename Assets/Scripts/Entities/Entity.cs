@@ -1024,6 +1024,11 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public virtual bool RemoveContents(IItemInstance item)
         {
+            if (item is null)
+            {
+                return true;
+            }
+            
             if (this.m_Backpack.Contains(item.Guid))
             {
                 this.m_Backpack.Remove(item.Guid);
@@ -1121,6 +1126,11 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public virtual bool AddContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             if (this.m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
             {
                 actor.IdentifyMe();

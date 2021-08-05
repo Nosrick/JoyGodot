@@ -563,6 +563,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool AddContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             if (!this.CanAddContents(actor))
             {
                 return false;
@@ -584,6 +589,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool RemoveContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             if (!this.m_Contents.Remove(actor.Guid))
             {
                 return false;
