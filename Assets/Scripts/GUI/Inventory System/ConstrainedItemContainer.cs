@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Entities;
+using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 using Array = Godot.Collections.Array;
@@ -14,12 +16,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         public override void _Ready()
         {
             this.SlotParent = this.FindNode("Slot Container") as Container;
-            this.SlotPrefab = GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyConstrainedSlot.tscn");
+            this.SlotPrefab =
+                GD.Load<PackedScene>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/Parts/JoyConstrainedSlot.tscn");
             this.Title = this.FindNode("Title") as ManagedLabel;
-            
+
             this.OnEnable();
         }
-        
+
         public override void OnEnable()
         {
             if (GlobalConstants.GameManager is null)
@@ -55,7 +58,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             if (this.ContainerOwner is EquipmentStorage equipment)
             {
                 var contents = equipment.GetSlotsAndContents().ToList();
-                
+
                 if (this.Slots.Count < contents.Count)
                 {
                     for (int i = this.Slots.Count; i < contents.Count; i++)
@@ -75,16 +78,17 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                         equipmentSlot.Slot = contents[i].Item1;
                     }
                 }
+
                 foreach (var tuple in contents)
                 {
                     if (tuple.Item2 is null == false
-                        && this.CanAddItem(tuple.Item2, this.Name))
+                        && this.GetSlotsForItem(tuple.Item2).Any() == false)
                     {
                         this.StackOrAdd(tuple.Item2);
                     }
                 }
 
-                foreach (JoyItemSlot slot in this.Slots.Where(slot => slot.Visible))
+                foreach (JoyItemSlot slot in this.ActiveSlots)
                 {
                     slot.Repaint();
                 }

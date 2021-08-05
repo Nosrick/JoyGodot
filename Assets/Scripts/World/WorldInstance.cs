@@ -179,6 +179,10 @@ namespace JoyGodot.Assets.Scripts.World
             this.m_Items.Add(objectRef);
             objectRef.InWorld = true;
             objectRef.MyWorld = this;
+            if (objectRef.MyNode is null == false)
+            {
+                objectRef.MyNode.Visible = true;
+            }
 
             this.IsDirty = true;
         }

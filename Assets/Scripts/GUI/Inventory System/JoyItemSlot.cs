@@ -32,7 +32,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public IItemInstance Item
         {
-            get { return this.m_Item; }
+            get => this.m_Item;
             set
             {
                 this.m_Item = value;
@@ -162,8 +162,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var cursor = this.GuiManager.Cursor;
             cursor.DragSprite = null;
 
-            if(this.Container.StackOrSwap(dragObject.SourceContainer, this, dragObject.Item))
+            if(this.Container.StackOrSwap(
+                dragObject.SourceContainer.GetSlotsForItem(dragObject.Item).ToArray(), 
+                new[] {this}))
             {
+                dragObject.SourceContainer.ContainerOwner.RemoveContents(dragObject.Item);
+                this.Container.ContainerOwner.AddContents(dragObject.Item);
                 this.PlayEndDragSound();
             }
         }
@@ -197,17 +201,20 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             if (this.Container != slot.Container)
             {
-                if (slot.Container.RemoveItem(rightItem) && slot.Container.StackOrAdd(new[] {slot}, leftItem))
+                if (slot.Container.ContainerOwner.RemoveContents(rightItem) 
+                    && slot.Container.ContainerOwner.AddContents(leftItem))
                 {
-                    return this.Container.RemoveItem(leftItem) && this.Container.StackOrAdd(new[] {this}, rightItem);
+                    return this.Container.ContainerOwner.RemoveContents(leftItem)
+                           && this.Container.ContainerOwner.AddContents(rightItem)
+                           && this.Container.StackOrSwap(
+                               slot.Container.GetSlotsForItem(rightItem).ToArray(), 
+                               new[] { slot });
                 }
             }
             else
             {
-                this.Container.RemoveItem(leftItem);
-                this.Container.RemoveItem(rightItem);
-                this.Container.StackOrAdd(new[] {slot}, leftItem);
-                this.Container.StackOrAdd(new[] {this}, rightItem);
+                this.Item = rightItem;
+                slot.Item = leftItem;
             }
 
             return false;
@@ -390,11 +397,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 return;
             }
-            
+
             GlobalConstants.GameManager.Player.MyWorld.AddItem(this.Item);
-            this.Item.MyNode.Visible = true;
-            this.Container.RemoveItem(this.Item);
-            this.Item = null;
+            this.Container.ContainerOwner.RemoveContents(this.Item);
         }
         
         protected virtual void OpenContainer()

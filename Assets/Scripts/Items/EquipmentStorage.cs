@@ -179,7 +179,7 @@ namespace JoyGodot.Assets.Scripts.Items
                 this.m_Slots[index] = new Tuple<string, Guid>(slot, actor.Guid);
             }
             
-            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+            this.ItemAdded?.Invoke(this, actor);
             return true;
         }
 
@@ -207,7 +207,7 @@ namespace JoyGodot.Assets.Scripts.Items
                 int index = this.m_Slots.IndexOf(slot);
                 this.m_Slots[index] = new Tuple<string, Guid>(slot.Item1, Guid.Empty);
             }
-            this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs { Item = actor });
+            this.ItemRemoved?.Invoke(this, actor);
 
             return true;
         }

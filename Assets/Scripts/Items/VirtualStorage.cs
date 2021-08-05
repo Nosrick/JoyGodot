@@ -35,7 +35,7 @@ namespace JoyGodot.Assets.Scripts.Items
             
             this.m_Contents.Add(actor);
                 
-            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+            this.ItemAdded?.Invoke(this, actor);
             return true;
 
         }
@@ -46,7 +46,7 @@ namespace JoyGodot.Assets.Scripts.Items
             
             foreach (IItemInstance actor in actors)
             {
-                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+                this.ItemAdded?.Invoke(this, actor);
             }
 
             return true;
@@ -58,7 +58,7 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 return false;
             }
-            this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs() { Item = actor });
+            this.ItemRemoved?.Invoke(this, actor);
 
             return true;
         }

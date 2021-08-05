@@ -1027,7 +1027,7 @@ namespace JoyGodot.Assets.Scripts.Entities
             if (this.m_Backpack.Contains(item.Guid))
             {
                 this.m_Backpack.Remove(item.Guid);
-                this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs() {Item = item});
+                this.ItemRemoved?.Invoke(this, item);
                 return true;
             }
 
@@ -1134,7 +1134,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                 this.m_Backpack.Add(actor.Guid);
             }
 
-            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs {Item = actor});
+            this.ItemAdded?.Invoke(this, actor);
             return true;
         }
 
@@ -1150,23 +1150,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public virtual bool AddContents(IEnumerable<IItemInstance> actors)
         {
-            foreach (IItemInstance actor in actors)
-            {
-                if (this.m_IdentifiedItems.Any(i => i.Equals(actor.JoyName, StringComparison.OrdinalIgnoreCase)))
-                {
-                    actor.IdentifyMe();
-                }
-            }
-
-            this.m_Backpack.AddRange(
-                actors.Where(actor => this.m_Backpack.Any(item => item == actor.Guid) == false)
-                    .Select(instance => instance.Guid));
-            foreach (IItemInstance actor in actors)
-            {
-                this.ItemAdded?.Invoke(this, new ItemChangedEventArgs() {Item = actor});
-            }
-
-            return true;
+            return actors.Aggregate(true, (current, actor) => current & this.AddContents(actor));
         }
 
         public virtual bool RemoveContents(IEnumerable<IItemInstance> actors)

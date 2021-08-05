@@ -558,14 +558,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool CanAddContents(IItemInstance actor)
         {
-            if (actor.Guid == this.Guid 
-            || this.Contains(actor) 
-            || actor.Contains(this))
-            {
-                return false;
-            }
-
-            return true;
+            return actor.Guid != this.Guid && !this.Contains(actor) && !actor.Contains(this);
         }
 
         public bool AddContents(IItemInstance actor)
@@ -580,7 +573,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
             actor.InWorld = false;
                 
-            this.ItemAdded?.Invoke(this, new ItemChangedEventArgs { Item = actor });
+            this.ItemAdded?.Invoke(this, actor);
             return true;
         }
 
@@ -597,7 +590,7 @@ namespace JoyGodot.Assets.Scripts.Items
             }
 
             this.ContentsDirty = true;
-            this.ItemRemoved?.Invoke(this, new ItemChangedEventArgs { Item = actor });
+            this.ItemRemoved?.Invoke(this, actor);
 
             return true;
         }

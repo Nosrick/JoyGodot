@@ -79,18 +79,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
 
         public override bool Close(object sender)
         {
-            foreach (IItemInstance item in this.LeftOffering.Contents)
-            {
-                this.LeftInventory.StackOrAdd(item);
-            }
-
+            this.LeftInventory.ContainerOwner.AddContents(this.LeftOffering.Contents);
             this.LeftOffering.RemoveAllItems();
 
-            foreach (IItemInstance item in this.RightOffering.Contents)
-            {
-                this.RightOffering.StackOrAdd(item);
-            }
-
+            this.RightInventory.ContainerOwner.AddContents(this.RightOffering.Contents);
             this.RightOffering.RemoveAllItems();
             
             GlobalConstants.GameManager.GUIManager.CloseGUI(this, GUINames.TOOLTIP);
@@ -213,9 +205,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                                    "'s value: " + rightValue;
         }
 
-        protected void Tally(IItemContainer container, ItemChangedEventArgs args)
+        protected bool Tally(IItemContainer container, IItemInstance itemInstance)
         {
             this.Tally();
+            return true;
         }
     }
 }

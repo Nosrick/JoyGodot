@@ -43,19 +43,19 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         public bool MoveUsedItem => this.m_MoveUsedItem;
         protected List<JoyItemSlot> Slots { get; set; }
 
-        public int NumberOfSlots => this.ActiveSlots.Count;
+        public int NumberOfSlots => this.ActiveSlots.Count();
 
-        protected List<JoyItemSlot> ActiveSlots => this.Slots
-            .Where(slot => slot.Visible)
-            .ToList();
+        protected IEnumerable<JoyItemSlot> ActiveSlots => this.Slots
+            .Where(slot => slot.Visible);
 
-        protected List<JoyItemSlot> FilledSlots =>
-            this.Slots.Where(slot => slot.Visible && slot.Item is null == false)
-                .ToList();
+        protected IEnumerable<JoyItemSlot> FilledSlots =>
+            this.Slots.Where(slot => slot.Visible && slot.Item is null == false);
 
-        protected List<JoyItemSlot> EmptySlots => this.Slots
-            .Where(slot => slot.Visible && slot.Item is null)
-            .ToList();
+        protected IEnumerable<JoyItemSlot> EmptySlots => this.Slots
+            .Where(slot => slot.Visible && slot.Item is null);
+
+        protected IEnumerable<JoyItemSlot> InactiveSlots => this.Slots
+            .Where(slot => slot.Visible == false && slot.Item is null);
 
         public Array<MoveContainerPriority> ContainerPriorities => this.m_ContainerNames;
 
@@ -64,7 +64,17 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             get => this.m_ContainerOwner;
             set
             {
+                if (this.m_ContainerOwner is null == false)
+                {
+                    this.m_ContainerOwner.ItemAdded -= this.StackOrAddFromEvent;
+                    this.m_ContainerOwner.ItemRemoved -= this.RemoveItemFromEvent;
+                }
+
                 this.m_ContainerOwner = value;
+
+                this.m_ContainerOwner.ItemAdded += this.StackOrAddFromEvent;
+                this.m_ContainerOwner.ItemRemoved += this.RemoveItemFromEvent;
+
                 this.TitleText = value.JoyName;
             }
         }
@@ -150,10 +160,10 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 instance.Container = this;
             }
 
-            List<IItemInstance> contents = this.ContainerOwner.Contents.ToList();
+            IEnumerable<IItemInstance> contents = this.ContainerOwner.Contents;
             foreach (IItemInstance item in contents)
             {
-                if (this.CanAddItem(item, this.Name))
+                if (this.GetSlotsForItem(item).Any() == false)
                 {
                     this.StackOrAdd(item);
                 }
@@ -165,88 +175,45 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
         }
 
-        public virtual bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
+        protected virtual bool StackOrAdd(
+            IItemInstance item,
+            IEnumerable<JoyItemSlot> slots = null)
         {
             if (item is null)
             {
                 return true;
             }
-            
+
             if (this.ContainerOwner is null)
             {
                 return false;
             }
 
-            if (this.CanAddItem(item, this.Name) == false)
+            if (this.GetSlotsForItem(item).Any())
             {
-                return false;
+                return true;
             }
 
-            if (item.Guid != this.ContainerOwner.Guid)
+            var requiredSlots = this.GetRequiredSlots(item, false, slots);
+            if (requiredSlots.Any())
             {
-                if (this.ContainerOwner.CanAddContents(item))
+                foreach (JoyItemSlot slot in requiredSlots)
                 {
-                    this.ContainerOwner.AddContents(item);
-                    var requiredSlots = this.GetRequiredSlots(item, false, slots);
-                    if (requiredSlots.Any())
-                    {
-                        foreach (JoyItemSlot slot in requiredSlots)
-                        {
-                            slot.Item = item;
-                        }
-                    }
-                    else
-                    {
-                        var emptySlot = this.Slots.FirstOrDefault(slot => slot.IsEmpty);
-                        if (emptySlot is null)
-                        {
-                            emptySlot = this.AddSlot(false);
-                        }
-
-                        emptySlot.Item = item;
-                        emptySlot.Repaint();
-                    }
-
-                    this.OnAddItem?.Invoke(this.ContainerOwner, new ItemChangedEventArgs {Item = item});
-                    return true;
+                    slot.Item = item;
                 }
+            }
+            else
+            {
+                var emptySlot = this.EmptySlots.FirstOrDefault() ?? this.AddSlot(false);
 
-                int filledSlots = this.FilledSlots.Count(slot => slot.Item == item);
-                if (this.ContainerOwner.Contains(item)
-                    && filledSlots == 0)
-                {
-                    IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
-                    if (joyItemSlots.Any())
-                    {
-                        foreach (JoyItemSlot slot in joyItemSlots)
-                        {
-                            slot.Item = item;
-                        }
-
-                        return true;
-                    }
-                    else
-                    {
-                        var emptySlot = this.Slots.FirstOrDefault(slot => slot.IsEmpty);
-                        if (emptySlot is null)
-                        {
-                            emptySlot = this.AddSlot(false);
-                        }
-
-                        emptySlot.Item = item;
-                        emptySlot.Repaint();
-
-                        return true;
-                    }
-                }
-
-                return false;
+                emptySlot.Item = item;
+                emptySlot.Repaint();
             }
 
-            return false;
+            return true;
         }
 
-        public virtual bool StackOrAdd(IItemInstance item)
+        public virtual bool StackOrAddFromEvent(IItemContainer source, IItemInstance item)
         {
             List<JoyItemSlot> slots;
 
@@ -254,13 +221,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 if (this.EmptySlots.Any())
                 {
-                    slots = new List<JoyItemSlot> {this.EmptySlots.First()};
+                    slots = new List<JoyItemSlot> { this.EmptySlots.First() };
                 }
                 else
                 {
                     if (this.DynamicContainer)
                     {
-                        slots = new List<JoyItemSlot>{this.AddSlot(true)};
+                        slots = new List<JoyItemSlot> { this.AddSlot(true) };
                     }
                     else
                     {
@@ -273,7 +240,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 slots = this.GetRequiredSlots(item);
             }
 
-            return this.StackOrAdd(slots, item);
+            return this.StackOrAdd(item, slots);
         }
 
         public override void Display()
@@ -303,7 +270,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             this.ContainerOwner.Clear();
         }
-        
+
         public IEnumerable<JoyItemSlot> GetSlotsForItem(IItemInstance item)
         {
             return this.FilledSlots.Where(slot => slot.Item.Equals(item));
@@ -320,17 +287,21 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return false;
             }
 
-            ItemContainer target = this.MoveToContainers.FirstOrDefault(container => sorted.Any(sort =>
-                sort.m_ContainerName.Equals(container.Name, StringComparison.OrdinalIgnoreCase)
-                && ((sort.m_RequiresVisibility && container.Visible)
-                    || sort.m_RequiresVisibility == false)));
+            ItemContainer target = this.MoveToContainers.FirstOrDefault(
+                container => sorted.Any(
+                    sort =>
+                        sort.m_ContainerName.Equals(container.Name, StringComparison.OrdinalIgnoreCase)
+                        && ((sort.m_RequiresVisibility && container.Visible)
+                            || sort.m_RequiresVisibility == false)));
 
             if (target is null || item is null)
             {
                 return false;
             }
 
-            return this.StackOrSwap(target, this.EmptySlots.FirstOrDefault(), item);
+            return this.StackOrSwap(
+                this.GetSlotsForItem(item).ToArray(),
+                target.EmptySlots.ToArray());
         }
 
         public virtual List<JoyItemSlot> GetRequiredSlots(
@@ -339,9 +310,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             IEnumerable<JoyItemSlot> includedSlots = null)
         {
             List<JoyItemSlot> slots = new List<JoyItemSlot>();
-            if (item == null)
+            if (item is null)
             {
                 return slots;
+            }
+
+            if (item.ItemType.Slots.Any() == false
+                && this.EmptySlots.Any())
+            {
+                return new List<JoyItemSlot>{this.EmptySlots.FirstOrDefault()};
             }
 
             System.Collections.Generic.Dictionary<string, int> requiredSlots =
@@ -362,7 +339,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             System.Collections.Generic.Dictionary<string, int> copySlots =
                 new System.Collections.Generic.Dictionary<string, int>(requiredSlots);
 
-            JoyItemSlot[] included = includedSlots?.ToArray() ?? new JoyItemSlot[0];
+            JoyItemSlot[] included = includedSlots?.ToArray() ?? System.Array.Empty<JoyItemSlot>();
             if (included.IsNullOrEmpty() == false)
             {
                 foreach (JoyItemSlot slot in included)
@@ -402,15 +379,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return slots;
             }
 
-            List<JoyItemSlot> emptySlots = this.EmptySlots;
-            for (int i = 0; i < emptySlots.Count; i++)
+            IEnumerable<JoyItemSlot> emptySlots = this.EmptySlots;
+            foreach (JoyItemSlot emptySlot in emptySlots)
             {
-                if (included.Contains(emptySlots[i]))
+                if (included.Contains(emptySlot))
                 {
                     continue;
                 }
 
-                if (emptySlots[i] is JoyConstrainedSlot constrainedSlot
+                if (emptySlot is JoyConstrainedSlot constrainedSlot
                     && constrainedSlot.Slot.IsNullOrEmpty() == false)
                 {
                     foreach (KeyValuePair<string, int> pair in requiredSlots)
@@ -421,13 +398,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                                 && copySlots[pair.Key] > 0)
                             {
                                 copySlots[pair.Key] -= 1;
-                                slots.Add(emptySlots[i]);
+                                slots.Add(emptySlot);
                             }
                             else if (takeFilledSlots
                                      && copySlots[pair.Key] > 0)
                             {
                                 copySlots[pair.Key] -= 1;
-                                slots.Add(emptySlots[i]);
+                                slots.Add(emptySlot);
                             }
                         }
                     }
@@ -450,7 +427,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return this.AddSlot();
             }
 
-            JoyItemSlot poolSlot = this.Slots.FirstOrDefault(itemSlot => itemSlot.Visible == false) ??
+            JoyItemSlot poolSlot = this.EmptySlots.FirstOrDefault(itemSlot => itemSlot.Visible == false) ??
                                    this.SlotPrefab.Instance() as JoyItemSlot;
 
             return this.AddSlot(item, poolSlot);
@@ -497,63 +474,17 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         {
             if (pool)
             {
-                this.Slots.ForEach(slot => slot.Visible = false);
+                foreach (JoyItemSlot slot in this.Slots)
+                {
+                    slot.Visible = false;
+                    slot.Item = null;
+                }
+
                 return true;
             }
 
             this.Slots.ForEach(slot => slot.QueueFree());
             return true;
-        }
-
-        public virtual bool CanAddItem(IItemInstance item, string sourceContainer)
-        {
-            if (this.Name.Equals(sourceContainer))
-            {
-                return true;
-            }
-            
-            if (this.ContainerPriorities.IsNullOrEmpty())
-            {
-                return this.ContainerOwner.CanAddContents(item);
-            }
-
-            if (this.ContainerPriorities.Any(priority =>
-                priority.m_ContainerName.Equals(sourceContainer, StringComparison.OrdinalIgnoreCase)))
-            {
-                return this.ContainerOwner.CanAddContents(item);
-            }
-
-            return false;
-        }
-
-        public virtual bool RemoveItem(IItemInstance item, int amount)
-        {
-            if (this.ContainerOwner is null)
-            {
-                return false;
-            }
-
-            bool result = false;
-            if (this.ContainerOwner.Contents.Any(i =>
-                i.IdentifiedName.Equals(item.IdentifiedName, StringComparison.OrdinalIgnoreCase)))
-            {
-                List<IItemInstance> matches = this.ContainerOwner.Contents.Where(itemInstance =>
-                    itemInstance.IdentifiedName.Equals(item.IdentifiedName,
-                        StringComparison.OrdinalIgnoreCase)).ToList();
-
-                for (int i = 0; i < amount; i++)
-                {
-                    result |= this.ContainerOwner.RemoveContents(matches[i]);
-                    result |= this.RemoveItem(matches[i]);
-                }
-
-                if (result)
-                {
-                    this.OnRemoveItem?.Invoke(this.ContainerOwner, new ItemChangedEventArgs {Item = item});
-                }
-            }
-
-            return result;
         }
 
         public override bool CanDropData(Vector2 position, object data)
@@ -568,21 +499,33 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 var cursor = this.GUIManager.Cursor;
                 cursor.DragSprite = null;
 
-                if (this.CanAddItem(dragObject.Item, dragObject.SourceContainer.Name)
-                    && this.StackOrAdd(dragObject.Item))
+                if (this.ContainerOwner.CanAddContents(dragObject.Item))
                 {
-                    dragObject.SourceContainer.RemoveItem(dragObject.Item);
+                    dragObject.SourceContainer.ContainerOwner.RemoveContents(dragObject.Item);
+                    this.ContainerOwner.AddContents(dragObject.Item);
                 }
             }
         }
 
         public virtual bool RemoveItem(IItemInstance item)
         {
+            bool removed = false;
+            foreach (JoyItemSlot slot in this.FilledSlots.Where(slot => slot.Item == item))
+            {
+                removed = true;
+                slot.Item = null;
+            }
+
+            return removed;
+        }
+
+        public virtual bool RemoveItemFromEvent(IItemContainer source, IItemInstance item)
+        {
             if (item is null)
             {
-                return true;
+                return false;
             }
-            
+
             if (this.ContainerOwner is null)
             {
                 return false;
@@ -590,13 +533,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             if (item.Guid != this.ContainerOwner.Guid)
             {
-                if (this.ContainerOwner.Contains(item) == false ||
-                    this.FilledSlots.Any(slot => slot.Item.Guid == item.Guid) == false)
+                if (this.FilledSlots.Any(slot => slot.Item.Guid == item.Guid) == false)
                 {
                     return false;
                 }
 
-                this.ContainerOwner.RemoveContents(item);
                 foreach (JoyItemSlot joyItemSlot in this.Slots.Where(slot =>
                     !(slot.Item is null) && item.Equals(slot.Item)))
                 {
@@ -604,79 +545,72 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     joyItemSlot.Repaint();
                 }
 
-                this.OnRemoveItem?.Invoke(this.ContainerOwner, new ItemChangedEventArgs() {Item = item});
+                this.OnRemoveItem?.Invoke(this.ContainerOwner, item);
                 return true;
             }
 
             return false;
         }
 
-        public virtual bool RemoveItem(int index)
+        public virtual bool StackOrSwap(
+            ICollection<JoyItemSlot> sourceSlots,
+            ICollection<JoyItemSlot> destinationSlots)
         {
-            if (this.ContainerOwner is null)
-            {
-                return false;
-            }
+            var sourceItems = sourceSlots.Select(slot => slot.Item).Distinct().ToArray();
+            var destinationItems = destinationSlots.Select(slot => slot.Item).Distinct().ToArray();
 
-            if (index < this.Slots.Count)
+            var sourceContainer = sourceSlots.FirstOrDefault()?.Container;
+            var destinationContainer = destinationSlots.FirstOrDefault()?.Container;
+            
+            foreach (IItemInstance sourceItem in sourceItems)
             {
-                JoyItemSlot slot = this.Slots[index];
-                IItemInstance item = slot.Item;
-                if (item is null)
+                var requiredDestinationSlots = destinationContainer?.GetRequiredSlots(
+                    sourceItem, 
+                    true, 
+                    destinationSlots);
+
+                if (requiredDestinationSlots is null)
                 {
-                    return false;
+                    continue;
                 }
 
-                this.ContainerOwner.RemoveContents(item);
-                slot.Item = null;
-                this.OnRemoveItem?.Invoke(this.ContainerOwner, new ItemChangedEventArgs {Item = item});
+                foreach (JoyItemSlot slot in requiredDestinationSlots)
+                {
+                    slot.Item = sourceItem;
+                }
+
+                if (sourceContainer != destinationContainer)
+                {
+                    sourceContainer?.RemoveItem(sourceItem);
+                }
+            }
+
+            foreach (IItemInstance destinationItem in destinationItems)
+            {
+                var requiredSourceSlots = sourceContainer?.GetRequiredSlots(
+                    destinationItem,
+                    true,
+                    sourceSlots);
+
+                if (requiredSourceSlots is null)
+                {
+                    continue;
+                }
+                
+                foreach(JoyItemSlot slot in requiredSourceSlots)
+                {
+                    slot.Item = destinationItem;
+                }
+
+                if (sourceContainer != destinationContainer)
+                {
+                    destinationContainer?.RemoveItem(destinationItem);
+                }
             }
 
             return true;
         }
 
-        public virtual bool StackOrSwap(
-            ItemContainer sourceContainer, 
-            JoyItemSlot destinationSlot,
-            IItemInstance item)
-        {
-            if (this.CanAddItem(item, sourceContainer.Name) == false)
-            {
-                IEnumerable<JoyItemSlot> filledSlots =
-                    this.GetRequiredSlots(item, true, new[] {destinationSlot});
-                bool result = true;
-                foreach (JoyItemSlot slot in filledSlots)
-                {
-                    if (slot.Item is null == false && sourceContainer.CanAddItem(slot.Item, this.Name))
-                    {
-                        result &= sourceContainer.StackOrAdd(slot.Item);
-                        result &= slot.Container.RemoveItem(slot.Item);
-                    }
-
-                    if (!result)
-                    {
-                        break;
-                    }
-                }
-
-                if (!result || !this.CanAddItem(item, sourceContainer.Name))
-                {
-                    return false;
-                }
-                
-                if (sourceContainer.RemoveItem(item) == false)
-                {
-                    return false;
-                }
-                
-                this.StackOrAdd(item);
-                return true;
-            }
-
-            var slots = sourceContainer.GetSlotsForItem(item);
-            return destinationSlot.SwapWithSlot(slots.First());
-        }
-        
         public virtual event ItemAddedEventHandler OnAddItem;
         public virtual event ItemRemovedEventHandler OnRemoveItem;
     }

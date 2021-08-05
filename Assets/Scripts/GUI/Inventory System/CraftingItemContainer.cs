@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Collections;
-using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Items.Crafting;
@@ -14,7 +12,7 @@ using Array = Godot.Collections.Array;
 
 namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 {
-    public class CraftingItemContainer : ItemContainer
+    public class CraftingItemContainer : ConstrainedItemContainer
     {
         public IEnumerable<IRecipe> PossibleRecipes { get; protected set; }
 
@@ -167,7 +165,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             
             if (includedSlots.IsNullOrEmpty() == false)
             {
-                JoyItemSlot[] included = includedSlots.ToArray();
+                JoyItemSlot[] included = includedSlots?.ToArray() ?? System.Array.Empty<JoyItemSlot>();
                 foreach (JoyItemSlot slot in included)
                 {
                     if (slot is JoyConstrainedSlot constrainedSlot
@@ -200,8 +198,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return slots;
             }
 
-            List<JoyItemSlot> emptySlots = this.EmptySlots;
-            for (int i = 0; i < emptySlots.Count; i++)
+            JoyItemSlot[] emptySlots = this.EmptySlots.ToArray();
+            for (int i = 0; i < emptySlots.Length; i++)
             {
                 if (emptySlots[i] is JoyCraftingSlot craftingSlot
                     && craftingSlot.Slot.IsNullOrEmpty() == false)
@@ -228,52 +226,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
 
             return slots;
-        }
-
-        public override bool StackOrAdd(IItemInstance item)
-        {
-            List<JoyItemSlot> slots = this.GetRequiredSlots(item);
-
-            return this.StackOrAdd(slots, item);
-        }
-
-        public override bool StackOrAdd(IEnumerable<JoyItemSlot> slots, IItemInstance item)
-        {
-            if (this.ContainerOwner is null)
-            {
-                return false;
-            }
-
-            if (item is null)
-            {
-                return true;
-            }
-
-            if (item.Guid != this.ContainerOwner.Guid)
-            {
-                if (this.ContainerOwner.CanAddContents(item))
-                {
-                    IEnumerable<JoyItemSlot> joyItemSlots = slots.ToList();
-                    if (joyItemSlots.Any())
-                    {
-                        this.ContainerOwner.AddContents(item);
-                        foreach (JoyItemSlot slot in joyItemSlots)
-                        {
-                            slot.Item = item;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }
-
-                return false;
-            }
-
-            return false;
         }
 
         public bool CanCraft()
