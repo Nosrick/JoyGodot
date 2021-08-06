@@ -1150,6 +1150,11 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public virtual bool CanAddContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             return actor.Guid != this.Guid && !this.Contains(actor);
         }
 

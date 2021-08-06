@@ -128,6 +128,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public virtual bool CanAddContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             int slots = this.GetRequiredSlots(actor).Count();
             return !this.Contains(actor)
                    && slots > 0

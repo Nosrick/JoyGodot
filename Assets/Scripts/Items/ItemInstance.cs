@@ -558,6 +558,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool CanAddContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             return actor.Guid != this.Guid && !this.Contains(actor) && !actor.Contains(this);
         }
 

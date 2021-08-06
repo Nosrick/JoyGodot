@@ -210,6 +210,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 emptySlot.Repaint();
             }
 
+            this.OnAddItem?.Invoke(this.ContainerOwner, item);
             return true;
         }
 
@@ -354,6 +355,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                             if (pair.Key.Equals(constrainedSlot.Slot, StringComparison.OrdinalIgnoreCase))
                             {
                                 if (takeFilledSlots == false
+                                    && slot.IsEmpty
                                     && copySlots[pair.Key] > 0)
                                 {
                                     copySlots[pair.Key] -= 1;
@@ -563,11 +565,21 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var sourceItems = sourceSlots.Select(slot => slot.Item).Distinct().ToArray();
             var destinationItems = destinationSlots.Select(slot => slot.Item).Distinct().ToArray();
 
+            foreach (JoyItemSlot slot in destinationSlots)
+            {
+                slot.Item = null;
+            }
+
+            foreach (JoyItemSlot slot in sourceSlots)
+            {
+                slot.Item = null;
+            }
+            
             foreach (IItemInstance sourceItem in sourceItems)
             {
                 var requiredDestinationSlots = destinationContainer?.GetRequiredSlots(
                     sourceItem, 
-                    true, 
+                    false, 
                     destinationSlots);
 
                 if (requiredDestinationSlots is null)
@@ -590,7 +602,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 var requiredSourceSlots = sourceContainer?.GetRequiredSlots(
                     destinationItem,
-                    true,
+                    false,
                     sourceSlots);
 
                 if (requiredSourceSlots is null)

@@ -99,5 +99,39 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 this.OnEnable();
             }
         }
+        
+        protected override bool StackOrAdd(
+            IItemInstance item,
+            IEnumerable<JoyItemSlot> slots = null)
+        {
+            if (item is null)
+            {
+                return true;
+            }
+
+            if (this.ContainerOwner is null)
+            {
+                return false;
+            }
+
+            if (this.GetSlotsForItem(item).Any())
+            {
+                return true;
+            }
+
+            var requiredSlots = this.GetRequiredSlots(item, false, slots);
+            if (requiredSlots.Count == item.ItemType.Slots.Count())
+            {
+                foreach (JoyItemSlot slot in requiredSlots)
+                {
+                    slot.Item = item;
+                }
+
+                return true;
+            }
+
+            //this.OnAddItem?.Invoke(this.ContainerOwner, item);
+            return false;
+        }
     }
 }

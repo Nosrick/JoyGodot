@@ -206,11 +206,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     this.Container,
                     slot.Container);
             }
-            if (this.Container.ContainerOwner.RemoveContents(leftItem)
-                && slot.Container.ContainerOwner.RemoveContents(rightItem)
-                && this.Container.ContainerOwner.AddContents(rightItem)
-                && slot.Container.ContainerOwner.AddContents(leftItem))
+            if (this.Container.ContainerOwner.CanAddContents(rightItem)
+                && slot.Container.ContainerOwner.CanAddContents(leftItem)
+                && this.Container.ContainerOwner.RemoveContents(leftItem)
+                && slot.Container.ContainerOwner.RemoveContents(rightItem))
             {
+                this.Container.ContainerOwner.AddContents(rightItem);
+                slot.Container.ContainerOwner.AddContents(leftItem);
+
                 return this.Container.StackOrSwap(
                     sourceSlots,
                     destinationSlots,
