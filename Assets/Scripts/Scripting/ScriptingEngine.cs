@@ -1,17 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
+using Godot;
 using JoyGodot.Assets.Scripts.Helpers;
-using JoyGodot.Assets.Scripts.JoyObject;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
-using Directory = System.IO.Directory;
-using Expression = NCalc.Expression;
-using File = System.IO.File;
-using Object = Godot.Object;
 
 namespace JoyGodot.Assets.Scripts.Scripting
 {
@@ -163,8 +154,14 @@ namespace JoyGodot.Assets.Scripts.Scripting
 
         public T Evaluate<T>(string code)
         {
-            Expression expression = new Expression(code);
-            return (T) Convert.ChangeType(expression.Evaluate(), typeof(T));
+            Expression expression = new Expression();
+            Error error = expression.Parse(code);
+            if (error != Error.Ok)
+            {
+                GlobalConstants.ActionLog.Log("Could not evaluate expression " + code, LogLevel.Error);
+                throw new InvalidOperationException("Could not evaluate expression " + code);
+            }
+            return (T) Convert.ChangeType(expression.Execute(), typeof(T));
         }
     }
 
