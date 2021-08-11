@@ -23,6 +23,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool CanAddContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             return this.Guid != actor.Guid && !this.Contains(actor);
         }
 
@@ -54,6 +59,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool RemoveContents(IItemInstance actor)
         {
+            if (actor is null)
+            {
+                return true;
+            }
+            
             if (!this.m_Contents.Remove(actor))
             {
                 return false;
