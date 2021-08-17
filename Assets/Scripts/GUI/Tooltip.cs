@@ -309,6 +309,16 @@ namespace JoyGodot.Assets.Scripts.GUI
         {
             this.Timer.OneShot = true;
             this.Timer.Start(0.8f);
+            if (this.Timer.IsConnected(
+                "timeout",
+                this,
+                nameof(this.ShowInternal)))
+            {
+                this.Timer.Disconnect(
+                    "timeout",
+                    this,
+                    nameof(this.ShowInternal));
+            }
             this.Timer.Connect(
                 "timeout",
                 this,
