@@ -187,11 +187,30 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var sourceSlots = this.Container.GetSlotsForItem(leftItem).ToArray();
             var destinationSlots = slot.Container.GetSlotsForItem(rightItem).ToArray();
 
-            return this.Container.StackOrSwap(
+            var sourceContainer = this.Container.ContainerOwner;
+            var destinationContainer = slot.Container.ContainerOwner;
+
+            bool result = this.Container.StackOrSwap(
                 sourceSlots,
                 destinationSlots,
                 this.Container,
                 slot.Container);
+            
+            if (sourceContainer != destinationContainer)
+            {
+                if (sourceContainer.CanRemoveContents(leftItem)
+                    && sourceContainer.CanAddContents(rightItem)
+                    && destinationContainer.CanRemoveContents(rightItem)
+                    && destinationContainer.CanAddContents(leftItem))
+                {
+                    result &= sourceContainer.RemoveContents(leftItem);
+                    result &= sourceContainer.AddContents(rightItem);
+                    result &= destinationContainer.RemoveContents(rightItem);
+                    result &= destinationContainer.AddContents(leftItem);
+                }
+            }
+
+            return result;
         }
 
         public override void _Input(InputEvent @event)

@@ -250,18 +250,19 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
 
             var requiredSlots = this.GetRequiredSlots(item, takeFilledSlots, slots);
-            if (requiredSlots.Count == item.ItemType.Slots.Count())
+            if (!requiredSlots.Any())
             {
-                foreach (JoyItemSlot slot in requiredSlots)
-                {
-                    slot.Item = item;
-                }
-
-                return true;
+                return false;
+            }
+            
+            foreach (JoyItemSlot slot in requiredSlots)
+            {
+                slot.Item = item;
             }
 
+            return true;
+
             //this.OnAddItem?.Invoke(this.ContainerOwner, item);
-            return false;
         }
 
         public bool CanCraft()
