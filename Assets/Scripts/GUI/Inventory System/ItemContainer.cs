@@ -219,6 +219,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         {
             List<JoyItemSlot> slots;
 
+            if (item is null)
+            {
+                return true;
+            }
+
             if (item.ItemType.Slots.Any() == false)
             {
                 if (this.EmptySlots.Any())
