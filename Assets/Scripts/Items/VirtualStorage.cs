@@ -37,6 +37,11 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 return false;
             }
+
+            if (actor is null)
+            {
+                return true;
+            }
             
             this.m_Contents.Add(actor);
                 
