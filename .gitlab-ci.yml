@@ -11,10 +11,10 @@ Windows:
   stage: export
   script:
     - mkdir -v -p build/windows
-    - godot -v --export "Windows Desktop" ./build/windows/$EXPORT_NAME.exe
-    - cp -r Assets ./build/windows
+    - godot -v --export-debug "Windows Desktop" --path build/windows/$EXPORT_NAME.exe
+    - cp -r Assets build/windows
 
   artifacts:
-    name: $EXPORT_NAME-$CI_JOB_NAME
+    name: $EXPORT_NAME
     paths:
       - build/windows
