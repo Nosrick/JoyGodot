@@ -81,10 +81,12 @@
   <ItemGroup>
     <Compile Remove="Assets\Tests\**" />
     <Compile Remove="JoyGodot.Generator\**" />
+    <Compile Remove="build\**" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Assets\Tests\**" />
     <EmbeddedResource Remove="JoyGodot.Generator\**" />
+    <EmbeddedResource Remove="build\**" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="addons" />
