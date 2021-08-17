@@ -5,13 +5,13 @@ variables:
 
 stages:
   - export
-  - deploy
 
 Windows:
   stage: export
   script:
     - mkdir -v -p build/windows
     - godot -v --export-debug "Windows Desktop" --path build/windows/$EXPORT_NAME.exe
+    - godot -v --export-pack "Windows Desktop" --path build/windows/$EXPORT_NAME.pck
     - cp -r Assets build/windows
 
   artifacts:
