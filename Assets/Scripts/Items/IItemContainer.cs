@@ -16,8 +16,11 @@ namespace JoyGodot.Assets.Scripts.Items
 
         bool AddContents(IEnumerable<IItemInstance> actors);
 
+        bool CanRemoveContents(IItemInstance actor);
+        bool CanRemoveContents(IEnumerable<IItemInstance> actors);
         bool RemoveContents(IItemInstance actor);
         bool RemoveContents(IEnumerable<IItemInstance> actors);
+
 
         void Clear();
         

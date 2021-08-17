@@ -177,7 +177,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         protected virtual bool StackOrAdd(
             IItemInstance item,
-            IEnumerable<JoyItemSlot> slots = null)
+            IEnumerable<JoyItemSlot> slots = null,
+            bool takeFilledSlots = false)
         {
             if (item is null)
             {
@@ -194,7 +195,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return true;
             }
 
-            var requiredSlots = this.GetRequiredSlots(item, false, slots);
+            var requiredSlots = this.GetRequiredSlots(item, takeFilledSlots, slots);
             if (requiredSlots.Any())
             {
                 foreach (JoyItemSlot slot in requiredSlots)
@@ -318,9 +319,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return slots;
             }
 
-            if (item.ItemType.Slots.Any() == false
-                && this.EmptySlots.Any())
+            if (item.ItemType.Slots.Any() == false)
             {
+                if (includedSlots.IsNullOrEmpty() == false
+                    && includedSlots.Any())
+                {
+                    return includedSlots.ToList();
+                }
                 return new List<JoyItemSlot>{this.EmptySlots.FirstOrDefault()};
             }
 
@@ -565,16 +570,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var sourceItems = sourceSlots.Select(slot => slot.Item).Distinct().ToArray();
             var destinationItems = destinationSlots.Select(slot => slot.Item).Distinct().ToArray();
 
-            foreach (JoyItemSlot slot in destinationSlots)
-            {
-                slot.Item = null;
-            }
-
-            foreach (JoyItemSlot slot in sourceSlots)
-            {
-                slot.Item = null;
-            }
-            
             foreach (IItemInstance sourceItem in sourceItems)
             {
                 var requiredDestinationSlots = destinationContainer?.GetRequiredSlots(
@@ -587,15 +582,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     continue;
                 }
 
-                foreach (JoyItemSlot slot in requiredDestinationSlots)
-                {
-                    slot.Item = sourceItem;
-                }
-
-                if (sourceContainer != destinationContainer)
-                {
-                    sourceContainer?.RemoveItem(sourceItem);
-                }
+                sourceContainer?.RemoveItem(sourceItem);
+                destinationContainer.StackOrAdd(sourceItem, requiredDestinationSlots);
             }
 
             foreach (IItemInstance destinationItem in destinationItems)
@@ -609,16 +597,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 {
                     continue;
                 }
-                
-                foreach(JoyItemSlot slot in requiredSourceSlots)
-                {
-                    slot.Item = destinationItem;
-                }
 
-                if (sourceContainer != destinationContainer)
-                {
-                    destinationContainer?.RemoveItem(destinationItem);
-                }
+                destinationContainer?.RemoveItem(destinationItem);
+                sourceContainer.StackOrAdd(destinationItem, requiredSourceSlots);
             }
 
             return true;

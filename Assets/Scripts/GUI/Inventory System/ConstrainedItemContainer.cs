@@ -102,7 +102,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         
         protected override bool StackOrAdd(
             IItemInstance item,
-            IEnumerable<JoyItemSlot> slots = null)
+            IEnumerable<JoyItemSlot> slots = null,
+            bool takeFilledSlots = false)
         {
             if (item is null)
             {
@@ -119,7 +120,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return true;
             }
 
-            var requiredSlots = this.GetRequiredSlots(item, false, slots);
+            var requiredSlots = this.GetRequiredSlots(item, takeFilledSlots, slots);
             if (requiredSlots.Count == item.ItemType.Slots.Count())
             {
                 foreach (JoyItemSlot slot in requiredSlots)

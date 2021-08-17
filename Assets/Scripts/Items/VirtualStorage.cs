@@ -57,6 +57,16 @@ namespace JoyGodot.Assets.Scripts.Items
             return true;
         }
 
+        public bool CanRemoveContents(IItemInstance actor)
+        {
+            return actor is null || this.Contains(actor);
+        }
+
+        public bool CanRemoveContents(IEnumerable<IItemInstance> actors)
+        {
+            return actors.Aggregate(true, (current, actor) => current & this.CanRemoveContents(actor));
+        }
+
         public bool RemoveContents(IItemInstance actor)
         {
             if (actor is null)

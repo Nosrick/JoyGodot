@@ -147,6 +147,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             List<string> itemInfo = new List<string>(item.Tags);
             itemInfo.AddRange(item.ItemType.Materials.Keys.Select(material => material.Name).Distinct());
             itemInfo.Add(item.ItemType.UnidentifiedName);
+            itemInfo = itemInfo.Select(s => s.ToLower()).Distinct().ToList();
 
             foreach (string slot in itemInfo)
             {
@@ -226,6 +227,41 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
 
             return slots;
+        }
+        
+        protected override bool StackOrAdd(
+            IItemInstance item,
+            IEnumerable<JoyItemSlot> slots = null, 
+            bool takeFilledSlots = false)
+        {
+            if (item is null)
+            {
+                return true;
+            }
+
+            if (this.ContainerOwner is null)
+            {
+                return false;
+            }
+
+            if (this.GetSlotsForItem(item).Any())
+            {
+                return true;
+            }
+
+            var requiredSlots = this.GetRequiredSlots(item, takeFilledSlots, slots);
+            if (requiredSlots.Count == item.ItemType.Slots.Count())
+            {
+                foreach (JoyItemSlot slot in requiredSlots)
+                {
+                    slot.Item = item;
+                }
+
+                return true;
+            }
+
+            //this.OnAddItem?.Invoke(this.ContainerOwner, item);
+            return false;
         }
 
         public bool CanCraft()

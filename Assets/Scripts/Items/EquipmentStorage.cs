@@ -200,11 +200,31 @@ namespace JoyGodot.Assets.Scripts.Items
             return result;
         }
 
+        public bool CanRemoveContents(IItemInstance actor)
+        {
+            if (actor is null)
+            {
+                return true;
+            }
+
+            return this.Contains(actor);
+        }
+
+        public bool CanRemoveContents(IEnumerable<IItemInstance> actors)
+        {
+            return actors.Aggregate(true, (current, actor) => current & this.CanRemoveContents(actor));
+        }
+
         public virtual bool RemoveContents(IItemInstance actor)
         {
             if (actor is null)
             {
                 return true;
+            }
+
+            if (this.CanRemoveContents(actor) == false)
+            {
+                return false;
             }
             
             if (this.m_Slots.All(s => actor.Guid.Equals(s.Item2) == false))

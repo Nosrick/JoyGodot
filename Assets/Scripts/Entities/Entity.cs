@@ -1022,6 +1022,11 @@ namespace JoyGodot.Assets.Scripts.Entities
             }
         }
 
+        public bool CanRemoveContents(IEnumerable<IItemInstance> actors)
+        {
+            return actors.Aggregate(true, (current, actor) => current & this.CanRemoveContents(actor));
+        }
+
         public virtual bool RemoveContents(IItemInstance item)
         {
             if (item is null)
@@ -1166,6 +1171,11 @@ namespace JoyGodot.Assets.Scripts.Entities
         public virtual bool AddContents(IEnumerable<IItemInstance> actors)
         {
             return actors.Aggregate(true, (current, actor) => current & this.AddContents(actor));
+        }
+
+        public bool CanRemoveContents(IItemInstance actor)
+        {
+            return actor is null || this.Contains(actor);
         }
 
         public virtual bool RemoveContents(IEnumerable<IItemInstance> actors)
