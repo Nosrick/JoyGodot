@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Godot;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
-using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.GUI.Inventory_System;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
@@ -53,16 +51,6 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             
             this.RightInventory = this.FindNode("RightInventory") as ItemContainer;
             this.RightOffering = this.FindNode("RightOffering") as ItemContainer;
-            
-            this.LeftOffering.OnAddItem -= this.Tally;
-            this.LeftOffering.OnRemoveItem -= this.Tally;
-            this.RightOffering.OnAddItem -= this.Tally;
-            this.RightOffering.OnRemoveItem -= this.Tally;
-
-            this.LeftOffering.OnAddItem += this.Tally;
-            this.LeftOffering.OnRemoveItem += this.Tally;
-            this.RightOffering.OnAddItem += this.Tally;
-            this.RightOffering.OnRemoveItem += this.Tally;
 
             this.RelationshipHandler = GlobalConstants.GameManager.RelationshipHandler;
         }
@@ -71,10 +59,10 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         {
             base.DisconnectEvents();
             
-            this.LeftOffering.OnAddItem -= this.Tally;
-            this.LeftOffering.OnRemoveItem -= this.Tally;
-            this.RightOffering.OnAddItem -= this.Tally;
-            this.RightOffering.OnRemoveItem -= this.Tally;
+            this.LeftOffering.ContainerOwner.ItemAdded -= this.Tally;
+            this.LeftOffering.ContainerOwner.ItemRemoved -= this.Tally;
+            this.RightOffering.ContainerOwner.ItemAdded -= this.Tally;
+            this.RightOffering.ContainerOwner.ItemRemoved -= this.Tally;
         }
 
         public override bool Close(object sender)
@@ -93,6 +81,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
         {
             this.Left = left;
             this.Right = right;
+            
             this.SetActors();
         }
 
@@ -128,6 +117,16 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
             }
             
             this.RightInventory.TitleText = this.Right.JoyName;
+            
+            this.LeftOffering.ContainerOwner.ItemAdded -= this.Tally;
+            this.LeftOffering.ContainerOwner.ItemRemoved -= this.Tally;
+            this.RightOffering.ContainerOwner.ItemAdded -= this.Tally;
+            this.RightOffering.ContainerOwner.ItemRemoved -= this.Tally;
+
+            this.LeftOffering.ContainerOwner.ItemAdded += this.Tally;
+            this.LeftOffering.ContainerOwner.ItemRemoved += this.Tally;
+            this.RightOffering.ContainerOwner.ItemAdded += this.Tally;
+            this.RightOffering.ContainerOwner.ItemRemoved += this.Tally;
 
             this.Tally();
         }
