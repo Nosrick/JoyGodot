@@ -1,4 +1,4 @@
-image: barichello/godot-ci:3.3.2
+image: barichello/godot-ci:mono-3.3.2
 
 variables:
   EXPORT_NAME: JoyGodot
