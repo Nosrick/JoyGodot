@@ -13,6 +13,8 @@ Windows:
     - godot -v --export-debug "Windows Desktop" --path build/windows/$EXPORT_NAME.exe
     - godot -v --export-pack "Windows Desktop" --path build/windows/$EXPORT_NAME.pck
     - cp -r Assets build/windows
+  only:
+    - main
 
   artifacts:
     name: $EXPORT_NAME
