@@ -48,8 +48,10 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 
             while (this.m_NumberRoomsPlaced <= this.m_NumberOfRooms && loopCounter < LOOP_BREAK)
             {
-                Vector2Int topLeft = new Vector2Int();
-                topLeft.x = this.Roller.Roll(1, this.m_Size);
+                Vector2Int topLeft = new Vector2Int
+                {
+                    x = this.Roller.Roll(1, this.m_Size)
+                };
                 if (topLeft.x % 2 == 1)
                 {
                     topLeft.x += 1;
@@ -61,7 +63,10 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
                     topLeft.y += 1;
                 }
 
-                if (this.PlaceRoom(topLeft)) this.OpenRoom(this.m_Rooms[this.m_Rooms.Count - 1]);
+                if (this.PlaceRoom(topLeft))
+                {
+                    this.OpenRoom(this.m_Rooms[this.m_Rooms.Count - 1]);
+                }
 
                 loopCounter += 1;
             }
@@ -98,10 +103,14 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
                 Rect2Int room = new Rect2Int(topLeft, sizes);
 
                 if (!this.ValidateRoom(room))
+                {
                     return false;
+                }
 
                 if (this.CheckForRoom(room))
+                {
                     return false;
+                }
 
                 for (int i = room.x; i <= room.xMax; i++)
                 {

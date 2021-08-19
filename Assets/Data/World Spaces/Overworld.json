@@ -7,7 +7,6 @@
       ],
       "TileSet": {
         "Name": "Overworld",
-        "UseTileMap": true,
         "SpriteData": [
           {
             "Name": "SurroundFloor",

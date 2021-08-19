@@ -7,7 +7,6 @@
       ],
       "TileSet": {
         "Name": "stairs",
-        "UseTileMap": true,
         "SpriteData": [
           {
             "Name": "upstairs",

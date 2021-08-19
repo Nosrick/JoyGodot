@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Godot;
 using Godot.Collections;
 using JoyGodot.Assets.Scripts.Helpers;
@@ -27,10 +26,12 @@ namespace JoyGodot.Assets.Scripts.Graphics
         protected IDictionary<string, IDictionary<int, Texture>> CachedTiles { get; set; }
 
         protected IDictionary<string, TileSet> TileSets { get; set; }
-        
+
+        protected TileSet TileSetTemplate { get; set; }
+
         public ShaderMaterial TileSetMaterial { get; protected set; }
         public ShaderMaterial JoyMaterial { get; protected set; }
-        
+
         public ShaderMaterial UiMaterial { get; protected set; }
 
         public ObjectIconHandler(RNG roller)
@@ -49,6 +50,10 @@ namespace JoyGodot.Assets.Scripts.Graphics
             {
                 return true;
             }
+
+            this.TileSetTemplate = GD.Load<TileSet>(
+                GlobalConstants.GODOT_ASSETS_FOLDER +
+                "Tile Sets/tileset-template.tres");
 
             this.TileSetMaterial = GD.Load<ShaderMaterial>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
@@ -86,7 +91,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 {
                     new SpritePart
                     {
-                        m_Data = new[] {"default"},
+                        m_Data = new[] { "default" },
                         m_Filename = GlobalConstants.GODOT_ASSETS_FOLDER +
                                      GlobalConstants.SPRITES_FOLDER +
                                      "default.png",
@@ -97,7 +102,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                         {
                             defaultImageTexture
                         },
-                        m_PossibleColours = new List<Color> {Colors.White},
+                        m_PossibleColours = new List<Color> { Colors.White },
                         m_DrawCentre = true,
                         m_PatchMargins = new int[4],
                         m_StretchMode = NinePatchRect.AxisStretchMode.Stretch
@@ -120,7 +125,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
 
             foreach (string file in files)
             {
-                Dictionary result = (Dictionary) JSON.Parse(System.IO.File.ReadAllText(file)).Result;
+                Dictionary result = (Dictionary)JSON.Parse(System.IO.File.ReadAllText(file)).Result;
 
                 this.AddSpriteDataFromJson(result);
             }
@@ -128,35 +133,20 @@ namespace JoyGodot.Assets.Scripts.Graphics
             return true;
         }
 
-        public bool AddSpriteData(string tileSet, SpriteData dataToAdd, bool isTileSet)
+        public bool AddSpriteData(string tileSet, SpriteData dataToAdd)
         {
-            if (isTileSet)
+            if (this.Icons.ContainsKey(tileSet))
             {
-                if (this.TileSets.TryGetValue(tileSet, out TileSet set))
-                {
-                    this.TileSets[tileSet] = this.AddSpriteDataToTileSet(set, dataToAdd);
-                }
-                else
-                {
-                    TileSet newSet = this.AddSpriteDataToTileSet(new TileSet(), dataToAdd);
-                    this.TileSets.Add(tileSet, newSet);
-                }
+                this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd));
             }
             else
             {
-                if (this.Icons.ContainsKey(tileSet))
-                {
-                    this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd));
-                }
-                else
-                {
-                    this.Icons.Add(new KeyValuePair<string, List<Tuple<string, SpriteData>>>(
-                        tileSet,
-                        new List<Tuple<string, SpriteData>>
-                        {
-                            new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd)
-                        }));
-                }
+                this.Icons.Add(new KeyValuePair<string, List<Tuple<string, SpriteData>>>(
+                    tileSet,
+                    new List<Tuple<string, SpriteData>>
+                    {
+                        new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd)
+                    }));
             }
 
             return true;
@@ -164,6 +154,8 @@ namespace JoyGodot.Assets.Scripts.Graphics
 
         public TileSet AddSpriteDataToTileSet(TileSet set, SpriteData data)
         {
+            set.AutotileSetBitmaskMode(0, TileSet.BitmaskMode.Bitmask3x3Minimal);
+
             foreach (var part in data.Parts)
             {
                 for (int i = 0; i < part.m_Frames; i++)
@@ -172,155 +164,218 @@ namespace JoyGodot.Assets.Scripts.Graphics
                     {
                         continue;
                     }
-                    
+
                     var index = set.GetLastUnusedTileId();
                     set.CreateTile(index);
                     set.TileSetTexture(index, part.m_FrameSprite[i]);
                     set.TileSetName(index, data.Name);
                     set.TileSetModulate(index, part.SelectedColour);
                     set.TileSetMaterial(index, this.TileSetMaterial);
+
+                    Vector2 coord = new Vector2(i % 12, i / 4);
+
+                    uint bitmask = this.TileSetTemplate.AutotileGetBitmask(index, coord);
+                    set.AutotileSetBitmask(index, coord, bitmask);
                 }
             }
 
             return set;
         }
 
-        public bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd, bool isTileSet)
+        public bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd)
         {
             return dataToAdd.Aggregate(true,
                 (current, data) =>
-                    current & this.AddSpriteData(tileSet, data, isTileSet));
+                    current & this.AddSpriteData(tileSet, data));
         }
 
-        /// <summary>
-        /// This must be passed the "SpriteData" node of the JSON
-        /// </summary>
-        /// <param name="tileSet">The tileset that the data belongs to</param>
-        /// <param name="spriteDataToken">The JSON to pull the data from. MUST have a root of "SpriteData"</param>
-        /// <returns></returns>
         public bool AddSpriteDataFromJson(Dictionary spriteDict)
         {
-            List<SpriteData> spriteData = new List<SpriteData>();
             Dictionary tileSetDict = this.ValueExtractor.GetValueFromDictionary<Dictionary>(spriteDict, "TileSet");
 
             if (tileSetDict.IsNullOrEmpty())
             {
                 return false;
             }
-            
+
             string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
-            ICollection<Dictionary> tileSetArray =
-                this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
 
             bool isTileSet = this.ValueExtractor.GetValueFromDictionary<bool>(tileSetDict, "UseTileMap");
-            
-            foreach (Dictionary dict in tileSetArray)
+
+            if (isTileSet)
             {
-                try
-                {
-                    List<SpritePart> parts = new List<SpritePart>();
+                string fileName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Filename");
+                int size = this.ValueExtractor.GetValueFromDictionary<int>(tileSetDict, "Size");
 
-                    string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
-                    int size = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Size");
-                    if (size == 0)
+                List<Texture> tiles = this.ChopSprites(
+                    fileName,
+                    this.TryGetTextureFromCache(fileName),
+                    48,
+                    0,
+                    size);
+
+                Array partColourArray =
+                    this.ValueExtractor.GetValueFromDictionary<Array>(tileSetDict, "Colour");
+                List<Color> colours = new List<Color>();
+                ICollection<string> colourCodes = partColourArray.IsNullOrEmpty()
+                    ? new List<string>
                     {
-                        size = GlobalConstants.SPRITE_TEXTURE_SIZE;
+                        Colors.Magenta.ToHtml(false)
                     }
+                    : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
+                foreach (string code in colourCodes)
+                {
+                    colours.Add(new Color(code));
+                }
 
-                    string state = this.ValueExtractor.GetValueFromDictionary<string>(dict, "State") ?? "default";
-                    Array partsArray = this.ValueExtractor.GetValueFromDictionary<Array>(dict, "Part");
-                    ICollection<Dictionary> partDicts =
-                        this.ValueExtractor.GetCollectionFromArray<Dictionary>(partsArray);
-                    foreach (Dictionary innerDict in partDicts)
-                    {
-                        string partName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Name");
-                        int partFrames = innerDict.Contains("Frames")
-                            ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Frames")
-                            : 1;
-                        string fileName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Filename");
-                        int sortOrder = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "SortOrder");
-                        int position = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Position");
-                        NinePatchRect.AxisStretchMode stretchMode =
-                            GraphicsHelper.ParseStretchMode(
-                                this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "FillType"));
-                        bool drawCentre = !innerDict.Contains("DrawCentre")
-                                          || this.ValueExtractor.GetValueFromDictionary<bool>(innerDict, "DrawCentre");
-                        Array marginArray = this.ValueExtractor.GetValueFromDictionary<Array>(
-                            innerDict,
-                            "PatchMargins");
-                        ICollection<int> patchMargins = marginArray.IsNullOrEmpty()
-                            ? new[] {0, 0, 0, 0}
-                            : this.ValueExtractor.GetCollectionFromArray<int>(marginArray);
-
-                        Array partDataArray = innerDict.Contains("Data")
-                            ? this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Data")
-                            : new Array();
-                        ICollection<string> data = this.ValueExtractor.GetCollectionFromArray<string>(partDataArray);
-                        Array partColourArray =
-                            this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Colour");
-                        ICollection<Color> colours = new List<Color>();
-                        ICollection<string> colourCodes = partColourArray.IsNullOrEmpty()
-                            ? new List<string>
-                            {
-                                Colors.Magenta.ToHtml(false)
-                            }
-                            : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
-                        foreach (string code in colourCodes)
+                List<SpritePart> parts = tiles.Select(tile =>
+                        new SpritePart
                         {
-                            colours.Add(new Color(code));
-                        }
-
-                        List<Texture> frames = this.ChopSprites(
-                            fileName,
-                            this.TryGetTextureFromCache(fileName),
-                            partFrames,
-                            position);
-
-                        int halfway = frames.Count / 2;
-                        if (frames.Count > 1)
-                        {
-                            for (int i = halfway; i >= halfway; i--)
-                            {
-                                frames.Add(frames[i]);
-                            }
-                        }
-
-                        SpritePart part = new SpritePart
-                        {
-                            m_Data = data.ToArray(),
+                            m_Data = System.Array.Empty<string>(),
+                            m_DrawCentre = true,
                             m_Filename = fileName,
-                            m_Frames = partFrames,
-                            m_FrameSprite = frames,
-                            m_Name = partName,
-                            m_Position = position,
-                            m_PossibleColours = colours.ToList(),
-                            m_SortingOrder = sortOrder,
-                            m_PatchMargins = patchMargins.ToArray(),
-                            m_DrawCentre = drawCentre,
-                            m_StretchMode = stretchMode
-                        };
+                            m_Frames = 1,
+                            m_FrameSprite = new List<Texture> { tile },
+                            m_Name = tileSetName,
+                            m_PatchMargins = new int[4],
+                            m_Position = 0,
+                            m_PossibleColours = colours,
+                            m_SelectedColour = 0,
+                            m_SortingOrder = 0,
+                            m_StretchMode = NinePatchRect.AxisStretchMode.TileFit
+                        })
+                    .ToList();
 
-                        parts.Add(part);
-                    }
-
-                    spriteData.Add(
-                        new SpriteData
-                        {
-                            Name = name,
-                            Parts = parts,
-                            State = state,
-                            Size = size
-                        });
-                }
-                catch (Exception e)
+                SpriteData spriteData = new SpriteData
                 {
-                    GlobalConstants.ActionLog.Log("Could not load sprite data from JSON. Offending JSON to follow.");
-                    GlobalConstants.ActionLog.Log(dict);
-                    GlobalConstants.ActionLog.StackTrace(e);
-                }
-            }
+                    Name = tileSetName,
+                    Parts = parts,
+                    Size = size,
+                    State = "default"
+                };
 
-            return this.AddSpriteDataRange(tileSetName, spriteData, isTileSet);
+                this.AddSpriteDataToTileSet(new TileSet(), spriteData);
+                return true;
+            }
+            else
+            {
+                List<SpriteData> spriteData = new List<SpriteData>();
+                
+                ICollection<Dictionary> tileSetArray =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
+
+                foreach (Dictionary dict in tileSetArray)
+                {
+                    try
+                    {
+                        List<SpritePart> parts = new List<SpritePart>();
+
+                        string name = this.ValueExtractor.GetValueFromDictionary<string>(dict, "Name");
+                        int size = this.ValueExtractor.GetValueFromDictionary<int>(dict, "Size");
+                        if (size == 0)
+                        {
+                            size = GlobalConstants.SPRITE_TEXTURE_SIZE;
+                        }
+
+                        string state = this.ValueExtractor.GetValueFromDictionary<string>(dict, "State") ?? "default";
+                        Array partsArray = this.ValueExtractor.GetValueFromDictionary<Array>(dict, "Part");
+                        ICollection<Dictionary> partDicts =
+                            this.ValueExtractor.GetCollectionFromArray<Dictionary>(partsArray);
+                        foreach (Dictionary innerDict in partDicts)
+                        {
+                            string partName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Name");
+                            int partFrames = innerDict.Contains("Frames")
+                                ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Frames")
+                                : 1;
+                            string fileName = this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "Filename");
+                            int sortOrder = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "SortOrder");
+                            int position = this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Position");
+                            NinePatchRect.AxisStretchMode stretchMode =
+                                GraphicsHelper.ParseStretchMode(
+                                    this.ValueExtractor.GetValueFromDictionary<string>(innerDict, "FillType"));
+                            bool drawCentre = !innerDict.Contains("DrawCentre")
+                                              || this.ValueExtractor.GetValueFromDictionary<bool>(innerDict,
+                                                  "DrawCentre");
+                            Array marginArray = this.ValueExtractor.GetValueFromDictionary<Array>(
+                                innerDict,
+                                "PatchMargins");
+                            ICollection<int> patchMargins = marginArray.IsNullOrEmpty()
+                                ? new[] { 0, 0, 0, 0 }
+                                : this.ValueExtractor.GetCollectionFromArray<int>(marginArray);
+
+                            Array partDataArray = innerDict.Contains("Data")
+                                ? this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Data")
+                                : new Array();
+                            ICollection<string> data =
+                                this.ValueExtractor.GetCollectionFromArray<string>(partDataArray);
+                            Array partColourArray =
+                                this.ValueExtractor.GetValueFromDictionary<Array>(innerDict, "Colour");
+                            ICollection<Color> colours = new List<Color>();
+                            ICollection<string> colourCodes = partColourArray.IsNullOrEmpty()
+                                ? new List<string>
+                                {
+                                    Colors.Magenta.ToHtml(false)
+                                }
+                                : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
+                            foreach (string code in colourCodes)
+                            {
+                                colours.Add(new Color(code));
+                            }
+
+                            List<Texture> frames = this.ChopSprites(
+                                fileName,
+                                this.TryGetTextureFromCache(fileName),
+                                partFrames,
+                                position,
+                                size);
+
+                            int halfway = frames.Count / 2;
+                            if (frames.Count > 1)
+                            {
+                                for (int i = halfway; i >= halfway; i--)
+                                {
+                                    frames.Add(frames[i]);
+                                }
+                            }
+
+                            SpritePart part = new SpritePart
+                            {
+                                m_Data = data.ToArray(),
+                                m_Filename = fileName,
+                                m_Frames = partFrames,
+                                m_FrameSprite = frames,
+                                m_Name = partName,
+                                m_Position = position,
+                                m_PossibleColours = colours.ToList(),
+                                m_SortingOrder = sortOrder,
+                                m_PatchMargins = patchMargins.ToArray(),
+                                m_DrawCentre = drawCentre,
+                                m_StretchMode = stretchMode
+                            };
+
+                            parts.Add(part);
+                        }
+
+                        spriteData.Add(
+                            new SpriteData
+                            {
+                                Name = name,
+                                Parts = parts,
+                                State = state,
+                                Size = size
+                            });
+                    }
+                    catch (Exception e)
+                    {
+                        GlobalConstants.ActionLog.Log(
+                            "Could not load sprite data from JSON. Offending JSON to follow.");
+                        GlobalConstants.ActionLog.Log(dict);
+                        GlobalConstants.ActionLog.StackTrace(e);
+                    }
+                }
+            
+                return this.AddSpriteDataRange(tileSetName, spriteData);
+            }
         }
 
         protected Texture TryGetTextureFromCache(string fileName)
@@ -338,14 +393,18 @@ namespace JoyGodot.Assets.Scripts.Graphics
             return texture;
         }
 
-        protected List<Texture> ChopSprites(string fileName, Texture texture, int frames, int position)
+        protected List<Texture> ChopSprites(
+            string fileName,
+            Texture texture,
+            int frames,
+            int position,
+            int size)
         {
             List<Texture> sprites = new List<Texture>();
 
             Image sheet = texture.GetData();
             int width = sheet.GetWidth();
             int height = sheet.GetHeight();
-            const int size = GlobalConstants.SPRITE_TEXTURE_SIZE;
 
             int index = 0;
             if (this.CachedTiles.ContainsKey(fileName))
@@ -399,7 +458,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                             fileName,
                             new System.Collections.Generic.Dictionary<int, Texture>
                             {
-                                {p, imageTexture}
+                                { p, imageTexture }
                             });
                     }
 
@@ -463,7 +522,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
             {
                 return null;
             }
-            
+
             if (addStairs
                 && this.TileSets.TryGetValue("stairs", out TileSet stairs))
             {
@@ -497,10 +556,10 @@ namespace JoyGodot.Assets.Scripts.Graphics
                     Texture texture = set.TileGetTexture(index);
                     data.Parts.Add(new SpritePart
                     {
-                        m_Data = new []{"default"},
+                        m_Data = new[] { "default" },
                         m_Frames = 1,
                         m_Name = name,
-                        m_FrameSprite = new List<Texture>{ texture },
+                        m_FrameSprite = new List<Texture> { texture },
                         m_PossibleColours = new List<Color> { Colors.White },
                         m_SortingOrder = index,
                         m_StretchMode = NinePatchRect.AxisStretchMode.TileFit

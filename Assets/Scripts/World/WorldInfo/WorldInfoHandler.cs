@@ -23,6 +23,8 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
 
         IEnumerable<WorldTile> GetByTags(IEnumerable<string> tags);
 
+        WorldTile GetEmptyTile();
+
         WorldInfo GetRandom(params string[] tags);
     }
 
@@ -149,6 +151,13 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
                             tags));
                 }
             }
+            
+            this.WorldTiles.Add(
+                "empty",
+                new WorldTile(
+                    "empty",
+                    "empty",
+                    new []{"empty"}));
 
             return worldInfos;
         }
@@ -157,7 +166,7 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
         {
             if (this.WorldTiles.Any(tuple => tuple.Item1.Equals(tileSet, StringComparison.OrdinalIgnoreCase)) == false)
             {
-                return new WorldTile[0];
+                return new List<WorldTile>{this.GetEmptyTile()};
             }
 
             return this.WorldTiles
@@ -185,6 +194,11 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
         public IEnumerable<WorldTile> GetByTags(IEnumerable<string> tags)
         {
             return this.WorldTiles.Values.Where(tile => tile.Tags.Intersect(tags).Any());
+        }
+
+        public WorldTile GetEmptyTile()
+        {
+            return this.WorldTiles.FetchValuesForKey("empty").FirstOrDefault();
         }
 
         public WorldInfo GetRandom(params string[] tags)

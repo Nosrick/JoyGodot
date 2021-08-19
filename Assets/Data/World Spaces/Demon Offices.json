@@ -9,40 +9,9 @@
     {
       "Name": "Demon Offices",
       "UseTileMap": true,
-      "SpriteData": [
-        {
-          "Name": "SurroundFloor",
-          "Part": [
-            {
-              "Name": "SurroundFloor",
-              "Position": 4,
-              "Data": [
-                "Floor",
-                "Default"
-              ],
-              "Filename": "environments/overworld-grass.png",
-              "Frames": 1,
-              "Colour": ["#625565"]
-            }
-          ]
-        },
-        {
-          "Name": "SurroundWall",
-          "Part": [
-            {
-              "Name": "SurroundWall",
-              "Position": 19,
-              "Data": [
-                "Floor",
-                "Default"
-              ],
-              "Filename": "environments/naga-pits32.png",
-              "Frames": 1,
-              "Colour": ["#8fd3ff"]
-            }
-          ]
-        }
-      ]
+      "Filename": "environments/naga-pits-floor.png",
+      "Size": 32,
+      "Colour": ["#625565"]
     }
   }]
 }

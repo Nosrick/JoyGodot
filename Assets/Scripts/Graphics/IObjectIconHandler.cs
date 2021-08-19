@@ -7,8 +7,8 @@ namespace JoyGodot.Assets.Scripts.Graphics
 {
     public interface IObjectIconHandler
     {
-        bool AddSpriteData(string tileSet, SpriteData dataToAdd, bool isTileSet);
-        bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd, bool isTileSet);
+        bool AddSpriteData(string tileSet, SpriteData dataToAdd);
+        bool AddSpriteDataRange(string tileSet, IEnumerable<SpriteData> dataToAdd);
         bool AddSpriteDataFromJson(Dictionary spriteDict);
         IEnumerable<SpriteData> GetManagedSprites(string tileSet, string tileName, string state = "DEFAULT");
         IEnumerable<SpriteData> GetSpritesForManagedAssets(string tileSet);

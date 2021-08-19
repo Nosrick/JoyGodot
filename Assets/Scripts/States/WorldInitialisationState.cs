@@ -59,12 +59,12 @@ namespace JoyGodot.Assets.Scripts.States
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
 
             var floorTileMap = gameManager.FloorTileMap;
-            floorTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet, true);
-            int surroundFloorIndex = floorTileMap.TileSet.FindTileByName("SurroundFloor");
+            //floorTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet, true);
+            //int surroundFloorIndex = floorTileMap.TileSet.FindTileByName("SurroundFloor");
 
             var wallTileMap = gameManager.WallTileMap;
             wallTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet);
-            int surroundWallIndex = wallTileMap.TileSet.FindTileByName("SurroundWall");
+            //int surroundWallIndex = wallTileMap.TileSet.FindTileByName("SurroundWall");
             
             for (int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
             {
@@ -80,9 +80,11 @@ namespace JoyGodot.Assets.Scripts.States
                     fog.Move(intPos);
 
                     //Make the floor
-                    floorTileMap.SetCell(i, j, surroundFloorIndex);
+                    floorTileMap.SetCell(i, j, 0);
                 }
             }
+
+            floorTileMap.UpdateBitmaskRegion();
 
             //Make the upstairs
             if (this.m_ActiveWorld.Guid != this.m_Overworld.Guid)
@@ -103,9 +105,11 @@ namespace JoyGodot.Assets.Scripts.States
             //Create the walls
             foreach (Vector2Int position in this.m_ActiveWorld.Walls)
             {
+                /*
                 wallTileMap.SetCellv(
                     position.ToVec2(),
                     surroundWallIndex);
+                    */
             }
 
             int index = 0;

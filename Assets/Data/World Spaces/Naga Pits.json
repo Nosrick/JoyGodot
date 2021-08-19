@@ -9,40 +9,9 @@
         {
           "Name": "Naga Pits",
           "UseTileMap": true,
-          "SpriteData": [
-            {
-              "Name": "SurroundFloor",
-              "Part": [
-                {
-                  "Name": "SurroundFloor",
-                  "Position": 4,
-                  "Data": [
-                    "Floor",
-                    "Default"
-                  ],
-                  "Filename": "environments/naga-pits32.png",
-                  "Frames": 1,
-                  "Colour": ["#4d9be6"]
-                }
-              ]
-            },
-            {
-              "Name": "SurroundWall",
-              "Part": [
-                {
-                  "Name": "SurroundWall",
-                  "Position": 19,
-                  "Data": [
-                    "Floor",
-                    "Default"
-                  ],
-                  "Filename": "environments/naga-pits32.png",
-                  "Frames": 1,
-                  "Colour": ["#4d65b4"]
-                }
-              ]
-            }
-          ]
+          "Filename": "environments/naga-pits-floor.png",
+          "Size": 32,
+          "Colour": ["#4d9be6"]
         }
     }]
 }
