@@ -96,20 +96,23 @@ namespace JoyGodot.Assets.Scripts.World
         }
 
         /// <summary>
-        /// A template for adding stuff to later. A blank WorldInstance.
+        /// 
         /// </summary>
+        /// <param name="tileSet"></param>
         /// <param name="tiles"></param>
         /// <param name="tags"></param>
         /// <param name="name"></param>
         /// <param name="entityHandler"></param>
         /// <param name="roller"></param>
         public WorldInstance(
+            string tileSet,
             WorldTile[,] tiles,
             IEnumerable<string> tags,
             string name,
             ILiveEntityHandler entityHandler,
             RNG roller = null)
         {
+            this.TileSet = tileSet;
             this.EntityHandler = entityHandler;
             this.Roller = roller ?? new RNG();
 
@@ -570,6 +573,8 @@ namespace JoyGodot.Assets.Scripts.World
         {
             get { return this.m_Tiles; }
         }
+
+        public string TileSet { get; protected set; }
 
         public System.Collections.Generic.Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
         {

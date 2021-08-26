@@ -45,6 +45,7 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
                 WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size, worldInfo.name);
                 HashSet<Vector2Int> walls = interiorGenerator.GenerateWalls(tiles);
                 WorldInstance worldInstance = new WorldInstance(
+                    worldInfo.name,
                     tiles, 
                     worldInfo.tags, 
                     worldInfo.name + " " + i, 

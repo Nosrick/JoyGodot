@@ -213,7 +213,7 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
             var keys = new List<string>(this.WorldTiles.Keys);
             foreach (string key in keys)
             {
-                this.WorldTiles.RemoveAll(key);
+                this.WorldTiles.RemoveByKey(key);
             }
 
             this.WorldTiles = null;

@@ -45,66 +45,56 @@ namespace JoyGodot.Assets.Scripts.Collections
             }
         }
 
-        public int RemoveByKey(K key)
+        public int RemoveByKey(K key, IEqualityComparer<K> comparer = default)
         {
-            return this.m_KeyValues.RemoveAll(tuple => tuple.Item1.Equals(key));
+            return comparer is null
+                ? this.m_KeyValues.RemoveAll(tuple => tuple.Item1.Equals(key))
+                : this.m_KeyValues.RemoveAll(tuple => comparer.Equals(tuple.Item1, key));
         }
 
-        public int RemoveByValue(T value)
+        public int RemoveByValue(T value, IEqualityComparer<T> comparer = default)
         {
-            return this.m_KeyValues.RemoveAll(tuple => tuple.Item2.Equals(value));
+            return comparer is null
+                ? this.m_KeyValues.RemoveAll(tuple => tuple.Item2.Equals(value))
+                : this.m_KeyValues.RemoveAll(tuple => comparer.Equals(tuple.Item2, value));
         }
 
-        public bool Remove(K key, T value)
+        public bool Remove(
+            K key,
+            T value,
+            IEqualityComparer<K> keyComparer = default,
+            IEqualityComparer<T> valueComparer = default)
         {
-            return this.m_KeyValues.Remove(new Tuple<K, T>(key, value));
+            var item = this.m_KeyValues.FirstOrDefault(tuple =>
+                keyComparer is null
+                    ? tuple.Item1.Equals(key)
+                    : keyComparer.Equals(key, tuple.Item1)
+                      &&
+                      valueComparer is null
+                        ? tuple.Item2.Equals(value)
+                        : valueComparer.Equals(value, tuple.Item2));
+            return this.m_KeyValues.Remove(item);
         }
 
-        public bool RemoveAll(K key)
+        public bool ContainsKey(K key, IEqualityComparer<K> comparer = default)
         {
-            List<Tuple<K, T>> toBeRemoved = new List<Tuple<K, T>>();
-
-            foreach(Tuple<K, T> tuple in this.m_KeyValues)
-            {
-                if(tuple.Item1.Equals(key))
-                {
-                    toBeRemoved.Add(tuple);
-                }
-            }
-
-            this.m_KeyValues.RemoveAll(x => toBeRemoved.Contains(x));
-            return toBeRemoved.Count > 0;
+            return comparer is null
+                ? this.m_KeyValues.Any(x => x.Item1.Equals(key))
+                : this.m_KeyValues.Any(x => comparer.Equals(x.Item1, key));
         }
 
-        public bool ContainsKey(K key)
+        public bool ContainsValue(T value, IEqualityComparer<T> comparer = default)
         {
-            return this.m_KeyValues.Any(x => x.Item1.Equals(key));
+            return comparer is null
+                ? this.m_KeyValues.Any(x => x.Item2.Equals(value))
+                : this.m_KeyValues.Any(x => comparer.Equals(x.Item2, value));
         }
 
-        public bool ContainsValue(T value)
+        public int KeyCount(K key, IEqualityComparer<K> comparer = default)
         {
-            return this.m_KeyValues.Any(x => x.Item2.Equals(value));
-        }
-
-        public int KeyCount(K key)
-        {
-            return this.m_KeyValues.Count(x => x.Item1.Equals(key));
-        }
-
-        public bool RemoveAll(T value)
-        {
-            List<Tuple<K, T>> toBeRemoved = new List<Tuple<K, T>>();
-
-            foreach (Tuple<K, T> tuple in this.m_KeyValues)
-            {
-                if (tuple.Item2.Equals(value))
-                {
-                    toBeRemoved.Add(tuple);
-                }
-            }
-
-            this.m_KeyValues.RemoveAll(x => toBeRemoved.Contains(x));
-            return toBeRemoved.Count > 0;
+            return comparer is null
+                ? this.m_KeyValues.Count(x => x.Item1.Equals(key))
+                : this.m_KeyValues.Count(x => comparer.Equals(x.Item1, key));
         }
 
         public void OrderBy(Func<Tuple<K, T>, object> func)
@@ -114,36 +104,57 @@ namespace JoyGodot.Assets.Scripts.Collections
 
         public List<T> this[K key]
         {
-            get
-            {
-                return this.FetchValuesForKey(key);
-            }
+            get { return this.FetchValuesForKey(key); }
         }
 
-        public List<T> FetchValuesForKey(K key)
+        public List<T> FetchValuesForKey(K key, IEqualityComparer<K> comparer = default)
         {
             List<T> values = new List<T>();
 
-            foreach(Tuple<K, T> tuple in this.m_KeyValues)
+            bool comparerPresent = comparer is null == false;
+
+            foreach (Tuple<K, T> tuple in this.m_KeyValues)
             {
-                if(tuple.Item1.Equals(key))
+                if (!comparerPresent)
                 {
-                    values.Add(tuple.Item2);
+                    if (tuple.Item1.Equals(key))
+                    {
+                        values.Add(tuple.Item2);
+                    }
+                }
+                else
+                {
+                    if (comparer.Equals(key, tuple.Item1))
+                    {
+                        values.Add(tuple.Item2);
+                    }
                 }
             }
 
             return values;
         }
 
-        public List<K> FetchKeysForValue(T value)
+        public List<K> FetchKeysForValue(T value, IEqualityComparer<T> comparer = default)
         {
             List<K> keys = new List<K>();
 
-            foreach(Tuple<K, T> tuple in this.m_KeyValues)
+            bool comparerPresent = comparer is null == false;
+
+            foreach (Tuple<K, T> tuple in this.m_KeyValues)
             {
-                if(tuple.Item2.Equals(value))
+                if (!comparerPresent)
                 {
-                    keys.Add(tuple.Item1);
+                    if (tuple.Item2.Equals(value))
+                    {
+                        keys.Add(tuple.Item1);
+                    }
+                }
+                else
+                {
+                    if (comparer.Equals(value, tuple.Item2))
+                    {
+                        keys.Add(tuple.Item1);
+                    }
                 }
             }
 
@@ -162,37 +173,29 @@ namespace JoyGodot.Assets.Scripts.Collections
 
         public List<Tuple<K, T>> Collection
         {
-            get
-            {
-                return this.m_KeyValues.ToList();
-            }
+            get { return this.m_KeyValues.ToList(); }
         }
 
         public List<K> Keys
         {
-            get
-            {
-                return this.m_KeyValues.Select(x => x.Item1).ToList();
-            }
+            get { return this.m_KeyValues.Select(x => x.Item1).ToList(); }
         }
 
         public List<T> Values
         {
-            get
-            {
-                return this.m_KeyValues.Select(x => x.Item2).ToList();
-            }
+            get { return this.m_KeyValues.Select(x => x.Item2).ToList(); }
         }
 
         public NonUniqueDictionary<K, T> Copy()
         {
             NonUniqueDictionary<K, T> clone = new NonUniqueDictionary<K, T>();
-            foreach(Tuple<K, T> tuple in this)
+            foreach (Tuple<K, T> tuple in this)
             {
                 clone.Add(
-                    ObjectExtensions.Copy(tuple.Item1), 
+                    ObjectExtensions.Copy(tuple.Item1),
                     ObjectExtensions.Copy(tuple.Item2));
             }
+
             return clone;
         }
     }

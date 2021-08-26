@@ -63,7 +63,7 @@ namespace JoyGodot.Assets.Scripts.States
             //int surroundFloorIndex = floorTileMap.TileSet.FindTileByName("SurroundFloor");
 
             var wallTileMap = gameManager.WallTileMap;
-            wallTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet);
+            //wallTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.TileSet);
             //int surroundWallIndex = wallTileMap.TileSet.FindTileByName("SurroundWall");
             
             for (int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)

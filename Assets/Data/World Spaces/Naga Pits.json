@@ -11,7 +11,10 @@
           "UseTileMap": true,
           "Filename": "environments/naga-pits-floor.png",
           "Size": 32,
-          "Colour": ["#4d9be6"]
+          "Colour": ["#4d9be6"],
+          "Data": [
+            "floor"
+          ]
         }
     }]
 }

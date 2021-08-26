@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using JoyGodot.Assets.Scripts.Collections;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Managed_Assets;
 using JoyGodot.Assets.Scripts.Rollers;
@@ -15,6 +16,8 @@ namespace JoyGodot.Assets.Scripts.Graphics
     public class ObjectIconHandler : IObjectIconHandler
     {
         protected RNG Roller { get; set; }
+
+        protected IDictionary<string, NonUniqueDictionary<string, SpriteData>> Icons { get; set; }
 
         protected JSONValueExtractor ValueExtractor { get; set; }
 
@@ -67,7 +70,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 GlobalConstants.GODOT_ASSETS_FOLDER +
                 "Materials/Default UI Material.tres");
 
-            this.Icons = new System.Collections.Generic.Dictionary<string, List<Tuple<string, SpriteData>>>();
+            this.Icons = new System.Collections.Generic.Dictionary<string, NonUniqueDictionary<string, SpriteData>>();
 
             Texture defaultSprite = GD.Load<Texture>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
@@ -110,9 +113,9 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 }
             };
 
-            this.Icons.Add("default", new List<Tuple<string, SpriteData>>
+            this.Icons.Add("default", new NonUniqueDictionary<string, SpriteData>
             {
-                new Tuple<string, SpriteData>(iconData.Name, iconData)
+                {iconData.Name, iconData}
             });
 
             string[] files =
@@ -137,24 +140,25 @@ namespace JoyGodot.Assets.Scripts.Graphics
         {
             if (this.Icons.ContainsKey(tileSet))
             {
-                this.Icons[tileSet].Add(new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd));
+                this.Icons[tileSet].Add(dataToAdd.Name, dataToAdd);
             }
             else
             {
-                this.Icons.Add(new KeyValuePair<string, List<Tuple<string, SpriteData>>>(
-                    tileSet,
-                    new List<Tuple<string, SpriteData>>
+                this.Icons.Add(tileSet,
+                    new NonUniqueDictionary<string, SpriteData>
                     {
-                        new Tuple<string, SpriteData>(dataToAdd.Name, dataToAdd)
-                    }));
+                        {dataToAdd.Name, dataToAdd}
+                    });
             }
 
             return true;
         }
 
-        public TileSet AddSpriteDataToTileSet(TileSet set, SpriteData data)
+        protected TileSet AddSpriteDataToTileSet(SpriteData data)
         {
-            set.AutotileSetBitmaskMode(0, TileSet.BitmaskMode.Bitmask3x3Minimal);
+            TileSet set = (TileSet) this.TileSetTemplate.Duplicate();
+
+            var tileIDs = set.GetTilesIds();
 
             foreach (var part in data.Parts)
             {
@@ -165,19 +169,21 @@ namespace JoyGodot.Assets.Scripts.Graphics
                         continue;
                     }
 
-                    var index = set.GetLastUnusedTileId();
-                    set.CreateTile(index);
+                    bool containsID = tileIDs.Contains(i);
+                    var index = containsID ? i : set.GetLastUnusedTileId();
+                    if(containsID == false)
+                    {
+                        set.CreateTile(index);
+                    }
+
                     set.TileSetTexture(index, part.m_FrameSprite[i]);
                     set.TileSetName(index, data.Name);
                     set.TileSetModulate(index, part.SelectedColour);
                     set.TileSetMaterial(index, this.TileSetMaterial);
-
-                    Vector2 coord = new Vector2(i % 12, i / 4);
-
-                    uint bitmask = this.TileSetTemplate.AutotileGetBitmask(index, coord);
-                    set.AutotileSetBitmask(index, coord, bitmask);
                 }
             }
+
+            set.AutotileSetBitmaskMode(0, TileSet.BitmaskMode.Bitmask3x3Minimal);
 
             return set;
         }
@@ -207,6 +213,12 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 string fileName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Filename");
                 int size = this.ValueExtractor.GetValueFromDictionary<int>(tileSetDict, "Size");
 
+                string[] data = this.ValueExtractor
+                                    .GetArrayValuesCollectionFromDictionary<string>(
+                                        tileSetDict,
+                                        "Data")
+                                        .ToArray();
+
                 List<Texture> tiles = this.ChopSprites(
                     fileName,
                     this.TryGetTextureFromCache(fileName),
@@ -214,8 +226,11 @@ namespace JoyGodot.Assets.Scripts.Graphics
                     0,
                     size);
 
-                Array partColourArray =
-                    this.ValueExtractor.GetValueFromDictionary<Array>(tileSetDict, "Colour");
+                Array partColourArray = this.ValueExtractor
+                                            .GetValueFromDictionary<Array>(
+                                                tileSetDict,
+                                                "Colour");
+                                                
                 List<Color> colours = new List<Color>();
                 ICollection<string> colourCodes = partColourArray.IsNullOrEmpty()
                     ? new List<string>
@@ -231,7 +246,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 List<SpritePart> parts = tiles.Select(tile =>
                         new SpritePart
                         {
-                            m_Data = System.Array.Empty<string>(),
+                            m_Data = data,
                             m_DrawCentre = true,
                             m_Filename = fileName,
                             m_Frames = 1,
@@ -254,13 +269,21 @@ namespace JoyGodot.Assets.Scripts.Graphics
                     State = "default"
                 };
 
-                this.AddSpriteDataToTileSet(new TileSet(), spriteData);
+                TileSet value = this.AddSpriteDataToTileSet(spriteData);
+                if (this.TileSets.ContainsKey(tileSetName) == false)
+                {
+                    this.TileSets.Add(tileSetName, value);
+                }
+                else
+                {
+                    this.TileSets[tileSetName] = value;
+                }
                 return true;
             }
             else
             {
                 List<SpriteData> spriteData = new List<SpriteData>();
-                
+
                 ICollection<Dictionary> tileSetArray =
                     this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
 
@@ -373,7 +396,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                         GlobalConstants.ActionLog.StackTrace(e);
                     }
                 }
-            
+
                 return this.AddSpriteDataRange(tileSetName, spriteData);
             }
         }
@@ -491,11 +514,8 @@ namespace JoyGodot.Assets.Scripts.Graphics
 
         public IEnumerable<SpriteData> GetManagedSprites(string tileSet, string tileName, string state = "DEFAULT")
         {
-            List<SpriteData> data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
-                .SelectMany(x => x.Value.Where(pair => pair.Item1.Equals(tileName, StringComparison.OrdinalIgnoreCase)))
-                .Where(pair => pair.Item2.State.Equals(state, StringComparison.OrdinalIgnoreCase))
-                .Select(x => x.Item2)
-                .ToList();
+            var data = this.Icons.Where(x => x.Key.Equals(tileSet, StringComparison.OrdinalIgnoreCase))
+                .SelectMany(x => x.Value.FetchValuesForKey(tileName, StringComparer.OrdinalIgnoreCase));
 
             return data.Any() ? data : this.ReturnDefaultData();
         }
@@ -569,7 +589,5 @@ namespace JoyGodot.Assets.Scripts.Graphics
 
             return data.Parts.Count > 0 ? data : this.ReturnDefaultData().First();
         }
-
-        protected IDictionary<string, List<Tuple<string, SpriteData>>> Icons { get; set; }
     }
 }

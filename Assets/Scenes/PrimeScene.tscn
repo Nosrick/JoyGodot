@@ -8,7 +8,7 @@
 [ext_resource path="res://Assets/Scripts/Graphics/HappinessShaderHandler.cs" type="Script" id=6]
 [ext_resource path="res://Assets/Tile Sets/tileset-template.tres" type="TileSet" id=7]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
 size = 24
 outline_size = 1
@@ -33,9 +33,9 @@ format = 1
 script = ExtResource( 6 )
 
 [node name="WorldWalls" type="TileMap" parent="WorldHolder"]
-visible = false
 position = Vector2( -16, -16 )
 z_index = 1
+tile_set = ExtResource( 7 )
 cell_size = Vector2( 32, 32 )
 cell_tile_origin = 1
 format = 1
@@ -57,7 +57,7 @@ z_index = 120
 [node name="Tooltip" parent="Persistent UI" instance=ExtResource( 2 )]
 visible = false
 PositionOffset = Vector2( 0, 0 )
-CustomFont = SubResource( 2 )
+CustomFont = SubResource( 1 )
 
 [node name="Context Menu" parent="Persistent UI" instance=ExtResource( 5 )]
 visible = false

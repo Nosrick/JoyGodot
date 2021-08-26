@@ -63,7 +63,7 @@ namespace JoyGodot.Assets.Scripts.Items.Crafting
             List<Guid> recipesKeys = new List<Guid>(this.Recipes.Keys);
             foreach (Guid key in recipesKeys)
             {
-                this.Recipes.RemoveAll(key);
+                this.Recipes.RemoveByKey(key);
             }
 
             this.Recipes = null;
