@@ -67,6 +67,66 @@ namespace JoyGodot.Assets.Scripts.World
 
         protected Guid m_GUID;
 
+        public IEnumerable<string> Tags
+        {
+            get => this.m_Tags;
+            protected set => this.m_Tags = new List<string>(value);
+        }
+
+        public System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance> Areas
+        {
+            get { return this.m_Areas; }
+        }
+
+        public HashSet<IItemInstance> Items
+        {
+            get { return this.m_Items; }
+        }
+
+        public HashSet<Vector2Int> Walls
+        {
+            get { return this.m_Walls; }
+        }
+
+        public Vector2Int SpawnPoint
+        {
+            get { return this.m_SpawnPoint; }
+            set { this.m_SpawnPoint = value; }
+        }
+
+        public IWorldInstance Parent
+        {
+            get { return this.m_Parent; }
+            set { this.m_Parent = value; }
+        }
+
+        public Guid Guid
+        {
+            get { return this.m_GUID; }
+            protected set { this.m_GUID = value; }
+        }
+
+        public string Name
+        {
+            get { return this.m_Name; }
+            protected set { this.m_Name = value; }
+        }
+
+        public Vector2Int Dimensions
+        {
+            get { return this.m_Dimensions; }
+        }
+
+
+        public bool IsDirty { get; protected set; }
+
+        public string WallTileSet { get; protected set; }
+
+        public byte[,] Costs
+        {
+            get { return this.m_Costs; }
+        }
+
 
         public LightCalculator LightCalculator { get; protected set; }
 
@@ -98,21 +158,24 @@ namespace JoyGodot.Assets.Scripts.World
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="tileSet"></param>
+        /// <param name="floorTileSet"></param>
+        /// <param name="wallTileSet"></param>
         /// <param name="tiles"></param>
         /// <param name="tags"></param>
         /// <param name="name"></param>
         /// <param name="entityHandler"></param>
         /// <param name="roller"></param>
         public WorldInstance(
-            string tileSet,
+            string floorTileSet,
+            string wallTileSet,
             WorldTile[,] tiles,
             IEnumerable<string> tags,
             string name,
             ILiveEntityHandler entityHandler,
             RNG roller = null)
         {
-            this.TileSet = tileSet;
+            this.FloorTileSet = floorTileSet;
+            this.WallTileSet = wallTileSet;
             this.EntityHandler = entityHandler;
             this.Roller = roller ?? new RNG();
 
@@ -574,7 +637,7 @@ namespace JoyGodot.Assets.Scripts.World
             get { return this.m_Tiles; }
         }
 
-        public string TileSet { get; protected set; }
+        public string FloorTileSet { get; protected set; }
 
         public System.Collections.Generic.Dictionary<Vector2Int, IJoyObject> GetObjectsOfType(string[] tags)
         {
@@ -748,64 +811,6 @@ namespace JoyGodot.Assets.Scripts.World
             }
 
             this.Initialised = true;
-        }
-
-        public IEnumerable<string> Tags
-        {
-            get => this.m_Tags;
-            protected set => this.m_Tags = new List<string>(value);
-        }
-
-        public System.Collections.Generic.Dictionary<Vector2Int, IWorldInstance> Areas
-        {
-            get { return this.m_Areas; }
-        }
-
-        public HashSet<IItemInstance> Items
-        {
-            get { return this.m_Items; }
-        }
-
-        public HashSet<Vector2Int> Walls
-        {
-            get { return this.m_Walls; }
-        }
-
-        public Vector2Int SpawnPoint
-        {
-            get { return this.m_SpawnPoint; }
-            set { this.m_SpawnPoint = value; }
-        }
-
-        public IWorldInstance Parent
-        {
-            get { return this.m_Parent; }
-            set { this.m_Parent = value; }
-        }
-
-        public Guid Guid
-        {
-            get { return this.m_GUID; }
-            protected set { this.m_GUID = value; }
-        }
-
-        public string Name
-        {
-            get { return this.m_Name; }
-            protected set { this.m_Name = value; }
-        }
-
-        public Vector2Int Dimensions
-        {
-            get { return this.m_Dimensions; }
-        }
-
-
-        public bool IsDirty { get; protected set; }
-
-        public byte[,] Costs
-        {
-            get { return this.m_Costs; }
         }
 
         public void Dispose()

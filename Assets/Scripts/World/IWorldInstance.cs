@@ -23,7 +23,8 @@ namespace JoyGodot.Assets.Scripts.World
         HashSet<Guid> EntityGUIDs { get; }
         HashSet<Guid> ItemGUIDs { get; }
         WorldTile[,] Tiles { get; }
-        string TileSet { get; }
+        string FloorTileSet { get; }
+        string WallTileSet { get; }
         byte[,] Costs { get; }
         LightCalculator LightCalculator { get; }
         Dictionary<Vector2Int, IWorldInstance> Areas { get; }
