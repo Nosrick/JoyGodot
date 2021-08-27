@@ -83,7 +83,6 @@ namespace JoyGodot.Assets.Scripts.States
                     floorTileMap.SetCell(i, j, 0);
                 }
             }
-
             floorTileMap.UpdateBitmaskRegion();
 
             //Make the upstairs
@@ -105,12 +104,11 @@ namespace JoyGodot.Assets.Scripts.States
             //Create the walls
             foreach (Vector2Int position in this.m_ActiveWorld.Walls)
             {
-                /*
                 wallTileMap.SetCellv(
                     position.ToVec2(),
-                    surroundWallIndex);
-                    */
+                    0);
             }
+            wallTileMap.UpdateBitmaskRegion();
 
             int index = 0;
             index = this.CreateItems(index, this.m_ActiveWorld.Items);

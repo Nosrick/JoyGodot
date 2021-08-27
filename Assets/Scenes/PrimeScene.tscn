@@ -33,6 +33,7 @@ format = 1
 script = ExtResource( 6 )
 
 [node name="WorldWalls" type="TileMap" parent="WorldHolder"]
+modulate = Color( 0.0941176, 0.0901961, 0.913725, 1 )
 position = Vector2( -16, -16 )
 z_index = 1
 tile_set = ExtResource( 7 )
