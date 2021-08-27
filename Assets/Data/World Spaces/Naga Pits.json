@@ -1,20 +1,42 @@
 ﻿{
-  "WorldInfo": [{
+  "WorldInfo": [
+    {
       "Name": "Naga Pits",
       "Cultures": [
         "naga imperium"
       ],
-      "Tags": ["Interior"],
-      "TileSet": 
-        {
-          "Name": "Naga Pits",
-          "UseTileMap": true,
-          "Filename": "environments/naga-pits-floor.png",
-          "Size": 32,
-          "Colour": ["#4d9be6"],
-          "Data": [
-            "floor"
-          ]
-        }
-    }]
+      "Tags": [
+        "Interior"
+      ],
+      "WallTileSet": "naga-pits-walls",
+      "FloorTileSet": "naga-pits-floor",
+      "TileSet": {
+        "UseTileMap": true,
+        "Sets": [
+          {
+            "Name": "naga-pits-floor",
+            "Filename": "environments/naga-pits-floor.png",
+            "Size": 32,
+            "Colour": [
+              "#4d9be6"
+            ],
+            "Data": [
+              "floor"
+            ]
+          },
+          {
+            "Name": "naga-pits-walls",
+            "Filename": "environments/naga-pits-walls.png",
+            "Size": 32,
+            "Colour": [
+              "#020a55"
+            ],
+            "Data": [
+              "walls"
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

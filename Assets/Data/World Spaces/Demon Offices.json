@@ -1,17 +1,42 @@
 ﻿{
-  "WorldInfo": [{
-    "Name": "Demon Offices",
-    "Cultures": [
-      "demon republic"
-    ],
-    "Tags": ["Interior"],
-    "TileSet":
+  "WorldInfo": [
     {
       "Name": "Demon Offices",
-      "UseTileMap": true,
-      "Filename": "environments/naga-pits-floor.png",
-      "Size": 32,
-      "Colour": ["#625565"]
+      "Cultures": [
+        "demon republic"
+      ],
+      "Tags": [
+        "Interior"
+      ],
+      "WallTileSet": "demon-offices-walls",
+      "FloorTileSet": "demon-offices-floor",
+      "TileSet": {
+        "UseTileMap": true,
+        "Sets": [
+          {
+            "Name": "demon-offices-floor",
+            "Filename": "environments/naga-pits-floor.png",
+            "Size": 32,
+            "Colour": [
+              "#0341b5"
+            ],
+            "Data": [
+              "floor"
+            ]
+          },
+          {
+            "Name": "demon-offices-walls",
+            "Filename": "environments/naga-pits-walls.png",
+            "Size": 32,
+            "Colour": [
+              "#107a68"
+            ],
+            "Data": [
+              "walls"
+            ]
+          }
+        ]
+      }
     }
-  }]
+  ]
 }

@@ -28,9 +28,9 @@ namespace JoyGodot.Assets.Scripts.Graphics
         //Value is the List of frames from that position
         protected IDictionary<string, IDictionary<int, Texture>> CachedTiles { get; set; }
 
-        protected IDictionary<string, TileSet> TileSets { get; set; }
+        protected IDictionary<string, JoyTileSet> TileSets { get; set; }
 
-        protected TileSet TileSetTemplate { get; set; }
+        protected JoyTileSet TileSetTemplate { get; set; }
 
         public ShaderMaterial TileSetMaterial { get; protected set; }
         public ShaderMaterial JoyMaterial { get; protected set; }
@@ -43,7 +43,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
             this.ValueExtractor = new JSONValueExtractor();
             this.CachedTextures = new System.Collections.Generic.Dictionary<string, Texture>();
             this.CachedTiles = new System.Collections.Generic.Dictionary<string, IDictionary<int, Texture>>();
-            this.TileSets = new System.Collections.Generic.Dictionary<string, TileSet>();
+            this.TileSets = new System.Collections.Generic.Dictionary<string, JoyTileSet>();
             this.Load();
         }
 
@@ -54,9 +54,9 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 return true;
             }
 
-            this.TileSetTemplate = GD.Load<TileSet>(
+            this.TileSetTemplate = GD.Load<JoyTileSet>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
-                "Tile Sets/tileset-template.tres");
+                "Tile Sets/joytileset-template.tres");
 
             this.TileSetMaterial = GD.Load<ShaderMaterial>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
@@ -80,7 +80,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
             ImageTexture defaultImageTexture = new ImageTexture();
             defaultImageTexture.CreateFromImage(defaultSprite.GetData(), 2);
 
-            TileSet defaultSet = new TileSet();
+            JoyTileSet defaultSet = new JoyTileSet();
             defaultSet.CreateTile(0);
             defaultSet.TileSetTexture(0, defaultImageTexture);
             defaultSet.TileSetName(0, "default");
@@ -115,7 +115,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
 
             this.Icons.Add("default", new NonUniqueDictionary<string, SpriteData>
             {
-                {iconData.Name, iconData}
+                { iconData.Name, iconData }
             });
 
             string[] files =
@@ -147,40 +147,30 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 this.Icons.Add(tileSet,
                     new NonUniqueDictionary<string, SpriteData>
                     {
-                        {dataToAdd.Name, dataToAdd}
+                        { dataToAdd.Name, dataToAdd }
                     });
             }
 
             return true;
         }
 
-        protected TileSet AddSpriteDataToTileSet(SpriteData data)
+        protected JoyTileSet AddSpriteDataToTileSet(
+            Texture tileset,
+            IEnumerable<Color> colours)
         {
-            TileSet set = (TileSet) this.TileSetTemplate.Duplicate();
+            JoyTileSet set = (JoyTileSet)this.TileSetTemplate.Duplicate();
+            set.TileSetTexture(0, tileset);
+            set.PossibleColours = colours;
 
-            var tileIDs = set.GetTilesIds();
-
-            foreach (var part in data.Parts)
+            for (int i = 0; i < 48; i++)
             {
-                for (int i = 0; i < part.m_Frames; i++)
-                {
-                    if (set.FindTileByName(part.m_Name) >= 0)
-                    {
-                        continue;
-                    }
-
-                    bool containsID = tileIDs.Contains(i);
-                    var index = containsID ? i : set.GetLastUnusedTileId();
-                    if(containsID == false)
-                    {
-                        set.CreateTile(index);
-                    }
-
-                    set.TileSetTexture(index, part.m_FrameSprite[i]);
-                    set.TileSetName(index, data.Name);
-                    set.TileSetModulate(index, part.SelectedColour);
-                    set.TileSetMaterial(index, this.TileSetMaterial);
-                }
+                Vector2 pos = new Vector2(i % 12, i / 4);
+                set.AutotileSetBitmask(
+                    0, 
+                    pos,
+                    this.TileSetTemplate.AutotileGetBitmask(
+                        0,
+                        pos));
             }
 
             set.AutotileSetBitmaskMode(0, TileSet.BitmaskMode.Bitmask3x3Minimal);
@@ -204,80 +194,52 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 return false;
             }
 
-            string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
-
             bool isTileSet = this.ValueExtractor.GetValueFromDictionary<bool>(tileSetDict, "UseTileMap");
 
             if (isTileSet)
             {
-                string fileName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Filename");
-                int size = this.ValueExtractor.GetValueFromDictionary<int>(tileSetDict, "Size");
+                ICollection<Dictionary> setDicts =
+                    this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "Sets");
 
-                string[] data = this.ValueExtractor
-                                    .GetArrayValuesCollectionFromDictionary<string>(
-                                        tileSetDict,
-                                        "Data")
-                                        .ToArray();
-
-                List<Texture> tiles = this.ChopSprites(
-                    fileName,
-                    this.TryGetTextureFromCache(fileName),
-                    48,
-                    0,
-                    size);
-
-                Array partColourArray = this.ValueExtractor
-                                            .GetValueFromDictionary<Array>(
-                                                tileSetDict,
-                                                "Colour");
-                                                
-                List<Color> colours = new List<Color>();
-                ICollection<string> colourCodes = partColourArray.IsNullOrEmpty()
-                    ? new List<string>
-                    {
-                        Colors.Magenta.ToHtml(false)
-                    }
-                    : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
-                foreach (string code in colourCodes)
+                foreach (Dictionary setDict in setDicts)
                 {
-                    colours.Add(new Color(code));
-                }
+                    string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(setDict, "Name");
+                    string fileName = this.ValueExtractor.GetValueFromDictionary<string>(setDict, "Filename");
 
-                List<SpritePart> parts = tiles.Select(tile =>
-                        new SpritePart
+                    string[] data = this.ValueExtractor
+                        .GetArrayValuesCollectionFromDictionary<string>(
+                            setDict,
+                            "Data")
+                        .ToArray();
+
+                    Array partColourArray = this.ValueExtractor
+                        .GetValueFromDictionary<Array>(
+                            setDict,
+                            "Colour");
+
+                    List<Color> colours = new List<Color>();
+                    ICollection<string> colourCodes = partColourArray.IsNullOrEmpty()
+                        ? new List<string>
                         {
-                            m_Data = data,
-                            m_DrawCentre = true,
-                            m_Filename = fileName,
-                            m_Frames = 1,
-                            m_FrameSprite = new List<Texture> { tile },
-                            m_Name = tileSetName,
-                            m_PatchMargins = new int[4],
-                            m_Position = 0,
-                            m_PossibleColours = colours,
-                            m_SelectedColour = 0,
-                            m_SortingOrder = 0,
-                            m_StretchMode = NinePatchRect.AxisStretchMode.TileFit
-                        })
-                    .ToList();
+                            Colors.Magenta.ToHtml(false)
+                        }
+                        : this.ValueExtractor.GetCollectionFromArray<string>(partColourArray);
+                    foreach (string code in colourCodes)
+                    {
+                        colours.Add(new Color(code));
+                    }
 
-                SpriteData spriteData = new SpriteData
-                {
-                    Name = tileSetName,
-                    Parts = parts,
-                    Size = size,
-                    State = "default"
-                };
+                    JoyTileSet value = this.AddSpriteDataToTileSet(this.TryGetTextureFromCache(fileName), colours);
+                    if (this.TileSets.ContainsKey(tileSetName) == false)
+                    {
+                        this.TileSets.Add(tileSetName, value);
+                    }
+                    else
+                    {
+                        this.TileSets[tileSetName] = value;
+                    }
+                }
 
-                TileSet value = this.AddSpriteDataToTileSet(spriteData);
-                if (this.TileSets.ContainsKey(tileSetName) == false)
-                {
-                    this.TileSets.Add(tileSetName, value);
-                }
-                else
-                {
-                    this.TileSets[tileSetName] = value;
-                }
                 return true;
             }
             else
@@ -286,6 +248,8 @@ namespace JoyGodot.Assets.Scripts.Graphics
 
                 ICollection<Dictionary> tileSetArray =
                     this.ValueExtractor.GetArrayValuesCollectionFromDictionary<Dictionary>(tileSetDict, "SpriteData");
+
+                string tileSetName = this.ValueExtractor.GetValueFromDictionary<string>(tileSetDict, "Name");
 
                 foreach (Dictionary dict in tileSetArray)
                 {
@@ -536,13 +500,14 @@ namespace JoyGodot.Assets.Scripts.Graphics
         /// <param name="tileSet">The name of the tile set</param>
         /// <param name="addStairs">Whether to append the stairs tiles to the tile set</param>
         /// <returns>The found tile set, or null if nothing was found</returns>
-        public TileSet GetStaticTileSet(string tileSet, bool addStairs = false)
+        public JoyTileSet GetStaticTileSet(string tileSet, bool addStairs = false)
         {
-            if (!this.TileSets.TryGetValue(tileSet, out TileSet set))
+            if (!this.TileSets.TryGetValue(tileSet, out JoyTileSet set))
             {
                 return null;
             }
 
+            /*
             if (addStairs
                 && this.TileSets.TryGetValue("stairs", out TileSet stairs))
             {
@@ -558,6 +523,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 set.TileSetTexture(index, stairs.TileGetTexture(stairs.FindTileByName("upstairs")));
                 set.TileSetMaterial(index, this.TileSetMaterial);
             }
+            */
 
             return set;
         }
@@ -568,7 +534,7 @@ namespace JoyGodot.Assets.Scripts.Graphics
             {
                 Name = "default"
             };
-            if (this.TileSets.TryGetValue(tileSet, out TileSet set))
+            if (this.TileSets.TryGetValue(tileSet, out JoyTileSet set))
             {
                 foreach (int index in set.GetTilesIds())
                 {

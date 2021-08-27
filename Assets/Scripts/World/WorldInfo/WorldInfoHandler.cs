@@ -118,6 +118,9 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
                         continue;
                     }
 
+                    string wallTileSet = this.ValueExtractor.GetValueFromDictionary<string>(worldInfo, "WallTileSet");
+                    string floorTileSet = this.ValueExtractor.GetValueFromDictionary<string>(worldInfo, "FloorTileSet");
+
                     IEnumerable<string> inhabitants = worldInfo.Contains("Inhabitants")
                         ? this.ValueExtractor.GetArrayValuesCollectionFromDictionary<string>(worldInfo, "Inhabitants")
                         : new string[0];
@@ -140,7 +143,9 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
                         inhabitants = inhabitants,
                         name = name,
                         tags = tags,
-                        cultures = cultures
+                        cultures = cultures,
+                        wallTileSet = wallTileSet,
+                        floorTileSet = floorTileSet
                     });
 
                     this.WorldTiles.Add(
@@ -229,5 +234,7 @@ namespace JoyGodot.Assets.Scripts.World.WorldInfo
         public IEnumerable<string> cultures;
         public IEnumerable<string> inhabitants;
         public IEnumerable<string> tags;
+        public string wallTileSet;
+        public string floorTileSet;
     }
 }

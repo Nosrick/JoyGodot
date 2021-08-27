@@ -59,12 +59,14 @@ namespace JoyGodot.Assets.Scripts.States
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
 
             var floorTileMap = gameManager.FloorTileMap;
-            //floorTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.Tiles[0, 0].TileSet, true);
-            //int surroundFloorIndex = floorTileMap.TileSet.FindTileByName("SurroundFloor");
+            JoyTileSet floorTileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.FloorTileSet);
+            floorTileMap.TileSet = floorTileSet;
+            floorTileMap.Modulate = GlobalConstants.GameManager.Roller.SelectFromCollection(floorTileSet.PossibleColours);
 
             var wallTileMap = gameManager.WallTileMap;
-            //wallTileMap.TileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.TileSet);
-            //int surroundWallIndex = wallTileMap.TileSet.FindTileByName("SurroundWall");
+            JoyTileSet wallTileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.WallTileSet);
+            wallTileMap.TileSet = wallTileSet;
+            wallTileMap.Modulate = GlobalConstants.GameManager.Roller.SelectFromCollection(wallTileSet.PossibleColours);
             
             for (int i = 0; i < this.m_ActiveWorld.Tiles.GetLength(0); i++)
             {

@@ -710,7 +710,9 @@ namespace JoyGodot.Assets.Scripts.World
                 {"EntityGuids", new Array(this.EntityGUIDs.Select(guid => guid.ToString()))},
                 {"ItemGuids", new Array(this.ItemGUIDs.Select(guid => guid.ToString()))},
                 {"Walls", new Array(this.Walls.Select(wall => wall.Save()))},
-                {"Date", s_DateTime.InternalTicks}
+                {"Date", s_DateTime.InternalTicks},
+                {"WallTileSet", this.WallTileSet},
+                {"FloorTileSet", this.FloorTileSet}
             };
 
             Array array = new Array();
@@ -750,6 +752,9 @@ namespace JoyGodot.Assets.Scripts.World
             this.Name = valueExtractor.GetValueFromDictionary<string>(data, "Name");
 
             this.Tags = valueExtractor.GetArrayValuesCollectionFromDictionary<string>(data, "Tags");
+
+            this.FloorTileSet = valueExtractor.GetValueFromDictionary<string>(data, "FloorTileSet");
+            this.WallTileSet = valueExtractor.GetValueFromDictionary<string>(data, "WallTileSet");
 
             Vector2Int dimensions =
                 new Vector2Int(valueExtractor.GetValueFromDictionary<Dictionary>(data, "Dimensions"));

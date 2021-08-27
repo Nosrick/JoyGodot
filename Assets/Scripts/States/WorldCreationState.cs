@@ -49,7 +49,8 @@ namespace JoyGodot.Assets.Scripts.States
 
             //Generate the basic overworld
             this.m_World = new WorldInstance(
-                "overworld",
+                "overworld-floor",
+                "overworld-walls",
                 overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"),
                 new string[] {"overworld", "exterior"},
                 "Everse",
