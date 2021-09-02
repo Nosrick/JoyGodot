@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tilemap-template.png-6384ed75037dead68b2a3ef8a25c985f.stex"
+path="res://.import/tilemap-template-3x3-minimal.png-cd64171a33fb1efb69006752aef73260.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/environments/tilemap-template.png"
-dest_files=[ "res://.import/tilemap-template.png-6384ed75037dead68b2a3ef8a25c985f.stex" ]
+source_file="res://Assets/Sprites/environments/tilemap-template-3x3-minimal.png"
+dest_files=[ "res://.import/tilemap-template-3x3-minimal.png-cd64171a33fb1efb69006752aef73260.stex" ]
 
 [params]
 
@@ -20,15 +20,15 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
-flags/srgb=2
+flags/srgb=0
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

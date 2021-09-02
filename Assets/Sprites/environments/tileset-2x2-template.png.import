@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/overworld-grass.png-c43950acdf18fbb814da2f8fcf00dfdd.stex"
+path="res://.import/tileset-2x2-template.png-90eeda94bc77f89613b91d796be1f444.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/environments/overworld-grass.png"
-dest_files=[ "res://.import/overworld-grass.png-c43950acdf18fbb814da2f8fcf00dfdd.stex" ]
+source_file="res://Assets/Sprites/environments/tileset-2x2-template.png"
+dest_files=[ "res://.import/tileset-2x2-template.png-90eeda94bc77f89613b91d796be1f444.stex" ]
 
 [params]
 
