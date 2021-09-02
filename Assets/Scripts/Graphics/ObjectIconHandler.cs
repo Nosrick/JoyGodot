@@ -30,7 +30,9 @@ namespace JoyGodot.Assets.Scripts.Graphics
 
         protected IDictionary<string, JoyTileSet> TileSets { get; set; }
 
-        protected JoyTileSet TileSetTemplate { get; set; }
+        protected JoyTileSet TileSetTemplate3x3Minimal { get; set; }
+        
+        protected JoyTileSet TileSetTemplate2x2 { get; set; }
 
         public ShaderMaterial TileSetMaterial { get; protected set; }
         public ShaderMaterial JoyMaterial { get; protected set; }
@@ -54,9 +56,13 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 return true;
             }
 
-            this.TileSetTemplate = GD.Load<JoyTileSet>(
+            this.TileSetTemplate3x3Minimal = GD.Load<JoyTileSet>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
-                "Tile Sets/joytileset-template.tres");
+                "Tile Sets/joytileset-template-3x3-minimal.tres");
+
+            this.TileSetTemplate2x2 = GD.Load<JoyTileSet>(
+                GlobalConstants.GODOT_ASSETS_FOLDER +
+                "Tile Sets/joytileset-template-2x2.tres");
 
             this.TileSetMaterial = GD.Load<ShaderMaterial>(
                 GlobalConstants.GODOT_ASSETS_FOLDER +
@@ -156,24 +162,56 @@ namespace JoyGodot.Assets.Scripts.Graphics
 
         protected JoyTileSet AddSpriteDataToTileSet(
             Texture tileset,
+            TileSet.BitmaskMode bitmaskMode,
             IEnumerable<Color> colours)
         {
-            JoyTileSet set = (JoyTileSet)this.TileSetTemplate.Duplicate();
+            JoyTileSet set;
+            JoyTileSet template;
+            int autoTiles;
+            int width, height;
+
+            switch (bitmaskMode)
+            {
+                case TileSet.BitmaskMode.Bitmask3x3Minimal:
+                    template = this.TileSetTemplate3x3Minimal;
+                    set = (JoyTileSet)template.Duplicate();
+                    autoTiles = 48;
+                    width = 12;
+                    height = 4;
+                    break;
+                
+                case TileSet.BitmaskMode.Bitmask3x3:
+                    GlobalConstants.ActionLog.Log("Bitmask3x3 not implemented yet! Defaulting to 3x3 minimal.", LogLevel.Error);
+                    template = this.TileSetTemplate3x3Minimal;
+                    set = (JoyTileSet)template.Duplicate();
+                    autoTiles = 48;
+                    width = 12;
+                    height = 4;
+                    break;
+                
+                default:
+                    template = this.TileSetTemplate2x2;
+                    set = (JoyTileSet)template.Duplicate();
+                    autoTiles = 16;
+                    width = height = 4;
+                    break;
+            }
+            
             set.TileSetTexture(0, tileset);
             set.PossibleColours = colours;
 
-            for (int i = 0; i < 48; i++)
+            for (int i = 0; i < autoTiles; i++)
             {
-                Vector2 pos = new Vector2(i % 12, i / 4);
+                Vector2 pos = new Vector2(i % width, i / height);
                 set.AutotileSetBitmask(
                     0, 
                     pos,
-                    this.TileSetTemplate.AutotileGetBitmask(
+                    template.AutotileGetBitmask(
                         0,
                         pos));
             }
 
-            set.AutotileSetBitmaskMode(0, TileSet.BitmaskMode.Bitmask3x3Minimal);
+            set.AutotileSetBitmaskMode(0, bitmaskMode);
 
             return set;
         }
@@ -212,6 +250,13 @@ namespace JoyGodot.Assets.Scripts.Graphics
                             "Data")
                         .ToArray();
 
+                    string bitmaskString = this.ValueExtractor.GetValueFromDictionary<string>(setDict, "Bitmask");
+
+                    if (!Enum.TryParse(bitmaskString, true, out TileSet.BitmaskMode bitmaskMode))
+                    {
+                        bitmaskMode = TileSet.BitmaskMode.Bitmask2x2;
+                    }
+
                     Array partColourArray = this.ValueExtractor
                         .GetValueFromDictionary<Array>(
                             setDict,
@@ -229,7 +274,10 @@ namespace JoyGodot.Assets.Scripts.Graphics
                         colours.Add(new Color(code));
                     }
 
-                    JoyTileSet value = this.AddSpriteDataToTileSet(this.TryGetTextureFromCache(fileName), colours);
+                    JoyTileSet value = this.AddSpriteDataToTileSet(
+                        this.TryGetTextureFromCache(fileName), 
+                        bitmaskMode,
+                        colours);
                     if (this.TileSets.ContainsKey(tileSetName) == false)
                     {
                         this.TileSets.Add(tileSetName, value);

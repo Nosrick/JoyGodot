@@ -16,6 +16,7 @@
           {
             "Name": "demon-offices-floor",
             "Filename": "environments/naga-pits-floor.png",
+            "Bitmask": "Bitmask2x2",
             "Size": 32,
             "Colour": [
               "#0341b5"
@@ -27,6 +28,7 @@
           {
             "Name": "demon-offices-walls",
             "Filename": "environments/naga-pits-walls.png",
+            "Bitmask": "Bitmask2x2",
             "Size": 32,
             "Colour": [
               "#107a68"
