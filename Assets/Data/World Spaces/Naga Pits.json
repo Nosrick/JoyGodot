@@ -18,7 +18,7 @@
             "Filename": "environments/naga-pits-floor.png",
             "Size": 32,
             "Colour": [
-              "#4d9be6"
+              "#93a5be"
             ],
             "Data": [
               "floor"
@@ -29,7 +29,7 @@
             "Filename": "environments/naga-pits-walls.png",
             "Size": 32,
             "Colour": [
-              "#020a55"
+              "#12c2f8"
             ],
             "Data": [
               "walls"
