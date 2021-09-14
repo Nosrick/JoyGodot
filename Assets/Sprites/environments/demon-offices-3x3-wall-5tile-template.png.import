@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/naga-pits-3x3-wall.png-5cc645f247a51e9f4eb68ba870ce1283.stex"
+path="res://.import/demon-offices-3x3-wall-5tile-template.png-b57dfbe59c7a0296553866e39d6055c5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/environments/naga-pits-3x3-wall.png"
-dest_files=[ "res://.import/naga-pits-3x3-wall.png-5cc645f247a51e9f4eb68ba870ce1283.stex" ]
+source_file="res://Assets/Sprites/environments/demon-offices-3x3-wall-5tile-template.png"
+dest_files=[ "res://.import/demon-offices-3x3-wall-5tile-template.png-b57dfbe59c7a0296553866e39d6055c5.stex" ]
 
 [params]
 

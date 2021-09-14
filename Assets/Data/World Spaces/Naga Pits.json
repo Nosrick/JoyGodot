@@ -19,7 +19,7 @@
             "Bitmask": "Bitmask3x3Minimal",
             "Size": 32,
             "Colour": [
-              "#93a5be"
+              "#3aabe8"
             ],
             "Data": [
               "floor"
@@ -31,7 +31,7 @@
             "Bitmask": "Bitmask3x3Minimal",
             "Size": 32,
             "Colour": [
-              "#12c2f8"
+              "#295987"
             ],
             "Data": [
               "walls"

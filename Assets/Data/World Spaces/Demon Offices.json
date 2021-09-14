@@ -15,11 +15,11 @@
         "Sets": [
           {
             "Name": "demon-offices-floor",
-            "Filename": "environments/naga-pits-floor.png",
+            "Filename": "environments/demon-offices-3x3-floor.png",
             "Bitmask": "Bitmask3x3Minimal",
             "Size": 32,
             "Colour": [
-              "#0341b5"
+              "#a2f1f5"
             ],
             "Data": [
               "floor"
@@ -27,11 +27,11 @@
           },
           {
             "Name": "demon-offices-walls",
-            "Filename": "environments/naga-pits-wall.png",
+            "Filename": "environments/demon-offices-3x3-wall.png",
             "Bitmask": "Bitmask3x3Minimal",
             "Size": 32,
             "Colour": [
-              "#107a68"
+              "#8b9bb4"
             ],
             "Data": [
               "walls"
