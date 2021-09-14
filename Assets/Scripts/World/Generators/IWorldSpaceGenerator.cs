@@ -6,8 +6,9 @@ namespace JoyGodot.Assets.Scripts.World.Generators
 {
     public interface IWorldSpaceGenerator
     {
-        WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet);
-        void GenerateTileObjects(WorldTile[,] worldTiles);
-        HashSet<Vector2Int> GenerateWalls(WorldTile[,] worldTiles);
+        WorldTile[,] Tiles { get; }
+        HashSet<Vector2Int> Walls { get; }
+        
+        void GenerateWorldSpace(int sizeRef, string tileSet);
     }
 }

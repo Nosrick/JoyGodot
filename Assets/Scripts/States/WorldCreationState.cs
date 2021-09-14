@@ -46,13 +46,15 @@ namespace JoyGodot.Assets.Scripts.States
         {
             //Make a new overworld generator
             OverworldGenerator overworldGen = new OverworldGenerator(this.m_WorldInfoHandler);
+            overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains");
+            WorldTile[,] tiles = overworldGen.Tiles;
 
             //Generate the basic overworld
             this.m_World = new WorldInstance(
                 "overworld-floor",
                 "overworld-walls",
-                overworldGen.GenerateWorldSpace(WORLD_SIZE, "plains"),
-                new string[] {"overworld", "exterior"},
+                tiles,
+                new[] {"overworld", "exterior"},
                 "Everse",
                 GlobalConstants.GameManager.EntityHandler,
                 GlobalConstants.GameManager.Roller);

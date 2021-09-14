@@ -110,6 +110,8 @@ namespace JoyGodot.Assets.Scripts.States
                     position.ToVec2(),
                     0);
             }
+
+            floorTileMap.UpdateBitmaskRegion();
             wallTileMap.UpdateBitmaskRegion();
 
             int index = 0;

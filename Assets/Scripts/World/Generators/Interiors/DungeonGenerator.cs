@@ -42,8 +42,9 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
             WorldInstance current = null;
             for (int i = 1; i <= levels; i++)
             {
-                WorldTile[,] tiles = interiorGenerator.GenerateWorldSpace(size, worldInfo.name);
-                HashSet<Vector2Int> walls = interiorGenerator.GenerateWalls(tiles);
+                interiorGenerator.GenerateWorldSpace(size, worldInfo.name);
+                WorldTile[,] tiles = interiorGenerator.Tiles;
+                HashSet<Vector2Int> walls = interiorGenerator.Walls;
                 WorldInstance worldInstance = new WorldInstance(
                     worldInfo.floorTileSet,
                     worldInfo.wallTileSet, 

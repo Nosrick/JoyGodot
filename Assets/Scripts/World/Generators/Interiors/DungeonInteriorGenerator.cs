@@ -22,6 +22,9 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
 
         protected string TileSet { get; set; }
         protected RNG Roller { get; set; }
+        
+        public WorldTile[,] Tiles { get; protected set; }
+        public HashSet<Vector2Int> Walls { get; protected set; }
 
         public DungeonInteriorGenerator(
             GUIDManager guidManager,
@@ -37,7 +40,7 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
             this.ObjectIcons = objectIconHandler;
         }
 
-        public WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet)
+        public void GenerateWorldSpace(int sizeRef, string tileSet)
         {
             this.TileSet = tileSet;
 
@@ -46,41 +49,46 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
             this.m_UntreatedTiles = roomGen.GenerateRooms();
 
             DungeonCorridorGenerator corrGen =
-                new DungeonCorridorGenerator(this.m_UntreatedTiles, roomGen.rooms, 50, this.Roller);
+                new DungeonCorridorGenerator(
+                    this.m_UntreatedTiles, 
+                    roomGen.rooms, 
+                    50,
+                    this.Roller);
+            
             this.m_UntreatedTiles = corrGen.GenerateCorridors();
 
-            return this.TreatTiles();
+            this.GenerateWalls();
+            this.TreatTiles();
         }
 
-        protected WorldTile[,] TreatTiles()
+        protected void TreatTiles()
         {
-            WorldTile[,] tiles = new WorldTile[this.m_UntreatedTiles.GetLength(0), this.m_UntreatedTiles.GetLength(1)];
+            this.Tiles = new WorldTile[this.m_UntreatedTiles.GetLength(0), this.m_UntreatedTiles.GetLength(1)];
 
             WorldTile[] templates = this.WorldInfoHandler.GetByTileSet(this.TileSet).ToArray();
 
             WorldTile emptyTile = this.WorldInfoHandler.GetEmptyTile();
 
-            for (int i = 0; i < tiles.GetLength(0); i++)
+            for (int i = 0; i < this.Tiles.GetLength(0); i++)
             {
-                for (int j = 0; j < tiles.GetLength(1); j++)
+                for (int j = 0; j < this.Tiles.GetLength(1); j++)
                 {
-                    if (this.m_UntreatedTiles[i, j] == GeneratorTileType.Floor)
+                    if (this.m_UntreatedTiles[i, j] == GeneratorTileType.Floor
+                        || this.m_UntreatedTiles[i, j] == GeneratorTileType.Wall)
                     {
-                        tiles[i, j] = templates.FirstOrDefault();
+                        this.Tiles[i, j] = templates.FirstOrDefault();
                     }
                     else
                     {
-                        tiles[i, j] = emptyTile;
+                        this.Tiles[i, j] = emptyTile;
                     }
                 }
             }
-
-            return tiles;
         }
 
-        public HashSet<Vector2Int> GenerateWalls(WorldTile[,] worldTiles)
+        protected void GenerateWalls()
         {
-            HashSet<Vector2Int> walls = new HashSet<Vector2Int>();
+            this.Walls = new HashSet<Vector2Int>();
 
             for (int i = 0; i < this.m_UntreatedTiles.GetLength(0); i++)
             {
@@ -90,15 +98,10 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Interiors
                         this.m_UntreatedTiles[i, j] == GeneratorTileType.Wall ||
                         this.m_UntreatedTiles[i, j] == GeneratorTileType.None)
                     {
-                        walls.Add(new Vector2Int(i, j));
+                        this.Walls.Add(new Vector2Int(i, j));
                     }
                 }
             }
-
-            return walls;
         }
-
-        public void GenerateTileObjects(WorldTile[,] worldTiles)
-        { }
     }
 }

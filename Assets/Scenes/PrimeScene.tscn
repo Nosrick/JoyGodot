@@ -6,7 +6,7 @@
 [ext_resource path="res://Assets/Fonts/Silver.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://Assets/Scenes/Windows/Context Menu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Scripts/Graphics/HappinessShaderHandler.cs" type="Script" id=6]
-[ext_resource path="res://Assets/Tile Sets/joytileset-template-2x2.tres" type="TileSet" id=7]
+[ext_resource path="res://Assets/Tile Sets/joytileset-template-3x3-minimal.tres" type="TileSet" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 resource_local_to_scene = true
@@ -25,7 +25,7 @@ script = ExtResource( 3 )
 
 [node name="WorldFloors" type="TileMap" parent="WorldHolder"]
 position = Vector2( -16, -16 )
-tile_set = ExtResource( 7 )
+tile_set = ExtResource( 8 )
 cell_size = Vector2( 32, 32 )
 cell_custom_transform = Transform2D( 32, 0, 0, 32, 0, 0 )
 cell_tile_origin = 1
@@ -35,7 +35,7 @@ script = ExtResource( 6 )
 [node name="WorldWalls" type="TileMap" parent="WorldHolder"]
 position = Vector2( -16, -16 )
 z_index = 1
-tile_set = ExtResource( 7 )
+tile_set = ExtResource( 8 )
 cell_size = Vector2( 32, 32 )
 cell_tile_origin = 1
 format = 1

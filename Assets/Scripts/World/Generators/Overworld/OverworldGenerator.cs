@@ -8,37 +8,29 @@ namespace JoyGodot.Assets.Scripts.World.Generators.Overworld
     public class OverworldGenerator : IWorldSpaceGenerator
     {
         protected IWorldInfoHandler WorldInfoHandler { get; set; }
-        
+
+        public WorldTile[,] Tiles { get; protected set; }
+        public HashSet<Vector2Int> Walls { get; protected set; }
+
         public OverworldGenerator(IWorldInfoHandler worldInfoHandler)
         {
             this.WorldInfoHandler = worldInfoHandler;
         }
         
-        public WorldTile[,] GenerateWorldSpace(int sizeRef, string tileSet)
+        public void GenerateWorldSpace(int sizeRef, string tileSet)
         {
-            WorldTile[,] tiles = new WorldTile[sizeRef, sizeRef];
+            this.Tiles = new WorldTile[sizeRef, sizeRef];
 
             WorldTile template = this.WorldInfoHandler.GetByTileSet(tileSet).FirstOrDefault();
 
-            for (int i = 0; i < tiles.GetLength(0); i++)
+            for (int i = 0; i < this.Tiles.GetLength(0); i++)
             {
-                for(int j = 0; j < tiles.GetLength(1); j++)
+                for(int j = 0; j < this.Tiles.GetLength(1); j++)
                 {
                     //TODO: Make this better!
-                    tiles[i, j] = template;
+                    this.Tiles[i, j] = template;
                 }
             }
-
-            return tiles;
-        }
-
-        public void GenerateTileObjects(WorldTile[,] tiles)
-        {
-        }
-
-        public HashSet<Vector2Int> GenerateWalls(WorldTile[,] worldTiles)
-        {
-            return new HashSet<Vector2Int>();
         }
     }
 }
