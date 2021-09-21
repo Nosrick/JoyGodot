@@ -55,11 +55,10 @@ namespace JoyGodot.Assets.Scripts.States
 
             this.m_ActiveWorld.Initialise();
 
-            ISpriteState state = null;
             float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / GlobalConstants.SPRITE_TEXTURE_SIZE;
 
             var floorTileMap = gameManager.FloorTileMap;
-            JoyTileSet floorTileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.FloorTileSet);
+            JoyTileSet floorTileSet = this.m_ObjectIcons.GetStaticTileSet(this.m_ActiveWorld.FloorTileSet, true);
             floorTileMap.TileSet = floorTileSet;
             floorTileMap.Modulate = GlobalConstants.GameManager.Roller.SelectFromCollection(floorTileSet.PossibleColours);
 

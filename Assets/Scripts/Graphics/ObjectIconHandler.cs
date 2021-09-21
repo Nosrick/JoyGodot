@@ -555,23 +555,30 @@ namespace JoyGodot.Assets.Scripts.Graphics
                 return null;
             }
 
-            /*
-            if (addStairs
-                && this.TileSets.TryGetValue("stairs", out TileSet stairs))
+            if (!addStairs || !this.Icons.TryGetValue("stairs", out var stairs))
             {
+                return set;
+            }
+            
+            if (stairs.ContainsKey("downstairs"))
+            {
+                Texture texture = stairs["downstairs"].First().Parts.First().m_FrameSprite.First();
                 int index = set.GetLastUnusedTileId();
                 set.CreateTile(index);
                 set.TileSetName(index, "downstairs");
-                set.TileSetTexture(index, stairs.TileGetTexture(stairs.FindTileByName("downstairs")));
-                set.TileSetMaterial(index, this.TileSetMaterial);
-
-                index = set.GetLastUnusedTileId();
-                set.CreateTile(index);
-                set.TileSetName(index, "upstairs");
-                set.TileSetTexture(index, stairs.TileGetTexture(stairs.FindTileByName("upstairs")));
+                set.TileSetTexture(index, texture);
                 set.TileSetMaterial(index, this.TileSetMaterial);
             }
-            */
+
+            if (stairs.ContainsKey("upstairs"))
+            {
+                Texture texture = stairs["upstairs"].First().Parts.First().m_FrameSprite.First();
+                int index = set.GetLastUnusedTileId();
+                set.CreateTile(index);
+                set.TileSetName(index, "upstairs");
+                set.TileSetTexture(index, texture);
+                set.TileSetMaterial(index, this.TileSetMaterial);
+            }
 
             return set;
         }
