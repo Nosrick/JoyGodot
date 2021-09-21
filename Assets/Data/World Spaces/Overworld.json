@@ -5,25 +5,33 @@
       "Tags": [
         "Exterior"
       ],
+      "WallTileSet": "overworld-walls",
+      "FloorTileSet": "overworld-floor",
       "TileSet": {
-        "Name": "Overworld",
-        "SpriteData": [
+        "UseTileMap": true,
+        "Sets": [
           {
-            "Name": "SurroundFloor",
-            "Part": [
-              {
-                "Name": "grass",
-                "Position": 4,
-                "Data": [
-                  "default"
-                ],
-                "Frames": 1,
-                "Filename": "environments/overworld-grass.png",
-                "SortOrder": 1,
-                "Colour": [
-                  "#1ebc73"
-                ]
-              }
+            "Name": "overworld-floor",
+            "Filename": "environments/demon-offices-3x3-floor.png",
+            "Bitmask": "Bitmask3x3Minimal",
+            "Size": 32,
+            "Colour": [
+              "#3e8948"
+            ],
+            "Data": [
+              "floor"
+            ]
+          },
+          {
+            "Name": "overworld-walls",
+            "Filename": "environments/demon-offices-3x3-wall.png",
+            "Bitmask": "Bitmask3x3Minimal",
+            "Size": 32,
+            "Colour": [
+              "#c28569"
+            ],
+            "Data": [
+              "walls"
             ]
           }
         ]
