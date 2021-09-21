@@ -213,7 +213,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return result;
         }
 
-        public override void _Input(InputEvent @event)
+        public override void _GuiInput(InputEvent @event)
         {
             if (!(@event is InputEventMouseButton action))
             {
