@@ -130,6 +130,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             this.SetSlots();
         }
 
+        public override bool CanAdd(IItemInstance item)
+        {
+            return this.GetRequiredSlots(item).Any();
+        }
+
         public override List<JoyItemSlot> GetRequiredSlots(
             IItemInstance item, 
             bool takeFilledSlots = false,

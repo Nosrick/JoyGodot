@@ -196,7 +196,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 this.Container,
                 slot.Container);
             
-            if (sourceContainer != destinationContainer)
+            if (result
+                && sourceContainer != destinationContainer)
             {
                 if (sourceContainer.CanRemoveContents(leftItem)
                     && sourceContainer.CanAddContents(rightItem)

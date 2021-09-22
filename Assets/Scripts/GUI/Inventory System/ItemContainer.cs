@@ -566,6 +566,16 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return false;
         }
 
+        public virtual bool Contains(IItemInstance item)
+        {
+            return this.FilledSlots.Any(slot => slot.Item.Equals(item));
+        }
+
+        public virtual bool CanAdd(IItemInstance item)
+        {
+            return this.EmptySlots.Any();
+        }
+
         public virtual bool StackOrSwap(
             ICollection<JoyItemSlot> sourceSlots,
             ICollection<JoyItemSlot> destinationSlots,
@@ -587,8 +597,16 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     continue;
                 }
 
-                sourceContainer?.RemoveItem(sourceItem);
-                destinationContainer.StackOrAdd(sourceItem, requiredDestinationSlots);
+                if (sourceContainer?.Contains(sourceItem) == true
+                    && destinationContainer.CanAdd(sourceItem))
+                {
+                    sourceContainer.RemoveItem(sourceItem);
+                    destinationContainer.StackOrAdd(sourceItem, requiredDestinationSlots);
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             foreach (IItemInstance destinationItem in destinationItems)
@@ -603,8 +621,16 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     continue;
                 }
 
-                destinationContainer?.RemoveItem(destinationItem);
-                sourceContainer.StackOrAdd(destinationItem, requiredSourceSlots);
+                if (destinationContainer?.Contains(destinationItem) == true
+                    && sourceContainer.CanAdd(destinationItem))
+                {
+                    destinationContainer.RemoveItem(destinationItem);
+                    sourceContainer.StackOrAdd(destinationItem, requiredSourceSlots);
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             return true;
