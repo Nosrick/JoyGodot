@@ -585,6 +585,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             var sourceItems = sourceSlots.Select(slot => slot.Item).Distinct().ToArray();
             var destinationItems = destinationSlots.Select(slot => slot.Item).Distinct().ToArray();
 
+            List<IItemInstance> sourceCache = new List<IItemInstance>();
+            List<IItemInstance> destinationCache = new List<IItemInstance>();
+
             foreach (IItemInstance sourceItem in sourceItems)
             {
                 var requiredDestinationSlots = destinationContainer?.GetRequiredSlots(
@@ -621,10 +624,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     continue;
                 }
 
-                if (destinationContainer?.Contains(destinationItem) == true
-                    && sourceContainer.CanAdd(destinationItem))
+                if (sourceContainer.CanAdd(destinationItem))
                 {
-                    destinationContainer.RemoveItem(destinationItem);
+                    destinationContainer?.RemoveItem(destinationItem);
                     sourceContainer.StackOrAdd(destinationItem, requiredSourceSlots);
                 }
                 else

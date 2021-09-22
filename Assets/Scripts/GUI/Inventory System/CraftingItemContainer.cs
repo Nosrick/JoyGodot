@@ -266,8 +266,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
 
             return true;
-
-            //this.OnAddItem?.Invoke(this.ContainerOwner, item);
         }
 
         public bool CanCraft()
