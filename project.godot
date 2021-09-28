@@ -603,16 +603,6 @@ _global_script_classes=[ {
 "class": "VisualShaderToolsvec2Compose",
 "language": "GDScript",
 "path": "res://addons/shaderV/tools/vec2Compose.gd"
-}, {
-"base": "Reference",
-"class": "WAT",
-"language": "GDScript",
-"path": "res://addons/WAT/namespace.gd"
-}, {
-"base": "Node",
-"class": "WATTest",
-"language": "GDScript",
-"path": "res://addons/WAT/core/test/test.gd"
 } ]
 _global_script_class_icons={
 "VisualShaderNodeCellularNoise2D": "",
@@ -733,9 +723,7 @@ _global_script_class_icons={
 "VisualShaderToolsSinTIME": "",
 "VisualShaderToolsSphericalToCartesian": "",
 "VisualShaderToolsTIMEscaled": "",
-"VisualShaderToolsvec2Compose": "",
-"WAT": "",
-"WATTest": ""
+"VisualShaderToolsvec2Compose": ""
 }
 
 [MonoCustomResourceRegistry]
@@ -774,7 +762,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/MonoCustomResourceRegistry/plugin.cfg", "res://addons/WAT/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/MonoCustomResourceRegistry/plugin.cfg" )
 
 [input]
 
