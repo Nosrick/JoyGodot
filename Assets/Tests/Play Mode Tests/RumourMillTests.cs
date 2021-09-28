@@ -52,7 +52,8 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                             new EntitySkill(
                                 "light blades", 
                                 5, 
-                                7)
+                                7,
+                                new List<string>())
                         }
                     })
                 && manager.RelationshipHandler == Mock.Of<IEntityRelationshipHandler>()
@@ -105,7 +106,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.ActionLog = null;
         }
     }
 }

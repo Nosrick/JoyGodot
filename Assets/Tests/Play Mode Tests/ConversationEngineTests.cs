@@ -47,8 +47,11 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
             IRelationship friendship = Mock.Of<IRelationship>();
             
             IEntityRelationshipHandler relationshipHandler = Mock.Of<IEntityRelationshipHandler>(
-                handler => handler.Get(It.IsAny<IJoyObject[]>(), It.IsAny<string[]>(), It.IsAny<bool>())
-                           == new IRelationship[] {friendship});
+                handler => handler.Get(
+                               It.IsAny<IEnumerable<Guid>>(), 
+                               It.IsAny<IEnumerable<string>>(), 
+                               It.IsAny<bool>())
+                           == new[] {friendship});
 
             IEntity questObject = Mock.Of<IEntity>(
                 entity => entity.JoyName == "NAME1" 
@@ -84,7 +87,8 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                 new EntityStatistic(
                     "personality",
                     4,
-                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD));
+                    GlobalConstants.DEFAULT_SUCCESS_THRESHOLD,
+                    new List<string>()));
 
             this.instigator = Mock.Of<IEntity>(
                 entity => entity.PlayerControlled == true
@@ -166,7 +170,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.ActionLog = null;
         }
     }
 }

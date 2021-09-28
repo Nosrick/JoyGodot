@@ -43,7 +43,9 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void CreateRelationship_ShouldHave_ZeroValue()
         {
             //given
-            IRelationship relationship = this.target.CreateRelationship(new[] {this.left, this.right}, new []{"friendship"});
+            IRelationship relationship = this.target.CreateRelationship(
+                new[] {this.left.Guid, this.right.Guid}, 
+                new []{"friendship"});
             
             //when
 
@@ -56,7 +58,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             //given
             IRelationship relationship = this.target.CreateRelationshipWithValue(
-                new[] {this.left, this.right},
+                new[] {this.left.Guid, this.right.Guid},
                 new [] {"friendship"},
                 50);
             
@@ -70,7 +72,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.ActionLog = null;
         }
     }
 }

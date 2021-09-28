@@ -1,10 +1,10 @@
 ﻿using System;
 using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Needs;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Quests;
 using JoyGodot.Assets.Scripts.Rollers;
 using JoyGodot.Assets.Scripts.Scripting;
@@ -98,7 +98,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.ActionLog = null;
         }
     }
 }

@@ -44,7 +44,8 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [TearDown]
         public void TearDown()
         {
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.GameManager = null;
+            GlobalConstants.ActionLog = null;
         }
     }
 }

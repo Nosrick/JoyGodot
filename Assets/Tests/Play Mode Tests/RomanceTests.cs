@@ -10,6 +10,7 @@ using JoyGodot.Assets.Scripts.Entities.Sexuality;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Moq;
 using NUnit.Framework;
 
@@ -129,12 +130,12 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                          && human.Guid == Guid.NewGuid());
 
 
-            IEntity[] heteroCouple = new IEntity[] {this.heterofemaleHuman, this.heteroMaleHuman };
-            IEntity[] homofemaleCouple = new IEntity[] {this.homofemaleHumanLeft, this.homofemaleHumanRight };
-            IEntity[] homoMaleCouple = new IEntity[] {this.homoMaleHumanLeft, this.homoMaleHumanRight };
-            IEntity[] biCoupleLeft = new IEntity[] {this.bifemaleHuman, this.homofemaleHumanLeft };
-            IEntity[] biCoupleRight = new IEntity[] {this.bifemaleHuman, this.biMaleHuman };
-            IEntity[] asexualCouple = new IEntity[] {this.aroMaleHuman, this.bifemaleHuman};
+            Guid[] heteroCouple = new[] {this.heterofemaleHuman.Guid, this.heteroMaleHuman.Guid };
+            Guid[] homofemaleCouple = new Guid[] {this.homofemaleHumanLeft.Guid, this.homofemaleHumanRight.Guid };
+            Guid[] homoMaleCouple = new Guid[] {this.homoMaleHumanLeft.Guid, this.homoMaleHumanRight.Guid };
+            Guid[] biCoupleLeft = new Guid[] {this.bifemaleHuman.Guid, this.homofemaleHumanLeft.Guid };
+            Guid[] biCoupleRight = new Guid[] {this.bifemaleHuman.Guid, this.biMaleHuman.Guid };
+            Guid[] asexualCouple = new Guid[] {this.aroMaleHuman.Guid, this.bifemaleHuman.Guid};
 
             this.RelationshipHandler.CreateRelationshipWithValue(heteroCouple, new[]{ "monoamorous" }, 500);
             this.RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, new[]{ "monoamorous" }, 500);
@@ -147,7 +148,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Heteroromantic_Compatible_AcceptsHeteroPartners()
         {
-            IJoyObject[] participants = new [] {this.heterofemaleHuman, this.heteroMaleHuman };
+            Guid[] participants = new [] {this.heterofemaleHuman.Guid, this.heteroMaleHuman.Guid };
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsTrue(this.heteroromantic.WillRomance(this.heterofemaleHuman, this.heteroMaleHuman, relationships));
         }
@@ -155,7 +156,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Heteroromantic_Compatible_RejectsHomoPartners()
         {
-            IJoyObject[] participants = new [] {this.heterofemaleHuman, this.homofemaleHumanLeft };
+            Guid[] participants = new [] {this.heterofemaleHuman.Guid, this.homofemaleHumanLeft.Guid };
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsFalse(this.heteroromantic.WillRomance(this.heterofemaleHuman, this.homofemaleHumanLeft, relationships));
         }
@@ -163,7 +164,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Homoromantic_Compatible_AcceptsHomoPartners()
         {
-            IJoyObject[] participants = new [] {this.homoMaleHumanLeft, this.homoMaleHumanRight };
+            Guid[] participants = new [] {this.homoMaleHumanLeft.Guid, this.homoMaleHumanRight.Guid };
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsTrue(this.homoromantic.WillRomance(this.homoMaleHumanLeft, this.homoMaleHumanRight, relationships));
         }
@@ -171,7 +172,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Homoromantic_Compatible_RejectsHeteroPartners()
         {
-            IJoyObject[] participants = new[] {this.homofemaleHumanLeft, this.homofemaleHumanRight };
+            Guid[] participants = new[] {this.homofemaleHumanLeft.Guid, this.homofemaleHumanRight.Guid };
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsFalse(this.homoromantic.WillRomance(this.homoMaleHumanLeft, this.homofemaleHumanRight, relationships));
         }
@@ -179,7 +180,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Biromantic_Compatible_WillAcceptHomoPartners()
         {
-            IJoyObject[] participants = new[] {this.bifemaleHuman, this.homofemaleHumanLeft };
+            Guid[] participants = new[] {this.bifemaleHuman.Guid, this.homofemaleHumanLeft.Guid };
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsTrue(this.biromantic.WillRomance(this.bifemaleHuman, this.homofemaleHumanLeft, relationships));
         }
@@ -187,7 +188,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Biromantic_Compatible_WillAcceptHeteroPartners()
         {
-            IJoyObject[] participants = new[] {this.bifemaleHuman, this.biMaleHuman };
+            Guid[] participants = new[] {this.bifemaleHuman.Guid, this.biMaleHuman.Guid };
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsTrue(this.biromantic.WillRomance(this.bifemaleHuman, this.biMaleHuman, relationships));
         }
@@ -195,7 +196,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Aromantic_Compatible_WillRejectPartner()
         {
-            IJoyObject[] participants = new[] {this.aroMaleHuman, this.bifemaleHuman };
+            Guid[] participants = new[] {this.aroMaleHuman.Guid, this.bifemaleHuman.Guid };
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsFalse(this.aromantic.WillRomance(this.aroMaleHuman, this.bifemaleHuman, relationships));
         }
@@ -204,7 +205,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.ActionLog = null;
         }
     }
 }

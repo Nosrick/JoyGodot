@@ -6,11 +6,11 @@ using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Combat;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Needs;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Graphics;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Rollers;
 using Moq;
 using NUnit.Framework;
@@ -824,7 +824,8 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [TearDown]
         public void TearDown()
         {
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.ActionLog = null;
+            GlobalConstants.GameManager = null;
         }
     }
 }

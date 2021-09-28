@@ -116,12 +116,12 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                           && entity.Guid == Guid.NewGuid());
 
 
-            IEntity[] heteroCouple = new IEntity[] {this.heterofemaleHuman, this.heteroMaleHuman};
-            IEntity[] homofemaleCouple = new IEntity[] {this.homofemaleHumanLeft, this.homofemaleHumanRight};
-            IEntity[] homoMaleCouple = new IEntity[] {this.homoMaleHumanLeft, this.homoMaleHumanRight};
-            IEntity[] biCoupleLeft = new IEntity[] {this.bifemaleHuman, this.homofemaleHumanLeft};
-            IEntity[] biCoupleRight = new IEntity[] {this.bifemaleHuman, this.biMaleHuman};
-            IEntity[] asexualCouple = new IEntity[] {this.asexualMaleHuman, this.bifemaleHuman};
+            Guid[] heteroCouple = new Guid[] {this.heterofemaleHuman.Guid, this.heteroMaleHuman.Guid};
+            Guid[] homofemaleCouple = new Guid[] {this.homofemaleHumanLeft.Guid, this.homofemaleHumanRight.Guid};
+            Guid[] homoMaleCouple = new Guid[] {this.homoMaleHumanLeft.Guid, this.homoMaleHumanRight.Guid};
+            Guid[] biCoupleLeft = new Guid[] {this.bifemaleHuman.Guid, this.homofemaleHumanLeft.Guid};
+            Guid[] biCoupleRight = new Guid[] {this.bifemaleHuman.Guid, this.biMaleHuman.Guid};
+            Guid[] asexualCouple = new Guid[] {this.asexualMaleHuman.Guid, this.bifemaleHuman.Guid};
 
             this.RelationshipHandler.CreateRelationshipWithValue(heteroCouple, new[] {"sexual"}, 500);
             this.RelationshipHandler.CreateRelationshipWithValue(homofemaleCouple, new[] {"sexual"}, 500);
@@ -134,7 +134,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Heterosexual_WillMateWith_AcceptsHeteroPartners()
         {
-            IJoyObject[] participants = new[] {this.heterofemaleHuman, this.heteroMaleHuman};
+            Guid[] participants = new[] {this.heterofemaleHuman.Guid, this.heteroMaleHuman.Guid};
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsTrue(this.heterosexual.WillMateWith(this.heterofemaleHuman, this.heteroMaleHuman, relationships));
         }
@@ -142,7 +142,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Heterosexual_WillMateWith_RejectsHomoPartners()
         {
-            IJoyObject[] participants = new[] {this.heterofemaleHuman, this.homofemaleHumanLeft};
+            Guid[] participants = new[] {this.heterofemaleHuman.Guid, this.homofemaleHumanLeft.Guid};
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsFalse(this.heterosexual.WillMateWith(this.heterofemaleHuman, this.homofemaleHumanLeft, relationships));
         }
@@ -150,7 +150,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Homosexual_WillMateWith_AcceptsHomoPartners()
         {
-            IJoyObject[] participants = new[] {this.homoMaleHumanLeft, this.homoMaleHumanRight};
+            Guid[] participants = new[] {this.homoMaleHumanLeft.Guid, this.homoMaleHumanRight.Guid};
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsTrue(this.homosexual.WillMateWith(this.homoMaleHumanLeft, this.homoMaleHumanRight, relationships));
         }
@@ -158,7 +158,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Homosexual_WillMateWith_RejectsHeteroPartners()
         {
-            IJoyObject[] participants = new[] {this.homofemaleHumanLeft, this.homofemaleHumanRight};
+            Guid[] participants = new[] {this.homofemaleHumanLeft.Guid, this.homofemaleHumanRight.Guid};
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsFalse(this.homosexual.WillMateWith(this.homoMaleHumanLeft, this.homofemaleHumanRight, relationships));
         }
@@ -166,7 +166,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Bisexual_WillMateWith_WillAcceptHomoPartners()
         {
-            IJoyObject[] participants = new[] {this.bifemaleHuman, this.homofemaleHumanLeft};
+            Guid[] participants = new[] {this.bifemaleHuman.Guid, this.homofemaleHumanLeft.Guid};
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsTrue(this.bisexual.WillMateWith(this.bifemaleHuman, this.homofemaleHumanLeft, relationships));
         }
@@ -174,7 +174,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Bisexual_WillMateWith_WillAcceptHeteroPartners()
         {
-            IJoyObject[] participants = new[] {this.bifemaleHuman, this.biMaleHuman};
+            Guid[] participants = new[] {this.bifemaleHuman.Guid, this.biMaleHuman.Guid};
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsTrue(this.bisexual.WillMateWith(this.bifemaleHuman, this.biMaleHuman, relationships));
         }
@@ -182,7 +182,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [Test]
         public void Asexual_WillMateWith_RejectsPartner()
         {
-            IJoyObject[] participants = new IJoyObject[] {this.asexualMaleHuman, this.bifemaleHuman};
+            Guid[] participants = new Guid[] {this.asexualMaleHuman.Guid, this.bifemaleHuman.Guid};
             IEnumerable<IRelationship> relationships = this.RelationshipHandler.Get(participants);
             Assert.IsFalse(this.asexual.WillMateWith(this.asexualMaleHuman, this.bifemaleHuman, relationships));
         }
@@ -191,7 +191,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.ActionLog = null;
         }
     }
 }

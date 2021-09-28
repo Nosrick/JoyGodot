@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Entities;
-using JoyGodot.Assets.Scripts.Entities.Items;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
 using JoyGodot.Assets.Scripts.Helpers;
-using JoyGodot.Assets.Scripts.JoyObject;
+using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Managers;
 using JoyGodot.Assets.Scripts.Quests;
 using JoyGodot.Assets.Scripts.Rollers;
@@ -74,7 +73,10 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                 relationship => relationship.GetRelationshipValue(It.IsAny<Guid>(), It.IsAny<Guid>()) == 0);
 
             IEntityRelationshipHandler relationshipHandler = Mock.Of<IEntityRelationshipHandler>(
-                handler => handler.Get(It.IsAny<IJoyObject[]>(), It.IsAny<string[]>(), It.IsAny<bool>())
+                handler => handler.Get(
+                               It.IsAny<IEnumerable<Guid>>(), 
+                               It.IsAny<IEnumerable<string>>(), 
+                               It.IsAny<bool>())
                            == new[] {friendship});
             ILiveItemHandler itemHandler = Mock.Of<ILiveItemHandler>(
                 handler => handler.GetQuestRewards(It.IsAny<Guid>()) == new List<IItemInstance> { item });
@@ -137,7 +139,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void TearDown()
         {
             GlobalConstants.GameManager = null;
-            GlobalConstants.ActionLog.Dispose();
+            GlobalConstants.ActionLog = null;
         }
     }
 }
