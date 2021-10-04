@@ -158,6 +158,7 @@ namespace JoyGodot.Assets.Scripts
             this.GenderHandler = new GenderHandler();
             this.SkillHandler = new EntitySkillHandler();
             this.EntityTemplateHandler = new EntityTemplateHandler(
+                this.StatisticHandler,
                 this.SkillHandler,
                 this.VisionProviderHandler,
                 this.AbilityHandler);

@@ -20,6 +20,8 @@ namespace JoyGodot.Assets.Scripts.Entities
         protected IEntitySkillHandler SkillHandler { get; set; }
         protected IVisionProviderHandler VisionProviderHandler { get; set; }
         protected IAbilityHandler AbilityHandler { get; set; }
+        
+        protected IEntityStatisticHandler StatisticHandler { get; set; }
 
         public JSONValueExtractor ValueExtractor { get; protected set; }
 
@@ -37,11 +39,13 @@ namespace JoyGodot.Assets.Scripts.Entities
         }
 
         public EntityTemplateHandler(
+            IEntityStatisticHandler statisticHandler,
             IEntitySkillHandler skillHandler,
             IVisionProviderHandler visionProviderHandler,
             IAbilityHandler abilityHandler)
         {
             this.ValueExtractor = new JSONValueExtractor();
+            this.StatisticHandler = statisticHandler;
             this.AbilityHandler = abilityHandler;
             this.VisionProviderHandler = visionProviderHandler;
             this.SkillHandler = skillHandler;
@@ -105,7 +109,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                         ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Threshold")
                         : GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
 
-                        IEntityStatistic statistic = GlobalConstants.GameManager.StatisticHandler.Get(statName);
+                        IEntityStatistic statistic = this.StatisticHandler.Get(statName);
                         statistic.SetValue(statValue);
                         statistic.SetThreshold(threshold);
                         
@@ -129,7 +133,7 @@ namespace JoyGodot.Assets.Scripts.Entities
                                 ? this.ValueExtractor.GetValueFromDictionary<int>(innerDict, "Threshold")
                                 : GlobalConstants.DEFAULT_SUCCESS_THRESHOLD;
 
-                            IEntitySkill skill = GlobalConstants.GameManager.SkillHandler.Get(skillName);
+                            IEntitySkill skill = this.SkillHandler.Get(skillName);
                             skill.SetValue(skillValue);
                             skill.SetThreshold(threshold);
                             skills.Add(

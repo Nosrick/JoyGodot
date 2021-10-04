@@ -6,6 +6,7 @@ using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Entities.AI.LOS.Providers;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Helpers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Moq;
 using NUnit.Framework;
 
@@ -18,14 +19,17 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         [SetUp]
         public void SetUp()
         {
-            ActionLog actionLog = new ActionLog();
-            GlobalConstants.ActionLog = actionLog;
+            GlobalConstants.ActionLog = new ActionLog();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
             IEntitySkillHandler skillHandler = Mock.Of<IEntitySkillHandler>();
             IVisionProviderHandler visionProviderHandler = Mock.Of<IVisionProviderHandler>(
                 handler => handler.Get(It.IsAny<string>()) == Mock.Of<IVision>());
             IAbilityHandler abilityHandler = Mock.Of<IAbilityHandler>();
+            IEntityStatisticHandler statisticHandler = Mock.Of<IEntityStatisticHandler>(
+                handler => handler.Get(It.IsAny<string>()) == Mock.Of<IEntityStatistic>());
             
             this.target = new EntityTemplateHandler(
+                statisticHandler,
                 skillHandler,
                 visionProviderHandler,
                 abilityHandler);
@@ -56,6 +60,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }
