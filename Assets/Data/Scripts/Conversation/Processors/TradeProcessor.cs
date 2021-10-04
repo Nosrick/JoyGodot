@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Conversation.Conversations;
 using JoyGodot.Assets.Scripts.Entities;
@@ -26,6 +27,11 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
+            if (GlobalConstants.GameManager.GUIManager is null)
+            {
+                return Array.Empty<ITopic>();
+            }
+            
             var tradeWindow = GlobalConstants.GameManager.GUIManager.Get<TradeWindow>(GUINames.TRADE);
             tradeWindow.SetActors(instigator, listener);
             GlobalConstants.GameManager.GUIManager.OpenGUI(this, GUINames.TRADE);

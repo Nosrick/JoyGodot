@@ -9,6 +9,8 @@ using JoyGodot.Assets.Scripts.Conversation.Subengines.Rumours;
 using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Needs;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
+using JoyGodot.Assets.Scripts.Entities.Romance;
+using JoyGodot.Assets.Scripts.Entities.Sexuality;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.JoyObject;
@@ -37,6 +39,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void SetUp()
         {
             GlobalConstants.ActionLog = new ActionLog();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
             
             this.prefab = GD.Load<Node2D>(GlobalConstants.GODOT_ASSETS_FOLDER + "Scenes/JoyObject.tscn");
 
@@ -96,13 +99,19 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                           && entity.Needs == needs
                           && entity.Statistics == stats
                           && entity.Sentient == true
-                          && entity.Guid == Guid.NewGuid());
+                          && entity.Guid == Guid.NewGuid()
+                          && entity.Sexuality == new BaseSexuality()
+                          && entity.Romance == new BaseRomance()
+                          && entity.NeedFulfillmentData == new NeedFulfillmentData());
 
             this.listener = Mock.Of<IEntity>(entity => entity.MyWorld == this.world
                                                        && entity.Needs == needs
                                                        && entity.Statistics == stats
                                                        && entity.Sentient == true
-                                                       && entity.Guid == Guid.NewGuid());
+                                                       && entity.Guid == Guid.NewGuid()
+                                                       && entity.Sexuality == new BaseSexuality()
+                                                       && entity.Romance == new BaseRomance()
+                                                       && entity.NeedFulfillmentData == new NeedFulfillmentData());
 
             GlobalConstants.GameManager = Mock.Of<IGameManager>(
                 manager => manager.Player == this.instigator
@@ -144,6 +153,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
             bool ended = false;
             foreach (ITopic topic in baseTopics)
             {
+                this.target.SetActors(this.instigator, this.listener);
                 ended = this.AdvanceToEnd(topic, baseTopics);
             }
 
@@ -171,6 +181,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }

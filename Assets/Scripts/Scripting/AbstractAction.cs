@@ -51,7 +51,7 @@ namespace JoyGodot.Assets.Scripts.Scripting
             if (this.LastParticipants.Any(o => o.Equals(GlobalConstants.GameManager.Player) == false)
                 && this.LastParticipants.Count() > 1)
             {
-                this.RumourMill.PropagateRumour(this.LastParticipants, this.LastTags);
+                this.RumourMill?.PropagateRumour(this.LastParticipants, this.LastTags);
             }
 
             this.QuestTracker?.PerformQuestAction(this.LastParticipants.First() as IEntity, this);

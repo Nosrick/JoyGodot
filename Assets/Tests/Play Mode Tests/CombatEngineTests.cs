@@ -12,6 +12,7 @@ using JoyGodot.Assets.Scripts.Graphics;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Items;
 using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 using Moq;
 using NUnit.Framework;
 
@@ -59,6 +60,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             this.logger = new ActionLog();
             GlobalConstants.ActionLog = this.logger;
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
             
             this.target = new CombatEngine(Mock.Of<IRollable>(
                 roller => roller.RollSuccesses(
@@ -826,6 +828,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.ActionLog = null;
             GlobalConstants.GameManager = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }

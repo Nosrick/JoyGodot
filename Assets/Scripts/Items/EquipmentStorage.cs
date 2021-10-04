@@ -34,7 +34,7 @@ namespace JoyGodot.Assets.Scripts.Items
         public EquipmentStorage()
         {
             this.m_Slots = new List<Tuple<string, Guid>>();
-            this.Guid = GlobalConstants.GameManager.GUIDManager.AssignGUID();
+            this.Guid = Guid.Empty;
         }
 
         public EquipmentStorage(IEnumerable<string> slots)

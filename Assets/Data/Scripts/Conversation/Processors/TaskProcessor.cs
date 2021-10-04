@@ -40,7 +40,7 @@ namespace JoyGodot.Assets.Data.Scripts.Conversation.Processors
 
         public override ITopic[] Interact(IEntity instigator, IEntity listener)
         {
-            this.OfferedQuest = this.QuestProvider.MakeRandomQuest(
+            this.OfferedQuest = this.QuestProvider?.MakeRandomQuest(
                 instigator,
                 listener,
                 instigator.MyWorld.GetOverworld());
