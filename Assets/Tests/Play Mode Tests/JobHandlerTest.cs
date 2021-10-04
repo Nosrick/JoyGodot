@@ -4,6 +4,7 @@ using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Entities.Jobs;
 using JoyGodot.Assets.Scripts.Helpers;
 using JoyGodot.Assets.Scripts.Rollers;
+using JoyGodot.Assets.Scripts.Scripting;
 using NUnit.Framework;
 
 namespace JoyGodot.Assets.Tests.Play_Mode_Tests
@@ -19,6 +20,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void SetUp()
         {
             GlobalConstants.ActionLog = new ActionLog();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
             this.abilityHandler = new AbilityHandler();
             this.target = new JobHandler(this.abilityHandler, new RNG());
         }
@@ -46,6 +48,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }
