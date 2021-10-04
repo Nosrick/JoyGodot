@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Godot;
 using JoyGodot.Assets.Scripts;
 using JoyGodot.Assets.Scripts.Entities.Needs;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
@@ -13,15 +15,13 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class NeedHandlerTests
     {
-        private ScriptingEngine ScriptingEngine;
-        
         private INeedHandler target;
     
         [SetUp]
         public void SetUp()
         {
             GlobalConstants.ActionLog = new ActionLog();
-            this.ScriptingEngine = new ScriptingEngine();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
 
             IGameManager gameManager = Mock.Of<IGameManager>(
                 manager => manager.RelationshipHandler == Mock.Of<IEntityRelationshipHandler>()
@@ -39,7 +39,13 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                                        {
                                            new SpritePart
                                            {
-                                               m_Frames = 1
+                                               m_Frames = 1,
+                                               m_Data = Array.Empty<string>(),
+                                               m_FrameSprite = new List<Texture>(),
+                                               m_PossibleColours = new List<Color>
+                                               {
+                                                   Colors.Magenta
+                                               }
                                            }
                                        },
                                        State = "DEFAULT"
@@ -72,6 +78,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }
