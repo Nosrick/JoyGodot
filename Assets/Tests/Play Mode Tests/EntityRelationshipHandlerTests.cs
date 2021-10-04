@@ -11,8 +11,6 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class EntityRelationshipHandlerTests
     {
-        private ScriptingEngine scriptingEngine;
-
         private IEntityRelationshipHandler target;
         
         private IEntity left;
@@ -22,7 +20,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         public void SetUp()
         {
             GlobalConstants.ActionLog = new ActionLog();
-            this.scriptingEngine = new ScriptingEngine();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
 
             ILiveEntityHandler entityHandler = new LiveEntityHandler();
             IGameManager gameManager = Mock.Of<IGameManager>(
@@ -73,6 +71,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }
