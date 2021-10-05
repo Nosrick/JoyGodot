@@ -20,6 +20,13 @@ namespace JoyGodot.Assets.Data.Scripts.Quests.Actions
 
         public DeliverQuestAction()
         {
+            this.Items = new List<Guid>();
+            this.Actors = new List<Guid>();
+            this.Areas = new List<Guid>();
+            this.Tags = Array.Empty<string>();
+            this.Description = string.Empty;
+            this.Roller = new RNG();
+            this.ItemFactory = GlobalConstants.GameManager?.ItemFactory;
         }
         
         public DeliverQuestAction(

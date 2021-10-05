@@ -36,7 +36,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            this.scriptingEngine = new ScriptingEngine();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
 
             this.ItemHandler = new LiveItemHandler(new RNG());
             IGameManager gameManager = Mock.Of<IGameManager>(
@@ -99,6 +99,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }

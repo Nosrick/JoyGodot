@@ -37,7 +37,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            this.scriptingEngine = new ScriptingEngine();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
 
             IItemInstance item = Mock.Of<IItemInstance>();
 
@@ -79,7 +79,8 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                                It.IsAny<bool>())
                            == new[] {friendship});
             ILiveItemHandler itemHandler = Mock.Of<ILiveItemHandler>(
-                handler => handler.GetQuestRewards(It.IsAny<Guid>()) == new List<IItemInstance> { item });
+                handler => handler.GetQuestRewards(It.IsAny<Guid>()) == new List<IItemInstance> { item }
+                && handler.Get(It.IsAny<Guid>()) == item);
             IItemFactory itemFactory = Mock.Of<IItemFactory>(
                 factory => factory.CreateRandomItemOfType(
                                It.IsAny<string[]>(),
@@ -92,10 +93,14 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
                                It.IsAny<bool>(),
                                It.IsAny<bool>()) == item);
 
+            ILiveEntityHandler entityHandler = Mock.Of<ILiveEntityHandler>(
+                handler => handler.Get(It.IsAny<Guid>()) == this.right);
+
             this.gameManager = Mock.Of<IGameManager>(
                 manager => manager.ItemFactory == itemFactory
                            && manager.Player == this.left
                            && manager.ItemHandler == itemHandler
+                           && manager.EntityHandler == entityHandler
                            && manager.GUIDManager == new GUIDManager());
 
             GlobalConstants.GameManager = this.gameManager;
@@ -140,6 +145,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }
