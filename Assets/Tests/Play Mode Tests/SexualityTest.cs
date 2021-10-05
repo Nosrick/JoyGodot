@@ -16,8 +16,6 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
 {
     public class SexualityTest
     {
-        private ScriptingEngine scriptingEngine;
-
         private IEntityRelationshipHandler RelationshipHandler;
 
         private IEntitySexualityHandler target;
@@ -46,7 +44,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            this.scriptingEngine = new ScriptingEngine();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
 
             this.target = new EntitySexualityHandler();
             this.RelationshipHandler = new EntityRelationshipHandler();
@@ -192,6 +190,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }
