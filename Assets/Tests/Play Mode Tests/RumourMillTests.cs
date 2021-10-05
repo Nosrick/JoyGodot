@@ -33,7 +33,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             ActionLog actionLog = new ActionLog();
             GlobalConstants.ActionLog = actionLog;
-            this.scriptingEngine = new ScriptingEngine();
+            GlobalConstants.ScriptingEngine = new ScriptingEngine();
             
             this.target = new ConcreteRumourMill();
 
@@ -107,6 +107,7 @@ namespace JoyGodot.Assets.Tests.Play_Mode_Tests
         {
             GlobalConstants.GameManager = null;
             GlobalConstants.ActionLog = null;
+            GlobalConstants.ScriptingEngine = null;
         }
     }
 }
