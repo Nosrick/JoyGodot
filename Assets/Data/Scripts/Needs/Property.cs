@@ -37,7 +37,8 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
             1,
             1,
             1,
-            1,
+            1, 
+            int.MinValue,
             new string[] { "additemaction" })
         {
         }
@@ -61,10 +62,11 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 happinessThresholdRef, 
                 valueRef, 
                 maxValueRef, 
+                int.MinValue, 
                 new string[] { "additemaction" },
                 fulfillingSprite,
-                averageForDayRef, 
-                averageForWeekRef)
+                averageForDayRef: averageForDayRef, 
+                averageForWeekRef: averageForWeekRef)
         {
         }
 

@@ -33,9 +33,11 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 1,
                 1,
                 1,
-                1,
+                1, 
+                0,
                 new string[0])
         {
+            this.m_ValuesToDamage = new[] { "hitpoints", "concentration", "composure" };
         }
         
         public Sleep(
@@ -56,12 +58,14 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 priorityRef,
                 happinessThresholdRef,
                 valueRef,
-                maxValueRef,
+                maxValueRef, 
+                0,
                 new string[0],
                 fulfillingSprite,
-                averageForDayRef, 
-                averageForWeekRef)
+                averageForDayRef: averageForDayRef, 
+                averageForWeekRef: averageForWeekRef)
         {
+            this.m_ValuesToDamage = new[] { "hitpoints", "concentration", "composure" };
         }
 
         public override bool FindFulfilmentObject(IEntity actor)

@@ -1,4 +1,5 @@
-﻿using JoyGodot.Assets.Scripts.Entities.Statistics;
+﻿using System.Collections.Generic;
+using JoyGodot.Assets.Scripts.Entities.Statistics;
 using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.JoyObject;
 using JoyGodot.Assets.Scripts.Managed_Assets;
@@ -8,7 +9,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 {
     public interface INeed : IBasicValue<int>
     {
-        event ValueChangedEventHandler<int> ValueChanged; 
+        event ValueChangedEventHandler<int> ValueChanged;
         bool FindFulfilmentObject(IEntity actor);
 
         bool Interact(IEntity actor, IJoyObject obj);
@@ -25,52 +26,30 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
         //Name and Value come from IBasicValue
 
-        string DisplayName
-        {
-            get;
-        }
-
-        int Priority
-        {
-            get;
-        }
-
-        bool ContributingHappiness
-        {
-            get;
-        }
-
-        int AverageForDay
-        {
-            get;
-        }
-
-        int AverageForWeek
-        {
-            get;
-        }
-
-        int AverageForMonth
-        {
-            get;
-        }
-
-        ISpriteState FulfillingSprite
-        {
-            get;
-            set;
-        }
-
-        int HappinessThreshold
-        {
-            get;
-        }
-
-        float PercentageFull
-        {
-            get;
-        }
+        string DisplayName { get; }
         
+        int DamageThreshold { get; }
+        
+        bool InDamageRange { get; }
+        
+        IEnumerable<string> ValuesToDamage { get; }
+
+        int Priority { get; }
+
+        bool ContributingHappiness { get; }
+
+        int AverageForDay { get; }
+
+        int AverageForWeek { get; }
+
+        int AverageForMonth { get; }
+
+        ISpriteState FulfillingSprite { get; set; }
+
+        int HappinessThreshold { get; }
+
+        float PercentageFull { get; }
+
         RNG Roller { get; }
     }
 }

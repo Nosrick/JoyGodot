@@ -43,7 +43,8 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 1,
                 1,
                 1,
-                1,
+                1, 
+                int.MinValue,
                 new[] { "modifyrelationshippointsaction"})
         {
         }
@@ -69,10 +70,11 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 happinessThresholdRef, 
                 valueRef, 
                 maxValueRef, 
+                int.MinValue,
                 new[] { "modifyrelationshippointsaction"},
                 fulfillingSprite,
-                averageForDayRef, 
-                averageForWeekRef)
+                averageForDayRef: averageForDayRef, 
+                averageForWeekRef: averageForWeekRef)
         {
             this.RelationshipHandler = relationshipHandler ?? GlobalConstants.GameManager?.RelationshipHandler;
             this.FulfillingSprite = fulfillingSprite;

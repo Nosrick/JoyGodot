@@ -27,6 +27,13 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
             protected set => this.m_DisplayName = value;
         }
 
+        public int DamageThreshold { get; protected set; }
+        public bool InDamageRange => this.Value <= this.DamageThreshold;
+
+        public IEnumerable<string> ValuesToDamage => this.m_ValuesToDamage;
+        
+        protected string[] m_ValuesToDamage = {"hitpoints"};
+
         protected string m_DisplayName;
 
         public ISpriteState FulfillingSprite { get; set; }
@@ -39,7 +46,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
         public float PercentageFull => this.HappinessThreshold == 0
             ? 1f
-            : Mathf.Min(1f, this.Value / (float) this.HappinessThreshold);
+            : Mathf.Min(1f, this.Value / (float)this.HappinessThreshold);
 
         protected System.Collections.Generic.Dictionary<string, IJoyAction> m_CachedActions;
 
@@ -82,6 +89,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
             int happinessThresholdRef,
             int valueRef,
             int maxValueRef,
+            int killThreshold,
             IEnumerable<string> actions,
             ISpriteState fulfillingSprite = null,
             int averageForDayRef = 0,
@@ -112,12 +120,14 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
             this.m_AverageForDay = averageForDayRef;
             this.m_AverageForWeek = averageForWeekRef;
 
+            this.DamageThreshold = killThreshold;
+
             this.FulfillingSprite = fulfillingSprite;
             if (this.FulfillingSprite is null)
             {
                 SpriteData data = GlobalConstants.GameManager.ObjectIconHandler?.GetManagedSprites(
-                    "needs",
-                    this.Name)
+                        "needs",
+                        this.Name)
                     .FirstOrDefault();
                 if (data is null == false)
                 {
@@ -151,10 +161,10 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
             {
                 this.m_DecayCounter = this.m_Decay;
                 this.Decay(1);
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         public virtual int Fulfill(int value)
@@ -245,17 +255,17 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
         {
             Dictionary saveDict = new Dictionary
             {
-                {"Name", this.Name},
-                {"Decay", this.m_Decay},
-                {"DecayCounter", this.m_DecayCounter},
-                {"DoesDecay", this.m_DoesDecay},
-                {"Priority", this.m_Priority},
-                {"HappinessThreshold", this.m_HappinessThreshold},
-                {"Value", this.m_Value},
-                {"MaximumValue", this.m_MaximumValue},
-                {"AverageForDay", this.m_AverageForDay},
-                {"AverageForWeek", this.m_AverageForWeek},
-                {"AverageForMonth", this.m_AverageForMonth}
+                { "Name", this.Name },
+                { "Decay", this.m_Decay },
+                { "DecayCounter", this.m_DecayCounter },
+                { "DoesDecay", this.m_DoesDecay },
+                { "Priority", this.m_Priority },
+                { "HappinessThreshold", this.m_HappinessThreshold },
+                { "Value", this.m_Value },
+                { "MaximumValue", this.m_MaximumValue },
+                { "AverageForDay", this.m_AverageForDay },
+                { "AverageForWeek", this.m_AverageForWeek },
+                { "AverageForMonth", this.m_AverageForMonth }
             };
 
             return saveDict;
