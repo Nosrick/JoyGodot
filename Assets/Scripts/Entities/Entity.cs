@@ -731,16 +731,29 @@ namespace JoyGodot.Assets.Scripts.Entities
             this.RegenTicker += 1;
             if (this.RegenTicker == REGEN_TICK_TIME)
             {
-                this.ModifyValue(DerivedValueName.HITPOINTS, 1);
-                this.ModifyValue(DerivedValueName.CONCENTRATION, 1);
-                this.ModifyValue(DerivedValueName.COMPOSURE, 1);
-                this.ModifyValue(DerivedValueName.MANA, 1);
-
                 this.RegenTicker = 0;
 
+                bool damaged = false;
                 foreach (INeed need in this.m_Needs.Values)
                 {
-                    this.HappinessIsDirty |= need.Tick(this);
+                    bool decayed = need.Tick(this);
+                    if (need.InDamageRange)
+                    {
+                        damaged = true;
+                        foreach (string value in need.ValuesToDamage)
+                        {
+                            this.ModifyValue(value, -1);
+                        }
+                    }
+                    this.HappinessIsDirty |= decayed;
+                }
+
+                if (!damaged)
+                {
+                    this.ModifyValue(DerivedValueName.HITPOINTS, 1);
+                    this.ModifyValue(DerivedValueName.CONCENTRATION, 1);
+                    this.ModifyValue(DerivedValueName.COMPOSURE, 1);
+                    this.ModifyValue(DerivedValueName.MANA, 1);
                 }
             }
 

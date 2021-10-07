@@ -179,7 +179,7 @@ namespace JoyGodot.Assets.Scripts.Entities.Needs
 
         public int ModifyValue(int value)
         {
-            this.m_Value = Math.Max(0, Math.Min(this.m_MaximumValue, this.m_Value + value));
+            this.m_Value = Mathf.Clamp(this.m_Value + value, 0, this.m_MaximumValue);
             this.ValueChanged?.Invoke(this, new ValueChangedEventArgs<int>
             {
                 Delta = value,
