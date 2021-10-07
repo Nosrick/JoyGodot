@@ -64,7 +64,7 @@ namespace JoyGodot.Assets.Scripts.GUI.WorldState
                 0.5f,
                 Tween.TransitionType.Linear,
                 Tween.EaseType.InOut,
-                4f);
+                2f);
             this.Tween.Start();
         }
     }
