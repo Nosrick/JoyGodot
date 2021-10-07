@@ -140,10 +140,14 @@ namespace JoyGodot.Assets.Scripts.States
         {
             IEntity player = GlobalConstants.GameManager.Player;
 
-            if ((player.NeedFulfillmentData.IsEmpty() || player.NeedFulfillmentData.Counter <= 0)
-                && this.AutoTurn
-                && player.Conscious
-                && this.ManualAutoTurn == false)
+            if (player.Conscious == false)
+            {
+                this.AutoTurn = true;
+            }
+            else if ((player.NeedFulfillmentData.IsEmpty() || player.NeedFulfillmentData.Counter <= 0)
+                     && this.AutoTurn
+                     && player.Conscious
+                     && this.ManualAutoTurn == false)
             {
                 this.AutoTurn = false;
             }
@@ -237,10 +241,14 @@ namespace JoyGodot.Assets.Scripts.States
             }
             */
 
-            if (action.IsActionReleased("auto turn"))
+            if (action.IsActionReleased("auto turn") && player.Conscious)
             {
                 this.AutoTurn = !this.AutoTurn;
                 this.ManualAutoTurn = this.AutoTurn;
+            }
+            else if (player.Conscious == false && this.AutoTurn)
+            {
+                return;
             }
 
             Vector2Int newPlayerPoint = GlobalConstants.GameManager.Player.WorldPosition;

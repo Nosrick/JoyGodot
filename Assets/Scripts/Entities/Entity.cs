@@ -713,21 +713,6 @@ namespace JoyGodot.Assets.Scripts.Entities
         {
             this.HappinessIsDirty = false;
 
-            if (this.Conscious == false)
-            {
-                return;
-            }
-
-            if (this.m_NeedFulfillmentData.Counter > 0
-                && this.m_NeedFulfillmentData.DecrementCounter() == 0)
-            {
-                this.NeedFulfillmentData = new NeedFulfillmentData();
-            }
-            else if (this.Needs.TryGetValue(this.m_NeedFulfillmentData.Name, out INeed need))
-            {
-                need.Fulfill(this.m_NeedFulfillmentData.ValuePerTick);
-            }
-
             this.RegenTicker += 1;
             if (this.RegenTicker == REGEN_TICK_TIME)
             {
@@ -755,6 +740,21 @@ namespace JoyGodot.Assets.Scripts.Entities
                     this.ModifyValue(DerivedValueName.COMPOSURE, 1);
                     this.ModifyValue(DerivedValueName.MANA, 1);
                 }
+            }
+
+            if (this.Conscious == false)
+            {
+                return;
+            }
+
+            if (this.m_NeedFulfillmentData.Counter > 0
+                && this.m_NeedFulfillmentData.DecrementCounter() == 0)
+            {
+                this.NeedFulfillmentData = new NeedFulfillmentData();
+            }
+            else if (this.Needs.TryGetValue(this.m_NeedFulfillmentData.Name, out INeed need))
+            {
+                need.Fulfill(this.m_NeedFulfillmentData.ValuePerTick);
             }
 
             this.HasMoved = false;
