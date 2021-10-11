@@ -6,6 +6,7 @@ using JoyGodot.Assets.Scripts.Entities;
 using JoyGodot.Assets.Scripts.Entities.Abilities;
 using JoyGodot.Assets.Scripts.Entities.Relationships;
 using JoyGodot.Assets.Scripts.Entities.Statistics;
+using JoyGodot.Assets.Scripts.Events;
 using JoyGodot.Assets.Scripts.GUI;
 using JoyGodot.Assets.Scripts.GUI.WorldState;
 using JoyGodot.Assets.Scripts.Helpers;
@@ -77,6 +78,17 @@ namespace JoyGodot.Assets.Scripts.Godot
             this.MoveChild(this.Collider, this.GetChildCount() - 1);
             this.Background.Visible = false;
             this.SpeechBubble.Visible = false;
+
+            if (this.MyJoyObject is IEntity { PlayerControlled: false } entity)
+            {
+                entity.AliveChange += delegate
+                {
+                    if (entity.Alive == false)
+                    {
+                        entity.MyWorld.RemoveEntity(entity.WorldPosition, true);
+                    }
+                };
+            }
         }
 
         public void SetSpeechBubble(bool on, ISpriteState need = null)
@@ -318,7 +330,6 @@ namespace JoyGodot.Assets.Scripts.Godot
                     GlobalConstants.ActionLog.Log(
                         aggressor.JoyName + " has killed " + defender.JoyName + "!",
                         LogLevel.Gameplay);
-                    defender.MyWorld.RemoveEntity(defender.WorldPosition, true);
                 }
                 else if (defender.Conscious == false)
                 {
