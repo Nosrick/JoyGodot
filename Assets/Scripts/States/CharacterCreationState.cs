@@ -68,7 +68,7 @@ namespace JoyGodot.Assets.Scripts.States
             this.Done = true;
         }
 
-        public override GameState GetNextState()
+        public override IGameState GetNextState()
         {
             return new WorldCreationState(this.Player);
         }

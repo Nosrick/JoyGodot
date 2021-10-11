@@ -28,7 +28,7 @@ namespace JoyGodot.Assets.Scripts.States
 
         public abstract void HandleInput(InputEvent @event);
 
-        public abstract GameState GetNextState();
+        public abstract IGameState GetNextState();
 
         public bool Done
         {

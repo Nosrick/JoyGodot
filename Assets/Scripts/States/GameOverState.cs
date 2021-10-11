@@ -24,6 +24,12 @@ namespace JoyGodot.Assets.Scripts.States
             gameManager.FogPool.RetireAll();
             gameManager.FloorTileMap.Clear();
             gameManager.WallTileMap.Clear();
+            
+            this.GUIManager.InstantiateUIScene(
+                GD.Load<PackedScene>(
+                    GlobalConstants.GODOT_ASSETS_FOLDER +
+                    "Scenes/UI/GameOver.tscn"));
+            this.GUIManager.FindGUIs();
         }
 
         public override void Update()
@@ -34,7 +40,7 @@ namespace JoyGodot.Assets.Scripts.States
         {
         }
 
-        public override GameState GetNextState()
+        public override IGameState GetNextState()
         {
             return new MainMenuState();
         }

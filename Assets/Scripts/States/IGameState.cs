@@ -13,6 +13,6 @@ namespace JoyGodot.Assets.Scripts.States
         void Stop();
         void Update();
         void HandleInput(InputEvent @event);
-        GameState GetNextState();
+        IGameState GetNextState();
     }
 }

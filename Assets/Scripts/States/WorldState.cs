@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Godot;
 using JoyGodot.Assets.Scripts.Calendar;
 using JoyGodot.Assets.Scripts.Conversation;
@@ -36,9 +37,6 @@ namespace JoyGodot.Assets.Scripts.States
         protected IConversationEngine ConversationEngine { get; set; }
 
         protected Thread TickTimer { get; set; }
-
-        protected IJoyObject PrimaryTarget { get; set; }
-
         protected Node2D FogHolder { get; set; }
 
         public WorldState(IWorldInstance overworldRef, IWorldInstance activeWorldRef) : base()
@@ -175,6 +173,7 @@ namespace JoyGodot.Assets.Scripts.States
         protected void ChangeWorld(IWorldInstance newWorld, Vector2Int spawnPoint)
         {
             this.Done = true;
+            this.NextState = new WorldDestructionState(this.Overworld, newWorld);
 
             IEntity player = GlobalConstants.GameManager.Player;
 
@@ -211,7 +210,8 @@ namespace JoyGodot.Assets.Scripts.States
             if (args.Value == false)
             {
                 this.AutoTurn = false;
-                this.GameManager.SetNextState(new GameOverState(this.m_Overworld));
+                this.NextState = new GameOverState(this.m_Overworld);
+                this.Done = true;
             }
         }
 
@@ -479,10 +479,10 @@ namespace JoyGodot.Assets.Scripts.States
             }
         }
 
-        public override GameState GetNextState()
+        public override IGameState GetNextState()
         {
             this.TickTimer.Abort();
-            return new WorldDestructionState(this.m_Overworld, this.m_ActiveWorld);
+            return this.NextState;
         }
 
         public IWorldInstance Overworld => this.m_Overworld;
@@ -496,5 +496,7 @@ namespace JoyGodot.Assets.Scripts.States
         protected bool ManualAutoTurn { get; set; }
 
         protected bool ExpandConsole { get; set; }
+        
+        protected IGameState NextState { get; set; }
     }
 }

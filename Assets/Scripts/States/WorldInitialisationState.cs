@@ -158,7 +158,7 @@ namespace JoyGodot.Assets.Scripts.States
             return index;
         }
 
-        public override GameState GetNextState()
+        public override IGameState GetNextState()
         {
             return new WorldState(this.m_Overworld, this.m_ActiveWorld);
         }

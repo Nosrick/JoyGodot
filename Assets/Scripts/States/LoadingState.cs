@@ -45,7 +45,7 @@ namespace JoyGodot.Assets.Scripts.States
         {
         }
 
-        public override GameState GetNextState()
+        public override IGameState GetNextState()
         {
             //return new CharacterCreationState();
             return new MainMenuState();

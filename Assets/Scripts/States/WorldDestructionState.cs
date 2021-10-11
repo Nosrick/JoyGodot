@@ -43,7 +43,7 @@ namespace JoyGodot.Assets.Scripts.States
             this.Done = true;
         }
 
-        public override GameState GetNextState()
+        public override IGameState GetNextState()
         {
             return new WorldInitialisationState(this.m_OverWorld, this.m_NextWorld);
         }

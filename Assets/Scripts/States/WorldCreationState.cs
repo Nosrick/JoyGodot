@@ -170,7 +170,7 @@ namespace JoyGodot.Assets.Scripts.States
         {
         }
 
-        public override GameState GetNextState()
+        public override IGameState GetNextState()
         {
             //return new WorldInitialisationState(m_World, m_World);
             return new WorldInitialisationState(this.m_World, this.m_ActiveWorld);
