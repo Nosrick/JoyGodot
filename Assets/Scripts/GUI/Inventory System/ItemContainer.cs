@@ -195,6 +195,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 return true;
             }
 
+            if (this.FilledSlots.Any(slot => slot.ItemStack.CanAddContents(item)))
+            {
+                var slot = this.FilledSlots.First(slot => slot.ItemStack.CanAddContents(item));
+                slot.ItemStack.AddContents(item);
+                return true;
+            }
+
             var requiredSlots = this.GetRequiredSlots(item, takeFilledSlots, slots);
             if (requiredSlots.Any())
             {
