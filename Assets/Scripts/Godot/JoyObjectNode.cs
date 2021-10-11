@@ -27,7 +27,7 @@ namespace JoyGodot.Assets.Scripts.Godot
         protected Sprite Background { get; set; }
         protected Particles2D ParticleSystem { get; set; }
         protected static Texture AttackParticle { get; set; }
-        
+
         protected Area2D Collider { get; set; }
 
         public ICollection<string> Tooltip
@@ -73,7 +73,7 @@ namespace JoyGodot.Assets.Scripts.Godot
 
             this.AddSpriteState(state);
             this.OverrideAllColours(state.SpriteData.GetCurrentPartColours());
-            float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
+            float scale = (float)GlobalConstants.SPRITE_WORLD_SIZE / this.CurrentSpriteState.SpriteData.Size;
             this.Scale = new Vector2(scale, scale);
             this.MoveChild(this.Collider, this.GetChildCount() - 1);
             this.Background.Visible = false;
@@ -81,13 +81,16 @@ namespace JoyGodot.Assets.Scripts.Godot
 
             if (this.MyJoyObject is IEntity { PlayerControlled: false } entity)
             {
-                entity.AliveChange += delegate
-                {
-                    if (entity.Alive == false)
-                    {
-                        entity.MyWorld.RemoveEntity(entity.WorldPosition, true);
-                    }
-                };
+                entity.AliveChange += this.OnAliveChange;
+            }
+        }
+
+        protected void OnAliveChange(object sender, BooleanChangeEventArgs args)
+        {
+            if (args.Value == false)
+            {
+                this.MyJoyObject.MyWorld.RemoveJoyObject(this.MyJoyObject, true);
+                GlobalConstants.ActionLog.Log(this.MyJoyObject.JoyName + " has died!", LogLevel.Gameplay);
             }
         }
 
@@ -104,7 +107,8 @@ namespace JoyGodot.Assets.Scripts.Godot
             {
                 this.SpeechBubble.Clear();
                 this.SpeechBubble.AddSpriteState(need);
-                float scale = (float) GlobalConstants.SPRITE_WORLD_SIZE / this.SpeechBubble.CurrentSpriteState.SpriteData.Size;
+                float scale = (float)GlobalConstants.SPRITE_WORLD_SIZE /
+                              this.SpeechBubble.CurrentSpriteState.SpriteData.Size;
                 this.SpeechBubble.Scale = new Vector2(scale, scale);
                 this.SetParticleTexture(need.SpriteData.Parts.First().m_FrameSprite.First());
             }
@@ -201,7 +205,7 @@ namespace JoyGodot.Assets.Scripts.Godot
                                 });
                         }
                     }
-                    
+
                     if (AdjacencyHelper.IsAdjacent(player.WorldPosition, entity.WorldPosition))
                     {
                         contextMenu.AddItem(
@@ -229,11 +233,11 @@ namespace JoyGodot.Assets.Scripts.Godot
                             "Call Over", delegate
                             {
                                 entity.FetchAction("seekaction")?.Execute(
-                                    new IJoyObject[] {entity, player},
-                                    new[] {"call over"},
+                                    new IJoyObject[] { entity, player },
+                                    new[] { "call over" },
                                     new Dictionary<string, object>
                                     {
-                                        {"need", "friendship"}
+                                        { "need", "friendship" }
                                     });
                             });
                     }
@@ -305,9 +309,9 @@ namespace JoyGodot.Assets.Scripts.Godot
             {
                 int value = GlobalConstants.GameManager.CombatEngine.MakeAttack(
                     aggressor,
-                            defender,
-                            attackerTags,
-                            defenderTags);
+                    defender,
+                    attackerTags,
+                    defenderTags);
                 defender.ModifyValue(DerivedValueName.HITPOINTS, -value);
 
                 IRelationship[] relationships = GlobalConstants.GameManager.RelationshipHandler.Get(
@@ -324,7 +328,7 @@ namespace JoyGodot.Assets.Scripts.Godot
                 {
                     relationship.ModifyValueOfParticipant(defender.Guid, aggressor.Guid, -50);
                 }
-                
+
                 if (defender.Alive == false)
                 {
                     GlobalConstants.ActionLog.Log(
