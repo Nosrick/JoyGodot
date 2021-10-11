@@ -72,7 +72,7 @@ namespace JoyGodot.Assets.Scripts.Items
             }
             
             IItemInstance item = this.Get(GUID);
-            item.MyWorld?.RemoveObject(item.WorldPosition, item);
+            item.MyWorld?.RemoveItemInstance(item.WorldPosition, item);
             return true;
 
         }
@@ -84,7 +84,7 @@ namespace JoyGodot.Assets.Scripts.Items
                 return false;
             }
 
-            return item.MyWorld.RemoveObject(item.WorldPosition, item);
+            return item.MyWorld.RemoveItemInstance(item.WorldPosition, item);
         }
         
         public bool Destroy(Guid key)

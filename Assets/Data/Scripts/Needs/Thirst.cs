@@ -129,7 +129,7 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 if (chosenDrink.WorldPosition.Equals(actor.WorldPosition))
                 {
                     this.Interact(actor, chosenDrink);
-                    actor.MyWorld.RemoveObject(chosenDrink.WorldPosition, chosenDrink);
+                    actor.MyWorld.RemoveItemInstance(chosenDrink.WorldPosition, chosenDrink);
                     return true;
                 }
                 else

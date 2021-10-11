@@ -259,7 +259,7 @@ namespace JoyGodot.Assets.Scripts.World
             this.m_Costs[wallRef.x, wallRef.y] = byte.MaxValue;
         }
 
-        public bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef)
+        public bool RemoveItemInstance(Vector2Int positionRef, IItemInstance itemRef)
         {
             bool removed = false;
 
@@ -476,12 +476,27 @@ namespace JoyGodot.Assets.Scripts.World
                             {"newOwner", newOwner}
                         });
 
-                this.RemoveObject(entityRef.WorldPosition, item);
+                this.RemoveItemInstance(entityRef.WorldPosition, item);
 
                 return item;
             }
 
             return null;
+        }
+
+        public bool RemoveJoyObject(IJoyObject joyObject, bool destroy = false)
+        {
+            if (this.EntityGUIDs.Contains(joyObject.Guid))
+            {
+                return this.RemoveEntity(joyObject.WorldPosition, destroy);
+            }
+
+            if (this.ItemGUIDs.Contains(joyObject.Guid))
+            {
+                return this.RemoveItemInstance(joyObject.WorldPosition, joyObject as IItemInstance);
+            }
+
+            return false;
         }
 
         public void AddEntity(IEntity entityRef)
@@ -497,13 +512,13 @@ namespace JoyGodot.Assets.Scripts.World
             entityRef.MyWorld = this;
         }
 
-        public void RemoveEntity(Vector2Int positionRef, bool destroy = false)
+        public bool RemoveEntity(Vector2Int positionRef, bool destroy = false)
         {
             IEntity entity = this.m_Entities.FirstOrDefault(e => e.WorldPosition == positionRef);
 
             if (entity is null)
             {
-                return;
+                return false;
             }
 
             this.OnTick -= entity.Tick;
@@ -513,11 +528,11 @@ namespace JoyGodot.Assets.Scripts.World
             {
                 this.EntityHandler.Destroy(entity.Guid);
             }
-
-
+            
             GlobalConstants.GameManager?.EntityPool.Retire(entity.MyNode);
 
             this.IsDirty = true;
+            return true;
         }
 
         public IEntity GetEntity(Vector2Int positionRef)

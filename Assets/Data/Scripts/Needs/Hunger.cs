@@ -127,7 +127,7 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                 if(chosenFood.WorldPosition.Equals(actor.WorldPosition))
                 {
                     this.Interact(actor, chosenFood);
-                    actor.MyWorld.RemoveObject(chosenFood.WorldPosition, chosenFood);
+                    actor.MyWorld.RemoveItemInstance(chosenFood.WorldPosition, chosenFood);
                     return true;
                 }
                 else
@@ -158,7 +158,7 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
             }
 
             actor.AddContents(item);
-            actor.MyWorld.RemoveObject(item.WorldPosition, item);
+            actor.MyWorld.RemoveItemInstance(item.WorldPosition, item);
             
             var name = item.AllAbilities.FirstOrDefault(a => 
                 a.HasTag("ingestion")

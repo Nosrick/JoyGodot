@@ -44,8 +44,9 @@ namespace JoyGodot.Assets.Scripts.World
         void SetDateTime(JoyDateTime dateTime);
         void AddItem(IItemInstance objectRef);
         void AddWall(Vector2Int wall);
-        
-        bool RemoveObject(Vector2Int positionRef, IItemInstance itemRef);
+
+        bool RemoveJoyObject(IJoyObject joyObject, bool destroy = false);
+        bool RemoveItemInstance(Vector2Int positionRef, IItemInstance itemRef);
         IJoyObject GetObject(Vector2Int WorldPosition);
         PhysicsResult IsObjectAt(Vector2Int worldPosition);
         void Tick();
@@ -60,7 +61,7 @@ namespace JoyGodot.Assets.Scripts.World
         void SwapPosition(IEntity left, IEntity right);
         IItemInstance PickUpObject(IEntity entityRef);
         void AddEntity(IEntity entityRef);
-        void RemoveEntity(Vector2Int positionRef, bool destroy = false);
+        bool RemoveEntity(Vector2Int positionRef, bool destroy = false);
         IEntity GetEntity(Vector2Int positionRef);
         Sector GetSectorFromPoint(Vector2Int point);
         List<Vector2Int> GetVisibleWalls(IEntity viewer);

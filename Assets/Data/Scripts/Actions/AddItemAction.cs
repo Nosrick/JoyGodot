@@ -49,7 +49,7 @@ namespace JoyGodot.Assets.Data.Scripts.Actions
                 }
             }
 
-            result &= item.MyWorld?.RemoveObject(item.WorldPosition, item) ?? true;
+            result &= item.MyWorld?.RemoveItemInstance(item.WorldPosition, item) ?? true;
             this.SetLastParameters(participants, tags, args);
 
             return result && container.AddContents(item);

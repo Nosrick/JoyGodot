@@ -134,7 +134,7 @@ namespace JoyGodot.Assets.Data.Scripts.Needs
                     {"newOwner", true}
                 }))
             {
-                if (actor.MyWorld.RemoveObject(actor.WorldPosition, item))
+                if (actor.MyWorld.RemoveItemInstance(actor.WorldPosition, item))
                 {
                     actor.CurrentTarget = new NeedAIData
                     {
