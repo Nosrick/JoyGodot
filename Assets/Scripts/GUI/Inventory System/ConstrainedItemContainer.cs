@@ -125,7 +125,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 foreach (JoyItemSlot slot in requiredSlots)
                 {
-                    slot.Item = item;
+                    slot.ItemStack.AddContents(item);
                 }
 
                 return true;

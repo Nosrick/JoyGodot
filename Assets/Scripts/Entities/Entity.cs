@@ -1142,6 +1142,11 @@ namespace JoyGodot.Assets.Scripts.Entities
             return this.Equipment.GetSlotContents(slotRef);
         }
 
+        public bool CanAddContents(IEnumerable<IItemInstance> actors)
+        {
+            return actors.Aggregate(true, (agg, item) => this.CanAddContents(item));
+        }
+
         public virtual bool AddContents(IItemInstance actor)
         {
             if (actor is null)

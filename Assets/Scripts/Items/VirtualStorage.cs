@@ -31,6 +31,11 @@ namespace JoyGodot.Assets.Scripts.Items
             return this.Guid != actor.Guid && !this.Contains(actor);
         }
 
+        public bool CanAddContents(IEnumerable<IItemInstance> actors)
+        {
+            return actors.Aggregate(true, (agg, item) => this.CanAddContents(item));
+        }
+
         public bool AddContents(IItemInstance actor)
         {
             if (!this.CanAddContents(actor))

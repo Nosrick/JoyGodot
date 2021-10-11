@@ -11,6 +11,7 @@ namespace JoyGodot.Assets.Scripts.Items
         bool Contains(IItemInstance actor);
 
         bool CanAddContents(IItemInstance actor);
+        bool CanAddContents(IEnumerable<IItemInstance> actors);
 
         bool AddContents(IItemInstance actor);
 

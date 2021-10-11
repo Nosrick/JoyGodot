@@ -13,25 +13,26 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         {
             get
             {
-                if (this.m_Item is null)
+                if (this.m_ItemStack.Empty)
                 {
                     return 0;
                 }
 
                 if (this.IngredientType.Equals("component", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (this.m_Item.ItemType.UnidentifiedName.Equals(this.Slot, StringComparison.OrdinalIgnoreCase))
+                    if (this.m_ItemStack.Contents.FirstOrDefault()?.ItemType.UnidentifiedName
+                        .Equals(this.Slot, StringComparison.OrdinalIgnoreCase) == true)
                     {
                         return 1f;
                     }
                 }
                 else if (this.IngredientType.Equals("material", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (this.m_Item.HasTag(this.Slot) 
-                        || this.m_Item.ItemType.MaterialNames.Any(
-                            name => name.Equals(this.Slot, StringComparison.OrdinalIgnoreCase)))
+                    if (this.m_ItemStack.Contents.FirstOrDefault()?.HasTag(this.Slot) == true
+                        || this.m_ItemStack.Contents.FirstOrDefault()?.ItemType.MaterialNames.Any(
+                            name => name.Equals(this.Slot, StringComparison.OrdinalIgnoreCase)) == true)
                     {
-                        return this.m_Item.ItemType.Size;
+                        return this.m_ItemStack.Contents.Sum(item => item.ItemType.Size);
                     }
                 }
 

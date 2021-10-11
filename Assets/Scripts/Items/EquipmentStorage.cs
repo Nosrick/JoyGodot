@@ -139,6 +139,11 @@ namespace JoyGodot.Assets.Scripts.Items
                    && slots == actor.ItemType.Slots.Count();
         }
 
+        public bool CanAddContents(IEnumerable<IItemInstance> actors)
+        {
+            return actors.Aggregate(true, (agg, item) => this.CanAddContents(item));
+        }
+
         public virtual bool AddContents(IItemInstance actor)
         {
             if (!this.CanAddContents(actor))

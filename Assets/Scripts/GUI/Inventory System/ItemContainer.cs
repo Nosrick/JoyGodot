@@ -49,13 +49,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             .Where(slot => slot.Visible);
 
         protected IEnumerable<JoyItemSlot> FilledSlots =>
-            this.Slots.Where(slot => slot.Visible && slot.Item is null == false);
+            this.Slots.Where(slot => slot.Visible && slot.ItemStack.Empty == false);
 
         protected IEnumerable<JoyItemSlot> EmptySlots => this.Slots
-            .Where(slot => slot.Visible && slot.Item is null);
+            .Where(slot => slot.Visible && slot.ItemStack.Empty);
 
         protected IEnumerable<JoyItemSlot> InactiveSlots => this.Slots
-            .Where(slot => slot.Visible == false && slot.Item is null);
+            .Where(slot => slot.Visible == false && slot.ItemStack.Empty);
 
         public Array<MoveContainerPriority> ContainerPriorities => this.m_ContainerNames;
 
@@ -200,14 +200,14 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 foreach (JoyItemSlot slot in requiredSlots)
                 {
-                    slot.Item = item;
+                    slot.ItemStack.AddContents(item);
                 }
             }
             else
             {
                 var emptySlot = this.EmptySlots.FirstOrDefault() ?? this.AddSlot(false);
 
-                emptySlot.Item = item;
+                emptySlot.ItemStack.AddContents(item);
                 emptySlot.Repaint();
             }
 
@@ -271,7 +271,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             foreach (JoyItemSlot slot in this.FilledSlots)
             {
-                slot.Item = null;
+                slot.ItemStack.Clear();
                 slot.Repaint();
             }
 
@@ -280,7 +280,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public IEnumerable<JoyItemSlot> GetSlotsForItem(IItemInstance item)
         {
-            return this.FilledSlots.Where(slot => slot.Item.Equals(item));
+            return this.FilledSlots.Where(slot => slot.ItemStack.Contains(item));
+        }
+
+        public IEnumerable<JoyItemSlot> GetSlotsForStack(ItemStack itemStack)
+        {
+            return this.Slots.Where(slot => slot.ItemStack.CanAddContents(itemStack.Contents));
         }
 
         public virtual bool MoveItem(IItemInstance item)
@@ -313,6 +318,36 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 target);
         }
 
+        public virtual bool MoveStack(ItemStack itemStack)
+        {
+            var sorted = (from priority in this.m_ContainerNames
+                orderby priority.m_Priority descending
+                select priority);
+
+            if (this.MoveToContainers.Any() == false)
+            {
+                return false;
+            }
+
+            ItemContainer target = this.MoveToContainers.FirstOrDefault(
+                container => sorted.Any(
+                    sort =>
+                        sort.m_ContainerName.Equals(container.Name, StringComparison.OrdinalIgnoreCase)
+                        && ((sort.m_RequiresVisibility && container.Visible)
+                            || sort.m_RequiresVisibility == false)));
+
+            if (target is null || itemStack.Empty)
+            {
+                return false;
+            }
+
+            return this.StackOrSwap(
+                new List<JoyItemSlot> { this.FilledSlots.First(slot => slot.ItemStack == itemStack) },
+                target.EmptySlots.ToArray(),
+                this,
+                target);
+        }
+
         public virtual List<JoyItemSlot> GetRequiredSlots(
             IItemInstance item,
             bool takeFilledSlots = false,
@@ -331,7 +366,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 {
                     return includedSlots.ToList();
                 }
-                return new List<JoyItemSlot>{this.EmptySlots.FirstOrDefault()};
+
+                return new List<JoyItemSlot> { this.EmptySlots.FirstOrDefault() };
             }
 
             System.Collections.Generic.Dictionary<string, int> requiredSlots =
@@ -366,13 +402,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                             {
                                 if (takeFilledSlots == false
                                     && slot.IsEmpty
-                                    && copySlots[pair.Key] > 0)
+                                    && copySlots[pair.Key] > 0
+                                    && slot.ItemStack.CanAddContents(item))
                                 {
                                     copySlots[pair.Key] -= 1;
                                     slots.Add(slot);
                                 }
                                 else if (takeFilledSlots
-                                         && copySlots[pair.Key] > 0)
+                                         && copySlots[pair.Key] > 0
+                                         && slot.ItemStack.CanAddContents(item))
                                 {
                                     copySlots[pair.Key] -= 1;
                                     slots.Add(slot);
@@ -434,7 +472,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
         /// <param name="pool">Reuse an old abandoned slot?</param>
         /// <param name="item">The item to be placed in the slot</param>
         /// <returns>The created or recycled slot</returns>
-        public virtual JoyItemSlot AddSlot(bool pool, IItemInstance item = null)
+        public virtual JoyItemSlot AddSlot(bool pool, ItemStack item = null)
         {
             if (!pool)
             {
@@ -447,13 +485,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return this.AddSlot(item, poolSlot);
         }
 
-        protected virtual JoyItemSlot AddSlot(IItemInstance item = null, JoyItemSlot slot = null)
+        protected virtual JoyItemSlot AddSlot(ItemStack item = null, JoyItemSlot slot = null)
         {
             JoyItemSlot tempSlot = slot ?? this.SlotPrefab.Instance() as JoyItemSlot;
             if (tempSlot is null == false)
             {
                 tempSlot.Visible = true;
-                tempSlot.Item = item;
+                tempSlot.ItemStack = item;
                 tempSlot.Container = this;
                 this.SlotParent.AddChild(tempSlot);
                 this.Slots.Add(tempSlot);
@@ -491,7 +529,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 foreach (JoyItemSlot slot in this.Slots)
                 {
                     slot.Visible = false;
-                    slot.Item = null;
+                    slot.ItemStack.Clear();
                 }
 
                 return true;
@@ -513,21 +551,21 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 var cursor = this.GUIManager.Cursor;
                 cursor.DragSprite = null;
 
-                if (this.ContainerOwner.CanAddContents(dragObject.Item))
+                if (this.ContainerOwner.CanAddContents(dragObject.ItemStack.Contents))
                 {
-                    dragObject.SourceContainer.ContainerOwner.RemoveContents(dragObject.Item);
-                    this.ContainerOwner.AddContents(dragObject.Item);
+                    dragObject.SourceContainer.ContainerOwner.RemoveContents(dragObject.ItemStack.Contents);
+                    this.ContainerOwner.AddContents(dragObject.ItemStack.Contents);
                 }
             }
         }
 
-        public virtual bool RemoveItem(IItemInstance item)
+        public virtual bool RemoveItem(ItemStack item)
         {
             bool removed = false;
-            foreach (JoyItemSlot slot in this.FilledSlots.Where(slot => slot.Item == item))
+            foreach (JoyItemSlot slot in this.FilledSlots.Where(slot => slot.ItemStack == item))
             {
                 removed = true;
-                slot.Item = null;
+                slot.ItemStack.Clear();
             }
 
             return removed;
@@ -547,15 +585,15 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             if (item.Guid != this.ContainerOwner.Guid)
             {
-                if (this.FilledSlots.Any(slot => slot.Item.Guid == item.Guid) == false)
+                if (this.FilledSlots.Any(slot => slot.ItemStack.Guid == item.Guid) == false)
                 {
                     return false;
                 }
 
-                foreach (JoyItemSlot joyItemSlot in this.Slots.Where(slot =>
-                    !(slot.Item is null) && item.Equals(slot.Item)))
+                foreach (JoyItemSlot joyItemSlot in this.Slots.Where(
+                    slot => !(slot.ItemStack is null) && slot.ItemStack.Contains(item)))
                 {
-                    joyItemSlot.Item = null;
+                    joyItemSlot.ItemStack.RemoveContents(item);
                     joyItemSlot.Repaint();
                 }
 
@@ -566,12 +604,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return false;
         }
 
-        public virtual bool Contains(IItemInstance item)
+        public virtual bool Contains(ItemStack item)
         {
-            return this.FilledSlots.Any(slot => slot.Item.Equals(item));
+            return this.FilledSlots.Any(slot => slot.ItemStack.Equals(item));
         }
 
-        public virtual bool CanAdd(IItemInstance item)
+        public virtual bool CanAdd(ItemStack item)
         {
             return this.EmptySlots.Any();
         }
@@ -582,56 +620,62 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             ItemContainer sourceContainer,
             ItemContainer destinationContainer)
         {
-            var sourceItems = sourceSlots.Select(slot => slot.Item).Distinct().ToArray();
-            var destinationItems = destinationSlots.Select(slot => slot.Item).Distinct().ToArray();
+            var sourceItemStacks = sourceSlots.Select(slot => slot.ItemStack).Distinct().ToArray();
+            var destinationItemStacks = destinationSlots.Select(slot => slot.ItemStack).Distinct().ToArray();
 
             List<IItemInstance> sourceCache = new List<IItemInstance>();
             List<IItemInstance> destinationCache = new List<IItemInstance>();
 
-            foreach (IItemInstance sourceItem in sourceItems)
+            foreach (ItemStack sourceItemStack in sourceItemStacks)
             {
-                var requiredDestinationSlots = destinationContainer?.GetRequiredSlots(
-                    sourceItem, 
-                    false, 
-                    destinationSlots);
+                foreach (IItemInstance sourceItem in sourceItemStack.Contents)
+                {
+                    var requiredDestinationSlots = destinationContainer?.GetRequiredSlots(
+                        sourceItem,
+                        false,
+                        destinationSlots);
 
-                if (requiredDestinationSlots is null)
-                {
-                    continue;
-                }
+                    if (requiredDestinationSlots is null)
+                    {
+                        continue;
+                    }
 
-                if (sourceContainer?.Contains(sourceItem) == true
-                    && destinationContainer.CanAdd(sourceItem))
-                {
-                    sourceContainer.RemoveItem(sourceItem);
-                    destinationContainer.StackOrAdd(sourceItem, requiredDestinationSlots);
-                }
-                else
-                {
-                    return false;
+                    if (sourceContainer?.Contains(sourceItemStack) == true
+                        && destinationContainer.CanAdd(sourceItemStack))
+                    {
+                        sourceContainer.RemoveItem(sourceItemStack);
+                        destinationContainer.StackOrAdd(sourceItem, requiredDestinationSlots);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
 
-            foreach (IItemInstance destinationItem in destinationItems)
+            foreach (ItemStack itemStack in destinationItemStacks)
             {
-                var requiredSourceSlots = sourceContainer?.GetRequiredSlots(
-                    destinationItem,
-                    false,
-                    sourceSlots);
+                foreach (IItemInstance destinationItem in itemStack.Contents)
+                {
+                    var requiredSourceSlots = sourceContainer?.GetRequiredSlots(
+                        destinationItem,
+                        false,
+                        sourceSlots);
 
-                if (requiredSourceSlots is null)
-                {
-                    continue;
-                }
+                    if (requiredSourceSlots is null)
+                    {
+                        continue;
+                    }
 
-                if (sourceContainer.CanAdd(destinationItem))
-                {
-                    destinationContainer?.RemoveItem(destinationItem);
-                    sourceContainer.StackOrAdd(destinationItem, requiredSourceSlots);
-                }
-                else
-                {
-                    return false;
+                    if (sourceContainer.CanAdd(itemStack))
+                    {
+                        destinationContainer?.RemoveItem(itemStack);
+                        sourceContainer.StackOrAdd(destinationItem, requiredSourceSlots);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
 
