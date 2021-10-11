@@ -666,7 +666,10 @@ namespace JoyGodot.Assets.Scripts.Managed_Assets
                 Player.HappinessChange -= this.SetHappiness;
             }
 
-            GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+            if (GlobalConstants.GameManager.SettingsManager is null == false)
+            {
+                GlobalConstants.GameManager.SettingsManager.ValueChanged -= this.SettingChanged;
+            }
 
             base._ExitTree();
         }
