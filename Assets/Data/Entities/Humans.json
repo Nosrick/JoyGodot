@@ -56,12 +56,7 @@
         "friendship",
         "family",
         "health",
-        "property",
-        "respect",
-        "sleep",
-        "confidence",
-        "morality",
-        "purpose"
+        "sleep"
       ],
       "Slots": [
         "Head",
