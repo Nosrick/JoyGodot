@@ -153,19 +153,21 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             this.m_ContainerNames ??= new Array<MoveContainerPriority>();
             this.ContainerOwner ??= new VirtualStorage();
 
+            /*
             for (int i = this.Slots.Count; i < this.ContainerOwner.Contents.Count(); i++)
             {
                 var instance = this.AddSlot(true);
                 this.GUIManager.SetupManagedComponents(instance);
                 instance.Container = this;
             }
+            */
 
             IEnumerable<IItemInstance> contents = this.ContainerOwner.Contents;
             foreach (IItemInstance item in contents)
             {
                 if (this.GetSlotsForItem(item).Any() == false)
                 {
-                    this.StackOrAdd(item);
+                    this.StackOrAddItem(item);
                 }
             }
 
@@ -175,7 +177,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
         }
 
-        protected virtual bool StackOrAdd(
+        protected virtual bool StackOrAddItem(
             IItemInstance item,
             IEnumerable<JoyItemSlot> slots = null,
             bool takeFilledSlots = false)
@@ -199,6 +201,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 var slot = this.FilledSlots.First(slot => slot.ItemStack.CanAddContents(item));
                 slot.ItemStack.AddContents(item);
+                this.OnAddItem?.Invoke(this.ContainerOwner, item);
                 return true;
             }
 
@@ -222,6 +225,55 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return true;
         }
 
+        protected virtual bool StackOrAddItemStack(
+            ItemStack itemStack,
+            IEnumerable<JoyItemSlot> slots = null,
+            bool takeFilledSlots = false)
+        {
+            if (itemStack.Empty)
+            {
+                return true;
+            }
+
+            if (this.ContainerOwner is null)
+            {
+                return false;
+            }
+
+            var firstItem = itemStack.Contents.First();
+            
+            if (this.FilledSlots.Any(slot => slot.ItemStack.CanAddContents(firstItem)))
+            {
+                var slot = this.FilledSlots.First(slot => slot.ItemStack.CanAddContents(firstItem));
+                slot.ItemStack.AddContents(itemStack.Contents);
+                this.OnAddItemStack?.Invoke(this, itemStack);
+                return true;
+            }
+
+            var availableSlot = this.GetFirstAvailableSlotForStack(itemStack);
+            if (availableSlot is null)
+            {
+                return false;
+            }
+            
+            availableSlot.ItemStack.AddContents(itemStack.Contents);
+            availableSlot.Repaint();
+            this.OnAddItemStack?.Invoke(this, itemStack);
+            return true;
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stack">The stack being moved</param>
+        /// <returns>The first available JoyItemSlot that matches the input's type, an empty slot, or null if nothing is found</returns>
+        protected virtual JoyItemSlot GetFirstAvailableSlotForStack(ItemStack stack)
+        {
+            return this.FilledSlots.FirstOrDefault(slot => slot.ItemStack.CanAddContents(stack.Contents))
+                ?? this.EmptySlots.FirstOrDefault();
+        }
+
         public virtual bool StackOrAddFromEvent(IItemContainer source, IItemInstance item)
         {
             List<JoyItemSlot> slots;
@@ -233,7 +285,11 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             if (item.ItemType.Slots.Any() == false)
             {
-                if (this.EmptySlots.Any())
+                if (this.FilledSlots.Any(slot => slot.ItemStack.CanAddContents(item)))
+                {
+                    slots = new List<JoyItemSlot> { this.FilledSlots.First(slot => slot.ItemStack.CanAddContents(item)) };
+                }
+                else if (this.EmptySlots.Any())
                 {
                     slots = new List<JoyItemSlot> { this.EmptySlots.First() };
                 }
@@ -254,7 +310,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 slots = this.GetRequiredSlots(item);
             }
 
-            return this.StackOrAdd(item, slots);
+            return this.StackOrAddItem(item, slots);
         }
 
         public override void Display()
@@ -292,7 +348,9 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public IEnumerable<JoyItemSlot> GetSlotsForStack(ItemStack itemStack)
         {
-            return this.Slots.Where(slot => slot.ItemStack.CanAddContents(itemStack.Contents));
+            return itemStack.Empty 
+                ? new List<JoyItemSlot>() 
+                : this.Slots.Where(slot => slot.ItemStack.CanAddContents(itemStack.Contents));
         }
 
         public virtual bool MoveItem(IItemInstance item)
@@ -374,7 +432,12 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     return includedSlots.ToList();
                 }
 
-                return new List<JoyItemSlot> { this.EmptySlots.FirstOrDefault() };
+                if (this.EmptySlots.Any())
+                {
+                    return new List<JoyItemSlot> { this.EmptySlots.First() };
+                }
+
+                return new List<JoyItemSlot>();
             }
 
             System.Collections.Generic.Dictionary<string, int> requiredSlots =
@@ -560,8 +623,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
                 if (this.ContainerOwner.CanAddContents(dragObject.ItemStack.Contents))
                 {
-                    dragObject.SourceContainer.ContainerOwner.RemoveContents(dragObject.ItemStack.Contents);
                     this.ContainerOwner.AddContents(dragObject.ItemStack.Contents);
+                    dragObject.SourceContainer.ContainerOwner.RemoveContents(dragObject.ItemStack.Contents);
                 }
             }
         }
@@ -592,13 +655,13 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             if (item.Guid != this.ContainerOwner.Guid)
             {
-                if (this.FilledSlots.Any(slot => slot.ItemStack.Guid == item.Guid) == false)
+                if (this.FilledSlots.Any(slot => slot.ItemStack.Contents.Any(instance => instance == item)) == false)
                 {
                     return false;
                 }
 
-                foreach (JoyItemSlot joyItemSlot in this.Slots.Where(
-                    slot => !(slot.ItemStack is null) && slot.ItemStack.Contains(item)))
+                foreach (JoyItemSlot joyItemSlot in this.FilledSlots.Where(
+                    slot => slot.ItemStack.Contains(item)))
                 {
                     joyItemSlot.ItemStack.RemoveContents(item);
                     joyItemSlot.Repaint();
@@ -635,54 +698,38 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
             foreach (ItemStack sourceItemStack in sourceItemStacks)
             {
-                foreach (IItemInstance sourceItem in sourceItemStack.Contents)
+                if (sourceItemStack.Empty)
                 {
-                    var requiredDestinationSlots = destinationContainer?.GetRequiredSlots(
-                        sourceItem,
-                        false,
-                        destinationSlots);
+                    continue;
+                }
 
-                    if (requiredDestinationSlots is null)
-                    {
-                        continue;
-                    }
-
-                    if (sourceContainer?.Contains(sourceItemStack) == true
-                        && destinationContainer.CanAdd(sourceItemStack))
-                    {
-                        sourceContainer.RemoveItem(sourceItemStack);
-                        destinationContainer.StackOrAdd(sourceItem, requiredDestinationSlots);
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                if (sourceContainer?.Contains(sourceItemStack) == true
+                    && destinationContainer.CanAdd(sourceItemStack))
+                {
+                    destinationContainer.StackOrAddItemStack(sourceItemStack);
+                    sourceContainer.RemoveItem(sourceItemStack);
+                }
+                else
+                {
+                    return false;
                 }
             }
 
             foreach (ItemStack itemStack in destinationItemStacks)
             {
-                foreach (IItemInstance destinationItem in itemStack.Contents)
+                if (itemStack.Empty)
                 {
-                    var requiredSourceSlots = sourceContainer?.GetRequiredSlots(
-                        destinationItem,
-                        false,
-                        sourceSlots);
+                    continue;
+                }
 
-                    if (requiredSourceSlots is null)
-                    {
-                        continue;
-                    }
-
-                    if (sourceContainer.CanAdd(itemStack))
-                    {
-                        destinationContainer?.RemoveItem(itemStack);
-                        sourceContainer.StackOrAdd(destinationItem, requiredSourceSlots);
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                if (sourceContainer.CanAdd(itemStack))
+                {
+                    sourceContainer.StackOrAddItemStack(itemStack);
+                    destinationContainer?.RemoveItem(itemStack);
+                }
+                else
+                {
+                    return false;
                 }
             }
 
@@ -691,5 +738,8 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
 
         public virtual event ItemAddedEventHandler OnAddItem;
         public virtual event ItemRemovedEventHandler OnRemoveItem;
+
+        public virtual event ItemStackAddedEventHandler OnAddItemStack;
+        public virtual event ItemStackRemovedEventHandler OnRemoveItemStack;
     }
 }

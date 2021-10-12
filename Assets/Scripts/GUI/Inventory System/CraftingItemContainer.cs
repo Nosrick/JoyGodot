@@ -236,7 +236,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return slots;
         }
         
-        protected override bool StackOrAdd(
+        protected override bool StackOrAddItem(
             IItemInstance item,
             IEnumerable<JoyItemSlot> slots = null, 
             bool takeFilledSlots = false)

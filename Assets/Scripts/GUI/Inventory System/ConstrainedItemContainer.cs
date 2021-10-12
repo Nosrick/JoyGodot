@@ -84,7 +84,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                     if (tuple.Item2 is null == false
                         && this.GetSlotsForItem(tuple.Item2).Any() == false)
                     {
-                        this.StackOrAdd(tuple.Item2);
+                        this.StackOrAddItem(tuple.Item2);
                     }
                 }
 
@@ -100,7 +100,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             }
         }
         
-        protected override bool StackOrAdd(
+        protected override bool StackOrAddItem(
             IItemInstance item,
             IEnumerable<JoyItemSlot> slots = null,
             bool takeFilledSlots = false)

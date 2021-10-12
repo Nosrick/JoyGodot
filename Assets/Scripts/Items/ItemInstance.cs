@@ -627,7 +627,8 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public virtual bool RemoveContents(IEnumerable<IItemInstance> actors)
         {
-            return actors.Aggregate(true, (current, actor) => current & this.RemoveContents(actor));
+            var copy = new List<IItemInstance>(actors);
+            return copy.Aggregate(true, (current, actor) => current & this.RemoveContents(actor));
         }
 
         public void Clear()

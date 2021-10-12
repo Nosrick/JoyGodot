@@ -94,7 +94,14 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool RemoveContents(IItemInstance actor)
         {
-            return this.m_Contents.Remove(actor);
+            bool result = this.m_Contents.Remove(actor);
+
+            if (this.m_Contents.Any() == false)
+            {
+                this.ItemTypeGuid = Guid.Empty;
+            }
+            
+            return result;
         }
 
         public bool RemoveContents(IEnumerable<IItemInstance> actors)
@@ -106,6 +113,11 @@ namespace JoyGodot.Assets.Scripts.Items
         {
             this.m_Contents.Clear();
             this.ItemTypeGuid = Guid.Empty;
+        }
+
+        public override string ToString()
+        {
+            return this.ContentString;
         }
 
         public string ContentString
@@ -120,7 +132,7 @@ namespace JoyGodot.Assets.Scripts.Items
                 return "Contains " + this.m_Contents.Count + " " + this.m_Contents.First().DisplayName;
             }
         }
-        
+
         public event ItemRemovedEventHandler ItemRemoved;
         public event ItemAddedEventHandler ItemAdded;
     }
