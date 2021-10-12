@@ -188,35 +188,37 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             return DragData;
         }
 
-        public bool SwapWithSlot(JoyItemSlot slot)
+        public bool SwapWithSlot(JoyItemSlot otherSlot)
         {
-            var leftItemStack = this.ItemStack;
-            var rightItemStack = slot.ItemStack;
+            var myItemStack = this.ItemStack;
+            var myContents = new List<IItemInstance>(myItemStack.Contents);
+            var otherItemStack = otherSlot.ItemStack;
+            var otherContents = new List<IItemInstance>(otherItemStack.Contents);
 
-            var sourceSlots = this.Container.GetSlotsForStack(leftItemStack).ToArray();
-            var destinationSlots = slot.Container.GetSlotsForStack(rightItemStack).ToArray();
+            var mySlots = this.Container.GetSlotsForStack(myItemStack).ToArray();
+            var otherSlots = otherSlot.Container.GetSlotsForStack(otherItemStack).ToArray();
 
-            var sourceContainer = this.Container.ContainerOwner;
-            var destinationContainer = slot.Container.ContainerOwner;
-
+            var myContainer = this.Container.ContainerOwner;
+            var otherContainer = otherSlot.Container.ContainerOwner;
+            
             bool result = this.Container.StackOrSwap(
-                sourceSlots,
-                destinationSlots,
-                this.Container,
-                slot.Container);
-
-            if (result
-                && sourceContainer != destinationContainer)
+                otherSlots,
+                mySlots,
+                otherSlot.Container,
+                this.Container);
+            
+            if (result && myContainer != otherContainer)
             {
-                if (sourceContainer.CanRemoveContents(leftItemStack.Contents)
-                    && sourceContainer.CanAddContents(rightItemStack.Contents)
-                    && destinationContainer.CanRemoveContents(rightItemStack.Contents)
-                    && destinationContainer.CanAddContents(leftItemStack.Contents))
+                if (myContainer.CanRemoveContents(myContents)
+                    && myContainer.CanAddContents(otherContents)
+                    && otherContainer.CanRemoveContents(otherContents)
+                    && otherContainer.CanAddContents(myContents))
                 {
-                    result &= sourceContainer.RemoveContents(leftItemStack.Contents);
-                    result &= sourceContainer.AddContents(rightItemStack.Contents);
-                    result &= destinationContainer.RemoveContents(rightItemStack.Contents);
-                    result &= destinationContainer.AddContents(leftItemStack.Contents);
+                    
+                    result &= myContainer.RemoveContents(myContents);
+                    result &= myContainer.AddContents(otherContents);
+                    result &= otherContainer.RemoveContents(otherContents);
+                    result &= otherContainer.AddContents(myContents);
                 }
             }
 

@@ -201,6 +201,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             {
                 var slot = this.FilledSlots.First(slot => slot.ItemStack.CanAddContents(item));
                 slot.ItemStack.AddContents(item);
+                slot.Repaint();
                 this.OnAddItem?.Invoke(this.ContainerOwner, item);
                 return true;
             }
@@ -211,6 +212,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 foreach (JoyItemSlot slot in requiredSlots)
                 {
                     slot.ItemStack.AddContents(item);
+                    slot.Repaint();
                 }
             }
             else
@@ -690,50 +692,70 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             ItemContainer sourceContainer,
             ItemContainer destinationContainer)
         {
-            var sourceItemStacks = sourceSlots.Select(slot => slot.ItemStack).Distinct().ToArray();
-            var destinationItemStacks = destinationSlots.Select(slot => slot.ItemStack).Distinct().ToArray();
-
-            List<IItemInstance> sourceCache = new List<IItemInstance>();
-            List<IItemInstance> destinationCache = new List<IItemInstance>();
-
-            foreach (ItemStack sourceItemStack in sourceItemStacks)
+            if (sourceSlots.Count == destinationSlots.Count)
             {
-                if (sourceItemStack.Empty)
+                for (int i = 0; i < sourceSlots.Count; i++)
                 {
-                    continue;
+                    var leftSlot = sourceSlots.ElementAt(i);
+                    var rightSlot = destinationSlots.ElementAt(i);
+
+                    var leftStack = leftSlot.ItemStack;
+                    var rightStack = rightSlot.ItemStack;
+
+                    leftSlot.ItemStack = rightStack;
+                    rightSlot.ItemStack = leftStack;
                 }
 
-                if (sourceContainer?.Contains(sourceItemStack) == true
-                    && destinationContainer.CanAdd(sourceItemStack))
+                return true;
+            }
+            else
+            {
+                int slots = Math.Min(sourceSlots.Count, destinationSlots.Count);
+                for (int i = 0; i < slots; i++)
                 {
-                    destinationContainer.StackOrAddItemStack(sourceItemStack);
-                    sourceContainer.RemoveItem(sourceItemStack);
+                    var leftSlot = sourceSlots.ElementAt(i);
+                    var rightSlot = destinationSlots.ElementAt(i);
+
+                    var leftStack = leftSlot.ItemStack;
+                    var rightStack = rightSlot.ItemStack;
+
+                    leftSlot.ItemStack = rightStack;
+                    rightSlot.ItemStack = leftStack;
                 }
-                else
+                
+                for (int i = slots; i < sourceSlots.Count; i++)
                 {
-                    return false;
+                    JoyItemSlot sourceSlot = sourceSlots.ElementAt(i);
+                    if (destinationContainer.CanAdd(sourceSlot.ItemStack))
+                    {
+                        destinationContainer.StackOrAddItemStack(sourceSlot.ItemStack);
+                        sourceContainer.RemoveItem(sourceSlot.ItemStack);
+                        sourceSlot.ItemStack.Clear();
+                        sourceSlot.Repaint();
+                    }
                 }
+
+                for (int i = slots; i < destinationSlots.Count; i++)
+                {
+                    JoyItemSlot destinationSlot = destinationSlots.ElementAt(i);
+                    if (sourceContainer.CanAdd(destinationSlot.ItemStack))
+                    {
+                        sourceContainer.StackOrAddItemStack(destinationSlot.ItemStack);
+                        destinationContainer.RemoveItem(destinationSlot.ItemStack);
+                        destinationSlot.ItemStack.Clear();
+                        destinationSlot.Repaint();
+                    }
+                }
+
+                return true;
             }
 
-            foreach (ItemStack itemStack in destinationItemStacks)
-            {
-                if (itemStack.Empty)
-                {
-                    continue;
-                }
+            return false;
+        }
 
-                if (sourceContainer.CanAdd(itemStack))
-                {
-                    sourceContainer.StackOrAddItemStack(itemStack);
-                    destinationContainer?.RemoveItem(itemStack);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return true;
+        public override string ToString()
+        {
+            return this.ContainerOwner?.JoyName ?? "None";
         }
 
         public virtual event ItemAddedEventHandler OnAddItem;
