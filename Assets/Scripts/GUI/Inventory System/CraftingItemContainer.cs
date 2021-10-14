@@ -130,7 +130,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
             this.SetSlots();
         }
 
-        public override bool CanAdd(ItemStack itemStack)
+        public override bool CanAddStack(ItemStack itemStack)
         {
             return itemStack.Contents.Aggregate(true, (agg, item) => this.GetRequiredSlots(item).Any());
         }

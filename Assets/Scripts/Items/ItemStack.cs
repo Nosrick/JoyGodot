@@ -25,6 +25,18 @@ namespace JoyGodot.Assets.Scripts.Items
             this.ItemTypeGuid = Guid.Empty;
         }
 
+        public ItemStack(IItemInstance contents)
+            : this()
+        {
+            if (contents is null)
+            {
+                return;
+            }
+            
+            this.m_Contents.Add(contents);
+            this.ItemTypeGuid = contents.ItemType.Guid;
+        }
+
         public ItemStack(IEnumerable<IItemInstance> contents)
             : this()
         {
@@ -46,7 +58,7 @@ namespace JoyGodot.Assets.Scripts.Items
             }
             
             this.m_Contents.AddRange(contents);
-            this.ItemTypeGuid = contents.First().Guid;
+            this.ItemTypeGuid = contents.First().ItemType.Guid;
         }
         
         public bool Contains(IItemInstance actor)
@@ -62,7 +74,7 @@ namespace JoyGodot.Assets.Scripts.Items
 
         public bool CanAddContents(IEnumerable<IItemInstance> actors)
         {
-            return actors.Aggregate(true, (agg, item) => this.CanAddContents(item));
+            return actors.Aggregate(true, (agg, item) => agg & this.CanAddContents(item));
         }
 
         public bool AddContents(IItemInstance actor)
@@ -74,12 +86,14 @@ namespace JoyGodot.Assets.Scripts.Items
 
             this.m_Contents.Add(actor);
             this.ItemTypeGuid = actor.ItemType.Guid;
+            this.ItemAdded?.Invoke(this, actor);
             return true;
         }
 
         public bool AddContents(IEnumerable<IItemInstance> actors)
         {
-            return actors.Aggregate(true, (agg, item) => this.AddContents(item));
+            var copy = new List<IItemInstance>(actors);
+            return copy.Aggregate(true, (agg, item) => this.AddContents(item));
         }
 
         public bool CanRemoveContents(IItemInstance actor)
@@ -100,13 +114,19 @@ namespace JoyGodot.Assets.Scripts.Items
             {
                 this.ItemTypeGuid = Guid.Empty;
             }
+
+            if (result)
+            {
+                this.ItemRemoved?.Invoke(this, actor);
+            }
             
             return result;
         }
 
         public bool RemoveContents(IEnumerable<IItemInstance> actors)
         {
-            return actors.Aggregate(true, (agg, item) => this.RemoveContents(item));
+            var copy = new List<IItemInstance>(actors);
+            return copy.Aggregate(true, (agg, item) => this.RemoveContents(item));
         }
 
         public void Clear()

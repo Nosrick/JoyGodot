@@ -5,7 +5,7 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
     public class JoyConstrainedSlot : JoyItemSlot
     {
         [Export]
-        public string Slot
+        public override string Slot
         {
             get => this.m_Slot;
             set
@@ -17,8 +17,6 @@ namespace JoyGodot.Assets.Scripts.GUI.Inventory_System
                 }
             }
         }
-
-        protected string m_Slot;
         
         public Label SlotLabel { get; protected set; }
 

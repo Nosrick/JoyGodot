@@ -1144,7 +1144,7 @@ namespace JoyGodot.Assets.Scripts.Entities
 
         public bool CanAddContents(IEnumerable<IItemInstance> actors)
         {
-            return actors.Aggregate(true, (agg, item) => this.CanAddContents(item));
+            return actors.Aggregate(true, (agg, item) => agg & this.CanAddContents(item));
         }
 
         public virtual bool AddContents(IItemInstance actor)
